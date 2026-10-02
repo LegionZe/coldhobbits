@@ -98,7 +98,30 @@
   "AD2E.Test.NotAvailable": "{test} is not available at this ability score.",
   "AD2E.Tab": {
     "main": "Main",
+    "class": "Class",
     "abilities": "Abilities",
     "bio": "Biography"
+  },
+  "AD2E.Character.kit": "Class Kit",
+  "AD2E.Class": {
+    "None": "— Choose class —",
+    "NoKit": "— No kit —",
+    "PrimeRequisites": "Prime Requisites",
+    "XpBonus": "XP Bonus",
+    "Alignments": "Alignments Allowed",
+    "AnyAlignment": "Any",
+    "School": "School",
+    "Opposition": "Opposition School(s)",
+    "Races": "Races Allowed",
+    "ChooseClass": "Choose a class in the header.",
+    "NoKitChosen": "No kit chosen.",
+    "Source": "Source",
+    "OtherRequirements": "This kit also has race, alignment or other restrictions; see the linked page.",
+    "Requirements": "Ability Requirements",
+    "ClassMin": "Class Min.",
+    "KitMin": "Kit Min.",
+    "Score": "Score",
+    "NoMinimum": "none",
+    "Notes": "Class & Kit Notes"
   }
 }

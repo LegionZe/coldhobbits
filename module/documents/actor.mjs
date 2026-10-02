@@ -24,6 +24,20 @@ export default class AD2EActor extends Actor {
     return { ...super.getRollData() };
   }
 
+  /** Clear a class or kit that no longer fits the chosen class group / class. */
+  async _preUpdate(changed, options, user) {
+    const sys = changed.system;
+    if (this.type === "character" && sys && ("classGroup" in sys || "classKey" in sys || "kit" in sys)) {
+      const { classes, kits } = CONFIG.AD2E;
+      const group = sys.classGroup ?? this.system.classGroup;
+      let classKey = sys.classKey ?? this.system.classKey;
+      if (classKey && classes[classKey]?.group !== group) sys.classKey = classKey = "";
+      const kit = sys.kit ?? this.system.kit;
+      if (kit && !kits[kit]?.classes.includes(classKey)) sys.kit = "";
+    }
+    return super._preUpdate(changed, options, user);
+  }
+
   /** Roll-under ability check: d20 <= score + modifier. */
   async rollAbilityCheck(key) {
     const mod = await promptNumber(
