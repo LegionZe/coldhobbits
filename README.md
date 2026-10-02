@@ -2,6 +2,8 @@
 
 Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 
+> **AI-generated code.** This repository is generated with [Claude Code](https://claude.com/claude-code) (Anthropic), under the direction and review of the repository owner. Rules tables and mechanics must be verified against an owned copy of the AD&D 2e rulebooks.
+
 ## Install
 - Manifest URL (Foundry > Install System): `https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json`
   Every push to `main` runs `.github/workflows/release.yml`, which publishes release `v<version>` (with `ad2e.zip`
