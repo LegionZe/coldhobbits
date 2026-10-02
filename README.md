@@ -9,7 +9,7 @@ initiative 1d10, lowest acts first.
 
 ## Verify before use
 - `module/config.mjs` tables were written from memory and must be checked against an owned Player's Handbook.
-- Built against the v13 API (`TypeDataModel`, `ApplicationV2`); `system.json` declares v14. v14 compatibility is untested.
+- API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Not yet loaded in a live v14 client.
 
 ## Planned
 Class kits, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, saving throw tables.

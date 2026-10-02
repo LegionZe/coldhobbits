@@ -1,5 +1,3 @@
-import { AD2E } from "../config.mjs";
-
 const { DialogV2 } = foundry.applications.api;
 
 /** Prompt for a single numeric input; resolves to a number, or null if dismissed. */
@@ -17,6 +15,15 @@ async function promptNumber(title, label, initial = 0) {
 }
 
 export default class AD2EActor extends Actor {
+  /**
+   * Core Actor#getRollData returns the system data directly and does not call
+   * TypeDataModel#getRollData, so delegate explicitly (same pattern as dnd5e Actor5e).
+   */
+  getRollData() {
+    if (this.system.getRollData) return this.system.getRollData();
+    return { ...super.getRollData() };
+  }
+
   /** Roll-under ability check: d20 <= score + modifier. */
   async rollAbilityCheck(key) {
     const mod = await promptNumber(

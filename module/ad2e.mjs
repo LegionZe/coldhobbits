@@ -15,7 +15,9 @@ Hooks.once("init", () => {
   CONFIG.Combat.documentClass = AD2ECombat;
   CONFIG.Combat.initiative = { formula: "1d10 + @init", decimals: 2 };
 
-  foundry.documents.collections.Actors.registerSheet("ad2e", CharacterSheet, {
+  const { DocumentSheetConfig } = foundry.applications.apps;
+  DocumentSheetConfig.unregisterSheet(Actor, "core", foundry.appv1.sheets.ActorSheet);
+  DocumentSheetConfig.registerSheet(Actor, "ad2e", CharacterSheet, {
     types: ["character"],
     makeDefault: true,
     label: "AD2E.Sheet.Character"

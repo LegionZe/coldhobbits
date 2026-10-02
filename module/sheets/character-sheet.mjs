@@ -38,7 +38,6 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }));
     context.alignments = AD2E.alignments;
     context.classGroups = AD2E.classGroups;
-    context.editable = this.isEditable;
     return context;
   }
 

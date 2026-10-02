@@ -65,6 +65,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   getRollData() {
     return {
+      abilities: Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].value])),
       level: this.level,
       thac0: this.thac0.value,
       init: this.initiative.mod + this.mods.reaction,
