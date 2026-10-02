@@ -1,0 +1,33 @@
+{
+  "_id": "47F9INT4qV2wL8kc",
+  "_key": "!items!47F9INT4qV2wL8kc",
+  "name": "Barbarian/Berserker Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "barbarian-berserker-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Barbarian/Berserker_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

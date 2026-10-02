@@ -1,0 +1,33 @@
+{
+  "_id": "C7jyNx1AMydpBaTK",
+  "_key": "!items!C7jyNx1AMydpBaTK",
+  "name": "Pacifist Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pacifist-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Pacifist_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 62000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

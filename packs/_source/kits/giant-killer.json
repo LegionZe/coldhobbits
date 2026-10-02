@@ -1,0 +1,32 @@
+{
+  "_id": "NI0i67aTfbhD5nJe",
+  "_key": "!items!NI0i67aTfbhD5nJe",
+  "name": "Giant Killer",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "giant-killer",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": 15,
+      "dex": 15,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Giant_Killer_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 38000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

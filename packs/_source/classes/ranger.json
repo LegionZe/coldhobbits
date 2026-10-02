@@ -1,0 +1,41 @@
+{
+  "_id": "ZdsUTRUwq95kBOED",
+  "_key": "!items!ZdsUTRUwq95kBOED",
+  "name": "Ranger",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "ranger",
+    "group": "warrior",
+    "min": {
+      "str": 13,
+      "dex": 13,
+      "con": 14,
+      "int": null,
+      "wis": 14,
+      "cha": null
+    },
+    "prime": [
+      "str",
+      "dex",
+      "wis"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Ranger_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

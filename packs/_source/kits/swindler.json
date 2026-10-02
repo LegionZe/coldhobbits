@@ -1,0 +1,32 @@
+{
+  "_id": "Eq22Id5Pu1nxHj8o",
+  "_key": "!items!Eq22Id5Pu1nxHj8o",
+  "name": "Swindler",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "swindler",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": 12
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Swindler_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 87000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

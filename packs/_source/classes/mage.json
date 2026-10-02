@@ -1,0 +1,45 @@
+{
+  "_id": "r8xFgU17dWY0a4lR",
+  "_key": "!items!r8xFgU17dWY0a4lR",
+  "name": "Mage",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "mage",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 9,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Mage_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

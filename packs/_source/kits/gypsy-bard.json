@@ -1,0 +1,32 @@
+{
+  "_id": "nmyZqxAUoQKKKw7d",
+  "_key": "!items!nmyZqxAUoQKKKw7d",
+  "name": "Gypsy-bard",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "gypsy-bard",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Gypsy-bard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 43000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

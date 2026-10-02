@@ -1,0 +1,45 @@
+{
+  "_id": "S3nfIky11qqDQgDx",
+  "_key": "!items!S3nfIky11qqDQgDx",
+  "name": "Cleric",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "cleric",
+    "group": "priest",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": 9,
+      "cha": null
+    },
+    "prime": [
+      "wis"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Cleric_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

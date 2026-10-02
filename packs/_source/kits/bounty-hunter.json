@@ -1,0 +1,32 @@
+{
+  "_id": "wOkhS1YjhQpbCwFf",
+  "_key": "!items!wOkhS1YjhQpbCwFf",
+  "name": "Bounty Hunter",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bounty-hunter",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": 11,
+      "dex": 11,
+      "con": 11,
+      "int": 11,
+      "wis": 11,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Bounty_Hunter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 16000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

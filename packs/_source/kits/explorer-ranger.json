@@ -1,0 +1,32 @@
+{
+  "_id": "3ZyaS7ABaAitVdwx",
+  "_key": "!items!3ZyaS7ABaAitVdwx",
+  "name": "Explorer",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "explorer-ranger",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 12,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Explorer_-_Ranger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 30000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

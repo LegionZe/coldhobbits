@@ -1,0 +1,40 @@
+{
+  "_id": "ulcvG5pndSaeGg7b",
+  "_key": "!items!ulcvG5pndSaeGg7b",
+  "name": "Wu Jen",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wu-jen",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Wu_Jen_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 97000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

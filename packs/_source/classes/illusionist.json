@@ -1,0 +1,48 @@
+{
+  "_id": "qEMxL1iQCx4dYTW3",
+  "_key": "!items!qEMxL1iQCx4dYTW3",
+  "name": "Illusionist",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "illusionist",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": 16,
+      "con": null,
+      "int": 9,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Illusion",
+    "opposition": "Necro., Invoc./Evoc., Abjur.",
+    "races": [
+      "human",
+      "gnome"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 12000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

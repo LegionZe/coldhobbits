@@ -1,0 +1,32 @@
+{
+  "_id": "tfb0D5HHvOR1i40D",
+  "_key": "!items!tfb0D5HHvOR1i40D",
+  "name": "Stalker",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stalker-ranger",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 14,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Stalker_-_Ranger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 84000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

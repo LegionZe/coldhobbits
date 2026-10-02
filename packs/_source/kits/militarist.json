@@ -1,0 +1,32 @@
+{
+  "_id": "NlMJmeclnogGXbSn",
+  "_key": "!items!NlMJmeclnogGXbSn",
+  "name": "Militarist",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "militarist",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": 12,
+      "con": 12,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Militarist_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 55000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

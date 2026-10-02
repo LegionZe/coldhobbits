@@ -1,4 +1,4 @@
-/* Selectors target only elements authored in templates/actor/*.hbs (classes prefixed ad2e-)
+/* Selectors target only elements authored in templates/actor/*.hbs and templates/item/*.hbs (classes prefixed ad2e-)
    and the sheet root classes set in CharacterSheet.DEFAULT_OPTIONS (.ad2e.character).
    Foundry core selectors are intentionally not restyled. */
 .ad2e.character .ad2e-header { display: flex; flex-direction: column; gap: 0.25rem; padding-bottom: 0.25rem; }
@@ -39,3 +39,21 @@
 .ad2e.character .ad2e-unmet { color: var(--color-level-error, #c33); }
 .ad2e-note { font-style: italic; }
 .ad2e-class-notes textarea { width: 100%; }
+
+.ad2e-header-item { display: flex; flex-direction: column; }
+.ad2e-header-item a { cursor: pointer; font-weight: bold; }
+.ad2e-placeholder { font-style: italic; opacity: 0.7; }
+.ad2e-header-pair { display: flex; gap: 0.5rem; }
+.ad2e-item-row { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e-item-row h3 { flex: 1; margin: 0; }
+.ad2e-item-row a { cursor: pointer; }
+
+.ad2e.item .ad2e-item-sheet { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem; overflow-y: auto; }
+.ad2e-item-header { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e-item-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-item-fields label { display: flex; flex-direction: column; }
+.ad2e-item-fields .ad2e-checkbox { flex-direction: row; align-items: center; gap: 0.25rem; }
+.ad2e-min-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-min-grid label { display: grid; grid-template-columns: 1fr 3.5rem; align-items: center; }
+.ad2e.item input[type="number"] { width: 3.5rem; }
+.ad2e-notes { display: flex; flex-direction: column; }

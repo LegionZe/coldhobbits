@@ -1,0 +1,48 @@
+{
+  "_id": "DAeshYm6kaychaHh",
+  "_key": "!items!DAeshYm6kaychaHh",
+  "name": "Conjurer",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "conjurer",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": 15,
+      "int": 9,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Conj./Summ.",
+    "opposition": "Gr. Divin. & Invocation",
+    "races": [
+      "human",
+      "half-elf"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

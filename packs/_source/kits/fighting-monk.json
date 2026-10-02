@@ -1,0 +1,33 @@
+{
+  "_id": "AQrQXw3TIb5QD1aT",
+  "_key": "!items!AQrQXw3TIb5QD1aT",
+  "name": "Fighting-Monk",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "fighting-monk",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": 12,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Fighting-Monk_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 34000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "SLjRyUkthuYFFy6B",
+  "_key": "!items!SLjRyUkthuYFFy6B",
+  "name": "Gladiator",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "gladiator-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Gladiator_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 39000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

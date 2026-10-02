@@ -1,0 +1,4 @@
+node_modules/
+# Compiled LevelDB packs are built by the release workflow from packs/_source.
+packs/*
+!packs/_source/

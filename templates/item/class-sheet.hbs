@@ -1,0 +1,28 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Character.classGroup"}}
+      <select name="system.group">{{selectOptions classGroups selected=system.group localize=true}}</select></label>
+    <label>{{localize "AD2E.Class.PrimeRequisites"}}
+      <multi-select name="system.prime">{{selectOptions abilityLabels selected=prime localize=true}}</multi-select></label>
+    <label>{{localize "AD2E.Class.Alignments"}}
+      <multi-select name="system.alignments">{{selectOptions alignments selected=alignmentList localize=true}}</multi-select></label>
+    <label>{{localize "AD2E.Class.School"}} <input type="text" name="system.school" value="{{system.school}}"></label>
+    <label>{{localize "AD2E.Class.Opposition"}} <input type="text" name="system.opposition" value="{{system.opposition}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  <fieldset>
+    <legend>{{localize "AD2E.Class.ClassMin"}}</legend>
+    <div class="ad2e-min-grid">
+      {{#each minimums as |m|}}
+      <label>{{m.label}} <input type="number" name="system.min.{{m.key}}" value="{{m.value}}" min="0" max="25"></label>
+      {{/each}}
+    </div>
+  </fieldset>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

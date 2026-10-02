@@ -1,0 +1,32 @@
+{
+  "_id": "LVkydgFGiigb88nL",
+  "_key": "!items!LVkydgFGiigb88nL",
+  "name": "Wyrmslayer",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wyrmslayer",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": 14,
+      "dex": 10,
+      "con": 10,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Wyrmslayer_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 98000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

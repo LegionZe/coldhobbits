@@ -1,0 +1,32 @@
+{
+  "_id": "FkocgdA7yKhhevZ6",
+  "_key": "!items!FkocgdA7yKhhevZ6",
+  "name": "Pathfinder",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pathfinder-ranger",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Pathfinder_-_Ranger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 63000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

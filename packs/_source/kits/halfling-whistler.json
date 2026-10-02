@@ -1,0 +1,32 @@
+{
+  "_id": "8xChwwDQIuU0HqPA",
+  "_key": "!items!8xChwwDQIuU0HqPA",
+  "name": "Halfling Whistler",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "halfling-whistler",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 10,
+      "wis": 13,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Halfling_Whistler_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 44000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

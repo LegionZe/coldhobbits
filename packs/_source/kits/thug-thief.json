@@ -1,0 +1,32 @@
+{
+  "_id": "8k02dMudAJFlMpcu",
+  "_key": "!items!8k02dMudAJFlMpcu",
+  "name": "Thug",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "thug-thief",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Thug_-_Thief_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 89000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

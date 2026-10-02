@@ -1,0 +1,32 @@
+{
+  "_id": "yNIh8PImdE18S8uk",
+  "_key": "!items!yNIh8PImdE18S8uk",
+  "name": "Forest Runner",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "forest-runner",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": 12
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Forest_Runner_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 35000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

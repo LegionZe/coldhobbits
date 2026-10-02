@@ -1,0 +1,49 @@
+{
+  "_id": "XxnVTrzOx0R2awiE",
+  "_key": "!items!XxnVTrzOx0R2awiE",
+  "name": "Enchanter",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "enchanter",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 9,
+      "wis": null,
+      "cha": 16
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Ench./Charm",
+    "opposition": "Invoc./Evoc. & Necromancy",
+    "races": [
+      "human",
+      "half-elf",
+      "elf"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 11000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

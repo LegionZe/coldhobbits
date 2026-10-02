@@ -104,8 +104,6 @@
   },
   "AD2E.Character.kit": "Class Kit",
   "AD2E.Class": {
-    "None": "— Choose class —",
-    "NoKit": "— No kit —",
     "PrimeRequisites": "Prime Requisites",
     "XpBonus": "XP Bonus",
     "Alignments": "Alignments Allowed",
@@ -113,8 +111,6 @@
     "School": "School",
     "Opposition": "Opposition School(s)",
     "Races": "Races Allowed",
-    "ChooseClass": "Choose a class in the header.",
-    "NoKitChosen": "No kit chosen.",
     "Source": "Source",
     "OtherRequirements": "This kit also has race, alignment or other restrictions; see the linked page.",
     "Requirements": "Ability Requirements",
@@ -122,6 +118,29 @@
     "KitMin": "Kit Min.",
     "Score": "Score",
     "NoMinimum": "none",
-    "Notes": "Class & Kit Notes"
+    "Notes": "Class & Kit Notes",
+    "DropClass": "Drag a Class item here",
+    "DropKit": "Drag a Class Kit item here",
+    "DragHint": "Drag a Class and then a Class Kit from the Items directory or the \"Classes (PHB)\" and \"Class Kits\" compendiums onto this sheet. Dropping a new one replaces the current one.",
+    "GroupFromClass": "Set by the Class item",
+    "NeedClassFirst": "Add a Class before adding a Class Kit.",
+    "KitNotForClass": "{kit} is not available to {class}.",
+    "KitDoesNotFit": "This kit is not available to the current class."
+  },
+  "TYPES.Item": {
+    "class": "Class",
+    "kit": "Class Kit"
+  },
+  "AD2E.Sheet.Class": "AD&D 2e Class",
+  "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
+  "AD2E.Item": {
+    "identifier": "Identifier",
+    "url": "Source page",
+    "notes": "Notes",
+    "remove": "Remove",
+    "kitClasses": "Classes (identifiers)",
+    "kitClassesHint": "Comma-separated class identifiers, e.g. fighter, paladin",
+    "otherRequirements": "Has race, alignment or other restrictions",
+    "kitMinHint": "Overrides the class minimum for that ability. Blank keeps the class minimum; 0 removes it."
   }
 }

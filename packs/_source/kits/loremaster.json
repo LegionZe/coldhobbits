@@ -1,0 +1,32 @@
+{
+  "_id": "8vsB7UOLkc8GpxP0",
+  "_key": "!items!8vsB7UOLkc8GpxP0",
+  "name": "Loremaster",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "loremaster",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 14,
+      "wis": 14,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Loremaster_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 51000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

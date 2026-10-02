@@ -1,0 +1,32 @@
+{
+  "_id": "4uzgLWI6AJjuxhkw",
+  "_key": "!items!4uzgLWI6AJjuxhkw",
+  "name": "Justifier",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "justifier",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": 14,
+      "dex": 14,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Justifier_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 50000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

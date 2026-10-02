@@ -1,0 +1,42 @@
+{
+  "_id": "vPC8C2WI3bHf8DcA",
+  "_key": "!items!vPC8C2WI3bHf8DcA",
+  "name": "Bard",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "bard",
+    "group": "rogue",
+    "min": {
+      "str": null,
+      "dex": 12,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": 15
+    },
+    "prime": [
+      "dex",
+      "cha"
+    ],
+    "alignments": [
+      "ng",
+      "ln",
+      "n",
+      "cn",
+      "ne"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Bard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

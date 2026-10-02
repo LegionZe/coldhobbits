@@ -1,0 +1,32 @@
+{
+  "_id": "DrA3DorzzWkwkiR6",
+  "_key": "!items!DrA3DorzzWkwkiR6",
+  "name": "Swashbuckler",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "swashbuckler-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": null,
+      "dex": 13,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Swashbuckler_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 85000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

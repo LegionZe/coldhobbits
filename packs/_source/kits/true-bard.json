@@ -1,0 +1,32 @@
+{
+  "_id": "TQRnnz2NrCsXHOWK",
+  "_key": "!items!TQRnnz2NrCsXHOWK",
+  "name": "True Bard",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "true-bard",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/True_Bard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 91000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

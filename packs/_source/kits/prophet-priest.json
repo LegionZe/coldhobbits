@@ -1,0 +1,33 @@
+{
+  "_id": "CVT2l0AQcasjVpUm",
+  "_key": "!items!CVT2l0AQcasjVpUm",
+  "name": "Prophet Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "prophet-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": 15,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Prophet_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 69000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "mwkHdtpUs8zwLGGB",
+  "_key": "!items!mwkHdtpUs8zwLGGB",
+  "name": "Envoy",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "envoy",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 12,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Envoy_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 26000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

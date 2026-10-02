@@ -1,36 +1,48 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with classTab as |ct|}}
+  <p class="ad2e-note">{{localize "AD2E.Class.DragHint"}}</p>
   <div class="ad2e-class-grid">
     <fieldset class="ad2e-class">
       <legend>{{localize "AD2E.Character.className"}}</legend>
-      {{#if ct.class}}
-      <h3><a href="{{ct.class.url}}" target="_blank" rel="noopener">{{ct.class.name}}</a></h3>
+      {{#if ct.classItem}}
+      <div class="ad2e-item-row">
+        <img src="{{ct.classItem.img}}" alt="" width="32" height="32">
+        <h3><a data-action="openItem" data-item-id="{{ct.classItem.id}}">{{ct.classItem.name}}</a></h3>
+        {{#if ct.cls.url}}<a href="{{ct.cls.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
+        {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.classItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Character.classGroup"}}</dt><dd>{{ct.groupLabel}} (d{{ct.hitDie}})</dd>
         <dt>{{localize "AD2E.Class.PrimeRequisites"}}</dt><dd>{{ct.prime}}</dd>
         <dt>{{localize "AD2E.Class.XpBonus"}}</dt><dd>{{#if ct.xpBonus}}+{{ct.xpBonus}}%{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.Alignments"}}</dt><dd class="{{#unless ct.alignmentAllowed}}ad2e-unmet{{/unless}}">{{ct.alignments}}</dd>
-        {{#if ct.class.school}}
-        <dt>{{localize "AD2E.Class.School"}}</dt><dd>{{ct.class.school}}</dd>
-        <dt>{{localize "AD2E.Class.Opposition"}}</dt><dd>{{ct.class.opposition}}</dd>
+        {{#if ct.cls.school}}
+        <dt>{{localize "AD2E.Class.School"}}</dt><dd>{{ct.cls.school}}</dd>
+        <dt>{{localize "AD2E.Class.Opposition"}}</dt><dd>{{ct.cls.opposition}}</dd>
         <dt>{{localize "AD2E.Class.Races"}}</dt><dd>{{ct.races}}</dd>
         {{/if}}
       </dl>
       {{else}}
-      <p>{{localize "AD2E.Class.ChooseClass"}}</p>
+      <p>{{localize "AD2E.Class.DropClass"}}</p>
       {{/if}}
     </fieldset>
 
     <fieldset class="ad2e-kit">
       <legend>{{localize "AD2E.Character.kit"}}</legend>
-      {{#if ct.kit}}
-      <h3><a href="{{ct.kit.url}}" target="_blank" rel="noopener">{{ct.kit.name}}</a></h3>
+      {{#if ct.kitItem}}
+      <div class="ad2e-item-row">
+        <img src="{{ct.kitItem.img}}" alt="" width="32" height="32">
+        <h3><a data-action="openItem" data-item-id="{{ct.kitItem.id}}">{{ct.kitItem.name}}</a></h3>
+        {{#if ct.kit.url}}<a href="{{ct.kit.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
+        {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.kitItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Class.Source"}}</dt><dd>{{ct.kit.source}}</dd>
       </dl>
+      {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
       {{#if ct.kit.otherRequirements}}<p class="ad2e-note">{{localize "AD2E.Class.OtherRequirements"}}</p>{{/if}}
       {{else}}
-      <p>{{#if ct.class}}{{localize "AD2E.Class.NoKitChosen"}}{{else}}{{localize "AD2E.Class.ChooseClass"}}{{/if}}</p>
+      <p>{{localize "AD2E.Class.DropKit"}}</p>
       {{/if}}
     </fieldset>
   </div>

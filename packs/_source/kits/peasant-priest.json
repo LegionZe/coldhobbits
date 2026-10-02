@@ -1,0 +1,33 @@
+{
+  "_id": "du3S4veaQfaFK1FH",
+  "_key": "!items!du3S4veaQfaFK1FH",
+  "name": "Peasant Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "peasant-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Peasant_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 66000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

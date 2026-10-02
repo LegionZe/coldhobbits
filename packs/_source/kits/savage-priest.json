@@ -1,0 +1,33 @@
+{
+  "_id": "utWLKkXWbahbUaYs",
+  "_key": "!items!utWLKkXWbahbUaYs",
+  "name": "Savage Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "savage-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": 11,
+      "dex": null,
+      "con": 13,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Savage_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 73000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ad2e",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:packs": "node tools/compile-packs.mjs"
+  },
+  "devDependencies": {
+    "@foundryvtt/foundryvtt-cli": "3.0.4"
+  }
+}

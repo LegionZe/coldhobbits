@@ -1,0 +1,32 @@
+{
+  "_id": "lw63giLxvzDkCVD6",
+  "_key": "!items!lw63giLxvzDkCVD6",
+  "name": "Feralan",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "feralan",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": 14,
+      "dex": null,
+      "con": 15,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Feralan_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 33000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "WhQVsDHOmdtxdY6d",
+  "_key": "!items!WhQVsDHOmdtxdY6d",
+  "name": "Squire",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "squire-paladin",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Squire_-_Paladin_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 83000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

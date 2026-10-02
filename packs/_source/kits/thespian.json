@@ -1,0 +1,32 @@
+{
+  "_id": "uAppslwe1oC8wTkq",
+  "_key": "!items!uAppslwe1oC8wTkq",
+  "name": "Thespian",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "thespian",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Thespian_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 88000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

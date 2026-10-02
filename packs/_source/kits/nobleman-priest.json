@@ -1,0 +1,33 @@
+{
+  "_id": "BSx1xF6ypVXqaYf7",
+  "_key": "!items!BSx1xF6ypVXqaYf7",
+  "name": "Nobleman Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "nobleman-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Nobleman_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 60000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

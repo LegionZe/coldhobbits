@@ -1,0 +1,49 @@
+{
+  "_id": "ANPkWiWL0GImL4aE",
+  "_key": "!items!ANPkWiWL0GImL4aE",
+  "name": "Diviner",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "diviner",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 9,
+      "wis": 16,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Gr. Divin.",
+    "opposition": "Conj./Summ.",
+    "races": [
+      "human",
+      "half-elf",
+      "elf"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 10000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

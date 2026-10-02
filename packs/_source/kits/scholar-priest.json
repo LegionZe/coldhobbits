@@ -1,0 +1,33 @@
+{
+  "_id": "0sHLp5ojwOzlOLNF",
+  "_key": "!items!0sHLp5ojwOzlOLNF",
+  "name": "Scholar Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "scholar-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Scholar_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 75000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
