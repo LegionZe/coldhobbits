@@ -4,7 +4,7 @@
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text.",
   "version": "0.0.1",
   "compatibility": {
-    "minimum": "14",
+    "minimum": "14.368",
     "verified": "14"
   },
   "authors": [{ "name": "LegionZe" }],
