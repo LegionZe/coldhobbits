@@ -51,12 +51,20 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   #computeDerived() {
     const a = this.abilities;
-    const str = lookup(AD2E.strTable, a.str.value);
+    const T = AD2E.abilityTables;
     const strRow = (a.str.value === 18 && a.str.exceptional > 0)
-      ? lookup(AD2E.strExceptional, a.str.exceptional) : str;
-    const dex = lookup(AD2E.dexTable, a.dex.value);
-    const con = lookup(AD2E.conTable, a.con.value);
-    const wis = lookup(AD2E.wisTable, a.wis.value);
+      ? lookup(T.strExceptional, a.str.exceptional) : lookup(T.str, a.str.value);
+
+    /** Current table row per ability (PHB Tables 1-6). */
+    this.abilityData = {
+      str: strRow,
+      dex: lookup(T.dex, a.dex.value),
+      con: lookup(T.con, a.con.value),
+      int: lookup(T.int, a.int.value),
+      wis: lookup(T.wis, a.wis.value),
+      cha: lookup(T.cha, a.cha.value)
+    };
+    const { dex, con, wis } = this.abilityData;
     const warrior = this.classGroup === "warrior";
 
     this.mods = {

@@ -62,6 +62,29 @@
     </fieldset>
   </div>
 
+  <fieldset class="ad2e-ability-tables">
+    <legend>{{localize "AD2E.Character.abilityTables"}}</legend>
+    <div class="ad2e-detail-grid">
+      {{#each abilityDetails as |ad|}}
+      <section class="ad2e-detail" data-ability="{{ad.key}}">
+        <h4>{{ad.label}}</h4>
+        <dl>
+          {{#each ad.stats as |st|}}
+          <dt>{{st.label}}</dt><dd>{{st.value}}</dd>
+          {{/each}}
+        </dl>
+        {{#if ad.tests.length}}
+        <div class="ad2e-tests">
+          {{#each ad.tests as |t|}}
+          <button type="button" data-action="rollTest" data-test="{{t.key}}" {{#if t.disabled}}disabled{{/if}}>{{t.label}}</button>
+          {{/each}}
+        </div>
+        {{/if}}
+      </section>
+      {{/each}}
+    </div>
+  </fieldset>
+
   <fieldset class="ad2e-bio">
     <legend>{{localize "AD2E.Character.biography"}}</legend>
     <textarea name="system.biography" rows="8">{{system.biography}}</textarea>

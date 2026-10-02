@@ -42,6 +42,26 @@ export default class AD2EActor extends Actor {
     });
   }
 
+  /** Table-driven ability test (AD2E.abilityTests): roll the die, succeed on roll <= table value. */
+  async rollAbilityTest(testKey) {
+    const test = CONFIG.AD2E.abilityTests[testKey];
+    const target = this.system.abilityData[test.ability][test.field];
+    const label = game.i18n.localize(`AD2E.Test.${testKey}`);
+    if (target === null || target === undefined) {
+      ui.notifications.warn(game.i18n.format("AD2E.Test.NotAvailable", { test: label }));
+      return;
+    }
+    const roll = await new Roll(test.die).evaluate();
+    const under = roll.total <= target;
+    const success = test.failsOnSuccess ? !under : under;
+    const outcomes = test.outcomes ?? { success: "AD2E.Roll.Success", failure: "AD2E.Roll.Failure" };
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${label} (${test.die} ${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}): `
+        + game.i18n.localize(success ? outcomes.success : outcomes.failure)
+    });
+  }
+
   /** Saving throw: d20 + modifier >= save target. */
   async rollSave(key) {
     const mod = await promptNumber(
