@@ -1,0 +1,10 @@
+/* Selectors target only elements authored in templates/actor/character.hbs.
+   Foundry core selectors are intentionally not styled until the rendered DOM
+   has been inspected in a live client. */
+.ad2e-sheet { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem; }
+.ad2e-name { font-size: 1.5rem; width: 100%; }
+.ad2e-row { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+.ad2e-columns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.ad2e-ability, .ad2e-save { display: flex; justify-content: space-between; align-items: center; gap: 0.25rem; }
+.ad2e-ability a, .ad2e-save a { cursor: pointer; }
+.ad2e-sheet input[type="number"] { width: 4rem; }
