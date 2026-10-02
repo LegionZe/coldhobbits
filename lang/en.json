@@ -1,4 +1,5 @@
 {
+  "TYPES.Actor.character": "Character",
   "AD2E.Sheet.Character": "AD&D 2e Character",
   "AD2E.Character.Name": "Name",
   "AD2E.Character.race": "Race",

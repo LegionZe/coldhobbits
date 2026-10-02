@@ -77,6 +77,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
   }
 
   getRollData() {
+    // Token-level applyActiveEffects() can also request roll data early; never assume preparation order.
+    if (!this.mods) this.#computeDerived();
     return {
       abilities: Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].value])),
       level: this.level,
