@@ -1,0 +1,58 @@
+name: Release
+
+# On every push to main: if no GitHub release exists for the version in
+# system.json, build ad2e.zip and publish release v<version> with ad2e.zip and
+# system.json attached. Bump "version" in system.json to publish a new release.
+# Foundry manifest URL:
+# https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: ver
+        run: |
+          VERSION="$(jq -r .version system.json)"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "v$VERSION" --repo "$REPO" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Release v$VERSION already exists; nothing to publish."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Stamp download URL into system.json
+        if: steps.ver.outputs.exists == 'false'
+        env:
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: |
+          jq --arg d "https://github.com/$REPO/releases/download/$TAG/ad2e.zip" \
+             '.download = $d' system.json > system.tmp
+          mv system.tmp system.json
+
+      - name: Build archive (files at zip root)
+        if: steps.ver.outputs.exists == 'false'
+        run: zip -r ad2e.zip system.json module templates styles lang README.md
+
+      - name: Publish release
+        if: steps.ver.outputs.exists == 'false'
+        env:
+          TAG: ${{ steps.ver.outputs.tag }}
+        run: |
+          gh release create "$TAG" system.json ad2e.zip \
+            --repo "$REPO" --target "$GITHUB_SHA" --title "$TAG" \
+            --notes "Automated release from $GITHUB_SHA."
