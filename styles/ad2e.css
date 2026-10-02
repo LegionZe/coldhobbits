@@ -14,7 +14,9 @@
 
 .ad2e-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 0.5rem; align-items: start; }
 .ad2e-ability { display: grid; grid-template-columns: 1fr 3.5rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
-.ad2e-save { display: grid; grid-template-columns: 1fr 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-save { display: grid; grid-template-columns: 1fr 2rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-save strong { text-align: center; }
+.ad2e-overridden { text-decoration: underline dotted; }
 .ad2e-field { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
 .ad2e-pair { display: flex; align-items: center; gap: 0.25rem; }
 .ad2e-ability a, .ad2e-save a { cursor: pointer; }
