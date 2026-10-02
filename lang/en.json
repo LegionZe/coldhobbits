@@ -95,5 +95,10 @@
   "AD2E.Test.spellFailure": "Spell Failure",
   "AD2E.Test.SpellWorks": "Spell works",
   "AD2E.Test.SpellFails": "Spell fails",
-  "AD2E.Test.NotAvailable": "{test} is not available at this ability score."
+  "AD2E.Test.NotAvailable": "{test} is not available at this ability score.",
+  "AD2E.Tab": {
+    "main": "Main",
+    "abilities": "Abilities",
+    "bio": "Biography"
+  }
 }

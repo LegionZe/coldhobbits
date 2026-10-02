@@ -37,7 +37,8 @@ const { ActorSheetV2 } = foundry.applications.sheets;
 export default class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["ad2e", "character"],
-    position: { width: 640, height: 720 },
+    position: { width: 760, height: 760 },
+    window: { resizable: true },
     form: { submitOnChange: true },
     actions: {
       rollAbility: CharacterSheet.onRollAbility,
@@ -48,8 +49,27 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   };
 
   static PARTS = {
-    body: { template: "systems/ad2e/templates/actor/character.hbs" }
+    header: { template: "systems/ad2e/templates/actor/character-header.hbs" },
+    tabs: { template: "templates/generic/tab-navigation.hbs" },
+    main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
+    abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
+    bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" }
   };
+
+  static TABS = {
+    primary: {
+      tabs: [{ id: "main" }, { id: "abilities" }, { id: "bio" }],
+      initial: "main",
+      labelPrefix: "AD2E.Tab"
+    }
+  };
+
+  /** Give each tab part its own ApplicationTab entry (same pattern as dnd5e WelcomeScreen). */
+  async _preparePartContext(partId, context, options) {
+    context = await super._preparePartContext(partId, context, options);
+    if (context.tabs?.[partId]) context.tab = context.tabs[partId];
+    return context;
+  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -70,9 +90,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }));
     context.abilityDetails = AD2E.abilities.map(key => {
       const row = sys.abilityData[key];
+      const score = sys.abilities[key].value;
+      const exc = sys.abilities[key].exceptional;
       return {
         key,
         label: game.i18n.localize(`AD2E.Ability.${key}`),
+        score: (key === "str" && score === 18 && exc > 0) ? `18/${exc === 100 ? "00" : String(exc).padStart(2, "0")}` : `${score}`,
         stats: DETAIL_COLUMNS[key].map(([col, fmt]) => ({
           label: game.i18n.localize(`AD2E.Table.${key}.${col}`),
           value: fmt(row)
