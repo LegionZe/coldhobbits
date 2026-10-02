@@ -8,3 +8,9 @@
 .ad2e-ability, .ad2e-save { display: flex; justify-content: space-between; align-items: center; gap: 0.25rem; }
 .ad2e-ability a, .ad2e-save a { cursor: pointer; }
 .ad2e-sheet input[type="number"] { width: 4rem; }
+.ad2e-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+.ad2e-detail h4 { margin: 0 0 0.25rem; }
+.ad2e-detail dl { display: grid; grid-template-columns: auto auto; gap: 0 0.5rem; margin: 0; }
+.ad2e-detail dt { font-weight: bold; }
+.ad2e-detail dd { margin: 0; text-align: right; }
+.ad2e-tests { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem; }
