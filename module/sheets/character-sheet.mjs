@@ -52,13 +52,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     header: { template: "systems/ad2e/templates/actor/character-header.hbs" },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
+    class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
     bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" }
   };
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "class" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -110,8 +111,40 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       };
     });
     context.alignments = AD2E.alignments;
+    context.classOptions = Object.fromEntries(Object.entries(AD2E.classes)
+      .filter(([, c]) => c.group === sys.classGroup).map(([k, c]) => [k, c.name]));
+    context.kitOptions = sys.classInfo.class
+      ? Object.fromEntries(Object.entries(AD2E.kits)
+        .filter(([, k]) => k.classes.includes(sys.classKey)).map(([key, k]) => [key, k.name]))
+      : null;
+    context.classTab = this._classTabContext(sys);
     context.classGroups = AD2E.classGroups;
     return context;
+  }
+
+  /** Display data for the Class tab (labels resolved, minimums formatted). */
+  _classTabContext(sys) {
+    const info = sys.classInfo;
+    const abilityLabel = key => game.i18n.localize(`AD2E.Ability.${key}`);
+    const fmtMin = v => (v === null || v === 0 ? "—" : `${v}`);
+    const cls = info.class;
+    return {
+      class: cls,
+      kit: info.kit,
+      groupLabel: game.i18n.localize(AD2E.classGroups[sys.classGroup]),
+      hitDie: AD2E.hitDie[sys.classGroup],
+      prime: cls ? cls.prime.map(abilityLabel).join(", ") : "",
+      xpBonus: info.xpBonus,
+      alignmentAllowed: info.alignmentAllowed,
+      alignments: cls ? (cls.alignments.length === 9 ? game.i18n.localize("AD2E.Class.AnyAlignment")
+        : cls.alignments.map(a => game.i18n.localize(AD2E.alignments[a])).join(", ")) : "",
+      races: cls?.races?.join(", ") ?? "",
+      requirements: info.requirements.map(r => ({
+        label: abilityLabel(r.key), classMin: fmtMin(r.classMin),
+        kitMin: r.kitMin === null ? "—" : (r.kitMin === 0 ? game.i18n.localize("AD2E.Class.NoMinimum") : `${r.kitMin}`),
+        score: r.score, met: r.met
+      }))
+    };
   }
 
   static onRollAbility(event, target) {

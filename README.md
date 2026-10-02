@@ -11,7 +11,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.5)
+## Status (v0.0.7)
 Character sheet; ability modifiers (STR/DEX/CON/WIS); THAC0 by class group and level; descending AC;
 roll-under ability checks; saves (d20 >= target, targets entered manually); melee/missile attack vs target AC;
 initiative 1d10, lowest acts first.
@@ -20,7 +20,11 @@ initiative 1d10, lowest acts first.
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by
   `python3 tools/build-ability-tables.py` from the AD&D 2e fandom wiki (revision ids recorded in the file). They are a
   starter set for testing; check them against an owned Player's Handbook. THAC0 progression in `module/config.mjs` is from memory.
+- Classes and kits are generated into `module/rules/class-data.mjs` by `python3 tools/build-class-data.py`: PHB classes
+  (Table 13 minimums, Table 22 specialist wizards) and the kits of the Complete Fighter's, Paladin's, Ranger's, Wizard's,
+  Priest's, Thief's and Bard's Handbooks. Kit ability minimums are curated by hand from each kit page; other kit rules are
+  linked, not copied.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-Class kits, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, saving throw tables.
+Kit proficiencies/benefits, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, saving throw tables.

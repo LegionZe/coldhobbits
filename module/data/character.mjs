@@ -21,7 +21,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     return {
       race: new StringField({ initial: "" }),
-      className: new StringField({ initial: "" }),
+      className: new StringField({ initial: "" }), // legacy free-text class (pre-0.0.7); not shown
+      classKey: new StringField({ initial: "", blank: true }),
+      kit: new StringField({ initial: "", blank: true }),
+      classNotes: new StringField({ initial: "" }),
       classGroup: new StringField({ initial: "warrior", choices: Object.keys(AD2E.classGroups) }),
       alignment: new StringField({ initial: "n", choices: Object.keys(AD2E.alignments) }),
       level: int(1, 1, 30),
@@ -77,11 +80,36 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
 
     this.ac.total = this.ac.base + dex.ac;
+    this.classInfo = this.#computeClassInfo();
 
     const prog = AD2E.thac0Progression[this.classGroup];
     const computed = 20 - Math.floor((this.level - 1) / prog.divisor) * prog.step;
     this.thac0.computed = computed;
     this.thac0.value = this.thac0.override ?? computed;
+  }
+
+  /** Selected class/kit (only if consistent with group/class) and requirement checks. */
+  #computeClassInfo() {
+    const cls = AD2E.classes[this.classKey];
+    const classData = cls?.group === this.classGroup ? cls : null;
+    const k = AD2E.kits[this.kit];
+    const kitData = classData && k?.classes.includes(this.classKey) ? k : null;
+    const requirements = AD2E.abilities.map(key => {
+      const classMin = classData?.min[key] ?? null;
+      const kitMin = kitData && key in kitData.min ? kitData.min[key] : null;
+      const required = kitMin ?? classMin ?? 0;
+      const score = this.abilities[key].value;
+      return { key, classMin, kitMin, required, score, met: score >= required };
+    });
+    const prime = classData?.prime ?? [];
+    return {
+      class: classData,
+      kit: kitData,
+      requirements,
+      requirementsMet: requirements.every(r => r.met),
+      alignmentAllowed: classData ? classData.alignments.includes(this.alignment) : true,
+      xpBonus: prime.length > 0 && prime.every(key => this.abilities[key].value >= 16) ? 10 : 0
+    };
   }
 
   getRollData() {
