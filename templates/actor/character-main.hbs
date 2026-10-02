@@ -17,6 +17,13 @@
       <legend>{{localize "AD2E.Character.combat"}}</legend>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.hp"}}</span>
         <span class="ad2e-pair"><input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></span></div>
+      <div class="ad2e-field"><span>{{localize "AD2E.HP.HitDice"}}</span><strong>{{system.hitDice.label}}</strong></div>
+      {{#if editable}}
+      <div class="ad2e-buttons">
+        <button type="button" data-action="rollFirstLevelHp">{{localize "AD2E.HP.RollFirst"}}</button>
+        <button type="button" data-action="levelUp">{{localize "AD2E.HP.LevelUp"}}</button>
+      </div>
+      {{/if}}
       <div class="ad2e-field"><span>{{localize "AD2E.Character.acBase"}}</span><input type="number" name="system.ac.base" value="{{system.ac.base}}"></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.acTotal"}}</span><strong>{{system.ac.total}}</strong></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.thac0Override"}}</span><input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}"></div>
@@ -35,7 +42,8 @@
       {{#each saves as |sv|}}
       <div class="ad2e-save">
         <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
-        <input type="number" name="system.saves.{{sv.key}}.value" value="{{sv.value}}">
+        <strong class="{{#if sv.overridden}}ad2e-overridden{{/if}}">{{sv.value}}</strong>
+        <input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">
       </div>
       {{/each}}
     </fieldset>

@@ -1,4 +1,4 @@
-import { AD2E, lookup } from "../config.mjs";
+import { AD2E, hitDiceAt, lookup } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
@@ -17,7 +17,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     }
 
     const saves = {};
-    for (const key of AD2E.saves) saves[key] = new SchemaField({ value: int(20, 1, 25) });
+    // Save targets come from PHB Table 60 by class group and level; override replaces the table value.
+    for (const key of AD2E.saves) {
+      saves[key] = new SchemaField({ override: new NumberField({ integer: true, min: 1, max: 25, nullable: true, initial: null }) });
+    }
 
     return {
       race: new StringField({ initial: "" }),
@@ -82,6 +85,17 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
 
     this.ac.total = this.ac.base + dex.ac;
+
+    const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
+    for (const key of AD2E.saves) {
+      this.saves[key].table = saveRow[key];
+      this.saves[key].value = this.saves[key].override ?? saveRow[key];
+    }
+
+    const hd = hitDiceAt(this.classGroup, this.level);
+    this.hitDice = { ...hd, label: hd.bonus ? `${hd.dice}d${hd.die}+${hd.bonus}` : `${hd.dice}d${hd.die}` };
+    const xp = AD2E.xpTable[this.classInfo.classItem?.system.identifier];
+    this.xpNext = xp?.[this.level] ?? null; // index = level -> XP for level + 1
 
     const prog = AD2E.thac0Progression[this.classGroup];
     const computed = 20 - Math.floor((this.level - 1) / prog.divisor) * prog.step;

@@ -20,7 +20,8 @@
     </label>
     <div class="ad2e-header-pair">
       <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
-      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"></label>
+      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"
+        {{#if system.xpNext}}data-tooltip="{{localize 'AD2E.HP.NextLevel'}}: {{system.xpNext}}"{{/if}}></label>
     </div>
   </div>
 </header>

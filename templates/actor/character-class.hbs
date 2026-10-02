@@ -14,6 +14,8 @@
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Character.classGroup"}}</dt><dd>{{ct.groupLabel}} (d{{ct.hitDie}})</dd>
         <dt>{{localize "AD2E.Class.PrimeRequisites"}}</dt><dd>{{ct.prime}}</dd>
+        <dt>{{localize "AD2E.HP.HitDice"}}</dt><dd>{{@root.system.hitDice.label}}</dd>
+        <dt>{{localize "AD2E.HP.NextLevel"}}</dt><dd>{{#if @root.system.xpNext}}{{@root.system.xpNext}} XP{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.XpBonus"}}</dt><dd>{{#if ct.xpBonus}}+{{ct.xpBonus}}%{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.Alignments"}}</dt><dd class="{{#unless ct.alignmentAllowed}}ad2e-unmet{{/unless}}">{{ct.alignments}}</dd>
         {{#if ct.cls.school}}

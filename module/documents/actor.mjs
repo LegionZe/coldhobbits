@@ -1,3 +1,5 @@
+import { hitDiceAt } from "../config.mjs";
+
 const { DialogV2 } = foundry.applications.api;
 
 /** Prompt for a single numeric input; resolves to a number, or null if dismissed. */
@@ -22,6 +24,51 @@ export default class AD2EActor extends Actor {
   getRollData() {
     if (this.system.getRollData) return this.system.getRollData();
     return { ...super.getRollData() };
+  }
+
+  /**
+   * Hit points gained on reaching `level`: one hit die + CON adjustment (minimum 1 per die)
+   * while the group still gains dice, otherwise the fixed per-level bonus with no CON.
+   * Posts the result to chat and returns the number gained.
+   */
+  async rollHitPointsForLevel(level) {
+    const group = this.system.classGroup;
+    const cur = hitDiceAt(group, level);
+    const prev = level > 1 ? hitDiceAt(group, level - 1) : { dice: 0, bonus: 0 };
+    const dice = cur.dice - prev.dice;
+    const bonus = cur.bonus - prev.bonus;
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    const flavor = game.i18n.format("AD2E.HP.RollFlavor", { level });
+    if (dice <= 0) {
+      await ChatMessage.create({ speaker, content: `<p>${flavor}: ${game.i18n.format("AD2E.HP.Fixed", { hp: bonus })}</p>` });
+      return bonus;
+    }
+    const con = this.system.mods.conHp;
+    const roll = await new Roll(`${dice}d${cur.die} + @con`, { con: con * dice }).evaluate();
+    const gained = Math.max(roll.total, dice) + bonus; // no hit die yields less than 1 hit point
+    await roll.toMessage({
+      speaker,
+      flavor: `${flavor}: ${game.i18n.format("AD2E.HP.Gained", { hp: gained })}`
+        + (gained > roll.total + bonus ? ` (${game.i18n.localize("AD2E.HP.Minimum")})` : "")
+    });
+    return gained;
+  }
+
+  /** Roll 1st-level hit points and set current and maximum HP to the result. */
+  async rollFirstLevelHitPoints() {
+    const hp = await this.rollHitPointsForLevel(1);
+    return this.update({ "system.hp.max": hp, "system.hp.value": hp });
+  }
+
+  /** Advance one level and add the hit points gained to current and maximum HP. */
+  async levelUp() {
+    const level = this.system.level + 1;
+    const hp = await this.rollHitPointsForLevel(level);
+    return this.update({
+      "system.level": level,
+      "system.hp.max": this.system.hp.max + hp,
+      "system.hp.value": this.system.hp.value + hp
+    });
   }
 
   /** Roll-under ability check: d20 <= score + modifier. */

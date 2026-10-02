@@ -45,6 +45,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollSave: CharacterSheet.onRollSave,
       rollTest: CharacterSheet.onRollTest,
       openItem: CharacterSheet.onOpenItem,
+      rollFirstLevelHp: CharacterSheet.onRollFirstLevelHp,
+      levelUp: CharacterSheet.onLevelUp,
       deleteItem: CharacterSheet.onDeleteItem,
       rollAttack: CharacterSheet.onRollAttack
     }
@@ -89,7 +91,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.saves = AD2E.saves.map(key => ({
       key,
       label: game.i18n.localize(`AD2E.Save.${key}`),
-      value: sys.saves[key].value
+      value: sys.saves[key].value,
+      table: sys.saves[key].table,
+      override: sys.saves[key].override ?? "",
+      overridden: sys.saves[key].override !== null
     }));
     context.abilityDetails = AD2E.abilities.map(key => {
       const row = sys.abilityData[key];
@@ -175,6 +180,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }
     if (remove.length) await this.actor.deleteEmbeddedDocuments("Item", remove);
     return super._onDropItem(event, item);
+  }
+
+  static async onRollFirstLevelHp() {
+    if (this.actor.system.level > 1) {
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: game.i18n.localize("AD2E.HP.RollFirst") },
+        content: `<p>${game.i18n.localize("AD2E.HP.ConfirmReset")}</p>`, rejectClose: false
+      });
+      if (!ok) return;
+    }
+    return this.actor.rollFirstLevelHitPoints();
+  }
+
+  static onLevelUp() {
+    return this.actor.levelUp();
   }
 
   static onOpenItem(event, target) {

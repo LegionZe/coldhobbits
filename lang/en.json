@@ -142,5 +142,17 @@
     "kitClassesHint": "Comma-separated class identifiers, e.g. fighter, paladin",
     "otherRequirements": "Has race, alignment or other restrictions",
     "kitMinHint": "Overrides the class minimum for that ability. Blank keeps the class minimum; 0 removes it."
+  },
+  "AD2E.Save.OverrideHint": "Override (blank uses PHB Table 60 for the class group and level)",
+  "AD2E.HP": {
+    "HitDice": "Hit Dice",
+    "RollFirst": "Roll 1st-Level HP",
+    "LevelUp": "Level Up",
+    "NextLevel": "Next level at",
+    "RollFlavor": "Hit points for level {level}",
+    "Gained": "+{hp} HP",
+    "Fixed": "+{hp} HP (fixed; no hit die or CON bonus at this level)",
+    "Minimum": "minimum 1 per die",
+    "ConfirmReset": "This character is above 1st level. Replace current and maximum HP with a new 1st-level roll?"
   }
 }
