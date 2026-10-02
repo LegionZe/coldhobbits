@@ -9,7 +9,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.2)
+## Status (v0.0.3)
 Character sheet; ability modifiers (STR/DEX/CON/WIS); THAC0 by class group and level; descending AC;
 roll-under ability checks; saves (d20 >= target, targets entered manually); melee/missile attack vs target AC;
 initiative 1d10, lowest acts first.

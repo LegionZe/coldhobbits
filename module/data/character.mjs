@@ -36,7 +36,20 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
   }
 
+  /**
+   * Core calls getRollData() from applyActiveEffects(), which runs between
+   * prepareBaseData() and prepareDerivedData(). Compute once in base data so roll
+   * data exists then, and again in derived data so active-effect changes apply.
+   */
+  prepareBaseData() {
+    this.#computeDerived();
+  }
+
   prepareDerivedData() {
+    this.#computeDerived();
+  }
+
+  #computeDerived() {
     const a = this.abilities;
     const str = lookup(AD2E.strTable, a.str.value);
     const strRow = (a.str.value === 18 && a.str.exceptional > 0)
@@ -68,7 +81,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       abilities: Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].value])),
       level: this.level,
       thac0: this.thac0.value,
-      init: this.initiative.mod + this.mods.reaction,
+      init: this.initiative.mod,
       hit: this.mods.hit,
       dmg: this.mods.dmg,
       missile: this.mods.missile
