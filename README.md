@@ -2,6 +2,12 @@
 
 Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 
+## Install
+- Manifest URL (Foundry > Install System): `https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json`
+  (requires at least one published GitHub release; `.github/workflows/release.yml` builds and attaches `ad2e.zip` and `system.json`).
+- Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
+- `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
+
 ## Status (v0.0.1)
 Character sheet; ability modifiers (STR/DEX/CON/WIS); THAC0 by class group and level; descending AC;
 roll-under ability checks; saves (d20 >= target, targets entered manually); melee/missile attack vs target AC;

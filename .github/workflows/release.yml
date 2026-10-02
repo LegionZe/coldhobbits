@@ -1,0 +1,38 @@
+name: Release
+
+# Publishing a GitHub release tagged e.g. v0.0.2 builds ad2e.zip and attaches it
+# and system.json to the release. Foundry installs from the manifest URL:
+# https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stamp version and download URL into system.json
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          VERSION="${TAG#v}"
+          jq --arg v "$VERSION" \
+             --arg d "https://github.com/$REPO/releases/download/$TAG/ad2e.zip" \
+             '.version = $v | .download = $d' system.json > system.tmp
+          mv system.tmp system.json
+
+      - name: Build archive (files at zip root)
+        run: zip -r ad2e.zip system.json module templates styles lang README.md
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$TAG" system.json ad2e.zip --clobber
