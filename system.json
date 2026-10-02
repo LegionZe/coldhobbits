@@ -1,8 +1,8 @@
 {
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
-  "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text.",
-  "version": "0.0.2",
+  "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
+  "version": "0.0.3",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14"

@@ -2,6 +2,8 @@
 
 Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 
+> **AI-generated code.** This repository is generated with [Claude Code](https://claude.com/claude-code) (Anthropic), under the direction and review of the repository owner. Rules tables and mechanics must be verified against an owned copy of the AD&D 2e rulebooks.
+
 ## Install
 - Manifest URL (Foundry > Install System): `https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json`
   Every push to `main` runs `.github/workflows/release.yml`, which publishes release `v<version>` (with `ad2e.zip`
@@ -9,7 +11,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.2)
+## Status (v0.0.3)
 Character sheet; ability modifiers (STR/DEX/CON/WIS); THAC0 by class group and level; descending AC;
 roll-under ability checks; saves (d20 >= target, targets entered manually); melee/missile attack vs target AC;
 initiative 1d10, lowest acts first.
