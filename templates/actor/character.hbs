@@ -1,0 +1,69 @@
+<section class="ad2e-sheet">
+  <header class="ad2e-header">
+    <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
+    <div class="ad2e-row">
+      <label>{{localize "AD2E.Character.race"}} <input type="text" name="system.race" value="{{system.race}}"></label>
+      <label>{{localize "AD2E.Character.className"}} <input type="text" name="system.className" value="{{system.className}}"></label>
+      <label>{{localize "AD2E.Character.classGroup"}}
+        <select name="system.classGroup">{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
+      </label>
+    </div>
+    <div class="ad2e-row">
+      <label>{{localize "AD2E.Character.alignment"}}
+        <select name="system.alignment">{{selectOptions alignments selected=system.alignment localize=true}}</select>
+      </label>
+      <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
+      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"></label>
+    </div>
+  </header>
+
+  <div class="ad2e-columns">
+    <fieldset class="ad2e-abilities">
+      <legend>{{localize "AD2E.Character.abilities"}}</legend>
+      {{#each abilities as |ab|}}
+      <div class="ad2e-ability">
+        <a data-action="rollAbility" data-ability="{{ab.key}}">{{ab.label}}</a>
+        <input type="number" name="system.abilities.{{ab.key}}.value" value="{{ab.value}}">
+        {{#if ab.isStr}}
+        <input type="number" name="system.abilities.str.exceptional" value="{{ab.exceptional}}" title="{{localize 'AD2E.Character.exceptional'}}" min="0" max="100">
+        {{/if}}
+      </div>
+      {{/each}}
+    </fieldset>
+
+    <fieldset class="ad2e-combat">
+      <legend>{{localize "AD2E.Character.combat"}}</legend>
+      <label>{{localize "AD2E.Character.hp"}}
+        <input type="number" name="system.hp.value" value="{{system.hp.value}}"> /
+        <input type="number" name="system.hp.max" value="{{system.hp.max}}">
+      </label>
+      <label>{{localize "AD2E.Character.acBase"}} <input type="number" name="system.ac.base" value="{{system.ac.base}}"></label>
+      <div>{{localize "AD2E.Character.acTotal"}}: <strong>{{system.ac.total}}</strong></div>
+      <label>{{localize "AD2E.Character.thac0Override"}}
+        <input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}">
+      </label>
+      <div>THAC0: <strong>{{system.thac0.value}}</strong></div>
+      <label>{{localize "AD2E.Character.initMod"}} <input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}"></label>
+      <div class="ad2e-row">
+        <button type="button" data-action="rollAttack" data-missile="false">{{localize "AD2E.Roll.Melee"}} ({{system.mods.hit}})</button>
+        <button type="button" data-action="rollAttack" data-missile="true">{{localize "AD2E.Roll.Missile"}} ({{system.mods.missile}})</button>
+      </div>
+      <div>{{localize "AD2E.Character.dmgAdj"}}: {{system.mods.dmg}} · {{localize "AD2E.Character.conHp"}}: {{system.mods.conHp}}/HD</div>
+    </fieldset>
+
+    <fieldset class="ad2e-saves">
+      <legend>{{localize "AD2E.Character.saves"}}</legend>
+      {{#each saves as |sv|}}
+      <div class="ad2e-save">
+        <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
+        <input type="number" name="system.saves.{{sv.key}}.value" value="{{sv.value}}">
+      </div>
+      {{/each}}
+    </fieldset>
+  </div>
+
+  <fieldset class="ad2e-bio">
+    <legend>{{localize "AD2E.Character.biography"}}</legend>
+    <textarea name="system.biography" rows="8">{{system.biography}}</textarea>
+  </fieldset>
+</section>

@@ -1,0 +1,22 @@
+{
+  "id": "ad2e",
+  "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
+  "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text.",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "authors": [{ "name": "LegionZe" }],
+  "url": "https://github.com/legionze/coldhobbits",
+  "esmodules": ["module/ad2e.mjs"],
+  "styles": ["styles/ad2e.css"],
+  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "documentTypes": {
+    "Actor": {
+      "character": { "htmlFields": ["biography"] }
+    }
+  },
+  "primaryTokenAttribute": "hp",
+  "grid": { "distance": 10, "units": "ft" }
+}
