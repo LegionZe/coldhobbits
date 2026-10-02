@@ -1,0 +1,32 @@
+{
+  "_id": "hyb4kilB14XOLT6y",
+  "_key": "!items!hyb4kilB14XOLT6y",
+  "name": "Skyrider",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "skyrider",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Skyrider_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 80000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

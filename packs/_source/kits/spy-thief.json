@@ -1,0 +1,32 @@
+{
+  "_id": "txkCpz3n8DPs10Md",
+  "_key": "!items!txkCpz3n8DPs10Md",
+  "name": "Spy",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "spy-thief",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 11,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Spy_-_Thief_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 82000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

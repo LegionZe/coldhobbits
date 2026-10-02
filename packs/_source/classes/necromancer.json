@@ -1,0 +1,47 @@
+{
+  "_id": "zdw4V2r9bybjXJIB",
+  "_key": "!items!zdw4V2r9bybjXJIB",
+  "name": "Necromancer",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "necromancer",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 9,
+      "wis": 16,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Necromancy",
+    "opposition": "Illusion & Ench./Charm",
+    "races": [
+      "human"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 14000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

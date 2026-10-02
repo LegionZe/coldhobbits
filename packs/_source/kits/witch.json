@@ -1,0 +1,40 @@
+{
+  "_id": "ry7muFA4AADG4su7",
+  "_key": "!items!ry7muFA4AADG4su7",
+  "name": "Witch",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "witch",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": 13,
+      "int": 13,
+      "wis": 13,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Witch_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 96000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

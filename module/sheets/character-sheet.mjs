@@ -44,6 +44,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollAbility: CharacterSheet.onRollAbility,
       rollSave: CharacterSheet.onRollSave,
       rollTest: CharacterSheet.onRollTest,
+      openItem: CharacterSheet.onOpenItem,
+      deleteItem: CharacterSheet.onDeleteItem,
       rollAttack: CharacterSheet.onRollAttack
     }
   };
@@ -111,40 +113,76 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       };
     });
     context.alignments = AD2E.alignments;
-    context.classOptions = Object.fromEntries(Object.entries(AD2E.classes)
-      .filter(([, c]) => c.group === sys.classGroup).map(([k, c]) => [k, c.name]));
-    context.kitOptions = sys.classInfo.class
-      ? Object.fromEntries(Object.entries(AD2E.kits)
-        .filter(([, k]) => k.classes.includes(sys.classKey)).map(([key, k]) => [key, k.name]))
-      : null;
     context.classTab = this._classTabContext(sys);
     context.classGroups = AD2E.classGroups;
     return context;
   }
 
-  /** Display data for the Class tab (labels resolved, minimums formatted). */
+  /** Display data for the class/kit items (header and Class tab). */
   _classTabContext(sys) {
     const info = sys.classInfo;
     const abilityLabel = key => game.i18n.localize(`AD2E.Ability.${key}`);
-    const fmtMin = v => (v === null || v === 0 ? "—" : `${v}`);
-    const cls = info.class;
+    const fmt = v => (v === null || v === undefined ? "—" : `${v}`);
+    const cls = info.classItem?.system ?? null;
     return {
-      class: cls,
-      kit: info.kit,
+      classItem: info.classItem,
+      kitItem: info.kitItem,
+      kitFits: info.kitFits,
+      cls,
+      kit: info.kitItem?.system ?? null,
       groupLabel: game.i18n.localize(AD2E.classGroups[sys.classGroup]),
       hitDie: AD2E.hitDie[sys.classGroup],
-      prime: cls ? cls.prime.map(abilityLabel).join(", ") : "",
+      prime: cls ? [...cls.prime].map(abilityLabel).join(", ") : "",
       xpBonus: info.xpBonus,
       alignmentAllowed: info.alignmentAllowed,
-      alignments: cls ? (cls.alignments.length === 9 ? game.i18n.localize("AD2E.Class.AnyAlignment")
-        : cls.alignments.map(a => game.i18n.localize(AD2E.alignments[a])).join(", ")) : "",
-      races: cls?.races?.join(", ") ?? "",
+      alignments: cls ? (cls.alignments.size === 9 ? game.i18n.localize("AD2E.Class.AnyAlignment")
+        : [...cls.alignments].map(a => game.i18n.localize(AD2E.alignments[a])).join(", ")) : "",
+      races: cls ? [...cls.races].join(", ") : "",
       requirements: info.requirements.map(r => ({
-        label: abilityLabel(r.key), classMin: fmtMin(r.classMin),
-        kitMin: r.kitMin === null ? "—" : (r.kitMin === 0 ? game.i18n.localize("AD2E.Class.NoMinimum") : `${r.kitMin}`),
+        label: abilityLabel(r.key), classMin: fmt(r.classMin),
+        kitMin: r.kitMin === 0 ? game.i18n.localize("AD2E.Class.NoMinimum") : fmt(r.kitMin),
         score: r.score, met: r.met
       }))
     };
+  }
+
+  /**
+   * Class and kit items: one of each per character. A dropped class replaces the current
+   * class (and drops a kit that does not fit it); a kit must be open to the current class.
+   */
+  async _onDropItem(event, item) {
+    if (!this.actor.isOwner || !["class", "kit"].includes(item.type)) return super._onDropItem(event, item);
+    if (item.parent === this.actor) return super._onDropItem(event, item); // sorting an owned item
+    const current = this.actor.items;
+    const classItem = current.find(i => i.type === "class");
+    const remove = [];
+    if (item.type === "class") {
+      if (classItem) remove.push(classItem.id);
+      const kit = current.find(i => i.type === "kit");
+      if (kit && !kit.system.classes.has(item.system.identifier)) remove.push(kit.id);
+    } else {
+      if (!classItem) {
+        ui.notifications.warn(game.i18n.localize("AD2E.Class.NeedClassFirst"));
+        return null;
+      }
+      if (!item.system.classes.has(classItem.system.identifier)) {
+        ui.notifications.warn(game.i18n.format("AD2E.Class.KitNotForClass",
+          { kit: item.name, class: classItem.name }));
+        return null;
+      }
+      const kit = current.find(i => i.type === "kit");
+      if (kit) remove.push(kit.id);
+    }
+    if (remove.length) await this.actor.deleteEmbeddedDocuments("Item", remove);
+    return super._onDropItem(event, item);
+  }
+
+  static onOpenItem(event, target) {
+    return this.actor.items.get(target.dataset.itemId)?.sheet.render({ force: true });
+  }
+
+  static onDeleteItem(event, target) {
+    return this.actor.items.get(target.dataset.itemId)?.delete();
   }
 
   static onRollAbility(event, target) {

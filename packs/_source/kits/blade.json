@@ -1,0 +1,32 @@
+{
+  "_id": "2IG6kaCCaccwJDnd",
+  "_key": "!items!2IG6kaCCaccwJDnd",
+  "name": "Blade",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "blade",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": 13,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": 15
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Blade_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 15000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -2,23 +2,72 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
   },
-  "authors": [{ "name": "LegionZe" }],
+  "authors": [
+    {
+      "name": "LegionZe"
+    }
+  ],
   "url": "https://github.com/LegionZe/coldhobbits",
   "manifest": "https://github.com/LegionZe/coldhobbits/releases/latest/download/system.json",
   "download": "https://github.com/LegionZe/coldhobbits/releases/latest/download/ad2e.zip",
-  "esmodules": ["module/ad2e.mjs"],
-  "styles": ["styles/ad2e.css"],
-  "languages": [{ "lang": "en", "name": "English", "path": "lang/en.json" }],
+  "esmodules": [
+    "module/ad2e.mjs"
+  ],
+  "styles": [
+    "styles/ad2e.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
   "documentTypes": {
     "Actor": {
-      "character": { "htmlFields": ["biography"] }
+      "character": {
+        "htmlFields": [
+          "biography"
+        ]
+      }
+    },
+    "Item": {
+      "class": {},
+      "kit": {}
     }
   },
   "primaryTokenAttribute": "hp",
-  "grid": { "distance": 10, "units": "ft" }
+  "grid": {
+    "distance": 10,
+    "units": "ft"
+  },
+  "packs": [
+    {
+      "name": "classes",
+      "label": "Classes (PHB)",
+      "system": "ad2e",
+      "path": "packs/classes",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "kits",
+      "label": "Class Kits (Complete Handbooks)",
+      "system": "ad2e",
+      "path": "packs/kits",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ]
 }

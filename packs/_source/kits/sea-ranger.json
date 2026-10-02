@@ -1,0 +1,32 @@
+{
+  "_id": "qrie857kwxZBUjWb",
+  "_key": "!items!qrie857kwxZBUjWb",
+  "name": "Sea Ranger",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "sea-ranger",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 12,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Sea_Ranger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 77000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

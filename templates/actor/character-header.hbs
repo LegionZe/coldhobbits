@@ -2,19 +2,25 @@
   <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
   <div class="ad2e-header-grid">
     <label>{{localize "AD2E.Character.classGroup"}}
-      <select name="system.classGroup">{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
+      <select name="system.classGroup" {{#if classTab.classItem}}disabled data-tooltip="{{localize 'AD2E.Class.GroupFromClass'}}"{{/if}}>{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
     </label>
-    <label>{{localize "AD2E.Character.className"}}
-      <select name="system.classKey">{{selectOptions classOptions selected=system.classKey blank=(localize "AD2E.Class.None")}}</select>
-    </label>
-    <label>{{localize "AD2E.Character.kit"}}
-      <select name="system.kit" {{#unless kitOptions}}disabled{{/unless}}>{{selectOptions kitOptions selected=system.kit blank=(localize "AD2E.Class.NoKit")}}</select>
-    </label>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">{{localize "AD2E.Character.className"}}</span>
+      {{#if classTab.classItem}}<a data-action="openItem" data-item-id="{{classTab.classItem.id}}">{{classTab.classItem.name}}</a>
+      {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Class.DropClass"}}</span>{{/if}}
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">{{localize "AD2E.Character.kit"}}</span>
+      {{#if classTab.kitItem}}<a data-action="openItem" data-item-id="{{classTab.kitItem.id}}" class="{{#unless classTab.kitFits}}ad2e-unmet{{/unless}}">{{classTab.kitItem.name}}</a>
+      {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Class.DropKit"}}</span>{{/if}}
+    </div>
     <label>{{localize "AD2E.Character.race"}} <input type="text" name="system.race" value="{{system.race}}"></label>
     <label>{{localize "AD2E.Character.alignment"}}
       <select name="system.alignment">{{selectOptions alignments selected=system.alignment localize=true}}</select>
     </label>
-    <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
-    <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"></label>
+    <div class="ad2e-header-pair">
+      <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
+      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"></label>
+    </div>
   </div>
 </header>

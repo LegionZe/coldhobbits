@@ -1,0 +1,48 @@
+{
+  "_id": "0uFy9KNsu8FlQJnj",
+  "_key": "!items!0uFy9KNsu8FlQJnj",
+  "name": "Transmuter",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "transmuter",
+    "group": "wizard",
+    "min": {
+      "str": null,
+      "dex": 15,
+      "con": null,
+      "int": 9,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "int"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "Alteration",
+    "opposition": "Abjuration & Necromancy",
+    "races": [
+      "human",
+      "half-elf"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 15000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

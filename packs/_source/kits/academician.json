@@ -1,0 +1,40 @@
+{
+  "_id": "sWLDrBKgE08Br0jt",
+  "_key": "!items!sWLDrBKgE08Br0jt",
+  "name": "Academician",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "academician",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 13,
+      "wis": 11,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Academician_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

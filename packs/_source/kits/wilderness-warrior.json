@@ -1,0 +1,32 @@
+{
+  "_id": "qbsfMbkg5O7mtsbF",
+  "_key": "!items!qbsfMbkg5O7mtsbF",
+  "name": "Wilderness Warrior",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wilderness-warrior",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": 13,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Wilderness_Warrior_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 95000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

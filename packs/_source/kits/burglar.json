@@ -1,0 +1,32 @@
+{
+  "_id": "nIEa14bN2RYHgeWb",
+  "_key": "!items!nIEa14bN2RYHgeWb",
+  "name": "Burglar",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "burglar",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": 10,
+      "dex": 13,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Burglar_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 18000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

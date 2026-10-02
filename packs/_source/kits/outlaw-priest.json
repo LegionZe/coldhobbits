@@ -1,0 +1,33 @@
+{
+  "_id": "kzwPf2kYZbQANk0J",
+  "_key": "!items!kzwPf2kYZbQANk0J",
+  "name": "Outlaw Priest",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "outlaw-priest",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Outlaw_Priest_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 61000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

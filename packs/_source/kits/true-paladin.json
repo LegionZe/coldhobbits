@@ -1,0 +1,32 @@
+{
+  "_id": "paTWUKzoGO3fIORR",
+  "_key": "!items!paTWUKzoGO3fIORR",
+  "name": "True Paladin",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "true-paladin",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/True_Paladin_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 92000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

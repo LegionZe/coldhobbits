@@ -1,0 +1,32 @@
+{
+  "_id": "szwRwNNQuKceI1hv",
+  "_key": "!items!szwRwNNQuKceI1hv",
+  "name": "Greenwood Ranger",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "greenwood-ranger",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Greenwood_Ranger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 41000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

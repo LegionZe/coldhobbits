@@ -1,0 +1,32 @@
+{
+  "_id": "LEA4bu9qz5unb9z1",
+  "_key": "!items!LEA4bu9qz5unb9z1",
+  "name": "Myrmidon",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "myrmidon",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": 12,
+      "dex": null,
+      "con": 12,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Myrmidon_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 57000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

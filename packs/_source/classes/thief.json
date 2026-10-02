@@ -1,0 +1,44 @@
+{
+  "_id": "MEkv1KM33J2kaHYx",
+  "_key": "!items!MEkv1KM33J2kaHYx",
+  "name": "Thief",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "thief",
+    "group": "rogue",
+    "min": {
+      "str": null,
+      "dex": 9,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "dex"
+    ],
+    "alignments": [
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Thief_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 6000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

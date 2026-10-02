@@ -1,0 +1,38 @@
+{
+  "_id": "OUaZy9oqBzx6jytD",
+  "_key": "!items!OUaZy9oqBzx6jytD",
+  "name": "Paladin",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "paladin",
+    "group": "warrior",
+    "min": {
+      "str": 12,
+      "dex": null,
+      "con": 9,
+      "int": null,
+      "wis": 13,
+      "cha": 17
+    },
+    "prime": [
+      "str",
+      "cha"
+    ],
+    "alignments": [
+      "lg"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Paladin_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

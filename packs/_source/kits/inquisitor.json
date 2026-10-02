@@ -1,0 +1,32 @@
+{
+  "_id": "KMXeafpU2VAoYutk",
+  "_key": "!items!KMXeafpU2VAoYutk",
+  "name": "Inquisitor",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "inquisitor",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 11,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Inquisitor_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 46000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "GKT84aJPWjLPZlxR",
+  "_key": "!items!GKT84aJPWjLPZlxR",
+  "name": "Meistersinger",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "meistersinger",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Meistersinger_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 53000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

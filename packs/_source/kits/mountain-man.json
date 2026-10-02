@@ -1,0 +1,32 @@
+{
+  "_id": "mqLzi8VTL4XLkMaI",
+  "_key": "!items!mqLzi8VTL4XLkMaI",
+  "name": "Mountain Man",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "mountain-man",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": 14,
+      "dex": null,
+      "con": 15,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Mountain_Man_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 56000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

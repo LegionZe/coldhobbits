@@ -1,0 +1,32 @@
+{
+  "_id": "NK2Sxxuk6MysJkSb",
+  "_key": "!items!NK2Sxxuk6MysJkSb",
+  "name": "Buccaneer",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "buccaneer",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": 10,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Buccaneer_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 17000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

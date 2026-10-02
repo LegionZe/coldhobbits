@@ -1,0 +1,32 @@
+{
+  "_id": "FwJ468p7GrYlYMcq",
+  "_key": "!items!FwJ468p7GrYlYMcq",
+  "name": "Herald",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "herald",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Herald_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 45000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "FwMrE7imTzSYDNnd",
+  "_key": "!items!FwMrE7imTzSYDNnd",
+  "name": "Jester",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "jester-bard",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": 14,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Jester_-_Bard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 48000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

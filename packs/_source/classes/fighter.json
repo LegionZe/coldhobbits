@@ -1,0 +1,45 @@
+{
+  "_id": "b54fVUyxwIJbEKEs",
+  "_key": "!items!b54fVUyxwIJbEKEs",
+  "name": "Fighter",
+  "type": "class",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "fighter",
+    "group": "warrior",
+    "min": {
+      "str": 9,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "prime": [
+      "str"
+    ],
+    "alignments": [
+      "lg",
+      "ng",
+      "cg",
+      "ln",
+      "n",
+      "cn",
+      "le",
+      "ne",
+      "ce"
+    ],
+    "school": "",
+    "opposition": "",
+    "races": [],
+    "url": "https://adnd2e.fandom.com/wiki/Fighter_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

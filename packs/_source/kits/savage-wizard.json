@@ -1,0 +1,40 @@
+{
+  "_id": "CKBKkcqWNydlESl2",
+  "_key": "!items!CKBKkcqWNydlESl2",
+  "name": "Savage Wizard",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "savage-wizard",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": 11,
+      "dex": null,
+      "con": 13,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Savage_Wizard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 74000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

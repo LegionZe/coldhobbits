@@ -1,0 +1,32 @@
+{
+  "_id": "h4UGvXqZrVVeDy2C",
+  "_key": "!items!h4UGvXqZrVVeDy2C",
+  "name": "Equerry",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "equerry",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": 14,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Equerry_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 27000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

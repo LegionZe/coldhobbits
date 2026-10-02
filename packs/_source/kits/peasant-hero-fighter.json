@@ -1,0 +1,32 @@
+{
+  "_id": "qMax3kU2kMCDtsnS",
+  "_key": "!items!qMax3kU2kMCDtsnS",
+  "name": "Peasant Hero",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "peasant-hero-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Peasant_Hero_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 65000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

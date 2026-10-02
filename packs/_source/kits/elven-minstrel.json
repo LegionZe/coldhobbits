@@ -1,0 +1,32 @@
+{
+  "_id": "8l6642BDznswgxhA",
+  "_key": "!items!8l6642BDznswgxhA",
+  "name": "Elven Minstrel",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "elven-minstrel",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Elven_Minstrel_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 25000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

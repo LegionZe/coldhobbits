@@ -1,0 +1,32 @@
+{
+  "_id": "QVDLJJ8WdXBOmsha",
+  "_key": "!items!QVDLJJ8WdXBOmsha",
+  "name": "Cavalier",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cavalier-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": 15,
+      "dex": 15,
+      "con": 15,
+      "int": 10,
+      "wis": 10,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Cavalier_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 19000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

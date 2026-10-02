@@ -1,0 +1,32 @@
+{
+  "_id": "svPA0vmqNJ75Z7bz",
+  "_key": "!items!svPA0vmqNJ75Z7bz",
+  "name": "Samurai",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "samurai-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": 13,
+      "dex": null,
+      "con": 13,
+      "int": 14,
+      "wis": 13,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Samurai_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 71000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

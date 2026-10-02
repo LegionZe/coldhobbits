@@ -1,0 +1,32 @@
+{
+  "_id": "Qk458aXAqZMIRZKS",
+  "_key": "!items!Qk458aXAqZMIRZKS",
+  "name": "Acrobat",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "acrobat-thief",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": 12,
+      "dex": 14,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Acrobat_-_Thief_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

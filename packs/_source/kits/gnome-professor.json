@@ -1,0 +1,32 @@
+{
+  "_id": "nqNU79LE7hSJ0MfE",
+  "_key": "!items!nqNU79LE7hSJ0MfE",
+  "name": "Gnome Professor",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "gnome-professor",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 15,
+      "wis": null,
+      "cha": 13
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Gnome_Professor_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 40000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "C7WBKTlVgfeJDwP7",
+  "_key": "!items!C7WBKTlVgfeJDwP7",
+  "name": "Barbarian",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "barbarian-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": 15,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Barbarian_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

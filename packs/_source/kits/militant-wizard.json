@@ -1,0 +1,40 @@
+{
+  "_id": "nvzEPw3BYVjlSqT3",
+  "_key": "!items!nvzEPw3BYVjlSqT3",
+  "name": "Militant Wizard",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "militant-wizard",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": 13,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Militant_Wizard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 54000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

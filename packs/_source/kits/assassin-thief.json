@@ -1,0 +1,32 @@
+{
+  "_id": "IYbM6yrED9yuUKlQ",
+  "_key": "!items!IYbM6yrED9yuUKlQ",
+  "name": "Assassin",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "assassin-thief",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": 12,
+      "dex": 12,
+      "con": null,
+      "int": 11,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Assassin_-_Thief_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 7000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

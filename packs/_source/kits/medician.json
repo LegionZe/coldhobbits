@@ -1,0 +1,32 @@
+{
+  "_id": "pL5mA1odUK4oywPY",
+  "_key": "!items!pL5mA1odUK4oywPY",
+  "name": "Medician",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "medician",
+    "classes": [
+      "paladin"
+    ],
+    "source": "Complete Paladin's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 10,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Medician_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 52000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

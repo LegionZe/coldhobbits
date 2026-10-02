@@ -1,0 +1,32 @@
+{
+  "_id": "nMG21Y35DKkqM9by",
+  "_key": "!items!nMG21Y35DKkqM9by",
+  "name": "Warden",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "warden",
+    "classes": [
+      "ranger"
+    ],
+    "source": "Complete Ranger's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": 12
+    },
+    "otherRequirements": true,
+    "url": "https://adnd2e.fandom.com/wiki/Warden_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 94000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "kqlO8DSxVKyD53C5",
+  "_key": "!items!kqlO8DSxVKyD53C5",
+  "name": "Savage",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "savage-fighter",
+    "classes": [
+      "fighter"
+    ],
+    "source": "Complete Fighter's Handbook",
+    "min": {
+      "str": 11,
+      "dex": null,
+      "con": 15,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Savage_-_Fighter_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 72000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

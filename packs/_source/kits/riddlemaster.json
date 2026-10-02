@@ -1,0 +1,32 @@
+{
+  "_id": "Cpj0C2fAZGWMWD5C",
+  "_key": "!items!Cpj0C2fAZGWMWD5C",
+  "name": "Riddlemaster",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "riddlemaster",
+    "classes": [
+      "bard"
+    ],
+    "source": "Complete Bard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 15,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Riddlemaster_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 70000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

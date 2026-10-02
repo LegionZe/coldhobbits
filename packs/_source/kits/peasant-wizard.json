@@ -1,0 +1,40 @@
+{
+  "_id": "OXjiIiHTX8WMo4Wt",
+  "_key": "!items!OXjiIiHTX8WMo4Wt",
+  "name": "Peasant Wizard",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "peasant-wizard",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Complete Wizard's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Peasant_Wizard_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 67000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

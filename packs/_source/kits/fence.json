@@ -1,0 +1,32 @@
+{
+  "_id": "oFHKuDN6qyfJVSjP",
+  "_key": "!items!oFHKuDN6qyfJVSjP",
+  "name": "Fence",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "fence",
+    "classes": [
+      "thief"
+    ],
+    "source": "Complete Thief's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 12,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Fence_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 32000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

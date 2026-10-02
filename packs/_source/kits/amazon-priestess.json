@@ -1,0 +1,33 @@
+{
+  "_id": "EI57VUvWdCLN9AFh",
+  "_key": "!items!EI57VUvWdCLN9AFh",
+  "name": "Amazon Priestess",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "amazon-priestess",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "source": "Complete Priest's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "url": "https://adnd2e.fandom.com/wiki/Amazon_Priestess_(Character_Kit)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

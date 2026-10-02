@@ -44,9 +44,20 @@ jobs:
              '.download = $d' system.json > system.tmp
           mv system.tmp system.json
 
+      - uses: actions/setup-node@v4
+        if: steps.ver.outputs.exists == 'false'
+        with:
+          node-version: 22
+
+      - name: Compile compendium packs
+        if: steps.ver.outputs.exists == 'false'
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:packs
+
       - name: Build archive (files at zip root)
         if: steps.ver.outputs.exists == 'false'
-        run: zip -r ad2e.zip system.json module templates styles lang README.md
+        run: zip -r ad2e.zip system.json module templates styles lang packs README.md -x "packs/_source/*"
 
       - name: Publish release
         if: steps.ver.outputs.exists == 'false'
