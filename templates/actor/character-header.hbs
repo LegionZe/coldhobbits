@@ -1,0 +1,15 @@
+<header class="ad2e-header">
+  <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
+  <div class="ad2e-header-grid">
+    <label>{{localize "AD2E.Character.race"}} <input type="text" name="system.race" value="{{system.race}}"></label>
+    <label>{{localize "AD2E.Character.className"}} <input type="text" name="system.className" value="{{system.className}}"></label>
+    <label>{{localize "AD2E.Character.classGroup"}}
+      <select name="system.classGroup">{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
+    </label>
+    <label>{{localize "AD2E.Character.alignment"}}
+      <select name="system.alignment">{{selectOptions alignments selected=system.alignment localize=true}}</select>
+    </label>
+    <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
+    <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"></label>
+  </div>
+</header>

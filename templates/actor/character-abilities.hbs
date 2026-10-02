@@ -1,0 +1,20 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="ad2e-detail-grid">
+    {{#each abilityDetails as |ad|}}
+    <fieldset class="ad2e-detail" data-ability="{{ad.key}}">
+      <legend>{{ad.label}} {{ad.score}}</legend>
+      <dl>
+        {{#each ad.stats as |st|}}
+        <dt>{{st.label}}</dt><dd>{{st.value}}</dd>
+        {{/each}}
+      </dl>
+      <div class="ad2e-buttons">
+        <button type="button" data-action="rollAbility" data-ability="{{ad.key}}">{{localize "AD2E.Roll.Check"}}</button>
+        {{#each ad.tests as |t|}}
+        <button type="button" data-action="rollTest" data-test="{{t.key}}" {{#if t.disabled}}disabled{{/if}}>{{t.label}}</button>
+        {{/each}}
+      </div>
+    </fieldset>
+    {{/each}}
+  </div>
+</section>
