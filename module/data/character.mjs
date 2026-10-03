@@ -226,7 +226,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   /**
    * Encumbrance and movement (Encumbrance (PHB), Tables 47/48; Movement (PHB), Table 64). Load = item weights
-   * (weapons and ammunition x quantity, armour) + coins (50 to the pound) + other gear + 5 lb clothing. Magical armour counts toward the most
+   * (weapons, ammunition and carried equipment x quantity, armour) + coins (50 to the pound) + other gear + 5 lb
+   * clothing. Magical armour counts toward the most
    * weight that can be carried but not toward movement or combat effects. Basic rule (Table 47 categories): Light
    * reduces movement by 1/3, Moderate by 1/2, Heavy by 2/3 (fractions down), Severe to 1. Specific rule (Table 48):
    * the first column whose weight is at least the load. Combat: movement at 1/2 of normal: -1 to hit; 1/3 or less:
@@ -236,8 +237,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     let rule = "basic";
     try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
     const items = this.parent?.items ?? [];
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
-    const gear = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type));
+    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    // Equipment counts while carried (animals, transport, services and lodging default to not carried).
+    const gear = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type)
+      || (i.type === "equipment" && i.system.carried));
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);

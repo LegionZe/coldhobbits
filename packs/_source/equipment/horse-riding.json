@@ -1,0 +1,34 @@
+{
+  "_id": "VnjY7ciCXD44wCn9",
+  "_key": "!items!VnjY7ciCXD44wCn9",
+  "name": "Horse, riding",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horse-riding",
+    "category": "animal",
+    "cost": "75 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 180,
+      "half": 270,
+      "quarter": 360
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 11000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "UEXZMxErppUOEJuo",
+  "_key": "!items!UEXZMxErppUOEJuo",
+  "name": "Basket, large",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "basket-large",
+    "category": "gear",
+    "cost": "3 sp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": 20,
+      "volume": "2'×2'×2'"
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "faXqPLnTYGFkIwhf",
+  "sort": 15300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

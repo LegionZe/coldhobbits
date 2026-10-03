@@ -1,0 +1,34 @@
+{
+  "_id": "plYjnLH2ZRgGzbmw",
+  "_key": "!items!plYjnLH2ZRgGzbmw",
+  "name": "Horse, light war",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horse-light-war",
+    "category": "animal",
+    "cost": "150 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 170,
+      "half": 255,
+      "quarter": 340
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 10800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

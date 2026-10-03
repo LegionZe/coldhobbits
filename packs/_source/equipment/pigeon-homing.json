@@ -1,0 +1,34 @@
+{
+  "_id": "vFMpISUITiy0hSDE",
+  "_key": "!items!vFMpISUITiy0hSDE",
+  "name": "Pigeon, homing",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pigeon-homing",
+    "category": "animal",
+    "cost": "100 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 11700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

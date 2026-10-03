@@ -1,0 +1,34 @@
+{
+  "_id": "QQI6fha0lBjzij5D",
+  "_key": "!items!QQI6fha0lBjzij5D",
+  "name": "Thieves' picks",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "thieves-picks",
+    "category": "gear",
+    "cost": "30 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "faXqPLnTYGFkIwhf",
+  "sort": 21200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

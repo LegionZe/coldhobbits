@@ -1,0 +1,34 @@
+{
+  "_id": "Qte70mDZbVBF4c4f",
+  "_key": "!items!Qte70mDZbVBF4c4f",
+  "name": "Belt",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "belt",
+    "category": "clothing",
+    "cost": "3 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Clothing_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "83sefHS7GWMecduo",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

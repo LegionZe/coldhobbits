@@ -1,0 +1,34 @@
+{
+  "_id": "5dkSbas6RIjrvIxh",
+  "_key": "!items!5dkSbas6RIjrvIxh",
+  "name": "Great galley",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "great-galley",
+    "category": "transport",
+    "cost": "30,000 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Transport_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "AgmZLCsh3mwp8yzu",
+  "sort": 7900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

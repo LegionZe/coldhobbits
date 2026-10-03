@@ -1,0 +1,34 @@
+{
+  "_id": "SOxm0qAOxc0FkZ3k",
+  "_key": "!items!SOxm0qAOxc0FkZ3k",
+  "name": "Doctor, leech, or bleeding",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "doctor-leech-or-bleeding",
+    "category": "service",
+    "cost": "3 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Services_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "6jWckP1v6db7zAie",
+  "sort": 12500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

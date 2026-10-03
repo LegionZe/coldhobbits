@@ -1,4 +1,4 @@
-import { AD2E, armorSummary } from "../config.mjs";
+import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 import { formatKitProficiencies } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -197,6 +197,18 @@ export class CoinSheet extends AD2EItemSheet {
     const gp = Math.round(sys.quantity * sys.value / AD2E.coinValues.gp * 100) / 100;
     const lb = Math.round(sys.quantity / AD2E.coinsPerPound * 10) / 10;
     context.summary = game.i18n.format("AD2E.Coin.Summary", { n: sys.quantity, gp, lb });
+    return context;
+  }
+}
+
+export class EquipmentSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["equipment"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/equipment-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.categories = AD2E.equipmentCategories;
+    context.summary = equipmentSummary(this.document.system);
     return context;
   }
 }

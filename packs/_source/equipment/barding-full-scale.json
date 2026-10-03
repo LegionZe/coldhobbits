@@ -1,0 +1,34 @@
+{
+  "_id": "rokieVpUc9iQmk7h",
+  "_key": "!items!rokieVpUc9iQmk7h",
+  "name": "Barding, full scale",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "barding-full-scale",
+    "category": "tack",
+    "cost": "1,000 gp",
+    "weight": 75.0,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "D40j20TX2n0C6QQ4",
+  "sort": 13500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

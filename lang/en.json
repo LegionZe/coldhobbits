@@ -137,7 +137,8 @@
     "weapon": "Weapon",
     "ammunition": "Ammunition",
     "armor": "Armour",
-    "coin": "Coin"
+    "coin": "Coin",
+    "equipment": "Equipment"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -377,5 +378,31 @@
     "Summary": "{n} coins: {gp} gp, {lb} lb",
     "NoneYet": "No coins yet. Drag coins from the \"Equipment (PHB)\" compendium; a dropped stack joins an owned stack of the same coin."
   },
-  "AD2E.Sheet.Coin": "AD&D 2e Coin"
+  "AD2E.Sheet.Coin": "AD&D 2e Coin",
+  "AD2E.Gear": {
+    "Gear": "Gear",
+    "Category": "Category",
+    "gear": "Miscellaneous equipment",
+    "clothing": "Clothing",
+    "provisions": "Household provisioning",
+    "lodging": "Daily food and lodging",
+    "tack": "Tack and harness",
+    "animal": "Animals",
+    "transport": "Transport",
+    "service": "Services",
+    "WeightEach": "Weight per unit (lb)",
+    "Each": "each",
+    "Carried": "Carried",
+    "CarriedHint": "Carried items count toward encumbrance (weight x quantity)",
+    "Capacity": "Holds (lb, PHB Table 50)",
+    "Volume": "Volume (PHB Table 50)",
+    "LoadFull": "Animal load at full move (lb, PHB Table 49)",
+    "LoadHalf": "Animal load at 1/2 move (lb)",
+    "LoadQuarter": "Animal load at 1/4 move (lb)",
+    "Holds": "holds {lb} lb",
+    "Carries": "carries {full} / {half} / {quarter} lb (full / 1/2 / 1/4 move)",
+    "NoneYet": "No gear yet. Drag items from the \"Equipment (PHB)\" compendium.",
+    "Total": "total"
+  },
+  "AD2E.Sheet.Equipment": "AD&D 2e Equipment"
 }

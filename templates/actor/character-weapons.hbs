@@ -18,6 +18,31 @@
     {{#if e.thresholds}}<p class="ad2e-note">{{e.thresholds}}</p>{{/if}}
   </fieldset>
   {{/with}}
+  <fieldset class="ad2e-prof-list ad2e-gear">
+    <legend>{{localize "AD2E.Gear.Gear"}}</legend>
+    {{#each wt.gear as |g|}}
+    <h4 class="ad2e-gear-heading">{{g.label}}</h4>
+    {{#each g.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-gear-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+        <span class="ad2e-weapon-meta">{{r.summary}}{{#if r.total}} · {{localize "AD2E.Gear.Total"}} {{r.total}} lb{{/if}}</span>
+      </div>
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{r.id}}" {{checked r.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.Gear.Carried"}}</label>
+      <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{r.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{/each}}
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Gear.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
   <fieldset class="ad2e-prof-list ad2e-coins">
     <legend>{{localize "AD2E.Coin.Coins"}}</legend>
     {{#each wt.coins.list as |c|}}
