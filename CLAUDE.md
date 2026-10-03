@@ -71,6 +71,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
 - Monster importer: `module/importers/complete-compendium.mjs` (pure parsing: /catalog/ HTML, page-data JSON) and
   `module/apps/monster-importer.mjs` (ApplicationV2, settings menu + `game.ad2e.importMonsters()`). Fetches run in the
   GM's browser (the site sends `access-control-allow-origin: *`). Import stat blocks and links only, never `fullBody`.
+  Pictures: `monster_data.images` (`img/x` -> /images/monsters/img/x, `/img/spc/x` from the root, `grf/` = logos), linked
+  as actor `img` and `prototypeToken.texture.src` after a HEAD check (the site links some missing files).
 - Spells: `module/importers/adnd2e-wiki.mjs` (shared infobox parser; MediaWiki API with `origin=*`) used by
   `module/apps/spell-importer.mjs` and by `tools/build-spell-data.py` (via `tools/spell-items.mjs`), which also GENERATES
   `module/rules/spell-tables.mjs` (Tables 21, 24, 17, 32) and the example spells in `packs/_source/spells`.

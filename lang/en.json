@@ -494,7 +494,7 @@
     "Title": "Monster importer (Complete Compendium)",
     "Open": "Import monsters",
     "MenuHint": "Import monster stat blocks from completecompendium.com into this world as Monster / NPC actors, by setting and source book.",
-    "Hint": "Imports stat blocks (game statistics) and a link to each monster's page; the descriptions stay on the site. Source:",
+    "Hint": "Imports stat blocks (game statistics), a link to each monster's page and its picture (shown from the site, not copied) as portrait and token; the descriptions stay on the site. Source:",
     "Setting": "Setting",
     "Book": "Source book",
     "Load": "Load monsters",

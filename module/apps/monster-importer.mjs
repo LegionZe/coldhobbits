@@ -9,6 +9,16 @@ async function get(url, json = true) {
   return json ? response.json() : response.text();
 }
 
+/** Whether a picture URL exists (HEAD request; some pictures the site links to are missing). Cached per session. */
+const imageChecks = new Map();
+function imageExists(url) {
+  if (!imageChecks.has(url)) {
+    imageChecks.set(url, fetch(url, { method: "HEAD" }).then(r => r.ok && /^image\//.test(r.headers.get("content-type") ?? ""))
+      .catch(() => false));
+  }
+  return imageChecks.get(url);
+}
+
 /** Run `fn` over `items` with at most `limit` requests at a time. */
 async function pool(items, limit, fn) {
   let next = 0;
@@ -174,10 +184,18 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
       folder = game.folders.find(f => f.type === "Actor" && f.name === book.title)
         ?? await Folder.create({ name: book.title, type: "Actor" });
     }
+    // Keep only the pictures that exist (the page's own picture for a variant, else the page's first one, else none).
+    const pages = [...new Set(chosen.map(e => e.page))];
+    const images = new Map();
+    await pool(pages, 4, async page => {
+      const ok = [];
+      for (const img of page.images ?? []) if (await imageExists(img.url)) ok.push(img);
+      images.set(page, ok);
+    });
     const create = [];
     const update = [];
     for (const e of chosen) {
-      const data = cc.monsterActorData(e.page, e.variant);
+      const data = cc.monsterActorData({ ...e.page, images: images.get(e.page) ?? [] }, e.variant);
       data.name = e.label; // "Horse: Heavy" for a page with several stat blocks
       data.prototypeToken.name = e.label;
       const existing = game.actors.find(a => {
@@ -186,7 +204,12 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
       });
       if (existing) {
         const { hp, ...system } = data.system; // keep current hit points
-        update.push({ _id: existing.id, name: data.name, system, flags: data.flags });
+        const change = { _id: existing.id, name: data.name, system, flags: data.flags };
+        // Pictures: replace only the default icon or an earlier picture from the site (keep ones a GM chose).
+        const fromSite = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE);
+        if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.img)) change.img = data.img;
+        if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.prototypeToken?.texture?.src)) change["prototypeToken.texture.src"] = data.img;
+        update.push(change);
       } else {
         if (folder) data.folder = folder.id;
         create.push(data);

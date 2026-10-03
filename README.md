@@ -185,6 +185,10 @@ initiative 1d10, lowest acts first.
   imported; descriptions stay on the site. Re-importing updates actors imported from the same page and keeps their
   current hit points. Hit Dice as written ("14 (base)", "6+6 or 9+9", "16 + 2-7 hit points", "45-75 hp", "1/4") are
   parsed; the listed THAC0 is kept when it differs from DMG Table 39.
+  The monster's picture from its page becomes the actor portrait and token image (the picture whose caption names the
+  stat block, else the page's first; pictures the site links to but does not have are skipped). Pictures are linked,
+  not copied, so they load from completecompendium.com and need an internet connection. Re-importing replaces only the
+  default icon or an earlier picture from the site, not one a GM chose.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
