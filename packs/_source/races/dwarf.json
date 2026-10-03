@@ -35,10 +35,18 @@
       "fighter",
       "thief"
     ],
+    "kitClasses": [
+      "bard"
+    ],
     "conSaves": true,
     "conPoison": true,
     "infravision": 60,
     "infravisionByLineage": false,
+    "levelLimits": {
+      "cleric": 10,
+      "fighter": 15,
+      "thief": 12
+    },
     "url": "https://adnd2e.fandom.com/wiki/Dwarf_(PHB)",
     "notes": ""
   },

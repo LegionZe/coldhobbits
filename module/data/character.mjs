@@ -122,7 +122,15 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const classItem = items?.find(i => i.type === "class") ?? null;
     const kitItem = items?.find(i => i.type === "kit") ?? null;
     const cls = classItem?.system ?? null;
-    const kitFits = !!(cls && kitItem && kitItem.system.classes.has(cls.identifier));
+    const race = this.raceInfo.race;
+    const raceId = this.raceInfo.raceItem?.system.identifier;
+    const classViaRace = !race || !cls || race.classes.has(cls.identifier);
+    const classViaKit = !!(race && cls && race.kitClasses?.has(cls.identifier));
+    const kitListsRace = !!(kitItem && raceId && kitItem.system.raceLimits && raceId in kitItem.system.raceLimits);
+    // A kit fits if it is open to the class and, with a race: a race-only kit must list the race, and a
+    // class the race only reaches through kits needs a kit that lists the race.
+    const kitFits = !!(cls && kitItem && kitItem.system.classes.has(cls.identifier)
+      && (!race || ((!kitItem.system.raceOnly || kitListsRace) && (classViaRace || kitListsRace))));
     const kit = kitFits ? kitItem.system : null;
     const requirements = AD2E.abilities.map(key => {
       const classMin = cls?.min[key] ?? null;
@@ -132,6 +140,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       return { key, classMin, kitMin, required, score, met: score >= required };
     });
     const prime = cls ? [...cls.prime] : [];
+    const levelLimit = (kitFits && kitListsRace)
+      ? (kitItem.system.raceLimits[raceId] ?? null)
+      : ((cls && race?.levelLimits?.[cls.identifier]) ?? null);
     return {
       classItem,
       kitItem,
@@ -139,7 +150,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       requirements,
       requirementsMet: requirements.every(r => r.met),
       alignmentAllowed: cls ? cls.alignments.has(this.alignment) : true,
-      classAllowedByRace: !cls || !this.raceInfo.race || this.raceInfo.race.classes.has(cls.identifier),
+      classAllowedByRace: classViaRace || (classViaKit && kitFits && kitListsRace),
+      needsRaceKit: !classViaRace && classViaKit && !(kitFits && kitListsRace),
+      levelLimit,
       xpBonus: prime.length > 0 && prime.every(key => this.abilities[key].total >= 16) ? 10 : 0
     };
   }

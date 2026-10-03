@@ -19,6 +19,10 @@
       "cha": null
     },
     "otherRequirements": false,
+    "raceLimits": {
+      "elf": 15
+    },
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Meistersinger_(Character_Kit)",
     "notes": ""
   },

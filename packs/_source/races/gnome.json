@@ -36,10 +36,19 @@
       "cleric",
       "illusionist"
     ],
+    "kitClasses": [
+      "bard"
+    ],
     "conSaves": true,
     "conPoison": false,
     "infravision": 60,
     "infravisionByLineage": false,
+    "levelLimits": {
+      "fighter": 11,
+      "thief": 13,
+      "cleric": 9,
+      "illusionist": 15
+    },
     "url": "https://adnd2e.fandom.com/wiki/Gnome_(PHB)",
     "notes": ""
   },

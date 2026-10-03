@@ -19,6 +19,11 @@
       "cha": null
     },
     "otherRequirements": false,
+    "raceLimits": {
+      "gnome": 8,
+      "halfling": 9
+    },
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Riddlemaster_(Character_Kit)",
     "notes": ""
   },

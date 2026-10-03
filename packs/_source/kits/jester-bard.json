@@ -19,6 +19,11 @@
       "cha": null
     },
     "otherRequirements": true,
+    "raceLimits": {
+      "gnome": 15,
+      "halfling": 8
+    },
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Jester_-_Bard_(Character_Kit)",
     "notes": ""
   },

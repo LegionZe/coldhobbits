@@ -19,6 +19,14 @@
       "cha": null
     },
     "otherRequirements": false,
+    "raceLimits": {
+      "dwarf": 6,
+      "elf": 6,
+      "gnome": 6,
+      "half-elf": 6,
+      "halfling": 6
+    },
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Herald_(Character_Kit)",
     "notes": ""
   },

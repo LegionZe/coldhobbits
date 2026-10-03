@@ -15,7 +15,8 @@
       <dt>{{localize "AD2E.Race.SaveBonus"}}</dt><dd>{{#if ct.conSaveBonus}}+{{ct.conSaveBonus}}{{else}}—{{/if}}</dd>
       <dt>{{localize "AD2E.Race.PoisonBonus"}}</dt><dd>{{#if ct.poisonBonus}}+{{ct.poisonBonus}}{{else}}—{{/if}}</dd>
     </dl>
-    {{#unless ct.classAllowedByRace}}<p class="ad2e-unmet">{{localize "AD2E.Race.ClassNotAllowed"}}</p>{{/unless}}
+    {{#if ct.needsRaceKit}}<p class="ad2e-unmet">{{localize "AD2E.Race.NeedsKitNote"}}</p>
+    {{else}}{{#unless ct.classAllowedByRace}}<p class="ad2e-unmet">{{localize "AD2E.Race.ClassNotAllowed"}}</p>{{/unless}}{{/if}}
     <table class="ad2e-race-table">
       <thead><tr><th></th><th>{{localize "AD2E.Race.Min"}}</th><th>{{localize "AD2E.Race.Max"}}</th><th>{{localize "AD2E.Race.Rolled"}}</th><th>{{localize "AD2E.Race.Adjust"}}</th><th>{{localize "AD2E.Race.Effective"}}</th><th></th></tr></thead>
       <tbody>
@@ -43,6 +44,7 @@
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Character.classGroup"}}</dt><dd>{{ct.groupLabel}} (d{{ct.hitDie}})</dd>
         <dt>{{localize "AD2E.Class.PrimeRequisites"}}</dt><dd>{{ct.prime}}</dd>
+        {{#if ct.raceItem}}<dt>{{localize "AD2E.Race.LevelLimit"}}</dt><dd class="{{#if ct.overLevelLimit}}ad2e-unmet{{/if}}">{{#if ct.levelLimit}}{{ct.levelLimit}}{{else}}{{localize "AD2E.Race.Unlimited"}}{{/if}}</dd>{{/if}}
         <dt>{{localize "AD2E.HP.HitDice"}}</dt><dd>{{@root.system.hitDice.label}}</dd>
         <dt>{{localize "AD2E.HP.NextLevel"}}</dt><dd>{{#if @root.system.xpNext}}{{@root.system.xpNext}} XP{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.XpBonus"}}</dt><dd>{{#if ct.xpBonus}}+{{ct.xpBonus}}%{{else}}—{{/if}}</dd>
@@ -69,6 +71,7 @@
       </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Class.Source"}}</dt><dd>{{ct.kit.source}}</dd>
+        {{#if ct.kitRaceLimits}}<dt>{{localize "AD2E.Race.KitRaceLimits"}}</dt><dd>{{ct.kitRaceLimits}}{{#if ct.kit.raceOnly}} ({{localize "AD2E.Race.RaceOnly"}}){{/if}}</dd>{{/if}}
       </dl>
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
       {{#if ct.kit.otherRequirements}}<p class="ad2e-note">{{localize "AD2E.Class.OtherRequirements"}}</p>{{/if}}
