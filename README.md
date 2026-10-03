@@ -114,8 +114,8 @@ initiative 1d10, lowest acts first.
   and ability checks, initiative, surprise, reaction, hit points per level, Charisma) and thief skill point budgets
   (Assassin, Thug) are curated by `python3 tools/build-kit-mechanics.py`, which checks each against the current kit page.
   Unconditional ones apply automatically (some only in no/light/any body armour); situational ones are tick boxes in
-  the attack, damage, save, ability check, proficiency and thief skill dialogs; reaction and surprise ones are listed
-  for the DM. Level-scaled ones (e.g. Cavalier, Wyrmslayer) follow the character's level. Abilities without a number
+  the attack, damage, save, ability check, proficiency, thief skill and surprise dialogs; reaction ones are listed for
+  the DM. A modifier limited to one proficiency (e.g. Cutpurse, -5 on Observation) is offered only on that check. Level-scaled ones (e.g. Cavalier, Wyrmslayer) follow the character's level. Abilities without a number
   (special powers, spells, followers) stay on the kit page.
   Kit items copied into a world or onto characters before 0.0.31 get the mechanics from the compendium when a GM
   loads the world (only kits without modifiers; skill adjustments a GM entered are kept).
@@ -138,6 +138,14 @@ initiative 1d10, lowest acts first.
   (resurrection survival roll, Constitution -1) on the character sheet; Damage and Heal on monster sheets. Token status
   icons show unconscious and dead. Weapon and monster damage rolls in chat have "Apply damage / healing to selected
   tokens" in their context menu.
+- Surprise: "Surprise" on the character sheet and the eye button on monster sheets roll 1d10, surprised on 1-3
+  ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
+  DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
+  a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
+- Experience awards: the "+" next to XP on the character sheet adds an individual award; Configure Settings >
+  "Award experience" (GM, or `game.ad2e.awardExperience()`) divides a group award equally among the chosen characters
+  ("Experience Point Awards (DMG)"): XP of monsters picked from the current combat (defeated ones preselected) plus
+  other XP. Each share gets the class prime-requisite bonus (10%); characters who can advance a level are named in chat.
 - Opaque windows: Foundry's dark theme gives windows a 90% opaque background and hides what is behind with a blur,
   which is off in low-performance mode, so text behind a sheet showed through. AD&D 2e sheets and windows now use the
   same colour fully opaque (client setting "Opaque sheet backgrounds", on by default).

@@ -26,7 +26,7 @@
     </label>
     <div class="ad2e-header-pair">
       <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
-      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"
+      <label>{{localize "AD2E.Character.xp"}}{{#if editable}} <a class="ad2e-item-link" data-action="awardXp" data-tooltip="{{localize 'AD2E.Xp.AddTitle'}}"><i class="fa-solid fa-plus"></i></a>{{/if}} <input type="number" name="system.xp" value="{{system.xp}}"
         {{#if system.xpNext}}data-tooltip="{{localize 'AD2E.HP.NextLevel'}}: {{system.xpNext}}{{#if system.xpRestart}} ({{localize 'AD2E.HP.XpRestart'}}){{/if}}"{{/if}}></label>
     </div>
   </div>

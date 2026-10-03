@@ -6,6 +6,7 @@ import { CREATURE_THAC0 } from "./rules/monster-tables.mjs";
 import { SPELL_PROGRESSION } from "./rules/spell-tables.mjs";
 import { CLASS_TABLES } from "./rules/class-tables.mjs";
 import { TREASURE_TABLES } from "./rules/treasure-tables.mjs";
+import { ENCOUNTER_TABLES } from "./rules/encounter-tables.mjs";
 import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
@@ -388,3 +389,6 @@ AD2E.gemClasses = Object.fromEntries(TREASURE_TABLES.gemClasses.map(g => [g.key,
 export function gemBaseValue(key) {
   return TREASURE_TABLES.gemClasses.find(g => g.key === key)?.value ?? null;
 }
+
+/** Surprise (generated: ENCOUNTER_TABLES): 1d10, surprised on 1-3; DMG Table 57 situational modifiers. */
+AD2E.encounterTables = ENCOUNTER_TABLES;

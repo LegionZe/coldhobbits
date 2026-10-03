@@ -43,12 +43,12 @@
     "modifiers": [
       {
         "target": "proficiency",
-        "key": "",
+        "key": "observation",
         "value": -5,
         "every": 0,
         "step": 0,
         "from": 1,
-        "condition": "observation check on someone in disguise",
+        "condition": "checking out someone in disguise",
         "armor": "",
         "max": null
       }
