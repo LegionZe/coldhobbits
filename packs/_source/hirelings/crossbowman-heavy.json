@@ -1,0 +1,287 @@
+{
+  "_id": "ON22WctwBMsCBANj",
+  "_key": "!actors!ON22WctwBMsCBANj",
+  "name": "Crossbowman, heavy",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "crossbowman-heavy",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Uncommon",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "I",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 10,
+      "text": "8 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (10-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Soldiers_(DMG)",
+    "notes": "<p>Statistics: Human (MM), Soldier column.</p>",
+    "cost": "3 gp per month"
+  },
+  "items": [
+    {
+      "_id": "JbheYT3dtvtcV3HG",
+      "_key": "!actors.items!ON22WctwBMsCBANj.JbheYT3dtvtcV3HG",
+      "name": "Heavy crossbow",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "heavy-crossbow",
+        "proficiency": "heavy-crossbow",
+        "weapon": {
+          "size": "M",
+          "type": "P",
+          "speed": 10,
+          "damage": [
+            {
+              "label": "Heavy quarrel",
+              "sm": "1d4+1",
+              "l": "1d6+1",
+              "speed": null
+            }
+          ],
+          "melee": false,
+          "missile": true,
+          "range": {
+            "rof": "1/2",
+            "short": "80",
+            "medium": "160",
+            "long": "240"
+          },
+          "family": "crossbow",
+          "missileColumn": "heavyCrossbow",
+          "strength": "none"
+        },
+        "cost": "50 gp",
+        "weight": 14.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 2700,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "kbUqZfJisFzLdb5E",
+      "_key": "!actors.items!ON22WctwBMsCBANj.kbUqZfJisFzLdb5E",
+      "name": "Heavy quarrel",
+      "type": "ammunition",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "identifier": "heavy-quarrel",
+        "launchers": [
+          "heavy-crossbow"
+        ],
+        "size": "S",
+        "type": "P",
+        "damage": {
+          "sm": "1d4+1",
+          "l": "1d6+1"
+        },
+        "cost": "2 sp",
+        "weight": 0.1,
+        "quantity": 12,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 300,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "wLc1ePAM7bmsSckH",
+      "_key": "!actors.items!ON22WctwBMsCBANj.wLc1ePAM7bmsSckH",
+      "name": "Short sword",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "short-sword",
+        "proficiency": "short-sword",
+        "weapon": {
+          "size": "S",
+          "type": "P",
+          "speed": 3,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d6",
+              "l": "1d8",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "10 gp",
+        "weight": 3.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 5200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "SYJnqG1DaWauWU15",
+      "_key": "!actors.items!ON22WctwBMsCBANj.SYJnqG1DaWauWU15",
+      "name": "Dagger or dirk",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "dagger-or-dirk",
+        "proficiency": "dagger-or-dirk",
+        "weapon": {
+          "size": "S",
+          "type": "P",
+          "speed": 2,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d4",
+              "l": "1d3",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": true,
+          "range": {
+            "rof": "2/1",
+            "short": "10",
+            "medium": "20",
+            "long": "30"
+          },
+          "family": "other",
+          "missileColumn": "thrownDagger",
+          "strength": "full"
+        },
+        "cost": "2 gp",
+        "weight": 1.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "Cbty5ghLRr5ufXQZ",
+      "_key": "!actors.items!ON22WctwBMsCBANj.Cbty5ghLRr5ufXQZ",
+      "name": "Chain mail",
+      "type": "armor",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "identifier": "chain-mail",
+        "kind": "body",
+        "ac": 5,
+        "shield": {
+          "melee": 0,
+          "missile": 0,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "75 gp",
+        "weight": 40.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "EAzss4tW8Y0h1OzZ",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

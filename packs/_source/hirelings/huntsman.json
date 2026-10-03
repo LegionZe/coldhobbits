@@ -1,0 +1,60 @@
+{
+  "_id": "qOLOk0aR07obD6EW",
+  "_key": "!actors!qOLOk0aR07obD6EW",
+  "name": "Huntsman",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "huntsman",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Common",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "Nil",
+    "alignment": "Neutral (good)",
+    "numberAppearing": "1-20",
+    "ac": {
+      "base": 10,
+      "text": "10"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 9,
+      "text": "Average (9)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Employing_Hirelings_(DMG)",
+    "notes": "<p>Statistics: Human (MM), Farmer/Herder column.</p>",
+    "cost": "2 gp per week, 10 gp per month"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "1DHtVkwCHVOs9fYx",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

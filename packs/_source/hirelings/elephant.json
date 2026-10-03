@@ -1,0 +1,86 @@
+{
+  "_id": "N16JIpqg2bwfKLWJ",
+  "_key": "!actors!N16JIpqg2bwfKLWJ",
+  "name": "Elephant",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "elephant",
+    "role": "mount",
+    "climate": "Subtropical to tropical jungle and plains",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Dawn, dusk, early morning and evening",
+    "diet": "Herbivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-12",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "11",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "2d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "2d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "2d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 4",
+        "damage": "2d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 5",
+        "damage": "2d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "5",
+    "damageText": "2-16/2-16/2-12/2-12/2-12",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (11' tall)",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (7)"
+    },
+    "xp": 4000,
+    "load": {
+      "full": 500,
+      "half": 750,
+      "quarter": 1000
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Elephant",
+    "notes": "<p>Statistics: Elephant, Elephant (African) column. Load and price: PHB Elephant, war.</p>",
+    "cost": "500 gp"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,123 @@
+{
+  "_id": "b8fycTFz5iDeBbIq",
+  "_key": "!actors!b8fycTFz5iDeBbIq",
+  "name": "Footman, heavy",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "footman-heavy",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Uncommon",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "I",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 10,
+      "text": "8 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (10-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Soldiers_(DMG)",
+    "notes": "<p>The large shield is the PHB body shield. Weapons vary (see the troop type on the DMG page): add them from the Weapons (PHB) compendium.</p><p>Statistics: Human (MM), Soldier column.</p>",
+    "cost": "2 gp per month"
+  },
+  "items": [
+    {
+      "_id": "H6d2AHUFIHE4yUmR",
+      "_key": "!actors.items!b8fycTFz5iDeBbIq.H6d2AHUFIHE4yUmR",
+      "name": "Chain mail",
+      "type": "armor",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "identifier": "chain-mail",
+        "kind": "body",
+        "ac": 5,
+        "shield": {
+          "melee": 0,
+          "missile": 0,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "75 gp",
+        "weight": 40.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 600,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "2eWLUPin5yTGujPj",
+      "_key": "!actors.items!b8fycTFz5iDeBbIq.2eWLUPin5yTGujPj",
+      "name": "Body shield",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "identifier": "body-shield",
+        "kind": "shield",
+        "ac": null,
+        "shield": {
+          "melee": 1,
+          "missile": 2,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "10 gp",
+        "weight": 15.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "EAzss4tW8Y0h1OzZ",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

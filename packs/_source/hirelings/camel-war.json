@@ -1,0 +1,76 @@
+{
+  "_id": "WECjlhMwmmHBBfNs",
+  "_key": "!actors!WECjlhMwmmHBBfNs",
+  "name": "Camel, war",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "camel-war",
+    "role": "mount",
+    "climate": "Any land",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal to Semi- (1-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-12",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 21,
+      "text": "21"
+    },
+    "hitDice": "3+3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d4",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "1d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "3",
+    "damageText": "1-4/1-6/1-6",
+    "specialAttacks": "Spitting, trample",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (8' tall)",
+    "morale": {
+      "value": 13,
+      "text": "Elite (13)"
+    },
+    "xp": 95,
+    "load": {
+      "full": 330,
+      "half": 500,
+      "quarter": 660
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Camel",
+    "notes": "<p>Statistics: Camel, War column. Load and price: PHB Camel.</p>",
+    "cost": "50 gp"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

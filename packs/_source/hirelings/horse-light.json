@@ -1,0 +1,140 @@
+{
+  "_id": "Wx4rlHOAulaGdp1X",
+  "_key": "!actors!Wx4rlHOAulaGdp1X",
+  "name": "Horse, light war",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "horse-light",
+    "role": "mount",
+    "climate": "Any non-mountainous",
+    "frequency": "Uncommon",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 24,
+      "text": "24"
+    },
+    "hitDice": "2",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d4",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1-4/1-4",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 35,
+    "load": {
+      "full": 170,
+      "half": 255,
+      "quarter": 340
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Horse",
+    "notes": "<p>Statistics: Horse, Light column. Load and price: PHB Horse, light war.</p>",
+    "cost": "150 gp"
+  },
+  "items": [
+    {
+      "_id": "79QpZMZhQ2BAkoUJ",
+      "_key": "!actors.items!Wx4rlHOAulaGdp1X.79QpZMZhQ2BAkoUJ",
+      "name": "Saddle, riding",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "saddle-riding",
+        "category": "tack",
+        "cost": "10 gp",
+        "weight": 35.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": null,
+          "volume": ""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14500,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "a6h7aewg61Qk9zo0",
+      "_key": "!actors.items!Wx4rlHOAulaGdp1X.a6h7aewg61Qk9zo0",
+      "name": "Bit and bridle",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "bit-and-bridle",
+        "category": "tack",
+        "cost": "15 sp",
+        "weight": 3.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": null,
+          "volume": ""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

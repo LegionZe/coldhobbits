@@ -1,0 +1,92 @@
+{
+  "_id": "TgsiZ90s2R9tW1yZ",
+  "_key": "!actors!TgsiZ90s2R9tW1yZ",
+  "name": "Shieldbearer",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "shieldbearer",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Uncommon",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "I",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 10,
+      "text": "8 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (10-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Soldiers_(DMG)",
+    "notes": "<p>Carries and sets up large shields (pavises) for archers and crossbowmen. Weapons vary (see the troop type on the DMG page): add them from the Weapons (PHB) compendium.</p><p>Statistics: Human (MM), Soldier column.</p>",
+    "cost": "5 sp per month"
+  },
+  "items": [
+    {
+      "_id": "pkfcVE55em7pyTUC",
+      "_key": "!actors.items!TgsiZ90s2R9tW1yZ.pkfcVE55em7pyTUC",
+      "name": "Body shield",
+      "type": "armor",
+      "img": "icons/svg/shield.svg",
+      "system": {
+        "identifier": "body-shield",
+        "kind": "shield",
+        "ac": null,
+        "shield": {
+          "melee": 1,
+          "missile": 2,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "10 gp",
+        "weight": 15.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "EAzss4tW8Y0h1OzZ",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

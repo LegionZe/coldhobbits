@@ -38,6 +38,7 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       initiative: new SchemaField({ mod: int(0) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional(), other: optional() }),
       url: text(),
+      cost: text(), // hirelings: wage (DMG Tables 64/65); mounts: price (PHB Table 44)
       notes: new HTMLField()
     };
   }

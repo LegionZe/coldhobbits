@@ -1,0 +1,66 @@
+{
+  "_id": "xy0rQKvuqaU6yex3",
+  "_key": "!actors!xy0rQKvuqaU6yex3",
+  "name": "Horse, draft",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "horse-draft",
+    "role": "mount",
+    "climate": "Any non-mountainous",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d3",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-3",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 65,
+    "load": {
+      "full": 260,
+      "half": 390,
+      "quarter": 520
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Horse",
+    "notes": "<p>Statistics: Horse, Draft column. Load and price: PHB Horse, draft.</p>",
+    "cost": "200 gp"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

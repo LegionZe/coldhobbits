@@ -112,6 +112,12 @@ initiative 1d10, lowest acts first.
   (special powers, spells, followers) stay on the kit page.
   Kit items copied into a world or onto characters before 0.0.31 get the mechanics from the compendium when a GM
   loads the world (only kits without modifiers; skill adjustments a GM entered are kept).
+- "Hirelings & Mounts" compendium (`python3 tools/build-hireling-data.py`): 18 soldier types from DMG Table 64 with
+  monthly wage and the equipment their DMG descriptions name (weapons left to the GM where the DMG says they vary;
+  the optional handgunner is left out), 8 hirelings from DMG Table 65 with weekly/monthly wage, statistics from the
+  Monstrous Manual human types (Human (MM)), and 10 mounts (draft, heavy, medium, light war and riding horses, pony,
+  mule, desert and war camel, elephant) from the Monstrous Manual with PHB load and price. Wage or price shows in the
+  sheet header.
 - Monster importer (GM): Configure Settings > "Import monsters", or the macro `game.ad2e.importMonsters()`. Choose a
   setting and source book from https://www.completecompendium.com/, load its monsters, filter and select, and import them
   as Monster / NPC actors (optionally into a folder named after the book). Only stat blocks and a link to each page are
