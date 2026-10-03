@@ -15,14 +15,14 @@
     <button type="button" data-action="selectNone">{{localize "AD2E.Importer.None"}}</button>
   </div>
   <p class="ad2e-note">{{localize "AD2E.SpellImporter.Shown"}}: {{shownCount}} · {{localize "AD2E.SpellImporter.Selected"}}: {{selectedCount}}</p>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label class="ad2e-check"><input type="checkbox" name="folder" {{checked state.folder}}> {{localize "AD2E.SpellImporter.Folder"}}</label>
+    <button type="button" data-action="importSelected"><i class="fa-solid fa-file-import"></i> {{localize "AD2E.SpellImporter.Import"}}</button>
+  </div>
   <div class="ad2e-importer-list">
     {{#each entries as |e|}}
     <label class="ad2e-importer-entry"><input type="checkbox" data-entry="{{e.id}}" {{checked e.checked}}> {{e.label}} <span class="ad2e-weapon-meta">{{e.meta}}</span></label>
     {{/each}}
-  </div>
-  <div class="ad2e-importer-controls">
-    <label class="ad2e-check"><input type="checkbox" name="folder" {{checked state.folder}}> {{localize "AD2E.SpellImporter.Folder"}}</label>
-    <button type="button" data-action="importSelected"><i class="fa-solid fa-file-import"></i> {{localize "AD2E.SpellImporter.Import"}}</button>
   </div>
   {{/if}}
 </section>
