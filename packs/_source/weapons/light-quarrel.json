@@ -1,0 +1,36 @@
+{
+  "_id": "TyT3YGPmEXu3cbcN",
+  "_key": "!items!TyT3YGPmEXu3cbcN",
+  "name": "Light quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "light-quarrel",
+    "launchers": [
+      "light-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d4",
+      "l": "1d4"
+    },
+    "cost": "1 sp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

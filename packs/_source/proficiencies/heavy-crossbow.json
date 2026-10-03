@@ -24,7 +24,8 @@
         {
           "label": "Heavy quarrel",
           "sm": "1d4+1",
-          "l": "1d6+1"
+          "l": "1d6+1",
+          "speed": null
         }
       ],
       "melee": false,

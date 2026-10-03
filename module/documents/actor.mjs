@@ -193,14 +193,55 @@ export default class AD2EActor extends Actor {
   }
 
   /**
-   * Attack with a weapon proficiency (`use` "melee" or "missile"): d20 + adjustments (see
+   * Launchers (bows, crossbows, slings, blowgun) fire ammunition: a missile-only weapon whose damage options
+   * come from ammunition rows. Returns the owned ammunition items that fit it (by weapon identifier).
+   */
+  ammunitionFor(item) {
+    const w = item.system.weapon;
+    if (!w?.missile || w.melee || !w.damage.some(d => d.label)) return null;
+    return this.items.filter(i => i.type === "ammunition" && i.system.launchers.has(item.system.identifier));
+  }
+
+  /** Hurled weapon items (thrown melee weapons, darts) are used up when thrown: one from the item's quantity. */
+  #isThrownItem(item, use) {
+    return use === "missile" && item.type === "weapon" && item.system.weapon.strength === "full";
+  }
+
+  /** Derived attack entry for a weapon item or weapon proficiency. */
+  #weaponEntry(itemId) {
+    const sys = this.system;
+    return sys.weapons?.find(e => e.item.id === itemId) ?? sys.proficiencies.entries.find(e => e.item.id === itemId);
+  }
+
+  /**
+   * Attack with a weapon item or weapon proficiency (`use` "melee" or "missile"): d20 + adjustments (see
    * CharacterData#weaponAttack) + range modifier + situational modifier >= THAC0 - target AC.
    */
   async rollWeaponAttack(itemId, use = "melee") {
     const item = this.items.get(itemId);
-    const attack = this.system.proficiencies.entries.find(e => e.item.id === itemId)?.attack?.[use];
+    const entry = this.#weaponEntry(itemId);
+    const attack = entry?.attack?.[use];
     if (!item || !attack) return;
     const i18n = key => game.i18n.localize(key);
+    const status = entry.penalty ? ` [${game.i18n.format("AD2E.Weapon.NotProficient", { penalty: entry.penalty })}]`
+      : (entry.specialized && !entry.specInvalid ? ` [${i18n("AD2E.Weapon.Specialized")}]` : "");
+    // Ammunition tracking: a launcher needs owned ammunition with quantity left; a thrown item needs quantity.
+    const ammoList = use === "missile" ? this.ammunitionFor(item) : null;
+    let ammoField = "";
+    if (ammoList) {
+      const loaded = ammoList.filter(a => a.system.quantity > 0);
+      if (!loaded.length) {
+        ui.notifications.warn(game.i18n.format("AD2E.Ammo.None", { name: item.name }));
+        return;
+      }
+      const last = AD2EActor.#lastAmmo.get(`${this.id}.${itemId}`);
+      ammoField = `<div class="form-group"><label>${i18n("AD2E.Ammo.Ammunition")}</label><select name="ammo">${
+        loaded.map(a => `<option value="${a.id}"${a.id === last ? " selected" : ""}>${a.name} (${a.system.quantity})</option>`).join("")}</select></div>`;
+    }
+    if (this.#isThrownItem(item, use) && item.system.quantity < 1) {
+      ui.notifications.warn(game.i18n.format("AD2E.Ammo.NoneLeft", { name: item.name }));
+      return;
+    }
     let rangeField = "";
     if (use === "missile") {
       const r = attack.range;
@@ -214,39 +255,64 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
-        + rangeField
+        + ammoField + rangeField
         + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
-          return { ac: Number(f.ac.value) || 0, mod: Number(f.mod.value) || 0, range: f.range?.value ?? null };
+          return { ac: Number(f.ac.value) || 0, mod: Number(f.mod.value) || 0, range: f.range?.value ?? null,
+            ammo: f.ammo?.value ?? null };
         }
       },
       rejectClose: false
     });
     if (!input) return;
+    const ammo = input.ammo ? this.items.get(input.ammo) : null;
+    if (ammoList && !ammo) return;
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
-    const roll = await new Roll("1d20 + @adj + @range + @mod", { adj: attack.hit, range: rangeMod, mod: input.mod }).evaluate();
+    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0);
+    const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
+    // Use up the piece fired or thrown.
+    let spent = "";
+    if (ammo) {
+      const left = Math.max(ammo.system.quantity - 1, 0);
+      await ammo.update({ "system.quantity": left });
+      AD2EActor.#lastAmmo.set(`${this.id}.${itemId}`, ammo.id);
+      spent = ` — ${game.i18n.format("AD2E.Ammo.Left", { name: ammo.name, n: left })}`;
+    } else if (this.#isThrownItem(item, use)) {
+      const left = Math.max(item.system.quantity - 1, 0);
+      await item.update({ "system.quantity": left });
+      spent = ` — ${game.i18n.format("AD2E.Ammo.Left", { name: item.name, n: left })}`;
+    }
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${item.name} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
+      flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
         + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
-        + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+        + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
     });
   }
 
+  /** Last ammunition fired per actor and launcher (default choice for the next shot and its damage roll). */
+  static #lastAmmo = new Map();
+
   /**
-   * Weapon damage: the chosen damage option's dice vs. small/medium or large targets + the use's damage
-   * adjustment; "a successful attack roll can never cause less than 1 point of damage" (Strength (PHB)).
+   * Weapon damage: the chosen damage option's dice (or owned ammunition's) vs. small/medium or large targets
+   * + the use's damage adjustment (+ the ammunition's magical bonus); "a successful attack roll can never cause less than 1 point of damage" (Strength (PHB)).
    */
   async rollWeaponDamage(itemId, use = "melee") {
     const item = this.items.get(itemId);
-    const attack = this.system.proficiencies.entries.find(e => e.item.id === itemId)?.attack?.[use];
-    const options = (item?.system.weapon.damage ?? []).filter(d => d.sm || d.l);
+    const attack = this.#weaponEntry(itemId)?.attack?.[use];
     if (!item || !attack) return;
+    // A launcher with owned ammunition: the ammunition's damage and magical bonus (last fired first).
+    const owned = use === "missile" ? (this.ammunitionFor(item) ?? []) : [];
+    const last = AD2EActor.#lastAmmo.get(`${this.id}.${itemId}`);
+    owned.sort((a, b) => (b.id === last) - (a.id === last));
+    const options = owned.length
+      ? owned.map(a => ({ label: a.name, sm: a.system.damage.sm, l: a.system.damage.l, dmg: a.system.bonus.dmg }))
+      : (item.system.weapon.damage ?? []).filter(d => d.sm || d.l);
     if (!options.length) {
       ui.notifications.warn(game.i18n.format("AD2E.Weapon.NoDamage", { name: item.name }));
       return;
@@ -273,7 +339,7 @@ export default class AD2EActor extends Actor {
     if (!input) return;
     const option = options[input.option] ?? options[0];
     const dice = option[input.size] ?? option.sm ?? option.l;
-    const roll = await new Roll(`${dice} + @adj + @mod`, { adj: attack.dmg, mod: input.mod }).evaluate();
+    const roll = await new Roll(`${dice} + @adj + @mod`, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),

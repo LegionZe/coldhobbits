@@ -1,0 +1,37 @@
+{
+  "_id": "PtEBX15horfl8Qn0",
+  "_key": "!items!PtEBX15horfl8Qn0",
+  "name": "Sling bullet",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sling-bullet",
+    "launchers": [
+      "sling",
+      "staff-sling"
+    ],
+    "size": "S",
+    "type": "B",
+    "damage": {
+      "sm": "1d4+1",
+      "l": "1d6+1"
+    },
+    "cost": "1 cp.",
+    "weight": 0.5,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

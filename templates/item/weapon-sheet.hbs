@@ -1,0 +1,36 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Weapon.Proficiency"}} <input type="text" name="system.proficiency" value="{{system.proficiency}}"></label>
+    <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"></label>
+    <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
+    <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
+    <label>{{localize "AD2E.Weapon.MagicHit"}} <input type="number" name="system.bonus.hit" value="{{system.bonus.hit}}"></label>
+    <label>{{localize "AD2E.Weapon.MagicDmg"}} <input type="number" name="system.bonus.dmg" value="{{system.bonus.dmg}}"></label>
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  {{#if linked}}<p class="ad2e-note">{{linked}}</p>{{/if}}
+  <fieldset class="ad2e-weapon-details">
+    <legend>{{localize "AD2E.Weapon.Details"}}</legend>
+    <dl class="ad2e-weapon-stats">
+      <dt>{{localize "AD2E.Weapon.Size"}}</dt><dd>{{weapon.size}}</dd>
+      <dt>{{localize "AD2E.Weapon.Type"}}</dt><dd>{{weapon.type}}</dd>
+      <dt>{{localize "AD2E.Weapon.Speed"}}</dt><dd>{{weapon.speed}}</dd>
+      <dt>{{localize "AD2E.Weapon.melee"}} / {{localize "AD2E.Weapon.missile"}}</dt><dd>{{weapon.uses}}</dd>
+      {{#each weapon.damage as |d|}}
+      <dt>{{localize "AD2E.Weapon.Damage"}}{{#if d.label}} ({{d.label}}){{/if}}</dt><dd>{{d.sm}} / {{d.l}}</dd>
+      {{/each}}
+      {{#if weapon.missile}}
+      <dt>{{localize "AD2E.Weapon.ROF"}}</dt><dd>{{weapon.range.rof}}</dd>
+      <dt>{{localize "AD2E.Weapon.MissileRange"}}</dt><dd>{{weapon.range.short}} / {{weapon.range.medium}} / {{weapon.range.long}}</dd>
+      {{/if}}
+    </dl>
+  </fieldset>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

@@ -24,12 +24,14 @@
         {
           "label": "Flight arrow",
           "sm": "1d6",
-          "l": "1d6"
+          "l": "1d6",
+          "speed": null
         },
         {
           "label": "Sheaf arrow",
           "sm": "1d8",
-          "l": "1d8"
+          "l": "1d8",
+          "speed": null
         }
       ],
       "melee": false,

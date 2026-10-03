@@ -1,0 +1,53 @@
+{
+  "_id": "iDvn8KyYrqCIhIjI",
+  "_key": "!items!iDvn8KyYrqCIhIjI",
+  "name": "Two-hand. sword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "two-hand-sword",
+    "proficiency": "two-hand-sword",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "3d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "50 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 5900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

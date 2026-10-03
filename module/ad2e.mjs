@@ -4,10 +4,12 @@ import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
 import ProficiencyData from "./data/item-proficiency.mjs";
+import WeaponData from "./data/item-weapon.mjs";
+import AmmunitionData from "./data/item-ammunition.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2ECombat from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
-import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet } from "./sheets/item-sheets.mjs";
+import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet } from "./sheets/item-sheets.mjs";
 
 Hooks.once("init", () => {
   console.log("AD2E | Initializing AD&D 2e system");
@@ -20,6 +22,8 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.kit = KitData;
   CONFIG.Item.dataModels.race = RaceData;
   CONFIG.Item.dataModels.proficiency = ProficiencyData;
+  CONFIG.Item.dataModels.weapon = WeaponData;
+  CONFIG.Item.dataModels.ammunition = AmmunitionData;
 
   CONFIG.Combat.documentClass = AD2ECombat;
   CONFIG.Combat.initiative = { formula: "1d10 + @init", decimals: 2 };
@@ -35,4 +39,6 @@ Hooks.once("init", () => {
   DocumentSheetConfig.registerSheet(Item, "ad2e", KitSheet, { types: ["kit"], makeDefault: true, label: "AD2E.Sheet.Kit" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", RaceSheet, { types: ["race"], makeDefault: true, label: "AD2E.Sheet.Race" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", ProficiencySheet, { types: ["proficiency"], makeDefault: true, label: "AD2E.Sheet.Proficiency" });
+  DocumentSheetConfig.registerSheet(Item, "ad2e", WeaponSheet, { types: ["weapon"], makeDefault: true, label: "AD2E.Sheet.Weapon" });
+  DocumentSheetConfig.registerSheet(Item, "ad2e", AmmunitionSheet, { types: ["ammunition"], makeDefault: true, label: "AD2E.Sheet.Ammunition" });
 });

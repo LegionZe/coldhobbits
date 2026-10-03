@@ -1,0 +1,59 @@
+{
+  "_id": "kqqFxEzptX38lPx4",
+  "_key": "!items!kqqFxEzptX38lPx4",
+  "name": "Blowgun",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "blowgun",
+    "proficiency": "blowgun",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "Barbed Dart",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        },
+        {
+          "label": "Needle",
+          "sm": "1",
+          "l": "1",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "5 gp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

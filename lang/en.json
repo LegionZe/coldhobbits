@@ -101,7 +101,8 @@
     "class": "Race & Class",
     "proficiencies": "Proficiencies",
     "abilities": "Abilities",
-    "bio": "Biography"
+    "bio": "Biography",
+    "weapons": "Weapons"
   },
   "AD2E.Character.kit": "Class Kit",
   "AD2E.Class": {
@@ -132,7 +133,9 @@
     "class": "Class",
     "kit": "Class Kit",
     "race": "Race",
-    "proficiency": "Proficiency"
+    "proficiency": "Proficiency",
+    "weapon": "Weapon",
+    "ammunition": "Ammunition"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -257,6 +260,30 @@
     "DamageSM": "Damage S-M",
     "DamageL": "Damage L",
     "MissileRange": "Range (yards) S/M/L",
-    "ROF": "Rate of fire"
-  }
+    "ROF": "Rate of fire",
+    "Weapons": "Weapons",
+    "Proficient": "Proficient",
+    "NotProficient": "Not proficient ({penalty})",
+    "DropNotProficient": "{name}: no matching weapon proficiency; attacks take the non-proficiency penalty ({penalty}).",
+    "DragHint": "Drag weapons and ammunition from the \"Weapons (PHB)\" compendium onto this sheet. A weapon uses the weapon proficiency with the same identifier; specialization is set on the proficiency. Firing a launcher uses one piece of the chosen ammunition; throwing a weapon uses one from its quantity.",
+    "NoneYet": "No weapons yet.",
+    "Quantity": "Quantity",
+    "Cost": "Cost",
+    "Weight": "Weight (lb)",
+    "Proficiency": "Weapon proficiency",
+    "MagicHit": "Magical attack bonus",
+    "MagicDmg": "Magical damage bonus"
+  },
+  "AD2E.Ammo": {
+    "Ammunition": "Ammunition",
+    "Launchers": "Fired from",
+    "LaunchersHint": "Fired from: comma-separated weapon identifiers (e.g. long-bow, short-bow).",
+    "None": "{name}: no ammunition left. Add ammunition that fits it, or raise its quantity.",
+    "NoneLeft": "{name}: none left to throw.",
+    "Left": "{name}: {n} left",
+    "NoneOwned": "none owned",
+    "NoneYet": "No ammunition yet."
+  },
+  "AD2E.Sheet.Weapon": "AD&D 2e Weapon",
+  "AD2E.Sheet.Ammunition": "AD&D 2e Ammunition"
 }

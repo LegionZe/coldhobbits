@@ -1,0 +1,36 @@
+{
+  "_id": "APT3Wmgbz5uOmpBG",
+  "_key": "!items!APT3Wmgbz5uOmpBG",
+  "name": "Barbed Dart",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "barbed-dart",
+    "launchers": [
+      "blowgun"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d3",
+      "l": "1d2"
+    },
+    "cost": "1 sp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,23 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Ammo.Launchers"}} <input type="text" name="launchersText" value="{{launchersText}}"></label>
+    <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"></label>
+    <label>{{localize "AD2E.Weapon.DamageSM"}} <input type="text" name="system.damage.sm" value="{{system.damage.sm}}"></label>
+    <label>{{localize "AD2E.Weapon.DamageL"}} <input type="text" name="system.damage.l" value="{{system.damage.l}}"></label>
+    <label>{{localize "AD2E.Weapon.Type"}} <input type="text" name="system.type" value="{{system.type}}"></label>
+    <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
+    <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
+    <label>{{localize "AD2E.Weapon.MagicHit"}} <input type="number" name="system.bonus.hit" value="{{system.bonus.hit}}"></label>
+    <label>{{localize "AD2E.Weapon.MagicDmg"}} <input type="number" name="system.bonus.dmg" value="{{system.bonus.dmg}}"></label>
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  <p class="ad2e-note">{{localize "AD2E.Ammo.LaunchersHint"}}</p>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

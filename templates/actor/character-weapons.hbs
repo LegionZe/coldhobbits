@@ -1,0 +1,58 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#with weaponTab as |wt|}}
+  <p class="ad2e-note">{{localize "AD2E.Weapon.DragHint"}}</p>
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Weapon.Weapons"}} (THAC0 {{wt.thac0}})</legend>
+    {{#each wt.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-weapon-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.bonus}} {{r.bonus}}{{/if}}</a>
+        <span class="ad2e-weapon-meta">{{r.meta}}</span>
+        {{#if r.launcher}}<span class="ad2e-weapon-meta {{#unless r.ammo}}ad2e-unmet{{/unless}}">{{localize "AD2E.Ammo.Ammunition"}}: {{#if r.ammo}}{{r.ammo}}{{else}}{{localize "AD2E.Ammo.NoneOwned"}}{{/if}}</span>{{/if}}
+      </div>
+      {{#if r.profId}}<a class="ad2e-weapon-status" data-action="openItem" data-item-id="{{r.profId}}">{{r.status}}</a>
+      {{else}}<span class="ad2e-weapon-status ad2e-unmet">{{r.status}}</span>{{/if}}
+      <div class="ad2e-weapon-uses">
+        {{#each r.uses as |u|}}
+        <span class="ad2e-weapon-use">
+          <button type="button" data-action="rollWeaponAttack" data-item-id="{{r.id}}" data-use="{{u.use}}">{{u.label}} {{u.hit}}</button>
+          <button type="button" data-action="rollWeaponDamage" data-item-id="{{r.id}}" data-use="{{u.use}}" data-tooltip="{{u.damageHint}}">{{localize "AD2E.Weapon.Damage"}} {{u.dmg}}</button>
+          <span class="ad2e-weapon-rate" data-tooltip="{{localize 'AD2E.Weapon.Rate'}}">{{u.rate}}</span>
+          {{#if u.pointBlank}}<span class="ad2e-weapon-pb" data-tooltip="{{localize 'AD2E.Weapon.PointBlankHint'}}">PB</span>{{/if}}
+        </span>
+        {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>
+        {{/each}}
+      </div>
+      <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{r.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Weapon.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Ammo.Ammunition"}}</legend>
+    {{#each wt.ammo as |a|}}
+    <div class="ad2e-prof-row ad2e-ammo-row">
+      <img src="{{a.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}{{#if a.bonus}} {{a.bonus}}{{/if}}</a>
+        <span class="ad2e-weapon-meta">{{localize "AD2E.Weapon.Damage"}} {{a.damage}} · {{localize "AD2E.Ammo.Launchers"}}: {{a.launchers}}</span>
+      </div>
+      <span class="ad2e-qty {{#if a.empty}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{a.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{a.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{a.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Ammo.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+  {{/with}}
+</section>

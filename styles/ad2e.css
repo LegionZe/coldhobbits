@@ -78,6 +78,10 @@
 .ad2e-weapon-stats { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.75rem; margin: 0.25rem 0; }
 .ad2e-weapon-stats dd { margin: 0; }
 .ad2e-check { display: flex; align-items: center; gap: 0.25rem; }
+.ad2e-weapon-row { grid-template-columns: 24px minmax(8rem, 1fr) auto auto auto auto; }
+.ad2e-ammo-row { grid-template-columns: 24px 1fr auto auto; }
+.ad2e-weapon-status { font-size: 0.85em; white-space: nowrap; }
+.ad2e-qty { display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
 .ad2e-prof-name { cursor: pointer; }
 .ad2e-prof-check { white-space: nowrap; opacity: 0.85; }
 .ad2e-prof-cost { text-align: center; }

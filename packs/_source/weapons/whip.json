@@ -1,0 +1,53 @@
+{
+  "_id": "X6EH6cij7LeRtSpH",
+  "_key": "!items!X6EH6cij7LeRtSpH",
+  "name": "Whip",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "whip",
+    "proficiency": "whip",
+    "weapon": {
+      "size": "M",
+      "type": null,
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d2",
+          "l": "1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "1 sp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 6200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

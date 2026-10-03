@@ -1,0 +1,53 @@
+{
+  "_id": "hM8nRrgprV6ZRW7R",
+  "_key": "!items!hM8nRrgprV6ZRW7R",
+  "name": "Jousting lance",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "jousting-lance",
+    "proficiency": "jousting-lance",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3-1",
+          "l": "1d2-1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "20 gp",
+    "weight": 20.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

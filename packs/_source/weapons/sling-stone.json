@@ -1,0 +1,37 @@
+{
+  "_id": "JEiJ4md1guqIJItN",
+  "_key": "!items!JEiJ4md1guqIJItN",
+  "name": "Sling stone",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sling-stone",
+    "launchers": [
+      "sling",
+      "staff-sling"
+    ],
+    "size": "S",
+    "type": "B",
+    "damage": {
+      "sm": "1d4",
+      "l": "1d4"
+    },
+    "cost": "",
+    "weight": 0.5,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

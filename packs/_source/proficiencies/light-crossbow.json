@@ -24,7 +24,8 @@
         {
           "label": "Light quarrel",
           "sm": "1d4",
-          "l": "1d4"
+          "l": "1d4",
+          "speed": null
         }
       ],
       "melee": false,

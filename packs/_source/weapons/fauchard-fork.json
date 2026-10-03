@@ -1,0 +1,53 @@
+{
+  "_id": "KdZZEsiuNMVZxt4m",
+  "_key": "!items!KdZZEsiuNMVZxt4m",
+  "name": "Fauchard-fork",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "fauchard-fork",
+    "proficiency": "fauchard-fork",
+    "weapon": {
+      "size": "L",
+      "type": "P/S",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "8 gp",
+    "weight": 9.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

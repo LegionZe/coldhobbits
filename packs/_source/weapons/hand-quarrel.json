@@ -1,0 +1,36 @@
+{
+  "_id": "5RjsqAaBN5QHrIGo",
+  "_key": "!items!5RjsqAaBN5QHrIGo",
+  "name": "Hand quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "hand-quarrel",
+    "launchers": [
+      "hand-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d3",
+      "l": "1d2"
+    },
+    "cost": "1 gp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

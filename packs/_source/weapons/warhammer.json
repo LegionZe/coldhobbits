@@ -1,0 +1,53 @@
+{
+  "_id": "guwXtmnaJSoSMwtJ",
+  "_key": "!items!guwXtmnaJSoSMwtJ",
+  "name": "Warhammer",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "warhammer",
+    "proficiency": "warhammer",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "cost": "2 gp",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 6100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

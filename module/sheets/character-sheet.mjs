@@ -44,6 +44,29 @@ const DETAIL_COLUMNS = {
   ],
   cha: [["henchmen", r => `${r.henchmen}`], ["loyalty", r => signed(r.loyalty)], ["reaction", r => signed(r.reaction)]]
 };
+/** "+1/+1" for a magical attack/damage bonus; "" when none. */
+function magicBonus({ hit, dmg }) {
+  const signed = n => (n >= 0 ? `+${n}` : `${n}`);
+  return hit || dmg ? `${signed(hit)}/${signed(dmg)}` : "";
+}
+
+/** Attack/damage buttons and a summary line for a derived weapon entry (weapon item or weapon proficiency). */
+function weaponDisplay(e) {
+  const w = e.item.system.weapon;
+  const signed = n => (n >= 0 ? `+${n}` : `${n}`);
+  const damage = w.damage.filter(d => d.sm || d.l)
+    .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ");
+  const uses = ["melee", "missile"].filter(u => e.attack?.[u]).map(u => {
+    const a = e.attack[u];
+    const label = u === "melee" ? "AD2E.Weapon.Attack" : (w.melee ? "AD2E.Weapon.Throw" : "AD2E.Weapon.Fire");
+    return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg), rate: a.rate,
+      pointBlank: !!a.pointBlank, damageHint: damage };
+  });
+  const meta = [w.size, w.type, w.speed !== null ? `${game.i18n.localize("AD2E.Weapon.Speed")} ${w.speed}` : null, damage]
+    .filter(v => v).join(" · ");
+  return { uses, meta };
+}
+
 const { ActorSheetV2 } = foundry.applications.sheets;
 
 export default class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -64,7 +87,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollAttack: CharacterSheet.onRollAttack,
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
-      toggleSpecialized: CharacterSheet.onToggleSpecialized
+      toggleSpecialized: CharacterSheet.onToggleSpecialized,
+      adjustQuantity: CharacterSheet.onAdjustQuantity
     }
   };
 
@@ -72,6 +96,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     header: { template: "systems/ad2e/templates/actor/character-header.hbs" },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
+    weapons: { template: "systems/ad2e/templates/actor/character-weapons.hbs", scrollable: [""] },
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
     proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
@@ -80,7 +105,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "class" }, { id: "proficiencies" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "proficiencies" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -141,6 +166,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
+    context.weaponTab = this._weaponTabContext(sys);
     context.classGroups = AD2E.classGroups;
     return context;
   }
@@ -195,6 +221,30 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     };
   }
 
+  /** Display data for the Weapons tab: owned weapon items and their proficiency status. */
+  _weaponTabContext(sys) {
+    const actor = this.document;
+    const rows = sys.weapons.map(e => ({
+      id: e.item.id, name: e.item.name, img: e.item.img, quantity: e.item.system.quantity, ...weaponDisplay(e),
+      status: e.proficient
+        ? game.i18n.localize(e.specialized ? "AD2E.Weapon.Specialized" : "AD2E.Weapon.Proficient")
+        : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: e.penalty }),
+      proficient: e.proficient, specialized: e.specialized, profId: e.proficiency?.id ?? null,
+      bonus: magicBonus(e.item.system.bonus),
+      ammo: (actor.ammunitionFor?.(e.item) ?? []).map(a => `${a.name} ×${a.system.quantity}`).join(", "),
+      launcher: !!actor.ammunitionFor?.(e.item)
+    })).sort((a, b) => a.name.localeCompare(b.name));
+    const weaponNames = new Map(sys.weapons.map(e => [e.item.system.identifier, e.item.name]));
+    const label = id => weaponNames.get(id) ?? id.replace(/-/g, " ");
+    const ammo = (actor.items?.filter(i => i.type === "ammunition") ?? []).map(a => ({
+      id: a.id, name: a.name, img: a.img, quantity: a.system.quantity, empty: a.system.quantity < 1,
+      launchers: [...a.system.launchers].map(label).join(", "),
+      damage: `${a.system.damage.sm ?? "—"} / ${a.system.damage.l ?? "—"}`,
+      bonus: magicBonus(a.system.bonus)
+    })).sort((a, b) => a.name.localeCompare(b.name));
+    return { rows, ammo, thac0: sys.thac0.value };
+  }
+
   /** Display data for the Proficiencies tab. */
   _proficiencyTabContext(sys) {
     const p = sys.proficiencies;
@@ -207,21 +257,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       url: e.item.system.url
     });
     const sortByName = (a, b) => a.name.localeCompare(b.name);
-    const signed = n => (n >= 0 ? `+${n}` : `${n}`);
-    const weaponRow = e => {
-      const w = e.item.system.weapon;
-      const damage = w.damage.filter(d => d.sm || d.l)
-        .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ");
-      const uses = ["melee", "missile"].filter(u => e.attack?.[u]).map(u => {
-        const a = e.attack[u];
-        const label = u === "melee" ? "AD2E.Weapon.Attack" : (w.melee ? "AD2E.Weapon.Throw" : "AD2E.Weapon.Fire");
-        return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg), rate: a.rate,
-          pointBlank: !!a.pointBlank, damageHint: damage };
-      });
-      const meta = [w.size, w.type, w.speed !== null ? `${game.i18n.localize("AD2E.Weapon.Speed")} ${w.speed}` : null, damage]
-        .filter(v => v).join(" · ");
-      return { ...row(e), specialized: e.specialized, specInvalid: e.specInvalid, uses, meta };
-    };
+    const weaponRow = e => ({ ...row(e), ...weaponDisplay(e), specialized: e.specialized, specInvalid: e.specInvalid });
     return {
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
         rows: p.entries.filter(e => e.item.system.kind === "weapon").map(weaponRow).sort(sortByName) },
@@ -245,6 +281,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         ui.notifications.warn(game.i18n.format("AD2E.Prof.AlreadyHave", { name: item.name }));
         return null;
       }
+    }
+    if (this.actor.isOwner && item.type === "weapon" && item.parent !== this.actor) {
+      const prof = this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon"
+        && i.system.identifier === item.system.proficiency);
+      if (!prof) ui.notifications.info(game.i18n.format("AD2E.Weapon.DropNotProficient",
+        { name: item.name, penalty: this.actor.system.proficiencies.penalty }));
     }
     if (!this.actor.isOwner || !["race", "class", "kit"].includes(item.type)) return super._onDropItem(event, item);
     if (item.parent === this.actor) return super._onDropItem(event, item); // sorting an owned item
@@ -337,6 +379,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollWeaponDamage(event, target) {
     return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  /** +/- buttons for weapon and ammunition quantities. */
+  static onAdjustQuantity(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    return item.update({ "system.quantity": Math.max(item.system.quantity + Number(target.dataset.delta), 0) });
   }
 
   static onToggleSpecialized(event, target) {

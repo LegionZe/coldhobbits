@@ -24,12 +24,14 @@
         {
           "label": "One-handed",
           "sm": "1d8",
-          "l": "1d12"
+          "l": "1d12",
+          "speed": 6
         },
         {
           "label": "Two-handed",
           "sm": "2d4",
-          "l": "2d8"
+          "l": "2d8",
+          "speed": 8
         }
       ],
       "melee": true,
