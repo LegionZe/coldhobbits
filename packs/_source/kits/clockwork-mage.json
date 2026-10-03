@@ -23,7 +23,13 @@
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Clockwork_Mage_(Character_Kit)",
     "notes": "",
-    "bonusProficiencies": [],
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "clockwork-creation"
+        ]
+      }
+    ],
     "requiredProficiencies": [],
     "bonusSlots": {
       "weapon": 0,
