@@ -159,7 +159,8 @@
     "Gained": "+{hp} HP",
     "Fixed": "+{hp} HP (fixed; no hit die or CON bonus at this level)",
     "Minimum": "minimum 1 per die",
-    "ConfirmReset": "This character is above 1st level. Replace current and maximum HP with a new 1st-level roll?"
+    "ConfirmReset": "This character is above 1st level. Replace current and maximum HP with a new 1st-level roll?",
+    "XpRestart": "hierophant druid: counted from 1 XP after stepping down as Grand Druid at 16th level"
   },
   "AD2E.Sheet.Race": "AD&D 2e Race",
   "AD2E.Race": {

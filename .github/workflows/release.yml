@@ -23,6 +23,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # One-off clean-up requested by the repo owner: release "a" (tag "a", named "0.0.2") was created by hand
+      # before the versioned releases. Deletes it and its tag if still present; no-op otherwise.
+      - name: Remove stray release "a"
+        run: |
+          if gh release view a --repo "$REPO" >/dev/null 2>&1; then
+            gh release delete a --repo "$REPO" --cleanup-tag --yes
+          fi
+
       - name: Read version
         id: ver
         run: |

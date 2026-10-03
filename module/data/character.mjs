@@ -106,6 +106,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.hitDice = { ...hd, label: hd.bonus ? `${hd.dice}d${hd.die}+${hd.bonus}` : `${hd.dice}d${hd.die}` };
     const xp = AD2E.xpTable[this.classInfo.classItem?.system.identifier];
     this.xpNext = xp?.[this.level] ?? null; // index = level -> XP for level + 1
+    // Hierophant druids: XP for the starred levels counts from the restart at 16th level (Table 23 footnote).
+    const restart = AD2E.xpRestart[this.classInfo.classItem?.system.identifier];
+    this.xpRestart = !!(restart && this.xpNext !== null && this.level + 1 >= restart);
 
     this.proficiencies = this.#computeProficiencies();
     this.weapons = this.#computeWeapons();

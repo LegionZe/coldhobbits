@@ -79,7 +79,7 @@ def build_saves():
 
 
 def build_levels():
-    hit_dice, xp, sources = {}, {}, {}
+    hit_dice, xp, sources, restart = {}, {}, {}, {}
     for group, (title, caption) in XP_TABLES.items():
         wiki, rev = page(title)
         sources[group] = {"page": WIKI + urllib.parse.quote(title.replace(" ", "_"), safe="()"), "revid": rev}
@@ -93,9 +93,15 @@ def build_levels():
         hit_dice[group] = {"die": die, "levels": levels}
         for i, col in enumerate(cols[1:-1], start=1):
             for cls in XP_COLUMNS[re.sub(r"\s*/\s*", "/", col)]:
-                # digits only: Table 23 marks druid level 17 "500,000*" (footnote: hierophant druids)
+                # digits only: Table 23 marks druid level 17 "500,000*". Footnote: see "hierophant druids" (Druid
+                # (PHB) rev 157697: the former Grand Druid relinquishes "all of his experience points but 1" and
+                # "begins advancing anew"), so the starred level and those after it count XP from that restart.
                 xp[cls] = [int(re.sub(r"\D", "", r[i])) for r in rows]
-    return hit_dice, xp, sources
+                starred = [int(r[0]) for r in rows if r[i].endswith("*")]
+                if starred:
+                    restart[cls] = starred[0]
+    assert restart == {"druid": 17}, restart
+    return hit_dice, xp, sources, restart
 
 
 def build_thac0():
@@ -154,7 +160,7 @@ if __name__ == "__main__":
     warrior_attacks, spec_attacks, attack_revs = build_attacks()
     thac0, thac0_src = build_thac0()
     saves, save_src = build_saves()
-    hit_dice, xp, lvl_src = build_levels()
+    hit_dice, xp, lvl_src, xp_restart = build_levels()
     for g in GROUP_NAMES.values():
         covered = {n for r in saves[g] for n in range(r["min"], min(r["max"], 30) + 1)}
         assert set(range(1, 31)) <= covered, f"saves for {g} do not cover levels 1-30"
@@ -176,6 +182,8 @@ if __name__ == "__main__":
               "/** Per group: hit die size and, per level, number of dice and fixed bonus HP. */",
               "export const HIT_DICE = " + json.dumps(hit_dice, indent=2) + ";", "",
               "/** Per class identifier: total XP needed for levels 1..20 (index 0 = level 1). */",
-              "export const XP_TABLE = " + json.dumps(xp) + ";", ""]
+              "export const XP_TABLE = " + json.dumps(xp) + ";", "",
+              "/** Per class identifier: first level whose XP counts from a restart (Table 23 footnote: hierophant druids). */",
+              "export const XP_RESTART = " + json.dumps(xp_restart) + ";", ""]
     open("module/rules/level-tables.mjs", "w").write("\n".join(lines))
     print("wrote module/rules/level-tables.mjs:", {g: len(v) for g, v in saves.items()}, sorted(xp))
