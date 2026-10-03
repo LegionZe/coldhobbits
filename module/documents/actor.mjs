@@ -713,16 +713,24 @@ export default class AD2EActor extends Actor {
     const dex = this.type === "character" ? (this.system.abilityData?.dex?.reaction ?? 0) : 0;
     const kitAuto = this.type === "character" ? (this.system.kitMods?.total("surprise") ?? 0) : 0;
     const kitOptions = this.#kitOptions("surprise");
-    const groups = ["other", "party", "conditions"].map(g => `<fieldset><legend>${i18n(`AD2E.Surprise.Group.${g}`)}</legend>${
-      T.modifiers.filter(m => m.group === g).map(m => m.key === "every-10-members"
-        ? `<div class="form-group"><label>${esc(m.label)} (+${m.values[0]})</label><input type="number" name="members" value="0" min="0" step="1" placeholder="${i18n("AD2E.Surprise.Members")}"></div>`
-        : m.values.length > 1
-          ? `<div class="form-group"><label>${esc(m.label)}</label><select name="t57-${m.key}"><option value="0">—</option>${m.values.map(v => `<option value="${v}">${v}</option>`).join("")}</select></div>`
-          : `<div class="form-group"><label>${esc(m.label)} (${m.values[0] > 0 ? "+" : ""}${m.values[0]})</label><input type="checkbox" name="t57-${m.key}" value="${m.values[0]}"></div>`).join("")}</fieldset>`).join("");
+    const sign = v => `${v > 0 ? "+" : ""}${v}`;
+    const groups = ["other", "party", "conditions"].map(g => {
+      const mods = T.modifiers.filter(m => m.group === g);
+      const boxes = mods.filter(m => m.values.length === 1 && m.key !== "every-10-members")
+        .map(m => `<label><input type="checkbox" name="t57-${m.key}" value="${m.values[0]}"> ${esc(m.label)} (${sign(m.values[0])})</label>`).join("");
+      const other = mods.filter(m => m.values.length > 1 || m.key === "every-10-members").map(m => m.key === "every-10-members"
+        ? `<div class="form-group"><label>${esc(m.label)} (${sign(m.values[0])})</label><input type="number" name="members" value="0" min="0" step="1" placeholder="${i18n("AD2E.Surprise.Members")}"></div>`
+        : `<div class="form-group"><label>${esc(m.label)}</label><select name="t57-${m.key}"><option value="0">—</option>${m.values.map(v => `<option value="${v}">${sign(v)}</option>`).join("")}</select></div>`).join("");
+      return `<fieldset><legend>${i18n(`AD2E.Surprise.Group.${g}`)}</legend><div class="ad2e-check-grid">${boxes}</div>${other}</fieldset>`;
+    }).join("");
     const fixed = [dex ? `${i18n("AD2E.Surprise.Dex")} ${dex > 0 ? "+" : ""}${dex}` : "", kitAuto ? `${i18n("AD2E.Surprise.Kit")} ${kitAuto > 0 ? "+" : ""}${kitAuto}` : ""].filter(Boolean).join(" · ");
     const input = await DialogV2.prompt({
+      // Class "ad2e": opaque background (module/opaque-windows.mjs). The situations scroll inside their own box so the
+      // dialog stays within the screen and the Roll button visible.
+      classes: ["ad2e"], position: { width: 520 },
       window: { title: `${this.name}: ${i18n("AD2E.Surprise.Title")}` },
-      content: `<p class="ad2e-note">${i18n("AD2E.Surprise.Hint")}${fixed ? ` ${esc(fixed)}` : ""}</p>` + groups + modifierFields() + this.#kitFields(kitOptions),
+      content: `<p class="ad2e-note">${i18n("AD2E.Surprise.Hint")}${fixed ? ` ${esc(fixed)}` : ""}</p>`
+        + `<div class="ad2e-dialog-scroll">${groups}</div>` + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form;
         const picked = [];
