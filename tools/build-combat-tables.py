@@ -9,6 +9,9 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
     character wrestling in armour), Table 58 (punching and wrestling results by modified attack roll), overbearing
     (4 per size category of difference, -2 per defender leg beyond two, +1 per attacker beyond the first), non-lethal
     weapon attacks (-4 to hit, 50% damage). "Attacking Without Killing (DMG)" Tables 42/43 are asserted identical.
+  * "Initiative (PHB)": Table 55 (standard modifiers), Table 56 (optional modifiers: weapon speed, casting time, breath
+    weapon, monster size with natural weapons, innate spell ability, magical items), magical weapons' speed factor
+    reduction (the lesser bonus, never below 0), and casting times with units (a round or more: end of the round).
 Armour identifiers per Table 57 row are curated in WRESTLING_ARMOR (row labels asserted against the page).
 Run from the repo root:  python3 tools/build-combat-tables.py
 """
@@ -102,7 +105,26 @@ if __name__ == "__main__":
     need(pw, r"the character has a -4 penalty to his attack roll", "non-lethal weapon -4")
     need(pw, r"The damage from such an attack is 50% normal; one-half of this damage is temporary", "non-lethal 50%")
 
+    iw, rev_init, _ = classdata.page("Initiative (PHB)")
+    label55 = lambda c: re.sub(r"\[\[(?:[^\]|]*\|)?([^\]]*)\]\]", r"\1", c).replace("*", "").strip()
+    t55 = [{"key": re.sub(r"[^a-z]+", "-", label55(r[0]).lower()).strip("-"), "label": label55(r[0]), "value": int(r[1])}
+           for r in rows(table(iw, "<h3>Table 55: Standard Modifiers to Initiative"))]
+    assert [x["value"] for x in t55] == [-2, 2, -1, -2, 2, 4, 6, 3, 1], t55
+    cell = lambda c: re.sub(r'^style="[^"]*"\s*\|\s*', "", c).strip()  # indented sub-rows carry a style attribute
+    t56 = {cell(r[0]): cell(r[1]) if len(r) > 1 else "" for r in rows(table(iw, "<h3>Table 56: Optional Modifiers to Initiative"))}
+    size56 = {k[0]: int(t56[k]) for k in ("Tiny", "Small", "Medium", "Large", "Huge", "Gargantuan")}
+    items56 = {"misc": int(t56["Miscellaneous Magic"]), "potion": int(t56["Potion"]), "ring": int(t56["Ring"]),
+               "rod": int(t56["Rods"]), "staff": int(t56["Stave"]), "wand": int(t56["Wand"])}
+    assert t56["Attacking with weapon"] == "Weapon speed" and t56["Casting a spell"] == "Casting time", t56
+    assert t56["Scroll"] == "Casting time of spell", t56
+    need(iw, r"each bonus point conferred by a magical weapon reduces the speed factor of that weapon by 1", "magic speed")
+    need(iw, r"When a weapon has two bonuses, the lesser one is used\. No weapon can have a speed factor of less than 0", "speed min 0")
+    need(iw, r"a spell requiring one round to cast takes effect at the end of the current round", "round casting")
+    need(iw, r"creatures with natural weapons are not affected by weapon speed", "natural weapons")
+    initiative = {"standard": t55, "breath": int(t56["Breath weapon"]), "innate": int(t56["Innate spell ability"]),
+                  "size": size56, "items": items56}
     data = {
+        "initiative": initiative,
         "twoWeapon": {"main": -2, "off": -4, "groups": ["warrior", "rogue"], "rangerMaxArmorAc": 7, "smallAlways": "dagger-or-dirk"},
         "wrestlingArmor": wrestling,
         "punchWrestle": results,
@@ -118,6 +140,7 @@ if __name__ == "__main__":
              f" *   {classdata.url('Ranger (PHB)')} (revision {rev_ranger})",
              f" *   Tables 57/58, overbearing, non-lethal weapon attacks: {classdata.url('Attacking Without Killing (PHB)')} (revision {rev_awk});",
              f" *   DMG Tables 42/43 identical: {classdata.url('Attacking Without Killing (DMG)')} (revision {rev_awk_dmg})",
+             f" *   Initiative Tables 55/56: {classdata.url('Initiative (PHB)')} (revision {rev_init})",
              " */",
              "export const COMBAT_TABLES = " + json.dumps(data) + ";", ""]
     open("module/rules/combat-tables.mjs", "w").write("\n".join(lines))

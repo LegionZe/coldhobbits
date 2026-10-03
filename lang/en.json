@@ -973,9 +973,26 @@
     "Wealth": "Total with coins"
   },
   "AD2E.Init": {
-    "Setting": "Ask for an initiative modifier",
-    "SettingHint": "When one combatant rolls initiative from the combat tracker, ask for a situational modifier and reason (weapon speed, spell casting time, magical items). Rolling several at once never asks.",
-    "Title": "Initiative: {name}"
+    "Setting": "Ask for the initiative action",
+    "SettingHint": "When one combatant rolls initiative from the combat tracker, ask for its action (weapon speed factor, spell casting time, magical item, breath weapon, innate ability, natural weapons by size), the standard situations (Initiative (PHB) Table 55) and a modifier. Rolling several at once never asks and uses each combatant's weapon in hand (or natural weapons).",
+    "Title": "Initiative: {name}",
+    "Hint": "1d10, lowest acts first. Action modifiers: Initiative (PHB) Table 56; magical weapons are faster by their bonus.",
+    "ActionLabel": "Action",
+    "Standard": "Situation (Table 55)",
+    "Action": {
+      "none": "Other action / no modifier",
+      "weapon": "Attack with {name} (speed {n})",
+      "natural": "Natural weapons (size +{n})",
+      "spell": "Cast {name} (casting time {n})",
+      "spellRound": "Cast {name} ({time}: end of the round)",
+      "magic": "Use {name} (+{n})",
+      "breath": "Breath weapon (+{n})",
+      "innate": "Innate spell ability (+{n})"
+    },
+    "Natural": "natural weapons",
+    "Breath": "breath weapon",
+    "Innate": "innate ability",
+    "EndOfRound": "takes effect at the end of the round"
   },
   "AD2E.AbilityRoll": {
     "Title": "Roll ability scores",
