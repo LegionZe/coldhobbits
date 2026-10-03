@@ -1,4 +1,6 @@
-<header class="ad2e-header">
+<header class="ad2e-header ad2e-character-header">
+  <img class="ad2e-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-tooltip="{{actor.name}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}}>
+  <div class="ad2e-header-main">
   <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
   <div class="ad2e-header-grid">
     <label>{{localize "AD2E.Character.classGroup"}}
@@ -27,5 +29,6 @@
       <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"
         {{#if system.xpNext}}data-tooltip="{{localize 'AD2E.HP.NextLevel'}}: {{system.xpNext}}{{#if system.xpRestart}} ({{localize 'AD2E.HP.XpRestart'}}){{/if}}"{{/if}}></label>
     </div>
+  </div>
   </div>
 </header>

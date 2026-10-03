@@ -106,7 +106,7 @@
 .ad2e.monster .window-content { display: flex; flex-direction: column; overflow: hidden; }
 .ad2e.monster .ad2e-tab { flex: 1; min-height: 0; overflow-y: auto; padding: 0.25rem 0.5rem; }
 .ad2e.monster .ad2e-tab:not(.active) { display: none; }
-.ad2e-monster-header { display: grid; grid-template-columns: 72px 1fr; gap: 0.25rem 0.75rem; padding-bottom: 0.4rem; }
+.ad2e-monster-header { display: grid; grid-template-columns: 96px 1fr; gap: 0.25rem 0.75rem; padding-bottom: 0.4rem; }
 .ad2e-monster-title { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
 .ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; }
 .ad2e-monster-line input[type="number"] { width: 3.5rem; }
@@ -153,3 +153,7 @@
 .ad2e-item-link { opacity: 0.6; font-size: 0.85em; }
 .ad2e-item-link:hover { opacity: 1; }
 .ad2e-source-link { white-space: nowrap; }
+.ad2e.character .ad2e-character-header { flex-direction: row; align-items: flex-start; gap: 0.75rem; }
+.ad2e-header-main { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.ad2e-portrait { width: 96px; height: 96px; flex: 0 0 96px; object-fit: cover; border: 1px solid currentColor; border-radius: 4px; }
+.ad2e-portrait[data-action="editImage"] { cursor: pointer; }
