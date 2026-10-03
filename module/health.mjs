@@ -125,41 +125,93 @@ export function registerHealth() {
     }
   });
 
-  // Chat context menu on damage rolls: apply the damage (or healing) to the tokens targeted when the roll was made
-  // (`flags.ad2e.targets`), to the tokens this user targets now, or to the selected tokens. Punching and non-lethal
-  // messages carry `damageKind` ("punch" | "nonlethal") and `temp` (the temporary part of non-lethal damage).
+  // Chat context menu on damage rolls (the same actions as the buttons under the message: damageButtons).
   Hooks.on("getChatMessageContextOptions", (html, options) => {
     const message = li => game.messages.get(li.dataset.messageId);
-    const flag = (li, k) => message(li)?.getFlag("ad2e", k);
-    const amount = li => flag(li, "damage");
-    const kind = li => flag(li, "damageKind") ?? "normal";
-    const has = li => Number.isFinite(amount(li));
-    const rollTargets = li => (flag(li, "targets") ?? []).map(t => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(t.uuid, { strict: false })?.actor).filter(Boolean);
-    const myTargets = () => [...(game.user?.targets ?? [])].map(t => t.actor).filter(Boolean);
-    const selected = () => (canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
-    const apply = (actors, heal) => async (event, li) => {
-      for (const actor of new Set(actors(li))) {
-        if (!actor.applyDamage) continue;
-        if (!actor.isOwner) {
-          ui.notifications.warn(game.i18n.format("AD2E.Health.NotOwner", { name: actor.name }));
-          continue;
-        }
-        if (heal) await actor.applyHealing(amount(li));
-        else await actor.applyDamage(amount(li), { single: true, kind: kind(li), temp: flag(li, "temp") ?? 0 });
-      }
-    };
+    const entry = (label, icon, scope, heal) => ({ label, icon, group: "ad2e",
+      visible: li => damageTargets(message(li), scope, heal).length > 0,
+      onClick: (event, li) => applyFromMessage(message(li), scope, heal) });
     // Same entry shape as dnd5e 6.x on v14 (icon class, group, visible(li), onClick(event, li)).
-    const entry = (label, icon, actors, heal, extra = () => true) => ({ label, icon, group: "ad2e",
-      visible: li => has(li) && extra(li) && actors(li).length > 0, onClick: apply(actors, heal) });
-    const normal = li => kind(li) === "normal";
     options.push(
-      entry("AD2E.Health.ApplyDamageRollTargets", "fa-solid fa-crosshairs", rollTargets, false),
-      entry("AD2E.Health.ApplyDamageMyTargets", "fa-solid fa-bullseye", myTargets, false),
-      entry("AD2E.Health.ApplyDamage", "fa-solid fa-user-minus", selected, false),
-      entry("AD2E.Health.ApplyHealingMyTargets", "fa-solid fa-hand-holding-medical", myTargets, true, normal),
-      entry("AD2E.Health.ApplyHealing", "fa-solid fa-user-plus", selected, true, normal)
+      entry("AD2E.Health.ApplyDamageRollTargets", "fa-solid fa-crosshairs", "roll", false),
+      entry("AD2E.Health.ApplyDamageMyTargets", "fa-solid fa-bullseye", "mine", false),
+      entry("AD2E.Health.ApplyDamage", "fa-solid fa-user-minus", "selected", false),
+      entry("AD2E.Health.ApplyHealingMyTargets", "fa-solid fa-hand-holding-medical", "mine", true),
+      entry("AD2E.Health.ApplyHealing", "fa-solid fa-user-plus", "selected", true)
     );
   });
+}
+
+/* ---------------------------------------- Applying damage from chat */
+
+/**
+ * Actors a damage message can be applied to: `scope` "roll" (the tokens targeted when it was rolled,
+ * `flags.ad2e.targets`), "mine" (this user's targets now) or "selected" (controlled tokens). Healing only for normal
+ * damage. Empty when the message carries no damage.
+ */
+export function damageTargets(message, scope, heal = false) {
+  const amount = message?.getFlag?.("ad2e", "damage");
+  if (!Number.isFinite(amount)) return [];
+  if (heal && (message.getFlag("ad2e", "damageKind") ?? "normal") !== "normal") return [];
+  let actors = [];
+  if (scope === "roll") {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    actors = (message.getFlag("ad2e", "targets") ?? []).map(t => resolve?.(t.uuid, { strict: false })?.actor);
+  } else if (scope === "mine") actors = [...(game.user?.targets ?? [])].map(t => t.actor);
+  else actors = (canvas?.tokens?.controlled ?? []).map(t => t.actor);
+  return [...new Set(actors.filter(a => a?.applyDamage))];
+}
+
+/** Apply a damage message's damage (or healing) to the actors of `scope` (see damageTargets); owners only. */
+export async function applyFromMessage(message, scope, heal = false) {
+  const actors = damageTargets(message, scope, heal);
+  if (!actors.length) {
+    ui.notifications.warn(game.i18n.localize(`AD2E.Health.NoTargets.${scope}`));
+    return;
+  }
+  const amount = message.getFlag("ad2e", "damage");
+  for (const actor of actors) {
+    if (!actor.isOwner) {
+      ui.notifications.warn(game.i18n.format("AD2E.Health.NotOwner", { name: actor.name }));
+      continue;
+    }
+    if (heal) await actor.applyHealing(amount);
+    else await actor.applyDamage(amount, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
+      temp: message.getFlag("ad2e", "temp") ?? 0 });
+  }
+}
+
+/**
+ * Buttons under a damage message (GM only; players use the context menu for tokens they own): apply to the targets of
+ * the roll (named), to my targeted tokens, to the selected tokens, or heal the selected tokens. Called from
+ * AD2EChatMessage#renderHTML (as dnd5e adds its chat controls on v14).
+ */
+export function damageButtons(message, html) {
+  const amount = message?.getFlag?.("ad2e", "damage");
+  if (!Number.isFinite(amount) || !game.user?.isGM || !html?.querySelector) return;
+  const i18n = k => game.i18n.localize(k);
+  const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+  const rollTargets = message.getFlag("ad2e", "targets") ?? [];
+  const normal = (message.getFlag("ad2e", "damageKind") ?? "normal") === "normal";
+  const buttons = [
+    rollTargets.length ? ["roll", false, "fa-crosshairs", `${i18n("AD2E.Health.Button.roll")}: ${rollTargets.map(t => esc(t.name)).join(", ")}`] : null,
+    ["mine", false, "fa-bullseye", i18n("AD2E.Health.Button.mine")],
+    ["selected", false, "fa-user-minus", i18n("AD2E.Health.Button.selected")],
+    normal ? ["selected", true, "fa-user-plus", i18n("AD2E.Health.Button.heal")] : null
+  ].filter(Boolean);
+  const box = document.createElement("div");
+  box.className = "ad2e-damage-buttons";
+  box.innerHTML = `<span class="ad2e-damage-amount">${esc(game.i18n.format("AD2E.Health.Button.amount", { n: amount }))}</span>`
+    + buttons.map(([scope, heal, icon, label]) => `<button type="button" data-ad2e-apply="${scope}" data-ad2e-heal="${heal}">`
+      + `<i class="fa-solid ${icon}"></i> ${label}</button>`).join("");
+  for (const b of box.querySelectorAll("button")) {
+    b.addEventListener("click", ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      applyFromMessage(message, b.dataset.ad2eApply, b.dataset.ad2eHeal === "true");
+    });
+  }
+  (html.querySelector(".message-content") ?? html).append(box);
 }
 
 /** Ask for an amount of damage or healing and apply it to `actor` (sheet buttons). */

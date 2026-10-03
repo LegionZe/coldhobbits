@@ -1058,7 +1058,19 @@
     "ApplyDamageRollTargets": "Apply damage to the targets of the roll",
     "ApplyDamageMyTargets": "Apply damage to my targeted tokens",
     "ApplyHealingMyTargets": "Apply as healing to my targeted tokens",
-    "NotOwner": "No permission to change {name}'s hit points; ask the GM to apply it."
+    "NotOwner": "No permission to change {name}'s hit points; ask the GM to apply it.",
+    "Button": {
+      "amount": "{n} damage",
+      "roll": "Apply to",
+      "mine": "My targets",
+      "selected": "Selected",
+      "heal": "Heal selected"
+    },
+    "NoTargets": {
+      "roll": "The roll had no targeted tokens.",
+      "mine": "Target one or more tokens first (T key or right-click > Target).",
+      "selected": "Select one or more tokens first."
+    }
   },
   "AD2E.Surprise": {
     "Title": "Surprise",
