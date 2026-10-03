@@ -1,0 +1,56 @@
+{
+  "_id": "1nB0Pwh0Yriu5xd1",
+  "_key": "!items!1nB0Pwh0Yriu5xd1",
+  "name": "Elf",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "elf",
+    "min": {
+      "str": 3,
+      "dex": 6,
+      "con": 7,
+      "int": 8,
+      "wis": 3,
+      "cha": 8
+    },
+    "max": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 18,
+      "wis": 18,
+      "cha": 18
+    },
+    "adjust": {
+      "str": 0,
+      "dex": 1,
+      "con": -1,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "classes": [
+      "cleric",
+      "fighter",
+      "mage",
+      "thief",
+      "ranger",
+      "diviner",
+      "enchanter"
+    ],
+    "conSaves": false,
+    "conPoison": false,
+    "infravision": 60,
+    "infravisionByLineage": false,
+    "url": "https://adnd2e.fandom.com/wiki/Elf_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

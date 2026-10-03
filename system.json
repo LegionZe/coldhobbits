@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -38,7 +38,8 @@
     },
     "Item": {
       "class": {},
-      "kit": {}
+      "kit": {},
+      "race": {}
     }
   },
   "primaryTokenAttribute": "hp",
@@ -47,6 +48,17 @@
     "units": "ft"
   },
   "packs": [
+    {
+      "name": "races",
+      "label": "Races (PHB)",
+      "system": "ad2e",
+      "path": "packs/races",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
     {
       "name": "classes",
       "label": "Classes (PHB)",

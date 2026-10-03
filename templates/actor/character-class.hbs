@@ -1,6 +1,35 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with classTab as |ct|}}
   <p class="ad2e-note">{{localize "AD2E.Class.DragHint"}}</p>
+  <fieldset class="ad2e-race">
+    <legend>{{localize "AD2E.Character.race"}}</legend>
+    {{#if ct.raceItem}}
+    <div class="ad2e-item-row">
+      <img src="{{ct.raceItem.img}}" alt="" width="32" height="32">
+      <h3><a data-action="openItem" data-item-id="{{ct.raceItem.id}}">{{ct.raceItem.name}}</a></h3>
+      {{#if ct.race.url}}<a href="{{ct.race.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.raceItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    <dl class="ad2e-facts">
+      <dt>{{localize "AD2E.Race.Infravision"}}</dt><dd>{{ct.infravision}}</dd>
+      <dt>{{localize "AD2E.Race.SaveBonus"}}</dt><dd>{{#if ct.conSaveBonus}}+{{ct.conSaveBonus}}{{else}}—{{/if}}</dd>
+      <dt>{{localize "AD2E.Race.PoisonBonus"}}</dt><dd>{{#if ct.poisonBonus}}+{{ct.poisonBonus}}{{else}}—{{/if}}</dd>
+    </dl>
+    {{#unless ct.classAllowedByRace}}<p class="ad2e-unmet">{{localize "AD2E.Race.ClassNotAllowed"}}</p>{{/unless}}
+    <table class="ad2e-race-table">
+      <thead><tr><th></th><th>{{localize "AD2E.Race.Min"}}</th><th>{{localize "AD2E.Race.Max"}}</th><th>{{localize "AD2E.Race.Rolled"}}</th><th>{{localize "AD2E.Race.Adjust"}}</th><th>{{localize "AD2E.Race.Effective"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each ct.raceRows as |r|}}
+        <tr class="{{#unless r.met}}ad2e-unmet{{/unless}}"><th>{{r.label}}</th><td>{{r.min}}</td><td>{{r.max}}</td><td>{{r.rolled}}</td><td>{{r.adjust}}</td><td>{{r.total}}</td>
+          <td>{{#if r.met}}<i class="fa-solid fa-check"></i>{{else}}<i class="fa-solid fa-xmark"></i>{{/if}}</td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {{else}}
+    <p>{{localize "AD2E.Race.DropRace"}}</p>
+    {{/if}}
+  </fieldset>
+
   <div class="ad2e-class-grid">
     <fieldset class="ad2e-class">
       <legend>{{localize "AD2E.Character.className"}}</legend>
