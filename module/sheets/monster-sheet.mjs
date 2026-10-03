@@ -1,5 +1,5 @@
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
-import { promptHitPoints } from "../health.mjs";
+import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -32,6 +32,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       useMagicItem: MonsterSheet.onUseMagicItem,
       hpDamage: MonsterSheet.onHpDamage,
       hpHeal: MonsterSheet.onHpHeal,
+      recoverTemp: MonsterSheet.onRecoverTemp,
       rollSurprise: MonsterSheet.onRollSurprise
     }
   };
@@ -101,6 +102,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Wage (hirelings) or price (mounts); shown for those roles or whenever one is set.
     context.showCost = ["hireling", "mount"].includes(sys.role) || !!sys.cost;
     context.dead = sys.hpState?.state === "dead";
+    context.knockedOut = !!sys.hpState?.knockedOut;
+    context.temporary = temporaryHp(sys.hp);
     context.sourceLabel = game.i18n.localize(/completecompendium\.com/.test(sys.url) ? "AD2E.Monster.CompleteCompendium" : "AD2E.Monster.SourcePage");
     context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;
@@ -140,6 +143,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onHpDamage() { return promptHitPoints(this.actor, false); }
 
   static onHpHeal() { return promptHitPoints(this.actor, true); }
+
+  static onRecoverTemp() { return this.actor.recoverTemporary(); }
 
   static onRollSurprise() { return this.actor.rollSurprise(); }
 

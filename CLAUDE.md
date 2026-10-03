@@ -56,7 +56,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `python3 tools/build-magic-item-data.py` (after build-treasure-tables.py). No item descriptions are copied.
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
-  applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead; derived `system.hpState`.
+  applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
+  Temporary damage: `hp.punch` (75% returns on deleteCombat) and `hp.temp` + `hp.tempUntil` (returns on updateWorldTime,
+  one turn after the combat); chat flags `damageKind` ("punch" | "nonlethal") and `temp`.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

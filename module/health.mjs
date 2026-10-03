@@ -8,8 +8,22 @@
  *  - Death From Massive Damage (PHB, DMG): 50 or more points from a single attack: save vs. death or die.
  *  - Healing (PHB): 1 hit point per day of rest, 3 per day of complete bed rest, plus the Constitution hit point bonus
  *    per complete week of bed rest; never above the maximum. Curative spells have no effect on the dead.
+ *  - Temporary damage (Attacking Without Killing (PHB, DMG)): punching damage is recorded separately (`hp.punch`) and
+ *    split at the end of combat, 25% lasting and 75% returned; half of a non-lethal weapon attack's damage is temporary
+ *    (`hp.temp`), "lasting one turn after the fight is over". A creature whose hit points are 0 or less only because of
+ *    temporary damage is unconscious, not dead or dying.
  */
+import { COMBAT_TABLES } from "./rules/combat-tables.mjs";
+
 export const DEATH_LIMIT = -10;
+/** One turn = 10 rounds of one minute (PHB, "Time"), in seconds of world time. */
+export const TURN_SECONDS = 600;
+
+/** Hit points of punching damage that return after the fight (25% of it is lasting, rounded down). */
+export function punchRestore(punch = 0) {
+  const n = Math.max(Number(punch) || 0, 0);
+  return n - Math.floor(n * COMBAT_TABLES.punch.lasting);
+}
 export const MASSIVE_DAMAGE = 50;
 
 export function deathRule() {
@@ -20,13 +34,25 @@ export function deathRule() {
  * State from hit points: "ok", "unconscious" (Death's Door, 0 to -9) or "dead". `dead` = an explicit death (massive
  * damage, bled out). `bleeding`: unconscious and not stabilised.
  */
-export function hpState({ value = 1, dead = false, stable = false } = {}, { character = true, rule = deathRule() } = {}) {
+export function hpState({ value = 1, dead = false, stable = false, punch = 0, temp = 0 } = {}, { character = true, rule = deathRule() } = {}) {
   const doorRule = character && rule === "deathsDoor";
+  const restorable = punchRestore(punch) + Math.max(Number(temp) || 0, 0);
+  // Knocked out: 0 or fewer hit points, but above 0 once the temporary damage returns.
+  const knockedOut = !dead && value <= 0 && value + restorable > 0;
   let state = "ok";
   if (dead) state = "dead";
+  else if (knockedOut) state = "unconscious";
   else if (doorRule) state = value <= DEATH_LIMIT ? "dead" : (value <= 0 ? "unconscious" : "ok");
   else if (value <= 0) state = "dead";
-  return { state, bleeding: state === "unconscious" && !stable, doorRule };
+  return { state, bleeding: state === "unconscious" && !stable && !knockedOut, doorRule, knockedOut, restorable };
+}
+
+/** Sheet text for pending temporary damage: "" when none (localized). */
+export function temporaryHp(hp = {}) {
+  const punch = hp.punch ?? 0;
+  const temp = hp.temp ?? 0;
+  if (!(punch > 0) && !(temp > 0)) return "";
+  return game.i18n.format("AD2E.Health.TemporaryText", { punch, restore: punchRestore(punch), temp });
 }
 
 /** Natural healing for `days` of rest (Healing (PHB)): rest 1 per day; bed rest 3 per day + conBonus per full week. */
@@ -76,23 +102,49 @@ export function registerHealth() {
     }
   });
 
-  // Chat context menu on damage rolls: apply the damage (or healing) to the selected tokens.
+  // End of combat: punching damage is split (75% returns now); temporary non-lethal damage returns one turn later.
+  Hooks.on("deleteCombat", async combat => {
+    if (!game.user.isActiveGM) return;
+    for (const actor of new Set(combat.combatants.map(c => c.actor).filter(Boolean))) {
+      const hp = actor.system?.hp;
+      if (!hp) continue;
+      if (hp.punch > 0) await actor.recoverTemporary({ punch: true, temp: false });
+      if (hp.temp > 0 && hp.tempUntil === null) await actor.update({ "system.hp.tempUntil": game.time.worldTime + TURN_SECONDS });
+    }
+  });
+
+  // Temporary non-lethal damage returns once the world time passes the recorded time (active GM).
+  Hooks.on("updateWorldTime", async worldTime => {
+    if (!game.user.isActiveGM) return;
+    const tokenActors = game.scenes.contents.flatMap(s => s.tokens.contents).filter(t => !t.actorLink).map(t => t.actor);
+    for (const actor of new Set([...game.actors.contents, ...tokenActors].filter(Boolean))) {
+      const hp = actor.system?.hp;
+      if (hp?.temp > 0 && hp.tempUntil !== null && hp.tempUntil !== undefined && worldTime >= hp.tempUntil) {
+        await actor.recoverTemporary({ punch: false, temp: true });
+      }
+    }
+  });
+
+  // Chat context menu on damage rolls: apply the damage (or healing) to the selected tokens. Punching and non-lethal
+  // messages carry `kind` ("punch" | "nonlethal") and `temp` (the temporary part of non-lethal damage).
   Hooks.on("getChatMessageContextOptions", (html, options) => {
     const message = li => game.messages.get(li.dataset.messageId);
     const amount = li => message(li)?.getFlag("ad2e", "damage");
+    const kind = li => message(li)?.getFlag("ad2e", "damageKind") ?? "normal";
     const visible = li => Number.isFinite(amount(li)) && canvas?.tokens?.controlled?.length > 0;
     const apply = heal => async (event, li) => {
       for (const token of canvas.tokens.controlled) {
         const actor = token.actor;
         if (!actor?.applyDamage) continue;
         if (heal) await actor.applyHealing(amount(li));
-        else await actor.applyDamage(amount(li), { single: true });
+        else await actor.applyDamage(amount(li), { single: true, kind: kind(li), temp: message(li)?.getFlag("ad2e", "temp") ?? 0 });
       }
     };
     options.push(
       // Same entry shape as dnd5e 6.x on v14 (icon class, group, visible(li), onClick(event, li)).
       { label: "AD2E.Health.ApplyDamage", icon: "fa-solid fa-user-minus", group: "ad2e", visible, onClick: apply(false) },
-      { label: "AD2E.Health.ApplyHealing", icon: "fa-solid fa-user-plus", group: "ad2e", visible, onClick: apply(true) }
+      { label: "AD2E.Health.ApplyHealing", icon: "fa-solid fa-user-plus", group: "ad2e",
+        visible: li => visible(li) && kind(li) === "normal", onClick: apply(true) }
     );
   });
 }

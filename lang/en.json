@@ -1045,7 +1045,16 @@
     "RaiseFailure": "{name} fails the resurrection survival roll ({roll} > {chance}%).",
     "CannotRaise": "{name}'s Constitution is too low to be raised.",
     "ApplyDamage": "Apply damage to selected tokens",
-    "ApplyHealing": "Apply as healing to selected tokens"
+    "ApplyHealing": "Apply as healing to selected tokens",
+    "PunchNote": "({n} punching damage: 75% of it returns after the fight)",
+    "TempNote": "({n} of it temporary, returning one turn after the fight)",
+    "TempRecovered": "{name} recovers {n} hit points of temporary damage ({before} → {after}).",
+    "PunchLasting": "{n} of the punching damage is lasting.",
+    "Temporary": "Temporary damage",
+    "TemporaryText": "punching {punch} ({restore} returns), non-lethal {temp}",
+    "Recover": "Recover temporary damage",
+    "RecoverHint": "Attacking Without Killing (PHB): 75% of punching damage returns at the end of the fight and the temporary half of non-lethal weapon damage one turn after it. Done automatically when a combat encounter ends (non-lethal: after one turn of game time); this button does it now.",
+    "KnockedOut": "knocked out: temporary damage"
   },
   "AD2E.Surprise": {
     "Title": "Surprise",

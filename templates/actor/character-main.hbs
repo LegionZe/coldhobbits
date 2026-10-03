@@ -20,13 +20,15 @@
         <span class="ad2e-pair"><input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></span></div>
       <div class="ad2e-field"><span>{{localize "AD2E.HP.HitDice"}}</span><strong>{{system.hitDice.label}}</strong></div>
       <div class="ad2e-field ad2e-hp-status"><span data-tooltip="{{hpStatus.rule}}">{{localize "AD2E.Health.Status"}}</span>
-        <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{#if hpStatus.label}}{{hpStatus.label}}{{#if hpStatus.bleeding}} ({{localize "AD2E.Health.BleedingNote"}}){{/if}}{{#if hpStatus.stable}} ({{localize "AD2E.Health.StableNote"}}){{/if}}{{else}}{{localize "AD2E.Health.State.ok"}}{{/if}}{{#if hpStatus.feeble}} · {{localize "AD2E.Health.State.feeble"}}{{/if}}</strong></div>
+        <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{#if hpStatus.label}}{{hpStatus.label}}{{#if hpStatus.bleeding}} ({{localize "AD2E.Health.BleedingNote"}}){{/if}}{{#if hpStatus.stable}} ({{localize "AD2E.Health.StableNote"}}){{/if}}{{else}}{{localize "AD2E.Health.State.ok"}}{{/if}}{{#if hpStatus.feeble}} · {{localize "AD2E.Health.State.feeble"}}{{/if}}{{#if hpStatus.knockedOut}} ({{localize "AD2E.Health.KnockedOut"}}){{/if}}</strong></div>
+      {{#if hpStatus.temporary}}<div class="ad2e-field"><span data-tooltip="{{localize 'AD2E.Health.RecoverHint'}}">{{localize "AD2E.Health.Temporary"}}</span><strong>{{hpStatus.temporary}}</strong></div>{{/if}}
       {{#if editable}}
       <div class="ad2e-buttons">
         <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
         <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>
         <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
         <button type="button" data-action="hpRest" data-tooltip="{{localize 'AD2E.Health.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Health.Rest"}}</button>
+        {{#if hpStatus.temporary}}<button type="button" data-action="recoverTemp" data-tooltip="{{localize 'AD2E.Health.RecoverHint'}}"><i class="fa-solid fa-rotate-left"></i> {{localize "AD2E.Health.Recover"}}</button>{{/if}}
         {{#if hpStatus.bleeding}}<button type="button" data-action="bindWounds"><i class="fa-solid fa-kit-medical"></i> {{localize "AD2E.Health.BindWounds"}}</button>{{/if}}
         {{#if hpStatus.dead}}<button type="button" data-action="raiseDead" data-tooltip="{{localize 'AD2E.Health.RaiseHint'}}"><i class="fa-solid fa-person-rays"></i> {{localize "AD2E.Health.Raise"}}</button>{{/if}}
       </div>
