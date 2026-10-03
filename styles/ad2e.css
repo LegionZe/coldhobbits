@@ -132,7 +132,9 @@
 .ad2e.monster-importer .ad2e-importer { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
 .ad2e-importer-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 .ad2e-importer-controls select { max-width: 22rem; }
-.ad2e-importer-list { flex: 1; overflow-y: auto; columns: 2; min-height: 10rem; }
+/* The list scrolls inside its own box (bounded by the viewport), so the controls above it stay reachable. */
+.ad2e-importer-list { overflow-y: auto; columns: 2; min-height: 10rem; max-height: 55vh; border: 1px solid currentColor; border-radius: 4px; padding: 0.25rem 0.4rem; }
+.ad2e-importer-actions { justify-content: space-between; }
 .ad2e-importer-entry { display: block; break-inside: avoid; }
 
 /* Spells tab (templates/actor/character-spells.hbs) */
