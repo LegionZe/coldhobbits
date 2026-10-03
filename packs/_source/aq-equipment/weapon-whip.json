@@ -1,0 +1,53 @@
+{
+  "_id": "Oo2RCEJ3jHwxwSID",
+  "_key": "!items!Oo2RCEJ3jHwxwSID",
+  "name": "Whip",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "whip",
+    "proficiency": "whip",
+    "weapon": {
+      "size": "M",
+      "type": null,
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d2",
+          "l": "1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "1 sp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Whip: asking 2 sp, normal 1 sp, bargain 7 cp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 7100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

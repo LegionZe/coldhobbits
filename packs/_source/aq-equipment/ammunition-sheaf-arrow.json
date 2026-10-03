@@ -1,0 +1,39 @@
+{
+  "_id": "JemwjCFMqEvdrrDC",
+  "_key": "!items!JemwjCFMqEvdrrDC",
+  "name": "Sheaf arrow",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sheaf-arrow",
+    "launchers": [
+      "composite-long-bow",
+      "composite-short-bow",
+      "long-bow",
+      "short-bow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d8",
+      "l": "1d8"
+    },
+    "cost": "30 sp/6",
+    "weight": 0.1,
+    "quantity": 6,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (3 sp/6)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 5700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

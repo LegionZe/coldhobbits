@@ -1,0 +1,37 @@
+{
+  "_id": "i9anWecHULSKYvVC",
+  "_key": "!items!i9anWecHULSKYvVC",
+  "name": "Sling bullet",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sling-bullet",
+    "launchers": [
+      "sling",
+      "staff-sling"
+    ],
+    "size": "S",
+    "type": "B",
+    "damage": {
+      "sm": "1d4+1",
+      "l": "1d6+1"
+    },
+    "cost": "1 cp",
+    "weight": 0.5,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: bullet: asking 2 cp, normal 1 cp, bargain 1 cp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

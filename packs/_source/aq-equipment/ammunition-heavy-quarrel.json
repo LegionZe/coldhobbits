@@ -1,0 +1,36 @@
+{
+  "_id": "dOFIfsUjO5cCoZPE",
+  "_key": "!items!dOFIfsUjO5cCoZPE",
+  "name": "Heavy quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "heavy-quarrel",
+    "launchers": [
+      "heavy-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d4+1",
+      "l": "1d6+1"
+    },
+    "cost": "2 sp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: quarrel: asking 3 sp, normal 2 sp, bargain 1 sp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 3200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

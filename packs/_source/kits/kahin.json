@@ -21,6 +21,7 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "druid",
     "url": "https://adnd2e.fandom.com/wiki/Kahin_(Character_Kit)",
     "notes": "Uses the druid experience table (Kits (AA), Table 3).",
     "bonusProficiencies": [

@@ -1,0 +1,53 @@
+{
+  "_id": "hZpPSP9yXLL3q6dB",
+  "_key": "!items!hZpPSP9yXLL3q6dB",
+  "name": "Heavy crossbow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "heavy-crossbow",
+    "proficiency": "heavy-crossbow",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "Heavy quarrel",
+          "sm": "1d4+1",
+          "l": "1d6+1",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "80",
+        "medium": "160",
+        "long": "240"
+      },
+      "family": "crossbow",
+      "missileColumn": "heavyCrossbow",
+      "strength": "none"
+    },
+    "cost": "50 gp",
+    "weight": 14.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Crossbow, heavy: asking 75 gp, normal 50 gp, bargain 40 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

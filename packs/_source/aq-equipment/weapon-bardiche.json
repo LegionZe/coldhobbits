@@ -1,0 +1,53 @@
+{
+  "_id": "0RbTX4dkrRHG9fpS",
+  "_key": "!items!0RbTX4dkrRHG9fpS",
+  "name": "Bardiche",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bardiche",
+    "proficiency": "bardiche",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "70 gp",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (7 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

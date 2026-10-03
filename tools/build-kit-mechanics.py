@@ -48,6 +48,83 @@ def reaction(v, match, condition):
 
 # kit identifier -> list of modifiers
 KIT_MODIFIERS = {
+    # --- Al-Qadim (Arabian Adventures; The Complete Sha'ir's Handbook) ---
+    "askar": [
+        m("proficiency", 2, r"While askars are in their home town, they gain a \+2 bonus to proficiencies used while interacting with natives",
+          condition="in the home town, dealing with its natives"),
+    ],
+    "astrologer-sha-ir": [
+        m("proficiency", 1, r"the astrologer gains a \+1 to this ability check for every three levels", key="astrology",
+          every=3, step=1, start=3),
+        m("initiative", 2, r"An astrologer gains a -2 bonus to initiative rolls when using a \"hung\" spell", condition="casting a hung spell"),
+    ],
+    "barber": [
+        m("proficiency", 2, r"A demihuman barber tending a member of the same race gains a \+2 bonus to the grooming proficiency",
+          key="grooming", condition="demihuman tending a member of the same race"),
+    ],
+    "beggar-thief-al-qadim": [
+        reaction(-4, r"members of this kit suffer a 4-point penalty to all reaction rolls involving other intelligent creatures",
+                 "other intelligent creatures"),
+        m("proficiency", -5, r"Even modest clothing reduces the opportunities for begging by -5", key="begging",
+          condition="wearing even modest clothing"),
+        m("proficiency", -5, r"magical items \(especially those in good shape\) reduce the opportunity to beg or pass unnoticed by -5",
+          key="begging", condition="carrying visible magical items"),
+    ],
+    "clockwork-mage": [
+        m("proficiency", 1, r"Gnomes, in particular, are adept at working with clockwork mechanisms and receive a \+1",
+          key="clockwork-creation", condition="gnome"),
+    ],
+    "corsair-al-qadim": [
+        reaction(-2, r"corsairs are considered marginal members of society, and as such they suffer a 2-point penalty to initial reactions",
+                 "initial reactions"),
+    ],
+    "desert-rider": [
+        m("proficiency", -1, r"When not in a desert or desertlike area, they make all proficiency checks at -1",
+          condition="not in a desert or desertlike area"),
+    ],
+    "elemental-mage": [
+        m("save", 2, r"a \+2 bonus to all saving throws against attacks using that element", condition="vs. the chosen element"),
+        m("proficiency", 2, r"\+2 to all proficiency and ability checks involving that element", condition="involving the chosen element"),
+        m("ability", 2, r"\+2 to all proficiency and ability checks involving that element", condition="involving the chosen element"),
+    ],
+    "faris": [
+        reaction(4, r"A faris gains a \+4 benefit to encounter reactions with other members of his or her personal faith",
+                 "members of the same faith"),
+    ],
+    "matrud": [
+        reaction(-2, r"When dealing with desert tribes, members of this kit suffer a 2-point penalty", "desert tribes"),
+    ],
+    "mercenary-barbarian": [
+        reaction(-2, r"When barbarians interact with those who are not of the same homeland, all reaction checks are made with a 2-point penalty",
+                 "anyone not of the same homeland (best reaction: indifferent)"),
+        reaction(2, r"If a barbarian attempts a \"hostile\" or \"threatening\" approach toward human or humanoid natives of Zakhara, he or she gains a 2-point bonus",
+                 "hostile or threatening approach to natives of Zakhara"),
+        reaction(-2, r"If a barbarian attempts a \"friendly\" or \"indifferent\" approach toward human and humanoid natives of Zakhara, he or she suffers a 2- point penalty",
+                 "friendly or indifferent approach to natives of Zakhara"),
+    ],
+    "moralist": [
+        reaction(-3, r"moralists suffer a 3-point penalty to all initial encounter reactions", "initial encounter reactions"),
+    ],
+    "mystic-al-qadim": [
+        reaction(-2, r"Mystics also suffer a 2-point penalty to reaction rolls when dealing with pragmatist and ethoist clergy",
+                 "pragmatist and ethoist clergy"),
+        reaction(-4, r"and a 4-point penalty for moralist clergy", "moralist clergy"),
+    ],
+    "mystic-of-nog": [
+        m("attack", 1, r"If used as a means of closing to attack, the wizard gains a \+1 attack bonus on his first attack",
+          condition="first attack after a leap"),
+    ],
+    "outland-priest": [
+        reaction(-2, r"they suffer a -2 penalty to reaction rolls when encountering other human and humanoid natives of Zakhara",
+                 "human and humanoid natives of Zakhara"),
+        reaction(-3, r"This penalty becomes -3 when they're dealing with pragmatists", "pragmatists"),
+        reaction(-4, r"and -4 with ethoists and moralists", "ethoists and moralists"),
+    ],
+    "rawun": [
+        m("proficiency", 1, r"Rawuns who own such libraries gain a \+1 bonus to all proficiency checks involving the research of an item",
+          condition="researching an item, with access to own library"),
+    ],
+    # --- Complete Handbooks ---
     "academician": [
         reaction(3, r"receives a \+3 reaction bo", "NPCs who know his reputation, correspondents, scholars, authors, teachers"),
         m("ability", 1, r"flat \+1 to his Intelligence and Wisdom Checks", key="int"),
@@ -354,6 +431,8 @@ KIT_SKILLS = {
 
 # Thief skill discretionary points: [at 1st level, per level after] (default Thief (PHB): 60, 30).
 KIT_POINTS = {
+    # Barber: "only 40 percentage points are available to thieves using this kit" (per level: the class default).
+    "barber": ([40, None], r"only 40 percentage points are available to thieves using this kit"),
     "assassin-thief": ([40, 20], r"They start with only 40 discretionary points to allocate at 1st level, and with each level gained they receive only 20 points"),
     "thug-thief": ([40, 30], r"has only 40 points to distribute initially among his thief skills"),
 }

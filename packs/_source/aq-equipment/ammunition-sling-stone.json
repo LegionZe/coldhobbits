@@ -1,0 +1,37 @@
+{
+  "_id": "iNB8AwMV1acNI8O4",
+  "_key": "!items!iNB8AwMV1acNI8O4",
+  "name": "Sling stone",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sling-stone",
+    "launchers": [
+      "sling",
+      "staff-sling"
+    ],
+    "size": "S",
+    "type": "B",
+    "damage": {
+      "sm": "1d4",
+      "l": "1d4"
+    },
+    "cost": "",
+    "weight": 0.5,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: stone: asking —, normal —, bargain —. A plain one costs nothing (a suitable piece of wood)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

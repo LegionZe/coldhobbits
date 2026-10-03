@@ -1,0 +1,36 @@
+{
+  "_id": "PGDfq1XWOVm10hsv",
+  "_key": "!items!PGDfq1XWOVm10hsv",
+  "name": "Light quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "light-quarrel",
+    "launchers": [
+      "light-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d4",
+      "l": "1d4"
+    },
+    "cost": "1 sp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: quarrel: asking 2 sp, normal 1 sp, bargain 7 cp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

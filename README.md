@@ -192,6 +192,14 @@ initiative 1d10, lowest acts first.
   jewellery add to the party's wealth total. "Use" spends a charge, or one potion, scroll or dust, and posts the item
   to chat. Magical armour and weapons remain armour and weapon items with a magical bonus. Tables from
   `python3 tools/build-treasure-tables.py`.
+- Al-Qadim rules: kit modifiers for the Al-Qadim kits (reactions, proficiency and ability checks, saves, initiative,
+  attack; checked against each kit page by `tools/build-kit-mechanics.py`); the Kahin advances on the druid experience
+  table (kit field `xpTable`); corsairs, like rangers, have no two-weapon penalty in studded leather or lighter; the
+  barber thief has 40 discretionary skill points at 1st level. World setting "Al-Qadim: heat penalty for heavy armour"
+  (off by default; Armor in Fiery Zakhara (AA) Table 6): worn armour better than AC 7 gives -1 per class to attack rolls
+  and proficiency and ability checks (magical bonuses, daraqs and bucklers do not count). The "Al-Qadim Equipment (AA)"
+  compendium has a "PHB Weapons (Zakharan prices)" folder: weapons on the AA list at their AA price, the others
+  ("exotic") at 10 times the PHB price.
 - "Al-Qadim Equipment (AA)" compendium (`python3 tools/build-aq-equipment-data.py`): the Arabian Adventures price lists
   (clothing, food and lodgings, household provisions, animals, tack and harness, transport, miscellaneous equipment;
   302 items) at the normal price, with the asking and bargain prices in each item's notes; the nine new Zakharan weapons

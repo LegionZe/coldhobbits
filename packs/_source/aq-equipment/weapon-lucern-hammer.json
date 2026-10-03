@@ -1,0 +1,53 @@
+{
+  "_id": "EfuH6iYUPoZisu2v",
+  "_key": "!items!EfuH6iYUPoZisu2v",
+  "name": "Lucern hammer",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "lucern-hammer",
+    "proficiency": "lucern-hammer",
+    "weapon": {
+      "size": "L",
+      "type": "P/B",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "70 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (7 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "QOrbAyZGX1RqePMK",
+  "_key": "!items!QOrbAyZGX1RqePMK",
+  "name": "Awl pike",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "awl-pike",
+    "proficiency": "awl-pike",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 13,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Polearm, awl pike: asking 7 gp, normal 5 gp, bargain 4 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

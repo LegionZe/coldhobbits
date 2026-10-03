@@ -21,6 +21,7 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Elemental_Mage_(Character_Kit)",
     "notes": "",
     "bonusProficiencies": [
@@ -38,7 +39,41 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
+    "modifiers": [
+      {
+        "target": "save",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "vs. the chosen element",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "proficiency",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "involving the chosen element",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "ability",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "involving the chosen element",
+        "armor": "",
+        "max": null
+      }
+    ],
     "skillAdjust": {
       "pp": 0,
       "ol": 0,

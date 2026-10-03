@@ -21,6 +21,7 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Mystic_of_Nog_(Character_Kit)",
     "notes": "",
     "bonusProficiencies": [],
@@ -41,7 +42,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
+    "modifiers": [
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "first attack after a leap",
+        "armor": "",
+        "max": null
+      }
+    ],
     "skillAdjust": {
       "pp": 0,
       "ol": 0,

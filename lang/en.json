@@ -1191,5 +1191,11 @@
     "WrestleDamage": "{damage} damage",
     "HoldResult": "Hold maintained, round {round}: {damage} damage",
     "StrengthShort": "Strength"
+  },
+  "AD2E.AQ": {
+    "HeatSetting": "Al-Qadim: heat penalty for heavy armour",
+    "HeatSettingHint": "Armor in Fiery Zakhara (Arabian Adventures): armour better than AC 7 gives -1 per class to attack rolls and to proficiency and ability checks (only the armour's own rating; magical bonuses, daraqs and bucklers do not count).",
+    "HeatNote": "heat {n}",
+    "Heat": "Heat (armour)"
   }
 }

@@ -1,0 +1,36 @@
+{
+  "_id": "OlmXgQ4LSXrAhI78",
+  "_key": "!items!OlmXgQ4LSXrAhI78",
+  "name": "Hand quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "hand-quarrel",
+    "launchers": [
+      "hand-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d3",
+      "l": "1d2"
+    },
+    "cost": "10 gp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (1 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

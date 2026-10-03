@@ -1,0 +1,59 @@
+{
+  "_id": "KnjwyT6B25CTkIB5",
+  "_key": "!items!KnjwyT6B25CTkIB5",
+  "name": "Composite short bow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "composite-short-bow",
+    "proficiency": "composite-short-bow",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "Flight arrow",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        },
+        {
+          "label": "Sheaf arrow",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "50",
+        "medium": "100",
+        "long": "180"
+      },
+      "family": "bow",
+      "missileColumn": "otherMissile",
+      "strength": "penalty"
+    },
+    "cost": "75 gp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Bow, composite short: asking 105 gp, normal 75 gp, bargain 60 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
