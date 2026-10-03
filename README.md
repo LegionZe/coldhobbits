@@ -11,7 +11,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.11)
+## Status (v0.0.12)
 Character sheet; ability modifiers (STR/DEX/CON/WIS); THAC0 by class group and level; descending AC;
 roll-under ability checks; saves (d20 >= target, targets entered manually); melee/missile attack vs target AC;
 initiative 1d10, lowest acts first.
@@ -31,7 +31,8 @@ initiative 1d10, lowest acts first.
   repository owner; Complete Bard's Handbook kits add kit-specific racial limits and open the bard class to demihumans
   (kit-only classes need a kit that lists the race). Multi-classing is not implemented.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
-  Drag a class, then a kit, onto a character. Source documents are generated into `packs/_source/` by
+  Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
+  (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
   `python3 tools/build-class-data.py` and compiled at release by `npm run build:packs`: PHB classes
   (Table 13 minimums, Table 22 specialist wizards) and the kits of the Complete Fighter's, Paladin's, Ranger's, Wizard's,
   Priest's, Thief's and Bard's Handbooks. Kit ability minimums are curated by hand from each kit page; other kit rules are

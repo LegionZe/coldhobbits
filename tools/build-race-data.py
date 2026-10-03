@@ -108,12 +108,12 @@ def build():
             adjust[link_text(race)][ABIL[ab]] = int(n) * (1 if sign == "+" else -1)
 
     specialists = {}
-    for f in glob.glob("packs/_source/classes/*.json"):
+    for f in glob.glob("packs/_source/classes/[!_]*.json"):
         d = json.load(open(f))
         for race in d["system"].get("races", []):
             specialists.setdefault(race, []).append(d["system"]["identifier"])
 
-    all_classes = sorted(json.load(open(f))["system"]["identifier"] for f in glob.glob("packs/_source/classes/*.json"))
+    all_classes = sorted(json.load(open(f))["system"]["identifier"] for f in glob.glob("packs/_source/classes/[!_]*.json"))
     docs = []
     for i, (name, f) in enumerate(RACE_FACTS.items()):
         key = name.lower()
@@ -123,7 +123,7 @@ def build():
             classes = f["classes"] + sorted(s for s in specialists.get(RACE_TO_TABLE22[name], []) if s not in f["classes"])
         _, page_rev, _ = classdata.page(f["page"])
         # Classes this race can only take through a kit that lists the race (Complete Bard's Handbook).
-        kit_classes = sorted({c for kf in glob.glob("packs/_source/kits/*.json")
+        kit_classes = sorted({c for kf in glob.glob("packs/_source/kits/[!_]*.json")
                               for kd in [json.load(open(kf))["system"]] if key in kd.get("raceLimits", {})
                               for c in kd["classes"] if c not in classes})
         r = req.get(name, {"min": {}, "max": {}})
