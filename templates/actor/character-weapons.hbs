@@ -160,6 +160,20 @@
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Weapon.NoneYet"}}</p>
     {{/each}}
+    <div class="ad2e-prof-row ad2e-weapon-row">
+      <i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i>
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title">{{localize "AD2E.Unarmed.Title"}}</span>
+        <span class="ad2e-weapon-meta">{{localize "AD2E.Unarmed.Meta"}}{{#if wt.unarmed.twoWeapons}} · {{wt.unarmed.twoWeapons}}{{/if}}</span>
+      </div>
+      <div class="ad2e-weapon-uses">
+        <span class="ad2e-weapon-use">
+          <button type="button" data-action="rollUnarmed" data-form="punch">{{localize "AD2E.Unarmed.punch"}} {{wt.unarmed.hit}}</button>
+          <button type="button" data-action="rollUnarmed" data-form="wrestle">{{localize "AD2E.Unarmed.wrestle"}}</button>
+          <button type="button" data-action="rollUnarmed" data-form="overbear">{{localize "AD2E.Unarmed.overbear"}}</button>
+        </span>
+      </div>
+    </div>
   </fieldset>
 
   <fieldset class="ad2e-prof-list">

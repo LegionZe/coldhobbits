@@ -1,6 +1,8 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing } from "../health.mjs";
+import { canFightTwoWeapons, COMBAT_TABLES, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
+  twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -288,10 +290,21 @@ export default class AD2EActor extends Actor {
     const kitOptions = this.#kitOptions("attack");
     const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
+    // Two weapons (warriors and rogues, melee) and non-lethal attacks with a blade ("Attacking with Two Weapons (PHB)",
+    // "Attacking Without Killing (PHB)").
+    const twoWeapons = use === "melee" && this.type === "character" && canFightTwoWeapons(this.system.classGroup);
+    const others = twoWeapons ? this.items.filter(i => i.type === "weapon" && i.id !== itemId && i.system.weapon?.melee) : [];
+    const twoField = twoWeapons ? `<div class="form-group"><label>${i18n("AD2E.TwoWeapons.Label")}</label><select name="twoWeapon">`
+      + `<option value="">—</option><option value="main">${i18n("AD2E.TwoWeapons.main")}</option><option value="off">${i18n("AD2E.TwoWeapons.off")}</option></select></div>`
+      + (others.length ? `<div class="form-group"><label>${i18n("AD2E.TwoWeapons.MainWeapon")}</label><select name="mainWeapon">${
+        others.map(o => `<option value="${o.id}">${foundry.utils.escapeHTML?.(o.name) ?? o.name}</option>`).join("")}</select></div>` : "") : "";
+    const nonlethalOk = use === "melee" && nonlethalAllowed(item.system.weapon);
+    const nonlethalField = nonlethalOk ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${COMBAT_TABLES.nonlethal.hit})</label>`
+      + `<input type="checkbox" name="nonlethal"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
-        + ammoField + rangeField + backstabField
+        + ammoField + rangeField + backstabField + twoField + nonlethalField
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -301,19 +314,37 @@ export default class AD2EActor extends Actor {
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
           const m = readModifier(button.form);
           return { ac: Number(f.ac.value) || 0, mod: m.mod + kit.sum, range: f.range?.value ?? null,
-            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m };
+            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
+            twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked };
         }
       },
       rejectClose: false
     });
     if (!input) return;
+    const notes = [];
+    let twoAdj = 0;
+    if (input.twoWeapon) {
+      const sys = this.system;
+      twoAdj = twoWeaponPenalty(input.twoWeapon, { reaction: sys.abilityData?.dex?.reaction ?? 0,
+        ranger: sys.classInfo?.classItem?.system.identifier === "ranger", armorAc: sys.armor?.body?.system.ac ?? null });
+      notes.push(`${i18n(`AD2E.TwoWeapons.${input.twoWeapon}`)} ${twoAdj > 0 ? "+" : ""}${twoAdj}`);
+      if (sys.armor?.shield) notes.push(i18n("AD2E.TwoWeapons.Shield"));
+      const main = input.twoWeapon === "off" ? this.items.get(input.mainWeapon) : null;
+      if (main && !secondWeaponAllowed(
+        { proficiency: main.system.proficiency, size: main.system.weapon.size, weight: main.system.weight },
+        { proficiency: item.system.proficiency, size: item.system.weapon?.size, weight: item.system.weight ?? null })) {
+        notes.push(game.i18n.format("AD2E.TwoWeapons.TooLarge", { main: main.name }));
+      }
+    }
+    if (input.nonlethal) notes.push(`${i18n("AD2E.Nonlethal.Weapon")} ${COMBAT_TABLES.nonlethal.hit}`);
     const ammo = input.ammo ? this.items.get(input.ammo) : null;
     if (ammoList && !ammo) return;
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
-    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (input.backstab ? AD2E.backstabHit : 0);
+    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (input.backstab ? AD2E.backstabHit : 0)
+      + twoAdj + (input.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0);
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
     // Use up the piece fired or thrown.
@@ -334,6 +365,7 @@ export default class AD2EActor extends Actor {
         + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
         + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
+        + (notes.length ? ` [${notes.join("; ")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
   }
@@ -374,11 +406,13 @@ export default class AD2EActor extends Actor {
     const kitOptions = this.#kitOptions("damage");
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
+    const nonlethalField = use === "melee" && nonlethalAllowed(item.system.weapon)
+      ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${i18n("AD2E.Nonlethal.Half")})</label><input type="checkbox" name="nonlethal"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
-        + backstabField
+        + backstabField + nonlethalField
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -388,7 +422,7 @@ export default class AD2EActor extends Actor {
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
           const m = readModifier(button.form);
           return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
-            backstab: !!f.backstab?.checked, kitText: kit.text, manual: m };
+            backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m };
         }
       },
       rejectClose: false
@@ -400,16 +434,123 @@ export default class AD2EActor extends Actor {
     // weapon bonuses are added" (Thief Skill Explanations (PHB)).
     const formula = input.backstab && mult ? `(${dice}) * ${mult} + @adj + @mod` : `${dice} + @adj + @mod`;
     const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
-    const total = Math.max(roll.total, 1);
+    const full = Math.max(roll.total, 1);
+    // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
+    // temporary; not offered for applying to tokens, since the system does not track temporary damage.
+    const total = input.nonlethal ? Math.max(Math.floor(full * COMBAT_TABLES.nonlethal.damage), 1) : full;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flags: { ad2e: { damage: total } }, // chat context menu: apply to selected tokens (module/health.mjs)
+      flags: input.nonlethal ? {} : { ad2e: { damage: total } }, // chat context menu: apply to selected tokens (module/health.mjs)
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
-        + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+        + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
+          : (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : ""))
     });
+  }
+
+  /**
+   * Unarmed attack ("Attacking Without Killing (PHB)"), `form` "punch" | "wrestle" | "overbear": a normal attack roll
+   * (d20 + Strength, encumbrance and kit attack modifiers + situational modifier >= THAC0 - target AC; no
+   * non-proficiency penalty: all characters are "somewhat proficient"). Punch and wrestle results come from Table 58 by
+   * the modified roll; punches do the listed damage (1d3 with a metal gauntlet) + Strength damage, 25% of it lasting,
+   * and may knock out (percentile roll, stunned 1d10 rounds); wrestling in armour takes the Table 57 penalty, moves do
+   * 1 + Strength damage (optional) and a maintained hold 1 more each round; overbearing adds the size, legs and
+   * attackers modifiers. Unarmed damage is not offered for applying to tokens (temporary damage is not tracked).
+   */
+  async rollUnarmed(form = "punch") {
+    if (this.type !== "character") return;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const sys = this.system;
+    const C = COMBAT_TABLES;
+    const kitOptions = this.#kitOptions("attack");
+    const field = (label, html) => `<div class="form-group"><label>${label}</label>${html}</div>`;
+    const sizeSelect = (name, value) => `<select name="${name}">${C.overbear.sizes.map(z =>
+      `<option value="${z}"${z === value ? " selected" : ""}>${i18n(`AD2E.Unarmed.Size.${z}`)}</option>`).join("")}</select>`;
+    const armorRow = form === "wrestle" ? wrestlingArmor(sys.armor?.body?.system.identifier) : null;
+    let extra = "";
+    if (form === "punch") {
+      extra = field(i18n("AD2E.Unarmed.Gauntlet"), `<input type="checkbox" name="gauntlet">`)
+        + field(i18n("AD2E.Unarmed.Pull"), `<input type="checkbox" name="pull">`);
+    } else if (form === "wrestle") {
+      extra = field(i18n("AD2E.Unarmed.HoldRound"), `<input type="number" name="holdRound" value="0" min="0" step="1">`)
+        + field(i18n("AD2E.Unarmed.AddStrength"), `<input type="checkbox" name="addStr" checked>`)
+        + (armorRow ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Unarmed.ArmorPenalty", { armor: armorRow.label, value: armorRow.value }))}</p>` : "");
+    } else {
+      extra = field(i18n("AD2E.Unarmed.AttackerSize"), sizeSelect("attacker", "M"))
+        + field(i18n("AD2E.Unarmed.DefenderSize"), sizeSelect("defender", "M"))
+        + field(i18n("AD2E.Unarmed.Legs"), `<input type="number" name="legs" value="2" min="0" step="1">`)
+        + field(i18n("AD2E.Unarmed.Attackers"), `<input type="number" name="attackers" value="1" min="1" step="1">`)
+        + field(i18n("AD2E.Unarmed.Down"), `<input type="checkbox" name="down">`);
+    }
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n(`AD2E.Unarmed.${form}`)}` },
+      content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}</p>`
+        + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="10" autofocus>`)
+        + extra + modifierFields() + this.#kitFields(kitOptions),
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const f = button.form.elements;
+        const kit = AD2EActor.#kitPicked(button.form, kitOptions);
+        return { ...readModifier(button.form), kit: kit.sum, kitText: kit.text, ac: Number(f.ac.value) || 0,
+          gauntlet: !!f.gauntlet?.checked, pull: !!f.pull?.checked, holdRound: Math.max(Math.floor(Number(f.holdRound?.value) || 0), 0),
+          addStr: !!f.addStr?.checked, attacker: f.attacker?.value ?? "M", defender: f.defender?.value ?? "M",
+          legs: Math.max(Number(f.legs?.value) || 0, 0), attackers: Math.max(Math.floor(Number(f.attackers?.value) || 1), 1), down: !!f.down?.checked };
+      } },
+      rejectClose: false
+    });
+    if (!input) return;
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    const str = sys.mods?.dmg ?? 0;
+    const parts = [input.kitText].filter(Boolean);
+    // A maintained hold needs no attack roll: 1 more point each round (round 2 = 2 points, ...).
+    if (form === "wrestle" && input.holdRound >= 2) {
+      const dmg = Math.max(input.holdRound + (input.addStr ? str : 0), 0);
+      return ChatMessage.create({ speaker, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
+        { round: input.holdRound, damage: dmg }))}${input.addStr && str ? ` (${i18n("AD2E.Unarmed.StrengthShort")} ${str > 0 ? "+" : ""}${str})` : ""}</p>` });
+    }
+    let situation = 0;
+    if (form === "wrestle" && armorRow) { situation += armorRow.value; parts.push(`${armorRow.label} ${armorRow.value}`); }
+    if (form === "overbear") {
+      const o = overbearModifier(input);
+      situation += o.size + o.legs + o.attackers;
+      if (o.size) parts.push(`${i18n("AD2E.Unarmed.SizeDiff")} ${o.size > 0 ? "+" : ""}${o.size}`);
+      if (o.legs) parts.push(`${i18n("AD2E.Unarmed.Legs")} ${o.legs}`);
+      if (o.attackers) parts.push(`${i18n("AD2E.Unarmed.Attackers")} +${o.attackers}`);
+    }
+    const hitAdj = sys.mods?.meleeAttack ?? 0;
+    const roll = await new Roll("1d20 + @hit + @situation + @kit + @mod", { hit: hitAdj, situation, kit: input.kit, mod: input.mod }).evaluate();
+    const needed = sys.thac0.value - input.ac;
+    const hit = roll.total >= needed;
+    const rolls = [roll];
+    let result = i18n("AD2E.Roll.Miss");
+    if (hit && form === "overbear") {
+      result = i18n(input.down ? "AD2E.Unarmed.Pinned" : "AD2E.Unarmed.PulledDown");
+    } else if (hit) {
+      const row = punchWrestleResult(roll.total);
+      if (form === "punch") {
+        // A blow that lands (not a wild swing) does the listed damage, 1d3 with a metal gauntlet, + Strength damage.
+        const dmgRoll = await new Roll(row.damage ? `${input.gauntlet ? C.punch.gauntlet : row.damage} + @str` : "0",
+          { str: row.damage ? str : 0 }).evaluate();
+        const ko = await new Roll("1d100").evaluate();
+        rolls.push(dmgRoll, ko);
+        const damage = input.pull ? 0 : Math.max(dmgRoll.total, 0);
+        const knocked = ko.total <= row.ko;
+        let stun = null;
+        if (knocked) { stun = await new Roll(C.punch.stun).evaluate(); rolls.push(stun); }
+        result = `${i18n("AD2E.Roll.Hit")}: ${row.punch} — ${input.pull ? i18n("AD2E.Unarmed.Pulled")
+          : game.i18n.format("AD2E.Unarmed.PunchDamage", { damage, lasting: C.punch.lasting * 100 })}; `
+          + game.i18n.format(knocked ? "AD2E.Unarmed.KO" : "AD2E.Unarmed.NoKO", { roll: ko.total, chance: row.ko, rounds: stun?.total ?? 0 });
+      } else {
+        const damage = Math.max(C.wrestle.damage + (input.addStr ? str : 0), 0);
+        result = `${i18n("AD2E.Roll.Hit")}: ${row.wrestle}${row.hold ? ` (${i18n("AD2E.Unarmed.Hold")})` : ""} — `
+          + game.i18n.format("AD2E.Unarmed.WrestleDamage", { damage });
+      }
+    }
+    const flavor = `${i18n(`AD2E.Unarmed.${form}`)} vs AC ${input.ac} (THAC0 ${sys.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+)`
+      + `${parts.length ? ` [${parts.map(esc).join("; ")}]` : ""}${modifierText(input.mod, input.note)}: ${result}`;
+    return ChatMessage.create({ speaker, flavor, rolls });
   }
 
   /**

@@ -2,6 +2,7 @@ import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints } from "../health.mjs";
+import { canFightTwoWeapons, twoWeaponPenalty } from "../combat-options.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -153,6 +154,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       bindWounds: CharacterSheet.onBindWounds,
       raiseDead: CharacterSheet.onRaiseDead,
       rollSurprise: CharacterSheet.onRollSurprise,
+      rollUnarmed: CharacterSheet.onRollUnarmed,
       awardXp: CharacterSheet.onAwardXp
     }
   };
@@ -486,7 +488,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       gp: Math.round(jewelleryItems.reduce((n, i) => n + (i.system.totalValue ?? 0), 0) * 100) / 100
     };
     treasure.wealth = Math.round((coins.gp + treasure.gp) * 100) / 100;
-    return { rows, ammo, armor, enc, coins, gear, magic, treasure, ac: acSummary, thac0: sys.thac0.value };
+    // Unarmed attacks (punch, wrestle, overbear) and the two-weapon penalties ("Attacking with Two Weapons (PHB)").
+    const sign = n => `${n > 0 ? "+" : ""}${n}`;
+    const twoOpts = { reaction: sys.abilityData?.dex?.reaction ?? 0, ranger: sys.classInfo?.classItem?.system.identifier === "ranger",
+      armorAc: sys.armor?.body?.system.ac ?? null };
+    const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
+      twoWeapons: canFightTwoWeapons(sys.classGroup) ? game.i18n.format("AD2E.TwoWeapons.Summary",
+        { main: sign(twoWeaponPenalty("main", twoOpts)), off: sign(twoWeaponPenalty("off", twoOpts)) }) : "" };
+    return { rows, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -664,6 +673,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   static onRollSurprise() { return this.actor.rollSurprise(); }
+
+  static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
 
   static onAwardXp() { return this.actor.awardExperience(); }
 
