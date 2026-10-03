@@ -20,6 +20,7 @@ import SpellImporter from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
+import AD2EChatMessage from "./documents/chat-message.mjs";
 import AD2ECombat from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
@@ -62,6 +63,7 @@ Hooks.once("init", () => {
   });
 
   CONFIG.Actor.documentClass = AD2EActor;
+  CONFIG.ChatMessage.documentClass = AD2EChatMessage;
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;
   CONFIG.Item.dataModels.class = ClassData;

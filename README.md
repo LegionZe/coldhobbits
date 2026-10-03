@@ -140,9 +140,9 @@ initiative 1d10, lowest acts first.
 - Targets: attack and damage rolls record the tokens the rolling user has targeted (shown as "→ name" in chat); a damage
   roll made with no target uses the targets of the same actor's last attack with that weapon. The attack dialog's
   target AC is filled in from the first target (vs. missiles for missile attacks) when the user may see that actor.
-  Damage messages offer, in their chat context menu: "Apply damage to the targets of the roll", "Apply damage to my
-  targeted tokens" (the GM's current targets), "Apply damage to selected tokens", and healing to targeted or selected
-  tokens. Only owners (the GM) can change a token's hit points; other users get a warning.
+  Damage messages show buttons for the GM under the roll: "Apply to: <targets of the roll>", "My targets" (the GM's
+  current targets), "Selected" and "Heal selected"; the same actions are in the message's right-click menu (for players
+  too). Only owners (the GM) can change a token's hit points; other users get a warning.
 - Surprise: "Surprise" on the character sheet and the eye button on monster sheets roll 1d10, surprised on 1-3
   ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
