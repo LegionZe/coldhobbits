@@ -2,6 +2,7 @@ import { ABILITY_TABLES } from "./rules/ability-tables.mjs";
 import { HIT_DICE, SAVE_TABLE, SPECIALIST_ATTACKS, THAC0_TABLE, WARRIOR_ATTACKS, XP_RESTART, XP_TABLE } from "./rules/level-tables.mjs";
 import { PROFICIENCY_GROUPS, PROFICIENCY_SLOTS } from "./rules/proficiency-tables.mjs";
 import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
+import { CREATURE_THAC0 } from "./rules/monster-tables.mjs";
 import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
@@ -199,6 +200,39 @@ AD2E.coinDenominations = { pp: "AD2E.Coin.pp", gp: "AD2E.Coin.gp", ep: "AD2E.Coi
 /** Strength key for Tables 47/48: score * 100, plus the exceptional percentile at 18 (18/00 = 1900). */
 export function strengthKey(score, exceptional = 0) {
   return score * 100 + (score === 18 && exceptional > 0 ? exceptional : 0);
+}
+
+/** Monster actor roles (the monster sheet also serves hirelings, mounts and pets). */
+AD2E.monsterRoles = { monster: "AD2E.Monster.Role.monster", hireling: "AD2E.Monster.Role.hireling",
+  mount: "AD2E.Monster.Role.mount", pet: "AD2E.Monster.Role.pet" };
+/** DMG Table 39 (generated): index 0 = less than one Hit Die, index n = n Hit Dice, last = 16 and more. */
+AD2E.creatureThac0 = CREATURE_THAC0;
+
+/**
+ * Parse a Monstrous Manual Hit Dice entry: "3", "3+3", "1-1", "1/2", "2-8 hp", "1-6 hp".
+ * - hit points: n d8 + m (Hit Dice are d8), "1/2" = 1d4, "x-y hp" = a die roll covering x-y;
+ * - thac0Index: Hit Dice for Table 39, "When a creature has three or more points added to its Hit Dice, count
+ *   another die"; less than one Hit Die (1-1, 1/2, hit points only) = 0;
+ * - saveLevel: "Any additions to their Hit Dice are counted as well, at the rate of one die for every four points or
+ *   fraction thereof" (The Saving Throw (DMG)); less than one Hit Die = 0.
+ */
+export function creatureHitDice(text) {
+  const t = String(text ?? "").trim().replace("½", "1/2");
+  let m = t.match(/^(\d+)\s*-\s*(\d+)\s*hp$/i) ?? t.match(/^(\d+)\s*hp$/i);
+  if (m) {
+    const lo = Number(m[1]);
+    const hi = Number(m[2] ?? m[1]);
+    const formula = lo === hi ? `${lo}` : lo === 1 ? `1d${hi}` : hi % lo === 0 ? `${lo}d${hi / lo}` : `1d${hi - lo + 1}+${lo - 1}`;
+    return { dice: 0, bonus: 0, formula, thac0Index: 0, saveLevel: 0, hpOnly: true };
+  }
+  if (/^1\/2$/.test(t)) return { dice: 0.5, bonus: 0, formula: "1d4", thac0Index: 0, saveLevel: 0, hpOnly: false };
+  m = t.match(/^(\d+)\s*([+-])\s*(\d+)$/) ?? t.match(/^(\d+)$/);
+  if (!m) return { dice: 1, bonus: 0, formula: "1d8", thac0Index: 1, saveLevel: 1, hpOnly: false, invalid: true };
+  const dice = Number(m[1]);
+  const bonus = m[2] ? (m[2] === "+" ? 1 : -1) * Number(m[3]) : 0;
+  const formula = bonus ? `${dice}d8${bonus > 0 ? "+" : ""}${bonus}` : `${dice}d8`;
+  if (bonus < 0) return { dice, bonus, formula, thac0Index: dice - 1, saveLevel: Math.max(dice - 1, 0), hpOnly: false };
+  return { dice, bonus, formula, thac0Index: dice + (bonus >= 3 ? 1 : 0), saveLevel: dice + Math.ceil(bonus / 4), hpOnly: false };
 }
 
 AD2E.thac0Progression = {

@@ -1,0 +1,5 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#if system.url}}<p class="ad2e-note"><a href="{{system.url}}" target="_blank" rel="noopener">{{system.url}}</a></p>{{/if}}
+  <label class="ad2e-field"><span>{{localize "AD2E.Item.url"}}</span><input type="text" name="system.url" value="{{system.url}}"></label>
+  <textarea class="ad2e-biography" name="system.notes">{{system.notes}}</textarea>
+</section>

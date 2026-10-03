@@ -98,3 +98,11 @@
 .ad2e-coin-value { white-space: nowrap; font-size: 0.85em; }
 .ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
 .ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }
+
+/* Monster / NPC sheet */
+.ad2e.monster .ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.9rem; margin-top: 0.25rem; }
+.ad2e.monster .ad2e-monster-line input[type="number"] { width: 3.5rem; }
+.ad2e.monster .ad2e-monster-line input[type="text"] { width: 5rem; }
+.ad2e-monster-attack { display: grid; grid-template-columns: 1fr 5rem 3rem auto auto auto; gap: 0.3rem; align-items: center; margin-bottom: 0.2rem; }
+.ad2e-monster-weapon { grid-template-columns: auto 1fr auto auto; }
+.ad2e-monster-right { display: flex; flex-direction: column; gap: 0.5rem; }

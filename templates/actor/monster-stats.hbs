@@ -1,0 +1,56 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="ad2e-columns">
+    <fieldset class="ad2e-monster-block">
+      <legend>{{localize "AD2E.Monster.StatBlock"}}</legend>
+      {{#each statFields as |f|}}
+      <label class="ad2e-field"><span>{{f.label}}</span><input type="text" name="system.{{f.key}}" value="{{f.value}}"></label>
+      {{/each}}
+      <label class="ad2e-field"><span>{{localize "AD2E.Monster.Field.acBase"}}</span><input type="number" name="system.ac.base" value="{{system.ac.base}}" data-tooltip="{{system.ac.text}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Monster.Field.movement"}}</span><input type="number" name="system.movement.base" value="{{system.movement.base}}" data-tooltip="{{system.movement.text}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Monster.Field.movementText"}}</span><input type="text" name="system.movement.text" value="{{system.movement.text}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Character.thac0Override"}}</span><input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Monster.Morale"}}</span><input type="number" name="system.morale.value" value="{{system.morale.value}}" data-tooltip="{{system.morale.text}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Monster.Field.moraleText"}}</span><input type="text" name="system.morale.text" value="{{system.morale.text}}"></label>
+      <label class="ad2e-field"><span>XP</span><input type="number" name="system.xp" value="{{system.xp}}"></label>
+      <label class="ad2e-field"><span>{{localize "AD2E.Character.initMod"}}</span><input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}"></label>
+    </fieldset>
+
+    <div class="ad2e-monster-right">
+      <fieldset class="ad2e-saves">
+        <legend>{{localize "AD2E.Character.saves"}}</legend>
+        <label class="ad2e-field"><span>{{localize "AD2E.Monster.SaveGroup"}}</span>
+          <select name="system.saveGroup">{{selectOptions saveGroups selected=system.saveGroup localize=true}}</select></label>
+        {{#each saves as |sv|}}
+        <div class="ad2e-save">
+          <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
+          <strong>{{sv.value}}</strong>
+          <span class="ad2e-note" data-tooltip="{{localize 'AD2E.Monster.SaveLevelHint'}}">{{localize "AD2E.Character.level"}} {{sv.level}}</span>
+        </div>
+        {{/each}}
+      </fieldset>
+
+      <fieldset class="ad2e-prof-list">
+        <legend>{{localize "AD2E.Monster.Attacks"}}</legend>
+        {{#each naturalAttacks as |a|}}
+        <div class="ad2e-monster-attack">
+          <input type="text" name="system.attacks.{{a.index}}.name" value="{{a.name}}">
+          <input type="text" name="system.attacks.{{a.index}}.damage" value="{{a.damage}}" data-tooltip="{{localize 'AD2E.Monster.DamageHint'}}">
+          <input type="number" name="system.attacks.{{a.index}}.bonus" value="{{a.bonus}}" data-tooltip="{{localize 'AD2E.Monster.AttackBonus'}}">
+          <button type="button" data-action="rollAttack" data-key="{{a.key}}">{{localize "AD2E.Weapon.Attack"}}</button>
+          <button type="button" data-action="rollDamage" data-key="{{a.key}}">{{localize "AD2E.Weapon.Damage"}}</button>
+          {{#if @root.editable}}<a data-action="removeAttack" data-index="{{a.index}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+        </div>
+        {{/each}}
+        {{#each weapons as |w|}}
+        <div class="ad2e-monster-attack ad2e-monster-weapon">
+          <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{w.id}}">{{w.name}}</a>
+          <span class="ad2e-weapon-meta">{{w.summary}}</span>
+          <button type="button" data-action="rollAttack" data-key="{{w.key}}">{{localize "AD2E.Weapon.Attack"}}</button>
+          <button type="button" data-action="rollDamage" data-key="{{w.key}}">{{localize "AD2E.Weapon.Damage"}}</button>
+        </div>
+        {{/each}}
+        {{#if editable}}<button type="button" data-action="addAttack"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Monster.AddAttack"}}</button>{{/if}}
+      </fieldset>
+    </div>
+  </div>
+</section>
