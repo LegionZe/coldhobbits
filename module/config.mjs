@@ -139,6 +139,23 @@ export function formatRate([attacks, rounds]) {
   return rounds === 1 ? `${attacks}` : `${attacks}/${rounds}`;
 }
 
+/** Armour item kinds (Armor List (PHB)). */
+AD2E.armorKinds = { body: "AD2E.Armor.body", shield: "AD2E.Armor.shield", helmet: "AD2E.Armor.helmet" };
+
+/** "AC 5" / "Shield +1 (+2 vs. missiles), 1 attack/round" / "Helmet" for an armour item (localized). */
+export function armorSummary(sys) {
+  const i18n = k => game.i18n.localize(k);
+  const magic = sys.bonus ? ` (${sys.bonus > 0 ? "+" : ""}${sys.bonus})` : "";
+  if (sys.kind === "body") return `${i18n("AD2E.Armor.AC")} ${sys.ac ?? "—"}${magic}`;
+  if (sys.kind === "shield") {
+    const s = sys.shield;
+    return `${i18n("AD2E.Armor.shield")} +${s.melee + sys.bonus}`
+      + (s.missile !== s.melee ? ` (+${s.missile + sys.bonus} ${i18n("AD2E.Armor.VsMissiles")})` : "")
+      + `, ${s.attacks ? game.i18n.format("AD2E.Armor.AttacksPerRound", { n: s.attacks }) : i18n("AD2E.Armor.AnyFrontal")}`;
+  }
+  return i18n("AD2E.Armor.helmet") + (magic ? ` ${magic}` : "");
+}
+
 AD2E.thac0Progression = {
   warrior: { divisor: 1, step: 1 },
   priest:  { divisor: 3, step: 2 },

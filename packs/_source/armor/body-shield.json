@@ -1,0 +1,31 @@
+{
+  "_id": "cz2B134EebZI2apO",
+  "_key": "!items!cz2B134EebZI2apO",
+  "name": "Body shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "body-shield",
+    "kind": "shield",
+    "ac": null,
+    "shield": {
+      "melee": 1,
+      "missile": 2,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "10 gp",
+    "weight": 15.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cAX0umty25NXL1n9",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,4 +1,4 @@
-import { AD2E } from "../config.mjs";
+import { AD2E, armorSummary } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -44,6 +44,9 @@ const DETAIL_COLUMNS = {
   ],
   cha: [["henchmen", r => `${r.henchmen}`], ["loyalty", r => signed(r.loyalty)], ["reaction", r => signed(r.reaction)]]
 };
+/** Armour list order: body armour, shields, helmets. */
+const AD2E_KIND_ORDER = { body: 0, shield: 1, helmet: 2 };
+
 /** "+1/+1" for a magical attack/damage bonus; "" when none. */
 function magicBonus({ hit, dmg }) {
   const signed = n => (n >= 0 ? `+${n}` : `${n}`);
@@ -88,7 +91,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
       toggleSpecialized: CharacterSheet.onToggleSpecialized,
-      adjustQuantity: CharacterSheet.onAdjustQuantity
+      adjustQuantity: CharacterSheet.onAdjustQuantity,
+      toggleEquipped: CharacterSheet.onToggleEquipped
     }
   };
 
@@ -242,7 +246,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       damage: `${a.system.damage.sm ?? "—"} / ${a.system.damage.l ?? "—"}`,
       bonus: magicBonus(a.system.bonus)
     })).sort((a, b) => a.name.localeCompare(b.name));
-    return { rows, ammo, thac0: sys.thac0.value };
+    const a = sys.armor;
+    const armor = (actor.items?.filter(i => i.type === "armor") ?? []).map(i => ({
+      id: i.id, name: i.name, img: i.img, kind: i.system.kind, equipped: i.system.equipped, summary: armorSummary(i.system),
+      meta: [i.system.cost, i.system.weight !== null ? `${i.system.weight} lb` : null].filter(Boolean).join(" · "),
+      // an equipped item that does not count (a second body armour or shield) is marked
+      unused: i.system.equipped && ((i.system.kind === "body" && a.body && a.body.id !== i.id)
+        || (i.system.kind === "shield" && a.shield && a.shield.id !== i.id))
+    })).sort((x, y) => AD2E_KIND_ORDER[x.kind] - AD2E_KIND_ORDER[y.kind] || x.name.localeCompare(y.name));
+    const acSummary = { front: a.front, rear: a.rear, missile: a.missile, missileDiffers: a.missile !== a.front,
+      source: a.body ? a.body.name : game.i18n.localize("AD2E.Armor.NoArmor"), shield: a.shield?.name ?? null,
+      shieldAttacks: a.shieldAttacks };
+    return { rows, ammo, armor, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -379,6 +394,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollWeaponDamage(event, target) {
     return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  /** Equip/unequip armour; equipping body armour or a shield unequips the other items of that kind. */
+  static onToggleEquipped(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return;
+    const updates = [{ _id: item.id, "system.equipped": target.checked }];
+    if (target.checked && item.system.kind !== "helmet") {
+      for (const other of this.actor.items) {
+        if (other.type === "armor" && other.id !== item.id && other.system.kind === item.system.kind && other.system.equipped) {
+          updates.push({ _id: other.id, "system.equipped": false });
+        }
+      }
+    }
+    return this.actor.updateEmbeddedDocuments("Item", updates);
   }
 
   /** +/- buttons for weapon and ammunition quantities. */

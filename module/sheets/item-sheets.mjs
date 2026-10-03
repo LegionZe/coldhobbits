@@ -1,4 +1,4 @@
-import { AD2E } from "../config.mjs";
+import { AD2E, armorSummary } from "../config.mjs";
 import { formatKitProficiencies } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -168,5 +168,20 @@ export class AmmunitionSheet extends AD2EItemSheet {
   /** Launchers are edited as comma-separated weapon identifiers. */
   _processFormData(event, form, formData) {
     return parseClassesText(super._processFormData(event, form, formData), ["launchers"]);
+  }
+}
+
+export class ArmorSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["armor"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/armor-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const sys = this.document.system;
+    context.kinds = AD2E.armorKinds;
+    context.isBody = sys.kind === "body";
+    context.isShield = sys.kind === "shield";
+    context.summary = armorSummary(sys);
+    return context;
   }
 }

@@ -1,0 +1,31 @@
+{
+  "_id": "fPa73Vj4xtsyk1Ls",
+  "_key": "!items!fPa73Vj4xtsyk1Ls",
+  "name": "Full plate",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "full-plate",
+    "kind": "body",
+    "ac": 1,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "4,000-10,000 gp",
+    "weight": 70.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

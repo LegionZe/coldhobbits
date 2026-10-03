@@ -14,7 +14,7 @@
   "AD2E.Character.exceptional": "Exceptional Strength (18/xx, 100 = 18/00)",
   "AD2E.Character.combat": "Combat",
   "AD2E.Character.hp": "HP",
-  "AD2E.Character.acBase": "AC (armor)",
+  "AD2E.Character.acBase": "Base AC (no armour item)",
   "AD2E.Character.acTotal": "AC",
   "AD2E.Character.thac0Override": "THAC0 override",
   "AD2E.Character.initMod": "Initiative mod",
@@ -102,7 +102,7 @@
     "proficiencies": "Proficiencies",
     "abilities": "Abilities",
     "bio": "Biography",
-    "weapons": "Weapons"
+    "weapons": "Weapons & Armour"
   },
   "AD2E.Character.kit": "Class Kit",
   "AD2E.Class": {
@@ -135,7 +135,8 @@
     "race": "Race",
     "proficiency": "Proficiency",
     "weapon": "Weapon",
-    "ammunition": "Ammunition"
+    "ammunition": "Ammunition",
+    "armor": "Armour"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -266,7 +267,7 @@
     "Proficient": "Proficient",
     "NotProficient": "Not proficient ({penalty})",
     "DropNotProficient": "{name}: no matching weapon proficiency; attacks take the non-proficiency penalty ({penalty}).",
-    "DragHint": "Drag weapons and ammunition from the \"Weapons (PHB)\" compendium onto this sheet. A weapon uses the weapon proficiency with the same identifier; specialization is set on the proficiency. Firing a launcher uses one piece of the chosen ammunition; throwing a weapon uses one from its quantity.",
+    "DragHint": "Drag armour from the \"Armour (PHB)\" compendium and weapons and ammunition from the \"Weapons (PHB)\" compendium onto this sheet. A weapon uses the weapon proficiency with the same identifier; specialization is set on the proficiency. Firing a launcher uses one piece of the chosen ammunition; throwing a weapon uses one from its quantity.",
     "NoneYet": "No weapons yet.",
     "Quantity": "Quantity",
     "Cost": "Cost",
@@ -286,5 +287,27 @@
     "NoneYet": "No ammunition yet."
   },
   "AD2E.Sheet.Weapon": "AD&D 2e Weapon",
-  "AD2E.Sheet.Ammunition": "AD&D 2e Ammunition"
+  "AD2E.Sheet.Ammunition": "AD&D 2e Ammunition",
+  "AD2E.Sheet.Armor": "AD&D 2e Armour",
+  "AD2E.Armor": {
+    "Armour": "Armour",
+    "body": "Body armour",
+    "shield": "Shield",
+    "helmet": "Helmet",
+    "Kind": "Kind",
+    "AC": "AC",
+    "ShieldMelee": "Shield: AC improvement",
+    "ShieldMissile": "Shield: AC improvement vs. missiles",
+    "ShieldAttacks": "Shield: attacks blocked per round",
+    "AnyFrontal": "any front or flank attack",
+    "AttacksPerRound": "{n} attack(s) per round",
+    "VsMissiles": "vs. missiles",
+    "Bonus": "Magical bonus (lowers AC)",
+    "Equipped": "Equipped",
+    "Rear": "Rear",
+    "RearHint": "Attacks from behind: no shield, no beneficial Dexterity adjustment",
+    "NoArmor": "No armour (base AC)",
+    "NoneYet": "No armour yet.",
+    "Unused": "Another equipped item of this kind gives a better AC; this one is not counted"
+  }
 }

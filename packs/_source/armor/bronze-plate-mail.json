@@ -1,0 +1,31 @@
+{
+  "_id": "A39M6es3vSJqgBXa",
+  "_key": "!items!A39M6es3vSJqgBXa",
+  "name": "Bronze plate mail",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "bronze-plate-mail",
+    "kind": "body",
+    "ac": 4,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "400 gp",
+    "weight": 45.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "pIvlv7d1H1wgqvST",
+  "_key": "!items!pIvlv7d1H1wgqvST",
+  "name": "Banded mail",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "banded-mail",
+    "kind": "body",
+    "ac": 4,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "200 gp",
+    "weight": 35.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
