@@ -326,6 +326,18 @@ AD2E.classFeatures = {
   thief: [["skills", 1], ["backstab", 1], ["followers", 10], ["scrolls", 10]],
   bard: [["abilities", 1], ["influence", 1], ["counterSong", 1], ["spells", 2], ["scrolls", 10]]
 };
+/**
+ * Wizards (Wizard (PHB), Specialist Wizard (PHB)): entries [key, level, namespace]; the namespace selects the lang
+ * group (AD2E.Feature.wizard / .specialist) shared by the mage and the eight specialists.
+ */
+const WIZARD_FEATURES = [["spellBook", 1, "wizard"], ["learnSpells", 1, "wizard"], ["noArmor", 1, "wizard"],
+  ["magicItems", 1, "wizard"], ["scrollsPotions", 9, "wizard"], ["noStronghold", 1, "wizard"]];
+const SPECIALIST_FEATURES = [["extraSpell", 1, "specialist"], ["schoolSaves", 1, "specialist"], ["learnBonus", 1, "specialist"],
+  ["opposition", 1, "specialist"], ["newSpellLevel", 1, "specialist"]];
+AD2E.classFeatures.mage = WIZARD_FEATURES;
+for (const id of ["abjurer", "conjurer", "diviner", "enchanter", "illusionist", "invoker", "necromancer", "transmuter"]) {
+  AD2E.classFeatures[id] = [...WIZARD_FEATURES, ...SPECIALIST_FEATURES];
+}
 
 AD2E.thac0Progression = {
   warrior: { divisor: 1, step: 1 },

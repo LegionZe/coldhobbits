@@ -804,6 +804,54 @@
         "name": "Use magical writings",
         "text": "From 10th level; 15% chance of reading an item wrongly."
       }
+    },
+    "wizard": {
+      "spellBook": {
+        "name": "Spell book",
+        "text": "Spells are memorized from the spell book; a spell cast is gone until memorized again."
+      },
+      "learnSpells": {
+        "name": "Learning spells",
+        "text": "A new spell is learned on a percentile roll at or under the Intelligence chance to learn (Table 4), up to the maximum spells per level."
+      },
+      "noArmor": {
+        "name": "No armour",
+        "text": "Wizards wear no armour; weapons: dagger, staff, darts, knives and slings."
+      },
+      "magicItems": {
+        "name": "Magical items",
+        "text": "Can use more magical items than any other class: potions, rings, wands, rods, scrolls and most miscellaneous items."
+      },
+      "scrollsPotions": {
+        "name": "Scrolls and potions",
+        "text": "From 9th level, can write magical scrolls and brew potions; other items need the right spells."
+      },
+      "noStronghold": {
+        "name": "Henchmen and apprentices",
+        "text": "No special benefit from a stronghold; may acquire a few henchmen and apprentices."
+      }
+    },
+    "specialist": {
+      "extraSpell": {
+        "name": "Extra school spell",
+        "text": "One additional spell per spell level, of the specialist's school (included in the Spells tab)."
+      },
+      "schoolSaves": {
+        "name": "School saving throws",
+        "text": "+1 to saves against spells of the school cast by other wizards; others save at -1 against the specialist's school spells."
+      },
+      "learnBonus": {
+        "name": "Learning spells",
+        "text": "+15% to learn spells of the school, -15% for other schools."
+      },
+      "opposition": {
+        "name": "Opposition schools",
+        "text": "Cannot learn spells of the opposition schools or use items that duplicate them (see the Race & Class tab)."
+      },
+      "newSpellLevel": {
+        "name": "Free school spell",
+        "text": "Gains one spell of the school for the spell book on reaching each new spell level."
+      }
     }
   },
   "AD2E.Kit": {
