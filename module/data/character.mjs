@@ -302,7 +302,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
     // Equipment, magical items and treasure count while carried (animals, transport, services and lodging default to
     // not carried).
-    const gear = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type)
+    const gear = items.filter(i => (["weapon", "ammunition", "armor"].includes(i.type) && !(i.type === "weapon" && i.system.dropped))
       || (["equipment", "magic", "jewellery"].includes(i.type) && i.system.carried));
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)

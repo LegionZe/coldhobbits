@@ -380,6 +380,18 @@ export default class AD2EActor extends Actor {
   /** Last ammunition fired per actor and launcher (default choice for the next shot and its damage roll). */
   static #lastAmmo = new Map();
 
+  /**
+   * Put a weapon away (`drop` false: sheathed or stowed, still carried) or drop it (`drop` true: no longer counted
+   * toward encumbrance until picked up), with a line in chat.
+   */
+  async stowWeapon(itemId, { drop = false } = {}) {
+    const item = this.items.get(itemId);
+    if (item?.type !== "weapon") return;
+    await item.update({ "system.equipped": false, "system.dropped": !!drop });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${foundry.utils.escapeHTML?.(
+      game.i18n.format(drop ? "AD2E.Weapon.DropChat" : "AD2E.Weapon.StowChat", { name: this.name, weapon: item.name })) ?? ""}</p>` });
+  }
+
   /* ---------------------------------------- Targets (applying damage from chat: module/health.mjs) */
 
   /** Tokens the current user targets: [{ uuid, name }] (`game.user.targets`). */

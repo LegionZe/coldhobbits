@@ -137,11 +137,12 @@ initiative 1d10, lowest acts first.
   Rest (natural healing: 1 a day, 3 a day of bed rest plus the Constitution bonus per week), Bind wounds and Raise
   (resurrection survival roll, Constitution -1) on the character sheet; Damage and Heal on monster sheets. Token status
   icons show unconscious and dead.
-- Combat tab (character sheet): hit points, THAC0 and movement with Damage, Heal and Surprise buttons; the equipped
-  weapons with their attack and damage rolls (all weapons, with a hint, when none is equipped; weapons have an
-  Equipped tick box on the Equipment and Combat tabs) and the unarmed attacks; the armour list and Armor Class; and the
-  class abilities (thief, bard and ranger skills, backstab, turning undead, paladin powers). The Equipment and Class
-  Abilities tabs keep the same lists (shared partials).
+- Combat tab (character sheet): hit points, THAC0 and movement with Damage, Heal and Surprise buttons; the weapons in
+  hand with their attack and damage rolls, a Stow button (sheathed or stowed, still carried) and a Drop button (no
+  longer counted toward encumbrance; "Pick up" on the Equipment tab), and the unarmed attacks; the worn armour and Armor
+  Class; and the class abilities (thief, bard and ranger skills, backstab, turning undead, paladin powers). Weapons and
+  armour are equipped with the Equipped tick box on the Equipment tab only. The Equipment and Class Abilities tabs use
+  the same lists (shared partials).
 - Targets: attack and damage rolls record the tokens the rolling user has targeted (shown as "→ name" in chat); a damage
   roll made with no target uses the targets of the same actor's last attack with that weapon. The attack dialog's
   target AC is filled in from the first target (vs. missiles for missile attacks) when the user may see that actor.
