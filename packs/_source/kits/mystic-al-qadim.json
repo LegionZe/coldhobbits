@@ -1,0 +1,61 @@
+{
+  "_id": "NJqqvO4ZeRZMYcjf",
+  "_key": "!items!NJqqvO4ZeRZMYcjf",
+  "name": "Mystic (Al-Qadim)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "mystic-al-qadim",
+    "classes": [
+      "cleric"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Mystic_-_Al-Qadim_(Character_Kit)",
+    "notes": "Bonus: one priest or general proficiency for the action that brings spells (player's choice; none for solitude and meditation).",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "religion"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "InEiVfQCHSnHco4F",
+  "sort": 82000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

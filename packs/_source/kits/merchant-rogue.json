@@ -1,0 +1,66 @@
+{
+  "_id": "0gY7jIQN58etNarL",
+  "_key": "!items!0gY7jIQN58etNarL",
+  "name": "Merchant-Rogue",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "merchant-rogue",
+    "classes": [
+      "thief"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Merchant-Rogue_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "haggling"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "BVfipmiC4r0zp30k",
+  "sort": 75000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
