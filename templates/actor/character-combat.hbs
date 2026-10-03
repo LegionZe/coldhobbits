@@ -1,0 +1,17 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <div class="ad2e-prof-summary">
+    <span>{{localize "AD2E.Character.hp"}}: <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{system.hp.value}} / {{system.hp.max}}</strong>{{#if hpStatus.label}} ({{hpStatus.label}}){{/if}}</span>
+    <span>THAC0: <strong>{{system.thac0.value}}</strong></span>
+    <span>{{localize "AD2E.Move.Movement"}}: <strong>{{moveLabel}}</strong></span>
+    {{#if editable}}
+    <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
+    <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>
+    <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
+    {{/if}}
+  </div>
+  {{> "ad2e.weapon-list" wt=weaponTab rows=weaponTab.combatRows note=weaponTab.combatNote}}
+  {{> "ad2e.armor-list" wt=weaponTab}}
+  {{#with featureTab as |ft|}}
+  {{#if ft.classItem}}{{> "ad2e.class-abilities" ft=ft}}{{/if}}
+  {{/with}}
+</section>
