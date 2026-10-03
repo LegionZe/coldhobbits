@@ -85,6 +85,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       key,
       label: game.i18n.localize(`AD2E.Ability.${key}`),
       value: sys.abilities[key].value,
+      total: sys.abilities[key].total,
+      adjusted: sys.abilities[key].total !== sys.abilities[key].value,
       isStr: key === "str",
       exceptional: sys.abilities[key].exceptional
     }));
@@ -94,11 +96,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       value: sys.saves[key].value,
       table: sys.saves[key].table,
       override: sys.saves[key].override ?? "",
-      overridden: sys.saves[key].override !== null
+      overridden: sys.saves[key].override !== null,
+      bonus: sys.saves[key].bonus,
+      poison: key === "par" ? sys.raceInfo.poisonBonus : 0
     }));
     context.abilityDetails = AD2E.abilities.map(key => {
       const row = sys.abilityData[key];
-      const score = sys.abilities[key].value;
+      const score = sys.abilities[key].total;
       const exc = sys.abilities[key].exceptional;
       return {
         key,
@@ -129,7 +133,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const abilityLabel = key => game.i18n.localize(`AD2E.Ability.${key}`);
     const fmt = v => (v === null || v === undefined ? "—" : `${v}`);
     const cls = info.classItem?.system ?? null;
+    const race = sys.raceInfo;
     return {
+      raceItem: race.raceItem,
+      race: race.race,
+      raceRequirementsMet: race.requirementsMet,
+      raceRows: race.requirements.map(r => ({
+        label: abilityLabel(r.key), min: fmt(r.min), max: fmt(r.max),
+        adjust: r.adjust ? (r.adjust > 0 ? `+${r.adjust}` : `${r.adjust}`) : "—",
+        rolled: r.rolled, total: r.total, met: r.met
+      })),
+      infravision: race.race ? (race.race.infravisionByLineage ? game.i18n.localize("AD2E.Race.ByLineage")
+        : (race.race.infravision ? `${race.race.infravision} ft` : "—")) : "",
+      conSaveBonus: race.conSaveBonus,
+      poisonBonus: race.poisonBonus,
+      classAllowedByRace: info.classAllowedByRace,
       classItem: info.classItem,
       kitItem: info.kitItem,
       kitFits: info.kitFits,
@@ -152,16 +170,28 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   /**
-   * Class and kit items: one of each per character. A dropped class replaces the current
-   * class (and drops a kit that does not fit it); a kit must be open to the current class.
+   * Race, class and kit items: one of each per character. A race or class is refused if the
+   * race does not allow the class. A dropped class replaces the current class (and drops a kit
+   * that does not fit it); a kit must be open to the current class.
    */
   async _onDropItem(event, item) {
-    if (!this.actor.isOwner || !["class", "kit"].includes(item.type)) return super._onDropItem(event, item);
+    if (!this.actor.isOwner || !["race", "class", "kit"].includes(item.type)) return super._onDropItem(event, item);
     if (item.parent === this.actor) return super._onDropItem(event, item); // sorting an owned item
     const current = this.actor.items;
+    const raceItem = current.find(i => i.type === "race");
     const classItem = current.find(i => i.type === "class");
     const remove = [];
-    if (item.type === "class") {
+    if (item.type === "race") {
+      if (classItem && !item.system.classes.has(classItem.system.identifier)) {
+        ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: classItem.name, race: item.name }));
+        return null;
+      }
+      if (raceItem) remove.push(raceItem.id);
+    } else if (item.type === "class") {
+      if (raceItem && !raceItem.system.classes.has(item.system.identifier)) {
+        ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: item.name, race: raceItem.name }));
+        return null;
+      }
       if (classItem) remove.push(classItem.id);
       const kit = current.find(i => i.type === "kit");
       if (kit && !kit.system.classes.has(item.system.identifier)) remove.push(kit.id);

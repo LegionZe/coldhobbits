@@ -98,7 +98,7 @@
   "AD2E.Test.NotAvailable": "{test} is not available at this ability score.",
   "AD2E.Tab": {
     "main": "Main",
-    "class": "Class",
+    "class": "Race & Class",
     "abilities": "Abilities",
     "bio": "Biography"
   },
@@ -121,7 +121,7 @@
     "Notes": "Class & Kit Notes",
     "DropClass": "Drag a Class item here",
     "DropKit": "Drag a Class Kit item here",
-    "DragHint": "Drag a Class and then a Class Kit from the Items directory or the \"Classes (PHB)\" and \"Class Kits\" compendiums onto this sheet. Dropping a new one replaces the current one.",
+    "DragHint": "Drag a Race, a Class and then a Class Kit from the Items directory or the \"Races (PHB)\", \"Classes (PHB)\" and \"Class Kits\" compendiums onto this sheet. Dropping a new one replaces the current one.",
     "GroupFromClass": "Set by the Class item",
     "NeedClassFirst": "Add a Class before adding a Class Kit.",
     "KitNotForClass": "{kit} is not available to {class}.",
@@ -129,7 +129,8 @@
   },
   "TYPES.Item": {
     "class": "Class",
-    "kit": "Class Kit"
+    "kit": "Class Kit",
+    "race": "Race"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -154,5 +155,27 @@
     "Fixed": "+{hp} HP (fixed; no hit die or CON bonus at this level)",
     "Minimum": "minimum 1 per die",
     "ConfirmReset": "This character is above 1st level. Replace current and maximum HP with a new 1st-level roll?"
+  },
+  "AD2E.Sheet.Race": "AD&D 2e Race",
+  "AD2E.Race": {
+    "DropRace": "Drag a Race item here",
+    "Classes": "Classes allowed (identifiers)",
+    "Infravision": "Infravision",
+    "InfravisionByLineage": "Infravision depends on lineage (see source page)",
+    "ByLineage": "by lineage (see source page)",
+    "ConSaves": "CON bonus vs. rod/staff/wand and spells (Table 9)",
+    "ConPoison": "CON bonus vs. poison (Table 9)",
+    "SaveBonus": "Racial CON bonus (Table 9), added to the roll",
+    "PoisonBonus": "Racial CON bonus vs. poison only (Table 9)",
+    "Table": "Ability Requirements and Adjustments (Tables 7-8)",
+    "Min": "Min.",
+    "Max": "Max.",
+    "Adjust": "Adj.",
+    "Rolled": "Rolled",
+    "Effective": "Effective",
+    "RolledScore": "Rolled score (checked against the race's Table 7 limits)",
+    "EffectiveScore": "Effective score: rolled + racial adjustment (Table 8); used for all tables and rolls",
+    "ClassNotForRace": "{race} cannot be a {class}.",
+    "ClassNotAllowed": "This race cannot take the current class."
   }
 }

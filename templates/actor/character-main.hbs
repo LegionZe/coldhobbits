@@ -5,7 +5,8 @@
       {{#each abilities as |ab|}}
       <div class="ad2e-ability">
         <a data-action="rollAbility" data-ability="{{ab.key}}" data-tooltip="{{localize 'AD2E.Roll.Check'}}">{{ab.label}}</a>
-        <input type="number" name="system.abilities.{{ab.key}}.value" value="{{ab.value}}">
+        <input type="number" name="system.abilities.{{ab.key}}.value" value="{{ab.value}}" data-tooltip="{{localize 'AD2E.Race.RolledScore'}}">
+        <strong class="ad2e-total {{#if ab.adjusted}}ad2e-adjusted{{/if}}" data-tooltip="{{localize 'AD2E.Race.EffectiveScore'}}">{{ab.total}}</strong>
         {{#if ab.isStr}}
         <input type="number" name="system.abilities.str.exceptional" value="{{ab.exceptional}}" data-tooltip="{{localize 'AD2E.Character.exceptional'}}" min="0" max="100">
         {{else}}<span></span>{{/if}}
@@ -43,6 +44,7 @@
       <div class="ad2e-save">
         <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
         <strong class="{{#if sv.overridden}}ad2e-overridden{{/if}}">{{sv.value}}</strong>
+        <span class="ad2e-save-bonus">{{#if sv.bonus}}<span data-tooltip="{{localize 'AD2E.Race.SaveBonus'}}">+{{sv.bonus}}</span>{{/if}}{{#if sv.poison}}<span data-tooltip="{{localize 'AD2E.Race.PoisonBonus'}}">+{{sv.poison}}&#x2620;</span>{{/if}}</span>
         <input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">
       </div>
       {{/each}}

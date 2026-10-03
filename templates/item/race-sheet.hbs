@@ -1,0 +1,31 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    <label>{{localize "AD2E.Race.Classes"}} <input type="text" name="classesText" value="{{classesText}}" data-tooltip="{{localize 'AD2E.Item.kitClassesHint'}}"></label>
+    <label>{{localize "AD2E.Race.Infravision"}} <input type="number" name="system.infravision" value="{{system.infravision}}" min="0"></label>
+    <label class="ad2e-checkbox"><input type="checkbox" name="system.infravisionByLineage" {{#if system.infravisionByLineage}}checked{{/if}}> {{localize "AD2E.Race.InfravisionByLineage"}}</label>
+    <label class="ad2e-checkbox"><input type="checkbox" name="system.conSaves" {{#if system.conSaves}}checked{{/if}}> {{localize "AD2E.Race.ConSaves"}}</label>
+    <label class="ad2e-checkbox"><input type="checkbox" name="system.conPoison" {{#if system.conPoison}}checked{{/if}}> {{localize "AD2E.Race.ConPoison"}}</label>
+  </div>
+  <fieldset>
+    <legend>{{localize "AD2E.Race.Table"}}</legend>
+    <table class="ad2e-race-table">
+      <thead><tr><th></th><th>{{localize "AD2E.Race.Min"}}</th><th>{{localize "AD2E.Race.Max"}}</th><th>{{localize "AD2E.Race.Adjust"}}</th></tr></thead>
+      <tbody>
+        {{#each raceRows as |r|}}
+        <tr><th>{{r.label}}</th>
+          <td><input type="number" name="system.min.{{r.key}}" value="{{r.min}}" min="0" max="25"></td>
+          <td><input type="number" name="system.max.{{r.key}}" value="{{r.max}}" min="0" max="25"></td>
+          <td><input type="number" name="system.adjust.{{r.key}}" value="{{r.adjust}}" min="-5" max="5"></td></tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </fieldset>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

@@ -1,0 +1,60 @@
+{
+  "_id": "4KJvgrCdQHDfyr0U",
+  "_key": "!items!4KJvgrCdQHDfyr0U",
+  "name": "Half-Elf",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "half-elf",
+    "min": {
+      "str": 3,
+      "dex": 6,
+      "con": 6,
+      "int": 4,
+      "wis": 3,
+      "cha": 3
+    },
+    "max": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 18,
+      "wis": 18,
+      "cha": 18
+    },
+    "adjust": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "classes": [
+      "cleric",
+      "druid",
+      "fighter",
+      "ranger",
+      "mage",
+      "thief",
+      "bard",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "transmuter"
+    ],
+    "conSaves": false,
+    "conPoison": false,
+    "infravision": 60,
+    "infravisionByLineage": false,
+    "url": "https://adnd2e.fandom.com/wiki/Half-Elf_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,65 @@
+{
+  "_id": "4qiPWQuYH05oVy1H",
+  "_key": "!items!4qiPWQuYH05oVy1H",
+  "name": "Human",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "human",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "max": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "adjust": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "classes": [
+      "abjurer",
+      "bard",
+      "cleric",
+      "conjurer",
+      "diviner",
+      "druid",
+      "enchanter",
+      "fighter",
+      "illusionist",
+      "invoker",
+      "mage",
+      "necromancer",
+      "paladin",
+      "ranger",
+      "thief",
+      "transmuter"
+    ],
+    "conSaves": false,
+    "conPoison": false,
+    "infravision": 0,
+    "infravisionByLineage": false,
+    "url": "https://adnd2e.fandom.com/wiki/Human_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

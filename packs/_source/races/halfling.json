@@ -1,0 +1,52 @@
+{
+  "_id": "B6AAsnyPwPUVTFOo",
+  "_key": "!items!B6AAsnyPwPUVTFOo",
+  "name": "Halfling",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "halfling",
+    "min": {
+      "str": 7,
+      "dex": 7,
+      "con": 10,
+      "int": 6,
+      "wis": 3,
+      "cha": 3
+    },
+    "max": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 18,
+      "wis": 17,
+      "cha": 18
+    },
+    "adjust": {
+      "str": -1,
+      "dex": 1,
+      "con": 0,
+      "int": 0,
+      "wis": 0,
+      "cha": 0
+    },
+    "classes": [
+      "cleric",
+      "fighter",
+      "thief"
+    ],
+    "conSaves": true,
+    "conPoison": true,
+    "infravision": 0,
+    "infravisionByLineage": true,
+    "url": "https://adnd2e.fandom.com/wiki/Halfling_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 5000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

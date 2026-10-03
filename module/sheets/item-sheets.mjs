@@ -39,6 +39,16 @@ export class ClassSheet extends AD2EItemSheet {
   }
 }
 
+/** Parse the comma-separated `classesText` field into `system.classes`. */
+function parseClassesText(data) {
+  if ("classesText" in data) {
+    foundry.utils.setProperty(data, "system.classes",
+      String(data.classesText).split(",").map(s => s.trim()).filter(Boolean));
+    delete data.classesText;
+  }
+  return data;
+}
+
 export class KitSheet extends AD2EItemSheet {
   static DEFAULT_OPTIONS = { classes: ["kit"] };
   static PARTS = { body: { template: "systems/ad2e/templates/item/kit-sheet.hbs", scrollable: [""] } };
@@ -51,12 +61,26 @@ export class KitSheet extends AD2EItemSheet {
 
   /** The class list is edited as comma-separated identifiers. */
   _processFormData(event, form, formData) {
-    const data = super._processFormData(event, form, formData);
-    if ("classesText" in data) {
-      foundry.utils.setProperty(data, "system.classes",
-        String(data.classesText).split(",").map(s => s.trim()).filter(Boolean));
-      delete data.classesText;
-    }
-    return data;
+    return parseClassesText(super._processFormData(event, form, formData));
+  }
+}
+
+export class RaceSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["race"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/race-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const system = this.document.system;
+    context.classesText = [...system.classes].join(", ");
+    context.raceRows = AD2E.abilities.map(key => ({
+      key, label: game.i18n.localize(`AD2E.Ability.${key}`),
+      min: system.min[key] ?? "", max: system.max[key] ?? "", adjust: system.adjust[key]
+    }));
+    return context;
+  }
+
+  _processFormData(event, form, formData) {
+    return parseClassesText(super._processFormData(event, form, formData));
   }
 }

@@ -78,7 +78,7 @@ export default class AD2EActor extends Actor {
       game.i18n.localize("AD2E.Roll.Modifier")
     );
     if (mod === null) return;
-    const target = this.system.abilities[key].value + mod;
+    const target = this.system.abilities[key].total + mod; // effective score (racial adjustment included)
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total <= target;
     return roll.toMessage({
@@ -109,7 +109,7 @@ export default class AD2EActor extends Actor {
     });
   }
 
-  /** Saving throw: d20 + modifier >= save target. */
+  /** Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. */
   async rollSave(key) {
     const mod = await promptNumber(
       game.i18n.localize(`AD2E.Save.${key}`),
@@ -117,7 +117,8 @@ export default class AD2EActor extends Actor {
     );
     if (mod === null) return;
     const target = this.system.saves[key].value;
-    const roll = await new Roll("1d20 + @mod", { mod }).evaluate();
+    const bonus = this.system.saves[key].bonus;
+    const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),

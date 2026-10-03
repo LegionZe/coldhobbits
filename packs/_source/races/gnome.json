@@ -1,0 +1,53 @@
+{
+  "_id": "HRelGxqaY2g0Hagv",
+  "_key": "!items!HRelGxqaY2g0Hagv",
+  "name": "Gnome",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "gnome",
+    "min": {
+      "str": 6,
+      "dex": 3,
+      "con": 8,
+      "int": 6,
+      "wis": 3,
+      "cha": 3
+    },
+    "max": {
+      "str": 18,
+      "dex": 18,
+      "con": 18,
+      "int": 18,
+      "wis": 18,
+      "cha": 18
+    },
+    "adjust": {
+      "str": 0,
+      "dex": 0,
+      "con": 0,
+      "int": 1,
+      "wis": -1,
+      "cha": 0
+    },
+    "classes": [
+      "fighter",
+      "thief",
+      "cleric",
+      "illusionist"
+    ],
+    "conSaves": true,
+    "conPoison": false,
+    "infravision": 60,
+    "infravisionByLineage": false,
+    "url": "https://adnd2e.fandom.com/wiki/Gnome_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

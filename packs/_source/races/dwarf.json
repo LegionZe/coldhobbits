@@ -1,0 +1,52 @@
+{
+  "_id": "ZeusHTwKc67psLnd",
+  "_key": "!items!ZeusHTwKc67psLnd",
+  "name": "Dwarf",
+  "type": "race",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "dwarf",
+    "min": {
+      "str": 8,
+      "dex": 3,
+      "con": 11,
+      "int": 3,
+      "wis": 3,
+      "cha": 3
+    },
+    "max": {
+      "str": 18,
+      "dex": 17,
+      "con": 18,
+      "int": 18,
+      "wis": 18,
+      "cha": 17
+    },
+    "adjust": {
+      "str": 0,
+      "dex": 0,
+      "con": 1,
+      "int": 0,
+      "wis": 0,
+      "cha": -1
+    },
+    "classes": [
+      "cleric",
+      "fighter",
+      "thief"
+    ],
+    "conSaves": true,
+    "conPoison": true,
+    "infravision": 60,
+    "infravisionByLineage": false,
+    "url": "https://adnd2e.fandom.com/wiki/Dwarf_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
