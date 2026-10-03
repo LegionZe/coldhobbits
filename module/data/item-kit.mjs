@@ -49,7 +49,8 @@ export default class KitData extends foundry.abstract.TypeDataModel {
         step: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         from: new NumberField({ required: true, integer: true, min: 1, initial: 1, nullable: false }),
         condition: new StringField({ initial: "" }),
-        armor: new StringField({ initial: "", choices: ["", "none", "light", "any"] }),
+        // blank must be explicit: a StringField with choices is not blank-able by default (Foundry StringField docs).
+        armor: new StringField({ initial: "", blank: true, choices: ["none", "light", "any"] }),
         max: new NumberField({ integer: true, nullable: true, initial: null })
       })),
       url: new StringField({ initial: "" }),
