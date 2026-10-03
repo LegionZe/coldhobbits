@@ -1,0 +1,34 @@
+{
+  "_id": "PHpAcJY8uWLxzkv5",
+  "_key": "!items!PHpAcJY8uWLxzkv5",
+  "name": "Signet ring",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "signet-ring",
+    "category": "gear",
+    "cost": "5 gp",
+    "weight": 0.1,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 8 gp, bargain 4 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 6700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

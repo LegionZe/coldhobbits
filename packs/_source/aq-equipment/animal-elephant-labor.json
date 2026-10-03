@@ -1,0 +1,34 @@
+{
+  "_id": "Z5ynxzYoePFJFMRA",
+  "_key": "!items!Z5ynxzYoePFJFMRA",
+  "name": "Elephant, labor",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "elephant-labor",
+    "category": "animal",
+    "cost": "150 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 225 gp, bargain 110 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "2gdybUPsN0qlqZaQ",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

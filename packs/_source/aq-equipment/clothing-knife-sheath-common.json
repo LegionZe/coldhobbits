@@ -1,0 +1,34 @@
+{
+  "_id": "XqBQuTdmXOOAfowS",
+  "_key": "!items!XqBQuTdmXOOAfowS",
+  "name": "Knife sheath, common",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "knife-sheath-common",
+    "category": "clothing",
+    "cost": "3 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 4 cp, bargain 2 cp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,54 @@
+{
+  "_id": "JrxIo2MhTVphQep6",
+  "_key": "!items!JrxIo2MhTVphQep6",
+  "name": "Scythe",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "scythe",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10+2",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Descriptions_(AA)",
+    "notes": "Two-handed; the blade can be locked straight to receive a charge."
+  },
+  "effects": [],
+  "folder": "4YRpFz6KtJbeVquI",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "DAMYSLb0Rydm3h9l",
+  "_key": "!items!DAMYSLb0Rydm3h9l",
+  "name": "Rope, silk (per 50 ft.)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rope-silk-per-50-ft",
+    "category": "gear",
+    "cost": "10 gp",
+    "weight": 8.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 15 gp, bargain 7 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 5900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

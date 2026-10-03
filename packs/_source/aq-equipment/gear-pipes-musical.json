@@ -1,0 +1,34 @@
+{
+  "_id": "Es39fPmvUprZOqcV",
+  "_key": "!items!Es39fPmvUprZOqcV",
+  "name": "Pipes, musical",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pipes-musical",
+    "category": "gear",
+    "cost": "5 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 7 gp, bargain 3 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 5600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

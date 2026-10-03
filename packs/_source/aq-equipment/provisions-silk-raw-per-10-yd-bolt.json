@@ -1,0 +1,34 @@
+{
+  "_id": "QK08ti6dOxrm0apt",
+  "_key": "!items!QK08ti6dOxrm0apt",
+  "name": "Silk, raw (per 10-yd. bolt)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "silk-raw-per-10-yd-bolt",
+    "category": "provisions",
+    "cost": "60 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 80 gp, bargain 45 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "qvoSlYBmckpr0Ii8",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

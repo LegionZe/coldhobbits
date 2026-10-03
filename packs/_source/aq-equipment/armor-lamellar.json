@@ -1,0 +1,31 @@
+{
+  "_id": "RGkscycZXTWw6wES",
+  "_key": "!items!RGkscycZXTWw6wES",
+  "name": "Lamellar",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "lamellar",
+    "kind": "body",
+    "ac": 6,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "100 gp",
+    "weight": 30.0,
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Descriptions_(AA)",
+    "notes": "Asking 150 gp, bargain 75 gp (Arabian Adventures). AC from Armor in Fiery Zakhara (AA) Table 6."
+  },
+  "effects": [],
+  "folder": "eGHkQb0bYryoLoUT",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "qgNOOleqc3cXfwiU",
+  "_key": "!items!qgNOOleqc3cXfwiU",
+  "name": "Tiger claws (bagh nakh)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "tiger-claws-bagh-nakh",
+    "proficiency": "tiger-claws-bagh-nakh",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d2",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "4 sp",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 6 sp, bargain 3 sp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

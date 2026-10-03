@@ -172,6 +172,13 @@ initiative 1d10, lowest acts first.
   jewellery add to the party's wealth total. "Use" spends a charge, or one potion, scroll or dust, and posts the item
   to chat. Magical armour and weapons remain armour and weapon items with a magical bonus. Tables from
   `python3 tools/build-treasure-tables.py`.
+- "Al-Qadim Equipment (AA)" compendium (`python3 tools/build-aq-equipment-data.py`): the Arabian Adventures price lists
+  (clothing, food and lodgings, household provisions, animals, tack and harness, transport, miscellaneous equipment;
+  302 items) at the normal price, with the asking and bargain prices in each item's notes; the nine new Zakharan weapons
+  (elephant goad, jambiya, katar, razor, scythe, cutlass, great scimitar, tiger claws, tufenk) with a weapon
+  proficiency each; lamellar armour (AC 6) and the daraq shield (as the buckler). Familiar weapons and armour are the
+  PHB items. The tufenk's Greek fire attack is described in its notes and rolled by hand. Services and slaves are not
+  items. The optional heat penalty for armour better than AC 7 ("Armor in Fiery Zakhara") is not applied.
 - "Magical Items (DMG)" compendium: 347 items from DMG Tables 89-104 (potions, rings, rods, staves, wands and the
   miscellaneous magic tables), one folder per table, each with its XP value, the groups that may use it, and a link
   to its description page (descriptions are not copied). Wands, rods and staves carry their DMG charges when found

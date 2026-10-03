@@ -1,0 +1,34 @@
+{
+  "_id": "vReXCUynlRvt5GDU",
+  "_key": "!items!vReXCUynlRvt5GDU",
+  "name": "Shirt, linen",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "shirt-linen",
+    "category": "clothing",
+    "cost": "6 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 8 sp, bargain 5 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 4300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
