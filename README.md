@@ -163,7 +163,8 @@ initiative 1d10, lowest acts first.
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
   a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
 - Two weapons ("Attacking with Two Weapons (PHB)"): warriors and rogues get a "Two weapons" choice in the melee
-  attack dialog: main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
+  attack dialog ("Both weapons" rolls the weapon clicked as the main weapon and the chosen weapon in the other hand as
+  the second, one chat message each; a backstab applies to the main weapon only): main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
   have no penalty in studded leather or lighter ("Ranger (PHB)"). The chat message notes an equipped shield and a
   second weapon that is not smaller and lighter than the main one (a dagger is always allowed). The penalties show on
   the Unarmed row of the Equipment tab; the extra attack per round is not added to the attack rate shown.

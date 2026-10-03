@@ -1140,7 +1140,9 @@
     "Label": "Two weapons",
     "main": "Main weapon",
     "off": "Second weapon",
-    "MainWeapon": "Main weapon in the other hand",
+    "both": "Both weapons (this one main, the other second)",
+    "MainWeapon": "Weapon in the other hand",
+    "NoBackstab": "backstab applies to the main weapon only",
     "Shield": "a shield cannot be used while fighting with two weapons",
     "TooLarge": "the second weapon must be smaller and lighter than {main} (a dagger is always allowed)",
     "Summary": "Two weapons: main {main}, second {off} (one extra attack per round)"
