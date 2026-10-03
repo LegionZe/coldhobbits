@@ -99,12 +99,19 @@ if __name__ == "__main__":
         os.unlink(f.name)
     items = json.loads(out)
     assert len(items) == len(EXAMPLES), [x["title"] for x in raw]
-    folders = {k: classdata.folder_doc(f"spells.{k}", label, sort=i * 1000)
-               for i, (k, label) in enumerate([("wizard", "Wizard Spells"), ("priest", "Priest Spells")])}
-    docs = list(folders.values())
+    # Folders by class, then spell level (the same layout the spell importer uses in the world).
+    tops = {k: classdata.folder_doc(f"spells.{k}", label, sort=i * 1000)
+            for i, (k, label) in enumerate([("wizard", "Wizard Spells"), ("priest", "Priest Spells")])}
+    folders, docs = {}, list(tops.values())
+    for it in items:
+        key = (it["system"]["kind"], it["system"]["level"])
+        if key not in folders:
+            name = "Cantrips / orisons" if key[1] == 0 else f"Level {key[1]}"
+            folders[key] = classdata.folder_doc(f"spells.{key[0]}.{key[1]}", name, parent=tops[key[0]]["_id"], sort=key[1] * 100)
+            docs.append(folders[key])
     for i, it in enumerate(sorted(items, key=lambda d: (d["system"]["kind"], d["system"]["level"], d["name"]))):
         doc = classdata.item_doc("spell", "s." + it["system"]["identifier"], it["name"], it["img"], it["system"], i * 100)
-        doc["folder"] = folders[it["system"]["kind"]]["_id"]
+        doc["folder"] = folders[(it["system"]["kind"], it["system"]["level"])]["_id"]
         doc["flags"] = it["flags"]
         docs.append(doc)
     classdata.write_docs("packs/_source/spells", docs)

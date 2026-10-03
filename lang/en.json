@@ -557,11 +557,11 @@
     "AllLevels": "All levels",
     "Shown": "Shown",
     "Selected": "Selected",
-    "Folder": "Put new spells in a folder named after the book",
-    "FolderName": "Spells: {book}",
+    "Folder": "File spells into folders by class and spell level (e.g. Wizard Spells / Level 3)",
     "Import": "Import shown and selected",
     "Loading": "Loading spell pages: {done} / {total}",
     "Skipped": "{n} page(s) without a usable spell infobox were skipped.",
-    "Done": "Spells imported: {created} created, {updated} updated."
+    "Done": "Spells imported: {created} created, {updated} updated.",
+    "ClassFolder": "{kind} Spells"
   }
 }
