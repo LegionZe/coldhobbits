@@ -252,17 +252,20 @@ export default class AD2EActor extends Actor {
       rangeField = `<div class="form-group"><label>${i18n("AD2E.Weapon.Range")}</label><select name="range">${
         opts.map(([k, l]) => `<option value="${k}"${k === "short" ? " selected" : ""}>${l}</option>`).join("")}</select></div>`;
     }
+    const backstab = use === "melee" ? this.#backstabMultiplier() : null;
+    const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
+      + `<input type="checkbox" name="backstab"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
-        + ammoField + rangeField
+        + ammoField + rangeField + backstabField
         + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
           return { ac: Number(f.ac.value) || 0, mod: Number(f.mod.value) || 0, range: f.range?.value ?? null,
-            ammo: f.ammo?.value ?? null };
+            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked };
         }
       },
       rejectClose: false
@@ -272,7 +275,9 @@ export default class AD2EActor extends Actor {
     if (ammoList && !ammo) return;
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
-    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0);
+    // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
+    // target are ignored, which the target AC entered should reflect.
+    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (input.backstab ? AD2E.backstabHit : 0);
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
     // Use up the piece fired or thrown.
@@ -292,7 +297,13 @@ export default class AD2EActor extends Actor {
       flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
         + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
+        + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
     });
+  }
+
+  /** Thieves: the Table 30 backstab multiplier at their level; null for other classes. */
+  #backstabMultiplier() {
+    return this.type === "character" ? (this.system.classAbilities?.info?.backstab ?? null) : null;
   }
 
   /** Last ammunition fired per actor and launcher (default choice for the next shot and its damage roll). */
@@ -322,16 +333,21 @@ export default class AD2EActor extends Actor {
       ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>`
       : "";
+    const mult = use === "melee" ? this.#backstabMultiplier() : null;
+    const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
+      + `<input type="checkbox" name="backstab"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
+        + backstabField
         + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
-          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: Number(f.mod.value) || 0 };
+          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: Number(f.mod.value) || 0,
+            backstab: !!f.backstab?.checked };
         }
       },
       rejectClose: false
@@ -339,12 +355,16 @@ export default class AD2EActor extends Actor {
     if (!input) return;
     const option = options[input.option] ?? options[0];
     const dice = option[input.size] ?? option.sm ?? option.l;
-    const roll = await new Roll(`${dice} + @adj + @mod`, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
+    // Backstab: "The weapon's standard damage is multiplied by the value given in Table 30. Then Strength and magical
+    // weapon bonuses are added" (Thief Skill Explanations (PHB)).
+    const formula = input.backstab && mult ? `(${dice}) * ${mult} + @adj + @mod` : `${dice} + @adj + @mod`;
+    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
+        + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
     });
   }
@@ -473,11 +493,121 @@ export default class AD2EActor extends Actor {
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
   }
 
-  /** Rest: every memorized spell can be cast again (memorization itself is kept; change it on the Spells tab). */
+  /**
+   * Rest: every memorized spell can be cast again (memorization itself is kept; change it on the Spells tab) and
+   * daily class abilities (paladin lay on hands) are restored.
+   */
   async restSpells() {
     const updates = this.items.filter(i => i.type === "spell" && i.system.cast > 0).map(i => ({ _id: i.id, "system.cast": 0 }));
     if (updates.length) await this.updateEmbeddedDocuments("Item", updates);
-    ui.notifications.info(game.i18n.format("AD2E.Spell.Rested", { name: this.name }));
+    if (this.type === "character" && this.system.classAbilities.layOnHandsUsed) {
+      await this.update({ "system.classAbilities.layOnHandsUsed": false });
+    }
+    ui.notifications.info(game.i18n.format("AD2E.Ability2.Rested", { name: this.name }));
+  }
+
+  /**
+   * Thief skill, bard ability or ranger stealth: d100 (percentile) + modifier, success at or below the skill's total
+   * (Thief Skill Explanations (PHB)). Rangers may halve the chance outside natural surroundings (Ranger (PHB)).
+   * Find/remove traps: a roll of 96-100 sets the trap off.
+   */
+  async rollClassSkill(key) {
+    const info = this.system.classAbilities?.info;
+    const skill = info?.skills.find(s => s.key === key);
+    if (!skill) return;
+    const i18n = k => game.i18n.localize(k);
+    const name = i18n(`AD2E.Skill.${key}`);
+    if (!skill.available) {
+      ui.notifications.warn(`${name}: ${i18n("AD2E.Skill.HeavyArmor")}`);
+      return;
+    }
+    const ranger = info.classId === "ranger";
+    const input = await DialogV2.prompt({
+      window: { title: name },
+      content: (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")} (%)</label><input type="number" name="mod" value="0" step="5" autofocus></div>`,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
+        mod: Number(button.form.elements.mod.value) || 0, halved: !!button.form.elements.halved?.checked }) },
+      rejectClose: false
+    });
+    if (!input) return;
+    let target = (input.halved ? Math.floor(skill.total / 2) : skill.total) + input.mod;
+    if (info.classId === "thief") target = Math.min(target, AD2E.skillClasses.thief.cap);
+    const roll = await new Roll("1d100").evaluate();
+    const success = roll.total <= target;
+    const trap = key === "rt" && roll.total >= AD2E.trapSpringRoll;
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}): `
+        + i18n(success ? "AD2E.Skill.Success" : "AD2E.Skill.Failure")
+        + (trap ? ` — ${i18n("AD2E.Skill.TrapSprung")}` : "")
+    });
+  }
+
+  /**
+   * Turn undead (Turning Undead (PHB), Table 61): choose the undead type; 1d20 equal to or above the number turns; T
+   * turns and D destroys automatically; D* destroys and 2d4 more are destroyed; a success affects 2d6 undead.
+   */
+  async rollTurnUndead() {
+    const level = this.system.classAbilities?.info?.turnLevel;
+    if (!level) return;
+    const t = AD2E.classTables.turnUndead;
+    const col = t.columns.findIndex(([lo, hi]) => level >= lo && level <= hi);
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const input = await DialogV2.prompt({
+      window: { title: game.i18n.format("AD2E.Ability2.TurnRoll", { level }) },
+      content: `<p class="ad2e-note">${i18n("AD2E.Ability2.TurnHint")}</p>`
+        + `<div class="form-group"><label>${i18n("AD2E.Ability2.Undead")}</label><select name="row">${
+          t.rows.map((r, i) => `<option value="${i}">${esc(r.undead)} (${esc(r.results[col])})</option>`).join("")}</select></div>`
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
+        row: Number(button.form.elements.row.value) || 0, mod: Number(button.form.elements.mod.value) || 0 }) },
+      rejectClose: false
+    });
+    if (!input) return;
+    const row = t.rows[input.row];
+    const result = row.results[col] ?? "—";
+    const flavor = `${i18n("AD2E.Ability2.TurnUndead")}: ${esc(row.undead)} (${game.i18n.format("AD2E.Ability2.TurnLevel", { level })}, ${esc(result)})`;
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    if (!/^\d+$/.test(result) && !["T", "D", "D*"].includes(result)) {
+      return ChatMessage.create({ speaker, content: `<p>${flavor}: ${i18n("AD2E.Ability2.Cannot")}</p>` });
+    }
+    const rolls = [];
+    let success = true;
+    let outcome = result.startsWith("D") ? "Dispelled" : "Turned";
+    if (/^\d+$/.test(result)) {
+      const d20 = await new Roll("1d20 + @mod", { mod: input.mod }).evaluate();
+      rolls.push(d20);
+      success = d20.total >= Number(result);
+      outcome = success ? "Turned" : "Failed";
+    }
+    const lines = [`${flavor}: <strong>${i18n(`AD2E.Ability2.${outcome}`)}</strong>`];
+    if (success) {
+      const count = await new Roll("2d6").evaluate();
+      rolls.push(count);
+      lines.push(game.i18n.format("AD2E.Ability2.Affected", { n: count.total }));
+      if (result === "D*") {
+        const extra = await new Roll("2d4").evaluate();
+        rolls.push(extra);
+        lines.push(game.i18n.format("AD2E.Ability2.Extra", { n: extra.total }));
+      }
+    }
+    const rollText = rolls.map(r => `${r.formula} = ${r.total}`).join("; ");
+    return ChatMessage.create({ speaker, rolls, content: `<p>${lines.join("<br>")}</p><p class="ad2e-note">${rollText}</p>` });
+  }
+
+  /** Paladin lay on hands: heals 2 hit points per level, once a day (Paladin (PHB)); restored by resting. */
+  async layOnHands() {
+    const info = this.system.classAbilities?.info?.layOnHands;
+    if (!info) return;
+    if (info.used) {
+      ui.notifications.warn(game.i18n.localize("AD2E.Ability2.LayOnHandsUsed"));
+      return;
+    }
+    await this.update({ "system.classAbilities.layOnHandsUsed": true });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p>${game.i18n.format("AD2E.Ability2.LayOnHandsChat", { hp: info.hp })}</p>` });
   }
 
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */

@@ -76,6 +76,8 @@ export class KitSheet extends AD2EItemSheet {
     context.kitRequiredProfs = formatKitProficiencies(this.document.system.requiredProficiencies);
     context.raceLimitsText = Object.entries(this.document.system.raceLimits ?? {})
       .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");
+    context.skillAdjust = AD2E.thiefSkills.map(key => ({ key, label: game.i18n.localize(`AD2E.Skill.${key}`),
+      value: this.document.system.skillAdjust?.[key] ?? 0 }));
     return context;
   }
 

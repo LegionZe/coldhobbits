@@ -97,7 +97,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleCarried: CharacterSheet.onToggleCarried,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
-      restSpells: CharacterSheet.onRestSpells
+      restSpells: CharacterSheet.onRestSpells,
+      rollClassSkill: CharacterSheet.onRollClassSkill,
+      rollTurnUndead: CharacterSheet.onRollTurnUndead,
+      layOnHands: CharacterSheet.onLayOnHands
     }
   };
 
@@ -107,6 +110,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
     weapons: { template: "systems/ad2e/templates/actor/character-weapons.hbs", scrollable: [""] },
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
+    features: { template: "systems/ad2e/templates/actor/character-features.hbs", scrollable: [""] },
     proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
     spells: { template: "systems/ad2e/templates/actor/character-spells.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
@@ -116,7 +120,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "features" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -190,6 +194,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
     context.spellTab = this._spellTabContext(sys);
+    context.featureTab = this._featureTabContext(sys);
     context.movement = this._movementContext(sys);
     const enc = sys.encumbrance.info;
     context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
@@ -269,6 +274,48 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       canJump,
       jump: { runningBroad: `2d6+${sys.level}`, runningHigh: `1d3+${half}`, standingBroad: `1d6+${half}`, standingHigh: "3" },
       jumpHint: game.i18n.localize(canJump ? "AD2E.Move.JumpHint" : "AD2E.Move.NoJump")
+    };
+  }
+
+  /** Display data for the Class Abilities tab: skills table, class ability buttons, class features, kit. */
+  _featureTabContext(sys) {
+    const info = sys.classAbilities.info;
+    const i18n = k => game.i18n.localize(k);
+    const fmt = (k, d) => game.i18n.format(k, d);
+    const sgn = v => (v ? signed(v) : "—");
+    const def = AD2E.skillClasses[info.classId] ?? null;
+    const features = (AD2E.classFeatures[info.classId] ?? []).map(([key, level]) => ({
+      name: i18n(`AD2E.Feature.${info.classId}.${key}.name`), text: i18n(`AD2E.Feature.${info.classId}.${key}.text`),
+      level: fmt("AD2E.Ability2.Level", { n: level }), gained: sys.level >= level
+    }));
+    const kitItem = sys.classInfo.kitFits ? sys.classInfo.kitItem : null;
+    const kitAdjust = kitItem ? AD2E.thiefSkills.filter(k => kitItem.system.skillAdjust?.[k])
+      .map(k => `${i18n(`AD2E.Skill.${k}`)} ${signed(kitItem.system.skillAdjust[k])}%`).join(", ") : "";
+    return {
+      classItem: sys.classInfo.classItem,
+      hasSkills: info.skills.length > 0,
+      skillTitle: i18n({ thief: "AD2E.Skill.Skills", bard: "AD2E.Skill.BardAbilities", ranger: "AD2E.Skill.RangerSkills" }[info.classId] ?? "AD2E.Skill.Skills"),
+      showPoints: !!def?.points,
+      showArmor: !!def?.armor,
+      skills: info.skills.map(sk => ({ ...sk, label: i18n(`AD2E.Skill.${sk.key}`), raceText: sgn(sk.race), dexText: sgn(sk.dex),
+        armorText: sgn(sk.armor), kitText: sgn(sk.kit) })),
+      budget: info.budget ? fmt("AD2E.Skill.Budget", info.budget) : "",
+      budgetOver: !!info.budget?.over,
+      perSkillMax: info.perSkillMax !== null ? fmt("AD2E.Skill.PerSkillMax", { n: info.perSkillMax }) : "",
+      cap: info.classId === "thief",
+      ranger: info.classId === "ranger",
+      trapNote: info.skills.some(sk => sk.key === "rt"),
+      armorBlocked: info.armorBlocked,
+      backstab: info.backstab ? fmt("AD2E.Ability2.BackstabText", { mult: info.backstab }) : "",
+      turnLevel: info.turnLevel ? fmt("AD2E.Ability2.TurnLevel", { level: info.turnLevel }) : "",
+      layOnHands: info.layOnHands ? { text: fmt("AD2E.Ability2.LayOnHandsText", { hp: info.layOnHands.hp }), used: info.layOnHands.used } : null,
+      cureDisease: info.cureDisease ? fmt("AD2E.Ability2.CureDisease", { n: info.cureDisease }) : "",
+      tracking: info.tracking !== null ? fmt("AD2E.Ability2.Tracking", { n: info.tracking }) : "",
+      speciesEnemy: info.classId === "ranger",
+      saveBonus: sys.classInfo.saveBonus,
+      features,
+      kitItem,
+      kitAdjust
     };
   }
 
@@ -532,6 +579,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRestSpells() {
     return this.actor.restSpells();
+  }
+
+  static onRollClassSkill(event, target) {
+    return this.actor.rollClassSkill(target.dataset.skill);
+  }
+
+  static onRollTurnUndead() {
+    return this.actor.rollTurnUndead();
+  }
+
+  static onLayOnHands() {
+    return this.actor.layOnHands();
   }
 
   /** Carried equipment counts toward encumbrance. */

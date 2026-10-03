@@ -104,7 +104,8 @@
     "abilities": "Abilities",
     "bio": "Biography",
     "weapons": "Equipment",
-    "spells": "Spells"
+    "spells": "Spells",
+    "features": "Class Abilities"
   },
   "AD2E.Character.kit": "Class Kit",
   "AD2E.Class": {
@@ -156,6 +157,7 @@
     "kitMinHint": "Overrides the class minimum for that ability. Blank keeps the class minimum; 0 removes it."
   },
   "AD2E.Save.OverrideHint": "Override (blank uses PHB Table 60 for the class group and level)",
+  "AD2E.Save.RollBonus": "Bonus added to the roll: racial Constitution bonus (PHB Table 9, vs. rod/staff/wand and spell) and paladin +2 (all saves)",
   "AD2E.HP": {
     "HitDice": "Hit Dice",
     "RollFirst": "Roll 1st-Level HP",
@@ -563,5 +565,234 @@
     "Skipped": "{n} page(s) without a usable spell infobox were skipped.",
     "Done": "Spells imported: {created} created, {updated} updated.",
     "ClassFolder": "{kind} Spells"
+  },
+  "AD2E.Skill": {
+    "pp": "Pick Pockets",
+    "ol": "Open Locks",
+    "rt": "Find/Remove Traps",
+    "ms": "Move Silently",
+    "hs": "Hide in Shadows",
+    "dn": "Detect Noise",
+    "cw": "Climb Walls",
+    "rl": "Read Languages",
+    "Base": "Base",
+    "Race": "Race",
+    "Dex": "Dex",
+    "Armor": "Armour",
+    "Kit": "Kit",
+    "Points": "Points",
+    "Total": "Total",
+    "Skills": "Thief skills",
+    "BardAbilities": "Bard abilities",
+    "RangerSkills": "Ranger stealth",
+    "Budget": "Discretionary points: {used} / {total}",
+    "BudgetHint": "Thief: 60 at 1st level, +30 per level, no more than 30 on one skill at 1st level and 15 per level after. Bard: 20 at 1st level, +15 per level (PHB).",
+    "Cap": "No thief skill above 95% including all adjustments (Thief (PHB))",
+    "HeavyArmor": "Not possible in this armour",
+    "RangerNote": "Studded leather or lighter armour only; halved outside natural surroundings (Ranger (PHB)).",
+    "TrapNote": "Removing a trap: a roll of 96-100 sets it off (Thief Skill Explanations (PHB)).",
+    "Roll": "Roll",
+    "Success": "success",
+    "Failure": "failure",
+    "Halved": "halved (non-natural surroundings)",
+    "KitAdjust": "Thief skill adjustments",
+    "KitAdjustHint": "Percentage added to (or taken from) the character's thief, bard or ranger skills while the kit fits the class. Kit pages give these in their text; enter them here.",
+    "TrapSprung": "the trap is set off (96-100)",
+    "PerSkillMax": "At most {n} points on one skill at this level"
+  },
+  "AD2E.Ability2": {
+    "Backstab": "Backstab",
+    "BackstabText": "+4 to hit from behind an unaware, roughly humanoid victim; damage ×{mult} (Table 30), first attack only.",
+    "BackstabAttack": "Backstab (+4 to hit)",
+    "BackstabDamage": "Backstab (damage ×{mult})",
+    "TurnUndead": "Turn undead",
+    "TurnLevel": "Turns as a level {level} priest",
+    "TurnRoll": "Turn Undead (d20, level {level})",
+    "TurnHint": "Roll 1d20: equal to or above the number turns; T = turned, D = destroyed, D* = 2d4 more destroyed; a success affects 2d6 undead (Turning Undead (PHB)).",
+    "Turned": "turned",
+    "Dispelled": "destroyed",
+    "Failed": "not turned",
+    "Cannot": "cannot turn",
+    "Affected": "Number affected (2d6): {n}",
+    "Extra": "plus {n} more destroyed (2d4)",
+    "LayOnHands": "Lay on hands",
+    "LayOnHandsText": "Heals {hp} hit points (2 per level), once per day.",
+    "LayOnHandsUsed": "Lay on hands has been used today; rest to restore it.",
+    "LayOnHandsChat": "Lay on hands: {hp} hit points restored.",
+    "CureDisease": "Cure disease: {n} per week",
+    "Tracking": "Tracking bonus: +{n}",
+    "SpeciesEnemy": "Species enemy (+4 to hit)",
+    "Features": "Class features",
+    "Level": "from level {n}",
+    "KitAbilities": "Kit abilities",
+    "KitText": "Special benefits and hindrances are described on the kit page:",
+    "Rested": "{name} rested: memorized spells and daily abilities restored.",
+    "None": "This class has no special abilities listed here (or no class item yet).",
+    "Undead": "Undead",
+    "Rest": "Rest"
+  },
+  "AD2E.Feature": {
+    "fighter": {
+      "specialization": {
+        "name": "Weapon specialization",
+        "text": "Extra weapon slots buy specialization: see the Proficiencies tab."
+      },
+      "followers": {
+        "name": "Followers",
+        "text": "At 9th level attracts men-at-arms and an elite bodyguard (Table 16)."
+      }
+    },
+    "paladin": {
+      "detectEvil": {
+        "name": "Detect evil",
+        "text": "Senses evil intent up to 60 feet in one direction; takes a round; at will."
+      },
+      "saves": {
+        "name": "+2 to all saving throws",
+        "text": "Added to every saving throw roll (included in the Saves table)."
+      },
+      "disease": {
+        "name": "Immune to disease",
+        "text": "Curses such as lycanthropy and mummy rot are not diseases."
+      },
+      "layOnHands": {
+        "name": "Lay on hands",
+        "text": "Heals 2 hit points per level, once per day."
+      },
+      "cureDisease": {
+        "name": "Cure disease",
+        "text": "Once per week for every five levels (levels 1-5: once, 6-10: twice, ...)."
+      },
+      "aura": {
+        "name": "Aura of protection",
+        "text": "10-foot radius: summoned and evil creatures have -1 to attack rolls."
+      },
+      "turnUndead": {
+        "name": "Turn undead",
+        "text": "From 3rd level, as a cleric two levels lower."
+      },
+      "spells": {
+        "name": "Priest spells",
+        "text": "From 9th level: combat, divination, healing and protection spheres (Table 17); no Wisdom bonus."
+      },
+      "noFollowers": {
+        "name": "No followers",
+        "text": "Attracts no followers; may hire lawful good soldiers and specialists."
+      }
+    },
+    "ranger": {
+      "twoWeapons": {
+        "name": "Two weapons",
+        "text": "No penalty fighting with two weapons in studded leather or lighter armour (no shield)."
+      },
+      "tracking": {
+        "name": "Tracking",
+        "text": "Tracking proficiency for free; +1 per three levels (3rd-5th +1, 6th-8th +2, ...)."
+      },
+      "stealth": {
+        "name": "Hide in shadows / move silently",
+        "text": "Table 18 by level, race and Dexterity adjusted; studded leather or lighter; halved outside natural surroundings."
+      },
+      "speciesEnemy": {
+        "name": "Species enemy",
+        "text": "Chosen before 2nd level: +4 to attack rolls against it."
+      },
+      "animals": {
+        "name": "Animal empathy",
+        "text": "Befriends domestic animals; wild or attack-trained animals save vs. rods at -1 per three ranger levels."
+      },
+      "spells": {
+        "name": "Priest spells",
+        "text": "From 8th level: plant and animal spheres (Table 18); no Wisdom bonus."
+      },
+      "followers": {
+        "name": "Followers",
+        "text": "At 10th level attracts 2d6 followers (Table 19)."
+      }
+    },
+    "cleric": {
+      "turnUndead": {
+        "name": "Turn undead",
+        "text": "Table 61 at the cleric's level (evil clerics command instead)."
+      },
+      "followers": {
+        "name": "Followers",
+        "text": "At 8th level, with a place of worship of significant size, attracts believers."
+      },
+      "stronghold": {
+        "name": "Stronghold",
+        "text": "At 9th level may receive approval to establish a religious stronghold."
+      }
+    },
+    "druid": {
+      "noTurning": {
+        "name": "Cannot turn undead",
+        "text": ""
+      },
+      "language": {
+        "name": "Druidic language",
+        "text": "Secret language of druids (no proficiency slot)."
+      },
+      "identify": {
+        "name": "Identify plants, animals, pure water",
+        "text": "From 3rd level, with perfect accuracy."
+      },
+      "passPlants": {
+        "name": "Pass through overgrowth",
+        "text": "From 3rd level, at normal movement and leaving no trail."
+      },
+      "woodlandLanguages": {
+        "name": "Woodland languages",
+        "text": "One language of woodland creatures at 3rd level and one more each level after."
+      },
+      "charmImmunity": {
+        "name": "Immune to woodland charm",
+        "text": "From 7th level, immune to charm spells of woodland creatures."
+      },
+      "shapechange": {
+        "name": "Shapechange",
+        "text": "From 7th level, up to three times a day (reptile, bird, mammal; each once a day)."
+      }
+    },
+    "thief": {
+      "skills": {
+        "name": "Thief skills",
+        "text": "Tables 26-29 plus discretionary points: see the skills table."
+      },
+      "backstab": {
+        "name": "Backstab",
+        "text": "+4 to hit, damage multiplied by Table 30; first attack only."
+      },
+      "followers": {
+        "name": "Followers",
+        "text": "At 10th level attracts 4d6 followers (Table 31)."
+      },
+      "scrolls": {
+        "name": "Use scrolls",
+        "text": "From 10th level; 25% chance to read the scroll wrongly (reversed effect)."
+      }
+    },
+    "bard": {
+      "abilities": {
+        "name": "Bard abilities",
+        "text": "Climb walls, detect noise, pick pockets, read languages (Table 33) plus points: see the table."
+      },
+      "influence": {
+        "name": "Influence reactions",
+        "text": "A performance can shift the mood of a group that is not attacking."
+      },
+      "counterSong": {
+        "name": "Counter song",
+        "text": "Allies within 30 feet are immune to song or poetry attacks while the bard counters (save vs. spell)."
+      },
+      "spells": {
+        "name": "Wizard spells",
+        "text": "From 2nd level (Table 32); kept in a spell book."
+      },
+      "scrolls": {
+        "name": "Use magical writings",
+        "text": "From 10th level; 15% chance of reading an item wrongly."
+      }
+    }
   }
 }

@@ -32,6 +32,15 @@
       {{/each}}
     </div>
   </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Skill.KitAdjust"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Skill.KitAdjustHint"}}</p>
+    <div class="ad2e-min-grid">
+      {{#each skillAdjust as |s|}}
+      <label>{{s.label}} <input type="number" name="system.skillAdjust.{{s.key}}" value="{{s.value}}" step="5"></label>
+      {{/each}}
+    </div>
+  </fieldset>
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
 </section>

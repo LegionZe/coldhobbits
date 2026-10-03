@@ -4,6 +4,7 @@ import { PROFICIENCY_GROUPS, PROFICIENCY_SLOTS } from "./rules/proficiency-table
 import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
 import { CREATURE_THAC0 } from "./rules/monster-tables.mjs";
 import { SPELL_PROGRESSION } from "./rules/spell-tables.mjs";
+import { CLASS_TABLES } from "./rules/class-tables.mjs";
 import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
@@ -273,6 +274,57 @@ AD2E.priestWisdomLevels = { 6: 17, 7: 18 };
 export function schoolStems(text) {
   return String(text ?? "").toLowerCase().split(/[\s,/;]+/).map(w => w.replace(/[^a-z]/g, "").slice(0, 4)).filter(w => w.length >= 4);
 }
+
+/**
+ * Class abilities (generated tables: CLASS_TABLES from tools/build-class-ability-tables.py).
+ * Thief skills (PHB Tables 26-29): base + race + Dexterity + armour + discretionary points, "no skill can be raised
+ * above 95 percent, including all adjustments" (Thief (PHB)); 60 points at 1st level, 30 per level after.
+ * Bard abilities (Table 33): race and Dexterity adjustments as for thieves; 20 points at 1st level, 15 per level after
+ * (Bard (PHB)). Ranger hide in shadows / move silently (Table 18): race and Dexterity adjustments only, studded leather
+ * or lighter armour, halved outside natural surroundings (Ranger (PHB)).
+ */
+AD2E.classTables = CLASS_TABLES;
+AD2E.thiefSkills = ["pp", "ol", "rt", "ms", "hs", "dn", "cw", "rl"];
+AD2E.skillClasses = {
+  thief: { skills: AD2E.thiefSkills, base: "thief", points: [60, 30], cap: 95, armor: true },
+  bard: { skills: ["cw", "dn", "pp", "rl"], base: "bard", points: [20, 15], cap: null, armor: true },
+  ranger: { skills: ["hs", "ms"], base: "ranger", points: null, cap: null, armor: false }
+};
+/** Thief discretionary points per skill: at most 30 at 1st level, 15 more per level after (Thief (PHB)). */
+AD2E.thiefPointLimits = { first: 30, perLevel: 15 };
+/** Backstab: +4 to hit for the rear attack (Thief Skill Explanations (PHB)). */
+AD2E.backstabHit = 4;
+/** Find/remove traps: a roll of 96-100 sets the trap off (Thief Skill Explanations (PHB)). */
+AD2E.trapSpringRoll = 96;
+/** Paladin saving throw bonus: "+2 bonus to all saving throws" (Paladin (PHB)). */
+AD2E.paladinSaveBonus = 2;
+/** Body armour names -> Table 29 column ("leather": no column, no adjustment; anything else heavier: not usable). */
+export function thiefArmorColumn(name) {
+  const n = String(name ?? "").toLowerCase();
+  if (!n) return "none";
+  if (n.includes("elven chain")) return "elvenChain";
+  if (/padded|hide|studded/.test(n)) return "padded";
+  if (/chain|ring/.test(n)) return "chain";
+  if (n.includes("leather")) return "leather";
+  return "heavy";
+}
+/** Turning undead: clerics at their level; paladins from 3rd level as a cleric two levels lower (Turning Undead (PHB)). */
+AD2E.turnUndead = { cleric: { from: 1, offset: 0 }, paladin: { from: 3, offset: -2 } };
+
+/**
+ * PHB class features shown on the Class Abilities tab: [key, level gained]. Names and short summaries are in
+ * lang (AD2E.Feature.<class>.<key>); the class page (Class item URL) has the full rules.
+ */
+AD2E.classFeatures = {
+  fighter: [["specialization", 1], ["followers", 9]],
+  paladin: [["detectEvil", 1], ["saves", 1], ["disease", 1], ["layOnHands", 1], ["cureDisease", 1], ["aura", 1],
+    ["turnUndead", 3], ["spells", 9], ["noFollowers", 9]],
+  ranger: [["twoWeapons", 1], ["tracking", 1], ["stealth", 1], ["speciesEnemy", 1], ["animals", 1], ["spells", 8], ["followers", 10]],
+  cleric: [["turnUndead", 1], ["followers", 8], ["stronghold", 9]],
+  druid: [["noTurning", 1], ["language", 1], ["identify", 3], ["passPlants", 3], ["woodlandLanguages", 3], ["charmImmunity", 7], ["shapechange", 7]],
+  thief: [["skills", 1], ["backstab", 1], ["followers", 10], ["scrolls", 10]],
+  bard: [["abilities", 1], ["influence", 1], ["counterSong", 1], ["spells", 2], ["scrolls", 10]]
+};
 
 AD2E.thac0Progression = {
   warrior: { divisor: 1, step: 1 },
