@@ -1,0 +1,23 @@
+{
+  "_id": "Tx58KZdT1ofxcoOg",
+  "_key": "!items!Tx58KZdT1ofxcoOg",
+  "name": "Platinum piece",
+  "type": "coin",
+  "img": "icons/commodities/currency/coins-assorted-mix-platinum.webp",
+  "system": {
+    "identifier": "pp",
+    "denomination": "pp",
+    "value": 500,
+    "quantity": 1,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Money_and_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "hCxx3eqU6qWqrJEP",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

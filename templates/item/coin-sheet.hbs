@@ -1,0 +1,18 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Coin.Denomination"}}
+      <select name="system.denomination">{{selectOptions denominations selected=system.denomination localize=true}}</select></label>
+    <label>{{localize "AD2E.Coin.Value"}} <input type="number" name="system.value" value="{{system.value}}" min="0" step="any"></label>
+    <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  <p class="ad2e-note">{{summary}}</p>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

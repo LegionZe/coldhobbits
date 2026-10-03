@@ -20,11 +20,16 @@
   {{/with}}
   <fieldset class="ad2e-prof-list ad2e-coins">
     <legend>{{localize "AD2E.Coin.Coins"}}</legend>
-    <div class="ad2e-prof-summary">
-      {{#each wt.coins.list as |c|}}
-      <label class="ad2e-coin">{{c.label}} <input type="number" name="system.currency.{{c.key}}" value="{{c.value}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
-      {{/each}}
+    {{#each wt.coins.list as |c|}}
+    <div class="ad2e-prof-row ad2e-coin-row">
+      <img src="{{c.img}}" alt="" width="24" height="24">
+      <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a>
+      <input type="number" data-coin-quantity data-item-id="{{c.id}}" value="{{c.quantity}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}} data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+      <span class="ad2e-coin-value">{{c.value}} gp</span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Coin.NoneYet"}}</p>
+    {{/each}}
     <p class="ad2e-note" data-tooltip="{{localize 'AD2E.Coin.Hint'}}">{{localize "AD2E.Coin.Total"}}: {{wt.coins.gp}} gp · {{wt.coins.count}} {{localize "AD2E.Coin.CoinsLower"}} = {{wt.coins.weight}} lb</p>
   </fieldset>
   <fieldset class="ad2e-prof-list">

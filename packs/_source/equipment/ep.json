@@ -1,0 +1,23 @@
+{
+  "_id": "yNMv4wIpWgtrOeCF",
+  "_key": "!items!yNMv4wIpWgtrOeCF",
+  "name": "Electrum piece",
+  "type": "coin",
+  "img": "icons/commodities/currency/coin-plain-gold.webp",
+  "system": {
+    "identifier": "ep",
+    "denomination": "ep",
+    "value": 50,
+    "quantity": 1,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Money_and_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "hCxx3eqU6qWqrJEP",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -37,7 +37,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       initiative: new SchemaField({ mod: int(0) }),
       // Weight of gear not held as items (lb); clothing (5 lb) is added automatically.
       encumbrance: new SchemaField({ other: new NumberField({ required: true, min: 0, initial: 0, nullable: false }) }),
-      // Coins carried (PHB Table 42); they count toward encumbrance at 50 to the pound.
+      // Legacy (0.0.20) coin counts; migrated to coin items at "ready" (module/migrations.mjs). Still counted.
       currency: new SchemaField(Object.fromEntries(AD2E.coins.map(c => [c, int(0, 0)]))),
       // Base movement rate override (default: the race item's Table 64 rate, 12 without a race).
       movement: new SchemaField({ override: new NumberField({ integer: true, min: 0, nullable: true, initial: null }) }),
@@ -241,7 +241,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);
-    const coinCount = AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
+    const coinItems = items.filter(i => i.type === "coin");
+    const coinCount = coinItems.reduce((n, i) => n + i.system.quantity, 0)
+      + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
+    const coinValue = coinItems.reduce((n, i) => n + i.system.quantity * i.system.value, 0)
+      + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0) * AD2E.coinValues[c], 0);
     const coinWeight = Math.round(coinCount / AD2E.coinsPerPound * 10) / 10;
     const total = Math.round((itemWeight + coinWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
     const effective = Math.round((total - magicArmor) * 10) / 10;
@@ -268,7 +272,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       else if (rate * 3 <= base) Object.assign(penalty, { hit: -2, ac: 1 });
       else if (rate * 2 <= base) Object.assign(penalty, { hit: -1, ac: 0 });
     }
-    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinWeight, maxCarried: row47.maxCarried, limits: row47.limits,
+    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinWeight, coinValue, maxCarried: row47.maxCarried, limits: row47.limits,
       category: rule === "none" ? null : AD2E.encumbranceCategories[category], overMax, base, rate, penalty };
   }
 

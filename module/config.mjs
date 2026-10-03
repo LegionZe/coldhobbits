@@ -173,6 +173,8 @@ AD2E.clothingWeight = 5;
 AD2E.coins = ["pp", "gp", "ep", "sp", "cp"];
 AD2E.coinValues = COIN_VALUES;
 AD2E.coinsPerPound = COINS_PER_POUND;
+AD2E.coinDenominations = { pp: "AD2E.Coin.pp", gp: "AD2E.Coin.gp", ep: "AD2E.Coin.ep", sp: "AD2E.Coin.sp",
+  cp: "AD2E.Coin.cp", other: "AD2E.Coin.other" };
 
 /** Strength key for Tables 47/48: score * 100, plus the exceptional percentile at 18 (18/00 = 1900). */
 export function strengthKey(score, exceptional = 0) {
