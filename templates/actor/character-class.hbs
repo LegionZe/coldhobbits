@@ -46,7 +46,7 @@
         <dt>{{localize "AD2E.Class.PrimeRequisites"}}</dt><dd>{{ct.prime}}</dd>
         {{#if ct.raceItem}}<dt>{{localize "AD2E.Race.LevelLimit"}}</dt><dd class="{{#if ct.overLevelLimit}}ad2e-unmet{{/if}}">{{#if ct.levelLimit}}{{ct.levelLimit}}{{else}}{{localize "AD2E.Race.Unlimited"}}{{/if}}</dd>{{/if}}
         <dt>{{localize "AD2E.HP.HitDice"}}</dt><dd>{{@root.system.hitDice.label}}</dd>
-        <dt>{{localize "AD2E.HP.NextLevel"}}</dt><dd>{{#if @root.system.xpNext}}{{@root.system.xpNext}} XP{{else}}—{{/if}}</dd>
+        <dt>{{localize "AD2E.HP.NextLevel"}}</dt><dd>{{#if @root.system.xpNext}}{{@root.system.xpNext}} XP{{#if @root.system.xpRestart}} <span class="ad2e-note">({{localize "AD2E.HP.XpRestart"}})</span>{{/if}}{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.XpBonus"}}</dt><dd>{{#if ct.xpBonus}}+{{ct.xpBonus}}%{{else}}—{{/if}}</dd>
         <dt>{{localize "AD2E.Class.Alignments"}}</dt><dd class="{{#unless ct.alignmentAllowed}}ad2e-unmet{{/unless}}">{{ct.alignments}}</dd>
         {{#if ct.cls.school}}

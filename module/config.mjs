@@ -1,5 +1,5 @@
 import { ABILITY_TABLES } from "./rules/ability-tables.mjs";
-import { HIT_DICE, SAVE_TABLE, SPECIALIST_ATTACKS, THAC0_TABLE, WARRIOR_ATTACKS, XP_TABLE } from "./rules/level-tables.mjs";
+import { HIT_DICE, SAVE_TABLE, SPECIALIST_ATTACKS, THAC0_TABLE, WARRIOR_ATTACKS, XP_RESTART, XP_TABLE } from "./rules/level-tables.mjs";
 import { PROFICIENCY_GROUPS, PROFICIENCY_SLOTS } from "./rules/proficiency-tables.mjs";
 import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
 
@@ -66,6 +66,8 @@ AD2E.abilityTests = {
 AD2E.saveTable = SAVE_TABLE;
 AD2E.hitDice = HIT_DICE;
 AD2E.xpTable = XP_TABLE;
+/** First level whose XP counts from a restart (druid 17: hierophant druids keep 1 XP and advance anew). */
+AD2E.xpRestart = XP_RESTART;
 
 /**
  * Hit dice and fixed bonus HP for a group at a level. Levels past the table (20) continue

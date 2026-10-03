@@ -69,8 +69,9 @@ CLASS_FACTS = {
     "Ranger": {"key": "ranger", "group": "warrior", "page": "Ranger (PHB)", "prime": ["str", "dex", "wis"], "alignments": ["lg", "ng", "cg"]},
     # "A mage who has an Intelligence score of 16 or higher gains a 10% bonus" (no alignment limit stated)
     "Mage": {"key": "mage", "group": "wizard", "page": "Mage (PHB)", "prime": ["int"], "alignments": ALL},
-    # "Clerics ... can have any alignment acceptable to their order." Prime requisite Wisdom (Table 13 minimum;
-    # not stated as a sentence on the wiki page - verify against the PHB).
+    # "Clerics ... can have any alignment acceptable to their order." / "A cleric who has a Wisdom of 16 or more
+    # gains a 10% bonus to the experience points he earns." (Cleric (PHB) rev 67226); Wisdom "is the prime
+    # requisite of priests" (Wisdom (PHB) rev 177327).
     "Cleric": {"key": "cleric", "group": "priest", "page": "Cleric (PHB)", "prime": ["wis"], "alignments": ALL},
     # "Wisdom ... 12 and a Charisma score of 15 ... Both of these abilities are prime requisites." / "must be neutral"
     "Druid": {"key": "druid", "group": "priest", "page": "Druid (PHB)", "prime": ["wis", "cha"], "alignments": ["n"]},
@@ -234,7 +235,8 @@ KIT_REQ = {
 #   Gnome Professor: "Only gnomes can become Professors, and they can advance up to 15th level."
 #   Gypsy-bard: "Elves can become Gypsy-bards able to advance to the 9th level."
 #   Halfling Whistler: "Halflings are the only race able to become Whistlers. They are limited to 15th level."
-#   Herald: "Demihumans can become Heralds of up to 6th level." (read literally: all non-human races)
+#   Herald: "Demihumans can become Heralds of up to 6th level." (read literally: all non-human races, half-elves
+#   included; confirmed by the repo owner)
 #   Jester: "Gnomes may advance to 15th level as Jesters, while halflings cannot rise above 8th level."
 #   Jongleur: "Gnomes can advance to the 9th level as Jongleurs. Halflings can attain 12th level."
 #   Loremaster: "Elves can advance up to 12th level as Lore masters."
