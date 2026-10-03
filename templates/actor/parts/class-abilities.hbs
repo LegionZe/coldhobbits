@@ -1,4 +1,5 @@
 {{!-- Class abilities (skills, backstab, turning, paladin powers): ft = featureTab (Class Abilities and Combat tabs). --}}
+{{!-- ft.combat (Combat tab): values as text, no form inputs (duplicate input names break the sheet form). --}}
 {{!-- Re-bind ft as a block parameter: hash values are not visible inside nested {{#each}} blocks. --}}
 {{#with ft as |ft|}}
 {{#unless ft.classItem}}<p class="ad2e-placeholder">{{localize "AD2E.Ability2.None"}}</p>{{/unless}}
@@ -22,8 +23,8 @@
       <tr class="{{#unless s.available}}ad2e-unmet{{/unless}}">
         <th>{{s.label}}</th><td>{{s.base}}%</td><td>{{s.raceText}}</td><td>{{s.dexText}}</td>
         {{#if ft.showArmor}}<td>{{s.armorText}}</td>{{/if}}<td>{{s.kitText}}</td>
-        {{#if ft.showPoints}}<td><input type="number" name="system.classAbilities.points.{{s.key}}" value="{{s.points}}" min="0" max="95" step="1"
-          class="{{#if s.overLimit}}ad2e-unmet{{/if}}" {{#unless @root.editable}}disabled{{/unless}}></td>{{/if}}
+        {{#if ft.showPoints}}<td>{{#if ft.combat}}{{s.points}}{{else}}<input type="number" name="system.classAbilities.points.{{s.key}}" value="{{s.points}}" min="0" max="95" step="1"
+          class="{{#if s.overLimit}}ad2e-unmet{{/if}}" {{#unless @root.editable}}disabled{{/unless}}>{{/if}}</td>{{/if}}
         <td><strong>{{s.total}}%</strong>{{#if s.capped}} <span data-tooltip="{{localize 'AD2E.Skill.Cap'}}">*</span>{{/if}}</td>
         <td><button type="button" data-action="rollClassSkill" data-skill="{{s.key}}" {{#unless s.available}}disabled{{/unless}}>{{localize "AD2E.Skill.Roll"}}</button></td>
       </tr>
@@ -63,7 +64,7 @@
 {{#if ft.speciesEnemy}}
 <fieldset>
   <legend>{{localize "AD2E.Ability2.SpeciesEnemy"}}</legend>
-  <input type="text" name="system.classAbilities.speciesEnemy" value="{{@root.system.classAbilities.speciesEnemy}}" {{#unless @root.editable}}disabled{{/unless}}>
+  {{#if ft.combat}}<strong>{{@root.system.classAbilities.speciesEnemy}}</strong>{{else}}<input type="text" name="system.classAbilities.speciesEnemy" value="{{@root.system.classAbilities.speciesEnemy}}" {{#unless @root.editable}}disabled{{/unless}}>{{/if}}
   <p>{{ft.tracking}}</p>
 </fieldset>
 {{/if}}

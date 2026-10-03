@@ -72,6 +72,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e); used by the Equipment, Class
   Abilities and Combat tabs. Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with
   `{{#with x as |x|}}` (class-abilities does).
+  A sheet is one form: an input name may appear only once across all tabs (a duplicate makes the form submit an array
+  and every update fails validation, e.g. "ac: misc: must be a number" in 0.0.51-0.0.52). The Combat tab passes
+  `combat=true` / `ft.combat` so the partials show those values as text.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.
