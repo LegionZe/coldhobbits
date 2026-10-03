@@ -1,5 +1,5 @@
 <header class="ad2e-header ad2e-monster-header">
-  <img class="ad2e-portrait" src="{{actor.img}}" data-edit="img" alt="" width="72" height="72">
+  <img class="ad2e-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-tooltip="{{actor.name}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}}>
   <div class="ad2e-monster-title">
     <input class="ad2e-name" type="text" name="name" value="{{actor.name}}">
     <div class="ad2e-monster-line">

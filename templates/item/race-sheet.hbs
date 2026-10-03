@@ -1,6 +1,6 @@
 <section class="ad2e-item-sheet">
   <header class="ad2e-item-header">
-    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <img src="{{item.img}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}} alt="" width="48" height="48">
     <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
     {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
   </header>
