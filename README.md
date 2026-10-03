@@ -92,7 +92,8 @@ initiative 1d10, lowest acts first.
   Dropping a spell warns about another class's spells, opposition schools and the paladin/ranger spheres.
   "Spells (examples)" has 12 PHB spells; GMs import more with Configure Settings > "Import spells" (or
   `game.ad2e.importSpells()`): choose a source book from the AD&D 2e wiki, filter by class and level, import (statistics
-  and links only; re-import keeps memorization).
+  and links only; filed into folders by class and spell level, e.g. Wizard Spells / Level 3; re-import keeps
+  memorization and moves spells into those folders).
 - Monster importer (GM): Configure Settings > "Import monsters", or the macro `game.ad2e.importMonsters()`. Choose a
   setting and source book from https://www.completecompendium.com/, load its monsters, filter and select, and import them
   as Monster / NPC actors (optionally into a folder named after the book). Only stat blocks and a link to each page are

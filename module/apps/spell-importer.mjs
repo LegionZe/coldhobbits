@@ -158,24 +158,42 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
     this.render();
   }
 
-  /** Import the selected spells that match the current filters; update spells imported from the same page. */
+  /**
+   * Item folder "<Class> Spells" / "Level <n>" (cantrips and orisons: "Cantrips / orisons") for a spell, created if
+   * missing; `cache` avoids creating the same folder twice in one import.
+   */
+  static async #folderFor(kind, level, cache) {
+    const i18n = k => game.i18n.localize(k);
+    const find = async (name, parent) => {
+      const key = `${parent?.id ?? ""}/${name}`;
+      if (cache.has(key)) return cache.get(key);
+      const folder = game.folders.find(f => f.type === "Item" && f.name === name && (f.folder?.id ?? null) === (parent?.id ?? null))
+        ?? await Folder.create({ name, type: "Item", folder: parent?.id ?? null, sorting: "a" });
+      cache.set(key, folder);
+      return folder;
+    };
+    const top = await find(game.i18n.format("AD2E.SpellImporter.ClassFolder", { kind: i18n(`AD2E.Spell.${kind}`) }), null);
+    return find(level === 0 ? i18n("AD2E.Spell.Cantrips") : game.i18n.format("AD2E.Spell.LevelN", { n: level }), top);
+  }
+
+  /**
+   * Import the selected spells that match the current filters, filed by class and spell level (e.g. "Wizard Spells" /
+   * "Level 3"); spells imported before from the same page are updated (memorization kept) and moved to that folder.
+   */
   static async #onImport() {
     const s = this.state;
     const chosen = this.#shown().filter(e => s.selected.has(e.id));
     if (!chosen.length) return;
-    let folder = null;
-    if (s.folder) {
-      const name = game.i18n.format("AD2E.SpellImporter.FolderName", { book: s.loadedBook });
-      folder = game.folders.find(f => f.type === "Item" && f.name === name) ?? await Folder.create({ name, type: "Item" });
-    }
+    const cache = new Map();
     const create = [];
     const update = [];
     for (const e of chosen) {
       const data = foundry.utils.deepClone(e.data);
+      const folder = s.folder ? await SpellImporter.#folderFor(data.system.kind, data.system.level, cache) : null;
       const existing = game.items.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
       if (existing) {
         const { prepared, cast, ...system } = data.system;
-        update.push({ _id: existing.id, name: data.name, system, flags: data.flags });
+        update.push({ _id: existing.id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
       } else {
         if (folder) data.folder = folder.id;
         create.push(data);
