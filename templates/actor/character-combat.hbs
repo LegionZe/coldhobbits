@@ -10,7 +10,7 @@
     {{/if}}
   </div>
   {{> "ad2e.weapon-list" wt=weaponTab rows=weaponTab.combatRows note=weaponTab.combatNote}}
-  {{> "ad2e.armor-list" wt=weaponTab}}
+  {{> "ad2e.armor-list" wt=weaponTab armor=weaponTab.combatArmor}}
   {{#with featureTab as |ft|}}
   {{#if ft.classItem}}{{> "ad2e.class-abilities" ft=ft}}{{/if}}
   {{/with}}

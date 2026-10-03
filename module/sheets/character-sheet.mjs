@@ -138,6 +138,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleSpecialized: CharacterSheet.onToggleSpecialized,
       adjustQuantity: CharacterSheet.onAdjustQuantity,
       toggleEquipped: CharacterSheet.onToggleEquipped,
+      stowWeapon: CharacterSheet.onStowWeapon,
+      dropWeapon: CharacterSheet.onDropWeapon,
+      pickUpWeapon: CharacterSheet.onPickUpWeapon,
       rollJump: CharacterSheet.onRollJump,
       toggleCarried: CharacterSheet.onToggleCarried,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
@@ -419,7 +422,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const actor = this.document;
     const rows = sys.weapons.map(e => ({
       id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
-      equipped: !!e.item.system.equipped,
+      equipped: !!e.item.system.equipped, dropped: !!e.item.system.dropped,
       status: e.proficient
         ? game.i18n.localize(e.specialized ? "AD2E.Weapon.Specialized" : "AD2E.Weapon.Proficient")
         : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: e.penalty }),
@@ -499,11 +502,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
       twoWeapons: canFightTwoWeapons(sys.classGroup) ? game.i18n.format("AD2E.TwoWeapons.Summary",
         { main: sign(twoWeaponPenalty("main", twoOpts)), off: sign(twoWeaponPenalty("off", twoOpts)) }) : "" };
-    // Combat tab: the equipped weapons; with none equipped, all weapons (and a hint to equip them).
-    const equippedRows = rows.filter(r => r.equipped);
-    const combatRows = equippedRows.length ? equippedRows : rows;
-    const combatNote = rows.length && !equippedRows.length ? game.i18n.localize("AD2E.Weapon.EquipHint") : "";
-    return { rows, combatRows, combatNote, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
+    // Combat tab: the equipped weapons (Stow and Drop buttons) and the worn armour (no tick boxes).
+    const combatRows = rows.filter(r => r.equipped && !r.dropped).map(r => ({ ...r, combat: true }));
+    const combatNote = game.i18n.localize(rows.length ? "AD2E.Weapon.EquipHint" : "AD2E.Weapon.NoneYet");
+    const combatArmor = armor.filter(x => x.equipped).map(x => ({ ...x, combat: true }));
+    return { rows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -743,6 +746,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return;
     const updates = [{ _id: item.id, "system.equipped": target.checked }];
+    if (target.checked && item.type === "weapon") updates[0]["system.dropped"] = false;
     if (target.checked && item.system.kind !== "helmet") {
       for (const other of this.actor.items) {
         if (other.type === "armor" && other.id !== item.id && other.system.kind === item.system.kind && other.system.equipped) {
@@ -751,6 +755,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }
     }
     return this.actor.updateEmbeddedDocuments("Item", updates);
+  }
+
+  /** Combat tab: put a weapon away (sheathed, slung or stowed; still carried). */
+  static onStowWeapon(event, target) {
+    return this.actor.stowWeapon(target.dataset.itemId, { drop: false });
+  }
+
+  /** Combat tab: drop a weapon (no longer carried until picked up). */
+  static onDropWeapon(event, target) {
+    return this.actor.stowWeapon(target.dataset.itemId, { drop: true });
+  }
+
+  /** Equipment tab: pick up a dropped weapon (carried, not in hand). */
+  static onPickUpWeapon(event, target) {
+    return this.actor.items.get(target.dataset.itemId)?.update({ "system.dropped": false });
   }
 
   /** +/- buttons for weapon and ammunition quantities. */

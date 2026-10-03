@@ -289,7 +289,15 @@
     "Proficiency": "Weapon proficiency",
     "MagicHit": "Magical attack bonus",
     "MagicDmg": "Magical damage bonus",
-    "EquipHint": "No weapon is equipped: all weapons are shown. Tick Equipped on a weapon to list only the weapons in hand."
+    "EquipHint": "No weapon in hand. Tick Equipped on the Equipment tab to ready a weapon.",
+    "Stow": "Stow",
+    "StowHint": "Sheathe, sling or stow the weapon: still carried, no longer in hand.",
+    "Drop": "Drop",
+    "DropHint": "Drop the weapon: no longer in hand or counted toward encumbrance until picked up (Equipment tab).",
+    "Dropped": "Dropped",
+    "PickUp": "Pick up",
+    "StowChat": "{name} puts away the {weapon}.",
+    "DropChat": "{name} drops the {weapon}."
   },
   "AD2E.Ammo": {
     "Ammunition": "Ammunition",

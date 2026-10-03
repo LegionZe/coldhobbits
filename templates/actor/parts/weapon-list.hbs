@@ -1,7 +1,7 @@
-{{!-- Weapon list: rows = weapon rows to show, wt = weaponTab, note = optional text (Equipment and Combat tabs). --}}
+{{!-- Weapon list: rows = weapon rows to show, wt = weaponTab, note = text when there are no rows. Rows with `combat`
+     (Combat tab) get Stow and Drop buttons; others the Equipped tick box (Equipment tab). --}}
 <fieldset class="ad2e-prof-list">
   <legend>{{localize "AD2E.Weapon.Weapons"}} (THAC0 {{wt.thac0}})</legend>
-  {{#if note}}<p class="ad2e-note">{{note}}</p>{{/if}}
   {{#each rows as |r|}}
   <div class="ad2e-prof-row ad2e-weapon-row">
     <img src="{{r.img}}" alt="" width="24" height="24">
@@ -23,16 +23,25 @@
       {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>
       {{/each}}
     </div>
-    <label class="ad2e-spec"><input type="checkbox" data-action="toggleEquipped" data-item-id="{{r.id}}" {{checked r.equipped}} {{#unless @root.editable}}disabled{{/unless}}>
-      {{localize "AD2E.Armor.Equipped"}}</label>
-    <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+    {{#if r.combat}}
+    {{#if @root.editable}}<span class="ad2e-weapon-use">
+      <button type="button" data-action="stowWeapon" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Weapon.StowHint'}}"><i class="fa-solid fa-hand-back-fist"></i> {{localize "AD2E.Weapon.Stow"}}</button>
+      <button type="button" data-action="dropWeapon" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Weapon.DropHint'}}"><i class="fa-solid fa-arrow-down"></i> {{localize "AD2E.Weapon.Drop"}}</button>
+    </span>{{/if}}
+    {{else}}
+    {{#if r.dropped}}<span class="ad2e-unmet">{{localize "AD2E.Weapon.Dropped"}}</span>
+    {{#if @root.editable}}<button type="button" data-action="pickUpWeapon" data-item-id="{{r.id}}"><i class="fa-solid fa-hand"></i> {{localize "AD2E.Weapon.PickUp"}}</button>{{/if}}
+    {{else}}<label class="ad2e-spec"><input type="checkbox" data-action="toggleEquipped" data-item-id="{{r.id}}" {{checked r.equipped}} {{#unless @root.editable}}disabled{{/unless}}>
+      {{localize "AD2E.Armor.Equipped"}}</label>{{/if}}
+    {{/if}}
+    {{#unless r.combat}}<span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
       {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
       {{r.quantity}}
       {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
     </span>
-    {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}{{/unless}}
   </div>
-  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Weapon.NoneYet"}}</p>
+  {{else}}<p class="ad2e-placeholder">{{#if note}}{{note}}{{else}}{{localize "AD2E.Weapon.NoneYet"}}{{/if}}</p>
   {{/each}}
   <div class="ad2e-prof-row ad2e-weapon-row">
     <i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i>
