@@ -307,9 +307,25 @@ def write_docs(folder, docs):
         shutil.rmtree(folder)
     os.makedirs(folder)
     for d in docs:
-        with open(os.path.join(folder, f"{d['system']['identifier']}.json"), "w") as f:
+        name = d["system"]["identifier"] if "system" in d else f"_folder-{d['_key'].split('!')[-1]}"
+        with open(os.path.join(folder, f"{name}.json"), "w") as f:
             json.dump(d, f, indent=2, ensure_ascii=False)
             f.write("\n")
+
+
+def folder_doc(key, name, parent=None, sort=0):
+    """Compendium Folder document (same shape as dnd5e's packs/_source/**/_folder.yml)."""
+    _id = doc_id("folder", key)
+    return {"_id": _id, "_key": f"!folders!{_id}", "name": name, "type": "Item", "sorting": "a",
+            "folder": parent, "sort": sort, "color": None, "flags": {}}
+
+
+GROUP_FOLDERS = {"warrior": "Warrior", "wizard": "Wizard", "priest": "Priest", "rogue": "Rogue"}
+# Kit folders: group -> sub-folder per class line. Wizard (mage + specialists) and priest (cleric + druid)
+# kits apply to the whole group, so they sit directly in the group folder.
+KIT_FOLDERS = {"fighter": ("warrior", "Fighter"), "paladin": ("warrior", "Paladin"), "ranger": ("warrior", "Ranger"),
+               "mage": ("wizard", None), "cleric": ("priest", None),
+               "thief": ("rogue", "Thief"), "bard": ("rogue", "Bard")}
 
 
 def item_doc(kind, key, name, img, system, sort):
@@ -322,6 +338,23 @@ def item_doc(kind, key, name, img, system, sort):
 if __name__ == "__main__":
     classes, sources = build_classes()
     kits = build_kits()
+    group_ids = {}
+    class_folders, kit_folders = [], []
+    for i, (g, label) in enumerate(GROUP_FOLDERS.items()):
+        f = folder_doc(f"classes.{g}", label, sort=i * 1000)
+        class_folders.append(f)
+        kf = folder_doc(f"kits.{g}", label, sort=i * 1000)
+        kit_folders.append(kf)
+        group_ids[g] = (f["_id"], kf["_id"])
+    kit_folder_for = {}
+    for cls, (g, label) in KIT_FOLDERS.items():
+        if label is None:
+            kit_folder_for[cls] = group_ids[g][1]
+        else:
+            sub = folder_doc(f"kits.{g}.{cls}", label, parent=group_ids[g][1], sort=len(kit_folders) * 1000)
+            kit_folders.append(sub)
+            kit_folder_for[cls] = sub["_id"]
+
     class_docs = []
     for i, (key, c) in enumerate(classes.items()):
         class_docs.append(item_doc("class", key, c["name"], "icons/svg/book.svg", {
@@ -330,6 +363,7 @@ if __name__ == "__main__":
             "prime": c["prime"], "alignments": c["alignments"],
             "school": c.get("school", ""), "opposition": c.get("opposition", ""), "races": c.get("races", []),
             "url": c["url"], "notes": ""}, i * 1000))
+        class_docs[-1]["folder"] = group_ids[c["group"]][0]
     kit_docs = []
     for i, (key, k) in enumerate(kits.items()):
         kit_docs.append(item_doc("kit", key, k["name"], "icons/svg/item-bag.svg", {
@@ -337,7 +371,8 @@ if __name__ == "__main__":
             "min": {a: k["min"].get(a) for a in MINS},
             "otherRequirements": k["otherRequirements"], "raceLimits": k["raceLimits"], "raceOnly": k["raceOnly"],
             "url": k["url"], "notes": ""}, i * 1000))
-    write_docs("packs/_source/classes", class_docs)
-    write_docs("packs/_source/kits", kit_docs)
+        kit_docs[-1]["folder"] = kit_folder_for[k["classes"][0]]
+    write_docs("packs/_source/classes", class_folders + class_docs)
+    write_docs("packs/_source/kits", kit_folders + kit_docs)
     print(f"wrote packs/_source: {len(class_docs)} classes, {len(kit_docs)} kits "
           f"(Table 13 rev {sources['table13']['revid']}, Table 22 rev {sources['table22']['revid']})")
