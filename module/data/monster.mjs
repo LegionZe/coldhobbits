@@ -81,9 +81,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
 
     // Load carried (items + coins + other cargo, e.g. a rider) against PHB Table 49: full movement, 1/2, 1/4;
     // "up to a maximum of twice their normal load" (Encumbrance (PHB)) - beyond the 1/4 column it cannot move.
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
     const carried = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type)
-      || (i.type === "equipment" && i.system.carried));
+      || (["equipment", "magic", "jewellery"].includes(i.type) && i.system.carried));
     const coins = items.filter(i => i.type === "coin").reduce((n, i) => n + i.system.quantity, 0);
     const weight = Math.round((carried.reduce((n, i) => n + weightOf(i), 0) + coins / AD2E.coinsPerPound
       + (this.load.other ?? 0)) * 10) / 10;

@@ -5,6 +5,7 @@ import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
 import { CREATURE_THAC0 } from "./rules/monster-tables.mjs";
 import { SPELL_PROGRESSION } from "./rules/spell-tables.mjs";
 import { CLASS_TABLES } from "./rules/class-tables.mjs";
+import { TREASURE_TABLES } from "./rules/treasure-tables.mjs";
 import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
@@ -359,3 +360,19 @@ export function kitKeyMatches(modKey, key) {
   return modKey.split(",").map(k => k.trim()).includes(key);
 }
 AD2E.kitTargets = ["attack", "damage", "save", "ac", "skill", "proficiency", "ability", "initiative", "surprise", "reaction", "hp", "score"];
+
+/**
+ * Magical items and treasure (generated: TREASURE_TABLES from tools/build-treasure-tables.py).
+ * Magical item categories follow DMG Table 88 (Tables 89-104); magical armour and weapons are armour and weapon items
+ * with a magical bonus. Consumed on use (one from the quantity): potions and oils, scrolls, dusts and stones.
+ * Gems: DMG Table 85 base value per class (uncut stones 10%); objects of art (jewellery and the like): Table 87.
+ */
+AD2E.treasureTables = TREASURE_TABLES;
+AD2E.magicCategories = Object.fromEntries(TREASURE_TABLES.magicCategories.map(c => [c.key, `AD2E.Magic.Category.${c.key}`]));
+AD2E.magicConsumable = ["potion", "scroll", "dust"];
+AD2E.treasureKinds = { gem: "AD2E.Treasure.Kind.gem", jewellery: "AD2E.Treasure.Kind.jewellery", art: "AD2E.Treasure.Kind.art" };
+AD2E.gemClasses = Object.fromEntries(TREASURE_TABLES.gemClasses.map(g => [g.key, `AD2E.Treasure.Gem.${g.key}`]));
+/** DMG Table 85 base value (gp) of a gem class; null for an unknown class. */
+export function gemBaseValue(key) {
+  return TREASURE_TABLES.gemClasses.find(g => g.key === key)?.value ?? null;
+}

@@ -57,6 +57,52 @@
     {{/each}}
     <p class="ad2e-note" data-tooltip="{{localize 'AD2E.Coin.Hint'}}">{{localize "AD2E.Coin.Total"}}: {{wt.coins.gp}} gp · {{wt.coins.count}} {{localize "AD2E.Coin.CoinsLower"}} = {{wt.coins.weight}} lb</p>
   </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-magic">
+    <legend>{{localize "AD2E.Magic.Items"}}</legend>
+    {{#each wt.magic as |m|}}
+    <div class="ad2e-prof-row ad2e-gear-row">
+      <img src="{{m.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{m.id}}">{{m.name}}</a>
+        <span class="ad2e-weapon-meta">{{m.summary}}</span>
+      </div>
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{m.id}}" {{checked m.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.Gear.Carried"}}</label>
+      <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{m.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{m.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{m.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      <button type="button" data-action="useMagicItem" data-item-id="{{m.id}}" {{#unless m.usable}}disabled{{/unless}} data-tooltip="{{localize 'AD2E.Magic.UseHint'}}">{{localize "AD2E.Magic.Use"}}</button>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{m.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Magic.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-treasure">
+    <legend>{{localize "AD2E.Treasure.Treasure"}}</legend>
+    {{#each wt.treasure.list as |t|}}
+    <div class="ad2e-prof-row ad2e-gear-row">
+      <img src="{{t.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{t.id}}">{{t.name}}</a>
+        <span class="ad2e-weapon-meta">{{t.summary}}{{#if t.total}} · {{localize "AD2E.Gear.Total"}} {{t.total}} gp{{/if}}</span>
+      </div>
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{t.id}}" {{checked t.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.Gear.Carried"}}</label>
+      <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{t.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{t.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{t.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{t.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Treasure.NoneYet"}}</p>
+    {{/each}}
+    <p class="ad2e-note">{{localize "AD2E.Treasure.Total"}}: {{wt.treasure.gp}} gp · {{localize "AD2E.Treasure.Wealth"}}: {{wt.treasure.wealth}} gp</p>
+  </fieldset>
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Armor.Armour"}}</legend>
     <div class="ad2e-prof-summary">
@@ -64,6 +110,7 @@
       <span data-tooltip="{{localize 'AD2E.Armor.RearHint'}}">{{localize "AD2E.Armor.Rear"}}: <strong>{{wt.ac.rear}}</strong></span>
       {{#if wt.ac.missileDiffers}}<span>{{localize "AD2E.Armor.VsMissiles"}}: <strong>{{wt.ac.missile}}</strong></span>{{/if}}
       <span>{{wt.ac.source}}{{#if wt.ac.shield}} + {{wt.ac.shield}}{{/if}}</span>
+      <label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
     </div>
     {{#each wt.armor as |a|}}
     <div class="ad2e-prof-row ad2e-armor-row">

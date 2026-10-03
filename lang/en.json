@@ -49,6 +49,8 @@
   "AD2E.Alignment.ce": "Chaotic Evil",
   "AD2E.Roll.Roll": "Roll",
   "AD2E.Roll.Modifier": "Modifier",
+  "AD2E.Roll.ModifierNote": "Reason",
+  "AD2E.Roll.ModifierNoteHint": "e.g. ring of protection, cover, blessed",
   "AD2E.Roll.Check": "Check",
   "AD2E.Roll.RollUnder": "roll ≤",
   "AD2E.Roll.Needs": "needs",
@@ -142,7 +144,9 @@
     "armor": "Armour",
     "coin": "Coin",
     "equipment": "Equipment",
-    "spell": "Spell"
+    "spell": "Spell",
+    "magic": "Magical item",
+    "jewellery": "Gem / jewellery"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -315,7 +319,9 @@
     "RearHint": "Attacks from behind: no shield, no beneficial Dexterity adjustment",
     "NoArmor": "No armour (base AC)",
     "NoneYet": "No armour yet.",
-    "Unused": "Another equipped item of this kind gives a better AC; this one is not counted"
+    "Unused": "Another equipped item of this kind gives a better AC; this one is not counted",
+    "Misc": "Other AC adjustment",
+    "MiscHint": "Magical items (rings, cloaks or bracers of protection), spells, cover: positive improves (lowers) Armour Class. Applies to all AC values."
   },
   "AD2E.Enc": {
     "Encumbrance": "Encumbrance",
@@ -501,6 +507,8 @@
     "Done": "Monsters imported: {created} created, {updated} updated."
   },
   "AD2E.Sheet.Spell": "AD&D 2e Spell",
+  "AD2E.Sheet.Magic": "AD&D 2e Magical Item",
+  "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
   "AD2E.Spell": {
     "wizard": "Wizard",
     "priest": "Priest",
@@ -833,5 +841,77 @@
     "NoModifiers": "No numeric modifiers are stated on the kit page.",
     "SkillPoints": "Thief skill points: {first} at 1st level, {per} per level after",
     "ScalingLevel": "+{step} per level after level {from}"
+  },
+  "AD2E.Magic": {
+    "Category": {
+      "label": "Category",
+      "potion": "Potions and oils",
+      "scroll": "Scrolls",
+      "ring": "Rings",
+      "rod": "Rods",
+      "staff": "Staves",
+      "wand": "Wands",
+      "book": "Books and tomes",
+      "jewel": "Jewels and jewellery",
+      "cloak": "Cloaks and robes",
+      "boots": "Boots and gloves",
+      "girdle": "Girdles and helms",
+      "bag": "Bags and bottles",
+      "dust": "Dusts and stones",
+      "household": "Household items and tools",
+      "instrument": "Musical instruments",
+      "weird": "The weird stuff"
+    },
+    "FromTable": "DMG Table {table}.",
+    "Charges": "Charges",
+    "MaxCharges": "Maximum charges",
+    "UsableBy": "Usable by",
+    "UsableByHint": "e.g. wizards, priests (blank: any)",
+    "XpValue": "XP value",
+    "GpValue": "gp value",
+    "Worn": "Worn / wielded",
+    "Identified": "Identified",
+    "SheetHint": "Magical armour and weapons are armour and weapon items with a magical bonus. Charges: each use spends one (wands are found with 1d20+80). Potions, scrolls and dusts are used up from the quantity. Effects on rolls: add them in the roll dialog's modifier; on Armour Class: the character's Other AC adjustment.",
+    "ChargesOf": "{value}/{max} charges",
+    "Unidentified": "unidentified",
+    "Items": "Magical items",
+    "Use": "Use",
+    "UseHint": "Spend a charge (or one potion, scroll or dust) and post the item to chat",
+    "NoneYet": "No magical items. Drag magical items here.",
+    "NoCharges": "{name} has no charges left.",
+    "ChargesLeft": "{n} of {max} charges left",
+    "Used": "{name} uses {item}.",
+    "NoneLeft": "{name}: none left."
+  },
+  "AD2E.Treasure": {
+    "Kind": {
+      "label": "Kind",
+      "gem": "Gem",
+      "jewellery": "Jewellery",
+      "art": "Object of art"
+    },
+    "Gem": {
+      "label": "Gem class (DMG Table 85)",
+      "ornamental": "Ornamental",
+      "semiprecious": "Semi-precious",
+      "fancy": "Fancy",
+      "precious": "Precious",
+      "gem": "Gem",
+      "jewel": "Jewel"
+    },
+    "Uncut": "Uncut",
+    "ValueEach": "Value each (gp)",
+    "Worth": "Worth",
+    "Each": "{value} gp each",
+    "SheetHint": "Gems with no value entered are worth their DMG Table 85 class base value (uncut: 10%). Jewellery and objects of art: DMG Table 87 gives value ranges; enter the value.",
+    "Treasure": "Gems, jewellery and objects of art",
+    "NoneYet": "No gems or jewellery. Drag them here.",
+    "Total": "Gems and jewellery",
+    "Wealth": "Total with coins"
+  },
+  "AD2E.Init": {
+    "Setting": "Ask for an initiative modifier",
+    "SettingHint": "When one combatant rolls initiative from the combat tracker, ask for a situational modifier and reason (weapon speed, spell casting time, magical items). Rolling several at once never asks.",
+    "Title": "Initiative: {name}"
   }
 }

@@ -1,20 +1,7 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
+import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 
 const { DialogV2 } = foundry.applications.api;
-
-/** Prompt for a single numeric input; resolves to a number, or null if dismissed. */
-async function promptNumber(title, label, initial = 0) {
-  const result = await DialogV2.prompt({
-    window: { title },
-    content: `<div class="form-group"><label>${label}</label><input type="number" name="value" value="${initial}" autofocus></div>`,
-    ok: {
-      label: game.i18n.localize("AD2E.Roll.Roll"),
-      callback: (event, button) => Number(button.form.elements.value.value) || 0
-    },
-    rejectClose: false
-  });
-  return result ?? null;
-}
 
 export default class AD2EActor extends Actor {
   /**
@@ -48,15 +35,15 @@ export default class AD2EActor extends Actor {
     return { sum: chosen.reduce((n, m) => n + m.current, 0), text: chosen.map(m => m.condition).join("; ") };
   }
 
-  /** Dialog with a situational modifier and the conditional kit modifiers; null when cancelled. */
+  /** Dialog with a situational modifier (and reason) and the conditional kit modifiers; null when cancelled. */
   async #promptRoll(title, options, unit = "") {
     return DialogV2.prompt({
       window: { title },
-      content: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0" autofocus></div>`
-        + this.#kitFields(options, unit),
+      content: modifierFields({ unit, autofocus: true }) + this.#kitFields(options, unit),
       ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => {
         const kit = AD2EActor.#kitPicked(button.form, options);
-        return { mod: Number(button.form.elements.mod.value) || 0, kit: kit.sum, kitText: kit.text };
+        const { mod, note } = readModifier(button.form);
+        return { mod, note, kit: kit.sum, kitText: kit.text };
       } },
       rejectClose: false
     });
@@ -122,19 +109,15 @@ export default class AD2EActor extends Actor {
     const item = this.items.get(itemId);
     const entry = this.system.proficiencies.entries.find(e => e.item.id === itemId);
     if (!item || entry?.target === null || entry?.target === undefined) return;
-    // Conditional kit modifiers for this proficiency: ask which apply.
-    const options = this.#kitOptions("proficiency", item.system.identifier);
-    let input = { mod: 0, kit: 0, kitText: "" };
-    if (options.length) {
-      input = await this.#promptRoll(item.name, options);
-      if (!input) return;
-    }
+    // Situational modifier, and the conditional kit modifiers for this proficiency.
+    const input = await this.#promptRoll(item.name, this.#kitOptions("proficiency", item.system.identifier));
+    if (!input) return;
     const target = entry.target + input.mod + input.kit;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total < 20 && roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}): `
+      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (roll.total === 20 ? ` (${game.i18n.localize("AD2E.Prof.TwentyFails")})` : "")
     });
@@ -194,7 +177,7 @@ export default class AD2EActor extends Actor {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Ability.${key}`)} ${game.i18n.localize("AD2E.Roll.Check")} `
-        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}): `
+        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }
@@ -208,13 +191,18 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(game.i18n.format("AD2E.Test.NotAvailable", { test: label }));
       return;
     }
+    // Situational modifier: positive is in the character's favour (for spell failure it lowers the failure chance).
+    const unit = test.die === "1d100" ? "%" : "";
+    const input = await promptModifier(label, { unit });
+    if (!input) return;
+    const chance = test.failsOnSuccess ? target - input.mod : target + input.mod;
     const roll = await new Roll(test.die).evaluate();
-    const under = roll.total <= target;
+    const under = roll.total <= chance;
     const success = test.failsOnSuccess ? !under : under;
     const outcomes = test.outcomes ?? { success: "AD2E.Roll.Success", failure: "AD2E.Roll.Failure" };
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${label} (${test.die} ${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}): `
+      flavor: `${label} (${test.die} ${game.i18n.localize("AD2E.Roll.RollUnder")} ${chance})${modifierText(input.mod, input.note, unit)}: `
         + game.i18n.localize(success ? outcomes.success : outcomes.failure)
     });
   }
@@ -230,7 +218,7 @@ export default class AD2EActor extends Actor {
     const success = roll.total >= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""}): `
+      flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }
@@ -303,15 +291,16 @@ export default class AD2EActor extends Actor {
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
         + ammoField + rangeField + backstabField
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`
+        + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
-          return { ac: Number(f.ac.value) || 0, mod: (Number(f.mod.value) || 0) + kit.sum, range: f.range?.value ?? null,
-            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text };
+          const m = readModifier(button.form);
+          return { ac: Number(f.ac.value) || 0, mod: m.mod + kit.sum, range: f.range?.value ?? null,
+            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m };
         }
       },
       rejectClose: false
@@ -344,7 +333,7 @@ export default class AD2EActor extends Actor {
         + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
         + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
-        + (input.kitText ? ` [${input.kitText}]` : "")
+        + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
   }
 
@@ -389,15 +378,16 @@ export default class AD2EActor extends Actor {
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
         + backstabField
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`
+        + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
-          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: (Number(f.mod.value) || 0) + kit.sum,
-            backstab: !!f.backstab?.checked, kitText: kit.text };
+          const m = readModifier(button.form);
+          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
+            backstab: !!f.backstab?.checked, kitText: kit.text, manual: m };
         }
       },
       rejectClose: false
@@ -415,7 +405,7 @@ export default class AD2EActor extends Actor {
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
-        + (input.kitText ? ` [${input.kitText}]` : "")
+        + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
     });
   }
@@ -442,9 +432,9 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+        + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-        ac: Number(button.form.elements.ac.value) || 0, mod: Number(button.form.elements.mod.value) || 0 }) },
+        ac: Number(button.form.elements.ac.value) || 0, ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
@@ -454,7 +444,7 @@ export default class AD2EActor extends Actor {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
-        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + modifierText(input.mod, input.note)
     });
   }
 
@@ -464,41 +454,46 @@ export default class AD2EActor extends Actor {
     const i18n = k => game.i18n.localize(k);
     let formula = attack.damage[0].formula;
     let label = "";
-    if (!formula) {
-      // a weapon: choose the damage option and the target size
-      const options = attack.damage;
-      const input = await DialogV2.prompt({
-        window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
-        content: (options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
-          options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
-          + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
-          + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`,
-        ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-          option: Number(button.form.elements.option?.value ?? 0), size: button.form.elements.size.value }) },
-        rejectClose: false
-      });
-      if (!input) return;
+    // A weapon: choose the damage option and the target size; any attack: a situational modifier.
+    const options = attack.damage;
+    const weapon = !formula;
+    const input = await DialogV2.prompt({
+      window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
+      content: (weapon && options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
+        options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
+        + (weapon ? `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
+          + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>` : "")
+        + modifierFields({ autofocus: !weapon }),
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
+        option: Number(button.form.elements.option?.value ?? 0), size: button.form.elements.size?.value ?? "sm",
+        ...readModifier(button.form) }) },
+      rejectClose: false
+    });
+    if (!input) return;
+    if (weapon) {
       const opt = options[input.option] ?? options[0];
       formula = opt[input.size] ?? opt.sm ?? opt.l;
       label = `${opt.label ? ` (${opt.label})` : ""} vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`;
     }
-    const roll = await new Roll(`${formula} + @bonus`, { bonus: attack.dmgBonus }).evaluate();
+    const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus, mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+        + modifierText(input.mod, input.note)
     });
   }
 
   /** Morale check (Morale (DMG)): 2d10 + modifier; the creature stands if the total is at most its morale. */
   async rollMorale() {
-    const mod = await promptNumber(game.i18n.localize("AD2E.Monster.Morale"), game.i18n.localize("AD2E.Roll.Modifier"));
-    if (mod === null) return;
-    const target = this.system.morale.value;
-    const roll = await new Roll("2d10 + @mod", { mod }).evaluate();
+    const input = await promptModifier(game.i18n.localize("AD2E.Monster.Morale"));
+    if (!input) return;
+    // Situational modifiers (DMG Table 50) adjust the morale rating: "Add or subtract the modifiers that apply" (Morale (DMG)).
+    const target = this.system.morale.value + input.mod;
+    const roll = await new Roll("2d10").evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${game.i18n.localize("AD2E.Monster.Morale")} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}): `
+      flavor: `${game.i18n.localize("AD2E.Monster.Morale")} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(roll.total <= target ? "AD2E.Monster.Stands" : "AD2E.Monster.Breaks")
     });
   }
@@ -577,12 +572,12 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: name },
       content: (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")} (%)</label><input type="number" name="mod" value="0" step="5" autofocus></div>`
+        + modifierFields({ unit: "%", autofocus: true })
         + this.#kitFields(kitOptions, "%"),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const kit = AD2EActor.#kitPicked(button.form, kitOptions);
-        return { mod: (Number(button.form.elements.mod.value) || 0) + kit.sum, halved: !!button.form.elements.halved?.checked,
-          kitText: kit.text };
+        const m = readModifier(button.form);
+        return { mod: m.mod + kit.sum, halved: !!button.form.elements.halved?.checked, kitText: kit.text, manual: m };
       } },
       rejectClose: false
     });
@@ -594,7 +589,7 @@ export default class AD2EActor extends Actor {
     const trap = key === "rt" && roll.total >= AD2E.trapSpringRoll;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}${input.kitText ? `; ${input.kitText}` : ""}): `
+      flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.manual?.mod, input.manual?.note, "%")}: `
         + i18n(success ? "AD2E.Skill.Success" : "AD2E.Skill.Failure")
         + (trap ? ` — ${i18n("AD2E.Skill.TrapSprung")}` : "")
     });
@@ -616,15 +611,16 @@ export default class AD2EActor extends Actor {
       content: `<p class="ad2e-note">${i18n("AD2E.Ability2.TurnHint")}</p>`
         + `<div class="form-group"><label>${i18n("AD2E.Ability2.Undead")}</label><select name="row">${
           t.rows.map((r, i) => `<option value="${i}">${esc(r.undead)} (${esc(r.results[col])})</option>`).join("")}</select></div>`
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+        + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-        row: Number(button.form.elements.row.value) || 0, mod: Number(button.form.elements.mod.value) || 0 }) },
+        row: Number(button.form.elements.row.value) || 0, ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
     const row = t.rows[input.row];
     const result = row.results[col] ?? "—";
-    const flavor = `${i18n("AD2E.Ability2.TurnUndead")}: ${esc(row.undead)} (${game.i18n.format("AD2E.Ability2.TurnLevel", { level })}, ${esc(result)})`;
+    const flavor = `${i18n("AD2E.Ability2.TurnUndead")}: ${esc(row.undead)} (${game.i18n.format("AD2E.Ability2.TurnLevel", { level })}, ${esc(result)})`
+      + modifierText(input.mod, input.note);
     const speaker = ChatMessage.getSpeaker({ actor: this });
     if (!/^\d+$/.test(result) && !["T", "D", "D*"].includes(result)) {
       return ChatMessage.create({ speaker, content: `<p>${flavor}: ${i18n("AD2E.Ability2.Cannot")}</p>` });
@@ -666,23 +662,59 @@ export default class AD2EActor extends Actor {
       content: `<p>${game.i18n.format("AD2E.Ability2.LayOnHandsChat", { hp: info.hp })}</p>` });
   }
 
+  /**
+   * Use a magical item: spends a charge (items with charges) or one from the quantity (potions, scrolls, dusts),
+   * and posts the item to chat with what is left and a link to its description. Other items are just announced.
+   */
+  async useMagicItem(itemId) {
+    const item = this.items.get(itemId);
+    if (!item || item.type !== "magic") return;
+    const sys = item.system;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    let left = "";
+    if (sys.usesCharges) {
+      if (sys.charges.value < 1) {
+        ui.notifications.warn(game.i18n.format("AD2E.Magic.NoCharges", { name: item.name }));
+        return;
+      }
+      const n = sys.charges.value - 1;
+      await item.update({ "system.charges.value": n });
+      left = game.i18n.format("AD2E.Magic.ChargesLeft", { n, max: sys.charges.max });
+    } else if (sys.consumable) {
+      if (sys.quantity < 1) {
+        ui.notifications.warn(game.i18n.format("AD2E.Magic.NoneLeft", { name: item.name }));
+        return;
+      }
+      const n = sys.quantity - 1;
+      await item.update({ "system.quantity": n });
+      left = game.i18n.format("AD2E.Ammo.Left", { name: item.name, n });
+    }
+    const content = `<div class="ad2e-spell-card"><h3>${esc(item.name)}</h3>`
+      + `<p>${esc(game.i18n.format("AD2E.Magic.Used", { name: this.name, item: item.name }))}</p>`
+      + (left ? `<p class="ad2e-note">${esc(left)}</p>` : "")
+      + (sys.url ? `<p><a href="${esc(sys.url)}" target="_blank" rel="noopener">${i18n("AD2E.Spell.FullText")}</a></p>` : "")
+      + `</div>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
+  }
+
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */
   async rollAttack({ missile = false } = {}) {
-    const targetAc = await promptNumber(
-      game.i18n.localize("AD2E.Roll.Attack"),
-      game.i18n.localize("AD2E.Roll.TargetAC"),
-      10
-    );
-    if (targetAc === null) return;
+    const input = await promptModifier(game.i18n.localize("AD2E.Roll.Attack"), {
+      extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`,
+      read: form => ({ ac: Number(form.elements.ac.value) || 0 })
+    });
+    if (!input) return;
+    const targetAc = Number(input.ac ?? 10);
     const sys = this.system;
     const adj = missile ? sys.mods.missileAttack : sys.mods.meleeAttack; // includes the encumbrance penalty
     const needed = sys.thac0.value - targetAc;
-    const roll = await new Roll("1d20 + @adj", { adj }).evaluate();
+    const roll = await new Roll("1d20 + @adj + @mod", { adj, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc} `
-        + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+): `
+        + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
     });
   }

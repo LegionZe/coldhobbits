@@ -1,0 +1,25 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Magic.Category.label"}}
+      <select name="system.category">{{selectOptions categories selected=system.category localize=true}}</select></label>
+    <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Gear.WeightEach"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
+    <label>{{localize "AD2E.Magic.Charges"}} <input type="number" name="system.charges.value" value="{{system.charges.value}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Magic.MaxCharges"}} <input type="number" name="system.charges.max" value="{{system.charges.max}}" min="0" step="1" placeholder="—"></label>
+    <label>{{localize "AD2E.Magic.UsableBy"}} <input type="text" name="system.usableBy" value="{{system.usableBy}}" placeholder="{{localize 'AD2E.Magic.UsableByHint'}}"></label>
+    <label>{{localize "AD2E.Magic.XpValue"}} <input type="number" name="system.xpValue" value="{{system.xpValue}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Magic.GpValue"}} <input type="number" name="system.gpValue" value="{{system.gpValue}}" min="0" step="1"></label>
+    <label class="ad2e-check"><input type="checkbox" name="system.carried" {{checked system.carried}}> {{localize "AD2E.Gear.Carried"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.equipped" {{checked system.equipped}}> {{localize "AD2E.Magic.Worn"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  <p class="ad2e-note">{{categoryTable}} {{localize "AD2E.Magic.SheetHint"}}</p>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>
