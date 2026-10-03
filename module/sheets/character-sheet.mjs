@@ -1,5 +1,6 @@
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
+import AbilityRoller from "../apps/ability-roller.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -143,7 +144,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
       layOnHands: CharacterSheet.onLayOnHands,
-      useMagicItem: CharacterSheet.onUseMagicItem
+      useMagicItem: CharacterSheet.onUseMagicItem,
+      rollAbilityScores: CharacterSheet.onRollAbilityScores
     }
   };
 
@@ -647,6 +649,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollClassSkill(event, target) {
     return this.actor.rollClassSkill(target.dataset.skill);
+  }
+
+  /** Generate ability scores (PHB Methods II-VI). */
+  static onRollAbilityScores() {
+    return new AbilityRoller(this.actor).render({ force: true });
   }
 
   static onUseMagicItem(event, target) {

@@ -1,0 +1,39 @@
+<section class="ad2e-ability-roller">
+  <div class="ad2e-importer-controls">
+    <label>{{localize "AD2E.AbilityRoll.Method"}}
+      <select name="method">{{#each methods as |m|}}<option value="{{m.value}}" {{#if m.selected}}selected{{/if}}>{{m.text}}</option>{{/each}}</select></label>
+    <button type="button" data-action="roll"><i class="fa-solid fa-dice"></i> {{#if rolled}}{{localize "AD2E.AbilityRoll.Reroll"}}{{else}}{{localize "AD2E.AbilityRoll.Roll"}}{{/if}}</button>
+  </div>
+  <p class="ad2e-note">{{hint}}</p>
+  {{#if rolled}}
+  {{#if isDice}}
+  <table class="ad2e-race-table">
+    <thead><tr><th>{{localize "AD2E.AbilityRoll.Die"}}</th><th>{{localize "AD2E.AbilityRoll.AddTo"}}</th></tr></thead>
+    <tbody>
+      {{#each dice as |d|}}
+      <tr><th>{{d.value}}</th><td><select data-assign="{{d.index}}">{{#each d.options as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.text}}</option>{{/each}}</select></td></tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{/if}}
+  <table class="ad2e-race-table ad2e-ability-roll-table">
+    <thead><tr><th></th>{{#unless isDice}}<th>{{localize "AD2E.AbilityRoll.Result"}}</th>{{/unless}}<th>{{localize "AD2E.Race.Rolled"}}</th>{{#if hasRace}}<th>{{localize "AD2E.Race.Adjust"}}</th><th>{{localize "AD2E.Race.Effective"}}</th>{{/if}}</tr></thead>
+    <tbody>
+      {{#each rows as |r|}}
+      <tr>
+        <th>{{r.label}}</th>
+        {{#if ../isPairs}}<td>{{#each r.pair as |p|}}<label class="ad2e-check"><input type="radio" name="pick-{{r.key}}" data-assign="{{r.key}}" value="{{p.value}}" {{#if p.checked}}checked{{/if}}> {{p.text}}</label> {{/each}}</td>{{/if}}
+        {{#if ../isPool}}<td><select data-assign="{{r.key}}">{{#each r.options as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.text}}</option>{{/each}}</select></td>{{/if}}
+        <td><strong>{{#if r.score}}{{r.score}}{{else}}—{{/if}}</strong></td>
+        {{#if ../hasRace}}<td>{{#if r.adjust}}{{r.adjust}}{{else}}—{{/if}}</td><td>{{#if r.total}}{{r.total}}{{else}}—{{/if}}</td>{{/if}}
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  {{#each errors as |e|}}<p class="ad2e-unmet">{{e}}</p>{{/each}}
+  {{#if offerExceptional}}<label class="ad2e-check"><input type="checkbox" name="exceptional" {{#if exceptional}}checked{{/if}}> {{localize "AD2E.AbilityRoll.Exceptional"}}</label>{{/if}}
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <button type="button" data-action="apply" {{#unless canApply}}disabled{{/unless}}><i class="fa-solid fa-check"></i> {{localize "AD2E.AbilityRoll.Apply"}}</button>
+  </div>
+  {{/if}}
+</section>

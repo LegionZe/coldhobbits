@@ -125,6 +125,11 @@ initiative 1d10, lowest acts first.
   Monstrous Manual human types (Human (MM)), and 10 mounts (draft, heavy, medium, light war and riding horses, pony,
   mule, desert and war camel, elephant) from the Monstrous Manual with PHB load and price. Wage or price shows in the
   sheet header.
+- Ability score generation: the dice button on the Abilities panel opens a roller for PHB Methods II-VI ("Rolling
+  Ability Scores (PHB)"): II 3d6 twice per ability, keep one; III 3d6 six times, assign; IV 3d6 twelve times, assign
+  six; V 4d6 drop lowest six times, assign; VI every ability 8 plus seven d6 added whole, none above 18. Rolls use
+  Foundry dice and are posted to chat; the racial adjustment and effective score are previewed; Apply sets the rolled
+  scores, and a warrior whose Strength comes to 18 can roll percentile dice for exceptional Strength (Strength (PHB)).
 - Magical items and treasure: item types `magic` (category per DMG Table 88: potions, scrolls, rings, rods, staves,
   wands and the miscellaneous magic tables; charges, quantity, usable-by, identified, DMG XP and gp value) and
   `jewellery` (gems by DMG Table 85 class with base value, 10% if uncut; jewellery and objects of art with an entered

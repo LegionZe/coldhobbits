@@ -1,7 +1,7 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   <div class="ad2e-columns">
     <fieldset class="ad2e-abilities">
-      <legend>{{localize "AD2E.Character.abilities"}}</legend>
+      <legend>{{localize "AD2E.Character.abilities"}}{{#if editable}} <a class="ad2e-item-link" data-action="rollAbilityScores" data-tooltip="{{localize 'AD2E.AbilityRoll.Title'}}"><i class="fa-solid fa-dice"></i></a>{{/if}}</legend>
       {{#each abilities as |ab|}}
       <div class="ad2e-ability">
         <a data-action="rollAbility" data-ability="{{ab.key}}" data-tooltip="{{localize 'AD2E.Roll.Check'}}">{{ab.label}}</a>
