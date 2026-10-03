@@ -142,6 +142,18 @@ initiative 1d10, lowest acts first.
   ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
   a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
+- Two weapons ("Attacking with Two Weapons (PHB)"): warriors and rogues get a "Two weapons" choice in the melee
+  attack dialog: main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
+  have no penalty in studded leather or lighter ("Ranger (PHB)"). The chat message notes an equipped shield and a
+  second weapon that is not smaller and lighter than the main one (a dagger is always allowed). The penalties show on
+  the Unarmed row of the Equipment tab; the extra attack per round is not added to the attack rate shown.
+- Unarmed combat ("Attacking Without Killing (PHB)"): Punch, Wrestle and Overbear on the Equipment tab. Punch and
+  wrestle results by the modified attack roll (PHB Table 58); punches do the listed damage (1d3 with a metal gauntlet)
+  plus Strength damage and roll the knockout chance (stunned 1d10 rounds); wrestling in armour takes the PHB Table 57
+  penalty; a maintained hold does 1 more point each round; overbearing adds 4 per size category, -2 per defender leg
+  beyond two and +1 per extra attacker. Blades (slashing weapons) have a non-lethal option: -4 to hit, half damage.
+  Punching and non-lethal damage are partly temporary, which the system does not track, so these messages have no
+  "Apply damage" entry. Tables from `python3 tools/build-combat-tables.py`.
 - Experience awards: the "+" next to XP on the character sheet adds an individual award; Configure Settings >
   "Award experience" (GM, or `game.ad2e.awardExperience()`) divides a group award equally among the chosen characters
   ("Experience Point Awards (DMG)"): XP of monsters picked from the current combat (defeated ones preselected) plus

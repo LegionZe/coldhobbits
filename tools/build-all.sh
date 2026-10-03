@@ -8,6 +8,7 @@ python3 tools/build-class-ability-tables.py  # thief/bard/ranger skills, backsta
 python3 tools/build-proficiency-data.py  # proficiencies; adds proficiency fields to the kit sources
 python3 tools/build-kit-mechanics.py      # kit modifiers, skill adjustments, skill points (curated, checked against kit pages)
 python3 tools/build-encounter-tables.py  # DMG Table 57 surprise modifiers
+python3 tools/build-combat-tables.py    # two weapons, PHB Tables 57/58 (unarmed combat)
 python3 tools/build-movement-tables.py   # encumbrance (Tables 47/48), base movement (Table 64)
 python3 tools/build-race-data.py         # races (reads class and kit sources, Table 64)
 python3 tools/build-armor-data.py        # armour, shields, helmets

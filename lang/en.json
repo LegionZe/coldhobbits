@@ -1083,5 +1083,61 @@
     "Amount": "Experience points",
     "BonusNote": "Prime requisite bonus: +{bonus}% is added.",
     "Gained": "{name} gains {gain} XP (now {xp})."
+  },
+  "AD2E.TwoWeapons": {
+    "Label": "Two weapons",
+    "main": "Main weapon",
+    "off": "Second weapon",
+    "MainWeapon": "Main weapon in the other hand",
+    "Shield": "a shield cannot be used while fighting with two weapons",
+    "TooLarge": "the second weapon must be smaller and lighter than {main} (a dagger is always allowed)",
+    "Summary": "Two weapons: main {main}, second {off} (one extra attack per round)"
+  },
+  "AD2E.Nonlethal": {
+    "Weapon": "Non-lethal (flat of the blade)",
+    "Half": "50% damage",
+    "DamageResult": "{total} non-lethal ({temp} of it temporary)"
+  },
+  "AD2E.Unarmed": {
+    "Title": "Unarmed",
+    "Meta": "Punching, wrestling, overbearing (Attacking Without Killing, PHB)",
+    "punch": "Punch",
+    "wrestle": "Wrestle",
+    "overbear": "Overbear",
+    "Hint": {
+      "punch": "Damage and knockout chance by the modified roll (PHB Table 58).",
+      "wrestle": "Needs both hands free. Move by the modified roll (PHB Table 58); armour gives the Table 57 penalty.",
+      "overbear": "Several attackers: one roll at the weakest attacker's THAC0, +1 per extra attacker; size of the largest."
+    },
+    "ArmedDefender": "An armed defender strikes first with +{bonus} to attack and damage.",
+    "Gauntlet": "Metal gauntlet or similar (1d3)",
+    "Pull": "Pull the punch (no damage)",
+    "HoldRound": "Maintain a hold: round (2+, no roll)",
+    "AddStrength": "Add Strength damage",
+    "ArmorPenalty": "Wrestling in {armor}: {value} (PHB Table 57).",
+    "AttackerSize": "Attacker size",
+    "DefenderSize": "Defender size",
+    "Legs": "Defender's legs",
+    "Attackers": "Attackers",
+    "Down": "Defender already pulled down (attempt to pin)",
+    "SizeDiff": "Size",
+    "Size": {
+      "T": "Tiny",
+      "S": "Small",
+      "M": "Medium",
+      "L": "Large",
+      "H": "Huge",
+      "G": "Gargantuan"
+    },
+    "PulledDown": "Hit: the defender is pulled down",
+    "Pinned": "Hit: the defender is pinned",
+    "Hold": "hold, maintained until broken",
+    "Pulled": "punch pulled, no damage",
+    "PunchDamage": "{damage} punching damage ({lasting}% lasting, the rest temporary; split the total after the fight)",
+    "KO": "knockout ({roll} ≤ {chance}%): stunned {rounds} rounds",
+    "NoKO": "no knockout ({roll} > {chance}%)",
+    "WrestleDamage": "{damage} damage",
+    "HoldResult": "Hold maintained, round {round}: {damage} damage",
+    "StrengthShort": "Strength"
   }
 }
