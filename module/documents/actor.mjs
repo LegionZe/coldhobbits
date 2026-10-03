@@ -358,7 +358,7 @@ export default class AD2EActor extends Actor {
     );
     if (targetAc === null) return;
     const sys = this.system;
-    const adj = missile ? sys.mods.missile : sys.mods.hit;
+    const adj = missile ? sys.mods.missileAttack : sys.mods.meleeAttack; // includes the encumbrance penalty
     const needed = sys.thac0.value - targetAc;
     const roll = await new Roll("1d20 + @adj", { adj }).evaluate();
     const hit = roll.total >= needed;

@@ -7,6 +7,7 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
   * Race pages (Dwarf/Elf/Gnome/Half-Elf/Halfling/Human (PHB)) for allowed classes, the
     Constitution saving-throw bonus (Table 9) and infravision - curated below with the
     sentence each value comes from.
+  * Table 64 (Base Movement Rates, "Movement (PHB)") for the base movement rate (via build-movement-tables.py).
   * Specialist wizard schools open to a race come from Table 22 (the `races` of the
     generated class documents in packs/_source/classes; run build-class-data.py first).
 Run from the repo root:  python3 tools/build-race-data.py
@@ -17,6 +18,9 @@ import importlib.util
 _spec = importlib.util.spec_from_file_location("classdata", "tools/build-class-data.py")
 classdata = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(classdata)
+_mspec = importlib.util.spec_from_file_location("movement", "tools/build-movement-tables.py")
+movement = importlib.util.module_from_spec(_mspec)
+_mspec.loader.exec_module(movement)
 
 ABIL = {"STR": "str", "DEX": "dex", "CON": "con", "INT": "int", "WIS": "wis", "CHA": "cha",
         "Strength": "str", "Dexterity": "dex", "Constitution": "con", "Intelligence": "int",
@@ -89,6 +93,7 @@ def level_limits(race, classes):
 
 
 def build():
+    base_move, _ = movement.build_base_move()
     wiki, rev, _ = classdata.page("Character Race Tables (PHB)")
     t7 = classdata.table_rows(wiki, "Table 7: Racial Ability Requirements")
     header = [link_text(h) for h in re.findall(r"!\s*scope=\"col\"\|\s*([^\n]+)", wiki[wiki.index("Table 7: Racial Ability Requirements"):])[1:7]]
@@ -127,7 +132,7 @@ def build():
                               for kd in [json.load(open(kf))["system"]] if key in kd.get("raceLimits", {})
                               for c in kd["classes"] if c not in classes})
         r = req.get(name, {"min": {}, "max": {}})
-        system = {"identifier": key,
+        system = {"identifier": key, "move": base_move[key],
                   "min": {a: r["min"].get(a) for a in classdata.MINS},
                   "max": {a: r["max"].get(a) for a in classdata.MINS},
                   "adjust": {a: adjust.get(name, {}).get(a, 0) for a in classdata.MINS},

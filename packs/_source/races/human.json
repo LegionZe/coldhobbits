@@ -6,6 +6,7 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "identifier": "human",
+    "move": 12,
     "min": {
       "str": null,
       "dex": null,

@@ -1,6 +1,23 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with weaponTab as |wt|}}
   <p class="ad2e-note">{{localize "AD2E.Weapon.DragHint"}}</p>
+  {{#with wt.enc as |e|}}
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Enc.Encumbrance"}} &amp; {{localize "AD2E.Move.Movement"}}</legend>
+    <div class="ad2e-prof-summary">
+      <span class="{{#if e.overMax}}ad2e-unmet{{/if}}">{{localize "AD2E.Enc.Load"}}: <strong>{{e.total}} / {{e.maxCarried}} lb</strong>{{#if e.magicArmor}} <span data-tooltip="{{localize 'AD2E.Enc.MagicArmorHint'}}">({{e.effective}} {{localize "AD2E.Enc.ForMovement"}})</span>{{/if}}</span>
+      {{#if e.category}}<span>{{localize "AD2E.Enc.Category"}}: <strong>{{e.categoryLabel}}</strong></span>{{/if}}
+      <span>{{localize "AD2E.Move.Movement"}}: <strong>{{e.rate}}</strong> / {{e.base}} ({{e.feet}} ft · {{e.yards}} yd {{localize "AD2E.Move.PerRound"}})</span>
+      {{#if e.penaltyText}}<span class="ad2e-unmet">{{e.penaltyText}}</span>{{/if}}
+    </div>
+    <div class="ad2e-prof-summary">
+      <span>{{localize "AD2E.Enc.Items"}}: {{e.itemWeight}} lb · {{localize "AD2E.Enc.Clothing"}}: {{e.clothing}} lb</span>
+      <label>{{localize "AD2E.Enc.Other"}} <input type="number" name="system.encumbrance.other" value="{{e.other}}" min="0" step="any" {{#unless @root.editable}}disabled{{/unless}}></label>
+      <label>{{localize "AD2E.Move.Override"}} <input type="number" name="system.movement.override" value="{{e.override}}" placeholder="{{e.raceBase}}" min="0" {{#unless @root.editable}}disabled{{/unless}}></label>
+    </div>
+    {{#if e.thresholds}}<p class="ad2e-note">{{e.thresholds}}</p>{{/if}}
+  </fieldset>
+  {{/with}}
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Armor.Armour"}}</legend>
     <div class="ad2e-prof-summary">

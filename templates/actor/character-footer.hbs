@@ -1,0 +1,17 @@
+<footer class="ad2e-footer">
+  {{#with movement as |m|}}
+  <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.SneakHint'}}"><strong>{{localize "AD2E.Move.Sneak"}}</strong> {{m.sneak}} ft</span>
+  <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.WalkHint'}}"><strong>{{localize "AD2E.Move.Walk"}}</strong> {{m.walk}} yd</span>
+  <span class="ad2e-move-item" data-tooltip="{{m.combatHint}}"><strong>{{localize "AD2E.Move.Combat"}}</strong> {{m.combat}} ft</span>
+  <span class="ad2e-move-item" data-tooltip="{{m.jogHint}}"><strong>{{localize "AD2E.Move.Jog"}}</strong> {{m.jog}} yd</span>
+  <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.RunHint'}}"><strong>{{localize "AD2E.Move.Run"}}</strong> {{m.run3}} / {{m.run4}} yd</span>
+  <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.SprintHint'}}"><strong>{{localize "AD2E.Move.Sprint"}}</strong> {{m.run5}} yd</span>
+  <span class="ad2e-move-item" data-tooltip="{{m.jumpHint}}"><strong>{{localize "AD2E.Move.Jump"}}</strong>
+    {{#if m.canJump}}
+    <a data-action="rollJump" data-jump="runningBroad">{{m.jump.runningBroad}}</a> /
+    <a data-action="rollJump" data-jump="runningHigh">{{m.jump.runningHigh}}</a> ·
+    <a data-action="rollJump" data-jump="standingBroad">{{m.jump.standingBroad}}</a> / {{m.jump.standingHigh}}
+    {{else}}—{{/if}}</span>
+  <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.MarchHint'}}"><strong>{{localize "AD2E.Move.March"}}</strong> {{m.march}} / {{m.forceMarch}} mi</span>
+  {{/with}}
+</footer>

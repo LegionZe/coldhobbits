@@ -6,6 +6,7 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "identifier": "gnome",
+    "move": 6,
     "min": {
       "str": 6,
       "dex": 3,

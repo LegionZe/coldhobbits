@@ -1,4 +1,4 @@
-import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, thac0At } from "../config.mjs";
+import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, strengthKey, thac0At } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
@@ -35,6 +35,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       ac: new SchemaField({ base: int(10, -10, 10) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
       initiative: new SchemaField({ mod: int(0) }),
+      // Weight of gear not held as items (lb); clothing (5 lb) is added automatically.
+      encumbrance: new SchemaField({ other: new NumberField({ required: true, min: 0, initial: 0, nullable: false }) }),
+      // Base movement rate override (default: the race item's Table 64 rate, 12 without a race).
+      movement: new SchemaField({ override: new NumberField({ integer: true, min: 0, nullable: true, initial: null }) }),
       saves: new SchemaField(saves),
       biography: new HTMLField()
     };
@@ -89,7 +93,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
 
     this.armor = this.#computeArmor(dex.ac);
+    this.encumbrance.info = this.#computeEncumbrance();
+    const { hit: encHit, ac: encAc } = this.encumbrance.info.penalty;
+    for (const k of ["front", "missile", "rear"]) this.armor[k] += encAc;
     this.ac.total = this.armor.front;
+    this.mods.encumbranceHit = encHit;
+    this.mods.meleeAttack = this.mods.hit + encHit;
+    this.mods.missileAttack = this.mods.missile + encHit;
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -213,6 +223,52 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
   }
 
   /**
+   * Encumbrance and movement (Encumbrance (PHB), Tables 47/48; Movement (PHB), Table 64). Load = item weights
+   * (weapons and ammunition x quantity, armour) + other gear + 5 lb clothing. Magical armour counts toward the most
+   * weight that can be carried but not toward movement or combat effects. Basic rule (Table 47 categories): Light
+   * reduces movement by 1/3, Moderate by 1/2, Heavy by 2/3 (fractions down), Severe to 1. Specific rule (Table 48):
+   * the first column whose weight is at least the load. Combat: movement at 1/2 of normal: -1 to hit; 1/3 or less:
+   * -2 to hit and +1 AC; movement 1: -4 to hit and +3 AC. Over the most weight that can be carried: no movement.
+   */
+  #computeEncumbrance() {
+    let rule = "basic";
+    try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
+    const items = this.parent?.items ?? [];
+    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    const gear = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type));
+    const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
+    const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
+      .reduce((n, i) => n + weightOf(i), 0);
+    const total = Math.round((itemWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
+    const effective = Math.round((total - magicArmor) * 10) / 10;
+    const key = strengthKey(this.abilities.str.total, this.abilities.str.exceptional);
+    const row47 = lookup(AD2E.encumbranceTable, key);
+    const row48 = lookup(AD2E.movementTable.rows, key);
+    const base = this.movement.override ?? this.raceInfo.race?.move ?? 12;
+    const overMax = total > row47.maxCarried;
+    let category = AD2E.encumbranceCategories.findIndex((c, i) => effective <= row47.limits[i]);
+    if (category < 0) category = 4;
+    let rate = base;
+    if (rule === "basic") {
+      rate = [base, Math.floor(base * 2 / 3), Math.floor(base / 2), Math.floor(base / 3), 1][category];
+    } else if (rule === "specific") {
+      const col = row48.loads.findIndex(w => w !== null && effective <= w);
+      const rates = base === 6 ? AD2E.movementTable.rates6 : AD2E.movementTable.rates12;
+      // Table 48 has rows for base 12 and 6 only; other bases scale the base-12 row.
+      rate = col < 0 ? 1 : (base === 12 || base === 6 ? rates[col] : Math.max(1, Math.floor(rates[col] * base / 12)));
+    }
+    if (overMax && rule !== "none") rate = 0;
+    const penalty = { hit: 0, ac: 0 };
+    if (rule !== "none" && base > 0 && rate < base) {
+      if (rate <= 1) Object.assign(penalty, { hit: -4, ac: 3 });
+      else if (rate * 3 <= base) Object.assign(penalty, { hit: -2, ac: 1 });
+      else if (rate * 2 <= base) Object.assign(penalty, { hit: -1, ac: 0 });
+    }
+    return { rule, total, effective, magicArmor, maxCarried: row47.maxCarried, limits: row47.limits,
+      category: rule === "none" ? null : AD2E.encumbranceCategories[category], overMax, base, rate, penalty };
+  }
+
+  /**
    * Proficiency slots (PHB Table 34): initial + one per level evenly divisible by the rate, plus kit
    * bonus slots; nonweapon slots also add the Intelligence "number of languages" (Table 4). Owned
    * proficiency items use slots unless granted by a kit (`grantedBy`); a nonweapon proficiency from a
@@ -267,7 +323,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * the specialization +1 hit / +2 damage. Damage never below 1.
    */
   #weaponAttack(w, specialized, extra = { hit: 0, dmg: 0 }) {
-    const { hit, dmg, missile } = this.mods;
+    const { dmg, missile: dexMissile, encumbranceHit } = this.mods;
+    // Encumbrance attack penalty (Encumbrance (PHB)) applies to every attack roll.
+    const hit = this.mods.hit + encumbranceHit;
+    const missile = dexMissile + encumbranceHit;
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
     if (w.melee) {
@@ -325,9 +384,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       level: this.level,
       thac0: this.thac0.value,
       init: this.initiative.mod,
-      hit: this.mods.hit,
+      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0),
       dmg: this.mods.dmg,
-      missile: this.mods.missile
+      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0),
+      move: this.encumbrance.info?.rate ?? null
     };
   }
 }

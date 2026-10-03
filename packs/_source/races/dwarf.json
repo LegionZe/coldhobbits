@@ -6,6 +6,7 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "identifier": "dwarf",
+    "move": 6,
     "min": {
       "str": 8,
       "dex": 3,

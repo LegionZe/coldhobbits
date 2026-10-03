@@ -92,7 +92,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
       toggleSpecialized: CharacterSheet.onToggleSpecialized,
       adjustQuantity: CharacterSheet.onAdjustQuantity,
-      toggleEquipped: CharacterSheet.onToggleEquipped
+      toggleEquipped: CharacterSheet.onToggleEquipped,
+      rollJump: CharacterSheet.onRollJump
     }
   };
 
@@ -104,7 +105,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
     proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
-    bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" }
+    bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" },
+    footer: { template: "systems/ad2e/templates/actor/character-footer.hbs" }
   };
 
   static TABS = {
@@ -170,6 +172,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
+    context.movement = this._movementContext(sys);
+    const enc = sys.encumbrance.info;
+    context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
     context.weaponTab = this._weaponTabContext(sys);
     context.classGroups = AD2E.classGroups;
     return context;
@@ -225,6 +230,30 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     };
   }
 
+  /**
+   * Footer: paces at the current (encumbered) movement rate (Movement (PHB) rev 262232; Movement in Combat (PHB)
+   * rev 70534). Cautious/dungeon pace: rate x 10 feet per round; walking: x 10 yards; combat: x 10 feet (closing
+   * to melee 1/2, withdrawing 1/3, charge +50%); jog: x 2 (Constitution rounds, then Constitution checks); run:
+   * x 3 (Strength check), x 4 (check -4), x 5 (check -8); march: x 2 miles a day, force march x 2 1/2.
+   * Jumping (proficiency, PHB): running broad 2d6 + level ft, running high 1d3 + level/2 ft, standing broad
+   * 1d6 + level/2 ft, standing high 3 ft; the PHB gives no jump distances without the proficiency.
+   */
+  _movementContext(sys) {
+    const m = sys.encumbrance.info.rate;
+    const fmt = game.i18n.format.bind(game.i18n);
+    const half = Math.floor(sys.level / 2);
+    const canJump = !!this.document.items?.find?.(i => i.type === "proficiency" && i.system.identifier === "jumping");
+    return {
+      sneak: m * 10, walk: m * 10, combat: m * 10, jog: m * 20, run3: m * 30, run4: m * 40, run5: m * 50,
+      march: m * 2, forceMarch: m * 2.5,
+      combatHint: fmt("AD2E.Move.CombatHint", { close: m * 5, withdraw: Math.floor(m * 10 / 3), charge: Math.floor(m * 15) }),
+      jogHint: fmt("AD2E.Move.JogHint", { rounds: sys.abilities.con.total }),
+      canJump,
+      jump: { runningBroad: `2d6+${sys.level}`, runningHigh: `1d3+${half}`, standingBroad: `1d6+${half}`, standingHigh: "3" },
+      jumpHint: game.i18n.localize(canJump ? "AD2E.Move.JumpHint" : "AD2E.Move.NoJump")
+    };
+  }
+
   /** Display data for the Weapons tab: owned weapon items and their proficiency status. */
   _weaponTabContext(sys) {
     const actor = this.document;
@@ -257,7 +286,20 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const acSummary = { front: a.front, rear: a.rear, missile: a.missile, missileDiffers: a.missile !== a.front,
       source: a.body ? a.body.name : game.i18n.localize("AD2E.Armor.NoArmor"), shield: a.shield?.name ?? null,
       shieldAttacks: a.shieldAttacks };
-    return { rows, ammo, armor, ac: acSummary, thac0: sys.thac0.value };
+    const e = sys.encumbrance.info;
+    const i18n = k => game.i18n.localize(k);
+    const enc = {
+      ...e, other: sys.encumbrance.other, override: sys.movement.override ?? "", raceBase: sys.raceInfo.race?.move ?? 12,
+      clothing: AD2E.clothingWeight, itemWeight: Math.round((e.total - sys.encumbrance.other - AD2E.clothingWeight) * 10) / 10,
+      feet: e.rate * 10, yards: e.rate * 10,
+      categoryLabel: e.category ? i18n(`AD2E.Enc.${e.category}`) : "",
+      penaltyText: [e.overMax ? i18n("AD2E.Enc.OverMax") : "", e.penalty.hit ? `${i18n("AD2E.Weapon.Attack")} ${e.penalty.hit}` : "",
+        e.penalty.ac ? `AC +${e.penalty.ac}` : ""].filter(Boolean).join(" · "),
+      // Table 47 upper weights for this Strength (basic rule)
+      thresholds: e.rule === "none" ? "" : AD2E.encumbranceCategories
+        .map((c, i) => `${i18n(`AD2E.Enc.${c}`)} ≤ ${e.limits[i]}`).join(" · ")
+    };
+    return { rows, ammo, armor, enc, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -394,6 +436,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollWeaponDamage(event, target) {
     return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  /** Roll a jump distance (Jumping proficiency, PHB) in feet. */
+  static async onRollJump(event, target) {
+    const sys = this.actor.system;
+    const half = Math.floor(sys.level / 2);
+    const formula = { runningBroad: "2d6 + @level", runningHigh: "1d3 + @half", standingBroad: "1d6 + @half" }[target.dataset.jump];
+    if (!formula) return;
+    const roll = await new Roll(formula, { level: sys.level, half }).evaluate();
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: `${game.i18n.localize(`AD2E.Move.Jump_${target.dataset.jump}`)}: ${roll.total} ft`
+        + (target.dataset.jump.endsWith("Broad") && target.dataset.jump.startsWith("running")
+          ? ` (${game.i18n.localize("AD2E.Move.BroadCap")})` : "")
+        + (target.dataset.jump === "runningHigh" ? ` (${game.i18n.localize("AD2E.Move.HighCap")})` : "")
+    });
   }
 
   /** Equip/unequip armour; equipping body armour or a shield unequips the other items of that kind. */
