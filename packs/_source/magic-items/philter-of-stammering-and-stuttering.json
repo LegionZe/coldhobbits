@@ -1,0 +1,33 @@
+{
+  "_id": "pz8qGryzRpy718MQ",
+  "_key": "!items!pz8qGryzRpy718MQ",
+  "name": "Philter of Stammering and Stuttering",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "philter-of-stammering-and-stuttering",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Philter_of_Stammering_and_Stuttering_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

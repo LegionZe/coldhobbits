@@ -1,0 +1,33 @@
+{
+  "_id": "gsajilBAZM0w3FeR",
+  "_key": "!items!gsajilBAZM0w3FeR",
+  "name": "Staff of Power",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-power",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": 12000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_Power_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "p6NMHhDE5uVVrG9e",
+  "_key": "!items!p6NMHhDE5uVVrG9e",
+  "name": "Potion of Healing",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "potion-of-healing",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 200,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Potion_of_Healing_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 3200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

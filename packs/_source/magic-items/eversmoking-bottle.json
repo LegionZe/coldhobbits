@@ -1,0 +1,33 @@
+{
+  "_id": "jtQiUPAhPhu3ykY5",
+  "_key": "!items!jtQiUPAhPhu3ykY5",
+  "name": "Eversmoking Bottle",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "eversmoking-bottle",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Eversmoking_Bottle_(Magic_Bottle)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

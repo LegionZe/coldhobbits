@@ -1,0 +1,33 @@
+{
+  "_id": "mpqZ3ZHoFIE5IMdd",
+  "_key": "!items!mpqZ3ZHoFIE5IMdd",
+  "name": "Scroll of Protection from Dragon Breath",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "scroll-of-protection-from-dragon-breath",
+    "category": "scroll",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Scroll_of_Protection_from_Dragon_Breath_(Magic_Scroll)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "2qOwCv0q3J0OAvEQ",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

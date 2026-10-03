@@ -1,0 +1,33 @@
+{
+  "_id": "Bhn815g30EJ6iC6Y",
+  "_key": "!items!Bhn815g30EJ6iC6Y",
+  "name": "Ring of Jumping",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ring-of-jumping",
+    "category": "ring",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Ring_of_Jumping_(Magic_Ring)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "X9p5VildNx3bkaVv",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "Oh8TrZuCzXS264MH",
+  "_key": "!items!Oh8TrZuCzXS264MH",
+  "name": "Periapt of Proof Against Poison",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "periapt-of-proof-against-poison",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Periapt_of_Proof_Against_Poison_(Magic_Periapt)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

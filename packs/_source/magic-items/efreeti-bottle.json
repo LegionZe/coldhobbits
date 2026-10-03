@@ -1,0 +1,33 @@
+{
+  "_id": "kaTnBdu5N411GQ55",
+  "_key": "!items!kaTnBdu5N411GQ55",
+  "name": "Efreeti Bottle",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "efreeti-bottle",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 9000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Efreeti_Bottle_(Magic_Bottle)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

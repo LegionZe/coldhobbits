@@ -1,0 +1,33 @@
+{
+  "_id": "XY41dXxbJJNI0IjY",
+  "_key": "!items!XY41dXxbJJNI0IjY",
+  "name": "Staff of Striking",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-striking",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Priest, Wizard",
+    "identified": true,
+    "xpValue": 6000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_Striking_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

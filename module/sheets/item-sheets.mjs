@@ -240,7 +240,17 @@ export class SpellSheet extends AD2EItemSheet {
 }
 
 export class MagicItemSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["magic"] };
+  static DEFAULT_OPTIONS = { classes: ["magic"], actions: { rollCharges: MagicItemSheet.#onRollCharges } };
+
+  /** Roll the charges an item has when found (charges.formula), at most its maximum. */
+  static async #onRollCharges() {
+    const sys = this.document.system;
+    if (!sys.charges.formula) return;
+    const roll = await new Roll(sys.charges.formula).evaluate();
+    const value = sys.charges.max !== null ? Math.min(roll.total, sys.charges.max) : roll.total;
+    await this.document.update({ "system.charges.value": value });
+    ui.notifications.info(game.i18n.format("AD2E.Magic.ChargesRolled", { name: this.document.name, formula: sys.charges.formula, n: value }));
+  }
   static PARTS = { body: { template: "systems/ad2e/templates/item/magic-sheet.hbs", scrollable: [""] } };
 
   async _prepareContext(options) {

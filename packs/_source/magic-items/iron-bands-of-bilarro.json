@@ -1,0 +1,33 @@
+{
+  "_id": "otmM66vtKkW36Zvx",
+  "_key": "!items!otmM66vtKkW36Zvx",
+  "name": "Iron Bands of Bilarro",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "iron-bands-of-bilarro",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 750,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Iron_Bands_of_Bilarro_(Magic_Band)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

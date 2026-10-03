@@ -1,0 +1,33 @@
+{
+  "_id": "cGXYhC8MrbAy1s7t",
+  "_key": "!items!cGXYhC8MrbAy1s7t",
+  "name": "Boots of Levitation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "boots-of-levitation",
+    "category": "boots",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Boots_of_Levitation_(Magic_Boots)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "vWyZN0stpoQEc6Ba",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

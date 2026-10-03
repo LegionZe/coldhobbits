@@ -1,0 +1,33 @@
+{
+  "_id": "oM9fDzvciRIwXkbv",
+  "_key": "!items!oM9fDzvciRIwXkbv",
+  "name": "Rod of Beguiling",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-beguiling",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "Priest, Wizard, Rogue",
+    "identified": true,
+    "xpValue": 5000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Beguiling_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

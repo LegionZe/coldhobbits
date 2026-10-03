@@ -1,0 +1,33 @@
+{
+  "_id": "ohMPFeZZ18r8WsUL",
+  "_key": "!items!ohMPFeZZ18r8WsUL",
+  "name": "Horn of Bubbles",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horn-of-bubbles",
+    "category": "instrument",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Horn_of_Bubbles_(Magic_Instrument)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Tu9yMsYUE17lhlEg",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

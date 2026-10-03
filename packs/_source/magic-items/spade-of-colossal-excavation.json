@@ -1,0 +1,33 @@
+{
+  "_id": "wOHLV0576nDMMQbN",
+  "_key": "!items!wOHLV0576nDMMQbN",
+  "name": "Spade of Colossal Excavation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "spade-of-colossal-excavation",
+    "category": "household",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Warrior",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Spade_of_Colossal_Excavation_(Magic_Shovel)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "PypM28nylPwpwl9o",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

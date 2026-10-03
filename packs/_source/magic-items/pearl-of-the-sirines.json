@@ -1,0 +1,33 @@
+{
+  "_id": "ytWbNhZYJ6m3AxrD",
+  "_key": "!items!ytWbNhZYJ6m3AxrD",
+  "name": "Pearl of the Sirines",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pearl-of-the-sirines",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 900,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Pearl_of_the_Sirines_(Magic_Pearl)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

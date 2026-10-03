@@ -1,0 +1,33 @@
+{
+  "_id": "7R8fz7WVzkgUYgQX",
+  "_key": "!items!7R8fz7WVzkgUYgQX",
+  "name": "Wand of Frost",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-frost",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": 6000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Frost_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

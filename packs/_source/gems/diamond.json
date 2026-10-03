@@ -1,0 +1,26 @@
+{
+  "_id": "tJyzV1bKMknPIY06",
+  "_key": "!items!tJyzV1bKMknPIY06",
+  "name": "Diamond",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "diamond",
+    "kind": "gem",
+    "gemClass": "jewel",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JlUXJQN4tAY8NF9j",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

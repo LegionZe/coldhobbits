@@ -1,0 +1,33 @@
+{
+  "_id": "quX990qSaAwAyYz2",
+  "_key": "!items!quX990qSaAwAyYz2",
+  "name": "Staff of the Magi",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-the-magi",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": 15000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_the_Magi_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,26 @@
+{
+  "_id": "14ICphBNcKhM3N7O",
+  "_key": "!items!14ICphBNcKhM3N7O",
+  "name": "Obsidian",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "obsidian",
+    "kind": "gem",
+    "gemClass": "ornamental",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "giqI8ESRACjc8qCG",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

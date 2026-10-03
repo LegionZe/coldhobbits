@@ -1,0 +1,26 @@
+{
+  "_id": "JngFKAIA5GDdkrhK",
+  "_key": "!items!JngFKAIA5GDdkrhK",
+  "name": "Sardonyx",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "sardonyx",
+    "kind": "gem",
+    "gemClass": "semiprecious",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Vor7vgT8ibZEKDLr",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

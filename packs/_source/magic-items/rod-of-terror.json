@@ -1,0 +1,33 @@
+{
+  "_id": "57hq8QBrLgAAAmTu",
+  "_key": "!items!57hq8QBrLgAAAmTu",
+  "name": "Rod of Terror",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-terror",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Terror_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

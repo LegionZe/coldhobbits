@@ -1,0 +1,26 @@
+{
+  "_id": "DC1lgycRNXrci3J6",
+  "_key": "!items!DC1lgycRNXrci3J6",
+  "name": "Coral",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "coral",
+    "kind": "gem",
+    "gemClass": "fancy",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "D4yWppUxyQl5qEVp",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

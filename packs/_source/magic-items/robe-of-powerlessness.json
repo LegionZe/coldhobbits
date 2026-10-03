@@ -1,0 +1,33 @@
+{
+  "_id": "6s7hItCAEzLaOUgR",
+  "_key": "!items!6s7hItCAEzLaOUgR",
+  "name": "Robe of Powerlessness",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "robe-of-powerlessness",
+    "category": "cloak",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Robe_of_Powerlessness_(Magic_Robe)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "n0azI1QJsPZYQuTu",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

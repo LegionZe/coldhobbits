@@ -1,0 +1,33 @@
+{
+  "_id": "NPw7yFGGPW22IOJt",
+  "_key": "!items!NPw7yFGGPW22IOJt",
+  "name": "Scroll of Protection from Possession",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "scroll-of-protection-from-possession",
+    "category": "scroll",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Scroll_of_Protection_from_Possession_(Magic_Scroll)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "2qOwCv0q3J0OAvEQ",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

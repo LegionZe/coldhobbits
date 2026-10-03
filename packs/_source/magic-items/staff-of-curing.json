@@ -1,0 +1,33 @@
+{
+  "_id": "yBd44SGkza0NjSEn",
+  "_key": "!items!yBd44SGkza0NjSEn",
+  "name": "Staff of Curing",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-curing",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Priest",
+    "identified": true,
+    "xpValue": 6000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_Curing_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

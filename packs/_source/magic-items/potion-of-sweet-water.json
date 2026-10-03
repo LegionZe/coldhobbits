@@ -1,0 +1,33 @@
+{
+  "_id": "WaXqPfr0DBIBRACz",
+  "_key": "!items!WaXqPfr0DBIBRACz",
+  "name": "Potion of Sweet Water",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "potion-of-sweet-water",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 200,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Potion_of_Sweet_Water_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

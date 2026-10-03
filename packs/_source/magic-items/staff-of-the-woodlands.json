@@ -1,0 +1,33 @@
+{
+  "_id": "ZH3O4DAjmew7Udn6",
+  "_key": "!items!ZH3O4DAjmew7Udn6",
+  "name": "Staff of the Woodlands",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-the-woodlands",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Druid",
+    "identified": true,
+    "xpValue": 8000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_the_Woodlands_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

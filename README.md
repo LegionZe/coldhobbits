@@ -132,6 +132,12 @@ initiative 1d10, lowest acts first.
   jewellery add to the party's wealth total. "Use" spends a charge, or one potion, scroll or dust, and posts the item
   to chat. Magical armour and weapons remain armour and weapon items with a magical bonus. Tables from
   `python3 tools/build-treasure-tables.py`.
+- "Magical Items (DMG)" compendium: 347 items from DMG Tables 89-104 (potions, rings, rods, staves, wands and the
+  miscellaneous magic tables), one folder per table, each with its XP value, the groups that may use it, and a link
+  to its description page (descriptions are not copied). Wands, rods and staves carry their DMG charges when found
+  (1d20+80, 1d10+40, 1d6+19; "Roll charges" on the item sheet). Spell scrolls are not listed (create one per scroll).
+  "Gems (DMG)" compendium: 53 named gems from the DMG gem lists, one folder per Table 85 class, valued by class. Both
+  from `python3 tools/build-magic-item-data.py`.
 - Situational modifiers: every roll dialog (attacks, damage, saves, ability checks and tests, proficiency checks, thief
   skills, turning undead, morale, jumps, initiative from the combat tracker) has a modifier and a reason, shown in the
   chat message, for magical items and conditions the system does not track. Armour Class has an "Other AC adjustment"

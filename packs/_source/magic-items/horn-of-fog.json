@@ -1,0 +1,33 @@
+{
+  "_id": "N9GrtE95S2IZfVEv",
+  "_key": "!items!N9GrtE95S2IZfVEv",
+  "name": "Horn of Fog",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horn-of-fog",
+    "category": "instrument",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 400,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Horn_of_Fog_(Magic_Instrument)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Tu9yMsYUE17lhlEg",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

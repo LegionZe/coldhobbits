@@ -1,0 +1,26 @@
+{
+  "_id": "fP6G54MJItMzXH40",
+  "_key": "!items!fP6G54MJItMzXH40",
+  "name": "Oriental Emerald",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "oriental-emerald",
+    "kind": "gem",
+    "gemClass": "jewel",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JlUXJQN4tAY8NF9j",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

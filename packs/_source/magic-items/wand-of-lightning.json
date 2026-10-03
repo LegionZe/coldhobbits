@@ -1,0 +1,33 @@
+{
+  "_id": "ZPL4yeVXqfvF94qj",
+  "_key": "!items!ZPL4yeVXqfvF94qj",
+  "name": "Wand of Lightning",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-lightning",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": 4000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Lightning_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "Ej0TgUE9i6iJOUbR",
+  "_key": "!items!Ej0TgUE9i6iJOUbR",
+  "name": "Phylactery of Monstrous Attention",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "phylactery-of-monstrous-attention",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Priest",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Phylactery_of_Monstrous_Attention_(Magic_Phylactery)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

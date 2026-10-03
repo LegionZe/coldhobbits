@@ -1,0 +1,33 @@
+{
+  "_id": "xRp0FhEIpwKCg2rM",
+  "_key": "!items!xRp0FhEIpwKCg2rM",
+  "name": "Rod of Smiting",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-smiting",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "Priest, Wizard",
+    "identified": true,
+    "xpValue": 4000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Smiting_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

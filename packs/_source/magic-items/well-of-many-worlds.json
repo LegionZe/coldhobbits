@@ -1,0 +1,33 @@
+{
+  "_id": "PFvo0czkmtQDuuVU",
+  "_key": "!items!PFvo0czkmtQDuuVU",
+  "name": "Well of Many Worlds",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "well-of-many-worlds",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 6000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Well_of_Many_Worlds_(Magic_Well)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

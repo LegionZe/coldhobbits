@@ -1,0 +1,26 @@
+{
+  "_id": "8A6p5ts9nIKUhxwm",
+  "_key": "!items!8A6p5ts9nIKUhxwm",
+  "name": "Tiger Eye Agate",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "tiger-eye-agate",
+    "kind": "gem",
+    "gemClass": "ornamental",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "giqI8ESRACjc8qCG",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

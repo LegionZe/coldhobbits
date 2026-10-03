@@ -1,0 +1,33 @@
+{
+  "_id": "iDojRR0PnoxDmtwa",
+  "_key": "!items!iDojRR0PnoxDmtwa",
+  "name": "Broom of Animated Attack",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "broom-of-animated-attack",
+    "category": "household",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Broom_of_Animated_Attack_(Magic_Broom)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "PypM28nylPwpwl9o",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

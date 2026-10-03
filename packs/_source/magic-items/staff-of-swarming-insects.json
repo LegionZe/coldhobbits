@@ -1,0 +1,33 @@
+{
+  "_id": "31ANnP0uJOdqV109",
+  "_key": "!items!31ANnP0uJOdqV109",
+  "name": "Staff of Swarming Insects",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-swarming-insects",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Priest, Wizard",
+    "identified": true,
+    "xpValue": 100,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_Swarming_Insects_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

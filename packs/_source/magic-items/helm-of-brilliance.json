@@ -1,0 +1,33 @@
+{
+  "_id": "t1WM7xQ3eXzDLiK4",
+  "_key": "!items!t1WM7xQ3eXzDLiK4",
+  "name": "Helm of Brilliance",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "helm-of-brilliance",
+    "category": "girdle",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Helm_of_Brilliance_(Magic_Helmet)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ny4oixJQAjTTx67q",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "qRIkaRtRsCinAHsb",
+  "_key": "!items!qRIkaRtRsCinAHsb",
+  "name": "Philter of Love",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "philter-of-love",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 200,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Philter_of_Love_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

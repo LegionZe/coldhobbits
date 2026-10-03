@@ -1,0 +1,26 @@
+{
+  "_id": "qeWqny2tDrotehOD",
+  "_key": "!items!qeWqny2tDrotehOD",
+  "name": "Topaz",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "topaz",
+    "kind": "gem",
+    "gemClass": "precious",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "xAh1LQKmLRVsnbpk",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

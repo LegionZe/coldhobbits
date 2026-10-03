@@ -1,0 +1,33 @@
+{
+  "_id": "w3EdHkta7CoRiFuu",
+  "_key": "!items!w3EdHkta7CoRiFuu",
+  "name": "Beaker of Plentiful Potions",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "beaker-of-plentiful-potions",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Beaker_of_Plentiful_Potions_(Magic_Beaker)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

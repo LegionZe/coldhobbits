@@ -1,0 +1,33 @@
+{
+  "_id": "u45WBlDTX5xtBdaB",
+  "_key": "!items!u45WBlDTX5xtBdaB",
+  "name": "Potion of Heroism",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "potion-of-heroism",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Warrior",
+    "identified": true,
+    "xpValue": 300,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Potion_of_Heroism_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

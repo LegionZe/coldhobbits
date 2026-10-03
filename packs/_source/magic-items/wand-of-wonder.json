@@ -1,0 +1,33 @@
+{
+  "_id": "g5kzEvuWHM7KHORg",
+  "_key": "!items!g5kzEvuWHM7KHORg",
+  "name": "Wand of Wonder",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-wonder",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 6000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Wonder_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

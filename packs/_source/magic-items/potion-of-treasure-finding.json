@@ -1,0 +1,33 @@
+{
+  "_id": "deepwXoacmZpL4Jf",
+  "_key": "!items!deepwXoacmZpL4Jf",
+  "name": "Potion of Treasure Finding",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "potion-of-treasure-finding",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 600,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Potion_of_Treasure_Finding_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 4600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

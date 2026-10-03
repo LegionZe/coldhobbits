@@ -1,0 +1,26 @@
+{
+  "_id": "llvVmv8u9bWJeDVA",
+  "_key": "!items!llvVmv8u9bWJeDVA",
+  "name": "Moss Agate",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "moss-agate",
+    "kind": "gem",
+    "gemClass": "ornamental",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "giqI8ESRACjc8qCG",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

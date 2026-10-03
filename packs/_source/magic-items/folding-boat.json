@@ -1,0 +1,33 @@
+{
+  "_id": "G8vu7dAb56HiOlhn",
+  "_key": "!items!G8vu7dAb56HiOlhn",
+  "name": "Folding Boat",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "folding-boat",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 10000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Folding_Boat_(Magic_Boat)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

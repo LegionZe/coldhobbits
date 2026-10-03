@@ -1,0 +1,33 @@
+{
+  "_id": "OnJGhanp7SL4uHGi",
+  "_key": "!items!OnJGhanp7SL4uHGi",
+  "name": "Scroll of Protection from Acid",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "scroll-of-protection-from-acid",
+    "category": "scroll",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Scroll_of_Protection_from_Acid_(Magic_Scroll)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "2qOwCv0q3J0OAvEQ",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

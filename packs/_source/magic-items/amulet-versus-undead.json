@@ -1,0 +1,33 @@
+{
+  "_id": "w3hVLnmsNbsj8LbO",
+  "_key": "!items!w3hVLnmsNbsj8LbO",
+  "name": "Amulet Versus Undead",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "amulet-versus-undead",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 200,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Amulet_Versus_Undead",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
