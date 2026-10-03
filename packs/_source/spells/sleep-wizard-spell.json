@@ -1,0 +1,50 @@
+{
+  "_id": "iJJM4c3GNDnPtgNC",
+  "_key": "!items!iJJM4c3GNDnPtgNC",
+  "name": "Sleep",
+  "type": "spell",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sleep-wizard-spell",
+    "kind": "wizard",
+    "level": 1,
+    "schools": [
+      "Enchantment/Charm",
+      "Song"
+    ],
+    "spheres": [],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "30 yds.",
+    "area": "Special",
+    "castingTime": "1",
+    "duration": "5 rds./level",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Wizard's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Sleep_(Wizard_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FElc3DxcAbSvBfEb",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Sleep (Wizard Spell)",
+        "revid": 281814
+      }
+    }
+  }
+}

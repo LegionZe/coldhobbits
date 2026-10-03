@@ -9,5 +9,6 @@ python3 tools/build-movement-tables.py   # encumbrance (Tables 47/48), base move
 python3 tools/build-race-data.py         # races (reads class and kit sources, Table 64)
 python3 tools/build-armor-data.py        # armour, shields, helmets
 python3 tools/build-equipment-data.py    # coins (Table 42; reads build-movement-tables.py)
+python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17, 32); example spells (node parser)
 python3 tools/build-monster-data.py      # Table 39 creature THAC0; prototype monster, mount, hireling actors
 rm -rf tools/__pycache__

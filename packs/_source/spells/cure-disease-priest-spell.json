@@ -1,0 +1,51 @@
+{
+  "_id": "3WsCGZvsfnODg0kK",
+  "_key": "!items!3WsCGZvsfnODg0kK",
+  "name": "Cure Disease",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "cure-disease-priest-spell",
+    "kind": "priest",
+    "level": 3,
+    "schools": [
+      "Abjuration"
+    ],
+    "spheres": [
+      "Necromantic"
+    ],
+    "reversible": true,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "range": "Touch",
+    "area": "1 creature",
+    "castingTime": "1 rd.",
+    "duration": "Permanent",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Priest's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Cure_Disease_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Cure Disease (Priest Spell)",
+        "revid": 171277
+      }
+    }
+  }
+}

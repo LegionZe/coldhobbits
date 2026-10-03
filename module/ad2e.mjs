@@ -12,11 +12,13 @@ import CoinData from "./data/item-coin.mjs";
 import EquipmentData from "./data/item-equipment.mjs";
 import { migrateCurrency } from "./migrations.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
+import SpellImporter from "./apps/spell-importer.mjs";
+import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2ECombat from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
-import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet, EquipmentSheet } from "./sheets/item-sheets.mjs";
+import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet, EquipmentSheet, SpellSheet } from "./sheets/item-sheets.mjs";
 
 Hooks.once("init", () => {
   console.log("AD2E | Initializing AD&D 2e system");
@@ -28,7 +30,15 @@ Hooks.once("init", () => {
     name: "AD2E.Importer.Title", label: "AD2E.Importer.Open", hint: "AD2E.Importer.MenuHint",
     icon: "fa-solid fa-dragon", type: MonsterImporter, restricted: true
   });
-  game.ad2e = { importMonsters: () => new MonsterImporter().render({ force: true }) };
+  // GM tool: import spells from the AD&D 2e wiki by source book (Configure Settings, or game.ad2e.importSpells()).
+  game.settings.registerMenu("ad2e", "spellImporter", {
+    name: "AD2E.SpellImporter.Title", label: "AD2E.SpellImporter.Open", hint: "AD2E.SpellImporter.MenuHint",
+    icon: "fa-solid fa-wand-sparkles", type: SpellImporter, restricted: true
+  });
+  game.ad2e = {
+    importMonsters: () => new MonsterImporter().render({ force: true }),
+    importSpells: () => new SpellImporter().render({ force: true })
+  };
 
   game.settings.register("ad2e", "encumbrance", {
     name: "AD2E.Enc.Setting", hint: "AD2E.Enc.SettingHint", scope: "world", config: true, type: String,
@@ -47,6 +57,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.armor = ArmorData;
   CONFIG.Item.dataModels.coin = CoinData;
   CONFIG.Item.dataModels.equipment = EquipmentData;
+  CONFIG.Item.dataModels.spell = SpellData;
 
   CONFIG.Combat.documentClass = AD2ECombat;
   CONFIG.Combat.initiative = { formula: "1d10 + @init", decimals: 2 };
@@ -68,6 +79,7 @@ Hooks.once("init", () => {
   DocumentSheetConfig.registerSheet(Item, "ad2e", ArmorSheet, { types: ["armor"], makeDefault: true, label: "AD2E.Sheet.Armor" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", CoinSheet, { types: ["coin"], makeDefault: true, label: "AD2E.Sheet.Coin" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", EquipmentSheet, { types: ["equipment"], makeDefault: true, label: "AD2E.Sheet.Equipment" });
+  DocumentSheetConfig.registerSheet(Item, "ad2e", SpellSheet, { types: ["spell"], makeDefault: true, label: "AD2E.Sheet.Spell" });
 });
 
 // 0.0.20 stored coins as numbers on the character; convert them to coin items once (GM only).

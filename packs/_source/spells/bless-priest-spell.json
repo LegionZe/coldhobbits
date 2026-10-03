@@ -1,0 +1,51 @@
+{
+  "_id": "EdTYQYjz85t0RJyd",
+  "_key": "!items!EdTYQYjz85t0RJyd",
+  "name": "Bless",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "bless-priest-spell",
+    "kind": "priest",
+    "level": 1,
+    "schools": [
+      "Conjuration/Summoning"
+    ],
+    "spheres": [
+      "All"
+    ],
+    "reversible": true,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "60 yds.",
+    "area": "50-ft. cube",
+    "castingTime": "1 rd.",
+    "duration": "6 rds.",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Priest's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Bless_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Bless (Priest Spell)",
+        "revid": 167764
+      }
+    }
+  }
+}

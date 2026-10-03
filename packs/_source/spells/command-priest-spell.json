@@ -1,0 +1,52 @@
+{
+  "_id": "Z3daI8EqUK5f7o6c",
+  "_key": "!items!Z3daI8EqUK5f7o6c",
+  "name": "Command",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "command-priest-spell",
+    "kind": "priest",
+    "level": 1,
+    "schools": [
+      "Enchantment/Charm"
+    ],
+    "spheres": [
+      "Charm",
+      "Combat"
+    ],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": false,
+      "material": false
+    },
+    "range": "30 yds.",
+    "area": "1 creature",
+    "castingTime": "1",
+    "duration": "1 rd.",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Priest's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Command_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Command (Priest Spell)",
+        "revid": 168000
+      }
+    }
+  }
+}

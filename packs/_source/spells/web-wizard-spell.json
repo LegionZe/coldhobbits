@@ -1,0 +1,49 @@
+{
+  "_id": "xWQvW23t3KfgyIji",
+  "_key": "!items!xWQvW23t3KfgyIji",
+  "name": "Web",
+  "type": "spell",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "web-wizard-spell",
+    "kind": "wizard",
+    "level": 2,
+    "schools": [
+      "Evocation"
+    ],
+    "spheres": [],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "5 yds./level",
+    "area": "Special",
+    "castingTime": "2",
+    "duration": "2 turns/level",
+    "save": "Neg. or 1/2",
+    "sources": [
+      "Players Handbook",
+      "Wizard's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Web_(Wizard_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FElc3DxcAbSvBfEb",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Web (Wizard Spell)",
+        "revid": 281822
+      }
+    }
+  }
+}
