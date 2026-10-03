@@ -57,6 +57,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: Check pack data against the schemas
+        if: steps.ver.outputs.exists == 'false'
+        run: node tools/check-pack-data.mjs
+
       - name: Compile compendium packs
         if: steps.ver.outputs.exists == 'false'
         run: |

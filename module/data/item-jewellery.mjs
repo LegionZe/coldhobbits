@@ -13,7 +13,8 @@ export default class JewelleryData extends foundry.abstract.TypeDataModel {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
       kind: new StringField({ required: true, initial: "gem", choices: AD2E.treasureKinds }),
-      gemClass: new StringField({ initial: "", choices: { "": "", ...AD2E.gemClasses } }),
+      // blank (no class: jewellery, objects of art) must be explicit when choices are given.
+      gemClass: new StringField({ initial: "", blank: true, choices: AD2E.gemClasses }),
       uncut: new BooleanField({ initial: false }),
       value: new NumberField({ min: 0, nullable: true, initial: null }),
       quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, nullable: false }),

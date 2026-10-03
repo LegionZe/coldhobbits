@@ -76,6 +76,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `python3 tools/build-class-data.py` (kit ability minimums are curated in its `KIT_REQ`; the script fails if the wiki
   and `KIT_REQ` disagree). LevelDB packs are compiled by `npm run build:packs` (@foundryvtt/foundryvtt-cli, as dnd5e)
   in the release workflow; compiled packs are git-ignored.
+- A `StringField` with `choices` defaults to `blank: false` and `nullable: false` (Foundry StringField docs: "If this field
+  is created with `choices`, the default changes to `false`"); a choice field that may be empty needs `blank: true`, or
+  Foundry drops invalid values on load (0.0.31-0.0.38 lost kit modifiers this way). The Node tests stub fields and
+  cannot catch this; `node tools/check-pack-data.mjs` (run by the release workflow) checks every pack document.
 - Test template rendering with helpers that behave like Foundry's (e.g. `selectOptions` throws on null choices).
 - THAC0 uses PHB Table 53 (generated); the progression in config.mjs only extends it past level 20 and is asserted
   against Table 53 by build-level-tables.py. Do not include rulebook text.
