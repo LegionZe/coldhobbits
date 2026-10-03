@@ -2,7 +2,7 @@ import { ABILITY_TABLES } from "./rules/ability-tables.mjs";
 import { HIT_DICE, SAVE_TABLE, SPECIALIST_ATTACKS, THAC0_TABLE, WARRIOR_ATTACKS, XP_RESTART, XP_TABLE } from "./rules/level-tables.mjs";
 import { PROFICIENCY_GROUPS, PROFICIENCY_SLOTS } from "./rules/proficiency-tables.mjs";
 import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
-import { BASE_MOVEMENT, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
+import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
  * Rules data for AD&D 2e. Numeric tables only; verify against an owned copy of the
@@ -169,6 +169,10 @@ AD2E.encumbranceCategories = ["unencumbered", "light", "moderate", "heavy", "sev
 AD2E.encumbranceRules = { none: "AD2E.Enc.RuleNone", basic: "AD2E.Enc.RuleBasic", specific: "AD2E.Enc.RuleSpecific" };
 /** Clothing worn is added to the load: "Add five pounds for clothing, if any is worn." (Encumbrance (PHB)). */
 AD2E.clothingWeight = 5;
+/** Coins, highest first: value in copper pieces (PHB Table 42); 50 coins of any metal weigh a pound (DMG). */
+AD2E.coins = ["pp", "gp", "ep", "sp", "cp"];
+AD2E.coinValues = COIN_VALUES;
+AD2E.coinsPerPound = COINS_PER_POUND;
 
 /** Strength key for Tables 47/48: score * 100, plus the exceptional percentile at 18 (18/00 = 1900). */
 export function strengthKey(score, exceptional = 0) {
