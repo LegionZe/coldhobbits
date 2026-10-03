@@ -288,6 +288,8 @@ export default class AD2EActor extends Actor {
     }
     const backstab = use === "melee" ? this.#backstabMultiplier() : null;
     const kitOptions = this.#kitOptions("attack");
+    const targets = AD2EActor.#targetsNow();
+    this.#rememberTargets(itemId, targets);
     const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     // Two weapons (warriors and rogues, melee) and non-lethal attacks with a blade ("Attacking with Two Weapons (PHB)",
@@ -303,7 +305,7 @@ export default class AD2EActor extends Actor {
       + `<input type="checkbox" name="nonlethal"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
-      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
+      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + backstabField + twoField + nonlethalField
         + modifierFields()
         + this.#kitFields(kitOptions),
@@ -362,7 +364,7 @@ export default class AD2EActor extends Actor {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
-        + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
+        + `vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
         + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
         + (notes.length ? ` [${notes.join("; ")}]` : "")
@@ -377,6 +379,44 @@ export default class AD2EActor extends Actor {
 
   /** Last ammunition fired per actor and launcher (default choice for the next shot and its damage roll). */
   static #lastAmmo = new Map();
+
+  /* ---------------------------------------- Targets (applying damage from chat: module/health.mjs) */
+
+  /** Tokens the current user targets: [{ uuid, name }] (`game.user.targets`). */
+  static #targetsNow() {
+    return [...(game.user?.targets ?? [])].map(t => ({ uuid: t.document?.uuid, name: t.document?.name ?? t.name }))
+      .filter(t => t.uuid);
+  }
+
+  /** Targets of this actor's last attack per weapon or attack key (a damage roll with no target uses them). */
+  static #lastTargets = new Map();
+
+  #rememberTargets(key, targets) {
+    AD2EActor.#lastTargets.set(`${this.uuid ?? this.id}.${key}`, targets);
+  }
+
+  #damageTargets(key) {
+    const now = AD2EActor.#targetsNow();
+    return now.length ? now : (AD2EActor.#lastTargets.get(`${this.uuid ?? this.id}.${key}`) ?? []);
+  }
+
+  /**
+   * Armor Class field default: the first target's Armor Class (characters: front, or vs. missiles), if the user may see
+   * that actor (observer or owner); else 10.
+   */
+  static #targetAc(targets, missile = false) {
+    const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
+    if (!actor || !(actor.isOwner || actor.testUserPermission?.(game.user, "OBSERVER"))) return 10;
+    const sys = actor.system;
+    const ac = actor.type === "character" ? (missile ? sys.armor?.missile : sys.ac?.total) : sys.ac?.value;
+    return Number.isFinite(ac) ? ac : 10;
+  }
+
+  /** " → Orc, Goblin" for chat. */
+  static #targetText(targets) {
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    return targets.length ? ` → ${targets.map(t => esc(t.name)).join(", ")}` : "";
+  }
 
   /**
    * Weapon damage: the chosen damage option's dice (or owned ammunition's) vs. small/medium or large targets
@@ -404,6 +444,7 @@ export default class AD2EActor extends Actor {
       : "";
     const mult = use === "melee" ? this.#backstabMultiplier() : null;
     const kitOptions = this.#kitOptions("damage");
+    const targets = this.#damageTargets(itemId);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     const nonlethalField = use === "melee" && nonlethalAllowed(item.system.weapon)
@@ -441,9 +482,9 @@ export default class AD2EActor extends Actor {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
-      flags: { ad2e: input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total } },
+      flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets } },
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
-        + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
+        + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}${AD2EActor.#targetText(targets)}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
@@ -467,6 +508,7 @@ export default class AD2EActor extends Actor {
     const sys = this.system;
     const C = COMBAT_TABLES;
     const kitOptions = this.#kitOptions("attack");
+    const targets = AD2EActor.#targetsNow();
     const field = (label, html) => `<div class="form-group"><label>${label}</label>${html}</div>`;
     const sizeSelect = (name, value) => `<select name="${name}">${C.overbear.sizes.map(z =>
       `<option value="${z}"${z === value ? " selected" : ""}>${i18n(`AD2E.Unarmed.Size.${z}`)}</option>`).join("")}</select>`;
@@ -489,7 +531,7 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${i18n(`AD2E.Unarmed.${form}`)}` },
       content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}</p>`
-        + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="10" autofocus>`)
+        + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus>`)
         + extra + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form.elements;
@@ -508,8 +550,8 @@ export default class AD2EActor extends Actor {
     // A maintained hold needs no attack roll: 1 more point each round (round 2 = 2 points, ...).
     if (form === "wrestle" && input.holdRound >= 2) {
       const dmg = Math.max(input.holdRound + (input.addStr ? str : 0), 0);
-      return ChatMessage.create({ speaker, flags: dmg > 0 ? { ad2e: { damage: dmg } } : {}, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
-        { round: input.holdRound, damage: dmg }))}${input.addStr && str ? ` (${i18n("AD2E.Unarmed.StrengthShort")} ${str > 0 ? "+" : ""}${str})` : ""}</p>` });
+      return ChatMessage.create({ speaker, flags: dmg > 0 ? { ad2e: { damage: dmg, targets } } : {}, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
+        { round: input.holdRound, damage: dmg }))}${AD2EActor.#targetText(targets)}${input.addStr && str ? ` (${i18n("AD2E.Unarmed.StrengthShort")} ${str > 0 ? "+" : ""}${str})` : ""}</p>` });
     }
     let situation = 0;
     if (form === "wrestle" && armorRow) { situation += armorRow.value; parts.push(`${armorRow.label} ${armorRow.value}`); }
@@ -541,18 +583,18 @@ export default class AD2EActor extends Actor {
         const knocked = ko.total <= row.ko;
         let stun = null;
         if (knocked) { stun = await new Roll(C.punch.stun).evaluate(); rolls.push(stun); }
-        if (damage > 0) damageFlags = { ad2e: { damage, damageKind: "punch" } };
+        if (damage > 0) damageFlags = { ad2e: { damage, damageKind: "punch", targets } };
         result = `${i18n("AD2E.Roll.Hit")}: ${row.punch} — ${input.pull ? i18n("AD2E.Unarmed.Pulled")
           : game.i18n.format("AD2E.Unarmed.PunchDamage", { damage, lasting: C.punch.lasting * 100 })}; `
           + game.i18n.format(knocked ? "AD2E.Unarmed.KO" : "AD2E.Unarmed.NoKO", { roll: ko.total, chance: row.ko, rounds: stun?.total ?? 0 });
       } else {
         const damage = Math.max(C.wrestle.damage + (input.addStr ? str : 0), 0);
-        if (damage > 0) damageFlags = { ad2e: { damage } };
+        if (damage > 0) damageFlags = { ad2e: { damage, targets } };
         result = `${i18n("AD2E.Roll.Hit")}: ${row.wrestle}${row.hold ? ` (${i18n("AD2E.Unarmed.Hold")})` : ""} — `
           + game.i18n.format("AD2E.Unarmed.WrestleDamage", { damage });
       }
     }
-    const flavor = `${i18n(`AD2E.Unarmed.${form}`)} vs AC ${input.ac} (THAC0 ${sys.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+)`
+    const flavor = `${i18n(`AD2E.Unarmed.${form}`)} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${sys.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+)`
       + `${parts.length ? ` [${parts.map(esc).join("; ")}]` : ""}${modifierText(input.mod, input.note)}: ${result}`;
     return ChatMessage.create({ speaker, flavor, rolls, flags: damageFlags });
   }
@@ -576,9 +618,11 @@ export default class AD2EActor extends Actor {
     const attack = this.monsterAttacks().find(a => a.key === key);
     if (!attack) return;
     const i18n = k => game.i18n.localize(k);
+    const targets = AD2EActor.#targetsNow();
+    this.#rememberTargets(key, targets);
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${attack.name}` },
-      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
+      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         ac: Number(button.form.elements.ac.value) || 0, ...readModifier(button.form) }) },
@@ -590,7 +634,7 @@ export default class AD2EActor extends Actor {
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit, mod: input.mod }).evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${attack.name} vs AC ${input.ac} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
+      flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + modifierText(input.mod, input.note)
     });
   }
@@ -599,6 +643,7 @@ export default class AD2EActor extends Actor {
     const attack = this.monsterAttacks().find(a => a.key === key);
     if (!attack || !attack.damage.length) return;
     const i18n = k => game.i18n.localize(k);
+    const targets = this.#damageTargets(key);
     let formula = attack.damage[0].formula;
     let label = "";
     // A weapon: choose the damage option and the target size; any attack: a situational modifier.
@@ -626,8 +671,8 @@ export default class AD2EActor extends Actor {
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flags: { ad2e: { damage: total } },
-      flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+      flags: { ad2e: { damage: total, targets } },
+      flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
         + modifierText(input.mod, input.note)
     });
   }
@@ -1109,8 +1154,9 @@ export default class AD2EActor extends Actor {
 
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */
   async rollAttack({ missile = false } = {}) {
+    const targets = AD2EActor.#targetsNow();
     const input = await promptModifier(game.i18n.localize("AD2E.Roll.Attack"), {
-      extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`,
+      extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, missile)}" autofocus></div>`,
       read: form => ({ ac: Number(form.elements.ac.value) || 0 })
     });
     if (!input) return;
@@ -1122,7 +1168,7 @@ export default class AD2EActor extends Actor {
     const hit = roll.total >= needed;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc} `
+      flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc}${AD2EActor.#targetText(targets)} `
         + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
     });
