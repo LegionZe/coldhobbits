@@ -63,6 +63,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
   Temporary damage: `hp.punch` (75% returns on deleteCombat) and `hp.temp` + `hp.tempUntil` (returns on updateWorldTime,
   one turn after the combat); chat flags `damageKind` ("punch" | "nonlethal") and `temp`.
+  Targets: attack/damage messages carry `flags.ad2e.targets` ([{ uuid, name }] from `game.user.targets` at roll time;
+  damage falls back to the last attack's targets per actor and weapon/attack key); the context menu resolves them with
+  `foundry.utils.fromUuidSync(uuid, { strict: false })`.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

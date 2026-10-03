@@ -125,26 +125,39 @@ export function registerHealth() {
     }
   });
 
-  // Chat context menu on damage rolls: apply the damage (or healing) to the selected tokens. Punching and non-lethal
-  // messages carry `kind` ("punch" | "nonlethal") and `temp` (the temporary part of non-lethal damage).
+  // Chat context menu on damage rolls: apply the damage (or healing) to the tokens targeted when the roll was made
+  // (`flags.ad2e.targets`), to the tokens this user targets now, or to the selected tokens. Punching and non-lethal
+  // messages carry `damageKind` ("punch" | "nonlethal") and `temp` (the temporary part of non-lethal damage).
   Hooks.on("getChatMessageContextOptions", (html, options) => {
     const message = li => game.messages.get(li.dataset.messageId);
-    const amount = li => message(li)?.getFlag("ad2e", "damage");
-    const kind = li => message(li)?.getFlag("ad2e", "damageKind") ?? "normal";
-    const visible = li => Number.isFinite(amount(li)) && canvas?.tokens?.controlled?.length > 0;
-    const apply = heal => async (event, li) => {
-      for (const token of canvas.tokens.controlled) {
-        const actor = token.actor;
-        if (!actor?.applyDamage) continue;
+    const flag = (li, k) => message(li)?.getFlag("ad2e", k);
+    const amount = li => flag(li, "damage");
+    const kind = li => flag(li, "damageKind") ?? "normal";
+    const has = li => Number.isFinite(amount(li));
+    const rollTargets = li => (flag(li, "targets") ?? []).map(t => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(t.uuid, { strict: false })?.actor).filter(Boolean);
+    const myTargets = () => [...(game.user?.targets ?? [])].map(t => t.actor).filter(Boolean);
+    const selected = () => (canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
+    const apply = (actors, heal) => async (event, li) => {
+      for (const actor of new Set(actors(li))) {
+        if (!actor.applyDamage) continue;
+        if (!actor.isOwner) {
+          ui.notifications.warn(game.i18n.format("AD2E.Health.NotOwner", { name: actor.name }));
+          continue;
+        }
         if (heal) await actor.applyHealing(amount(li));
-        else await actor.applyDamage(amount(li), { single: true, kind: kind(li), temp: message(li)?.getFlag("ad2e", "temp") ?? 0 });
+        else await actor.applyDamage(amount(li), { single: true, kind: kind(li), temp: flag(li, "temp") ?? 0 });
       }
     };
+    // Same entry shape as dnd5e 6.x on v14 (icon class, group, visible(li), onClick(event, li)).
+    const entry = (label, icon, actors, heal, extra = () => true) => ({ label, icon, group: "ad2e",
+      visible: li => has(li) && extra(li) && actors(li).length > 0, onClick: apply(actors, heal) });
+    const normal = li => kind(li) === "normal";
     options.push(
-      // Same entry shape as dnd5e 6.x on v14 (icon class, group, visible(li), onClick(event, li)).
-      { label: "AD2E.Health.ApplyDamage", icon: "fa-solid fa-user-minus", group: "ad2e", visible, onClick: apply(false) },
-      { label: "AD2E.Health.ApplyHealing", icon: "fa-solid fa-user-plus", group: "ad2e",
-        visible: li => visible(li) && kind(li) === "normal", onClick: apply(true) }
+      entry("AD2E.Health.ApplyDamageRollTargets", "fa-solid fa-crosshairs", rollTargets, false),
+      entry("AD2E.Health.ApplyDamageMyTargets", "fa-solid fa-bullseye", myTargets, false),
+      entry("AD2E.Health.ApplyDamage", "fa-solid fa-user-minus", selected, false),
+      entry("AD2E.Health.ApplyHealingMyTargets", "fa-solid fa-hand-holding-medical", myTargets, true, normal),
+      entry("AD2E.Health.ApplyHealing", "fa-solid fa-user-plus", selected, true, normal)
     );
   });
 }

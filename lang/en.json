@@ -1054,7 +1054,11 @@
     "TemporaryText": "punching {punch} ({restore} returns), non-lethal {temp}",
     "Recover": "Recover temporary damage",
     "RecoverHint": "Attacking Without Killing (PHB): 75% of punching damage returns at the end of the fight and the temporary half of non-lethal weapon damage one turn after it. Done automatically when a combat encounter ends (non-lethal: after one turn of game time); this button does it now.",
-    "KnockedOut": "knocked out: temporary damage"
+    "KnockedOut": "knocked out: temporary damage",
+    "ApplyDamageRollTargets": "Apply damage to the targets of the roll",
+    "ApplyDamageMyTargets": "Apply damage to my targeted tokens",
+    "ApplyHealingMyTargets": "Apply as healing to my targeted tokens",
+    "NotOwner": "No permission to change {name}'s hit points; ask the GM to apply it."
   },
   "AD2E.Surprise": {
     "Title": "Surprise",
