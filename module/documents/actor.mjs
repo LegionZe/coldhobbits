@@ -1,5 +1,6 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
+import { MASSIVE_DAMAGE, naturalHealing } from "../health.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -402,6 +403,7 @@ export default class AD2EActor extends Actor {
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
+      flags: { ad2e: { damage: total } }, // chat context menu: apply to selected tokens (module/health.mjs)
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
@@ -479,6 +481,7 @@ export default class AD2EActor extends Actor {
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
+      flags: { ad2e: { damage: total } },
       flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
         + modifierText(input.mod, input.note)
     });
@@ -696,6 +699,145 @@ export default class AD2EActor extends Actor {
       + (sys.url ? `<p><a href="${esc(sys.url)}" target="_blank" rel="noopener">${i18n("AD2E.Spell.FullText")}</a></p>` : "")
       + `</div>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
+  }
+
+  /* ---------------------------------------- Hit points, death and healing (module/health.mjs) */
+
+  /** Chat line about this actor's hit points. */
+  async #hpMessage(text, rolls = []) {
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls, content: `<p>${esc(text)}</p>` });
+  }
+
+  /** "unconscious" / "dead" / "" for chat. */
+  #stateText(state) {
+    return state && state !== "ok" ? ` — ${game.i18n.localize(`AD2E.Health.State.${state}`)}` : "";
+  }
+
+  /**
+   * Take damage. A single attack of 50 or more points calls for a saving throw vs. death (paralyzation, poison, death
+   * magic); failure kills ("Death From Massive Damage", Character Death (PHB)). `bleeding`: the Death's Door loss of
+   * 1 hit point per round.
+   */
+  async applyDamage(amount, { single = true, bleeding = false } = {}) {
+    const n = Math.max(Math.floor(Number(amount) || 0), 0);
+    const hp = this.system.hp;
+    if (!n || !hp) return;
+    if (this.system.hpState?.state === "dead") {
+      ui.notifications.info(game.i18n.format("AD2E.Health.AlreadyDead", { name: this.name }));
+      return;
+    }
+    const fmt = (k, d) => game.i18n.format(k, d);
+    const before = hp.value;
+    const after = before - n;
+    const update = { "system.hp.value": after };
+    if (after <= 0 && hp.value > 0 && "stable" in hp) update["system.hp.stable"] = false;
+    const rolls = [];
+    let note = "";
+    if (single && !bleeding && n >= MASSIVE_DAMAGE) {
+      const save = this.system.saves?.par;
+      const target = save?.value ?? 20;
+      const roll = await new Roll("1d20 + @bonus", { bonus: save?.bonus ?? 0 }).evaluate();
+      rolls.push(roll);
+      const survived = roll.total >= target;
+      note = ` ${fmt(survived ? "AD2E.Health.MassiveSaved" : "AD2E.Health.MassiveFailed", { roll: roll.total, target })}`;
+      if (!survived) {
+        update["system.hp.dead"] = true;
+        update["system.hp.value"] = Math.min(after, 0);
+      }
+    }
+    await this.update(update);
+    const state = this.system.hpState?.state;
+    const key = bleeding ? "AD2E.Health.Bleeds" : "AD2E.Health.Damaged";
+    return this.#hpMessage(fmt(key, { name: this.name, n, before, after: this.system.hp.value }) + note
+      + this.#stateText(state), rolls);
+  }
+
+  /**
+   * Heal (magical, or `natural` from rest). Never above maximum hit points; no effect on the dead ("Curative and healing
+   * spells have no effect on a dead character"). Death's Door: a cure on an unconscious character restores 1 hit point
+   * only and leaves him feeble; further cures do no good until a day of rest.
+   */
+  async applyHealing(amount, { natural = false } = {}) {
+    const n = Math.max(Math.floor(Number(amount) || 0), 0);
+    const hp = this.system.hp;
+    const st = this.system.hpState ?? {};
+    if (!n || !hp) return;
+    const fmt = (k, d) => game.i18n.format(k, d);
+    if (st.state === "dead") {
+      ui.notifications.warn(fmt("AD2E.Health.NoHealingDead", { name: this.name }));
+      return;
+    }
+    if (!natural && hp.feeble) {
+      ui.notifications.warn(fmt("AD2E.Health.FeebleNoCure", { name: this.name }));
+      return;
+    }
+    const update = {};
+    let after;
+    if (st.doorRule && hp.value <= 0 && !natural) {
+      after = 1;
+      update["system.hp.feeble"] = true;
+    } else after = Math.min(hp.value + n, hp.max);
+    update["system.hp.value"] = after;
+    if (after > 0 && "stable" in hp) update["system.hp.stable"] = false;
+    const before = hp.value;
+    await this.update(update);
+    return this.#hpMessage(fmt("AD2E.Health.Healed", { name: this.name, n: after - before, before, after })
+      + (update["system.hp.feeble"] ? ` ${game.i18n.localize("AD2E.Health.NowFeeble")}` : "") + this.#stateText(this.system.hpState?.state));
+  }
+
+  /** Death's Door: a round spent binding an unconscious character's wounds stops the loss of 1 hit point per round. */
+  async bindWounds() {
+    if (this.system.hpState?.state !== "unconscious" || this.system.hp.stable) return;
+    await this.update({ "system.hp.stable": true });
+    return this.#hpMessage(game.i18n.format("AD2E.Health.Bound", { name: this.name }));
+  }
+
+  /**
+   * Natural healing over days of rest (Healing (PHB)): 1 hit point a day, or 3 a day of complete bed rest plus the
+   * Constitution hit point bonus for each complete week of bed rest. A day of rest ends the feeble state.
+   */
+  async restHeal() {
+    const i18n = k => game.i18n.localize(k);
+    const input = await DialogV2.prompt({
+      window: { title: game.i18n.format("AD2E.Health.RestTitle", { name: this.name }) },
+      content: `<div class="form-group"><label>${i18n("AD2E.Health.Days")}</label><input type="number" name="days" value="1" min="1" step="1" autofocus></div>`
+        + `<div class="form-group"><label>${i18n("AD2E.Health.BedRest")}</label><input type="checkbox" name="bed"></div>`
+        + `<p class="ad2e-note">${i18n("AD2E.Health.RestHint")}</p>`,
+      ok: { label: i18n("AD2E.Health.Rest"), callback: (event, button) => ({
+        days: Math.max(Math.floor(Number(button.form.elements.days.value) || 0), 0), bed: !!button.form.elements.bed.checked }) },
+      rejectClose: false
+    });
+    if (!input?.days) return;
+    if (this.system.hpState?.state === "dead") {
+      ui.notifications.warn(game.i18n.format("AD2E.Health.NoHealingDead", { name: this.name }));
+      return;
+    }
+    if (this.system.hp.feeble) await this.update({ "system.hp.feeble": false });
+    const n = naturalHealing(input.days, input.bed, this.system.mods?.conHp ?? 0);
+    const room = this.system.hp.max - this.system.hp.value;
+    if (n > 0 && room > 0) return this.applyHealing(n, { natural: true });
+    return this.#hpMessage(game.i18n.format("AD2E.Health.Rested", { name: this.name, days: input.days }));
+  }
+
+  /**
+   * Raise dead (Character Death (PHB), "Raising the Dead"): resurrection survival roll on the current Constitution
+   * (Table 3); success restores life (at 1 hit point; the spell may give more) and lowers Constitution by 1 for good.
+   */
+  async raiseFromDead() {
+    if (this.type !== "character" || this.system.hpState?.state !== "dead") return;
+    const chance = this.system.abilityData?.con?.resurrection;
+    const con = this.system.abilities.con.value;
+    if (con <= 1) {
+      ui.notifications.warn(game.i18n.format("AD2E.Health.CannotRaise", { name: this.name }));
+      return;
+    }
+    const roll = await new Roll("1d100").evaluate();
+    const ok = roll.total <= chance;
+    if (ok) await this.update({ "system.hp.dead": false, "system.hp.stable": false, "system.hp.value": Math.max(1, Math.min(this.system.hp.value, 1)),
+      "system.abilities.con.value": con - 1 });
+    return roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: game.i18n.format(ok ? "AD2E.Health.RaiseSuccess" : "AD2E.Health.RaiseFailure", { name: this.name, roll: roll.total, chance, con: con - 1 }) });
   }
 
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */

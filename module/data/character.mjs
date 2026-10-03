@@ -1,3 +1,4 @@
+import { hpState } from "../health.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -32,7 +33,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       level: int(1, 1, 30),
       xp: int(0, 0),
       abilities: new SchemaField(abilities),
-      hp: new SchemaField({ value: int(1), max: int(1) }),
+      // stable: wounds bound (Death's Door); feeble: restored to 1 hp by a cure, until a day of rest; dead: explicit death
+      // (massive damage, or bled out). See module/health.mjs.
+      hp: new SchemaField({ value: int(1), max: int(1), stable: new BooleanField({ initial: false }),
+        feeble: new BooleanField({ initial: false }), dead: new BooleanField({ initial: false }) }),
       // misc: other AC adjustment (magical items such as rings or cloaks of protection, spells, cover); positive = better.
       ac: new SchemaField({ base: int(10, -10, 10), misc: int(0, -20, 20) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
@@ -110,6 +114,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       magicDef: wis.magicDef
     };
 
+    this.hpState = hpState(this.hp, { character: true });
     this.armor = this.#computeArmor(dex.ac);
     this.kitMods = this.#computeKitModifiers();
     const kitAc = this.kitMods.total("ac") + (this.ac.misc ?? 0);

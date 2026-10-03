@@ -1,6 +1,7 @@
 import { AD2E, creatureHitDice, lookup } from "../config.mjs";
+import { hpState } from "../health.mjs";
 
-const { ArrayField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
+const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
 const int = (initial, min = null) => new NumberField({ required: true, integer: true, initial, min, nullable: false });
 const text = () => new StringField({ initial: "" });
@@ -23,7 +24,7 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       ac: new SchemaField({ base: int(10, -10), text: text() }),
       movement: new SchemaField({ base: int(12, 0), text: text() }),
       hitDice: new StringField({ initial: "1" }),
-      hp: new SchemaField({ value: int(1), max: int(1) }),
+      hp: new SchemaField({ value: int(1), max: int(1), dead: new BooleanField({ initial: false }) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
       saveGroup: new StringField({ initial: "warrior", choices: Object.keys(AD2E.classGroups) }),
       attacks: new ArrayField(new SchemaField({
@@ -52,6 +53,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
   }
 
   #computeDerived() {
+    // Monsters (and hirelings, mounts) die at 0 hit points; Death's Door is for characters (Character Death (DMG)).
+    this.hpState = hpState(this.hp, { character: false });
     const hd = creatureHitDice(this.hitDice);
     this.hd = hd;
     const table = AD2E.creatureThac0;
