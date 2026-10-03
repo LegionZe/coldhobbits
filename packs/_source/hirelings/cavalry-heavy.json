@@ -1,0 +1,251 @@
+{
+  "_id": "RBNKSOug98pFUSEf",
+  "_key": "!actors!RBNKSOug98pFUSEf",
+  "name": "Cavalry, heavy",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "cavalry-heavy",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Uncommon",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "I",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 10,
+      "text": "8 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (10-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Soldiers_(DMG)",
+    "notes": "<p>Rides a barded heavy war horse (Mounts folder); the mace is the horseman's mace.</p><p>Statistics: Human (MM), Soldier column.</p>",
+    "cost": "10 gp per month"
+  },
+  "items": [
+    {
+      "_id": "KmUmCo0fy6LYhpPF",
+      "_key": "!actors.items!RBNKSOug98pFUSEf.KmUmCo0fy6LYhpPF",
+      "name": "Heavy horse lance",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "heavy-horse-lance",
+        "proficiency": "heavy-horse-lance",
+        "weapon": {
+          "size": "L",
+          "type": "P",
+          "speed": 8,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d8+1",
+              "l": "3d6",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "15 gp",
+        "weight": 15.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 2800,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "fy8Q9VnnsdPyDrho",
+      "_key": "!actors.items!RBNKSOug98pFUSEf.fy8Q9VnnsdPyDrho",
+      "name": "Long sword",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "long-sword",
+        "proficiency": "long-sword",
+        "weapon": {
+          "size": "M",
+          "type": "S",
+          "speed": 5,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d8",
+              "l": "1d12",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "15 gp",
+        "weight": 4.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 4000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "JuHAmF9BKrPH4GDq",
+      "_key": "!actors.items!RBNKSOug98pFUSEf.JuHAmF9BKrPH4GDq",
+      "name": "Horseman's mace",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "horseman-s-mace",
+        "proficiency": "horseman-s-mace",
+        "weapon": {
+          "size": "M",
+          "type": "B",
+          "speed": 6,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d6",
+              "l": "1d4",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "5 gp",
+        "weight": 6.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 3100,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "82XbOuP6jmXkgne4",
+      "_key": "!actors.items!RBNKSOug98pFUSEf.82XbOuP6jmXkgne4",
+      "name": "Plate mail",
+      "type": "armor",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "identifier": "plate-mail",
+        "kind": "body",
+        "ac": 3,
+        "shield": {
+          "melee": 0,
+          "missile": 0,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "600 gp",
+        "weight": 50.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1400,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "EAzss4tW8Y0h1OzZ",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

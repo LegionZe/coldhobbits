@@ -1,0 +1,243 @@
+{
+  "_id": "tKJLhHaiwqZH1mne",
+  "_key": "!actors!tKJLhHaiwqZH1mne",
+  "name": "Archer",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "archer",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Uncommon",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "I",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 10,
+      "text": "8 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-6 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (10-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Soldiers_(DMG)",
+    "notes": "<p>Statistics: Human (MM), Soldier column.</p>",
+    "cost": "4 gp per month"
+  },
+  "items": [
+    {
+      "_id": "5oahj6BPy9XugQBO",
+      "_key": "!actors.items!tKJLhHaiwqZH1mne.5oahj6BPy9XugQBO",
+      "name": "Short bow",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "short-bow",
+        "proficiency": "short-bow",
+        "weapon": {
+          "size": "M",
+          "type": "P",
+          "speed": 7,
+          "damage": [
+            {
+              "label": "Flight arrow",
+              "sm": "1d6",
+              "l": "1d6",
+              "speed": null
+            },
+            {
+              "label": "Sheaf arrow",
+              "sm": "1d8",
+              "l": "1d8",
+              "speed": null
+            }
+          ],
+          "melee": false,
+          "missile": true,
+          "range": {
+            "rof": "2/1",
+            "short": "50",
+            "medium": "100",
+            "long": "150"
+          },
+          "family": "bow",
+          "missileColumn": "otherMissile",
+          "strength": "penalty"
+        },
+        "cost": "30 gp",
+        "weight": 2.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 5100,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "OhBWPmSn67cbhitv",
+      "_key": "!actors.items!tKJLhHaiwqZH1mne.OhBWPmSn67cbhitv",
+      "name": "Flight arrow",
+      "type": "ammunition",
+      "img": "icons/svg/target.svg",
+      "system": {
+        "identifier": "flight-arrow",
+        "launchers": [
+          "composite-long-bow",
+          "composite-short-bow",
+          "long-bow",
+          "short-bow"
+        ],
+        "size": "S",
+        "type": "P",
+        "damage": {
+          "sm": "1d6",
+          "l": "1d6"
+        },
+        "cost": "3sp/12",
+        "weight": 0.1,
+        "quantity": 12,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 100,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "QP6MMCtwM9faXwn4",
+      "_key": "!actors.items!tKJLhHaiwqZH1mne.QP6MMCtwM9faXwn4",
+      "name": "Short sword",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "short-sword",
+        "proficiency": "short-sword",
+        "weapon": {
+          "size": "S",
+          "type": "P",
+          "speed": 3,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d6",
+              "l": "1d8",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "10 gp",
+        "weight": 3.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 5200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "N8BpDO36iqxuqbOz",
+      "_key": "!actors.items!tKJLhHaiwqZH1mne.N8BpDO36iqxuqbOz",
+      "name": "Leather",
+      "type": "armor",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "identifier": "leather",
+        "kind": "body",
+        "ac": 8,
+        "shield": {
+          "melee": 0,
+          "missile": 0,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "5 gp",
+        "weight": 15.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1100,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "EAzss4tW8Y0h1OzZ",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

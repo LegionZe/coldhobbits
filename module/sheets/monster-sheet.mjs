@@ -91,6 +91,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
     context.hd = sys.hd;
     // Header link to the stat block's source page (completecompendium.com for imported monsters).
+    // Wage (hirelings) or price (mounts); shown for those roles or whenever one is set.
+    context.showCost = ["hireling", "mount"].includes(sys.role) || !!sys.cost;
     context.sourceLabel = game.i18n.localize(/completecompendium\.com/.test(sys.url) ? "AD2E.Monster.CompleteCompendium" : "AD2E.Monster.SourcePage");
     context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;

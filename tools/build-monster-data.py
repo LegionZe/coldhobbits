@@ -95,7 +95,8 @@ def damage_formula(text):
 
 
 def first_int(text):
-    return int(re.search(r"-?\d+", text).group())
+    """'4,000' -> 4000; '8 to 4' -> 8."""
+    return int(re.search(r"-?\d+", text.replace(",", "")).group())
 
 
 def morale_value(text):

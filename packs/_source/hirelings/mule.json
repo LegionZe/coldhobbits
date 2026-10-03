@@ -1,0 +1,106 @@
+{
+  "_id": "0MuTEzbToIaLEshe",
+  "_key": "!actors!0MuTEzbToIaLEshe",
+  "name": "Mule",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mule",
+    "role": "mount",
+    "climate": "Any non-mountainous",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d2",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1 or 2",
+    "damageText": "1-2/1-6",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "M",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 65,
+    "load": {
+      "full": 250,
+      "half": 375,
+      "quarter": 500
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Horse",
+    "notes": "<p>Statistics: Horse, Mule column. Load and price: PHB Donkey, mule, or ass.</p>",
+    "cost": "8 gp"
+  },
+  "items": [
+    {
+      "_id": "47AicE78Kiunh0pj",
+      "_key": "!actors.items!0MuTEzbToIaLEshe.47AicE78Kiunh0pj",
+      "name": "Saddle, pack",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "saddle-pack",
+        "category": "tack",
+        "cost": "5 gp",
+        "weight": 15.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": null,
+          "volume": ""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14400,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
