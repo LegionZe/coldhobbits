@@ -359,5 +359,16 @@
     "HighCap": "no more than 1 1/2 times the character's height",
     "March": "March",
     "MarchHint": "Miles per 10-hour day: march (x2) / force march (x2 1/2, Constitution check each day) (Movement (PHB))"
+  },
+  "AD2E.Coin": {
+    "Coins": "Coins",
+    "CoinsLower": "coins",
+    "pp": "Platinum (pp)",
+    "gp": "Gold (gp)",
+    "ep": "Electrum (ep)",
+    "sp": "Silver (sp)",
+    "cp": "Copper (cp)",
+    "Total": "Total value",
+    "Hint": "Exchange (PHB Table 42): 1 pp = 5 gp, 1 gp = 2 ep = 10 sp = 100 cp. Coins of any metal weigh 50 to the pound (DMG) and count toward encumbrance."
   }
 }

@@ -12,3 +12,9 @@ export const MOVEMENT_TABLE = {"rates12": [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
 
 /** Table 64: base movement rate per race identifier. */
 export const BASE_MOVEMENT = {"human": 12, "dwarf": 6, "elf": 12, "half-elf": 12, "gnome": 6, "halfling": 6};
+
+/** Table 42 (https://adnd2e.fandom.com/wiki/Money_and_Equipment_(PHB) rev 283165): coin value in copper pieces. */
+export const COIN_VALUES = {"cp": 1, "sp": 10, "ep": 50, "gp": 100, "pp": 500};
+
+/** Coins per pound, any metal (https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG) rev 158183). */
+export const COINS_PER_POUND = 50;

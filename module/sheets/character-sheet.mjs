@@ -290,7 +290,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const i18n = k => game.i18n.localize(k);
     const enc = {
       ...e, other: sys.encumbrance.other, override: sys.movement.override ?? "", raceBase: sys.raceInfo.race?.move ?? 12,
-      clothing: AD2E.clothingWeight, itemWeight: Math.round((e.total - sys.encumbrance.other - AD2E.clothingWeight) * 10) / 10,
+      clothing: AD2E.clothingWeight,
       feet: e.rate * 10, yards: e.rate * 10,
       categoryLabel: e.category ? i18n(`AD2E.Enc.${e.category}`) : "",
       penaltyText: [e.overMax ? i18n("AD2E.Enc.OverMax") : "", e.penalty.hit ? `${i18n("AD2E.Weapon.Attack")} ${e.penalty.hit}` : "",
@@ -299,7 +299,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       thresholds: e.rule === "none" ? "" : AD2E.encumbranceCategories
         .map((c, i) => `${i18n(`AD2E.Enc.${c}`)} ≤ ${e.limits[i]}`).join(" · ")
     };
-    return { rows, ammo, armor, enc, ac: acSummary, thac0: sys.thac0.value };
+    // Coins: count per type, total value in gp (Table 42), weight.
+    const cpTotal = AD2E.coins.reduce((n, c) => n + sys.currency[c] * AD2E.coinValues[c], 0);
+    const coins = {
+      list: AD2E.coins.map(c => ({ key: c, label: i18n(`AD2E.Coin.${c}`), value: sys.currency[c] })),
+      gp: Math.round(cpTotal / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
+    };
+    return { rows, ammo, armor, enc, coins, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */

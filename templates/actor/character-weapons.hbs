@@ -11,13 +11,22 @@
       {{#if e.penaltyText}}<span class="ad2e-unmet">{{e.penaltyText}}</span>{{/if}}
     </div>
     <div class="ad2e-prof-summary">
-      <span>{{localize "AD2E.Enc.Items"}}: {{e.itemWeight}} lb · {{localize "AD2E.Enc.Clothing"}}: {{e.clothing}} lb</span>
+      <span>{{localize "AD2E.Enc.Items"}}: {{e.itemWeight}} lb · {{localize "AD2E.Coin.Coins"}}: {{e.coinWeight}} lb · {{localize "AD2E.Enc.Clothing"}}: {{e.clothing}} lb</span>
       <label>{{localize "AD2E.Enc.Other"}} <input type="number" name="system.encumbrance.other" value="{{e.other}}" min="0" step="any" {{#unless @root.editable}}disabled{{/unless}}></label>
       <label>{{localize "AD2E.Move.Override"}} <input type="number" name="system.movement.override" value="{{e.override}}" placeholder="{{e.raceBase}}" min="0" {{#unless @root.editable}}disabled{{/unless}}></label>
     </div>
     {{#if e.thresholds}}<p class="ad2e-note">{{e.thresholds}}</p>{{/if}}
   </fieldset>
   {{/with}}
+  <fieldset class="ad2e-prof-list ad2e-coins">
+    <legend>{{localize "AD2E.Coin.Coins"}}</legend>
+    <div class="ad2e-prof-summary">
+      {{#each wt.coins.list as |c|}}
+      <label class="ad2e-coin">{{c.label}} <input type="number" name="system.currency.{{c.key}}" value="{{c.value}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
+      {{/each}}
+    </div>
+    <p class="ad2e-note" data-tooltip="{{localize 'AD2E.Coin.Hint'}}">{{localize "AD2E.Coin.Total"}}: {{wt.coins.gp}} gp · {{wt.coins.count}} {{localize "AD2E.Coin.CoinsLower"}} = {{wt.coins.weight}} lb</p>
+  </fieldset>
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Armor.Armour"}}</legend>
     <div class="ad2e-prof-summary">

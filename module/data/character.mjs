@@ -37,6 +37,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       initiative: new SchemaField({ mod: int(0) }),
       // Weight of gear not held as items (lb); clothing (5 lb) is added automatically.
       encumbrance: new SchemaField({ other: new NumberField({ required: true, min: 0, initial: 0, nullable: false }) }),
+      // Coins carried (PHB Table 42); they count toward encumbrance at 50 to the pound.
+      currency: new SchemaField(Object.fromEntries(AD2E.coins.map(c => [c, int(0, 0)]))),
       // Base movement rate override (default: the race item's Table 64 rate, 12 without a race).
       movement: new SchemaField({ override: new NumberField({ integer: true, min: 0, nullable: true, initial: null }) }),
       saves: new SchemaField(saves),
@@ -224,7 +226,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   /**
    * Encumbrance and movement (Encumbrance (PHB), Tables 47/48; Movement (PHB), Table 64). Load = item weights
-   * (weapons and ammunition x quantity, armour) + other gear + 5 lb clothing. Magical armour counts toward the most
+   * (weapons and ammunition x quantity, armour) + coins (50 to the pound) + other gear + 5 lb clothing. Magical armour counts toward the most
    * weight that can be carried but not toward movement or combat effects. Basic rule (Table 47 categories): Light
    * reduces movement by 1/3, Moderate by 1/2, Heavy by 2/3 (fractions down), Severe to 1. Specific rule (Table 48):
    * the first column whose weight is at least the load. Combat: movement at 1/2 of normal: -1 to hit; 1/3 or less:
@@ -239,7 +241,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);
-    const total = Math.round((itemWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
+    const coinCount = AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
+    const coinWeight = Math.round(coinCount / AD2E.coinsPerPound * 10) / 10;
+    const total = Math.round((itemWeight + coinWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
     const effective = Math.round((total - magicArmor) * 10) / 10;
     const key = strengthKey(this.abilities.str.total, this.abilities.str.exceptional);
     const row47 = lookup(AD2E.encumbranceTable, key);
@@ -264,7 +268,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       else if (rate * 3 <= base) Object.assign(penalty, { hit: -2, ac: 1 });
       else if (rate * 2 <= base) Object.assign(penalty, { hit: -1, ac: 0 });
     }
-    return { rule, total, effective, magicArmor, maxCarried: row47.maxCarried, limits: row47.limits,
+    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinWeight, maxCarried: row47.maxCarried, limits: row47.limits,
       category: rule === "none" ? null : AD2E.encumbranceCategories[category], overMax, base, rate, penalty };
   }
 
