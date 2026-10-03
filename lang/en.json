@@ -176,6 +176,16 @@
     "RolledScore": "Rolled score (checked against the race's Table 7 limits)",
     "EffectiveScore": "Effective score: rolled + racial adjustment (Table 8); used for all tables and rolls",
     "ClassNotForRace": "{race} cannot be a {class}.",
-    "ClassNotAllowed": "This race cannot take the current class."
+    "ClassNotAllowed": "This race cannot take the current class.",
+    "LevelLimit": "Racial level limit",
+    "Unlimited": "Unlimited",
+    "LevelLimitReached": "This race cannot advance beyond level {limit} in this class. Edit the level directly if your DM allows it.",
+    "KitClasses": "Classes only through a kit (identifiers)",
+    "KitRaceLimits": "Race level limits",
+    "KitRaceLimitsHint": "race level, comma-separated, e.g. dwarf 15, gnome 6 (no number = unlimited)",
+    "RaceOnly": "Only the listed races",
+    "NeedsRaceKit": "{race} can only be a {class} through a kit that allows {race}; add one.",
+    "NeedsKitNote": "This race can only take this class through a kit that allows the race; add a qualifying kit.",
+    "KitNotForRace": "{kit} is not available to {race} for this class."
   }
 }

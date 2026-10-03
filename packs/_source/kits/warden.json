@@ -19,6 +19,8 @@
       "cha": 12
     },
     "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Warden_(Character_Kit)",
     "notes": ""
   },

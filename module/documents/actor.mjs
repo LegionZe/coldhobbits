@@ -63,6 +63,11 @@ export default class AD2EActor extends Actor {
   /** Advance one level and add the hit points gained to current and maximum HP. */
   async levelUp() {
     const level = this.system.level + 1;
+    const limit = this.system.classInfo.levelLimit;
+    if (limit && level > limit) {
+      ui.notifications.warn(game.i18n.format("AD2E.Race.LevelLimitReached", { limit }));
+      return null;
+    }
     const hp = await this.rollHitPointsForLevel(level);
     return this.update({
       "system.level": level,

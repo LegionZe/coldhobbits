@@ -39,13 +39,27 @@ export class ClassSheet extends AD2EItemSheet {
   }
 }
 
-/** Parse the comma-separated `classesText` field into `system.classes`. */
-function parseClassesText(data) {
-  if ("classesText" in data) {
-    foundry.utils.setProperty(data, "system.classes",
-      String(data.classesText).split(",").map(s => s.trim()).filter(Boolean));
-    delete data.classesText;
+/** Parse comma-separated `<name>Text` form fields into `system.<name>` arrays. */
+function parseClassesText(data, names = ["classes"]) {
+  for (const name of names) {
+    if (!(`${name}Text` in data)) continue;
+    foundry.utils.setProperty(data, `system.${name}`,
+      String(data[`${name}Text`]).split(",").map(s => s.trim()).filter(Boolean));
+    delete data[`${name}Text`];
   }
+  return data;
+}
+
+/** "dwarf 15, gnome 6, elf" -> { dwarf: 15, gnome: 6, elf: null } (no number = unlimited). */
+function parseRaceLimits(data) {
+  if (!("raceLimitsText" in data)) return data;
+  const limits = {};
+  for (const part of String(data.raceLimitsText).split(",")) {
+    const m = part.trim().match(/^([a-z-]+)(?:\s*[: ]\s*(\d+))?$/i);
+    if (m) limits[m[1].toLowerCase()] = m[2] ? Number(m[2]) : null;
+  }
+  foundry.utils.setProperty(data, "system.raceLimits", limits);
+  delete data.raceLimitsText;
   return data;
 }
 
@@ -56,12 +70,14 @@ export class KitSheet extends AD2EItemSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.classesText = [...this.document.system.classes].join(", ");
+    context.raceLimitsText = Object.entries(this.document.system.raceLimits ?? {})
+      .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");
     return context;
   }
 
-  /** The class list is edited as comma-separated identifiers. */
+  /** Class list and race limits are edited as comma-separated text. */
   _processFormData(event, form, formData) {
-    return parseClassesText(super._processFormData(event, form, formData));
+    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData)));
   }
 }
 
@@ -73,6 +89,7 @@ export class RaceSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     const system = this.document.system;
     context.classesText = [...system.classes].join(", ");
+    context.kitClassesText = [...(system.kitClasses ?? [])].join(", ");
     context.raceRows = AD2E.abilities.map(key => ({
       key, label: game.i18n.localize(`AD2E.Ability.${key}`),
       min: system.min[key] ?? "", max: system.max[key] ?? "", adjust: system.adjust[key]
@@ -81,6 +98,6 @@ export class RaceSheet extends AD2EItemSheet {
   }
 
   _processFormData(event, form, formData) {
-    return parseClassesText(super._processFormData(event, form, formData));
+    return parseClassesText(super._processFormData(event, form, formData), ["classes", "kitClasses"]);
   }
 }

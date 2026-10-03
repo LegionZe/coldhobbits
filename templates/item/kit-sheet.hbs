@@ -8,6 +8,8 @@
     <label>{{localize "AD2E.Item.kitClasses"}} <input type="text" name="classesText" value="{{classesText}}" data-tooltip="{{localize 'AD2E.Item.kitClassesHint'}}"></label>
     <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    <label>{{localize "AD2E.Race.KitRaceLimits"}} <input type="text" name="raceLimitsText" value="{{raceLimitsText}}" data-tooltip="{{localize 'AD2E.Race.KitRaceLimitsHint'}}"></label>
+    <label class="ad2e-checkbox"><input type="checkbox" name="system.raceOnly" {{#if system.raceOnly}}checked{{/if}}> {{localize "AD2E.Race.RaceOnly"}}</label>
     <label class="ad2e-checkbox"><input type="checkbox" name="system.otherRequirements" {{#if system.otherRequirements}}checked{{/if}}> {{localize "AD2E.Item.otherRequirements"}}</label>
   </div>
   <fieldset>

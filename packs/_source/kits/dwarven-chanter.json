@@ -19,6 +19,10 @@
       "cha": null
     },
     "otherRequirements": true,
+    "raceLimits": {
+      "dwarf": 15
+    },
+    "raceOnly": true,
     "url": "https://adnd2e.fandom.com/wiki/Dwarven_Chanter_(Character_Kit)",
     "notes": ""
   },

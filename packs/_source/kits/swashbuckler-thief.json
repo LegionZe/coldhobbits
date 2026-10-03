@@ -19,6 +19,8 @@
       "cha": 13
     },
     "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Swashbuckler_-_Thief_(Character_Kit)",
     "notes": ""
   },

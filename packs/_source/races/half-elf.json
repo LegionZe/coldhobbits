@@ -43,10 +43,24 @@
       "enchanter",
       "transmuter"
     ],
+    "kitClasses": [],
     "conSaves": false,
     "conPoison": false,
     "infravision": 60,
     "infravisionByLineage": false,
+    "levelLimits": {
+      "cleric": 14,
+      "druid": 9,
+      "fighter": 14,
+      "ranger": 16,
+      "mage": 12,
+      "thief": 12,
+      "bard": null,
+      "conjurer": 12,
+      "diviner": 12,
+      "enchanter": 12,
+      "transmuter": 12
+    },
     "url": "https://adnd2e.fandom.com/wiki/Half-Elf_(PHB)",
     "notes": ""
   },

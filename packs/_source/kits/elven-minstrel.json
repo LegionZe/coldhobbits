@@ -19,6 +19,11 @@
       "cha": null
     },
     "otherRequirements": true,
+    "raceLimits": {
+      "elf": 15,
+      "half-elf": 12
+    },
+    "raceOnly": true,
     "url": "https://adnd2e.fandom.com/wiki/Elven_Minstrel_(Character_Kit)",
     "notes": ""
   },

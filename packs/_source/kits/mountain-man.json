@@ -19,6 +19,8 @@
       "cha": null
     },
     "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Mountain_Man_(Character_Kit)",
     "notes": ""
   },

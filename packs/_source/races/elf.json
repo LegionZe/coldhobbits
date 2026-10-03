@@ -39,10 +39,22 @@
       "diviner",
       "enchanter"
     ],
+    "kitClasses": [
+      "bard"
+    ],
     "conSaves": false,
     "conPoison": false,
     "infravision": 60,
     "infravisionByLineage": false,
+    "levelLimits": {
+      "cleric": 12,
+      "fighter": 12,
+      "mage": 15,
+      "thief": 12,
+      "ranger": 15,
+      "diviner": 15,
+      "enchanter": 15
+    },
     "url": "https://adnd2e.fandom.com/wiki/Elf_(PHB)",
     "notes": ""
   },

@@ -225,6 +225,39 @@ KIT_REQ = {
 }
 
 
+# Kit-specific racial level limits (null = unlimited) and race-exclusive kits, curated from
+# the Complete Bard's Handbook kit pages ("Qualifications"); no other kit page states any.
+#   Charlatan: "Gnomes may become Charlatans and advance up to 6th level."
+#   Dwarven Chanter: "Only dwarves can become Chanters and they are limited to 15th level"
+#   Elven Minstrel: "Only elves and half-elves can become Minstrels. Elves can advance up to 15th level ...
+#                    half-elves are limited to 12th level."
+#   Gnome Professor: "Only gnomes can become Professors, and they can advance up to 15th level."
+#   Gypsy-bard: "Elves can become Gypsy-bards able to advance to the 9th level."
+#   Halfling Whistler: "Halflings are the only race able to become Whistlers. They are limited to 15th level."
+#   Herald: "Demihumans can become Heralds of up to 6th level." (read literally: all non-human races)
+#   Jester: "Gnomes may advance to 15th level as Jesters, while halflings cannot rise above 8th level."
+#   Jongleur: "Gnomes can advance to the 9th level as Jongleurs. Halflings can attain 12th level."
+#   Loremaster: "Elves can advance up to 12th level as Lore masters."
+#   Meistersinger: "Elves can become Meistersingers and reach 15th level."
+#   Riddlemaster: "Gnomes can rise to become 8th-level Riddlemasters. Halflings can advance up to 9th level."
+#   Skald: "Dwarves can advance up to the 12th level as Skalds."
+KIT_RACES = {
+    "Charlatan (Character Kit)": ({"gnome": 6}, False),
+    "Dwarven Chanter (Character Kit)": ({"dwarf": 15}, True),
+    "Elven Minstrel (Character Kit)": ({"elf": 15, "half-elf": 12}, True),
+    "Gnome Professor (Character Kit)": ({"gnome": 15}, True),
+    "Gypsy-bard (Character Kit)": ({"elf": 9}, False),
+    "Halfling Whistler (Character Kit)": ({"halfling": 15}, True),
+    "Herald (Character Kit)": ({"dwarf": 6, "elf": 6, "gnome": 6, "half-elf": 6, "halfling": 6}, False),
+    "Jester - Bard (Character Kit)": ({"gnome": 15, "halfling": 8}, False),
+    "Jongleur (Character Kit)": ({"gnome": 9, "halfling": 12}, False),
+    "Loremaster (Character Kit)": ({"elf": 12}, False),
+    "Meistersinger (Character Kit)": ({"elf": 15}, False),
+    "Riddlemaster (Character Kit)": ({"gnome": 8, "halfling": 9}, False),
+    "Skald (Character Kit)": ({"dwarf": 12}, False),
+}
+
+
 def kit_name(title):
     name = title.replace(" (Character Kit)", "")
     return re.sub(r" - (Fighter|Paladin|Ranger|Wizard|Thief|Bard)$", "", name)
@@ -247,11 +280,13 @@ def build_kits():
             rev = api(action="query", prop="revisions", titles=title, rvprop="ids")["query"]["pages"]
             revid = next(iter(rev.values()))["revisions"][0]["revid"]
             req = KIT_REQ[title]
+            race_limits, race_only = KIT_RACES.get(title, ({}, False))
             kits[slug(title)] = {"name": kit_name(title), "classes": classes, "source": book,
                                  "min": req.get("min", {}), "otherRequirements": req.get("other", False),
+                                 "raceLimits": race_limits, "raceOnly": race_only,
                                  "url": url(title), "revid": revid}
             seen.add(title)
-    stale = set(KIT_REQ) - seen
+    stale = (set(KIT_REQ) | set(KIT_RACES)) - seen
     if stale:
         raise SystemExit(f"Curated kits not found on the wiki: {sorted(stale)}")
     return dict(sorted(kits.items(), key=lambda kv: kv[1]["name"].lower()))
@@ -300,7 +335,8 @@ if __name__ == "__main__":
         kit_docs.append(item_doc("kit", key, k["name"], "icons/svg/item-bag.svg", {
             "identifier": key, "classes": k["classes"], "source": k["source"],
             "min": {a: k["min"].get(a) for a in MINS},
-            "otherRequirements": k["otherRequirements"], "url": k["url"], "notes": ""}, i * 1000))
+            "otherRequirements": k["otherRequirements"], "raceLimits": k["raceLimits"], "raceOnly": k["raceOnly"],
+            "url": k["url"], "notes": ""}, i * 1000))
     write_docs("packs/_source/classes", class_docs)
     write_docs("packs/_source/kits", kit_docs)
     print(f"wrote packs/_source: {len(class_docs)} classes, {len(kit_docs)} kits "

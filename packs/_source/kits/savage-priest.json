@@ -20,6 +20,8 @@
       "cha": null
     },
     "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Savage_Priest_(Character_Kit)",
     "notes": ""
   },

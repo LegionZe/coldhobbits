@@ -2,6 +2,12 @@ import { AD2E } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
+/** "dwarf 15, gnome 6" from a { race: maxLevel | null } map ("unlimited" for null). */
+export function formatRaceLimits(limits) {
+  return Object.entries(limits ?? {}).map(([race, max]) =>
+    `${race} ${max ?? game.i18n.localize("AD2E.Race.Unlimited")}`).join(", ");
+}
+
 const signed = v => (v > 0 ? `+${v}` : `${v}`);
 const pct = v => (v === null || v === undefined ? "—" : `${v}%`);
 const plain = v => (v === null || v === undefined || v === "" ? "—" : `${v}`);
@@ -148,6 +154,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       conSaveBonus: race.conSaveBonus,
       poisonBonus: race.poisonBonus,
       classAllowedByRace: info.classAllowedByRace,
+      levelLimit: info.levelLimit,
+      needsRaceKit: info.needsRaceKit,
+      kitRaceLimits: formatRaceLimits(info.kitItem?.system.raceLimits),
+      overLevelLimit: !!info.levelLimit && sys.level > info.levelLimit,
       classItem: info.classItem,
       kitItem: info.kitItem,
       kitFits: info.kitFits,
@@ -180,21 +190,34 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const current = this.actor.items;
     const raceItem = current.find(i => i.type === "race");
     const classItem = current.find(i => i.type === "class");
+    const kitItem = current.find(i => i.type === "kit");
     const remove = [];
+    const raceAllows = (race, classId) => race.system.classes.has(classId) || race.system.kitClasses?.has(classId);
+    // Can this kit be used by this race for this class? (race-only kits; classes reached only through a kit)
+    const kitOkForRace = (kit, race, classId) => {
+      if (!race) return true;
+      const listed = race.system.identifier in (kit.system.raceLimits ?? {});
+      if (kit.system.raceOnly && !listed) return false;
+      return race.system.classes.has(classId) || listed;
+    };
     if (item.type === "race") {
-      if (classItem && !item.system.classes.has(classItem.system.identifier)) {
+      if (classItem && !raceAllows(item, classItem.system.identifier)) {
         ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: classItem.name, race: item.name }));
         return null;
       }
       if (raceItem) remove.push(raceItem.id);
+      if (kitItem && classItem && !kitOkForRace(kitItem, item, classItem.system.identifier)) remove.push(kitItem.id);
     } else if (item.type === "class") {
-      if (raceItem && !raceItem.system.classes.has(item.system.identifier)) {
+      if (raceItem && !raceAllows(raceItem, item.system.identifier)) {
         ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: item.name, race: raceItem.name }));
         return null;
       }
       if (classItem) remove.push(classItem.id);
-      const kit = current.find(i => i.type === "kit");
-      if (kit && !kit.system.classes.has(item.system.identifier)) remove.push(kit.id);
+      if (kitItem && (!kitItem.system.classes.has(item.system.identifier)
+        || !kitOkForRace(kitItem, raceItem, item.system.identifier))) remove.push(kitItem.id);
+      if (raceItem && !raceItem.system.classes.has(item.system.identifier)) {
+        ui.notifications.info(game.i18n.format("AD2E.Race.NeedsRaceKit", { class: item.name, race: raceItem.name }));
+      }
     } else {
       if (!classItem) {
         ui.notifications.warn(game.i18n.localize("AD2E.Class.NeedClassFirst"));
@@ -205,8 +228,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           { kit: item.name, class: classItem.name }));
         return null;
       }
-      const kit = current.find(i => i.type === "kit");
-      if (kit) remove.push(kit.id);
+      if (!kitOkForRace(item, raceItem, classItem.system.identifier)) {
+        ui.notifications.warn(game.i18n.format("AD2E.Race.KitNotForRace", { kit: item.name, race: raceItem.name }));
+        return null;
+      }
+      if (kitItem) remove.push(kitItem.id);
     }
     if (remove.length) await this.actor.deleteEmbeddedDocuments("Item", remove);
     return super._onDropItem(event, item);

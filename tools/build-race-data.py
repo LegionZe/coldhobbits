@@ -45,11 +45,47 @@ RACE_FACTS = {
     "Halfling": {"page": "Halfling (PHB)", "classes": ["cleric", "fighter", "thief"], "conSaves": True, "conPoison": True,
                  "infravision": 0, "infravisionByLineage": True},
 }
+# Racial class level limits, as supplied by the repository owner (2026-10-03):
+#            Human  Half-elf  Elf  Gnome  Dwarf  Halfling
+# Paladin    20+    -         -    -      -      -
+# Bard       20+    20+       -    -      -      -
+# Druid      20+    9         -    -      -      -
+# Illus.     20+    -         -    15     -      -
+# Mage       20+    12        15   -      -      -
+# Ranger     20+    16        15   -      -      -
+# Cleric     20+    14        12   9      10     8
+# Fighter    20+    14        12   11     15     9
+# Thief      20+    12        12   13     12     15
+# "20+" = no limit (null). "-" = class not allowed (already excluded by the class lists).
+# Specialist schools other than illusionist are not in the table; they use the Mage limit.
+LEVEL_LIMITS = {
+    "Human": {},
+    "Half-Elf": {"bard": None, "druid": 9, "mage": 12, "ranger": 16, "cleric": 14, "fighter": 14, "thief": 12},
+    "Elf": {"mage": 15, "ranger": 15, "cleric": 12, "fighter": 12, "thief": 12},
+    "Gnome": {"illusionist": 15, "cleric": 9, "fighter": 11, "thief": 13},
+    "Dwarf": {"cleric": 10, "fighter": 15, "thief": 12},
+    "Halfling": {"cleric": 8, "fighter": 9, "thief": 15},
+}
+
 RACE_TO_TABLE22 = {"Human": "human", "Elf": "elf", "Half-Elf": "half-elf", "Gnome": "gnome", "Dwarf": "dwarf", "Halfling": "halfling"}
 
 
 def link_text(c):
     return re.sub(r"\[\[(?:[^\]|]*\|)?([^\]]*)\]\]", r"\1", c).replace("*", "").strip()
+
+
+def level_limits(race, classes):
+    """Max level per allowed class (null = unlimited); specialists without an entry use the Mage limit."""
+    table = LEVEL_LIMITS[race]
+    out = {}
+    for c in classes:
+        if c in table:
+            out[c] = table[c]
+        elif c in SPECIALISTS:
+            out[c] = table.get("mage")
+        else:
+            out[c] = None
+    return out
 
 
 def build():
@@ -86,16 +122,21 @@ def build():
         else:
             classes = f["classes"] + sorted(s for s in specialists.get(RACE_TO_TABLE22[name], []) if s not in f["classes"])
         _, page_rev, _ = classdata.page(f["page"])
+        # Classes this race can only take through a kit that lists the race (Complete Bard's Handbook).
+        kit_classes = sorted({c for kf in glob.glob("packs/_source/kits/*.json")
+                              for kd in [json.load(open(kf))["system"]] if key in kd.get("raceLimits", {})
+                              for c in kd["classes"] if c not in classes})
         r = req.get(name, {"min": {}, "max": {}})
         system = {"identifier": key,
                   "min": {a: r["min"].get(a) for a in classdata.MINS},
                   "max": {a: r["max"].get(a) for a in classdata.MINS},
                   "adjust": {a: adjust.get(name, {}).get(a, 0) for a in classdata.MINS},
-                  "classes": classes, "conSaves": f["conSaves"], "conPoison": f["conPoison"],
+                  "classes": classes, "kitClasses": kit_classes, "conSaves": f["conSaves"], "conPoison": f["conPoison"],
                   "infravision": f["infravision"], "infravisionByLineage": f.get("infravisionByLineage", False),
+                  "levelLimits": level_limits(name, classes),
                   "url": classdata.url(f["page"]), "notes": ""}
         docs.append(classdata.item_doc("race", key, name, "icons/svg/mystery-man.svg", system, i * 1000))
-        print(f"{name}: page rev {page_rev}, classes {classes}, adjust {system['adjust']}")
+        print(f"{name}: page rev {page_rev}, classes {classes}, via kit {kit_classes}")
     classdata.write_docs("packs/_source/races", docs)
 
     # Table 9: Constitution Saving Throw Bonuses (dwarf, gnome, halfling).
