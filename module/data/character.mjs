@@ -1,6 +1,6 @@
-import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, strengthKey, thac0At } from "../config.mjs";
+import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, strengthKey, thac0At, thiefArmorColumn } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
+const { BooleanField, SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
 const int = (initial, min = null, max = null) =>
   new NumberField({ required: true, integer: true, initial, min, max, nullable: false });
@@ -42,6 +42,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Base movement rate override (default: the race item's Table 64 rate, 12 without a race).
       movement: new SchemaField({ override: new NumberField({ integer: true, min: 0, nullable: true, initial: null }) }),
       saves: new SchemaField(saves),
+      // Class abilities: discretionary thief/bard skill points per skill, the ranger's species enemy, paladin lay on
+      // hands used since the last rest.
+      classAbilities: new SchemaField({
+        points: new SchemaField(Object.fromEntries(AD2E.thiefSkills.map(k => [k, int(0, 0, 95)]))),
+        speciesEnemy: new StringField({ initial: "" }),
+        layOnHandsUsed: new BooleanField({ initial: false })
+      }),
       biography: new HTMLField()
     };
   }
@@ -109,10 +116,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const raceCon = this.raceInfo.race?.conSaves ? conSaveBonus(a.con.total) : 0;
     this.raceInfo.conSaveBonus = raceCon;
     this.raceInfo.poisonBonus = this.raceInfo.race?.conPoison ? raceCon : 0;
+    // Paladins: "+2 bonus to all saving throws" (Paladin (PHB)); a roll bonus like the racial one.
+    const classSave = this.classInfo.classItem?.system.identifier === "paladin" ? AD2E.paladinSaveBonus : 0;
+    this.classInfo.saveBonus = classSave;
     for (const key of AD2E.saves) {
       this.saves[key].table = saveRow[key];
       this.saves[key].value = this.saves[key].override ?? saveRow[key];
-      this.saves[key].bonus = ["rsw", "sp"].includes(key) ? raceCon : 0;
+      this.saves[key].bonus = (["rsw", "sp"].includes(key) ? raceCon : 0) + classSave;
     }
 
     const hd = hitDiceAt(this.classGroup, this.level);
@@ -126,6 +136,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.proficiencies = this.#computeProficiencies();
     this.weapons = this.#computeWeapons();
     this.spells = this.#computeSpells();
+    this.classAbilities.info = this.#computeClassAbilities();
 
     const computed = thac0At(this.classGroup, this.level);
     this.thac0.computed = computed;
@@ -440,6 +451,78 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         prepared, remaining, known: usable.length, maxKnown: kind === "wizard" ? maxKnown : null, over: prepared > slots };
     }).filter(l => l.slots > 0 || l.spells.length);
     return { table, kind, castingLevel: row?.casting ?? null, levels: out };
+  }
+
+  /**
+   * Class abilities (generated tables, see config.mjs AD2E.skillClasses):
+   *  - Thief skills: Table 26 base + Table 27 race + Table 28 Dexterity (pick pockets, open locks, find/remove traps,
+   *    move silently, hide in shadows) + Table 29 armour + kit adjustment + discretionary points, at most 95 for
+   *    thieves ("no skill can be raised above 95 percent, including all adjustments", Thief (PHB)). Points: 60 at
+   *    1st level (at most 30 on one skill), +30 per level (at most 15 on one skill per level).
+   *  - Bard abilities: Table 33 base + race + Dexterity + armour + kit + points (20 at 1st level, +15 per level).
+   *  - Ranger hide in shadows / move silently: Table 18 by level + race + Dexterity; only in studded leather or
+   *    lighter armour (Ranger (PHB)); halved outside natural surroundings (shown, not applied).
+   *  - Backstab multiplier (Table 30) for thieves; turning undead level (Table 61) for clerics, and paladins from
+   *    3rd level as a cleric two levels lower; paladin lay on hands (2 hp per level, once a day) and cure disease
+   *    (once a week per 5 levels); ranger tracking bonus (+1 per 3 levels).
+   */
+  #computeClassAbilities() {
+    const id = this.classInfo.classItem?.system.identifier ?? null;
+    const T = AD2E.classTables;
+    const def = AD2E.skillClasses[id] ?? null;
+    const out = { classId: id, skills: [], budget: null, perSkillMax: null, armorColumn: null, armorBlocked: false,
+      backstab: null, turnLevel: null, layOnHands: null, cureDisease: null, tracking: null };
+    if (def) {
+      const raceId = this.raceInfo.raceItem?.system.identifier ?? null;
+      const dex = Math.min(Math.max(this.abilities.dex.total, 9), 19);
+      const dexRow = T.thief.dex.find(r => dex >= r.min && dex <= r.max) ?? {};
+      const body = this.armor.body;
+      let armorAdj = () => 0;
+      if (def.armor) {
+        const column = thiefArmorColumn(body?.name);
+        out.armorColumn = column;
+        out.armorBlocked = column === "heavy";
+        armorAdj = k => T.thief.armor[k]?.[column] ?? 0;
+      } else {
+        // Ranger: studded leather (AC 7) or lighter.
+        out.armorBlocked = !!body && (body.system.ac ?? 10) < 7;
+      }
+      const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
+      const rangerRow = id === "ranger" ? T.ranger.find(r => r.level === Math.min(this.level, T.ranger.at(-1).level)) : null;
+      const points = this.classAbilities.points;
+      for (const key of def.skills) {
+        const base = def.base === "thief" ? T.thief.base[key] : (def.base === "bard" ? T.bard[key] : rangerRow?.[key] ?? 0);
+        const race = T.thief.race[key]?.[raceId] ?? 0;
+        const dexAdj = dexRow[key] ?? 0;
+        const armor = armorAdj(key);
+        const kitAdj = kit?.skillAdjust?.[key] ?? 0;
+        const pts = def.points ? (points[key] ?? 0) : 0;
+        let total = base + race + dexAdj + armor + kitAdj + pts;
+        const capped = def.cap !== null && total > def.cap;
+        if (capped) total = def.cap;
+        out.skills.push({ key, base, race, dex: dexAdj, armor, kit: kitAdj, points: pts, total, capped,
+          available: !out.armorBlocked });
+      }
+      if (def.points) {
+        const [first, per] = def.points;
+        const used = def.skills.reduce((n, k) => n + (points[k] ?? 0), 0);
+        out.budget = { total: first + per * (this.level - 1), used };
+        out.budget.over = used > out.budget.total;
+        if (id === "thief") {
+          out.perSkillMax = AD2E.thiefPointLimits.first + AD2E.thiefPointLimits.perLevel * (this.level - 1);
+          for (const s of out.skills) s.overLimit = s.points > out.perSkillMax;
+        }
+      }
+    }
+    if (id === "thief") out.backstab = T.backstab.find(r => this.level >= r.min && this.level <= r.max)?.multiplier ?? null;
+    const turn = AD2E.turnUndead[id];
+    if (turn && this.level >= turn.from) out.turnLevel = this.level + turn.offset;
+    if (id === "paladin") {
+      out.layOnHands = { hp: 2 * this.level, used: this.classAbilities.layOnHandsUsed };
+      out.cureDisease = Math.ceil(this.level / 5);
+    }
+    if (id === "ranger") out.tracking = Math.floor(this.level / 3);
+    return out;
   }
 
   getRollData() {

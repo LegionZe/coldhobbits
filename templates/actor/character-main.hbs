@@ -45,7 +45,7 @@
       <div class="ad2e-save">
         <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
         <strong class="{{#if sv.overridden}}ad2e-overridden{{/if}}">{{sv.value}}</strong>
-        <span class="ad2e-save-bonus">{{#if sv.bonus}}<span data-tooltip="{{localize 'AD2E.Race.SaveBonus'}}">+{{sv.bonus}}</span>{{/if}}{{#if sv.poison}}<span data-tooltip="{{localize 'AD2E.Race.PoisonBonus'}}">+{{sv.poison}}&#x2620;</span>{{/if}}</span>
+        <span class="ad2e-save-bonus">{{#if sv.bonus}}<span data-tooltip="{{localize 'AD2E.Save.RollBonus'}}">+{{sv.bonus}}</span>{{/if}}{{#if sv.poison}}<span data-tooltip="{{localize 'AD2E.Race.PoisonBonus'}}">+{{sv.poison}}&#x2620;</span>{{/if}}</span>
         <input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">
       </div>
       {{/each}}

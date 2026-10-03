@@ -1,3 +1,4 @@
+import { AD2E } from "../config.mjs";
 import { minimumsField } from "./item-class.mjs";
 
 const { ArrayField, BooleanField, NumberField, ObjectField, SchemaField, StringField, SetField } = foundry.data.fields;
@@ -12,6 +13,8 @@ const proficiencyChoices = () => new ArrayField(new SchemaField({ choice: new Ar
  * own level limit); `raceOnly`: only the listed races may take the kit.
  * `bonusProficiencies`: granted free when the kit is added; `requiredProficiencies`: added too, but use slots.
  * `bonusSlots`: extra proficiency slots from the kit.
+ * `skillAdjust`: per thief skill, a percentage the kit adds to (or takes from) thief/bard/ranger skills. Kit pages
+ * describe these in their text; the GM enters them (default 0).
  */
 export default class KitData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -29,6 +32,8 @@ export default class KitData extends foundry.abstract.TypeDataModel {
         weapon: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         nonweapon: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false })
       }),
+      skillAdjust: new SchemaField(Object.fromEntries(AD2E.thiefSkills.map(k =>
+        [k, new NumberField({ required: true, integer: true, initial: 0, nullable: false })]))),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
