@@ -44,6 +44,66 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "modifiers": [
+      {
+        "target": "skill",
+        "key": "cw",
+        "value": 5,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "climbing ropes (+10% on a ship's ropes)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "skill",
+        "key": "cw",
+        "value": -10,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "climbing without a rope",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "rope combat (+2 on shipboard ropes)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "save",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "rope combat, where agility helps (+2 on shipboard ropes)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
     }
   },
   "effects": [],

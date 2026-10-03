@@ -41,6 +41,13 @@
       {{/each}}
     </div>
   </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Kit.Modifiers"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Kit.SheetHint"}}</p>
+    {{#if kitPoints}}<p>{{kitPoints}}</p>{{/if}}
+    {{#if kitModifiers.length}}<ul class="ad2e-kit-mods">{{#each kitModifiers as |t|}}<li>{{t}}</li>{{/each}}</ul>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Kit.NoModifiers"}}</p>{{/if}}
+  </fieldset>
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
 </section>

@@ -26,6 +26,42 @@ export default class AD2EActor extends Actor {
     return { ...super.getRollData() };
   }
 
+  /** Conditional kit modifiers for a roll (`target`, optional key): the character's kit options, else none. */
+  #kitOptions(target, key = null) {
+    return this.type === "character" ? (this.system.kitMods?.options(target, key) ?? []) : [];
+  }
+
+  /** Checkbox fields for conditional kit modifiers ("Kit: +2 (while Berserk)"). */
+  #kitFields(options, unit = "") {
+    if (!options.length) return "";
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const kit = this.system.classInfo?.kitItem?.name ?? "";
+    return `<fieldset><legend>${esc(game.i18n.format("AD2E.Kit.Situational", { kit }))}</legend>${options.map(m =>
+      `<div class="form-group"><label>${esc(`${m.current > 0 ? "+" : ""}${m.current}${unit} ${m.condition}`)}</label>`
+      + `<input type="checkbox" name="kitmod" value="${m.index}"></div>`).join("")}</fieldset>`;
+  }
+
+  /** Sum and labels of the kit modifiers ticked in a dialog form. */
+  static #kitPicked(form, options) {
+    const picked = [...(form?.querySelectorAll?.("input[name=kitmod]:checked") ?? [])].map(i => Number(i.value));
+    const chosen = options.filter(m => picked.includes(m.index));
+    return { sum: chosen.reduce((n, m) => n + m.current, 0), text: chosen.map(m => m.condition).join("; ") };
+  }
+
+  /** Dialog with a situational modifier and the conditional kit modifiers; null when cancelled. */
+  async #promptRoll(title, options, unit = "") {
+    return DialogV2.prompt({
+      window: { title },
+      content: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0" autofocus></div>`
+        + this.#kitFields(options, unit),
+      ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => {
+        const kit = AD2EActor.#kitPicked(button.form, options);
+        return { mod: Number(button.form.elements.mod.value) || 0, kit: kit.sum, kitText: kit.text };
+      } },
+      rejectClose: false
+    });
+  }
+
   /**
    * Hit points gained on reaching `level`: one hit die + CON adjustment (minimum 1 per die)
    * while the group still gains dice, otherwise the fixed per-level bonus with no CON.
@@ -39,17 +75,19 @@ export default class AD2EActor extends Actor {
     const bonus = cur.bonus - prev.bonus;
     const speaker = ChatMessage.getSpeaker({ actor: this });
     const flavor = game.i18n.format("AD2E.HP.RollFlavor", { level });
+    // Kit hit points per level (e.g. Gallant +1 per level, in addition to Constitution).
+    const kitHp = this.type === "character" ? (this.system.kitMods?.total("hp") ?? 0) : 0;
     if (dice <= 0) {
-      await ChatMessage.create({ speaker, content: `<p>${flavor}: ${game.i18n.format("AD2E.HP.Fixed", { hp: bonus })}</p>` });
-      return bonus;
+      await ChatMessage.create({ speaker, content: `<p>${flavor}: ${game.i18n.format("AD2E.HP.Fixed", { hp: bonus + kitHp })}</p>` });
+      return bonus + kitHp;
     }
     const con = this.system.mods.conHp;
     const roll = await new Roll(`${dice}d${cur.die} + @con`, { con: con * dice }).evaluate();
-    const gained = Math.max(roll.total, dice) + bonus; // no hit die yields less than 1 hit point
+    const gained = Math.max(roll.total, dice) + bonus + kitHp; // no hit die yields less than 1 hit point
     await roll.toMessage({
       speaker,
       flavor: `${flavor}: ${game.i18n.format("AD2E.HP.Gained", { hp: gained })}`
-        + (gained > roll.total + bonus ? ` (${game.i18n.localize("AD2E.HP.Minimum")})` : "")
+        + (gained > roll.total + bonus + kitHp ? ` (${game.i18n.localize("AD2E.HP.Minimum")})` : "")
     });
     return gained;
   }
@@ -84,11 +122,19 @@ export default class AD2EActor extends Actor {
     const item = this.items.get(itemId);
     const entry = this.system.proficiencies.entries.find(e => e.item.id === itemId);
     if (!item || entry?.target === null || entry?.target === undefined) return;
+    // Conditional kit modifiers for this proficiency: ask which apply.
+    const options = this.#kitOptions("proficiency", item.system.identifier);
+    let input = { mod: 0, kit: 0, kitText: "" };
+    if (options.length) {
+      input = await this.#promptRoll(item.name, options);
+      if (!input) return;
+    }
+    const target = entry.target + input.mod + input.kit;
     const roll = await new Roll("1d20").evaluate();
-    const success = roll.total < 20 && roll.total <= entry.target;
+    const success = roll.total < 20 && roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${entry.target}): `
+      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}): `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (roll.total === 20 ? ` (${game.i18n.localize("AD2E.Prof.TwentyFails")})` : "")
     });
@@ -138,18 +184,17 @@ export default class AD2EActor extends Actor {
 
   /** Roll-under ability check: d20 <= score + modifier. */
   async rollAbilityCheck(key) {
-    const mod = await promptNumber(
-      game.i18n.localize(`AD2E.Ability.${key}`),
-      game.i18n.localize("AD2E.Roll.Modifier")
-    );
-    if (mod === null) return;
-    const target = this.system.abilities[key].total + mod; // effective score (racial adjustment included)
+    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Ability.${key}`), this.#kitOptions("ability", key));
+    if (!input) return;
+    // effective score (racial adjustment included) + kit bonus to ability checks
+    const kitAuto = this.type === "character" ? (this.system.kitMods?.total("ability", key) ?? 0) : 0;
+    const target = this.system.abilities[key].total + kitAuto + input.mod + input.kit;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Ability.${key}`)} ${game.i18n.localize("AD2E.Roll.Check")} `
-        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}): `
+        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}): `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }
@@ -176,18 +221,16 @@ export default class AD2EActor extends Actor {
 
   /** Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. */
   async rollSave(key) {
-    const mod = await promptNumber(
-      game.i18n.localize(`AD2E.Save.${key}`),
-      game.i18n.localize("AD2E.Roll.Modifier")
-    );
-    if (mod === null) return;
+    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key));
+    if (!input) return;
+    const mod = input.mod + input.kit;
     const target = this.system.saves[key].value;
     const bonus = this.system.saves[key].bonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+): `
+      flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""}): `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }
@@ -253,19 +296,22 @@ export default class AD2EActor extends Actor {
         opts.map(([k, l]) => `<option value="${k}"${k === "short" ? " selected" : ""}>${l}</option>`).join("")}</select></div>`;
     }
     const backstab = use === "melee" ? this.#backstabMultiplier() : null;
+    const kitOptions = this.#kitOptions("attack");
     const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
         + ammoField + rangeField + backstabField
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`
+        + this.#kitFields(kitOptions),
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
-          return { ac: Number(f.ac.value) || 0, mod: Number(f.mod.value) || 0, range: f.range?.value ?? null,
-            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked };
+          const kit = AD2EActor.#kitPicked(button.form, kitOptions);
+          return { ac: Number(f.ac.value) || 0, mod: (Number(f.mod.value) || 0) + kit.sum, range: f.range?.value ?? null,
+            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text };
         }
       },
       rejectClose: false
@@ -298,6 +344,7 @@ export default class AD2EActor extends Actor {
         + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
         + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
+        + (input.kitText ? ` [${input.kitText}]` : "")
     });
   }
 
@@ -334,6 +381,7 @@ export default class AD2EActor extends Actor {
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>`
       : "";
     const mult = use === "melee" ? this.#backstabMultiplier() : null;
+    const kitOptions = this.#kitOptions("damage");
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     const input = await DialogV2.prompt({
@@ -341,13 +389,15 @@ export default class AD2EActor extends Actor {
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
         + backstabField
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`
+        + this.#kitFields(kitOptions),
       ok: {
         label: i18n("AD2E.Roll.Roll"),
         callback: (event, button) => {
           const f = button.form.elements;
-          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: Number(f.mod.value) || 0,
-            backstab: !!f.backstab?.checked };
+          const kit = AD2EActor.#kitPicked(button.form, kitOptions);
+          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: (Number(f.mod.value) || 0) + kit.sum,
+            backstab: !!f.backstab?.checked, kitText: kit.text };
         }
       },
       rejectClose: false
@@ -365,6 +415,7 @@ export default class AD2EActor extends Actor {
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
+        + (input.kitText ? ` [${input.kitText}]` : "")
         + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
     });
   }
@@ -522,12 +573,17 @@ export default class AD2EActor extends Actor {
       return;
     }
     const ranger = info.classId === "ranger";
+    const kitOptions = this.#kitOptions("skill", key);
     const input = await DialogV2.prompt({
       window: { title: name },
       content: (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
-        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")} (%)</label><input type="number" name="mod" value="0" step="5" autofocus></div>`,
-      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-        mod: Number(button.form.elements.mod.value) || 0, halved: !!button.form.elements.halved?.checked }) },
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")} (%)</label><input type="number" name="mod" value="0" step="5" autofocus></div>`
+        + this.#kitFields(kitOptions, "%"),
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const kit = AD2EActor.#kitPicked(button.form, kitOptions);
+        return { mod: (Number(button.form.elements.mod.value) || 0) + kit.sum, halved: !!button.form.elements.halved?.checked,
+          kitText: kit.text };
+      } },
       rejectClose: false
     });
     if (!input) return;
@@ -538,7 +594,7 @@ export default class AD2EActor extends Actor {
     const trap = key === "rt" && roll.total >= AD2E.trapSpringRoll;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}): `
+      flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}${input.kitText ? `; ${input.kitText}` : ""}): `
         + i18n(success ? "AD2E.Skill.Success" : "AD2E.Skill.Failure")
         + (trap ? ` — ${i18n("AD2E.Skill.TrapSprung")}` : "")
     });

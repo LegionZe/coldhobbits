@@ -103,6 +103,15 @@ initiative 1d10, lowest acts first.
   +2 to all saves, lay on hands (2 hp per level, once a day; Rest restores it), cure disease per week. Rangers: species
   enemy and tracking bonus. Class features are listed with the level gained and a link to the class page. Tables from
   `python3 tools/build-class-ability-tables.py`.
+- Kit mechanics: numeric modifiers stated on 61 kit pages (attack, damage, saves, Armour Class, thief skills, proficiency
+  and ability checks, initiative, surprise, reaction, hit points per level, Charisma) and thief skill point budgets
+  (Assassin, Thug) are curated by `python3 tools/build-kit-mechanics.py`, which checks each against the current kit page.
+  Unconditional ones apply automatically (some only in no/light/any body armour); situational ones are tick boxes in
+  the attack, damage, save, ability check, proficiency and thief skill dialogs; reaction and surprise ones are listed
+  for the DM. Level-scaled ones (e.g. Cavalier, Wyrmslayer) follow the character's level. Abilities without a number
+  (special powers, spells, followers) stay on the kit page.
+  Kit items copied into a world or onto characters before 0.0.31 get the mechanics from the compendium when a GM
+  loads the world (only kits without modifiers; skill adjustments a GM entered are kept).
 - Monster importer (GM): Configure Settings > "Import monsters", or the macro `game.ad2e.importMonsters()`. Choose a
   setting and source book from https://www.completecompendium.com/, load its monsters, filter and select, and import them
   as Monster / NPC actors (optionally into a folder named after the book). Only stat blocks and a link to each page are

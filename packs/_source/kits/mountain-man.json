@@ -40,6 +40,44 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "modifiers": [
+      {
+        "target": "save",
+        "key": "par",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "death magic that would kill him",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "all NPCs (-2 nobles and cultural elite)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": -5,
+      "hs": -5,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
     }
   },
   "effects": [],

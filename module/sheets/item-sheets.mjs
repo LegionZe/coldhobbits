@@ -1,5 +1,5 @@
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
-import { formatKitProficiencies } from "./character-sheet.mjs";
+import { formatKitModifier, formatKitProficiencies } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -78,6 +78,10 @@ export class KitSheet extends AD2EItemSheet {
       .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");
     context.skillAdjust = AD2E.thiefSkills.map(key => ({ key, label: game.i18n.localize(`AD2E.Skill.${key}`),
       value: this.document.system.skillAdjust?.[key] ?? 0 }));
+    context.kitModifiers = (this.document.system.modifiers ?? []).map(m => formatKitModifier(m));
+    const pts = this.document.system.skillPoints;
+    context.kitPoints = pts?.first !== null && pts?.first !== undefined
+      ? game.i18n.format("AD2E.Kit.SkillPoints", { first: pts.first, per: pts.perLevel ?? 30 }) : "";
     return context;
   }
 

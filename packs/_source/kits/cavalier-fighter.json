@@ -39,6 +39,77 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "modifiers": [
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 6,
+        "step": 1,
+        "from": 1,
+        "condition": "lance from horseback (proficient)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 6,
+        "step": 1,
+        "from": 3,
+        "condition": "his chosen type of sword",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 6,
+        "step": 1,
+        "from": 5,
+        "condition": "his chosen horseman's mace, flail or pick",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "save",
+        "key": "",
+        "value": 4,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "magic that would affect his mind (charm, sleep, scare, command, ...)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": 3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "his own culture (-3 from criminals and evil)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
     }
   },
   "effects": [],

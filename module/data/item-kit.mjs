@@ -14,7 +14,10 @@ const proficiencyChoices = () => new ArrayField(new SchemaField({ choice: new Ar
  * `bonusProficiencies`: granted free when the kit is added; `requiredProficiencies`: added too, but use slots.
  * `bonusSlots`: extra proficiency slots from the kit.
  * `skillAdjust`: per thief skill, a percentage the kit adds to (or takes from) thief/bard/ranger skills. Kit pages
- * describe these in their text; the GM enters them (default 0).
+ * describe these in their text; generated values come from tools/build-kit-mechanics.py, and the GM can change them.
+ * `skillPoints`: thief skill discretionary points when the kit changes them ({ first, perLevel }; null = class default).
+ * `modifiers`: kit modifiers stated on the kit page (see tools/build-kit-mechanics.py for the fields); those with no
+ * condition apply automatically, conditional ones are offered in the matching roll dialog.
  */
 export default class KitData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -34,6 +37,21 @@ export default class KitData extends foundry.abstract.TypeDataModel {
       }),
       skillAdjust: new SchemaField(Object.fromEntries(AD2E.thiefSkills.map(k =>
         [k, new NumberField({ required: true, integer: true, initial: 0, nullable: false })]))),
+      skillPoints: new SchemaField({
+        first: new NumberField({ integer: true, min: 0, nullable: true, initial: null }),
+        perLevel: new NumberField({ integer: true, min: 0, nullable: true, initial: null })
+      }),
+      modifiers: new ArrayField(new SchemaField({
+        target: new StringField({ required: true, initial: "attack", choices: AD2E.kitTargets }),
+        key: new StringField({ initial: "" }),
+        value: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        every: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
+        step: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        from: new NumberField({ required: true, integer: true, min: 1, initial: 1, nullable: false }),
+        condition: new StringField({ initial: "" }),
+        armor: new StringField({ initial: "", choices: ["", "none", "light", "any"] }),
+        max: new NumberField({ integer: true, nullable: true, initial: null })
+      })),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };

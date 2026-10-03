@@ -335,3 +335,27 @@ AD2E.thac0Progression = {
 
 /** Hit die size per group (used for CON bonus bookkeeping; HP itself is entered manually). */
 AD2E.hitDie = { warrior: 10, priest: 8, rogue: 6, wizard: 4 };
+
+/**
+ * Kit modifiers (system.modifiers on kit items, curated from the kit pages by tools/build-kit-mechanics.py).
+ * Effective value at a level: null below `from`; otherwise value + step x floor((level - from) / every).
+ */
+export function kitModifierValue(mod, level) {
+  if (level < (mod.from ?? 1)) return null;
+  return mod.value + (mod.every > 0 ? mod.step * Math.floor((level - (mod.from ?? 1)) / mod.every) : 0);
+}
+/** Whether equipped body armour (an item or null) meets a modifier's armour requirement. */
+export function kitArmorMatches(armor, body) {
+  if (!armor) return true;
+  const name = String(body?.name ?? "").toLowerCase();
+  if (armor === "none") return !body;
+  if (armor === "light") return !body || (/\b(leather|padded)\b/.test(name) && !name.includes("studded"));
+  if (armor === "any") return !!body;
+  return false;
+}
+/** Whether a modifier key ("" = all, or a comma-separated list) covers `key`. */
+export function kitKeyMatches(modKey, key) {
+  if (!modKey) return true;
+  return modKey.split(",").map(k => k.trim()).includes(key);
+}
+AD2E.kitTargets = ["attack", "damage", "save", "ac", "skill", "proficiency", "ability", "initiative", "surprise", "reaction", "hp", "score"];
