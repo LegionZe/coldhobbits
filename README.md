@@ -130,6 +130,9 @@ initiative 1d10, lowest acts first.
   six; V 4d6 drop lowest six times, assign; VI every ability 8 plus seven d6 added whole, none above 18. Rolls use
   Foundry dice and are posted to chat; the racial adjustment and effective score are previewed; Apply sets the rolled
   scores, and a warrior whose Strength comes to 18 can roll percentile dice for exceptional Strength (Strength (PHB)).
+- Opaque windows: Foundry's dark theme gives windows a 90% opaque background and hides what is behind with a blur,
+  which is off in low-performance mode, so text behind a sheet showed through. AD&D 2e sheets and windows now use the
+  same colour fully opaque (client setting "Opaque sheet backgrounds", on by default).
 - Magical items and treasure: item types `magic` (category per DMG Table 88: potions, scrolls, rings, rods, staves,
   wands and the miscellaneous magic tables; charges, quantity, usable-by, identified, DMG XP and gp value) and
   `jewellery` (gems by DMG Table 85 class with base value, 10% if uncut; jewellery and objects of art with an entered
