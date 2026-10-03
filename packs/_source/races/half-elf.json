@@ -6,6 +6,7 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "identifier": "half-elf",
+    "move": 12,
     "min": {
       "str": 3,
       "dex": 6,

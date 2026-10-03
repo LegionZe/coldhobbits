@@ -17,6 +17,11 @@ Hooks.once("init", () => {
 
   CONFIG.AD2E = AD2E;
 
+  game.settings.register("ad2e", "encumbrance", {
+    name: "AD2E.Enc.Setting", hint: "AD2E.Enc.SettingHint", scope: "world", config: true, type: String,
+    choices: AD2E.encumbranceRules, default: "basic", requiresReload: true
+  });
+
   CONFIG.Actor.documentClass = AD2EActor;
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Item.dataModels.class = ClassData;

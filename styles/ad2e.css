@@ -87,3 +87,9 @@
 .ad2e-prof-check { white-space: nowrap; opacity: 0.85; }
 .ad2e-prof-cost { text-align: center; }
 .ad2e-prof-roll { width: auto; min-width: 3.5rem; text-align: center; }
+
+/* Sheet footer: movement paces (always visible below the tabs). */
+.ad2e.character .ad2e-footer { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; padding: 0.35rem 0.5rem;
+  border-top: 1px solid var(--color-border, currentColor); font-size: 0.85em; flex: 0 0 auto; }
+.ad2e-move-item { white-space: nowrap; }
+.ad2e-move-item a { text-decoration: underline dotted; }

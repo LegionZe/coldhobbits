@@ -6,6 +6,7 @@
   "img": "icons/svg/mystery-man.svg",
   "system": {
     "identifier": "halfling",
+    "move": 6,
     "min": {
       "str": 7,
       "dex": 7,

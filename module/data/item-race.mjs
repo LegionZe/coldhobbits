@@ -9,6 +9,7 @@ const { BooleanField, NumberField, ObjectField, SchemaField, StringField, SetFie
  * to give the effective scores. `classes` holds the class identifiers the race may take.
  * `conSaves`/`conPoison`: Table 9 Constitution bonus vs. rod/staff/wand and spells / vs. poison.
  * `levelLimits`: { classIdentifier: maxLevel | null } (null = unlimited).
+ * `move`: base movement rate (PHB Table 64).
  */
 export default class RaceData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -22,6 +23,7 @@ export default class RaceData extends foundry.abstract.TypeDataModel {
       kitClasses: new SetField(new StringField()), // classes available only through a kit listing this race
       conSaves: new BooleanField({ initial: false }),
       conPoison: new BooleanField({ initial: false }),
+      move: new NumberField({ required: true, integer: true, min: 0, initial: 12, nullable: false }),
       infravision: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
       infravisionByLineage: new BooleanField({ initial: false }),
       levelLimits: new ObjectField(),
