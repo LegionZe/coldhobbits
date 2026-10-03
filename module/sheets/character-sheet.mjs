@@ -399,7 +399,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   _weaponTabContext(sys) {
     const actor = this.document;
     const rows = sys.weapons.map(e => ({
-      id: e.item.id, name: e.item.name, img: e.item.img, quantity: e.item.system.quantity, ...weaponDisplay(e),
+      id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
       status: e.proficient
         ? game.i18n.localize(e.specialized ? "AD2E.Weapon.Specialized" : "AD2E.Weapon.Proficient")
         : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: e.penalty }),
@@ -411,14 +411,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const weaponNames = new Map(sys.weapons.map(e => [e.item.system.identifier, e.item.name]));
     const label = id => weaponNames.get(id) ?? id.replace(/-/g, " ");
     const ammo = (actor.items?.filter(i => i.type === "ammunition") ?? []).map(a => ({
-      id: a.id, name: a.name, img: a.img, quantity: a.system.quantity, empty: a.system.quantity < 1,
+      id: a.id, name: a.name, img: a.img, url: a.system.url, quantity: a.system.quantity, empty: a.system.quantity < 1,
       launchers: [...a.system.launchers].map(label).join(", "),
       damage: `${a.system.damage.sm ?? "—"} / ${a.system.damage.l ?? "—"}`,
       bonus: magicBonus(a.system.bonus)
     })).sort((a, b) => a.name.localeCompare(b.name));
     const a = sys.armor;
     const armor = (actor.items?.filter(i => i.type === "armor") ?? []).map(i => ({
-      id: i.id, name: i.name, img: i.img, kind: i.system.kind, equipped: i.system.equipped, summary: armorSummary(i.system),
+      id: i.id, name: i.name, img: i.img, url: i.system.url, kind: i.system.kind, equipped: i.system.equipped, summary: armorSummary(i.system),
       meta: [i.system.cost, i.system.weight !== null ? `${i.system.weight} lb` : null].filter(Boolean).join(" · "),
       // an equipped item that does not count (a second body armour or shield) is marked
       unused: i.system.equipped && ((i.system.kind === "body" && a.body && a.body.id !== i.id)
@@ -444,7 +444,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const order = [...AD2E.coins, "other"];
     const coins = {
       list: (actor.items?.filter(i => i.type === "coin") ?? []).map(i => ({
-        id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, denomination: i.system.denomination,
+        id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, denomination: i.system.denomination,
         value: Math.round(i.system.quantity * i.system.value / AD2E.coinValues.gp * 100) / 100
       })).sort((x, y) => order.indexOf(x.denomination) - order.indexOf(y.denomination) || x.name.localeCompare(y.name)),
       gp: Math.round(e.coinValue / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
@@ -454,7 +454,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const gear = Object.entries(AD2E.equipmentCategories).map(([key, label]) => ({
       key, label: i18n(label),
       rows: gearItems.filter(i => i.system.category === key).map(i => ({
-        id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried,
+        id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
         summary: equipmentSummary(i.system),
         total: i.system.weight && i.system.quantity > 1 ? Math.round(i.system.weight * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
@@ -462,12 +462,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     // Magical items (DMG Table 88 order) and gems, jewellery and objects of art with their gp value.
     const catOrder = Object.keys(AD2E.magicCategories);
     const magic = (actor.items?.filter(i => i.type === "magic") ?? []).map(i => ({
-      id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried, summary: magicSummary(i),
+      id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried, summary: magicSummary(i),
       category: i.system.category, usable: i.system.usesCharges ? i.system.charges.value > 0 : (!i.system.consumable || i.system.quantity > 0)
     })).sort((x, y) => catOrder.indexOf(x.category) - catOrder.indexOf(y.category) || x.name.localeCompare(y.name));
     const jewelleryItems = actor.items?.filter(i => i.type === "jewellery") ?? [];
     const treasure = {
-      list: jewelleryItems.map(i => ({ id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried,
+      list: jewelleryItems.map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
         summary: jewellerySummary(i), total: i.system.totalValue })).sort((x, y) => x.name.localeCompare(y.name)),
       gp: Math.round(jewelleryItems.reduce((n, i) => n + (i.system.totalValue ?? 0), 0) * 100) / 100
     };

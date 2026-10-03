@@ -158,7 +158,9 @@
     "kitClasses": "Classes (identifiers)",
     "kitClassesHint": "Comma-separated class identifiers, e.g. fighter, paladin",
     "otherRequirements": "Has race, alignment or other restrictions",
-    "kitMinHint": "Overrides the class minimum for that ability. Blank keeps the class minimum; 0 removes it."
+    "kitMinHint": "Overrides the class minimum for that ability. Blank keeps the class minimum; 0 removes it.",
+    "Open": "Open item",
+    "Source": "Source page"
   },
   "AD2E.Save.OverrideHint": "Override (blank uses PHB Table 60 for the class group and level)",
   "AD2E.Save.RollBonus": "Bonus added to the roll: racial Constitution bonus (PHB Table 9, vs. rod/staff/wand and spell) and paladin +2 (all saves)",

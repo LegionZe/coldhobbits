@@ -26,7 +26,7 @@
     <div class="ad2e-prof-row ad2e-gear-row">
       <img src="{{r.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if r.url}}<a class="ad2e-item-link" href="{{r.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{r.summary}}{{#if r.total}} · {{localize "AD2E.Gear.Total"}} {{r.total}} lb{{/if}}</span>
       </div>
       <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
@@ -48,7 +48,7 @@
     {{#each wt.coins.list as |c|}}
     <div class="ad2e-prof-row ad2e-coin-row">
       <img src="{{c.img}}" alt="" width="24" height="24">
-      <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a>
+      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if c.url}}<a class="ad2e-item-link" href="{{c.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
       <input type="number" data-coin-quantity data-item-id="{{c.id}}" value="{{c.quantity}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}} data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
       <span class="ad2e-coin-value">{{c.value}} gp</span>
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
@@ -63,7 +63,7 @@
     <div class="ad2e-prof-row ad2e-gear-row">
       <img src="{{m.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{m.id}}">{{m.name}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{m.id}}">{{m.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{m.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if m.url}}<a class="ad2e-item-link" href="{{m.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{m.summary}}</span>
       </div>
       <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
@@ -86,7 +86,7 @@
     <div class="ad2e-prof-row ad2e-gear-row">
       <img src="{{t.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{t.id}}">{{t.name}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{t.id}}">{{t.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{t.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if t.url}}<a class="ad2e-item-link" href="{{t.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{t.summary}}{{#if t.total}} · {{localize "AD2E.Gear.Total"}} {{t.total}} gp{{/if}}</span>
       </div>
       <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
@@ -116,7 +116,7 @@
     <div class="ad2e-prof-row ad2e-armor-row">
       <img src="{{a.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if a.url}}<a class="ad2e-item-link" href="{{a.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{a.summary}}{{#if a.meta}} · {{a.meta}}{{/if}}</span>
       </div>
       <label class="ad2e-spec {{#if a.unused}}ad2e-unmet{{/if}}" {{#if a.unused}}data-tooltip="{{localize 'AD2E.Armor.Unused'}}"{{/if}}>
@@ -134,7 +134,7 @@
     <div class="ad2e-prof-row ad2e-weapon-row">
       <img src="{{r.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.bonus}} {{r.bonus}}{{/if}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.bonus}} {{r.bonus}}{{/if}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if r.url}}<a class="ad2e-item-link" href="{{r.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{r.meta}}</span>
         {{#if r.launcher}}<span class="ad2e-weapon-meta {{#unless r.ammo}}ad2e-unmet{{/unless}}">{{localize "AD2E.Ammo.Ammunition"}}: {{#if r.ammo}}{{r.ammo}}{{else}}{{localize "AD2E.Ammo.NoneOwned"}}{{/if}}</span>{{/if}}
       </div>
@@ -168,7 +168,7 @@
     <div class="ad2e-prof-row ad2e-ammo-row">
       <img src="{{a.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}{{#if a.bonus}} {{a.bonus}}{{/if}}</a>
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}{{#if a.bonus}} {{a.bonus}}{{/if}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if a.url}}<a class="ad2e-item-link" href="{{a.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
         <span class="ad2e-weapon-meta">{{localize "AD2E.Weapon.Damage"}} {{a.damage}} · {{localize "AD2E.Ammo.Launchers"}}: {{a.launchers}}</span>
       </div>
       <span class="ad2e-qty {{#if a.empty}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
