@@ -1,4 +1,5 @@
-{{!-- Armour list and Armor Class summary: wt = weaponTab, armor = rows (Combat tab rows have `combat`: no tick box). --}}
+{{!-- Armour list and Armor Class summary: wt = weaponTab, armor = rows (Combat tab rows have `combat`: no tick box); combat = Combat tab (no form inputs:
+     a second input with the same name makes the sheet submit an array, which fails validation). --}}
 <fieldset class="ad2e-prof-list">
   <legend>{{localize "AD2E.Armor.Armour"}}</legend>
   <div class="ad2e-prof-summary">
@@ -6,7 +7,8 @@
     <span data-tooltip="{{localize 'AD2E.Armor.RearHint'}}">{{localize "AD2E.Armor.Rear"}}: <strong>{{wt.ac.rear}}</strong></span>
     {{#if wt.ac.missileDiffers}}<span>{{localize "AD2E.Armor.VsMissiles"}}: <strong>{{wt.ac.missile}}</strong></span>{{/if}}
     <span>{{wt.ac.source}}{{#if wt.ac.shield}} + {{wt.ac.shield}}{{/if}}</span>
-    <label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
+    {{#if combat}}{{#if @root.system.ac.misc}}<span data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}}: <strong>{{@root.system.ac.misc}}</strong></span>{{/if}}
+    {{else}}<label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>{{/if}}
   </div>
   {{#each armor as |a|}}
   <div class="ad2e-prof-row ad2e-armor-row">

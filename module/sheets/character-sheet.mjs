@@ -255,6 +255,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.profTab = this._proficiencyTabContext(sys);
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
+    // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
+    context.combatFeatureTab = { ...context.featureTab, combat: true };
     context.movement = this._movementContext(sys);
     const enc = sys.encumbrance.info;
     context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
