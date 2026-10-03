@@ -1,0 +1,33 @@
+{
+  "_id": "81ylD7CKffn4n1h4",
+  "_key": "!items!81ylD7CKffn4n1h4",
+  "name": "Harp of Discord",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "harp-of-discord",
+    "category": "instrument",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Harp_of_Discord_(Magic_Instrument)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Tu9yMsYUE17lhlEg",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "Niy19jNkZY9eM992",
+  "_key": "!items!Niy19jNkZY9eM992",
+  "name": "Bracers of Defense",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bracers-of-defense",
+    "category": "boots",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Bracers_of_Defense_(Magic_Bracer)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "vWyZN0stpoQEc6Ba",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

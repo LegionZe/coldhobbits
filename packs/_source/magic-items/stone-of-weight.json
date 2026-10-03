@@ -1,0 +1,33 @@
+{
+  "_id": "fXq85QG4CIajEe7E",
+  "_key": "!items!fXq85QG4CIajEe7E",
+  "name": "Stone of Weight",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stone-of-weight",
+    "category": "dust",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Stone_of_Weight_(Magic_Stone)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "QS68eTqwO1g4Ldsy",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

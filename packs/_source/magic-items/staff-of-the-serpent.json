@@ -1,0 +1,33 @@
+{
+  "_id": "KiPHB75vhG3VYsMW",
+  "_key": "!items!KiPHB75vhG3VYsMW",
+  "name": "Staff of the Serpent",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-the-serpent",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Priest",
+    "identified": true,
+    "xpValue": 7000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_the_Serpent_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

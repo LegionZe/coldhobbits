@@ -1,0 +1,33 @@
+{
+  "_id": "zM7h2LcW58SEjQ97",
+  "_key": "!items!zM7h2LcW58SEjQ97",
+  "name": "Pouch of Accessibility",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pouch-of-accessibility",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Pouch_of_Accessibility_(Magic_Bag)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

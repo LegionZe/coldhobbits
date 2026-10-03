@@ -1,0 +1,33 @@
+{
+  "_id": "t1usUBm2S6ayOYhU",
+  "_key": "!items!t1usUBm2S6ayOYhU",
+  "name": "Flask of Curses",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "flask-of-curses",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Flask_of_Curses_(Magic_Flask)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

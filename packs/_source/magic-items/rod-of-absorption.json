@@ -1,0 +1,33 @@
+{
+  "_id": "a0Py35wV9Q5hmxhK",
+  "_key": "!items!a0Py35wV9Q5hmxhK",
+  "name": "Rod of Absorption",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-absorption",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "Priest, Wizard",
+    "identified": true,
+    "xpValue": 7500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Absorption_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

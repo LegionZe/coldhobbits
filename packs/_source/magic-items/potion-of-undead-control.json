@@ -1,0 +1,33 @@
+{
+  "_id": "nGl6d4cTJx9VZAsv",
+  "_key": "!items!nGl6d4cTJx9VZAsv",
+  "name": "Potion of Undead Control",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "potion-of-undead-control",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 700,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Potion_of_Undead_Control_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 4700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "OdoZfkBXenjrisJy",
+  "_key": "!items!OdoZfkBXenjrisJy",
+  "name": "Wand of Negation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-negation",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Negation_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

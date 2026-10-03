@@ -1,0 +1,33 @@
+{
+  "_id": "2Ux7LI1PcU8Fibjb",
+  "_key": "!items!2Ux7LI1PcU8Fibjb",
+  "name": "Elixir of Youth",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "elixir-of-youth",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Elixir_of_Youth_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

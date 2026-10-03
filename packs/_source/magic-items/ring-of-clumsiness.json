@@ -1,0 +1,33 @@
+{
+  "_id": "oRg9JSDwB5Xgn6w7",
+  "_key": "!items!oRg9JSDwB5Xgn6w7",
+  "name": "Ring of Clumsiness",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ring-of-clumsiness",
+    "category": "ring",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Ring_of_Clumsiness_(Magic_Ring)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "X9p5VildNx3bkaVv",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

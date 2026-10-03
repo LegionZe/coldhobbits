@@ -1,0 +1,33 @@
+{
+  "_id": "gSGxR9HkjyBaVq17",
+  "_key": "!items!gSGxR9HkjyBaVq17",
+  "name": "Rod of Flailing",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-flailing",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Flailing_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

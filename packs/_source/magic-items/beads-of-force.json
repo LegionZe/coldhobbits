@@ -1,0 +1,33 @@
+{
+  "_id": "O03uRUFhpE9D6Mul",
+  "_key": "!items!O03uRUFhpE9D6Mul",
+  "name": "Beads of Force",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "beads-of-force",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 200,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Beads_of_Force_(Magic_Bead)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

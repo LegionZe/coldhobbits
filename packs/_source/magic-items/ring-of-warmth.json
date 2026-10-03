@@ -1,0 +1,33 @@
+{
+  "_id": "edDwqdLDb7mG7LSX",
+  "_key": "!items!edDwqdLDb7mG7LSX",
+  "name": "Ring of Warmth",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ring-of-warmth",
+    "category": "ring",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Ring_of_Warmth_(Magic_Ring)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "X9p5VildNx3bkaVv",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

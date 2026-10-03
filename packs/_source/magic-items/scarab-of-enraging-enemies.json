@@ -1,0 +1,33 @@
+{
+  "_id": "hnUqPCVPVC81ZR13",
+  "_key": "!items!hnUqPCVPVC81ZR13",
+  "name": "Scarab of Enraging Enemies",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "scarab-of-enraging-enemies",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Scarab_of_Enraging_Enemies_(Magic_Scarab)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

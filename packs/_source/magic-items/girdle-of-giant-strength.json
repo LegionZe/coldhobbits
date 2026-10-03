@@ -1,0 +1,33 @@
+{
+  "_id": "Ic36dJ0ahVRzLy8H",
+  "_key": "!items!Ic36dJ0ahVRzLy8H",
+  "name": "Girdle of Giant Strength",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "girdle-of-giant-strength",
+    "category": "girdle",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Priest, Rogue, Warrior",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Girdle_of_Giant_Strength_(Magic_Girdle)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ny4oixJQAjTTx67q",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

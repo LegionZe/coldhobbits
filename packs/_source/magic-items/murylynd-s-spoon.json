@@ -1,0 +1,33 @@
+{
+  "_id": "7Wqwla77NA75ct3v",
+  "_key": "!items!7Wqwla77NA75ct3v",
+  "name": "Murylynd's Spoon",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "murylynd-s-spoon",
+    "category": "household",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 750,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Murylynd's_Spoon",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "PypM28nylPwpwl9o",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

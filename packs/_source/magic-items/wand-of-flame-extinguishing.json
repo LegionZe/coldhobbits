@@ -1,0 +1,33 @@
+{
+  "_id": "eYfuLZ8hvNRqbYvg",
+  "_key": "!items!eYfuLZ8hvNRqbYvg",
+  "name": "Wand of Flame Extinguishing",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-flame-extinguishing",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Flame_Extinguishing_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

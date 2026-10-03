@@ -1,0 +1,33 @@
+{
+  "_id": "exm3cv6p2YlVfIKa",
+  "_key": "!items!exm3cv6p2YlVfIKa",
+  "name": "Rod of Cancellation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-cancellation",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 10000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Cancellation_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

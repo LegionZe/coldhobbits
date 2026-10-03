@@ -1,0 +1,33 @@
+{
+  "_id": "W3l3EpixjkY4g3bn",
+  "_key": "!items!W3l3EpixjkY4g3bn",
+  "name": "Quaal's Feather Token",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "quaal-s-feather-token",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Quaal's_Feather_Token_(Magic_Feather)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

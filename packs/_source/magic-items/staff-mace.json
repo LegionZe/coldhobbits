@@ -1,0 +1,33 @@
+{
+  "_id": "XhfQSkqKjRkkilrw",
+  "_key": "!items!XhfQSkqKjRkkilrw",
+  "name": "Staff-Mace",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-mace",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff-Mace_(Magic_Weapon)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

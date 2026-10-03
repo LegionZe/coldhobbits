@@ -1,0 +1,33 @@
+{
+  "_id": "kLrXd2uHrvn72IQQ",
+  "_key": "!items!kLrXd2uHrvn72IQQ",
+  "name": "Censer of Summoning Hostile Air Elementals",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "censer-of-summoning-hostile-air-elementals",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Censer_of_Summoning_Hostile_Air_Elementals_(Magic_Censer)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

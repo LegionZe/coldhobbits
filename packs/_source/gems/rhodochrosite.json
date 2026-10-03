@@ -1,0 +1,26 @@
+{
+  "_id": "MNCequ7z2WBIjn3c",
+  "_key": "!items!MNCequ7z2WBIjn3c",
+  "name": "Rhodochrosite",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rhodochrosite",
+    "kind": "gem",
+    "gemClass": "ornamental",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "giqI8ESRACjc8qCG",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

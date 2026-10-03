@@ -1,0 +1,26 @@
+{
+  "_id": "5KkxQDqJ7dA6JvIj",
+  "_key": "!items!5KkxQDqJ7dA6JvIj",
+  "name": "Spinel",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "spinel",
+    "kind": "gem",
+    "gemClass": "fancy",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": "DMG value range: 100-500 gp"
+  },
+  "effects": [],
+  "folder": "D4yWppUxyQl5qEVp",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

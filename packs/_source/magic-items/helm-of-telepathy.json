@@ -1,0 +1,33 @@
+{
+  "_id": "eDcbvdfHkJfJj4mh",
+  "_key": "!items!eDcbvdfHkJfJj4mh",
+  "name": "Helm of Telepathy",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "helm-of-telepathy",
+    "category": "girdle",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Helm_of_Telepathy_(Magic_Helmet)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ny4oixJQAjTTx67q",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

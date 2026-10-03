@@ -1,0 +1,33 @@
+{
+  "_id": "Ho2KwfwT3ZsdOlQ4",
+  "_key": "!items!Ho2KwfwT3ZsdOlQ4",
+  "name": "Wand of Magic Detection",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wand-of-magic-detection",
+    "category": "wand",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 100,
+      "max": 100,
+      "formula": "1d20+80"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Wand_of_Magic_Detection_(Magic_Wand)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4EGlcOIcKXdMi6K4",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

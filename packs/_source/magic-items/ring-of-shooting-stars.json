@@ -1,0 +1,33 @@
+{
+  "_id": "Aowi36Y2jyWxaSCl",
+  "_key": "!items!Aowi36Y2jyWxaSCl",
+  "name": "Ring of Shooting Stars",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ring-of-shooting-stars",
+    "category": "ring",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Ring_of_Shooting_Stars_(Magic_Ring)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "X9p5VildNx3bkaVv",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

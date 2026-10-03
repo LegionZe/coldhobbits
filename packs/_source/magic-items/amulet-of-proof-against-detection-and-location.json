@@ -1,0 +1,33 @@
+{
+  "_id": "tWuJGQI4JdOa6na0",
+  "_key": "!items!tWuJGQI4JdOa6na0",
+  "name": "Amulet of Proof Against Detection and Location",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "amulet-of-proof-against-detection-and-location",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 4000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Amulet_of_Proof_Against_Detection_and_Location_(Magic_Amulet)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

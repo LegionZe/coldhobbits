@@ -1,0 +1,33 @@
+{
+  "_id": "yn4hvJqkJuHwuetJ",
+  "_key": "!items!yn4hvJqkJuHwuetJ",
+  "name": "Phylactery of Faithfulness",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "phylactery-of-faithfulness",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Priest",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Phylactery_of_Faithfulness_(Magic_Phylactery)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

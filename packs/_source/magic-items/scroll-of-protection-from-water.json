@@ -1,0 +1,33 @@
+{
+  "_id": "P8fC6nf3bo86WS6r",
+  "_key": "!items!P8fC6nf3bo86WS6r",
+  "name": "Scroll of Protection from Water",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "scroll-of-protection-from-water",
+    "category": "scroll",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Scroll_of_Protection_from_Water_(Magic_Scroll)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "2qOwCv0q3J0OAvEQ",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

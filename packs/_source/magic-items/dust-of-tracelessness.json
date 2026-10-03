@@ -1,0 +1,33 @@
+{
+  "_id": "yFCNLbu22HCqYnuk",
+  "_key": "!items!yFCNLbu22HCqYnuk",
+  "name": "Dust of Tracelessness",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "dust-of-tracelessness",
+    "category": "dust",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Dust_of_Tracelessness_(Magic_Dust)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "QS68eTqwO1g4Ldsy",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

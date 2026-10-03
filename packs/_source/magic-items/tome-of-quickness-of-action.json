@@ -1,0 +1,33 @@
+{
+  "_id": "5mRzxS9AS27Cot4d",
+  "_key": "!items!5mRzxS9AS27Cot4d",
+  "name": "Tome of Quickness of Action",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "tome-of-quickness-of-action",
+    "category": "book",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 5000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Tome_of_Quickness_of_Action_(Magic_Book)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Ay4OZV3HDVjhtewl",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

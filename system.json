@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -133,6 +133,28 @@
       "label": "Equipment (PHB)",
       "system": "ad2e",
       "path": "packs/equipment",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "magic-items",
+      "label": "Magical Items (DMG)",
+      "system": "ad2e",
+      "path": "packs/magic-items",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "gems",
+      "label": "Gems (DMG)",
+      "system": "ad2e",
+      "path": "packs/gems",
       "type": "Item",
       "ownership": {
         "PLAYER": "OBSERVER",

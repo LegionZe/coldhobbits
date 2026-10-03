@@ -1,0 +1,33 @@
+{
+  "_id": "aryJWW83G5VAqcZZ",
+  "_key": "!items!aryJWW83G5VAqcZZ",
+  "name": "Oil of Slipperiness",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "oil-of-slipperiness",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 400,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Oil_of_Slipperiness_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

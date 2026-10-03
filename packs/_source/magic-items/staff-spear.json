@@ -1,0 +1,33 @@
+{
+  "_id": "NfmAwgq57m3D57X6",
+  "_key": "!items!NfmAwgq57m3D57X6",
+  "name": "Staff-Spear",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-spear",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff-Spear_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

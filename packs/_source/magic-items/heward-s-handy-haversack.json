@@ -1,0 +1,33 @@
+{
+  "_id": "h8ENPhCHupn5PgDP",
+  "_key": "!items!h8ENPhCHupn5PgDP",
+  "name": "Heward's Handy Haversack",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "heward-s-handy-haversack",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Heward's_Handy_Haversack_(Magic_Bag)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

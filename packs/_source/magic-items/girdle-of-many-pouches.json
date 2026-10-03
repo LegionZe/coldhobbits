@@ -1,0 +1,33 @@
+{
+  "_id": "JEq2MlxmJFexyGGb",
+  "_key": "!items!JEq2MlxmJFexyGGb",
+  "name": "Girdle of Many Pouches",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "girdle-of-many-pouches",
+    "category": "girdle",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Girdle_of_Many_Pouches_(Magic_Girdle)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ny4oixJQAjTTx67q",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

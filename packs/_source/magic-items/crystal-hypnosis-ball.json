@@ -1,0 +1,33 @@
+{
+  "_id": "oWftOVevsmkJ4nVv",
+  "_key": "!items!oWftOVevsmkJ4nVv",
+  "name": "Crystal Hypnosis Ball",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "crystal-hypnosis-ball",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Crystal_Hypnosis_Ball_(Magic_Crystal_Ball)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

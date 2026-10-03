@@ -1,0 +1,33 @@
+{
+  "_id": "7rzrs0A6rVqKGMgl",
+  "_key": "!items!7rzrs0A6rVqKGMgl",
+  "name": "Periapt of Wound Closure",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "periapt-of-wound-closure",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Periapt_of_Wound_Closure_(Magic_Periapt)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

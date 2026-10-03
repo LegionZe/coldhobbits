@@ -1,0 +1,33 @@
+{
+  "_id": "9vdwoAqnUzjRrvco",
+  "_key": "!items!9vdwoAqnUzjRrvco",
+  "name": "Rod of Splendor",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "rod-of-splendor",
+    "category": "rod",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 50,
+      "max": 50,
+      "formula": "1d10+40"
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Rod_of_Splendor_(Magic_Rod)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "HsxB7jN8GZxWH6eQ",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

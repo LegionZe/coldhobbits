@@ -1,0 +1,33 @@
+{
+  "_id": "Z6ExmyVph9h2ZbuH",
+  "_key": "!items!Z6ExmyVph9h2ZbuH",
+  "name": "Staff of Command",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "staff-of-command",
+    "category": "staff",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 25,
+      "max": 25,
+      "formula": "1d6+19"
+    },
+    "usableBy": "Priest, Wizard",
+    "identified": true,
+    "xpValue": 5000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Staff_of_Command_(Magic_Staff)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Zh7QJUPtMq7IK13g",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

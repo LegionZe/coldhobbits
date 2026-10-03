@@ -1,0 +1,33 @@
+{
+  "_id": "0p1GrW62lq0ZfIKx",
+  "_key": "!items!0p1GrW62lq0ZfIKx",
+  "name": "Portable Hole",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "portable-hole",
+    "category": "bag",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 5000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Portable_Hole_(Magic_Container)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aJenpWRT5AF1myCW",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "o6cUKHyokqSqpOPW",
+  "_key": "!items!o6cUKHyokqSqpOPW",
+  "name": "Manual of Stealthy Pilfering",
+  "type": "magic",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "manual-of-stealthy-pilfering",
+    "category": "book",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Rogue",
+    "identified": true,
+    "xpValue": 8000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Manual_of_Stealthy_Pilfering_(Magic_Book)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Ay4OZV3HDVjhtewl",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "yHxQ0r7yhrMWcUKZ",
+  "_key": "!items!yHxQ0r7yhrMWcUKZ",
+  "name": "Talisman of Ultimate Evil",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "talisman-of-ultimate-evil",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Priest",
+    "identified": true,
+    "xpValue": 3500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Talisman_of_Ultimate_Evil_(Magic_Talisman)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

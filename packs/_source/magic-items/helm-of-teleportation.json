@@ -1,0 +1,33 @@
+{
+  "_id": "J3WrT0ConnLvnbCf",
+  "_key": "!items!J3WrT0ConnLvnbCf",
+  "name": "Helm of Teleportation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "helm-of-teleportation",
+    "category": "girdle",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Helm_of_Teleportation_(Magic_Helmet)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ny4oixJQAjTTx67q",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "GvXhgvW84XNAeZgl",
+  "_key": "!items!GvXhgvW84XNAeZgl",
+  "name": "Saw of Mighty Cutting",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "saw-of-mighty-cutting",
+    "category": "household",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Warrior",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Saw_of_Mighty_Cutting_(Magic_Saw)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "PypM28nylPwpwl9o",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,26 @@
+{
+  "_id": "7hhDAK16eHH5Lo61",
+  "_key": "!items!7hhDAK16eHH5Lo61",
+  "name": "Tourmaline",
+  "type": "jewellery",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "tourmaline",
+    "kind": "gem",
+    "gemClass": "fancy",
+    "uncut": false,
+    "value": null,
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "url": "https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "D4yWppUxyQl5qEVp",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

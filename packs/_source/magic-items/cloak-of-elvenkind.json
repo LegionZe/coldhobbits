@@ -1,0 +1,33 @@
+{
+  "_id": "xi5X8pqP6x61auxA",
+  "_key": "!items!xi5X8pqP6x61auxA",
+  "name": "Cloak of Elvenkind",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cloak-of-elvenkind",
+    "category": "cloak",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Cloak_of_Elvenkind_(Magic_Cloak)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "n0azI1QJsPZYQuTu",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

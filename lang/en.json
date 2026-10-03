@@ -881,7 +881,10 @@
     "NoCharges": "{name} has no charges left.",
     "ChargesLeft": "{n} of {max} charges left",
     "Used": "{name} uses {item}.",
-    "NoneLeft": "{name}: none left."
+    "NoneLeft": "{name}: none left.",
+    "ChargesFormula": "Charges when found",
+    "RollCharges": "Roll charges",
+    "ChargesRolled": "{name}: {formula} = {n} charges."
   },
   "AD2E.Treasure": {
     "Kind": {

@@ -1,0 +1,33 @@
+{
+  "_id": "6mpUW1z3ABmMjzRo",
+  "_key": "!items!6mpUW1z3ABmMjzRo",
+  "name": "Stone Horse",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stone-horse",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 2000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Stone_Horse_(Magic_Statue)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

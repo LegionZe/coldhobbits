@@ -7,7 +7,8 @@ const optional = (integer = false) => new NumberField({ min: 0, integer, nullabl
 /**
  * Item type "magic": a magical item other than armour and weapons (those are armour and weapon items with a magical
  * bonus). `category` = DMG Table 88 category (Tables 89-104). `charges` (wands, staves, rods and the like; max null =
- * none): each use spends one; the DMG gives a wand 1d20+80 charges when found ("Wands (DMG)"). Potions, scrolls and
+ * none): each use spends one; `charges.formula` = charges when found (wands 1d20+80, rods 1d10+40, staves 1d6+19:
+ * "Wands (DMG)", "Rods (DMG)", "Staves (DMG)"), rolled from the item sheet. Potions, scrolls and
  * dusts are used up one at a time from `quantity`. `xpValue` / `gpValue`: the DMG item tables' XP value (for making the
  * item) and gp value. `identified` false: the item is unidentified. Weight counts toward encumbrance while `carried`.
  */
@@ -22,7 +23,8 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
       equipped: new BooleanField({ initial: false }),
       charges: new SchemaField({
         value: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
-        max: optional(true)
+        max: optional(true),
+        formula: new StringField({ initial: "" }) // charges when found, e.g. "1d20+80" (wands)
       }),
       usableBy: new StringField({ initial: "" }),
       identified: new BooleanField({ initial: true }),

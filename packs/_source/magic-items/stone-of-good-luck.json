@@ -1,0 +1,33 @@
+{
+  "_id": "zCBJjSuIvedVZI8w",
+  "_key": "!items!zCBJjSuIvedVZI8w",
+  "name": "Stone of Good Luck",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stone-of-good-luck",
+    "category": "dust",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 3000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Stone_of_Good_Luck_(Magic_Stone)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "QS68eTqwO1g4Ldsy",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

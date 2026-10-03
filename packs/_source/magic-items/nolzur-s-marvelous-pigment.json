@@ -1,0 +1,33 @@
+{
+  "_id": "WGFsz3s3kIQbJBj3",
+  "_key": "!items!WGFsz3s3kIQbJBj3",
+  "name": "Nolzur's Marvelous Pigment",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "nolzur-s-marvelous-pigment",
+    "category": "dust",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Nolzur's_Marvelous_Pigment_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "QS68eTqwO1g4Ldsy",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

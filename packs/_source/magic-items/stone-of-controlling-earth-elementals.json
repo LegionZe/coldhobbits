@@ -1,0 +1,33 @@
+{
+  "_id": "duCPkbrwJ7gWmfMk",
+  "_key": "!items!duCPkbrwJ7gWmfMk",
+  "name": "Stone of Controlling Earth Elementals",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stone-of-controlling-earth-elementals",
+    "category": "dust",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Stone_of_Controlling_Earth_Elementals_(Magic_Stone)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "QS68eTqwO1g4Ldsy",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

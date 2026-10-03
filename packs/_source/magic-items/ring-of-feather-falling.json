@@ -1,0 +1,33 @@
+{
+  "_id": "6tIXdczAfxIw7olp",
+  "_key": "!items!6tIXdczAfxIw7olp",
+  "name": "Ring of Feather Falling",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ring-of-feather-falling",
+    "category": "ring",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Ring_of_Feather_Falling_(Magic_Ring)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "X9p5VildNx3bkaVv",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "o8fPKBdnPJqZxgAr",
+  "_key": "!items!o8fPKBdnPJqZxgAr",
+  "name": "Talisman of the Sphere",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "talisman-of-the-sphere",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Wizard",
+    "identified": true,
+    "xpValue": 100,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Talisman_of_the_Sphere_(Magic_Talisman)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

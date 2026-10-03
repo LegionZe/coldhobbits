@@ -11,6 +11,8 @@
     <label>{{localize "AD2E.Gear.WeightEach"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
     <label>{{localize "AD2E.Magic.Charges"}} <input type="number" name="system.charges.value" value="{{system.charges.value}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Magic.MaxCharges"}} <input type="number" name="system.charges.max" value="{{system.charges.max}}" min="0" step="1" placeholder="—"></label>
+    <label>{{localize "AD2E.Magic.ChargesFormula"}} <input type="text" name="system.charges.formula" value="{{system.charges.formula}}" placeholder="1d20+80">
+      {{#if system.charges.formula}}{{#if editable}}<button type="button" data-action="rollCharges"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Magic.RollCharges"}}</button>{{/if}}{{/if}}</label>
     <label>{{localize "AD2E.Magic.UsableBy"}} <input type="text" name="system.usableBy" value="{{system.usableBy}}" placeholder="{{localize 'AD2E.Magic.UsableByHint'}}"></label>
     <label>{{localize "AD2E.Magic.XpValue"}} <input type="number" name="system.xpValue" value="{{system.xpValue}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Magic.GpValue"}} <input type="number" name="system.gpValue" value="{{system.gpValue}}" min="0" step="1"></label>

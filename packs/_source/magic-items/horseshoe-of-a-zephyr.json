@@ -1,0 +1,33 @@
+{
+  "_id": "YhGiocqpafWCAJXH",
+  "_key": "!items!YhGiocqpafWCAJXH",
+  "name": "Horseshoe of a Zephyr",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horseshoe-of-a-zephyr",
+    "category": "weird",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 1500,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Horseshoe_of_a_Zephyr_(Magic_Horseshoe)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jPUeqwXkHXAECclR",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

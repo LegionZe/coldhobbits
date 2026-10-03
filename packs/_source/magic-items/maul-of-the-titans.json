@@ -1,0 +1,33 @@
+{
+  "_id": "qn5ywcqXLqU2HOxK",
+  "_key": "!items!qn5ywcqXLqU2HOxK",
+  "name": "Maul of the Titans",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "maul-of-the-titans",
+    "category": "household",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "Warrior",
+    "identified": true,
+    "xpValue": 4000,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Maul_of_the_Titans_(Magic_Hammer)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "PypM28nylPwpwl9o",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

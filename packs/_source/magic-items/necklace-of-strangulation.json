@@ -1,0 +1,33 @@
+{
+  "_id": "izC4RMGNHF1h3bfV",
+  "_key": "!items!izC4RMGNHF1h3bfV",
+  "name": "Necklace of Strangulation",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "necklace-of-strangulation",
+    "category": "jewel",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Necklace_of_Strangulation_(Magic_Necklace)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JwozOhVpw9NwnOuQ",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

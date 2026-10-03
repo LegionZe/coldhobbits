@@ -1,0 +1,33 @@
+{
+  "_id": "5Z0C8x1K9FiAlzd5",
+  "_key": "!items!5Z0C8x1K9FiAlzd5",
+  "name": "Pipes of Haunting",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pipes-of-haunting",
+    "category": "instrument",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": 400,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Pipes_of_Haunting_(Magic_Instrument)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Tu9yMsYUE17lhlEg",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

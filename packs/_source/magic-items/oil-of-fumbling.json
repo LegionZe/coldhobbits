@@ -1,0 +1,33 @@
+{
+  "_id": "DNxhYL3LiRPO4iVv",
+  "_key": "!items!DNxhYL3LiRPO4iVv",
+  "name": "Oil of Fumbling",
+  "type": "magic",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "oil-of-fumbling",
+    "category": "potion",
+    "quantity": 1,
+    "weight": null,
+    "carried": true,
+    "equipped": false,
+    "charges": {
+      "value": 0,
+      "max": null,
+      "formula": ""
+    },
+    "usableBy": "",
+    "identified": true,
+    "xpValue": null,
+    "gpValue": null,
+    "url": "https://adnd2e.fandom.com/wiki/Oil_of_Fumbling_(Magical_Liquid)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "KnSPbxNSMRXdnbk8",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
