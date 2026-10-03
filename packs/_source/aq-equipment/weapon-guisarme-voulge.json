@@ -1,0 +1,53 @@
+{
+  "_id": "JkEolYsJfpJazz0c",
+  "_key": "!items!JkEolYsJfpJazz0c",
+  "name": "Guisarme-voulge",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "guisarme-voulge",
+    "proficiency": "guisarme-voulge",
+    "weapon": {
+      "size": "L",
+      "type": "P/S",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "2d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "80 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (8 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

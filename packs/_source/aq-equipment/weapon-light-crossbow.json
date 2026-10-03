@@ -1,0 +1,53 @@
+{
+  "_id": "Wb6BRLFkZvdkSBIi",
+  "_key": "!items!Wb6BRLFkZvdkSBIi",
+  "name": "Light crossbow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "light-crossbow",
+    "proficiency": "light-crossbow",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "Light quarrel",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "60",
+        "medium": "120",
+        "long": "180"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
+    "cost": "35 gp",
+    "weight": 7.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Crossbow, light: asking 50 gp, normal 35 gp, bargain 25 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

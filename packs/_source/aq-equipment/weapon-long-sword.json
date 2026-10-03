@@ -1,0 +1,53 @@
+{
+  "_id": "RnF2m74dgdSiIvM4",
+  "_key": "!items!RnF2m74dgdSiIvM4",
+  "name": "Long sword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "long-sword",
+    "proficiency": "long-sword",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "15 gp",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Sword, long: asking 21 gp, normal 15 gp, bargain 12 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

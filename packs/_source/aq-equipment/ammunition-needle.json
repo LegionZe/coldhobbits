@@ -1,0 +1,36 @@
+{
+  "_id": "e64zrBrUdc0CogNe",
+  "_key": "!items!e64zrBrUdc0CogNe",
+  "name": "Needle",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "needle",
+    "launchers": [
+      "blowgun"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1",
+      "l": "1"
+    },
+    "cost": "20 cp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (2 cp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 5100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

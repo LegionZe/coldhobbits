@@ -1,0 +1,59 @@
+{
+  "_id": "EJuGVK1qgyWkm0x3",
+  "_key": "!items!EJuGVK1qgyWkm0x3",
+  "name": "Bastard sword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bastard-sword",
+    "proficiency": "bastard-sword",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "One-handed",
+          "sm": "1d8",
+          "l": "1d12",
+          "speed": 6
+        },
+        {
+          "label": "Two-handed",
+          "sm": "2d4",
+          "l": "2d8",
+          "speed": 8
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "25 gp",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Sword, bastard: asking 37 gp, normal 25 gp, bargain 20 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

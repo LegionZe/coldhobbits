@@ -10,6 +10,15 @@ import { COMBAT_TABLES as T } from "./rules/combat-tables.mjs";
 
 export { T as COMBAT_TABLES };
 
+/**
+ * Whether a character fights with two weapons without the attack penalty (in studded leather or lighter): rangers
+ * ("Ranger (PHB)") and corsairs ("the corsair suffers no penalty to attack rolls", Corsair - Al-Qadim).
+ */
+export function twoWeaponExempt(sys) {
+  const kit = sys?.classInfo?.kitFits ? sys.classInfo.kitItem?.system.identifier : null;
+  return sys?.classInfo?.classItem?.system.identifier === "ranger" || T.twoWeapon.exemptKits.includes(kit);
+}
+
 /** Whether a class group may fight with two weapons. */
 export function canFightTwoWeapons(group) {
   return T.twoWeapon.groups.includes(group);

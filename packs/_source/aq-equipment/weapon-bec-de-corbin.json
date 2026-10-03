@@ -1,0 +1,53 @@
+{
+  "_id": "E56AIr9dtHUTKHIa",
+  "_key": "!items!E56AIr9dtHUTKHIa",
+  "name": "Bec de corbin",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bec-de-corbin",
+    "proficiency": "bec-de-corbin",
+    "weapon": {
+      "size": "L",
+      "type": "P/B",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "80 gp",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (8 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

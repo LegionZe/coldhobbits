@@ -1,0 +1,53 @@
+{
+  "_id": "B9vG4P3omSQctiNX",
+  "_key": "!items!B9vG4P3omSQctiNX",
+  "name": "Hand crossbow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hand-crossbow",
+    "proficiency": "hand-crossbow",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "Hand quarrel",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "crossbow",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "3,000 gp",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (300 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "aQHhWMCJFvoyzYnC",
+  "_key": "!items!aQHhWMCJFvoyzYnC",
+  "name": "Light horse lance",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "light-horse-lance",
+    "proficiency": "light-horse-lance",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "6 gp",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Lance, light horse: asking 9 gp, normal 6 gp, bargain 5 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

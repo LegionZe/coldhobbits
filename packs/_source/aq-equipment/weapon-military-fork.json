@@ -1,0 +1,53 @@
+{
+  "_id": "H0MGxHTYiFhcIUan",
+  "_key": "!items!H0MGxHTYiFhcIUan",
+  "name": "Military fork",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "military-fork",
+    "proficiency": "military-fork",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "2d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "50 gp",
+    "weight": 7.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (5 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "rrA9j6xFKhOKlMUl",
+  "_key": "!items!rrA9j6xFKhOKlMUl",
+  "name": "Dagger or dirk",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "dagger-or-dirk",
+    "proficiency": "dagger-or-dirk",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "thrownDagger",
+      "strength": "full"
+    },
+    "cost": "2 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Dagger: asking 3 gp, normal 2 gp, bargain 1 gp; Dirk: asking 3 gp, normal 2 gp, bargain 1 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

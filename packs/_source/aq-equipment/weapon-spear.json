@@ -1,0 +1,53 @@
+{
+  "_id": "cK2QXoO6IQL4mh8t",
+  "_key": "!items!cK2QXoO6IQL4mh8t",
+  "name": "Spear",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "spear",
+    "proficiency": "spear",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "cost": "8 sp",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Spear: asking 12 sp, normal 8 sp, bargain 6 sp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

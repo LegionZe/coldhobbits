@@ -13,6 +13,12 @@ Price cells on the wiki contain scanning errors ("6 pg", "5 pp" between gold pri
 are not commonly available in the Land of Fate" and prices are "given in standard AD&D game currency: copper, silver,
 and gold" (At the Bazaar (AA)), so pp/pg are read as gp. A price without a number is left blank (noted).
 Weapon proficiencies for the new weapons are included (one slot each, as PHB weapons).
+  * PHB weapons at Zakharan prices (folder "PHB Weapons (Zakharan prices)"): the weapons on the AA Weapons list at
+    their normal price (AA_WEAPONS maps each AA row to the PHB item); every other PHB weapon and ammunition is
+    "exotic" and "costs 10 times the usual amount" (Equipment Lists (AA)).
+  * module/rules/aq-tables.mjs: the optional heat penalty ("Armor in Fiery Zakhara (AA)"): -1 per class of worn armour
+    better than AC 7 to attack rolls, proficiency and ability checks; magical bonuses do not count; daraqs and bucklers
+    do not count (optional rule). Asserted against every row of Table 6.
 Run from the repo root after build-proficiency-data.py and build-armor-data.py:  python3 tools/build-aq-equipment-data.py
 """
 import importlib.util
@@ -47,6 +53,33 @@ WEAPON_RULES = {
                "Projects Greek fire 10 ft: lit in round 1, 2d6 in round 2, 1d6 in rounds 3 and 4; one attack every three "
                "rounds; two-handed. As a melee weapon it is a quarterstaff."),
 }
+
+
+# AA Weapons list row (sub-rows "- quarrel" keyed by their parent) -> PHB weapon or ammunition item name.
+AA_WEAPONS = {
+    "Battle-axe": "Battle axe", "Blowgun": "Blowgun", "Blowgun > - barbed dart": "Barbed Dart",
+    "Bow, composite long": "Composite long bow", "Bow, composite short": "Composite short bow", "Bow, long": "Long bow",
+    "Bow, short": "Short bow", "Bow, short > - flight arrows (per 12)": "Flight arrow", "Club*": "Club",
+    "Crossbow, heavy": "Heavy crossbow", "Crossbow, heavy > - quarrel": "Heavy quarrel", "Crossbow, light": "Light crossbow",
+    "Crossbow, light > - quarrel": "Light quarrel", "Dagger": "Dagger or dirk", "Dirk": "Dagger or dirk", "Dart": "Dart",
+    "Flail, footman's": "Footman's flail", "Flail, horseman's": "Horseman's flail", "Hand or throwing axe": "Hand or throwing axe",
+    "Javelin": "Javelin", "Knife": "Knife", "Lance, light horse": "Light horse lance", "Lance, medium horse": "Medium horse lance",
+    "Mace, footman's": "Footman's mace", "Mace, horseman's": "Horseman's mace", "Morning star": "Morning star",
+    "Pick, footman's": "Footman's pick", "Pick, horseman's": "Horseman's pick", "Polearm, awl pike": "Awl pike",
+    "Polearm, glaive": "Glaive", "Polearm, halberd": "Halberd", "Quarterstaff*": "Quarterstaff", "Scourge": "Scourge",
+    "Sickle": "Sickle", "Sling": "Sling", "Sling > - bullet": "Sling bullet", "Sling > - stone": "Sling stone", "Spear": "Spear",
+    "Staff sling": "Staff sling", "Sword, bastard": "Bastard sword", "Sword, khopesh": "Khopesh", "Sword, long": "Long sword",
+    "Sword, scimitar": "Scimitar", "Sword, short": "Short sword", "Sword, two-handed": "Two-hand. sword",
+    "Warhammer": "Warhammer", "Whip": "Whip",
+}
+
+
+def times(cost, n):
+    """'15 gp' x 10 -> '150 gp'; '3sp/12' -> '30 sp/12'; '' -> ''."""
+    m = re.match(r"\s*([\d,]+)\s*(cp|sp|gp|pp)\.?(.*)$", str(cost or ""))
+    if not m:
+        return ""
+    return f"{int(m.group(1).replace(',', '')) * n:,} {m.group(2)}{m.group(3).strip()}"
 
 
 def clean(cell):
@@ -225,6 +258,59 @@ if __name__ == "__main__":
         d["folder"] = afolder["_id"]
         adocs.append(d)
 
-    write_docs("packs/_source/aq-equipment", [wfolder, pfolder, afolder, *folders.values(), *wdocs, *adocs, *docs])
+    # PHB weapons and ammunition at Zakharan prices.
+    need = lambda pat, what: re.search(pat, wiki, re.S) or (_ for _ in ()).throw(AssertionError(f"rule changed: {what}"))
+    need(r"but not here, it's considered \"exotic\.\".*it costs 10 times the usual amount", "exotic x10")
+    phb = {d["name"]: d for d in (load(f) for f in sorted(__import__("glob").glob("packs/_source/weapons/*.json")))
+           if d.get("type") in ("weapon", "ammunition")}
+    listed, parent = {}, None
+    for c in secs["Weapons"]:
+        if len(c) < 4 or not c[0]:
+            continue
+        key = f"{parent} > {c[0]}" if c[0].startswith("-") else c[0]
+        if not c[0].startswith("-"):
+            parent = c[0]
+        assert key in AA_WEAPONS, f"AA weapon row not mapped: {key!r}"
+        target = AA_WEAPONS[key]
+        assert target in phb, f"no PHB item {target!r} for {key!r}"
+        listed.setdefault(target, []).append((c[0].lstrip("- ").rstrip("*"), price(c[1]), price(c[2]), price(c[3])))
+    assert set(AA_WEAPONS.values()) == set(listed), set(AA_WEAPONS.values()) ^ set(listed)
+    zfolder = classdata.folder_doc("aq.zakhara-weapons", "PHB Weapons (Zakharan prices)", sort=200)
+    zdocs, exotic = [], []
+    for j, (name, src) in enumerate(sorted(phb.items())):
+        system = json.loads(json.dumps(src["system"]))
+        if name in listed:
+            rows = listed[name]
+            system["cost"] = rows[0][2] or system.get("cost", "")
+            system["notes"] = "Arabian Adventures price: " + "; ".join(
+                f"{r[0]}: asking {r[1] or '—'}, normal {r[2] or '—'}, bargain {r[3] or '—'}" for r in rows) + "."
+            if not rows[0][2]:
+                system["notes"] += " A plain one costs nothing (a suitable piece of wood)."
+        else:
+            system["cost"] = times(src["system"].get("cost"), 10)
+            system["notes"] = f"Exotic in Zakhara: 10 times the PHB price ({src['system'].get('cost') or '—'})."
+            exotic.append(name)
+        system["source"] = SOURCE
+        system["url"] = classdata.url(LISTS)
+        d = classdata.item_doc(src["type"], f"aq.zw.{src['_id']}", name, src["img"], system, j * 100)
+        d["folder"] = zfolder["_id"]
+        zdocs.append(d)
+
+    # Optional heat penalty (Armor in Fiery Zakhara (AA)), checked against every row of Table 6.
+    assert re.search(r"better than AC 7.{0,40}suffer a penalty to attack rolls, as well as to proficiency and ability checks", armor_wiki, re.S)
+    assert re.search(r"This penalty is -1 per class of armor better than 7", armor_wiki)
+    assert re.search(r"Bonuses due to an armor's magic rather than its weight or strength also do not count", armor_wiki)
+    assert re.search(r"Daraqs and bucklers are very small, lightweight shields.*they do not worsen a character's Armor Class", armor_wiki, re.S)
+    for label, row in t6.items():
+        ac, pen = int(row[1]), int(row[2])
+        assert pen == min(0, ac - 7), (label, ac, pen)
+    heat = {"maxAc": 7, "perClass": -1, "exempt": ["buckler", "daraq"]}
+    open("module/rules/aq-tables.mjs", "w").write("\n".join([
+        "/**", " * GENERATED by tools/build-aq-equipment-data.py - do not edit by hand.",
+        f" *   Heat penalty for worn armour: {classdata.url('Armor in Fiery Zakhara (AA)')} (revision {rev_armor}), Table 6",
+        " */", "export const AQ_TABLES = " + json.dumps({"heat": heat}) + ";", ""]))
+
+    write_docs("packs/_source/aq-equipment", [wfolder, pfolder, afolder, zfolder, *folders.values(), *wdocs, *adocs, *zdocs, *docs])
+    print(f"PHB weapons at Zakharan prices: {len(zdocs)} ({len(exotic)} exotic: {exotic})")
     print(f"wrote packs/_source/aq-equipment: {len(weapons)} weapons (+ proficiencies), 2 armour, {sum(counts.values())} items "
           f"{counts}; no normal price: {blank}; revs: lists {rev}, descriptions {rev_desc}, armor {rev_armor}, bazaar {rev_bazaar}")

@@ -1,0 +1,53 @@
+{
+  "_id": "2vFejhz3zfcDmxbO",
+  "_key": "!items!2vFejhz3zfcDmxbO",
+  "name": "Dart",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "dart",
+    "proficiency": "dart",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "3/1",
+        "short": "10",
+        "medium": "20",
+        "long": "40"
+      },
+      "family": "other",
+      "missileColumn": "thrownDart",
+      "strength": "full"
+    },
+    "cost": "5 sp",
+    "weight": 0.5,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Dart: asking 7 sp, normal 5 sp, bargain 4 sp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

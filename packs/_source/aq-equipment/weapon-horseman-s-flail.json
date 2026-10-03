@@ -1,0 +1,53 @@
+{
+  "_id": "dV2zkScud9hR6AhX",
+  "_key": "!items!dV2zkScud9hR6AhX",
+  "name": "Horseman's flail",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horseman-s-flail",
+    "proficiency": "horseman-s-flail",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "10 gp",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Flail, horseman's: asking 12 gp, normal 10 gp, bargain 7 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

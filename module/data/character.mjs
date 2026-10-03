@@ -1,4 +1,5 @@
 import { hpState } from "../health.mjs";
+import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -127,8 +128,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     for (const k of ["front", "missile", "rear"]) this.armor[k] += encAc;
     this.ac.total = this.armor.front;
     this.mods.encumbranceHit = encHit;
-    this.mods.meleeAttack = this.mods.hit + encHit + this.kitMods.total("attack");
-    this.mods.missileAttack = this.mods.missile + encHit + this.kitMods.total("attack");
+    // Al-Qadim heat (optional world setting): worn armour better than AC 7 hinders attacks and checks.
+    this.mods.heat = heatRuleOn() ? heatPenalty(this.armor.body, this.armor.shield) : 0;
+    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.kitMods.total("attack");
+    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.kitMods.total("attack");
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -147,10 +150,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     const hd = hitDiceAt(this.classGroup, this.level);
     this.hitDice = { ...hd, label: hd.bonus ? `${hd.dice}d${hd.die}+${hd.bonus}` : `${hd.dice}d${hd.die}` };
-    const xp = AD2E.xpTable[this.classInfo.classItem?.system.identifier];
+    // Experience table: the class's, or the one a fitting kit names (Kahin: druid, Kits (AA) Table 3).
+    const xpKey = (this.classInfo.kitFits && this.classInfo.kitItem?.system.xpTable) || this.classInfo.classItem?.system.identifier;
+    this.classInfo.xpTable = xpKey ?? null;
+    const xp = AD2E.xpTable[xpKey];
     this.xpNext = xp?.[this.level] ?? null; // index = level -> XP for level + 1
     // Hierophant druids: XP for the starred levels counts from the restart at 16th level (Table 23 footnote).
-    const restart = AD2E.xpRestart[this.classInfo.classItem?.system.identifier];
+    const restart = AD2E.xpRestart[xpKey];
     this.xpRestart = !!(restart && this.xpNext !== null && this.level + 1 >= restart);
 
     this.proficiencies = this.#computeProficiencies();
@@ -401,8 +407,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Encumbrance attack penalty (Encumbrance (PHB)) applies to every attack roll.
     const kitHit = this.kitMods?.total("attack") ?? 0;
     const kitDmg = this.kitMods?.total("damage") ?? 0;
-    const hit = this.mods.hit + encumbranceHit + kitHit;
-    const missile = dexMissile + encumbranceHit + kitHit;
+    const heat = this.mods.heat ?? 0; // Al-Qadim heat penalty (aq-rules.mjs)
+    const hit = this.mods.hit + encumbranceHit + heat + kitHit;
+    const missile = dexMissile + encumbranceHit + heat + kitHit;
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
     if (w.melee) {
@@ -589,9 +596,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       thac0: this.thac0.value,
       // Initiative is 1d10 + @init, lowest first: a kit's initiative bonus lowers the roll.
       init: this.initiative.mod - (this.kitMods?.total("initiative") ?? 0),
-      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0),
+      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0),
       dmg: this.mods.dmg,
-      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0),
+      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0),
       move: this.encumbrance.info?.rate ?? null
     };
   }

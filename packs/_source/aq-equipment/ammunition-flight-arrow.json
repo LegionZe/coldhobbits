@@ -1,0 +1,39 @@
+{
+  "_id": "BlHX6Ml1hLn5NlPm",
+  "_key": "!items!BlHX6Ml1hLn5NlPm",
+  "name": "Flight arrow",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "flight-arrow",
+    "launchers": [
+      "composite-long-bow",
+      "composite-short-bow",
+      "long-bow",
+      "short-bow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d6",
+      "l": "1d6"
+    },
+    "cost": "3 sp",
+    "weight": 0.1,
+    "quantity": 12,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: flight arrows (per 12): asking 4 sp, normal 3 sp, bargain 2 sp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

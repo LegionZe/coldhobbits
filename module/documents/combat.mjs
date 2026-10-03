@@ -44,10 +44,13 @@ export default class AD2ECombat extends Combat {
       if (!input) return this;
       const base = CONFIG.Combat.initiative.formula;
       const terms = [input.action.value ? `${input.action.value}[${flavor(input.action.short)}]` : null,
+        // A kit initiative bonus lowers the roll (lowest acts first).
+        ...input.kit.map(k => `${-k.current}[${flavor(k.condition)}]`),
         ...input.situations.map(s => `${s.value}[${flavor(s.label)}]`), input.mod ? `${input.mod}[${flavor(input.note || "modifier")}]` : null]
         .filter(Boolean);
       const parts = [input.action.key !== "none" ? input.action.label : null, input.action.note || null,
-        ...input.situations.map(s => `${s.label} ${s.value > 0 ? "+" : ""}${s.value}`)].filter(Boolean);
+        ...input.situations.map(s => `${s.label} ${s.value > 0 ? "+" : ""}${s.value}`),
+        ...input.kit.map(k => `${k.condition} ${-k.current > 0 ? "+" : ""}${-k.current}`)].filter(Boolean);
       options = {
         ...options,
         formula: [base, ...terms].join(" + ").replace(/\+ -/g, "- "),
@@ -67,11 +70,16 @@ export default class AD2ECombat extends Combat {
     const actor = combatant?.actor;
     const actions = initiativeActions(actor);
     const chosen = defaultAction(actor, [...actions]);
+    // Conditional kit initiative modifiers (e.g. the astrologer's hung spells); unconditional ones are in @init.
+    const kitOptions = actor?.type === "character" ? (actor.system.kitMods?.options("initiative") ?? []) : [];
     const content = `<p class="ad2e-note">${i18n("AD2E.Init.Hint")}</p>`
       + `<div class="form-group"><label>${i18n("AD2E.Init.ActionLabel")}</label><select name="action">${actions.map(a =>
         `<option value="${esc(a.key)}"${a.key === chosen.key ? " selected" : ""}>${esc(a.label)}</option>`).join("")}</select></div>`
       + `<fieldset><legend>${i18n("AD2E.Init.Standard")}</legend><div class="ad2e-check-grid">${STANDARD_MODIFIERS.map(m =>
         `<label><input type="checkbox" name="t55-${m.key}" value="${m.value}"> ${esc(m.label)} (${m.value > 0 ? "+" : ""}${m.value})</label>`).join("")}</div></fieldset>`
+      + (kitOptions.length ? `<fieldset><legend>${esc(game.i18n.format("AD2E.Kit.Situational", { kit: actor.system.classInfo?.kitItem?.name ?? "" }))}</legend>`
+        + kitOptions.map(m => `<div class="form-group"><label>${esc(`${m.current > 0 ? "-" : "+"}${Math.abs(m.current)} ${m.condition}`)}</label>`
+          + `<input type="checkbox" name="kitinit" value="${m.index}"></div>`).join("") + "</fieldset>" : "")
       + modifierFields();
     return foundry.applications.api.DialogV2.prompt({
       classes: ["ad2e"],
@@ -81,7 +89,9 @@ export default class AD2ECombat extends Combat {
         const f = button.form.elements;
         const action = actions.find(a => a.key === f.action?.value) ?? chosen;
         const situations = STANDARD_MODIFIERS.filter(m => f[`t55-${m.key}`]?.checked);
-        return { action, situations, ...readModifier(button.form) };
+        const ticked = [...(button.form.querySelectorAll?.("input[name=kitinit]:checked") ?? [])].map(i => Number(i.value));
+        const kit = kitOptions.filter(m => ticked.includes(m.index));
+        return { action, situations, kit, ...readModifier(button.form) };
       } },
       rejectClose: false
     });

@@ -2,7 +2,7 @@ import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
-import { canFightTwoWeapons, twoWeaponPenalty } from "../combat-options.mjs";
+import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -499,7 +499,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     treasure.wealth = Math.round((coins.gp + treasure.gp) * 100) / 100;
     // Unarmed attacks (punch, wrestle, overbear) and the two-weapon penalties ("Attacking with Two Weapons (PHB)").
     const sign = n => `${n > 0 ? "+" : ""}${n}`;
-    const twoOpts = { reaction: sys.abilityData?.dex?.reaction ?? 0, ranger: sys.classInfo?.classItem?.system.identifier === "ranger",
+    const twoOpts = { reaction: sys.abilityData?.dex?.reaction ?? 0, ranger: twoWeaponExempt(sys),
       armorAc: sys.armor?.body?.system.ac ?? null };
     const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
       twoWeapons: canFightTwoWeapons(sys.classGroup) ? game.i18n.format("AD2E.TwoWeapons.Summary",

@@ -58,6 +58,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `python3 tools/build-aq-equipment-data.py` (after build-proficiency-data.py and build-armor-data.py): "Equipment
   Lists (AA)" at the N (normal) price, pp/pg scanning errors read as gp, new weapons + proficiencies, lamellar, daraq.
   File names carry the item type (a weapon and its proficiency share an identifier).
+  It also writes the "PHB Weapons (Zakharan prices)" folder (`AA_WEAPONS` maps AA rows to PHB items; others x10) and
+  `module/rules/aq-tables.mjs` (heat penalty, asserted against Table 6), used by `module/aq-rules.mjs` (world setting
+  `aqArmorHeat`, `system.mods.heat` on attacks and checks). Kit field `xpTable` (Kahin: druid, `KIT_XP` in
+  build-class-data.py, asserted against the Table 3 footnote); corsair two-weapon exemption in combat-tables.
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

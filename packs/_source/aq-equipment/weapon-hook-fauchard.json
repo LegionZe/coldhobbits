@@ -1,0 +1,53 @@
+{
+  "_id": "ktGlXZuNkJqCzHe3",
+  "_key": "!items!ktGlXZuNkJqCzHe3",
+  "name": "Hook fauchard",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hook-fauchard",
+    "proficiency": "hook-fauchard",
+    "weapon": {
+      "size": "L",
+      "type": "P/S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "100 gp",
+    "weight": 8.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (10 gp)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

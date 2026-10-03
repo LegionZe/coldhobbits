@@ -21,6 +21,7 @@ import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
+import { registerAqRules } from "./aq-rules.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
@@ -62,6 +63,7 @@ Hooks.once("init", () => {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });
 
+  registerAqRules();
   CONFIG.Actor.documentClass = AD2EActor;
   CONFIG.ChatMessage.documentClass = AD2EChatMessage;
   // Sheet partials shared by tabs (registered by name, as dnd5e's preloadHandlebarsTemplates).

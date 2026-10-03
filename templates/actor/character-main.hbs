@@ -41,6 +41,7 @@
       <div class="ad2e-field"><span>{{localize "AD2E.Character.acTotal"}}</span><strong data-tooltip="{{localize 'AD2E.Armor.Rear'}} {{system.armor.rear}} · {{localize 'AD2E.Armor.VsMissiles'}} {{system.armor.missile}}">{{system.ac.total}}</strong></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.thac0Override"}}</span><input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}"></div>
       <div class="ad2e-field"><span>THAC0</span><strong>{{system.thac0.value}}</strong></div>
+      {{#if system.mods.heat}}<div class="ad2e-field"><span data-tooltip="{{localize 'AD2E.AQ.HeatSettingHint'}}">{{localize "AD2E.AQ.Heat"}}</span><strong class="ad2e-unmet">{{system.mods.heat}}</strong></div>{{/if}}
       <div class="ad2e-field"><span>{{localize "AD2E.Move.Movement"}}</span><strong class="{{#if system.encumbrance.info.overMax}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Move.Hint'}}">{{moveLabel}}</strong></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.initMod"}}</span><input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}"></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.dmgAdj"}}</span><strong>{{system.mods.dmg}}</strong></div>

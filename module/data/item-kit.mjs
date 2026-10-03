@@ -16,6 +16,7 @@ const proficiencyChoices = () => new ArrayField(new SchemaField({ choice: new Ar
  * `skillAdjust`: per thief skill, a percentage the kit adds to (or takes from) thief/bard/ranger skills. Kit pages
  * describe these in their text; generated values come from tools/build-kit-mechanics.py, and the GM can change them.
  * `skillPoints`: thief skill discretionary points when the kit changes them ({ first, perLevel }; null = class default).
+ * `xpTable`: class identifier whose experience table the kit uses (e.g. the Kahin advances as a druid); blank = the class's.
  * `modifiers`: kit modifiers stated on the kit page (see tools/build-kit-mechanics.py for the fields); those with no
  * condition apply automatically, conditional ones are offered in the matching roll dialog.
  */
@@ -29,6 +30,7 @@ export default class KitData extends foundry.abstract.TypeDataModel {
       otherRequirements: new BooleanField({ initial: false }),
       raceLimits: new ObjectField(),
       raceOnly: new BooleanField({ initial: false }),
+      xpTable: new StringField({ required: true, blank: true, initial: "" }),
       bonusProficiencies: proficiencyChoices(),
       requiredProficiencies: proficiencyChoices(),
       bonusSlots: new SchemaField({

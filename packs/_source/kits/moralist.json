@@ -21,6 +21,7 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Moralist_(Character_Kit)",
     "notes": "",
     "bonusProficiencies": [
@@ -40,7 +41,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "initial encounter reactions",
+        "armor": "",
+        "max": null
+      }
+    ],
     "skillAdjust": {
       "pp": 0,
       "ol": 0,

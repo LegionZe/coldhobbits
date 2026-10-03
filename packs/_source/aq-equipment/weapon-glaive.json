@@ -1,0 +1,53 @@
+{
+  "_id": "2O4pA0nQfeHpTgSm",
+  "_key": "!items!2O4pA0nQfeHpTgSm",
+  "name": "Glaive",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "glaive",
+    "proficiency": "glaive",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "6 gp",
+    "weight": 8.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Polearm, glaive: asking 9 gp, normal 6 gp, bargain 5 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

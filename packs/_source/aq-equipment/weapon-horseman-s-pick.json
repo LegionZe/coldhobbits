@@ -1,0 +1,53 @@
+{
+  "_id": "gAMjumhoWBAGi1EJ",
+  "_key": "!items!gAMjumhoWBAGi1EJ",
+  "name": "Horseman's pick",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horseman-s-pick",
+    "proficiency": "horseman-s-pick",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "7 gp",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Pick, horseman's: asking 10 gp, normal 7 gp, bargain 5 gp."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

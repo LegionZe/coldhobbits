@@ -3,6 +3,7 @@
     <span>{{localize "AD2E.Character.hp"}}: <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{system.hp.value}} / {{system.hp.max}}</strong>{{#if hpStatus.label}} ({{hpStatus.label}}){{/if}}</span>
     <span>THAC0: <strong>{{system.thac0.value}}</strong></span>
     <span>{{localize "AD2E.Move.Movement"}}: <strong>{{moveLabel}}</strong></span>
+    {{#if system.mods.heat}}<span class="ad2e-unmet" data-tooltip="{{localize 'AD2E.AQ.HeatSettingHint'}}">{{localize "AD2E.AQ.Heat"}}: <strong>{{system.mods.heat}}</strong></span>{{/if}}
     {{#if editable}}
     <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
     <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>

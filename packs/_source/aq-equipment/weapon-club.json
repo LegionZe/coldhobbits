@@ -1,0 +1,53 @@
+{
+  "_id": "nML2ajYQoWkOub7g",
+  "_key": "!items!nML2ajYQoWkOub7g",
+  "name": "Club",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "club",
+    "proficiency": "club",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "cost": "",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Arabian Adventures price: Club: asking —, normal —, bargain —. A plain one costs nothing (a suitable piece of wood)."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

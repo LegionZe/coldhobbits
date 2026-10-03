@@ -180,6 +180,8 @@ AQ_REQ = {
     "Spellslayer (Character Kit)": ({}, True, r"may only be of non-good, chaotic alignments"),
 }
 KIT_NOTES = {"Kahin (Character Kit)": "Uses the druid experience table (Kits (AA), Table 3)."}
+# Kits with another class's experience table: Table 3 "Clerics*" with the footnote "* Uses Druid Experience Table".
+KIT_XP = {"Kahin (Character Kit)": "druid"}
 # Ability minimums per kit page (overrides the class minimum for that ability; 0 removes it).
 # "other": the kit page states race/alignment/other restrictions - shown as a flag + link.
 KIT_REQ = {
@@ -328,13 +330,18 @@ def kit_name(title):
 def aa_classes():
     """Kit title -> class identifiers from "Kits (AA)" Table 3 (Eligible Classes)."""
     wiki, _, _ = page("Kits (AA)")
-    out = {}
+    out, starred = {}, set()
     for r in table_rows(wiki, "Table 3: Character Kit Summary"):
         m = re.search(r"\[\[([^\]|]+)\|", r[0])
         if not m:
             continue  # group heading rows
         title = AA_ALIASES.get(m.group(1).strip(), m.group(1).strip())
         out[title] = AA_CLASSES[r[1].strip()]
+        if r[1].strip().endswith("*"):
+            starred.add(title)
+    # "* Uses Druid Experience Table": the starred kits are exactly those in KIT_XP (as druid).
+    assert re.search(r"\* Uses Druid Experience Table", wiki), "Table 3 footnote changed"
+    assert starred == {t for t, c in KIT_XP.items() if c == "druid"}, starred
     return out
 
 
@@ -377,7 +384,7 @@ def build_kits():
             kits[key] = {"name": kit_name(title), "classes": kit_classes, "source": book,
                                  "min": req.get("min", {}), "otherRequirements": req.get("other", False),
                                  "raceLimits": race_limits, "raceOnly": race_only, "alQadim": cat in AL_QADIM,
-                                 "notes": KIT_NOTES.get(title, ""), "url": url(title), "revid": revid}
+                                 "notes": KIT_NOTES.get(title, ""), "xpTable": KIT_XP.get(title, ""), "url": url(title), "revid": revid}
             seen.add(title)
     if set(table3) - seen:
         raise SystemExit(f"Kits (AA) Table 3 kits missing from the category: {sorted(set(table3) - seen)}")
@@ -472,7 +479,7 @@ if __name__ == "__main__":
             "identifier": key, "classes": k["classes"], "source": k["source"],
             "min": {a: k["min"].get(a) for a in MINS},
             "otherRequirements": k["otherRequirements"], "raceLimits": k["raceLimits"], "raceOnly": k["raceOnly"],
-            "url": k["url"], "notes": k["notes"]}, i * 1000))
+            "xpTable": k.get("xpTable", ""), "url": k["url"], "notes": k["notes"]}, i * 1000))
         kit_docs[-1]["folder"] = aq_folder[group_of[k["classes"][0]]] if k["alQadim"] else kit_folder_for[k["classes"][0]]
     write_docs("packs/_source/classes", class_folders + class_docs)
     write_docs("packs/_source/kits", kit_folders + kit_docs)

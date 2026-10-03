@@ -23,6 +23,7 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Mercenary_Barbarian_(Character_Kit)",
     "notes": "Bonus modern language: Midani (Zakharan Common), in addition to the native tongue.",
     "bonusProficiencies": [
@@ -42,7 +43,41 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "anyone not of the same homeland (best reaction: indifferent)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "hostile or threatening approach to natives of Zakhara",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "friendly or indifferent approach to natives of Zakhara",
+        "armor": "",
+        "max": null
+      }
+    ],
     "skillAdjust": {
       "pp": 0,
       "ol": 0,

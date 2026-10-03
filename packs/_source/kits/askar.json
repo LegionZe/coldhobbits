@@ -23,6 +23,7 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Askar_(Character_Kit)",
     "notes": "Bonus: one general proficiency of the player's choice.",
     "bonusProficiencies": [
@@ -37,7 +38,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
+    "modifiers": [
+      {
+        "target": "proficiency",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "in the home town, dealing with its natives",
+        "armor": "",
+        "max": null
+      }
+    ],
     "skillAdjust": {
       "pp": 0,
       "ol": 0,
