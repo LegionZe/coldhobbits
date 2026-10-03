@@ -106,6 +106,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   and `KIT_REQ` disagree). Al-Qadim kits (categories "Character Kit AA" / "Character Kit CShaH"): classes from
   "Kits (AA)" Table 3, requirements curated in `AQ_REQ` with a regex checked against each kit page. LevelDB packs are compiled by `npm run build:packs` (@foundryvtt/foundryvtt-cli, as dnd5e)
   in the release workflow; compiled packs are git-ignored.
+  `system.json` `packFolders` puts every compendium in one "AD&D 2nd Edition" folder (as dnd5e's manifest); add each new
+  pack name there too.
 - A `StringField` with `choices` defaults to `blank: false` and `nullable: false` (Foundry StringField docs: "If this field
   is created with `choices`, the default changes to `false`"); a choice field that may be empty needs `blank: true`, or
   Foundry drops invalid values on load (0.0.31-0.0.38 lost kit modifiers this way). The Node tests stub fields and

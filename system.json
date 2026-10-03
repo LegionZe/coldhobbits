@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.53",
+  "version": "0.0.54",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -204,6 +204,28 @@
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"
       }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "AD&D 2nd Edition",
+      "sorting": "m",
+      "color": "#6b1d1d",
+      "packs": [
+        "races",
+        "classes",
+        "kits",
+        "proficiencies",
+        "weapons",
+        "armor",
+        "equipment",
+        "aq-equipment",
+        "magic-items",
+        "gems",
+        "monsters",
+        "hirelings",
+        "spells"
+      ]
     }
   ]
 }
