@@ -117,6 +117,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }
   };
 
+  /** Coin quantity inputs edit the coin item (they have no form name, so the actor form ignores them). */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element?.querySelectorAll?.("input[data-coin-quantity]") ?? []) {
+      input.addEventListener("change", event => {
+        const coin = this.actor.items.get(event.currentTarget.dataset.itemId);
+        const n = Math.max(Math.floor(Number(event.currentTarget.value) || 0), 0);
+        coin?.update({ "system.quantity": n });
+      });
+    }
+  }
+
   /** Give each tab part its own ApplicationTab entry (same pattern as dnd5e WelcomeScreen). */
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
@@ -299,11 +311,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       thresholds: e.rule === "none" ? "" : AD2E.encumbranceCategories
         .map((c, i) => `${i18n(`AD2E.Enc.${c}`)} ≤ ${e.limits[i]}`).join(" · ")
     };
-    // Coins: count per type, total value in gp (Table 42), weight.
-    const cpTotal = AD2E.coins.reduce((n, c) => n + sys.currency[c] * AD2E.coinValues[c], 0);
+    // Coin items (highest denomination first), total value in gp (Table 42) and weight.
+    const order = [...AD2E.coins, "other"];
     const coins = {
-      list: AD2E.coins.map(c => ({ key: c, label: i18n(`AD2E.Coin.${c}`), value: sys.currency[c] })),
-      gp: Math.round(cpTotal / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
+      list: (actor.items?.filter(i => i.type === "coin") ?? []).map(i => ({
+        id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, denomination: i.system.denomination,
+        value: Math.round(i.system.quantity * i.system.value / AD2E.coinValues.gp * 100) / 100
+      })).sort((x, y) => order.indexOf(x.denomination) - order.indexOf(y.denomination) || x.name.localeCompare(y.name)),
+      gp: Math.round(e.coinValue / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
     };
     return { rows, ammo, armor, enc, coins, ac: acSummary, thac0: sys.thac0.value };
   }
@@ -344,6 +359,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         ui.notifications.warn(game.i18n.format("AD2E.Prof.AlreadyHave", { name: item.name }));
         return null;
       }
+    }
+    // A dropped coin stack joins an owned stack of the same coin.
+    if (this.actor.isOwner && item.type === "coin" && item.parent !== this.actor) {
+      const stack = this.actor.items.find(i => i.type === "coin" && i.system.identifier === item.system.identifier);
+      if (stack) return stack.update({ "system.quantity": stack.system.quantity + item.system.quantity });
     }
     if (this.actor.isOwner && item.type === "weapon" && item.parent !== this.actor) {
       const prof = this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon"

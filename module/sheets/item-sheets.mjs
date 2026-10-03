@@ -185,3 +185,18 @@ export class ArmorSheet extends AD2EItemSheet {
     return context;
   }
 }
+
+export class CoinSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["coin"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/coin-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const sys = this.document.system;
+    context.denominations = AD2E.coinDenominations;
+    const gp = Math.round(sys.quantity * sys.value / AD2E.coinValues.gp * 100) / 100;
+    const lb = Math.round(sys.quantity / AD2E.coinsPerPound * 10) / 10;
+    context.summary = game.i18n.format("AD2E.Coin.Summary", { n: sys.quantity, gp, lb });
+    return context;
+  }
+}

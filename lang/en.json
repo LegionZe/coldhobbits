@@ -136,7 +136,8 @@
     "proficiency": "Proficiency",
     "weapon": "Weapon",
     "ammunition": "Ammunition",
-    "armor": "Armour"
+    "armor": "Armour",
+    "coin": "Coin"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -369,6 +370,12 @@
     "sp": "Silver (sp)",
     "cp": "Copper (cp)",
     "Total": "Total value",
-    "Hint": "Exchange (PHB Table 42): 1 pp = 5 gp, 1 gp = 2 ep = 10 sp = 100 cp. Coins of any metal weigh 50 to the pound (DMG) and count toward encumbrance."
-  }
+    "Hint": "Exchange (PHB Table 42): 1 pp = 5 gp, 1 gp = 2 ep = 10 sp = 100 cp. Coins of any metal weigh 50 to the pound (DMG) and count toward encumbrance.",
+    "other": "Other (foreign)",
+    "Denomination": "Denomination",
+    "Value": "Value of one coin (cp)",
+    "Summary": "{n} coins: {gp} gp, {lb} lb",
+    "NoneYet": "No coins yet. Drag coins from the \"Equipment (PHB)\" compendium; a dropped stack joins an owned stack of the same coin."
+  },
+  "AD2E.Sheet.Coin": "AD&D 2e Coin"
 }

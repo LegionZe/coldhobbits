@@ -7,10 +7,12 @@ import ProficiencyData from "./data/item-proficiency.mjs";
 import WeaponData from "./data/item-weapon.mjs";
 import AmmunitionData from "./data/item-ammunition.mjs";
 import ArmorData from "./data/item-armor.mjs";
+import CoinData from "./data/item-coin.mjs";
+import { migrateCurrency } from "./migrations.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2ECombat from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
-import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet } from "./sheets/item-sheets.mjs";
+import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet } from "./sheets/item-sheets.mjs";
 
 Hooks.once("init", () => {
   console.log("AD2E | Initializing AD&D 2e system");
@@ -31,6 +33,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.weapon = WeaponData;
   CONFIG.Item.dataModels.ammunition = AmmunitionData;
   CONFIG.Item.dataModels.armor = ArmorData;
+  CONFIG.Item.dataModels.coin = CoinData;
 
   CONFIG.Combat.documentClass = AD2ECombat;
   CONFIG.Combat.initiative = { formula: "1d10 + @init", decimals: 2 };
@@ -49,4 +52,10 @@ Hooks.once("init", () => {
   DocumentSheetConfig.registerSheet(Item, "ad2e", WeaponSheet, { types: ["weapon"], makeDefault: true, label: "AD2E.Sheet.Weapon" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", AmmunitionSheet, { types: ["ammunition"], makeDefault: true, label: "AD2E.Sheet.Ammunition" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", ArmorSheet, { types: ["armor"], makeDefault: true, label: "AD2E.Sheet.Armor" });
+  DocumentSheetConfig.registerSheet(Item, "ad2e", CoinSheet, { types: ["coin"], makeDefault: true, label: "AD2E.Sheet.Coin" });
+});
+
+// 0.0.20 stored coins as numbers on the character; convert them to coin items once (GM only).
+Hooks.once("ready", () => {
+  if (game.user.isGM) migrateCurrency();
 });

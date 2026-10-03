@@ -1,0 +1,23 @@
+{
+  "_id": "nkVhtF0CqRnwuwcI",
+  "_key": "!items!nkVhtF0CqRnwuwcI",
+  "name": "Silver piece",
+  "type": "coin",
+  "img": "icons/commodities/currency/coins-assorted-mix-silver.webp",
+  "system": {
+    "identifier": "sp",
+    "denomination": "sp",
+    "value": 10,
+    "quantity": 1,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Money_and_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "hCxx3eqU6qWqrJEP",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

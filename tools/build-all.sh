@@ -8,4 +8,5 @@ python3 tools/build-proficiency-data.py  # proficiencies; adds proficiency field
 python3 tools/build-movement-tables.py   # encumbrance (Tables 47/48), base movement (Table 64)
 python3 tools/build-race-data.py         # races (reads class and kit sources, Table 64)
 python3 tools/build-armor-data.py        # armour, shields, helmets
+python3 tools/build-equipment-data.py    # coins (Table 42; reads build-movement-tables.py)
 rm -rf tools/__pycache__
