@@ -473,7 +473,9 @@
     "Ecology": "Habitat and society",
     "AttackName": "Attack",
     "NoAttacks": "No attacks: add one, or drag a weapon onto the sheet.",
-    "SeeSource": "Full description:"
+    "SeeSource": "Full description:",
+    "CompleteCompendium": "Complete Compendium",
+    "SourcePage": "Source page"
   },
   "AD2E.Importer": {
     "Title": "Monster importer (Complete Compendium)",

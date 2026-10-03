@@ -109,6 +109,7 @@
 .ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; }
 .ad2e-monster-line input[type="number"] { width: 3.5rem; }
 .ad2e-monster-line button { flex: 0 0 auto; width: auto; }
+.ad2e-source-link { white-space: nowrap; text-decoration: underline; }
 .ad2e-monster-summary { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.25rem; margin: 0; }
 .ad2e-summary-cell { border: 1px solid currentColor; border-radius: 4px; padding: 0.15rem 0.35rem; opacity: 0.95; min-width: 0; }
 .ad2e-summary-cell dt { font-size: 0.75em; text-transform: uppercase; opacity: 0.8; }

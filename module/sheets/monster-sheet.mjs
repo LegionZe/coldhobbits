@@ -90,6 +90,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.load = { ...sys.load, weight: enc.weight, rate: enc.rate, hasLoad: sys.load.full !== null,
       bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
     context.hd = sys.hd;
+    // Header link to the stat block's source page (completecompendium.com for imported monsters).
+    context.sourceLabel = game.i18n.localize(/completecompendium\.com/.test(sys.url) ? "AD2E.Monster.CompleteCompendium" : "AD2E.Monster.SourcePage");
     context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;
   }
