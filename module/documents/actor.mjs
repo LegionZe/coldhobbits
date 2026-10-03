@@ -259,8 +259,6 @@ export default class AD2EActor extends Actor {
     const attack = entry?.attack?.[use];
     if (!item || !attack) return;
     const i18n = key => game.i18n.localize(key);
-    const status = entry.penalty ? ` [${game.i18n.format("AD2E.Weapon.NotProficient", { penalty: entry.penalty })}]`
-      : (entry.specialized && !entry.specInvalid ? ` [${i18n("AD2E.Weapon.Specialized")}]` : "");
     // Ammunition tracking: a launcher needs owned ammunition with quantity left; a thrown item needs quantity.
     const ammoList = use === "missile" ? this.ammunitionFor(item) : null;
     let ammoField = "";
@@ -298,9 +296,12 @@ export default class AD2EActor extends Actor {
     // Two weapons (warriors and rogues, melee) and non-lethal attacks with a blade ("Attacking with Two Weapons (PHB)",
     // "Attacking Without Killing (PHB)").
     const twoWeapons = use === "melee" && this.type === "character" && canFightTwoWeapons(this.system.classGroup);
-    const others = twoWeapons ? this.items.filter(i => i.type === "weapon" && i.id !== itemId && i.system.weapon?.melee) : [];
+    // The other weapon: weapons in hand first. "Both" rolls this weapon (main) and the other one (second) together.
+    const others = twoWeapons ? this.items.filter(i => i.type === "weapon" && i.id !== itemId && i.system.weapon?.melee && !i.system.dropped
+      && this.#weaponEntry(i.id)?.attack?.melee).sort((a, b) => !!b.system.equipped - !!a.system.equipped) : [];
     const twoField = twoWeapons ? `<div class="form-group"><label>${i18n("AD2E.TwoWeapons.Label")}</label><select name="twoWeapon">`
-      + `<option value="">—</option><option value="main">${i18n("AD2E.TwoWeapons.main")}</option><option value="off">${i18n("AD2E.TwoWeapons.off")}</option></select></div>`
+      + `<option value="">—</option>${others.length ? `<option value="both">${i18n("AD2E.TwoWeapons.both")}</option>` : ""}`
+      + `<option value="main">${i18n("AD2E.TwoWeapons.main")}</option><option value="off">${i18n("AD2E.TwoWeapons.off")}</option></select></div>`
       + (others.length ? `<div class="form-group"><label>${i18n("AD2E.TwoWeapons.MainWeapon")}</label><select name="mainWeapon">${
         others.map(o => `<option value="${o.id}">${foundry.utils.escapeHTML?.(o.name) ?? o.name}</option>`).join("")}</select></div>` : "") : "";
     const nonlethalOk = use === "melee" && nonlethalAllowed(item.system.weapon);
@@ -326,30 +327,55 @@ export default class AD2EActor extends Actor {
       rejectClose: false
     });
     if (!input) return;
+    const ammo = input.ammo ? this.items.get(input.ammo) : null;
+    if (ammoList && !ammo) return;
+    // "Both": this weapon as the main weapon, then the other weapon as the second (one extra attack per round).
+    const other = input.twoWeapon && input.mainWeapon ? this.items.get(input.mainWeapon) : null;
+    const attacks = [{ item, entry, attack, hand: input.twoWeapon === "both" ? "main" : input.twoWeapon, main: other,
+      nonlethal: input.nonlethal, backstab: input.backstab }];
+    if (input.twoWeapon === "both" && other) {
+      const otherEntry = this.#weaponEntry(other.id);
+      if (otherEntry?.attack?.melee) attacks.push({ item: other, entry: otherEntry, attack: otherEntry.attack.melee, hand: "off",
+        main: item, nonlethal: input.nonlethal && nonlethalAllowed(other.system.weapon), backstab: false, noBackstab: input.backstab });
+    }
+    const messages = [];
+    for (const a of attacks) messages.push(await this.#weaponAttackMessage(a, { use, input, targets, ammo, ammoList }));
+    return attacks.length > 1 ? messages : messages[0];
+  }
+
+  /**
+   * One weapon attack roll and its chat message (rollWeaponAttack): `a` = { item, entry, attack, hand ("main" | "off" |
+   * ""), main (the other weapon: checked as the main weapon when `hand` is "off"), nonlethal, backstab }.
+   */
+  async #weaponAttackMessage(a, { use, input, targets, ammo, ammoList }) {
+    const { item, entry, attack } = a;
+    const itemId = item.id;
+    const i18n = key => game.i18n.localize(key);
+    const status = entry.penalty ? ` [${game.i18n.format("AD2E.Weapon.NotProficient", { penalty: entry.penalty })}]`
+      : (entry.specialized && !entry.specInvalid ? ` [${i18n("AD2E.Weapon.Specialized")}]` : "");
     const notes = [];
     let twoAdj = 0;
-    if (input.twoWeapon) {
+    if (a.hand) {
       const sys = this.system;
-      twoAdj = twoWeaponPenalty(input.twoWeapon, { reaction: sys.abilityData?.dex?.reaction ?? 0,
+      twoAdj = twoWeaponPenalty(a.hand, { reaction: sys.abilityData?.dex?.reaction ?? 0,
         ranger: twoWeaponExempt(sys), armorAc: sys.armor?.body?.system.ac ?? null });
-      notes.push(`${i18n(`AD2E.TwoWeapons.${input.twoWeapon}`)} ${twoAdj > 0 ? "+" : ""}${twoAdj}`);
+      notes.push(`${i18n(`AD2E.TwoWeapons.${a.hand}`)} ${twoAdj > 0 ? "+" : ""}${twoAdj}`);
       if (sys.armor?.shield) notes.push(i18n("AD2E.TwoWeapons.Shield"));
-      const main = input.twoWeapon === "off" ? this.items.get(input.mainWeapon) : null;
+      const main = a.hand === "off" ? a.main : null;
       if (main && !secondWeaponAllowed(
         { proficiency: main.system.proficiency, size: main.system.weapon.size, weight: main.system.weight },
         { proficiency: item.system.proficiency, size: item.system.weapon?.size, weight: item.system.weight ?? null })) {
         notes.push(game.i18n.format("AD2E.TwoWeapons.TooLarge", { main: main.name }));
       }
     }
-    if (input.nonlethal) notes.push(`${i18n("AD2E.Nonlethal.Weapon")} ${COMBAT_TABLES.nonlethal.hit}`);
-    const ammo = input.ammo ? this.items.get(input.ammo) : null;
-    if (ammoList && !ammo) return;
+    if (a.nonlethal) notes.push(`${i18n("AD2E.Nonlethal.Weapon")} ${COMBAT_TABLES.nonlethal.hit}`);
+    if (a.noBackstab) notes.push(i18n("AD2E.TwoWeapons.NoBackstab"));
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
-    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (input.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (input.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0);
+    const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0);
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
     // Use up the piece fired or thrown.
@@ -369,7 +395,7 @@ export default class AD2EActor extends Actor {
       flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
         + `vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
-        + (input.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
+        + (a.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
         + (notes.length ? ` [${notes.join("; ")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
