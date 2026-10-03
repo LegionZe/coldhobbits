@@ -274,6 +274,12 @@ export const SAVE_TABLE = {
 /** PHB Table 53 (Calculated THAC0s), levels 1-20 per group: https://adnd2e.fandom.com/wiki/Calculating_THAC0_(PHB) (revision 248349). */
 export const THAC0_TABLE = {"priest": [20, 20, 20, 18, 18, 18, 16, 16, 16, 14, 14, 14, 12, 12, 12, 10, 10, 10, 8, 8], "rogue": [20, 20, 19, 19, 18, 18, 17, 17, 16, 16, 15, 15, 14, 14, 13, 13, 12, 12, 11, 11], "warrior": [20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1], "wizard": [20, 20, 20, 19, 19, 19, 18, 18, 18, 17, 17, 17, 16, 16, 16, 15, 15, 15, 14, 14]};
 
+/** PHB Table 15 (warrior melee attacks per round; rev 158210) as [attacks, rounds]. */
+export const WARRIOR_ATTACKS = [{"min": 1, "max": 6, "rate": [1, 1]}, {"min": 7, "max": 12, "rate": [3, 2]}, {"min": 13, "max": 99, "rate": [2, 1]}];
+
+/** PHB Table 35 (specialist attacks per round by fighter level; Weapon Specialization (PHB) rev 158222). */
+export const SPECIALIST_ATTACKS = {"melee": [{"min": 1, "max": 6, "rate": [3, 2]}, {"min": 7, "max": 12, "rate": [2, 1]}, {"min": 13, "max": 99, "rate": [5, 2]}], "lightCrossbow": [{"min": 1, "max": 6, "rate": [1, 1]}, {"min": 7, "max": 12, "rate": [3, 2]}, {"min": 13, "max": 99, "rate": [2, 1]}], "heavyCrossbow": [{"min": 1, "max": 6, "rate": [1, 2]}, {"min": 7, "max": 12, "rate": [1, 1]}, {"min": 13, "max": 99, "rate": [3, 2]}], "thrownDagger": [{"min": 1, "max": 6, "rate": [3, 1]}, {"min": 7, "max": 12, "rate": [4, 1]}, {"min": 13, "max": 99, "rate": [5, 1]}], "thrownDart": [{"min": 1, "max": 6, "rate": [4, 1]}, {"min": 7, "max": 12, "rate": [5, 1]}, {"min": 13, "max": 99, "rate": [6, 1]}], "otherMissile": [{"min": 1, "max": 6, "rate": [3, 2]}, {"min": 7, "max": 12, "rate": [2, 1]}, {"min": 13, "max": 99, "rate": [5, 2]}]};
+
 /** Per group: hit die size and, per level, number of dice and fixed bonus HP. */
 export const HIT_DICE = {
   "warrior": {

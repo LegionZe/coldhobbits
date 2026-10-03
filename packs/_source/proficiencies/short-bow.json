@@ -16,6 +16,34 @@
       "rating": null,
       "cost": null
     },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "Flight arrow",
+          "sm": "1d6",
+          "l": "1d6"
+        },
+        {
+          "label": "Sheaf arrow",
+          "sm": "1d8",
+          "l": "1d8"
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "50",
+        "medium": "100",
+        "long": "150"
+      },
+      "family": "bow",
+      "missileColumn": "otherMissile",
+      "strength": "penalty"
+    },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
     "notes": ""

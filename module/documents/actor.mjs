@@ -1,4 +1,4 @@
-import { hitDiceAt } from "../config.mjs";
+import { AD2E, hitDiceAt } from "../config.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -189,6 +189,97 @@ export default class AD2EActor extends Actor {
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+): `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
+    });
+  }
+
+  /**
+   * Attack with a weapon proficiency (`use` "melee" or "missile"): d20 + adjustments (see
+   * CharacterData#weaponAttack) + range modifier + situational modifier >= THAC0 - target AC.
+   */
+  async rollWeaponAttack(itemId, use = "melee") {
+    const item = this.items.get(itemId);
+    const attack = this.system.proficiencies.entries.find(e => e.item.id === itemId)?.attack?.[use];
+    if (!item || !attack) return;
+    const i18n = key => game.i18n.localize(key);
+    let rangeField = "";
+    if (use === "missile") {
+      const r = attack.range;
+      const opts = [["short", `${i18n("AD2E.Weapon.Short")} (${r.short})`], ["medium", `${i18n("AD2E.Weapon.Medium")} (${r.medium})`],
+        ["long", `${i18n("AD2E.Weapon.Long")} (${r.long})`]];
+      if (attack.pointBlank) opts.unshift(["pointBlank", `${i18n("AD2E.Weapon.PointBlank")} (${
+        AD2E.specialization.pointBlankFeet[item.system.weapon.family]} ft)`]);
+      rangeField = `<div class="form-group"><label>${i18n("AD2E.Weapon.Range")}</label><select name="range">${
+        opts.map(([k, l]) => `<option value="${k}"${k === "short" ? " selected" : ""}>${l}</option>`).join("")}</select></div>`;
+    }
+    const input = await DialogV2.prompt({
+      window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
+      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
+        + rangeField
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+      ok: {
+        label: i18n("AD2E.Roll.Roll"),
+        callback: (event, button) => {
+          const f = button.form.elements;
+          return { ac: Number(f.ac.value) || 0, mod: Number(f.mod.value) || 0, range: f.range?.value ?? null };
+        }
+      },
+      rejectClose: false
+    });
+    if (!input) return;
+    const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
+    const needed = this.system.thac0.value - input.ac;
+    const roll = await new Roll("1d20 + @adj + @range + @mod", { adj: attack.hit, range: rangeMod, mod: input.mod }).evaluate();
+    const hit = roll.total >= needed;
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${item.name} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
+        + `vs AC ${input.ac} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
+        + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+    });
+  }
+
+  /**
+   * Weapon damage: the chosen damage option's dice vs. small/medium or large targets + the use's damage
+   * adjustment; "a successful attack roll can never cause less than 1 point of damage" (Strength (PHB)).
+   */
+  async rollWeaponDamage(itemId, use = "melee") {
+    const item = this.items.get(itemId);
+    const attack = this.system.proficiencies.entries.find(e => e.item.id === itemId)?.attack?.[use];
+    const options = (item?.system.weapon.damage ?? []).filter(d => d.sm || d.l);
+    if (!item || !attack) return;
+    if (!options.length) {
+      ui.notifications.warn(game.i18n.format("AD2E.Weapon.NoDamage", { name: item.name }));
+      return;
+    }
+    const i18n = key => game.i18n.localize(key);
+    const choice = options.length > 1
+      ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
+        options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>`
+      : "";
+    const input = await DialogV2.prompt({
+      window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
+      content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
+        + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+      ok: {
+        label: i18n("AD2E.Roll.Roll"),
+        callback: (event, button) => {
+          const f = button.form.elements;
+          return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: Number(f.mod.value) || 0 };
+        }
+      },
+      rejectClose: false
+    });
+    if (!input) return;
+    const option = options[input.option] ?? options[0];
+    const dice = option[input.size] ?? option.sm ?? option.l;
+    const roll = await new Roll(`${dice} + @adj + @mod`, { adj: attack.dmg, mod: input.mod }).evaluate();
+    const total = Math.max(roll.total, 1);
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
+        + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
+        + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
     });
   }
 

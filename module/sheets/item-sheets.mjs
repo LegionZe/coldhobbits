@@ -116,6 +116,18 @@ export class ProficiencySheet extends AD2EItemSheet {
     context.abilityLabels = AD2E.abilityLabels;
     context.nonweaponGroups = AD2E.nonweaponGroups;
     context.groupList = [...this.document.system.groups];
+    const sys = this.document.system;
+    context.isWeapon = sys.kind === "weapon";
+    if (context.isWeapon) {
+      const w = sys.weapon;
+      const dash = v => v ?? "—";
+      context.weapon = {
+        size: dash(w.size), type: dash(w.type), speed: dash(w.speed), missile: w.missile, range: w.range,
+        uses: [w.melee && game.i18n.localize("AD2E.Weapon.melee"), w.missile && game.i18n.localize("AD2E.Weapon.missile")]
+          .filter(Boolean).join(", ") || "—",
+        damage: w.damage.map(d => ({ label: d.label, sm: dash(d.sm), l: dash(d.l) }))
+      };
+    }
     return context;
   }
 }

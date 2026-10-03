@@ -1,4 +1,4 @@
-import { AD2E, conSaveBonus, hitDiceAt, lookup, thac0At } from "../config.mjs";
+import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, thac0At } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
@@ -190,12 +190,23 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const classId = this.classInfo.classItem?.system.identifier;
     const groups = AD2E.proficiencyGroups[classId] ?? AD2E.defaultProficiencyGroups[this.classGroup];
     const items = this.parent?.items?.filter(i => i.type === "proficiency") ?? [];
+    const canSpecialize = AD2E.specialization.classes.includes(classId);
+    const specializedCount = items.filter(i => i.system.kind === "weapon" && i.system.specialized).length;
     const entries = items.map(item => {
       const p = item.system;
       const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
-      const cost = p.grantedBy ? 0 : (p.kind === "weapon" ? 1 : p.slots + (crossGroup ? 1 : 0));
+      // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
+      const specCost = (p.kind === "weapon" && p.specialized) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
+      const cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
       const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) : null;
-      return { item, cost, crossGroup, target };
+      const entry = { item, cost, crossGroup, target };
+      if (p.kind === "weapon") {
+        entry.specialized = p.specialized;
+        // Fighters only, and a single weapon ("choose a single weapon and specialize in its use").
+        entry.specInvalid = p.specialized && (!canSpecialize || specializedCount > 1);
+        entry.attack = this.#weaponAttack(p, p.specialized && canSpecialize);
+      }
+      return entry;
     });
     const used = kind => entries.filter(e => e.item.system.kind === kind).reduce((n, e) => n + e.cost, 0);
     const available = {
@@ -205,11 +216,48 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
     return {
       groups,
+      canSpecialize,
       penalty: rules.penalty,
       entries,
       weapon: { available: available.weapon, used: used("weapon") },
       nonweapon: { available: available.nonweapon, used: used("nonweapon") }
     };
+  }
+
+  /**
+   * Attack and damage adjustments and attacks per round for a weapon proficiency, per use (melee, missile).
+   * Melee: Strength hit/damage, specialization +1 hit / +2 damage; Table 15 (warriors) or Table 35 (specialists).
+   * Missile: Dexterity missile adjustment plus Strength as `weapon.strength` allows (bows: penalties only;
+   * crossbows: none); rate of fire from Table 45, or Table 35 for non-bow specialists (bow specialists gain no
+   * extra attacks); bow/crossbow specialists gain the point-blank range (+2 to hit). Damage never below 1.
+   */
+  #weaponAttack(p, specialized) {
+    const w = p.weapon;
+    const { hit, dmg, missile } = this.mods;
+    const spec = AD2E.specialization;
+    const out = { melee: null, missile: null };
+    if (w.melee) {
+      const table = specialized ? AD2E.specialistAttacks.melee
+        : (this.classGroup === "warrior" ? AD2E.warriorAttacks : null);
+      out.melee = {
+        hit: hit + (specialized ? spec.meleeHit : 0),
+        dmg: dmg + (specialized ? spec.meleeDamage : 0),
+        rate: table ? formatRate(attackRate(table, this.level)) : "1"
+      };
+    }
+    if (w.missile) {
+      const strHit = { full: hit, penalty: Math.min(hit, 0) }[w.strength] ?? 0;
+      const strDmg = { full: dmg, damage: dmg, penalty: Math.min(dmg, 0) }[w.strength] ?? 0;
+      const column = specialized && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
+      out.missile = {
+        hit: missile + strHit,
+        dmg: strDmg,
+        rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
+        pointBlank: specialized && w.family !== "other",
+        range: w.range
+      };
+    }
+    return out;
   }
 
   getRollData() {

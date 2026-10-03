@@ -114,7 +114,44 @@ def build_thac0():
     return out, {"page": WIKI + "Calculating_THAC0_(PHB)", "revid": rev}
 
 
+def rate(cell):
+    """'3 attacks{{br}}in 2 rounds' / '3/2 rounds' / '1/round' -> [attacks, rounds]."""
+    c = re.sub(r"\{\{br\}\}", " ", cell)
+    m = re.match(r"\s*(\d+)\s*(?:attacks?|/)\s*(?:in\s*)?(\d*)\s*rounds?", c)
+    return [int(m.group(1)), int(m.group(2) or 1)]
+
+
+def build_attacks():
+    """Table 15 (warrior melee attacks) and Table 35 (specialist attacks per round)."""
+    wiki, rev15 = page("Warrior Tables (PHB)")
+    t = wiki[wiki.index("Table 15: Warrior Melee Attacks per Round"):]
+    t = t[:t.index("|}")]
+    warrior = []
+    for r in re.split(r"\n\|-", t)[1:]:
+        if r.strip().startswith("!"):
+            continue  # header row
+        cells = [c.strip() for c in re.split(r"\n?\|", r) if c.strip()]
+        lo, hi = (int(cells[0].split()[0]), 99) if "up" in cells[0] else (int(cells[0].split("-")[0]), int(cells[0].split("-")[-1]))
+        warrior.append({"min": lo, "max": hi, "rate": rate(cells[1])})
+    wiki35, rev35 = page("Weapon Specialization (PHB)")
+    t = wiki35[wiki35.index("Table 35"):]
+    t = t[:t.index("|}")]
+    cols = ["melee", "lightCrossbow", "heavyCrossbow", "thrownDagger", "thrownDart", "otherMissile"]
+    spec = {c: [] for c in cols}
+    for r in re.split(r"\n\|-", t)[1:]:
+        if r.strip().startswith("!"):
+            continue  # header row
+        cells = [l[1:].strip() for l in r.strip().split("\n") if l.startswith("|")]
+        lv = cells[0]
+        lo, hi = (int(lv[:-1]), 99) if lv.endswith("+") else (int(lv.split("-")[0]), int(lv.split("-")[1]))
+        for c, cell in zip(cols, cells[1:]):
+            spec[c].append({"min": lo, "max": hi, "rate": rate(cell)})
+    assert len(warrior) == 3 and all(len(v) == 3 for v in spec.values()), (warrior, spec)
+    return warrior, spec, {"table15": rev15, "table35": rev35}
+
+
 if __name__ == "__main__":
+    warrior_attacks, spec_attacks, attack_revs = build_attacks()
     thac0, thac0_src = build_thac0()
     saves, save_src = build_saves()
     hit_dice, xp, lvl_src = build_levels()
@@ -132,6 +169,10 @@ if __name__ == "__main__":
               "export const SAVE_TABLE = " + json.dumps(saves, indent=2) + ";", "",
               f"/** PHB Table 53 (Calculated THAC0s), levels 1-20 per group: {thac0_src['page']} (revision {thac0_src['revid']}). */",
               "export const THAC0_TABLE = " + json.dumps(thac0) + ";", "",
+              f"/** PHB Table 15 (warrior melee attacks per round; rev {attack_revs['table15']}) as [attacks, rounds]. */",
+              "export const WARRIOR_ATTACKS = " + json.dumps(warrior_attacks) + ";", "",
+              f"/** PHB Table 35 (specialist attacks per round by fighter level; Weapon Specialization (PHB) rev {attack_revs['table35']}). */",
+              "export const SPECIALIST_ATTACKS = " + json.dumps(spec_attacks) + ";", "",
               "/** Per group: hit die size and, per level, number of dice and fixed bonus HP. */",
               "export const HIT_DICE = " + json.dumps(hit_dice, indent=2) + ";", "",
               "/** Per class identifier: total XP needed for levels 1..20 (index 0 = level 1). */",

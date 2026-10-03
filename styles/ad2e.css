@@ -67,7 +67,17 @@
 .ad2e.item .ad2e-race-table input[type="number"] { width: 3.5rem; }
 .ad2e-prof-summary { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.25rem 0 0.5rem; }
 .ad2e-prof-row { display: grid; grid-template-columns: 24px 1fr auto auto 2.5rem auto; align-items: center; gap: 0.5rem; margin-bottom: 0.15rem; }
-.ad2e-prof-row-weapon { grid-template-columns: 24px 1fr 2.5rem auto; }
+.ad2e-prof-row-weapon { grid-template-columns: 24px minmax(8rem, 1fr) auto auto 2.5rem auto; }
+.ad2e-weapon-main { display: flex; flex-direction: column; min-width: 0; }
+.ad2e-weapon-meta { font-size: 0.8em; opacity: 0.8; }
+.ad2e-spec { display: flex; align-items: center; gap: 0.2rem; font-size: 0.85em; white-space: nowrap; }
+.ad2e-weapon-uses { display: flex; flex-direction: column; gap: 0.15rem; }
+.ad2e-weapon-use { display: flex; align-items: center; gap: 0.25rem; }
+.ad2e-weapon-use button { flex: 0 0 auto; width: auto; padding: 0 0.4rem; line-height: 1.6; }
+.ad2e-weapon-rate, .ad2e-weapon-pb { font-size: 0.85em; white-space: nowrap; }
+.ad2e-weapon-stats { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.75rem; margin: 0.25rem 0; }
+.ad2e-weapon-stats dd { margin: 0; }
+.ad2e-check { display: flex; align-items: center; gap: 0.25rem; }
 .ad2e-prof-name { cursor: pointer; }
 .ad2e-prof-check { white-space: nowrap; opacity: 0.85; }
 .ad2e-prof-cost { text-align: center; }

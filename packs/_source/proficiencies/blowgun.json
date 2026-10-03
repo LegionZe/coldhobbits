@@ -16,6 +16,34 @@
       "rating": null,
       "cost": null
     },
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "Barbed Dart",
+          "sm": "1d3",
+          "l": "1d2"
+        },
+        {
+          "label": "Needle",
+          "sm": "1",
+          "l": "1"
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
     "notes": ""
