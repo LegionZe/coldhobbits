@@ -4,11 +4,13 @@
  * - /catalog/ (HTML): settings and books (publication ID, title, number of monsters);
  * - /page-data/catalog/<setting>/<id>/page-data.json: the book's monster keys;
  * - /page-data/appendix/<key>/page-data.json: a monster page, `statblock` = { variant name: { row label: value } }.
- * Only the stat block (game mechanics) and a link to the page are imported; descriptive text is not.
+ * Only the stat block (game mechanics), a link to the page and the URL of the page's monster picture are imported;
+ * descriptive text is not, and pictures are not copied (the actor and token load them from the site).
  */
 import { AD2E, creatureHitDice } from "../config.mjs";
 
 export const SITE = "https://www.completecompendium.com";
+export const DEFAULT_IMAGE = "icons/svg/mystery-man.svg";
 
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", apos: "'", nbsp: " ", times: "×", ndash: "–",
   mdash: "—", frac12: "½", frac14: "¼", frac34: "¾", deg: "°", minus: "−" };
@@ -46,12 +48,42 @@ export function bookMonsterKeys(json) {
   return pc.monster_keys ?? [];
 }
 
-/** { title, sources, variants: [{ name, block }] } from a monster page-data document. */
+/**
+ * Monster pictures from a page's `images` (<img> tags), as the site renders them: "img/x.gif" is served from
+ * /images/monsters/img/x.gif, "/img/spc/x.gif" from the site root ("../../static/img/..." = /img/...); "grf/" images
+ * are setting and publisher logos and are skipped. Returns [{ url, alt }] without duplicates.
+ */
+export function monsterImages(images) {
+  const out = [];
+  for (const tag of images ?? []) {
+    const src = String(tag).match(/\bsrc="([^"]+)"/i)?.[1]?.trim();
+    if (!src || /^(\.\.\/)*(static\/)?grf\//i.test(src) || /^https?:/i.test(src)) continue;
+    let path;
+    if (/^img\//i.test(src)) path = `/images/monsters/${src}`;
+    else if (src.startsWith("/")) path = src;
+    else if (/^(\.\.\/)+(static\/)?img\//i.test(src)) path = `/${src.replace(/^(\.\.\/)+(static\/)?/i, "")}`;
+    else continue;
+    const url = `${SITE}${path}`;
+    if (out.some(i => i.url === url)) continue;
+    const alt = cleanText(String(tag).match(/\b(?:alt|title)="([^"]*)"/i)?.[1] ?? "").replace(/^\\/, "");
+    out.push({ url, alt });
+  }
+  return out;
+}
+
+/** Picture for a stat block variant: the one whose alt text names the variant, else the page's first picture. */
+export function monsterImage(images, variant = "") {
+  const v = cleanText(variant).toLowerCase();
+  return (v && images?.find(i => i.alt.toLowerCase() === v)) || images?.[0] || null;
+}
+
+/** { title, sources, variants: [{ name, block }], images: [{ url, alt }] } from a monster page-data document. */
 export function parseMonsterPage(json) {
   const pc = json?.result?.pageContext ?? json?.result?.data?.sitePage?.pageContext ?? {};
   const data = pc.monster_data ?? {};
   const variants = Object.entries(data.statblock ?? {}).map(([name, block]) => ({ name: cleanText(name), block }));
-  return { key: pc.monster_key, title: cleanText(data.title ?? pc.title ?? ""), sources: data.TSR ?? pc.sources ?? [], variants };
+  return { key: pc.monster_key, title: cleanText(data.title ?? pc.title ?? ""), sources: data.TSR ?? pc.sources ?? [], variants,
+    images: monsterImages(data.images) };
 }
 
 const firstInt = text => {
@@ -93,7 +125,7 @@ export function parseAttacks(text) {
  * Monster actor data from one stat block variant. The listed THAC0 is kept as an override when it differs from
  * DMG Table 39 for the Hit Dice.
  */
-export function monsterActorData({ key, title, sources }, { name, block }) {
+export function monsterActorData({ key, title, sources, images }, { name, block }) {
   const get = label => cleanText(block[label] ?? "");
   const hitDice = get("Hit Dice") || "1";
   const hd = creatureHitDice(hitDice);
@@ -103,10 +135,11 @@ export function monsterActorData({ key, title, sources }, { name, block }) {
   const morale = get("Morale");
   const moraleNumbers = morale.match(/\d+/g);
   const avgHp = Math.max(1, Math.round(hd.dice ? hd.dice * 4.5 + hd.bonus : 3.5));
+  const img = monsterImage(images, name)?.url ?? DEFAULT_IMAGE;
   return {
     name: name || title,
     type: "monster",
-    img: "icons/svg/mystery-man.svg",
+    img,
     system: {
       identifier: key, role: "monster",
       climate: get("Climate/Terrain"), frequency: get("Frequency"), organization: get("Organization"),
@@ -125,7 +158,7 @@ export function monsterActorData({ key, title, sources }, { name, block }) {
       xp: firstInt(get("XP Value")) ?? 0,
       url: monsterPageUrl(key), notes: ""
     },
-    prototypeToken: { name: name || title, disposition: -1, actorLink: false },
+    prototypeToken: { name: name || title, disposition: -1, actorLink: false, texture: { src: img } },
     flags: { ad2e: { completeCompendium: { key, variant: name, sources } } }
   };
 }
