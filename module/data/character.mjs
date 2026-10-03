@@ -125,6 +125,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     this.proficiencies = this.#computeProficiencies();
     this.weapons = this.#computeWeapons();
+    this.spells = this.#computeSpells();
 
     const computed = thac0At(this.classGroup, this.level);
     this.thac0.computed = computed;
@@ -385,6 +386,60 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       return { item, proficient: !!prof, proficiency: prof?.item ?? null, specialized, penalty,
         attack: this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg }) };
     });
+  }
+
+  /**
+   * Spell slots by spell level from the class's progression table at the character's level (PHB Tables 21, 24, 17,
+   * 32). Wizards and bards: no slots above the Intelligence maximum spell level (Table 4); specialists gain one
+   * additional spell per spell level, "provided the additional spell is taken in the specialist's school" (Specialist
+   * Wizard (PHB)). Clerics and druids: Wisdom bonus spells, "cumulative" and "available only when the priest is entitled
+   * to spells of the appropriate level" (Wisdom (PHB)); 6th-level spells need Wisdom 17, 7th 18 (Table 24).
+   * Paladins and rangers get no Wisdom bonus spells. Owned spell items are grouped by level with their memorized counts.
+   */
+  #computeSpells() {
+    const cls = this.classInfo.classItem?.system;
+    const table = AD2E.casterTables[cls?.identifier] ?? null;
+    const kind = table ? AD2E.casterKinds[table] : null;
+    const rows = table ? AD2E.spellProgression[table] : null;
+    const levels = rows ? Object.keys(rows).map(Number) : [];
+    const rowLevel = levels.length ? Math.min(this.level, Math.max(...levels)) : null;
+    const row = rows?.[rowLevel] ?? null;
+    const base = row ? [...row.slots] : [];
+    const bonus = base.map(() => 0);
+    const school = base.map(() => 0);
+    if (kind === "wizard") {
+      const max = this.abilityData.int.maxSpellLevel ?? 0;
+      base.forEach((n, i) => { if (i + 1 > max) base[i] = 0; });
+      if (table === "wizard" && cls?.school) base.forEach((n, i) => { if (n > 0) school[i] = 1; });
+    }
+    if (table === "priest") {
+      const wis = this.abilities.wis.total;
+      for (const r of AD2E.abilityTables.wis) {
+        if (r.min > wis) break;
+        for (const l of r.bonusSpells ?? []) if (base[l - 1] > 0) bonus[l - 1]++;
+      }
+      for (const [l, need] of Object.entries(AD2E.priestWisdomLevels)) {
+        if (wis < need) { base[l - 1] = 0; bonus[l - 1] = 0; }
+      }
+    }
+    const owned = (this.parent?.items?.filter(i => i.type === "spell") ?? []);
+    const maxKnown = this.abilityData.int.maxSpells;
+    const byLevel = new Map();
+    const count = Math.max(base.length, ...owned.map(i => i.system.level), 0);
+    for (let l = kind === null ? 0 : 1; l <= count; l++) byLevel.set(l, []);
+    for (const i of owned) {
+      if (!byLevel.has(i.system.level)) byLevel.set(i.system.level, []);
+      byLevel.get(i.system.level).push(i);
+    }
+    const out = [...byLevel.entries()].sort((a, b) => a[0] - b[0]).map(([level, spells]) => {
+      const usable = spells.filter(i => i.system.kind === kind);
+      const slots = level >= 1 ? (base[level - 1] ?? 0) + (bonus[level - 1] ?? 0) + (school[level - 1] ?? 0) : 0;
+      const prepared = usable.reduce((n, i) => n + i.system.prepared, 0);
+      const remaining = usable.reduce((n, i) => n + Math.max(i.system.prepared - i.system.cast, 0), 0);
+      return { level, spells, slots, base: base[level - 1] ?? 0, bonus: bonus[level - 1] ?? 0, school: school[level - 1] ?? 0,
+        prepared, remaining, known: usable.length, maxKnown: kind === "wizard" ? maxKnown : null, over: prepared > slots };
+    }).filter(l => l.slots > 0 || l.spells.length);
+    return { table, kind, castingLevel: row?.casting ?? null, levels: out };
   }
 
   getRollData() {

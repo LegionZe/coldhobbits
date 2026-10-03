@@ -134,3 +134,11 @@
 .ad2e-importer-controls select { max-width: 22rem; }
 .ad2e-importer-list { flex: 1; overflow-y: auto; columns: 2; min-height: 10rem; }
 .ad2e-importer-entry { display: block; break-inside: avoid; }
+
+/* Spells tab (templates/actor/character-spells.hbs) */
+.ad2e-spell-row { grid-template-columns: 24px 1fr auto auto auto; }
+.ad2e-spell-row button { width: auto; }
+.ad2e-spell-unusable { opacity: 0.6; }
+.ad2e-spell-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.1rem 0.5rem; margin: 0.25rem 0; }
+.ad2e-spell-card dt { font-weight: bold; }
+.ad2e-spell-card dd { margin: 0; }

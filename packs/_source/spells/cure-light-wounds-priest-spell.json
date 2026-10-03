@@ -1,0 +1,51 @@
+{
+  "_id": "LUDgIoCRJ1CoAvsH",
+  "_key": "!items!LUDgIoCRJ1CoAvsH",
+  "name": "Cure Light Wounds",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "cure-light-wounds-priest-spell",
+    "kind": "priest",
+    "level": 1,
+    "schools": [
+      "Necromancy"
+    ],
+    "spheres": [
+      "Healing"
+    ],
+    "reversible": true,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "range": "Touch",
+    "area": "Creature touched",
+    "castingTime": "5",
+    "duration": "Permanent",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Priest's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Cure_Light_Wounds_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Cure Light Wounds (Priest Spell)",
+        "revid": 171271
+      }
+    }
+  }
+}

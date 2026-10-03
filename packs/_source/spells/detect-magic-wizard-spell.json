@@ -1,0 +1,49 @@
+{
+  "_id": "l8BVyfuf4IwPbkKG",
+  "_key": "!items!l8BVyfuf4IwPbkKG",
+  "name": "Detect Magic",
+  "type": "spell",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "detect-magic-wizard-spell",
+    "kind": "wizard",
+    "level": 1,
+    "schools": [
+      "Divination"
+    ],
+    "spheres": [],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "range": "0",
+    "area": "10 x 60 ft.",
+    "castingTime": "1",
+    "duration": "2 rds./level",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Wizard's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Detect_Magic_(Wizard_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FElc3DxcAbSvBfEb",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Detect Magic (Wizard Spell)",
+        "revid": 281812
+      }
+    }
+  }
+}

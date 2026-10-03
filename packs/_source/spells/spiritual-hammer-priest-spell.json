@@ -1,0 +1,50 @@
+{
+  "_id": "Pk3As684koePtEzh",
+  "_key": "!items!Pk3As684koePtEzh",
+  "name": "Spiritual Hammer",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "spiritual-hammer-priest-spell",
+    "kind": "priest",
+    "level": 2,
+    "schools": [
+      "Invocation"
+    ],
+    "spheres": [
+      "Combat"
+    ],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "10 yds./level",
+    "area": "Special",
+    "castingTime": "5",
+    "duration": "3 rds. + 1 rd./level",
+    "save": "None",
+    "sources": [
+      "Players Handbook"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Spiritual_Hammer_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Spiritual Hammer (Priest Spell)",
+        "revid": 170318
+      }
+    }
+  }
+}

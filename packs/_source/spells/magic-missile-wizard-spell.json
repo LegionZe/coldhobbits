@@ -1,0 +1,49 @@
+{
+  "_id": "DIjDLiqgR2iflgjE",
+  "_key": "!items!DIjDLiqgR2iflgjE",
+  "name": "Magic Missile",
+  "type": "spell",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "magic-missile-wizard-spell",
+    "kind": "wizard",
+    "level": 1,
+    "schools": [
+      "Evocation"
+    ],
+    "spheres": [],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": false
+    },
+    "range": "60 yds.+ 10 yds./level",
+    "area": "1 - 5 targets",
+    "castingTime": "1",
+    "duration": "Instantaneous",
+    "save": "None",
+    "sources": [
+      "Players Handbook",
+      "Wizard's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Magic_Missile_(Wizard_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FElc3DxcAbSvBfEb",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Magic Missile (Wizard Spell)",
+        "revid": 248651
+      }
+    }
+  }
+}

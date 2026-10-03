@@ -3,6 +3,7 @@ import { HIT_DICE, SAVE_TABLE, SPECIALIST_ATTACKS, THAC0_TABLE, WARRIOR_ATTACKS,
 import { PROFICIENCY_GROUPS, PROFICIENCY_SLOTS } from "./rules/proficiency-tables.mjs";
 import { CON_SAVE_BONUS } from "./rules/race-tables.mjs";
 import { CREATURE_THAC0 } from "./rules/monster-tables.mjs";
+import { SPELL_PROGRESSION } from "./rules/spell-tables.mjs";
 import { BASE_MOVEMENT, COIN_VALUES, COINS_PER_POUND, ENCUMBRANCE_TABLE, MOVEMENT_TABLE } from "./rules/movement-tables.mjs";
 
 /**
@@ -251,6 +252,26 @@ export function creatureHitDice(text) {
   const formula = bonus ? `${dice}d8${bonus > 0 ? "+" : ""}${bonus}` : `${dice}d8`;
   if (bonus < 0) return { dice, bonus, formula, thac0Index: dice - 1, saveLevel: Math.max(dice - 1, 0), hpOnly: false };
   return { dice, bonus, formula, thac0Index: dice + (bonus >= 3 ? 1 : 0), saveLevel: dice + Math.ceil(bonus / 4), hpOnly: false };
+}
+
+/**
+ * Spells. SPELL_PROGRESSION (generated): per caster table and class level, { casting level, slots per spell level }.
+ * Class identifier -> table; wizard and bard tables cast wizard spells, the others priest spells.
+ */
+AD2E.spellProgression = SPELL_PROGRESSION;
+AD2E.spellKinds = { wizard: "AD2E.Spell.wizard", priest: "AD2E.Spell.priest" };
+AD2E.casterTables = { mage: "wizard", abjurer: "wizard", conjurer: "wizard", diviner: "wizard", enchanter: "wizard",
+  illusionist: "wizard", invoker: "wizard", necromancer: "wizard", transmuter: "wizard",
+  cleric: "priest", druid: "priest", paladin: "paladin", ranger: "ranger", bard: "bard" };
+AD2E.casterKinds = { wizard: "wizard", bard: "wizard", priest: "priest", paladin: "priest", ranger: "priest" };
+/** Spheres open to paladins and rangers (Paladin (PHB), Ranger (PHB)); sphere "All" is open to every priest. */
+AD2E.limitedSpheres = { paladin: ["combat", "divination", "healing", "protection"], ranger: ["plant", "animal"] };
+/** Priest spell levels that need Wisdom (Table 24 footnotes): 6th 17+, 7th 18+. */
+AD2E.priestWisdomLevels = { 6: 17, 7: 18 };
+
+/** Four-letter stems of school names: "Invoc./Evoc." and "Invocation/Evocation" -> ["invo", "evoc"]. */
+export function schoolStems(text) {
+  return String(text ?? "").toLowerCase().split(/[\s,/;]+/).map(w => w.replace(/[^a-z]/g, "").slice(0, 4)).filter(w => w.length >= 4);
 }
 
 AD2E.thac0Progression = {

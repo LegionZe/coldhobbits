@@ -442,6 +442,44 @@ export default class AD2EActor extends Actor {
     return this.update({ "system.hp.max": hp, "system.hp.value": hp });
   }
 
+  /**
+   * Cast a memorized spell: one fewer remaining until the next rest; posts the spell's game statistics and a link to
+   * its full description.
+   */
+  async castSpell(itemId) {
+    const spell = this.items.get(itemId);
+    if (!spell || spell.type !== "spell") return;
+    const sys = spell.system;
+    if (sys.prepared - sys.cast < 1) {
+      ui.notifications.warn(game.i18n.format("AD2E.Spell.NotMemorized", { name: spell.name }));
+      return;
+    }
+    const left = sys.prepared - sys.cast - 1;
+    await spell.update({ "system.cast": sys.cast + 1 });
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const comps = ["verbal", "somatic", "material"].filter(c => sys.components[c]).map(c => c[0].toUpperCase()).join(", ");
+    const rows = [
+      [i18n("AD2E.Spell.Level"), `${sys.level} (${i18n(`AD2E.Spell.${sys.kind}`)})`],
+      [i18n(sys.kind === "priest" ? "AD2E.Spell.Spheres" : "AD2E.Spell.Schools"), (sys.kind === "priest" ? sys.spheres : sys.schools).join(", ")],
+      [i18n("AD2E.Spell.CastingTime"), sys.castingTime], [i18n("AD2E.Spell.Range"), sys.range],
+      [i18n("AD2E.Spell.Area"), sys.area], [i18n("AD2E.Spell.Duration"), sys.duration], [i18n("AD2E.Spell.Save"), sys.save],
+      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), this.system.spells?.castingLevel ?? this.system.level]
+    ].filter(([, v]) => v !== "" && v !== null && v !== undefined);
+    const content = `<div class="ad2e-spell-card"><h3>${esc(spell.name)}${sys.reversible ? ` <em>(${i18n("AD2E.Spell.Reversible")})</em>` : ""}</h3>`
+      + `<dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
+      + (sys.url ? `<p><a href="${esc(sys.url)}" target="_blank" rel="noopener">${i18n("AD2E.Spell.FullText")}</a></p>` : "")
+      + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
+  }
+
+  /** Rest: every memorized spell can be cast again (memorization itself is kept; change it on the Spells tab). */
+  async restSpells() {
+    const updates = this.items.filter(i => i.type === "spell" && i.system.cast > 0).map(i => ({ _id: i.id, "system.cast": 0 }));
+    if (updates.length) await this.updateEmbeddedDocuments("Item", updates);
+    ui.notifications.info(game.i18n.format("AD2E.Spell.Rested", { name: this.name }));
+  }
+
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */
   async rollAttack({ missile = false } = {}) {
     const targetAc = await promptNumber(

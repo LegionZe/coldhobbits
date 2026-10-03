@@ -1,0 +1,27 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Spell.Kind"}} <select name="system.kind">{{selectOptions kinds selected=system.kind localize=true}}</select></label>
+    <label>{{localize "AD2E.Spell.Level"}} <input type="number" name="system.level" value="{{system.level}}" min="0"></label>
+    <label>{{localize "AD2E.Spell.Schools"}} <input type="text" name="schoolsText" value="{{schoolsText}}"></label>
+    <label>{{localize "AD2E.Spell.Spheres"}} <input type="text" name="spheresText" value="{{spheresText}}"></label>
+    <label class="ad2e-check"><input type="checkbox" name="system.reversible" {{checked system.reversible}}> {{localize "AD2E.Spell.Reversible"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.components.verbal" {{checked system.components.verbal}}> {{localize "AD2E.Spell.Verbal"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.components.somatic" {{checked system.components.somatic}}> {{localize "AD2E.Spell.Somatic"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.components.material" {{checked system.components.material}}> {{localize "AD2E.Spell.Material"}}</label>
+    <label>{{localize "AD2E.Spell.Range"}} <input type="text" name="system.range" value="{{system.range}}"></label>
+    <label>{{localize "AD2E.Spell.Area"}} <input type="text" name="system.area" value="{{system.area}}"></label>
+    <label>{{localize "AD2E.Spell.CastingTime"}} <input type="text" name="system.castingTime" value="{{system.castingTime}}"></label>
+    <label>{{localize "AD2E.Spell.Duration"}} <input type="text" name="system.duration" value="{{system.duration}}"></label>
+    <label>{{localize "AD2E.Spell.Save"}} <input type="text" name="system.save" value="{{system.save}}"></label>
+    <label>{{localize "AD2E.Spell.Sources"}} <input type="text" name="sourcesText" value="{{sourcesText}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  {{#if system.url}}<p class="ad2e-note">{{localize "AD2E.Spell.FullText"}} <a href="{{system.url}}" target="_blank" rel="noopener">{{system.url}}</a></p>{{/if}}
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

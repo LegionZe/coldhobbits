@@ -1,0 +1,50 @@
+{
+  "_id": "OmfuHSQOmYs1jzIz",
+  "_key": "!items!OmfuHSQOmYs1jzIz",
+  "name": "Hold Person",
+  "type": "spell",
+  "img": "icons/svg/sun.svg",
+  "system": {
+    "identifier": "hold-person-priest-spell",
+    "kind": "priest",
+    "level": 2,
+    "schools": [
+      "Enchantment/Charm"
+    ],
+    "spheres": [
+      "Charm"
+    ],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "120 yds.",
+    "area": "1 to 4 persons in a 20-ft. cube",
+    "castingTime": "5",
+    "duration": "2 rds./level",
+    "save": "Neg.",
+    "sources": [
+      "Players Handbook"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Hold_Person_(Priest_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "iweQWPCYNFl0cwfP",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Hold Person (Priest Spell)",
+        "revid": 168726
+      }
+    }
+  }
+}

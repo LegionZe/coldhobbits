@@ -1,0 +1,49 @@
+{
+  "_id": "Xhs3RLPLPPTYyXLH",
+  "_key": "!items!Xhs3RLPLPPTYyXLH",
+  "name": "Lightning Bolt",
+  "type": "spell",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "lightning-bolt-wizard-spell",
+    "kind": "wizard",
+    "level": 3,
+    "schools": [
+      "Invocation/Evocation"
+    ],
+    "spheres": [],
+    "reversible": false,
+    "components": {
+      "verbal": true,
+      "somatic": true,
+      "material": true
+    },
+    "range": "40 yds.+ 10 yds./level",
+    "area": "Special",
+    "castingTime": "3",
+    "duration": "Instantaneous",
+    "save": "1/2",
+    "sources": [
+      "Players Handbook",
+      "Wizard's Spell Compendium"
+    ],
+    "url": "https://adnd2e.fandom.com/wiki/Lightning_Bolt_(Wizard_Spell)",
+    "prepared": 0,
+    "cast": 0,
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FElc3DxcAbSvBfEb",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {
+    "ad2e": {
+      "wiki": {
+        "title": "Lightning Bolt (Wizard Spell)",
+        "revid": 281828
+      }
+    }
+  }
+}

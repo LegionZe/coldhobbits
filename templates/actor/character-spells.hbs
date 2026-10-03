@@ -1,0 +1,39 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#with spellTab as |st|}}
+  <div class="ad2e-prof-summary">
+    {{#if st.kind}}<span>{{localize "AD2E.Spell.Caster"}}: <strong>{{st.kind}}</strong></span>
+    <span>{{localize "AD2E.Spell.CastingLevel"}}: <strong>{{st.castingLevel}}</strong></span>
+    {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Spell.NoCaster"}}</span>{{/if}}
+    {{#if @root.editable}}<button type="button" data-action="restSpells" data-tooltip="{{localize 'AD2E.Spell.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Spell.Rest"}}</button>{{/if}}
+  </div>
+  <p class="ad2e-note">{{localize "AD2E.Spell.DragHint"}}</p>
+  {{#each st.levels as |l|}}
+  <fieldset class="ad2e-prof-list ad2e-spell-level">
+    <legend>{{l.label}}</legend>
+    <div class="ad2e-prof-summary">
+      <span class="{{#if l.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Spell.Memorized"}}: <strong>{{l.prepared}} / {{l.slots}}</strong>{{#if l.slotText}} <span class="ad2e-note">({{l.slotText}})</span>{{/if}}</span>
+      <span>{{localize "AD2E.Spell.Remaining2"}}: <strong>{{l.remaining}}</strong></span>
+      {{#if l.maxKnown}}<span data-tooltip="{{localize 'AD2E.Spell.KnownHint'}}">{{localize "AD2E.Spell.Known"}}: <strong>{{l.known}} / {{l.maxKnown}}</strong></span>{{/if}}
+    </div>
+    {{#each l.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-spell-row {{#unless r.usable}}ad2e-spell-unusable{{/unless}}">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.reversible}} <em>(R)</em>{{/if}}</a>
+        <span class="ad2e-weapon-meta">{{r.meta}}{{#unless r.usable}} · <span class="ad2e-unmet">{{localize "AD2E.Spell.NotForClass"}}</span>{{/unless}}</span>
+      </div>
+      <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Spell.MemorizedHint'}}">
+        {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{r.remaining}}/{{r.prepared}}
+        {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      <button type="button" data-action="castSpell" data-item-id="{{r.id}}" {{#unless r.remaining}}disabled{{/unless}}>{{localize "AD2E.Spell.Cast"}}</button>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoneAtLevel"}}</p>
+    {{/each}}
+  </fieldset>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoneYet"}}</p>
+  {{/each}}
+  {{/with}}
+</section>

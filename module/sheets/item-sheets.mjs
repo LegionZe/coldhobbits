@@ -212,3 +212,23 @@ export class EquipmentSheet extends AD2EItemSheet {
     return context;
   }
 }
+
+export class SpellSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["spell"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/spell-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const sys = this.document.system;
+    context.kinds = AD2E.spellKinds;
+    context.schoolsText = sys.schools.join(", ");
+    context.spheresText = sys.spheres.join(", ");
+    context.sourcesText = sys.sources.join(", ");
+    return context;
+  }
+
+  /** Schools, spheres and sources are edited as comma-separated text. */
+  _processFormData(event, form, formData) {
+    return parseClassesText(super._processFormData(event, form, formData), ["schools", "spheres", "sources"]);
+  }
+}

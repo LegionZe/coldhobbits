@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.26",
+  "version": "0.0.27",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -50,7 +50,8 @@
       "ammunition": {},
       "armor": {},
       "coin": {},
-      "equipment": {}
+      "equipment": {},
+      "spell": {}
     }
   },
   "primaryTokenAttribute": "hp",
@@ -142,6 +143,17 @@
       "system": "ad2e",
       "path": "packs/monsters",
       "type": "Actor",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "spells",
+      "label": "Spells (examples)",
+      "system": "ad2e",
+      "path": "packs/spells",
+      "type": "Item",
       "ownership": {
         "PLAYER": "OBSERVER",
         "ASSISTANT": "OWNER"

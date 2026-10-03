@@ -1,4 +1,4 @@
-import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
+import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -94,7 +94,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       adjustQuantity: CharacterSheet.onAdjustQuantity,
       toggleEquipped: CharacterSheet.onToggleEquipped,
       rollJump: CharacterSheet.onRollJump,
-      toggleCarried: CharacterSheet.onToggleCarried
+      toggleCarried: CharacterSheet.onToggleCarried,
+      adjustPrepared: CharacterSheet.onAdjustPrepared,
+      castSpell: CharacterSheet.onCastSpell,
+      restSpells: CharacterSheet.onRestSpells
     }
   };
 
@@ -105,6 +108,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     weapons: { template: "systems/ad2e/templates/actor/character-weapons.hbs", scrollable: [""] },
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
     proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
+    spells: { template: "systems/ad2e/templates/actor/character-spells.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
     bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" },
     footer: { template: "systems/ad2e/templates/actor/character-footer.hbs" }
@@ -112,7 +116,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "proficiencies" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -185,6 +189,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
+    context.spellTab = this._spellTabContext(sys);
     context.movement = this._movementContext(sys);
     const enc = sys.encumbrance.info;
     context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
@@ -265,6 +270,31 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       jump: { runningBroad: `2d6+${sys.level}`, runningHigh: `1d3+${half}`, standingBroad: `1d6+${half}`, standingHigh: "3" },
       jumpHint: game.i18n.localize(canJump ? "AD2E.Move.JumpHint" : "AD2E.Move.NoJump")
     };
+  }
+
+  /** Display data for the Spells tab: one section per spell level with slots and memorized spells. */
+  _spellTabContext(sys) {
+    const sp = sys.spells;
+    const i18n = k => game.i18n.localize(k);
+    const ordinal = n => game.i18n.format("AD2E.Spell.LevelN", { n });
+    const levels = sp.levels.map(l => ({
+      ...l,
+      label: l.level === 0 ? i18n("AD2E.Spell.Cantrips") : ordinal(l.level),
+      slotText: !(l.bonus || l.school) ? "" : [l.base ? `${l.base}` : null, l.bonus ? `+${l.bonus} ${i18n("AD2E.Spell.WisdomBonus")}` : null,
+        l.school ? `+${l.school} ${i18n("AD2E.Spell.SchoolBonus")}` : null].filter(Boolean).join(" "),
+      rows: l.spells.map(i => {
+        const s = i.system;
+        const comps = ["verbal", "somatic", "material"].filter(c => s.components[c]).map(c => c[0].toUpperCase()).join("");
+        return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared,
+          remaining: Math.max(s.prepared - s.cast, 0), usable: s.kind === sp.kind,
+          meta: [(s.kind === "priest" ? s.spheres : s.schools).join("/"), comps,
+            `${i18n("AD2E.Spell.CT")} ${s.castingTime}`, `${i18n("AD2E.Spell.R")} ${s.range}`,
+            `${i18n("AD2E.Spell.D")} ${s.duration}`, `${i18n("AD2E.Spell.AoE")} ${s.area}`, `${i18n("AD2E.Spell.Save")} ${s.save}`]
+            .filter(v => v && !/ $/.test(v)).join(" · ") };
+      }).sort((a, b) => a.name.localeCompare(b.name))
+    }));
+    return { kind: sp.kind ? i18n(`AD2E.Spell.${sp.kind}`) : null, castingLevel: sp.castingLevel, levels,
+      hasSlots: sp.levels.some(l => l.slots > 0) };
   }
 
   /** Display data for the Weapons tab: owned weapon items and their proficiency status. */
@@ -376,6 +406,19 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       const stack = this.actor.items.find(i => i.type === "coin" && i.system.identifier === item.system.identifier);
       if (stack) return stack.update({ "system.quantity": stack.system.quantity + item.system.quantity });
     }
+    // Spells: notices only (the spell is still added) for spells this class cannot use.
+    if (this.actor.isOwner && item.type === "spell" && item.parent !== this.actor) {
+      const sp = this.actor.system.spells;
+      const cls = this.actor.system.classInfo.classItem?.system;
+      const warn = key => ui.notifications.warn(game.i18n.format(key, { name: item.name, class: this.actor.system.classInfo.classItem?.name ?? "—" }));
+      if (!sp.kind || item.system.kind !== sp.kind) warn("AD2E.Spell.WrongKind");
+      else if (cls?.opposition && item.system.schools.some(sc => schoolStems(sc).some(st => schoolStems(cls.opposition).includes(st)))) {
+        warn("AD2E.Spell.OppositionSchool");
+      } else if (AD2E.limitedSpheres[sp.table]
+        && !item.system.spheres.some(sp2 => ["all", ...AD2E.limitedSpheres[sp.table]].includes(sp2.toLowerCase()))) {
+        warn("AD2E.Spell.SphereNotAllowed");
+      }
+    }
     if (this.actor.isOwner && item.type === "weapon" && item.parent !== this.actor) {
       const prof = this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon"
         && i.system.identifier === item.system.proficiency);
@@ -473,6 +516,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollWeaponDamage(event, target) {
     return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  /** +/- memorized count of a spell. */
+  static onAdjustPrepared(event, target) {
+    const spell = this.actor.items.get(target.dataset.itemId);
+    if (!spell) return;
+    const prepared = Math.max(spell.system.prepared + Number(target.dataset.delta), 0);
+    return spell.update({ "system.prepared": prepared, "system.cast": Math.min(spell.system.cast, prepared) });
+  }
+
+  static onCastSpell(event, target) {
+    return this.actor.castSpell(target.dataset.itemId);
+  }
+
+  static onRestSpells() {
+    return this.actor.restSpells();
   }
 
   /** Carried equipment counts toward encumbrance. */
