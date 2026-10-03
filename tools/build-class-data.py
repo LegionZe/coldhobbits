@@ -15,7 +15,7 @@ Sources (AD&D 2e fandom wiki, via the MediaWiki API; the HTML pages return a JS 
 Only mechanical facts are emitted (names, minimums, flags, links); no rulebook prose.
 Run from the repo root:  python3 tools/build-class-data.py
 """
-import hashlib, json, os, re, shutil, urllib.parse, urllib.request
+import hashlib, json, os, re, shutil, sys, time, urllib.error, urllib.parse, urllib.request
 
 API = "https://adnd2e.fandom.com/api.php"
 WIKI = "https://adnd2e.fandom.com/wiki/"
@@ -24,10 +24,19 @@ ABIL = {"Str": "str", "Dex": "dex", "Con": "con", "Int": "int", "Wis": "wis", "C
 
 
 def api(**params):
+    """MediaWiki API call; on HTTP 429 (rate limit) waits (Retry-After, else 10, 20, 40 ... s) and retries."""
     params["format"] = "json"
     req = urllib.request.Request(API + "?" + urllib.parse.urlencode(params), headers=UA)
-    with urllib.request.urlopen(req) as r:
-        return json.load(r)
+    for attempt in range(8):
+        try:
+            with urllib.request.urlopen(req) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == 7:
+                raise
+            wait = int(e.headers.get("Retry-After") or 0) or 10 * 2 ** attempt
+            print(f"rate limited; retrying in {wait}s", file=sys.stderr)
+            time.sleep(wait)
 
 
 def page(title):

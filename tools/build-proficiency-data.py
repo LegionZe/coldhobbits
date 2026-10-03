@@ -38,10 +38,7 @@ SPECIALISTS = ["abjurer", "conjurer", "diviner", "enchanter", "illusionist", "in
 
 
 def api(**p):
-    p["format"] = "json"
-    req = urllib.request.Request(API + "?" + urllib.parse.urlencode(p), headers=UA)
-    with urllib.request.urlopen(req) as r:
-        return json.load(r)
+    return classdata.api(**p)  # retries on HTTP 429
 
 
 def slug(s):
