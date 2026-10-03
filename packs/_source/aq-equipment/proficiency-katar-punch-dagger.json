@@ -1,0 +1,54 @@
+{
+  "_id": "WJnE1PbNtkww6ued",
+  "_key": "!items!WJnE1PbNtkww6ued",
+  "name": "Katar (punch dagger)",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "katar-punch-dagger",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3+1",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Descriptions_(AA)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "4YRpFz6KtJbeVquI",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

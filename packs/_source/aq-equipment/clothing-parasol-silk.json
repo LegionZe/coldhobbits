@@ -1,0 +1,34 @@
+{
+  "_id": "xIDf5geNsZzLvIAK",
+  "_key": "!items!xIDf5geNsZzLvIAK",
+  "name": "Parasol, silk",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "parasol-silk",
+    "category": "clothing",
+    "cost": "5 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 6 gp, bargain 3 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

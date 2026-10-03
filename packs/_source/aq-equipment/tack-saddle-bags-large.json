@@ -1,0 +1,34 @@
+{
+  "_id": "rufy1lUv9u9WeOiF",
+  "_key": "!items!rufy1lUv9u9WeOiF",
+  "name": "Saddle bags, large",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "saddle-bags-large",
+    "category": "tack",
+    "cost": "4 gp",
+    "weight": 8.0,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 6 gp, bargain 3 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "rvCRumZavBCXCZFA",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "YQIJhtTAKyvX2GDS",
+  "_key": "!items!YQIJhtTAKyvX2GDS",
+  "name": "Meat, fresh (for one meal)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "meat-fresh-for-one-meal",
+    "category": "lodging",
+    "cost": "3 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 5 sp, bargain 2 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "9zEtOAnyvV8cfqMx",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

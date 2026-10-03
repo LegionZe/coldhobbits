@@ -1,0 +1,34 @@
+{
+  "_id": "spvsQfMKFRe8a5Fo",
+  "_key": "!items!spvsQfMKFRe8a5Fo",
+  "name": "Peacock",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "peacock",
+    "category": "animal",
+    "cost": "5 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking —, bargain 3 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "2gdybUPsN0qlqZaQ",
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

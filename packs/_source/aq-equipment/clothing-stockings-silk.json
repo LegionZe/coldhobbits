@@ -1,0 +1,34 @@
+{
+  "_id": "pSoWgJ6sTDhHDzxP",
+  "_key": "!items!pSoWgJ6sTDhHDzxP",
+  "name": "Stockings, silk",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "stockings-silk",
+    "category": "clothing",
+    "cost": "2 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 3 gp, bargain 15 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 4700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

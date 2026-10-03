@@ -1,0 +1,34 @@
+{
+  "_id": "OmAXuxwb6Fxlbdq4",
+  "_key": "!items!OmAXuxwb6Fxlbdq4",
+  "name": "Kohl (per tin)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "kohl-per-tin",
+    "category": "gear",
+    "cost": "3 cp",
+    "weight": 0.1,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 5 cp, bargain 2 cp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

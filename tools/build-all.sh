@@ -13,6 +13,7 @@ python3 tools/build-movement-tables.py   # encumbrance (Tables 47/48), base move
 python3 tools/build-race-data.py         # races (reads class and kit sources, Table 64)
 python3 tools/build-armor-data.py        # armour, shields, helmets
 python3 tools/build-equipment-data.py    # coins (Table 42; reads build-movement-tables.py)
+python3 tools/build-aq-equipment-data.py  # Al-Qadim Equipment (AA): price lists, new weapons, lamellar, daraq
 python3 tools/build-treasure-tables.py     # DMG Tables 85, 87, 88 (gem classes, art values, magical item categories)
 python3 tools/build-magic-item-data.py     # Magical Items (DMG Tables 89-104) and Gems (DMG) compendiums
 python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17, 32); example spells (node parser)

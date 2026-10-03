@@ -1,0 +1,34 @@
+{
+  "_id": "YOrbXqrUN8Aus731",
+  "_key": "!items!YOrbXqrUN8Aus731",
+  "name": "Feed & stables, camel (daily)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "feed-stables-camel-daily",
+    "category": "lodging",
+    "cost": "4 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 7 sp, bargain 2 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "9zEtOAnyvV8cfqMx",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

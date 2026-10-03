@@ -1,0 +1,34 @@
+{
+  "_id": "7HsWJSPqRnPDB2zZ",
+  "_key": "!items!7HsWJSPqRnPDB2zZ",
+  "name": "Cloak, cloth",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cloak-cloth",
+    "category": "clothing",
+    "cost": "8 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 12 sp, bargain 9 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

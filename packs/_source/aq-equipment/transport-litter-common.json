@@ -1,0 +1,34 @@
+{
+  "_id": "lYj6hoctlj3fIKHv",
+  "_key": "!items!lYj6hoctlj3fIKHv",
+  "name": "Litter, common",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "litter-common",
+    "category": "transport",
+    "cost": "80 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 120 gp, bargain 60 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "BrbBfP6Hykz7ljKg",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

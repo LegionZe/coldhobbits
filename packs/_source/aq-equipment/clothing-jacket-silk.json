@@ -1,0 +1,34 @@
+{
+  "_id": "aT7h1D6mYJyevbrr",
+  "_key": "!items!aT7h1D6mYJyevbrr",
+  "name": "Jacket, silk",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "jacket-silk",
+    "category": "clothing",
+    "cost": "80 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 120 gp, bargain 60 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "L70XdT4bCQFraIcD",
+  "_key": "!items!L70XdT4bCQFraIcD",
+  "name": "Scythe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "scythe",
+    "proficiency": "scythe",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10+2",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "10 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Two-handed; the blade can be locked straight to receive a charge. Asking 15 gp, bargain 8 gp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

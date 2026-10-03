@@ -1,0 +1,34 @@
+{
+  "_id": "CXfmqzOzi7gzKom2",
+  "_key": "!items!CXfmqzOzi7gzKom2",
+  "name": "Goat",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "goat",
+    "category": "animal",
+    "cost": "1 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 2 gp, bargain 7 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "2gdybUPsN0qlqZaQ",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

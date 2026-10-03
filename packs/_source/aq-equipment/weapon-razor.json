@@ -1,0 +1,53 @@
+{
+  "_id": "iTDDnnVt1yJF5E4h",
+  "_key": "!items!iTDDnnVt1yJF5E4h",
+  "name": "Razor",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "razor",
+    "proficiency": "razor",
+    "weapon": {
+      "size": "S",
+      "type": "S",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d2",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "4 sp",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 5 sp, bargain 3 sp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

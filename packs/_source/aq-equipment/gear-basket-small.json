@@ -1,0 +1,34 @@
+{
+  "_id": "jIpq0EgtP41sTEQK",
+  "_key": "!items!jIpq0EgtP41sTEQK",
+  "name": "Basket, small",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "basket-small",
+    "category": "gear",
+    "cost": "5 cp",
+    "weight": 0.1,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 7 cp, bargain 4 cp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

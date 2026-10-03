@@ -1,0 +1,34 @@
+{
+  "_id": "oUiHUhGAviuhx4Mp",
+  "_key": "!items!oUiHUhGAviuhx4Mp",
+  "name": "Parasol, linen",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "parasol-linen",
+    "category": "clothing",
+    "cost": "4 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 5 sp, bargain 3 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 3200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

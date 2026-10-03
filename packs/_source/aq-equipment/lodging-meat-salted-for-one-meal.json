@@ -1,0 +1,34 @@
+{
+  "_id": "HErvzsCjP0ho3suN",
+  "_key": "!items!HErvzsCjP0ho3suN",
+  "name": "Meat, salted (for one meal)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "meat-salted-for-one-meal",
+    "category": "lodging",
+    "cost": "2 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 3 sp, bargain 1 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "9zEtOAnyvV8cfqMx",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

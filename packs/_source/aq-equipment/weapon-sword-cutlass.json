@@ -1,0 +1,53 @@
+{
+  "_id": "WPg0Hn2REo2aKKCd",
+  "_key": "!items!WPg0Hn2REo2aKKCd",
+  "name": "Sword, cutlass",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sword-cutlass",
+    "proficiency": "sword-cutlass",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "12 gp",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "+1 when parrying (optional rule); punches with the hilt do 1d3. Asking 18 gp, bargain 9 gp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

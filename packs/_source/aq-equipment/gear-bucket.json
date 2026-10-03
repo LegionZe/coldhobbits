@@ -1,0 +1,34 @@
+{
+  "_id": "7oPgxBIJAsDnlA6B",
+  "_key": "!items!7oPgxBIJAsDnlA6B",
+  "name": "Bucket",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bucket",
+    "category": "gear",
+    "cost": "5 sp",
+    "weight": 3.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 7 sp, bargain 4 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

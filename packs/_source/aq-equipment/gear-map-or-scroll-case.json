@@ -1,0 +1,34 @@
+{
+  "_id": "xmTZatuS5r9d2ZaZ",
+  "_key": "!items!xmTZatuS5r9d2ZaZ",
+  "name": "Map or scroll case",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "map-or-scroll-case",
+    "category": "gear",
+    "cost": "8 sp",
+    "weight": 0.5,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 12 sp, bargain 6 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

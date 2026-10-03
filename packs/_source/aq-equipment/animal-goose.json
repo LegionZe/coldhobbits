@@ -1,0 +1,34 @@
+{
+  "_id": "XP3Oe3jodO760KgJ",
+  "_key": "!items!XP3Oe3jodO760KgJ",
+  "name": "Goose",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "goose",
+    "category": "animal",
+    "cost": "5 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 8 cp, bargain 4 cp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "2gdybUPsN0qlqZaQ",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

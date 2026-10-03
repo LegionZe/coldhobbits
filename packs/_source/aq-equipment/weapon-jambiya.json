@@ -1,0 +1,53 @@
+{
+  "_id": "s2cIHrhxMGeMqpbb",
+  "_key": "!items!s2cIHrhxMGeMqpbb",
+  "name": "Jambiya",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "jambiya",
+    "proficiency": "jambiya",
+    "weapon": {
+      "size": "S",
+      "type": "P/S",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "4 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Thrown: maximum range 1 (Equipment Descriptions (AA)). Asking 6 gp, bargain 3 gp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

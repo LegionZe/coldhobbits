@@ -1,0 +1,34 @@
+{
+  "_id": "nIAbgzx5aJjZHdNh",
+  "_key": "!items!nIAbgzx5aJjZHdNh",
+  "name": "Eggs (per dozen)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "eggs-per-dozen",
+    "category": "provisions",
+    "cost": "7 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 1 sp, bargain 6 cp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "qvoSlYBmckpr0Ii8",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

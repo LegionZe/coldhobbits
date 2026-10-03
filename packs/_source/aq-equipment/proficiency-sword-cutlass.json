@@ -1,0 +1,54 @@
+{
+  "_id": "7gcDKDYpjleKSTQJ",
+  "_key": "!items!7gcDKDYpjleKSTQJ",
+  "name": "Sword, cutlass",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sword-cutlass",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Descriptions_(AA)",
+    "notes": "+1 when parrying (optional rule); punches with the hilt do 1d3."
+  },
+  "effects": [],
+  "folder": "4YRpFz6KtJbeVquI",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

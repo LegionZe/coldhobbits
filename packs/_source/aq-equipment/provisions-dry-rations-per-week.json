@@ -1,0 +1,34 @@
+{
+  "_id": "I34J6WlOLUL8k4o0",
+  "_key": "!items!I34J6WlOLUL8k4o0",
+  "name": "Dry rations (per week)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "dry-rations-per-week",
+    "category": "provisions",
+    "cost": "10 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 15 gp, bargain 7 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "qvoSlYBmckpr0Ii8",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "ZGp7aWdhK5yaAWVs",
+  "_key": "!items!ZGp7aWdhK5yaAWVs",
+  "name": "Samovar",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "samovar",
+    "category": "gear",
+    "cost": "200 gp",
+    "weight": 50.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 300 gp, bargain 100 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 6300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

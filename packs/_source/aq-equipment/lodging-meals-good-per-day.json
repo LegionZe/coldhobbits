@@ -1,0 +1,34 @@
+{
+  "_id": "5WRYOlPKLkAiDHql",
+  "_key": "!items!5WRYOlPKLkAiDHql",
+  "name": "Meals, good (per day)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "meals-good-per-day",
+    "category": "lodging",
+    "cost": "5 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 7 sp, bargain 4 sp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "9zEtOAnyvV8cfqMx",
+  "sort": 2500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

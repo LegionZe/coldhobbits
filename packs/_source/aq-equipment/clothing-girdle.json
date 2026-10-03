@@ -1,0 +1,34 @@
+{
+  "_id": "gLF2dr8zL1IlCrZw",
+  "_key": "!items!gLF2dr8zL1IlCrZw",
+  "name": "Girdle",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "girdle",
+    "category": "clothing",
+    "cost": "3 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 5 gp, bargain 2 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "x9Z8DEnkUe2Drsef",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

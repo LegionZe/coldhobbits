@@ -1,0 +1,34 @@
+{
+  "_id": "v1ClYxPzr7hk3m7I",
+  "_key": "!items!v1ClYxPzr7hk3m7I",
+  "name": "Lock, good",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "lock-good",
+    "category": "gear",
+    "cost": "100 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 150 gp, bargain 75 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

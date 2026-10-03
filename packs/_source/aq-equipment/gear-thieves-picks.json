@@ -1,0 +1,34 @@
+{
+  "_id": "12uqehRm68C4Hel3",
+  "_key": "!items!12uqehRm68C4Hel3",
+  "name": "Thieves' picks",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "thieves-picks",
+    "category": "gear",
+    "cost": "30 gp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 45 gp, bargain 22 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "87UblKJWOLbVfB2s",
+  "sort": 7300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

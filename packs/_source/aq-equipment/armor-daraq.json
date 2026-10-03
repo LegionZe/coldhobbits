@@ -1,0 +1,31 @@
+{
+  "_id": "3ttJfA7wbvQjpOHI",
+  "_key": "!items!3ttJfA7wbvQjpOHI",
+  "name": "Shield, daraq",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "daraq",
+    "kind": "shield",
+    "ac": null,
+    "shield": {
+      "melee": 1,
+      "missile": 1,
+      "attacks": 1
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "",
+    "weight": 3.0,
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Descriptions_(AA)",
+    "notes": "As the buckler (\"Similar to the western buckler\"): fends off one opponent per round. No price on the AA lists; the PHB buckler costs 1 gp."
+  },
+  "effects": [],
+  "folder": "eGHkQb0bYryoLoUT",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

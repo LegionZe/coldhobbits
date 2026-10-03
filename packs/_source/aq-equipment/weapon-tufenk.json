@@ -1,0 +1,53 @@
+{
+  "_id": "Jv3hMhUdU460GIty",
+  "_key": "!items!Jv3hMhUdU460GIty",
+  "name": "Tufenk",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "tufenk",
+    "proficiency": "tufenk",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "14 gp",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Projects Greek fire 10 ft: lit in round 1, 2d6 in round 2, 1d6 in rounds 3 and 4; one attack every three rounds; two-handed. As a melee weapon it is a quarterstaff. Asking 21 gp, bargain 10 gp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

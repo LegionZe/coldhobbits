@@ -1,0 +1,53 @@
+{
+  "_id": "CNYSuNjCoc26VJoN",
+  "_key": "!items!CNYSuNjCoc26VJoN",
+  "name": "Sword, great scimitar",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sword-great-scimitar",
+    "proficiency": "sword-great-scimitar",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d8",
+          "l": "4d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "60 gp",
+    "weight": 16.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 90 gp, bargain 40 gp (Arabian Adventures)."
+  },
+  "effects": [],
+  "folder": "yHxRb1AHjcVgEYT7",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

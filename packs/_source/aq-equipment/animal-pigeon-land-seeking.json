@@ -1,0 +1,34 @@
+{
+  "_id": "kOz1uCBDt8a0BfPi",
+  "_key": "!items!kOz1uCBDt8a0BfPi",
+  "name": "Pigeon, land-seeking",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pigeon-land-seeking",
+    "category": "animal",
+    "cost": "60 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Asking 90 gp, bargain 45 gp (Arabian Adventures; bargain price with haggling)."
+  },
+  "effects": [],
+  "folder": "2gdybUPsN0qlqZaQ",
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
