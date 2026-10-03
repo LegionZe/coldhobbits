@@ -151,7 +151,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       hpHeal: CharacterSheet.onHpHeal,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
-      raiseDead: CharacterSheet.onRaiseDead
+      raiseDead: CharacterSheet.onRaiseDead,
+      rollSurprise: CharacterSheet.onRollSurprise,
+      awardXp: CharacterSheet.onAwardXp
     }
   };
 
@@ -660,6 +662,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollClassSkill(event, target) {
     return this.actor.rollClassSkill(target.dataset.skill);
   }
+
+  static onRollSurprise() { return this.actor.rollSurprise(); }
+
+  static onAwardXp() { return this.actor.awardExperience(); }
 
   static onHpDamage() { return promptHitPoints(this.actor, false); }
 

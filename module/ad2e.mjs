@@ -17,6 +17,7 @@ import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerHealth } from "./health.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter from "./apps/spell-importer.mjs";
+import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2ECombat from "./documents/combat.mjs";
@@ -39,9 +40,14 @@ Hooks.once("init", () => {
     name: "AD2E.SpellImporter.Title", label: "AD2E.SpellImporter.Open", hint: "AD2E.SpellImporter.MenuHint",
     icon: "fa-solid fa-wand-sparkles", type: SpellImporter, restricted: true
   });
+  // GM tool: group experience award (Configure Settings, or game.ad2e.awardExperience()).
+  game.settings.registerMenu("ad2e", "awardXp", {
+    name: "AD2E.Xp.Title", label: "AD2E.Xp.Open", hint: "AD2E.Xp.MenuHint", icon: "fa-solid fa-star", type: AwardXp, restricted: true
+  });
   game.ad2e = {
     importMonsters: () => new MonsterImporter().render({ force: true }),
-    importSpells: () => new SpellImporter().render({ force: true })
+    importSpells: () => new SpellImporter().render({ force: true }),
+    awardExperience: () => new AwardXp().render({ force: true })
   };
 
   game.settings.register("ad2e", "encumbrance", {

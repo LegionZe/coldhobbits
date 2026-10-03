@@ -31,7 +31,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       adjustQuantity: MonsterSheet.onAdjustQuantity,
       useMagicItem: MonsterSheet.onUseMagicItem,
       hpDamage: MonsterSheet.onHpDamage,
-      hpHeal: MonsterSheet.onHpHeal
+      hpHeal: MonsterSheet.onHpHeal,
+      rollSurprise: MonsterSheet.onRollSurprise
     }
   };
 
@@ -139,6 +140,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onHpDamage() { return promptHitPoints(this.actor, false); }
 
   static onHpHeal() { return promptHitPoints(this.actor, true); }
+
+  static onRollSurprise() { return this.actor.rollSurprise(); }
 
   static onUseMagicItem(event, target) {
     return this.actor.useMagicItem(target.dataset.itemId);

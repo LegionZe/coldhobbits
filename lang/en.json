@@ -1046,5 +1046,42 @@
     "CannotRaise": "{name}'s Constitution is too low to be raised.",
     "ApplyDamage": "Apply damage to selected tokens",
     "ApplyHealing": "Apply as healing to selected tokens"
+  },
+  "AD2E.Surprise": {
+    "Title": "Surprise",
+    "Hint": "1d10: surprised on 1-3 (The Surprise Roll, PHB); a plus makes surprise less likely. Situations: DMG Table 57.",
+    "Group": {
+      "other": "Other party is",
+      "party": "This party is",
+      "conditions": "Conditions are"
+    },
+    "Members": "members",
+    "On": "surprised on {n} or less",
+    "Dex": "Dexterity",
+    "Kit": "Kit",
+    "Surprised": "Surprised",
+    "NotSurprised": "Not surprised"
+  },
+  "AD2E.Xp": {
+    "Title": "Award experience",
+    "Open": "Award experience",
+    "MenuHint": "Divide a group experience award equally among the party (Experience Point Awards, DMG), with each character's prime requisite bonus. Also game.ad2e.awardExperience().",
+    "Hint": "Group awards are divided equally among the party (Experience Point Awards, DMG). Pick defeated monsters from the current combat and add other XP (story, treasure); each share gets the character's prime requisite bonus.",
+    "Monsters": "Monsters in the current combat",
+    "NoMonsters": "No monsters in the combat.",
+    "Other": "Other XP",
+    "ReasonHint": "e.g. adventure completed",
+    "Share": "Share",
+    "Gain": "Gain",
+    "Total": "Total XP",
+    "Recipients": "Recipients",
+    "Award": "Award",
+    "CanLevel": "can advance a level",
+    "WithBonus": "+{bonus}% prime requisite",
+    "ChatTitle": "Experience: {total} XP divided among {n} ({share} each)",
+    "AddTitle": "Add experience",
+    "Amount": "Experience points",
+    "BonusNote": "Prime requisite bonus: +{bonus}% is added.",
+    "Gained": "{name} gains {gain} XP (now {xp})."
   }
 }

@@ -1,0 +1,29 @@
+<section class="ad2e-award-xp">
+  <p class="ad2e-note">{{localize "AD2E.Xp.Hint"}}</p>
+  {{#if inCombat}}
+  <fieldset>
+    <legend>{{localize "AD2E.Xp.Monsters"}}</legend>
+    {{#each monsters as |m|}}<label class="ad2e-check"><input type="checkbox" data-monster="{{m.id}}" {{#if m.picked}}checked{{/if}}> {{m.name}} ({{m.xp}} XP)</label>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Xp.NoMonsters"}}</p>{{/each}}
+  </fieldset>
+  {{/if}}
+  <div class="ad2e-importer-controls">
+    <label>{{localize "AD2E.Xp.Other"}} <input type="number" name="other" value="{{other}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Roll.ModifierNote"}} <input type="text" name="reason" value="{{reason}}" placeholder="{{localize 'AD2E.Xp.ReasonHint'}}"></label>
+  </div>
+  <table class="ad2e-race-table">
+    <thead><tr><th></th><th>{{localize "AD2E.Xp.Share"}}</th><th>{{localize "AD2E.Class.XpBonus"}}</th><th>{{localize "AD2E.Xp.Gain"}}</th><th>{{localize "AD2E.Character.xp"}}</th></tr></thead>
+    <tbody>
+      {{#each characters as |c|}}
+      <tr class="{{#if c.dead}}ad2e-placeholder{{/if}}">
+        <th><label class="ad2e-check"><input type="checkbox" data-recipient="{{c.id}}" {{#if c.checked}}checked{{/if}}> {{c.name}}</label></th>
+        <td>{{c.share}}</td><td>{{c.bonus}}</td><td>{{c.gain}}</td><td>{{c.xp}}{{#if c.canLevel}} <strong>{{localize "AD2E.Xp.CanLevel"}}</strong>{{/if}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  <p>{{localize "AD2E.Xp.Total"}}: <strong>{{total}}</strong> · {{localize "AD2E.Xp.Recipients"}}: {{count}}</p>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <button type="button" data-action="award" {{#unless canAward}}disabled{{/unless}}><i class="fa-solid fa-star"></i> {{localize "AD2E.Xp.Award"}}</button>
+  </div>
+</section>

@@ -242,8 +242,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const armorOk = kitArmorMatches(mod.armor, body);
       const active = current !== null;
       const auto = active && !mod.condition && armorOk;
-      // Reaction and surprise rolls are the DM's; conditional AC changes are not rolled either.
-      const dm = ["reaction", "surprise"].includes(mod.target) || (mod.target === "ac" && !!mod.condition);
+      // Reaction rolls are the DM's; conditional AC changes are not rolled either. (Surprise is rolled: rollSurprise.)
+      const dm = mod.target === "reaction" || (mod.target === "ac" && !!mod.condition);
       const status = !active ? "inactive" : dm ? "dm" : auto ? "applied" : mod.condition ? "situational" : "armor";
       return { ...mod, index, current, armorOk, active, auto, status };
     });

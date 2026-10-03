@@ -7,7 +7,8 @@
       <label>HP <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></label>
       {{#if dead}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.dead"}}</strong>{{/if}}
       {{#if editable}}<button type="button" data-action="hpDamage" data-tooltip="{{localize 'AD2E.Health.Damage'}}"><i class="fa-solid fa-heart-crack"></i></button>
-      <button type="button" data-action="hpHeal" data-tooltip="{{localize 'AD2E.Health.Heal'}}"><i class="fa-solid fa-heart-pulse"></i></button>{{/if}}
+      <button type="button" data-action="hpHeal" data-tooltip="{{localize 'AD2E.Health.Heal'}}"><i class="fa-solid fa-heart-pulse"></i></button>
+      <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Title'}}"><i class="fa-solid fa-eye"></i></button>{{/if}}
       {{#if editable}}<button type="button" data-action="rollHp" data-tooltip="{{hd.formula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Monster.RollHp"}}</button>{{/if}}
       {{#if showCost}}<label>{{localize "AD2E.Monster.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>{{/if}}
       <button type="button" data-action="rollMorale" data-tooltip="{{localize 'AD2E.Monster.MoraleHint'}}"><i class="fa-solid fa-person-running"></i> {{localize "AD2E.Monster.Morale"}}</button>

@@ -131,8 +131,8 @@ KIT_MODIFIERS = {
         reaction(3, r"receives a \+3 reaction from anyone of his own culture", "his own culture (-3 from criminals and evil)"),
     ],
     "cutpurse": [
-        m("proficiency", -5, r"the Cutpurse suffers a penalty of -5 on his proficiency check",
-          condition="observation check on someone in disguise"),
+        m("proficiency", -5, r"the Cutpurse suffers a penalty of -5 on his proficiency check", key="observation",
+          condition="checking out someone in disguise"),
     ],
     "elven-minstrel": [
         m("save", 2, r"gain a \+2 saving throw bonus against all magical effects based on music",

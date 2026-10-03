@@ -701,6 +701,84 @@ export default class AD2EActor extends Actor {
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
   }
 
+  /**
+   * Surprise ("The Surprise Roll (PHB)"): 1d10, surprised on 1-3; a plus makes surprise less likely. Modifiers:
+   * Dexterity reaction adjustment ("Dexterity (PHB)": it "modifies the die roll to see if a character is surprised"),
+   * kit surprise modifiers (applied or ticked), DMG Table 57 situations, and a manual modifier with reason.
+   */
+  async rollSurprise() {
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const T = AD2E.encounterTables;
+    const dex = this.type === "character" ? (this.system.abilityData?.dex?.reaction ?? 0) : 0;
+    const kitAuto = this.type === "character" ? (this.system.kitMods?.total("surprise") ?? 0) : 0;
+    const kitOptions = this.#kitOptions("surprise");
+    const groups = ["other", "party", "conditions"].map(g => `<fieldset><legend>${i18n(`AD2E.Surprise.Group.${g}`)}</legend>${
+      T.modifiers.filter(m => m.group === g).map(m => m.key === "every-10-members"
+        ? `<div class="form-group"><label>${esc(m.label)} (+${m.values[0]})</label><input type="number" name="members" value="0" min="0" step="1" placeholder="${i18n("AD2E.Surprise.Members")}"></div>`
+        : m.values.length > 1
+          ? `<div class="form-group"><label>${esc(m.label)}</label><select name="t57-${m.key}"><option value="0">—</option>${m.values.map(v => `<option value="${v}">${v}</option>`).join("")}</select></div>`
+          : `<div class="form-group"><label>${esc(m.label)} (${m.values[0] > 0 ? "+" : ""}${m.values[0]})</label><input type="checkbox" name="t57-${m.key}" value="${m.values[0]}"></div>`).join("")}</fieldset>`).join("");
+    const fixed = [dex ? `${i18n("AD2E.Surprise.Dex")} ${dex > 0 ? "+" : ""}${dex}` : "", kitAuto ? `${i18n("AD2E.Surprise.Kit")} ${kitAuto > 0 ? "+" : ""}${kitAuto}` : ""].filter(Boolean).join(" · ");
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n("AD2E.Surprise.Title")}` },
+      content: `<p class="ad2e-note">${i18n("AD2E.Surprise.Hint")}${fixed ? ` ${esc(fixed)}` : ""}</p>` + groups + modifierFields() + this.#kitFields(kitOptions),
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const f = button.form;
+        const picked = [];
+        let table = 0;
+        for (const m of T.modifiers) {
+          if (m.key === "every-10-members") {
+            const n = Math.floor((Number(f.elements.members?.value) || 0) / 10) * m.values[0];
+            if (n) { table += n; picked.push(`${m.label} ${n > 0 ? "+" : ""}${n}`); }
+            continue;
+          }
+          const el = f.elements[`t57-${m.key}`];
+          const v = el?.type === "checkbox" ? (el.checked ? Number(el.value) : 0) : Number(el?.value) || 0;
+          if (v) { table += v; picked.push(`${m.label} ${v > 0 ? "+" : ""}${v}`); }
+        }
+        const kit = AD2EActor.#kitPicked(f, kitOptions);
+        return { ...readModifier(f), table, picked, kit: kit.sum, kitText: kit.text };
+      } },
+      rejectClose: false
+    });
+    if (!input) return;
+    const roll = await new Roll("1d10 + @dex + @kit + @table + @mod", { dex, kit: kitAuto + input.kit, table: input.table, mod: input.mod }).evaluate();
+    const surprised = roll.total <= T.surprisedOn;
+    const parts = [...input.picked, input.kitText].filter(Boolean).join("; ");
+    return roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${i18n("AD2E.Surprise.Title")} (${game.i18n.format("AD2E.Surprise.On", { n: T.surprisedOn })}${parts ? `; ${parts}` : ""})`
+        + `${modifierText(input.mod, input.note)}: ${i18n(surprised ? "AD2E.Surprise.Surprised" : "AD2E.Surprise.NotSurprised")}` });
+  }
+
+  /**
+   * Individual experience award ("Experience Point Awards (DMG)": individual awards are given for what a character
+   * does), with the class prime-requisite bonus (10%). Group awards: module/apps/award-xp.mjs.
+   */
+  async awardExperience() {
+    if (this.type !== "character") return;
+    const i18n = k => game.i18n.localize(k);
+    const bonus = this.system.classInfo?.xpBonus ?? 0;
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n("AD2E.Xp.AddTitle")}` },
+      content: `<div class="form-group"><label>${i18n("AD2E.Xp.Amount")}</label><input type="number" name="amount" value="0" min="0" step="1" autofocus></div>`
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.ModifierNote")}</label><input type="text" name="reason" placeholder="${i18n("AD2E.Xp.ReasonHint")}"></div>`
+        + (bonus ? `<p class="ad2e-note">${game.i18n.format("AD2E.Xp.BonusNote", { bonus })}</p>` : ""),
+      ok: { label: i18n("AD2E.Xp.Award"), callback: (event, button) => ({
+        amount: Math.max(Math.floor(Number(button.form.elements.amount.value) || 0), 0), reason: button.form.elements.reason.value.trim() }) },
+      rejectClose: false
+    });
+    if (!input?.amount) return;
+    const gain = Math.floor(input.amount * (100 + bonus) / 100);
+    const xp = (this.system.xp ?? 0) + gain;
+    await this.update({ "system.xp": xp });
+    const next = this.system.xpNext;
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Xp.Gained",
+      { name: this.name, gain, xp }))}${bonus ? ` (${esc(game.i18n.format("AD2E.Xp.WithBonus", { bonus }))})` : ""}${input.reason ? ` — ${esc(input.reason)}` : ""}`
+      + `${next !== null && next !== undefined && xp >= next ? ` <strong>${esc(i18n("AD2E.Xp.CanLevel"))}</strong>` : ""}</p>` });
+  }
+
   /* ---------------------------------------- Hit points, death and healing (module/health.mjs) */
 
   /** Chat line about this actor's hit points. */
