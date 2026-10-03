@@ -44,7 +44,9 @@ initiative 1d10, lowest acts first.
   none; slings: damage only), range modifiers medium -2 / long -5; damage never below 1. Attacks per round: Table 15
   (warriors) or Table 45 rate of fire.
 - Weapon specialization (optional PHB rule; single-class fighters, one weapon): +1 slot (+2 for bows); melee +1 to hit
-  and +2 damage; bow/crossbow point-blank range (+2 to hit); Table 35 attacks per round (bow specialists gain none).
+  and +2 damage, also when a melee weapon is thrown (PHB "all his attack rolls with that weapon"; darts, slings and
+  the blowgun get only the Table 35 attacks); bow/crossbow point-blank range (+2 to hit); Table 35 attacks per round
+  (bow specialists gain none).
   Toggle it on the weapon row or the proficiency sheet. Weapon proficiencies added before 0.0.14 have no weapon data;
   remove and re-add them from the compendium.
 - Weapons and ammunition are Items (types `weapon`, `ammunition`) in the "Weapons (PHB)" compendium (63 weapons with

@@ -233,7 +233,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * Melee: Strength hit/damage, specialization +1 hit / +2 damage; Table 15 (warriors) or Table 35 (specialists).
    * Missile: Dexterity missile adjustment plus Strength as `weapon.strength` allows (bows: penalties only;
    * crossbows: none); rate of fire from Table 45, or Table 35 for non-bow specialists (bow specialists gain no
-   * extra attacks); bow/crossbow specialists gain the point-blank range (+2 to hit). Damage never below 1.
+   * extra attacks); bow/crossbow specialists gain the point-blank range (+2 to hit); a thrown melee weapon keeps
+   * the specialization +1 hit / +2 damage. Damage never below 1.
    */
   #weaponAttack(w, specialized, extra = { hit: 0, dmg: 0 }) {
     const { hit, dmg, missile } = this.mods;
@@ -252,9 +253,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const strHit = { full: hit, penalty: Math.min(hit, 0) }[w.strength] ?? 0;
       const strDmg = { full: dmg, damage: dmg, penalty: Math.min(dmg, 0) }[w.strength] ?? 0;
       const column = specialized && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
+      // A thrown melee weapon keeps the melee specialization bonus: "+1 bonus to all his attack rolls with that
+      // weapon and a +2 bonus to all damage rolls" (Weapon Specialization (PHB) rev 158222); "When using his
+      // special weapon, the character gets a +1 to attack rolls and +2 to damage" (Weapon Proficiency Slots (CFH)).
+      const thrownSpec = specialized && w.melee;
       out.missile = {
-        hit: missile + strHit + extra.hit,
-        dmg: strDmg + extra.dmg,
+        hit: missile + strHit + (thrownSpec ? spec.meleeHit : 0) + extra.hit,
+        dmg: strDmg + (thrownSpec ? spec.meleeDamage : 0) + extra.dmg,
         rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
         pointBlank: specialized && w.family !== "other",
         range: w.range
