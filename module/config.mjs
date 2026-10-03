@@ -209,27 +209,45 @@ AD2E.monsterRoles = { monster: "AD2E.Monster.Role.monster", hireling: "AD2E.Mons
 AD2E.creatureThac0 = CREATURE_THAC0;
 
 /**
- * Parse a Monstrous Manual Hit Dice entry: "3", "3+3", "1-1", "1/2", "2-8 hp", "1-6 hp".
- * - hit points: n d8 + m (Hit Dice are d8), "1/2" = 1d4, "x-y hp" = a die roll covering x-y;
+ * Parse a Monstrous Manual Hit Dice entry: "3", "3+3", "1-1", "1/2", "2-8 hp", "1d8+76 hp", "2-4 hit points"; also
+ * "14 (base)" and "12 (8)" (leading value), "6+6 or 9+9" (first alternative) and "3-8" / "5-10 HD" (a range of
+ * Hit Dice: the lower end; "n-m" with m <= n is n dice minus m points, as in "1-1").
+ * - hit points: n d8 + m (Hit Dice are d8), "1/2" = 1d4, hit-point entries as written ("x-y hp" = a roll covering x-y);
  * - thac0Index: Hit Dice for Table 39, "When a creature has three or more points added to its Hit Dice, count
  *   another die"; less than one Hit Die (1-1, 1/2, hit points only) = 0;
  * - saveLevel: "Any additions to their Hit Dice are counted as well, at the rate of one die for every four points or
  *   fraction thereof" (The Saving Throw (DMG)); less than one Hit Die = 0.
  */
 export function creatureHitDice(text) {
-  const t = String(text ?? "").trim().replace("½", "1/2");
-  let m = t.match(/^(\d+)\s*-\s*(\d+)\s*hp$/i) ?? t.match(/^(\d+)\s*hp$/i);
-  if (m) {
-    const lo = Number(m[1]);
-    const hi = Number(m[2] ?? m[1]);
-    const formula = lo === hi ? `${lo}` : lo === 1 ? `1d${hi}` : hi % lo === 0 ? `${lo}d${hi / lo}` : `1d${hi - lo + 1}+${lo - 1}`;
-    return { dice: 0, bonus: 0, formula, thac0Index: 0, saveLevel: 0, hpOnly: true };
+  // first alternative: "6+6 or 9+9", "8, 12, or 16", "3, but see below", "2 to 5", "1+1 to 4+4"
+  const t = String(text ?? "").trim().replace(/½/g, "1/2").replace(/¼/g, "1/4").split(/\s+or\s+|,|\s+to\s+/i)[0].trim();
+  const hpOnly = formula => ({ dice: 0, bonus: 0, formula, thac0Index: 0, saveLevel: 0, hpOnly: true });
+  const range = (lo, hi) => (lo === hi ? `${lo}` : lo === 1 ? `1d${hi}` : hi % lo === 0 ? `${lo}d${hi / lo}` : `1d${hi - lo + 1}+${lo - 1}`);
+  // "16 + 2-7 hit points" (giants): Hit Dice plus a range of extra hit points
+  let g = t.match(/^(\d+)\s*\+\s*(\d+)\s*-\s*(\d+)\s*(?:hp|hit points)$/i);
+  if (g) {
+    const dice = Number(g[1]);
+    const lo = Number(g[2]);
+    return { dice, bonus: lo, formula: `${dice}d8+${range(lo, Number(g[3]))}`, thac0Index: dice + (lo >= 3 ? 1 : 0),
+      saveLevel: dice + Math.ceil(lo / 4), hpOnly: false };
   }
-  if (/^1\/2$/.test(t)) return { dice: 0.5, bonus: 0, formula: "1d4", thac0Index: 0, saveLevel: 0, hpOnly: false };
-  m = t.match(/^(\d+)\s*([+-])\s*(\d+)$/) ?? t.match(/^(\d+)$/);
+  let m = t.match(/^(\d+d\d+(?:\s*[+-]\s*\d+)?)\s*(?:hp|hit points)$/i);
+  if (m) return hpOnly(m[1].replace(/\s/g, ""));
+  m = t.replace(/\(.*?\)/g, "").trim().match(/^(\d+)\s*(?:-\s*(\d+))?\s*(?:hp|hit points?)$/i);
+  if (m) return hpOnly(range(Number(m[1]), Number(m[2] ?? m[1])));
+  const core = t.replace(/\(.*?\)/g, "").replace(/\s*HD$/i, "").replace(/\+$/, "").trim();
+  // fractions of a Hit Die: "1/2" = 1d4, "1/4" = 1d2, optionally "+n"
+  const frac = core.match(/^1\/(2|4)\s*(?:\+\s*(\d+))?$/);
+  if (frac) {
+    const plus = Number(frac[2] ?? 0);
+    return { dice: 1 / Number(frac[1]), bonus: plus, formula: `1d${8 / Number(frac[1])}${plus ? `+${plus}` : ""}`,
+      thac0Index: 0, saveLevel: 0, hpOnly: false };
+  }
+  m = core.match(/^(\d+)\s*([+-])\s*(\d+)$/) ?? core.match(/^(\d+)$/);
   if (!m) return { dice: 1, bonus: 0, formula: "1d8", thac0Index: 1, saveLevel: 1, hpOnly: false, invalid: true };
-  const dice = Number(m[1]);
-  const bonus = m[2] ? (m[2] === "+" ? 1 : -1) * Number(m[3]) : 0;
+  let dice = Number(m[1]);
+  let bonus = m[2] ? (m[2] === "+" ? 1 : -1) * Number(m[3]) : 0;
+  if (bonus < 0 && -bonus > dice) bonus = 0; // "3-8": a range of Hit Dice, use the lower end
   const formula = bonus ? `${dice}d8${bonus > 0 ? "+" : ""}${bonus}` : `${dice}d8`;
   if (bonus < 0) return { dice, bonus, formula, thac0Index: dice - 1, saveLevel: Math.max(dice - 1, 0), hpOnly: false };
   return { dice, bonus, formula, thac0Index: dice + (bonus >= 3 ? 1 : 0), saveLevel: dice + Math.ceil(bonus / 4), hpOnly: false };

@@ -11,6 +11,7 @@ import ArmorData from "./data/item-armor.mjs";
 import CoinData from "./data/item-coin.mjs";
 import EquipmentData from "./data/item-equipment.mjs";
 import { migrateCurrency } from "./migrations.mjs";
+import MonsterImporter from "./apps/monster-importer.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2ECombat from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
@@ -21,6 +22,13 @@ Hooks.once("init", () => {
   console.log("AD2E | Initializing AD&D 2e system");
 
   CONFIG.AD2E = AD2E;
+
+  // GM tool: import monsters from completecompendium.com (Configure Settings, or game.ad2e.importMonsters()).
+  game.settings.registerMenu("ad2e", "monsterImporter", {
+    name: "AD2E.Importer.Title", label: "AD2E.Importer.Open", hint: "AD2E.Importer.MenuHint",
+    icon: "fa-solid fa-dragon", type: MonsterImporter, restricted: true
+  });
+  game.ad2e = { importMonsters: () => new MonsterImporter().render({ force: true }) };
 
   game.settings.register("ad2e", "encumbrance", {
     name: "AD2E.Enc.Setting", hint: "AD2E.Enc.SettingHint", scope: "world", config: true, type: String,

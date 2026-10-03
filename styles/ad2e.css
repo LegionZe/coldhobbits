@@ -106,3 +106,10 @@
 .ad2e-monster-attack { display: grid; grid-template-columns: 1fr 5rem 3rem auto auto auto; gap: 0.3rem; align-items: center; margin-bottom: 0.2rem; }
 .ad2e-monster-weapon { grid-template-columns: auto 1fr auto auto; }
 .ad2e-monster-right { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* Monster importer */
+.ad2e.monster-importer .ad2e-importer { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
+.ad2e-importer-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.ad2e-importer-controls select { max-width: 22rem; }
+.ad2e-importer-list { flex: 1; overflow-y: auto; columns: 2; min-height: 10rem; }
+.ad2e-importer-entry { display: block; break-inside: avoid; }
