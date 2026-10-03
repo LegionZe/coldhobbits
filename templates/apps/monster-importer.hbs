@@ -1,0 +1,26 @@
+<section class="ad2e-importer">
+  <p class="ad2e-note">{{localize "AD2E.Importer.Hint"}} <a href="{{site}}" target="_blank" rel="noopener">{{site}}</a></p>
+  {{#if state.error}}<p class="ad2e-unmet">{{state.error}}</p>{{/if}}
+  <div class="ad2e-importer-controls">
+    <label>{{localize "AD2E.Importer.Setting"}} <select name="setting">{{selectOptions settings selected=state.setting}}</select></label>
+    <label>{{localize "AD2E.Importer.Book"}} <select name="book">{{selectOptions books selected=state.book}}</select></label>
+    <button type="button" data-action="loadBook" {{#if state.busy}}disabled{{/if}}><i class="fa-solid fa-download"></i> {{localize "AD2E.Importer.Load"}}</button>
+  </div>
+  {{#if state.busy}}<p class="ad2e-note">{{state.busy}}</p>{{/if}}
+  {{#if state.entries.length}}
+  <div class="ad2e-importer-controls">
+    <label>{{localize "AD2E.Importer.Filter"}} <input type="text" name="filter" value="{{state.filter}}"></label>
+    <button type="button" data-action="selectAll">{{localize "AD2E.Importer.All"}}</button>
+    <button type="button" data-action="selectNone">{{localize "AD2E.Importer.None"}}</button>
+  </div>
+  <div class="ad2e-importer-list">
+    {{#each entries as |e|}}
+    <label class="ad2e-importer-entry"><input type="checkbox" data-entry="{{e.id}}" {{checked e.checked}}> {{e.label}} <span class="ad2e-weapon-meta">HD {{e.hd}}</span></label>
+    {{/each}}
+  </div>
+  <div class="ad2e-importer-controls">
+    <label class="ad2e-check"><input type="checkbox" name="folder" {{checked state.folder}}> {{localize "AD2E.Importer.Folder"}}</label>
+    <button type="button" data-action="importSelected"><i class="fa-solid fa-file-import"></i> {{localize "AD2E.Importer.Import"}} (<span class="ad2e-importer-count">{{selectedCount}}</span>)</button>
+  </div>
+  {{/if}}
+</section>
