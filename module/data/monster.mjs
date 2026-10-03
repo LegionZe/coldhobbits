@@ -24,7 +24,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       ac: new SchemaField({ base: int(10, -10), text: text() }),
       movement: new SchemaField({ base: int(12, 0), text: text() }),
       hitDice: new StringField({ initial: "1" }),
-      hp: new SchemaField({ value: int(1), max: int(1), dead: new BooleanField({ initial: false }) }),
+      // punch / temp / tempUntil: temporary damage, as for characters (module/health.mjs).
+      hp: new SchemaField({ value: int(1), max: int(1), dead: new BooleanField({ initial: false }),
+        punch: int(0, 0), temp: int(0, 0), tempUntil: new NumberField({ nullable: true, initial: null }) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
       saveGroup: new StringField({ initial: "warrior", choices: Object.keys(AD2E.classGroups) }),
       attacks: new ArrayField(new SchemaField({

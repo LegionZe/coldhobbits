@@ -152,8 +152,12 @@ initiative 1d10, lowest acts first.
   plus Strength damage and roll the knockout chance (stunned 1d10 rounds); wrestling in armour takes the PHB Table 57
   penalty; a maintained hold does 1 more point each round; overbearing adds 4 per size category, -2 per defender leg
   beyond two and +1 per extra attacker. Blades (slashing weapons) have a non-lethal option: -4 to hit, half damage.
-  Punching and non-lethal damage are partly temporary, which the system does not track, so these messages have no
-  "Apply damage" entry. Tables from `python3 tools/build-combat-tables.py`.
+  Punching and non-lethal damage apply as temporary damage (below). Tables from `python3 tools/build-combat-tables.py`.
+- Temporary damage ("Attacking Without Killing", PHB/DMG): punching damage applied from chat is recorded separately and
+  75% of it returns when the combat encounter ends (25% lasting, rounded down); the temporary half of non-lethal weapon
+  damage returns one turn (10 minutes of game time) after the encounter ends. A character or monster at 0 or fewer hit
+  points only because of temporary damage is unconscious, not dead or dying. The sheet shows the pending temporary
+  damage, with a "Recover temporary damage" button for fights outside the combat tracker.
 - Experience awards: the "+" next to XP on the character sheet adds an individual award; Configure Settings >
   "Award experience" (GM, or `game.ad2e.awardExperience()`) divides a group award equally among the chosen characters
   ("Experience Point Awards (DMG)"): XP of monsters picked from the current combat (defeated ones preselected) plus

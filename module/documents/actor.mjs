@@ -1,6 +1,6 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
-import { MASSIVE_DAMAGE, naturalHealing } from "../health.mjs";
+import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -436,11 +436,12 @@ export default class AD2EActor extends Actor {
     const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
     const full = Math.max(roll.total, 1);
     // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
-    // temporary; not offered for applying to tokens, since the system does not track temporary damage.
+    // temporary (rounded down).
     const total = input.nonlethal ? Math.max(Math.floor(full * COMBAT_TABLES.nonlethal.damage), 1) : full;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flags: input.nonlethal ? {} : { ad2e: { damage: total } }, // chat context menu: apply to selected tokens (module/health.mjs)
+      // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
+      flags: { ad2e: input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total } },
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
@@ -457,7 +458,7 @@ export default class AD2EActor extends Actor {
    * the modified roll; punches do the listed damage (1d3 with a metal gauntlet) + Strength damage, 25% of it lasting,
    * and may knock out (percentile roll, stunned 1d10 rounds); wrestling in armour takes the Table 57 penalty, moves do
    * 1 + Strength damage (optional) and a maintained hold 1 more each round; overbearing adds the size, legs and
-   * attackers modifiers. Unarmed damage is not offered for applying to tokens (temporary damage is not tracked).
+   * attackers modifiers. Punching damage is applied as temporary damage (module/health.mjs).
    */
   async rollUnarmed(form = "punch") {
     if (this.type !== "character") return;
@@ -507,7 +508,7 @@ export default class AD2EActor extends Actor {
     // A maintained hold needs no attack roll: 1 more point each round (round 2 = 2 points, ...).
     if (form === "wrestle" && input.holdRound >= 2) {
       const dmg = Math.max(input.holdRound + (input.addStr ? str : 0), 0);
-      return ChatMessage.create({ speaker, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
+      return ChatMessage.create({ speaker, flags: dmg > 0 ? { ad2e: { damage: dmg } } : {}, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
         { round: input.holdRound, damage: dmg }))}${input.addStr && str ? ` (${i18n("AD2E.Unarmed.StrengthShort")} ${str > 0 ? "+" : ""}${str})` : ""}</p>` });
     }
     let situation = 0;
@@ -525,6 +526,7 @@ export default class AD2EActor extends Actor {
     const hit = roll.total >= needed;
     const rolls = [roll];
     let result = i18n("AD2E.Roll.Miss");
+    let damageFlags = {}; // chat context menu: apply to selected tokens (module/health.mjs)
     if (hit && form === "overbear") {
       result = i18n(input.down ? "AD2E.Unarmed.Pinned" : "AD2E.Unarmed.PulledDown");
     } else if (hit) {
@@ -539,18 +541,20 @@ export default class AD2EActor extends Actor {
         const knocked = ko.total <= row.ko;
         let stun = null;
         if (knocked) { stun = await new Roll(C.punch.stun).evaluate(); rolls.push(stun); }
+        if (damage > 0) damageFlags = { ad2e: { damage, damageKind: "punch" } };
         result = `${i18n("AD2E.Roll.Hit")}: ${row.punch} — ${input.pull ? i18n("AD2E.Unarmed.Pulled")
           : game.i18n.format("AD2E.Unarmed.PunchDamage", { damage, lasting: C.punch.lasting * 100 })}; `
           + game.i18n.format(knocked ? "AD2E.Unarmed.KO" : "AD2E.Unarmed.NoKO", { roll: ko.total, chance: row.ko, rounds: stun?.total ?? 0 });
       } else {
         const damage = Math.max(C.wrestle.damage + (input.addStr ? str : 0), 0);
+        if (damage > 0) damageFlags = { ad2e: { damage } };
         result = `${i18n("AD2E.Roll.Hit")}: ${row.wrestle}${row.hold ? ` (${i18n("AD2E.Unarmed.Hold")})` : ""} — `
           + game.i18n.format("AD2E.Unarmed.WrestleDamage", { damage });
       }
     }
     const flavor = `${i18n(`AD2E.Unarmed.${form}`)} vs AC ${input.ac} (THAC0 ${sys.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+)`
       + `${parts.length ? ` [${parts.map(esc).join("; ")}]` : ""}${modifierText(input.mod, input.note)}: ${result}`;
-    return ChatMessage.create({ speaker, flavor, rolls });
+    return ChatMessage.create({ speaker, flavor, rolls, flags: damageFlags });
   }
 
   /**
@@ -946,7 +950,7 @@ export default class AD2EActor extends Actor {
    * magic); failure kills ("Death From Massive Damage", Character Death (PHB)). `bleeding`: the Death's Door loss of
    * 1 hit point per round.
    */
-  async applyDamage(amount, { single = true, bleeding = false } = {}) {
+  async applyDamage(amount, { single = true, bleeding = false, kind = "normal", temp = 0 } = {}) {
     const n = Math.max(Math.floor(Number(amount) || 0), 0);
     const hp = this.system.hp;
     if (!n || !hp) return;
@@ -961,7 +965,18 @@ export default class AD2EActor extends Actor {
     if (after <= 0 && hp.value > 0 && "stable" in hp) update["system.hp.stable"] = false;
     const rolls = [];
     let note = "";
-    if (single && !bleeding && n >= MASSIVE_DAMAGE) {
+    // Temporary damage (Attacking Without Killing (PHB)): punching damage is recorded separately; the temporary half
+    // of a non-lethal weapon attack returns one turn after the fight.
+    if (kind === "punch") {
+      update["system.hp.punch"] = (hp.punch ?? 0) + n;
+      note = ` ${fmt("AD2E.Health.PunchNote", { n })}`;
+    } else if (kind === "nonlethal") {
+      const t = Math.min(Math.max(Math.floor(Number(temp) || 0), 0), n);
+      update["system.hp.temp"] = (hp.temp ?? 0) + t;
+      update["system.hp.tempUntil"] = null;
+      note = ` ${fmt("AD2E.Health.TempNote", { n: t })}`;
+    }
+    if (single && !bleeding && kind === "normal" && n >= MASSIVE_DAMAGE) {
       const save = this.system.saves?.par;
       const target = save?.value ?? 20;
       const roll = await new Roll("1d20 + @bonus", { bonus: save?.bonus ?? 0 }).evaluate();
@@ -1011,6 +1026,31 @@ export default class AD2EActor extends Actor {
     await this.update(update);
     return this.#hpMessage(fmt("AD2E.Health.Healed", { name: this.name, n: after - before, before, after })
       + (update["system.hp.feeble"] ? ` ${game.i18n.localize("AD2E.Health.NowFeeble")}` : "") + this.#stateText(this.system.hpState?.state));
+  }
+
+  /**
+   * Temporary damage returns (Attacking Without Killing (PHB)): `punch` - 75% of the punching damage taken (the end
+   * of the fight); `temp` - the temporary part of non-lethal weapon damage (one turn after the fight). Never above
+   * maximum hit points.
+   */
+  async recoverTemporary({ punch = true, temp = true } = {}) {
+    const hp = this.system.hp;
+    if (!hp) return;
+    const doPunch = punch && hp.punch > 0;
+    const doTemp = temp && hp.temp > 0;
+    if (!doPunch && !doTemp) return;
+    const back = (doPunch ? punchRestore(hp.punch) : 0) + (doTemp ? hp.temp : 0);
+    const update = {};
+    if (doPunch) update["system.hp.punch"] = 0;
+    if (doTemp) { update["system.hp.temp"] = 0; update["system.hp.tempUntil"] = null; }
+    const before = hp.value;
+    const lasting = doPunch ? hp.punch - punchRestore(hp.punch) : 0;
+    const dead = this.system.hpState?.state === "dead";
+    update["system.hp.value"] = dead ? before : Math.min(before + back, Math.max(hp.max, before));
+    await this.update(update);
+    return this.#hpMessage(game.i18n.format("AD2E.Health.TempRecovered", { name: this.name, n: dead ? 0 : this.system.hp.value - before,
+      before, after: this.system.hp.value }) + (lasting ? ` ${game.i18n.format("AD2E.Health.PunchLasting", { n: lasting })}` : "")
+      + this.#stateText(this.system.hpState?.state));
   }
 
   /** Death's Door: a round spent binding an unconscious character's wounds stops the loss of 1 hit point per round. */

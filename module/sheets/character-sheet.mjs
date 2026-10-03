@@ -1,7 +1,7 @@
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
-import { promptHitPoints } from "../health.mjs";
+import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponPenalty } from "../combat-options.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -150,6 +150,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollAbilityScores: CharacterSheet.onRollAbilityScores,
       hpDamage: CharacterSheet.onHpDamage,
       hpHeal: CharacterSheet.onHpHeal,
+      recoverTemp: CharacterSheet.onRecoverTemp,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
       raiseDead: CharacterSheet.onRaiseDead,
@@ -257,6 +258,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const st = sys.hpState ?? {};
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
       bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
+      knockedOut: st.knockedOut, temporary: temporaryHp(sys.hp),
       rule: game.i18n.localize(st.doorRule ? "AD2E.Health.RuleDeathsDoorShort" : "AD2E.Health.RuleStandardShort") };
     context.classGroups = AD2E.classGroups;
     return context;
@@ -673,6 +675,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   static onRollSurprise() { return this.actor.rollSurprise(); }
+
+  static onRecoverTemp() { return this.actor.recoverTemporary(); }
 
   static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
 

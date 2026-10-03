@@ -6,6 +6,9 @@
       <label>{{localize "AD2E.Monster.Role.label"}} <select name="system.role">{{selectOptions roles selected=system.role localize=true}}</select></label>
       <label>HP <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></label>
       {{#if dead}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.dead"}}</strong>{{/if}}
+      {{#if knockedOut}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.unconscious"}}</strong>{{/if}}
+      {{#if temporary}}<span data-tooltip="{{localize 'AD2E.Health.RecoverHint'}}">{{localize "AD2E.Health.Temporary"}}: {{temporary}}</span>
+      {{#if editable}}<button type="button" data-action="recoverTemp" data-tooltip="{{localize 'AD2E.Health.Recover'}}"><i class="fa-solid fa-rotate-left"></i></button>{{/if}}{{/if}}
       {{#if editable}}<button type="button" data-action="hpDamage" data-tooltip="{{localize 'AD2E.Health.Damage'}}"><i class="fa-solid fa-heart-crack"></i></button>
       <button type="button" data-action="hpHeal" data-tooltip="{{localize 'AD2E.Health.Heal'}}"><i class="fa-solid fa-heart-pulse"></i></button>
       <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Title'}}"><i class="fa-solid fa-eye"></i></button>{{/if}}
