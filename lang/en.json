@@ -1,6 +1,7 @@
 {
   "TYPES.Actor": {
-    "character": "Character"
+    "character": "Character",
+    "monster": "Monster / NPC"
   },
   "AD2E.Sheet.Character": "AD&D 2e Character",
   "AD2E.Character.Name": "Name",
@@ -270,7 +271,7 @@
     "NotProficient": "Not proficient ({penalty})",
     "DropNotProficient": "{name}: no matching weapon proficiency; attacks take the non-proficiency penalty ({penalty}).",
     "DragHint": "Weight of weapons, ammunition and armour counts toward encumbrance. Drag armour from the \"Armour (PHB)\" compendium and weapons and ammunition from the \"Weapons (PHB)\" compendium onto this sheet. A weapon uses the weapon proficiency with the same identifier; specialization is set on the proficiency. Firing a launcher uses one piece of the chosen ammunition; throwing a weapon uses one from its quantity.",
-    "NoneYet": "No weapons yet.",
+    "NoneYet": "No weapons.",
     "Quantity": "Quantity",
     "Cost": "Cost",
     "Weight": "Weight (lb)",
@@ -404,5 +405,64 @@
     "NoneYet": "No gear yet. Drag items from the \"Equipment (PHB)\" compendium.",
     "Total": "total"
   },
-  "AD2E.Sheet.Equipment": "AD&D 2e Equipment"
+  "AD2E.Sheet.Equipment": "AD&D 2e Equipment",
+  "AD2E.Sheet.Monster": "AD&D 2e Monster / NPC",
+  "AD2E.Monster": {
+    "Tab": {
+      "stats": "Stats",
+      "inventory": "Inventory",
+      "notes": "Notes"
+    },
+    "Role": {
+      "label": "Role",
+      "monster": "Monster",
+      "hireling": "Hireling",
+      "mount": "Mount",
+      "pet": "Pet"
+    },
+    "HitDice": "Hit Dice",
+    "HitDiceHint": "As written in the Monstrous Manual: 3, 3+3, 1-1, 1/2, 2-8 hp. Hit Dice are d8.",
+    "RollHp": "Roll HP",
+    "Morale": "Morale",
+    "MoraleHint": "Morale check: 2d10, the creature stands on a total at or below its morale (Morale (DMG))",
+    "Stands": "stands",
+    "Breaks": "fails: flees or surrenders",
+    "StatBlock": "Stat block",
+    "SaveGroup": "Saves as",
+    "SaveLevelHint": "Save level = Hit Dice (+1 per 4 added points or fraction); non-intelligent creatures use half except vs. paralyzation, poison and death magic (The Saving Throw (DMG))",
+    "Attacks": "Attacks",
+    "AddAttack": "Add attack",
+    "DamageHint": "Damage roll, e.g. 1d8 or 2d4+1",
+    "AttackBonus": "Attack roll bonus",
+    "InventoryHint": "Drag weapons, armour, equipment and coins here. Equipped armour sets AC; weapons add attacks; carried weight counts toward a mount's load.",
+    "Load": {
+      "label": "Load (mounts: PHB Table 49)",
+      "full": "full movement",
+      "half": "1/2 movement",
+      "quarter": "1/4 movement",
+      "over": "too heavy to move",
+      "other": "Other load (rider, cargo; lb)"
+    },
+    "Field": {
+      "climate": "Climate/Terrain",
+      "frequency": "Frequency",
+      "organization": "Organization",
+      "activity": "Activity cycle",
+      "diet": "Diet",
+      "intelligence": "Intelligence",
+      "treasure": "Treasure",
+      "alignment": "Alignment",
+      "numberAppearing": "No. appearing",
+      "attacksText": "No. of attacks",
+      "damageText": "Damage/attack",
+      "specialAttacks": "Special attacks",
+      "specialDefenses": "Special defenses",
+      "magicResistance": "Magic resistance",
+      "size": "Size",
+      "acBase": "AC (no armour items)",
+      "movement": "Movement",
+      "movementText": "Movement (all modes)",
+      "moraleText": "Morale (as written)"
+    }
+  }
 }

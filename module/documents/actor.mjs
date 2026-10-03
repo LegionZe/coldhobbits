@@ -349,6 +349,99 @@ export default class AD2EActor extends Actor {
     });
   }
 
+  /**
+   * Monster attacks: the stat block's natural attacks (`system.attacks`, index "a<n>") and owned weapon items
+   * (index "w<itemId>", damage options from the weapon list plus its magical bonus). Hit if d20 + bonus + modifier
+   * >= THAC0 - target AC.
+   */
+  monsterAttacks() {
+    if (this.type !== "monster") return [];
+    const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus,
+      damage: [{ label: "", formula: a.damage }], dmgBonus: 0 }));
+    const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
+      damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
+      dmgBonus: i.system.bonus.dmg }));
+    return [...natural, ...weapons];
+  }
+
+  async rollMonsterAttack(key) {
+    const attack = this.monsterAttacks().find(a => a.key === key);
+    if (!attack) return;
+    const i18n = k => game.i18n.localize(k);
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${attack.name}` },
+      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="10" autofocus></div>`
+        + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
+        ac: Number(button.form.elements.ac.value) || 0, mod: Number(button.form.elements.mod.value) || 0 }) },
+      rejectClose: false
+    });
+    if (!input) return;
+    const thac0 = this.system.thac0.value;
+    const needed = thac0 - input.ac;
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit, mod: input.mod }).evaluate();
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${attack.name} vs AC ${input.ac} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
+        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+    });
+  }
+
+  async rollMonsterDamage(key) {
+    const attack = this.monsterAttacks().find(a => a.key === key);
+    if (!attack || !attack.damage.length) return;
+    const i18n = k => game.i18n.localize(k);
+    let formula = attack.damage[0].formula;
+    let label = "";
+    if (!formula) {
+      // a weapon: choose the damage option and the target size
+      const options = attack.damage;
+      const input = await DialogV2.prompt({
+        window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
+        content: (options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
+          options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
+          + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
+          + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`,
+        ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
+          option: Number(button.form.elements.option?.value ?? 0), size: button.form.elements.size.value }) },
+        rejectClose: false
+      });
+      if (!input) return;
+      const opt = options[input.option] ?? options[0];
+      formula = opt[input.size] ?? opt.sm ?? opt.l;
+      label = `${opt.label ? ` (${opt.label})` : ""} vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`;
+    }
+    const roll = await new Roll(`${formula} + @bonus`, { bonus: attack.dmgBonus }).evaluate();
+    const total = Math.max(roll.total, 1);
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+    });
+  }
+
+  /** Morale check (Morale (DMG)): 2d10 + modifier; the creature stands if the total is at most its morale. */
+  async rollMorale() {
+    const mod = await promptNumber(game.i18n.localize("AD2E.Monster.Morale"), game.i18n.localize("AD2E.Roll.Modifier"));
+    if (mod === null) return;
+    const target = this.system.morale.value;
+    const roll = await new Roll("2d10 + @mod", { mod }).evaluate();
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${game.i18n.localize("AD2E.Monster.Morale")} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}): `
+        + game.i18n.localize(roll.total <= target ? "AD2E.Monster.Stands" : "AD2E.Monster.Breaks")
+    });
+  }
+
+  /** Roll a monster's hit points from its Hit Dice (d8 per die, minimum 1) and set current and maximum HP. */
+  async rollMonsterHitPoints() {
+    const formula = this.system.hd.formula;
+    const roll = await new Roll(formula).evaluate();
+    const hp = Math.max(roll.total, 1);
+    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${game.i18n.localize("AD2E.Monster.HitDice")} ${this.system.hitDice}: ${hp} hp` });
+    return this.update({ "system.hp.max": hp, "system.hp.value": hp });
+  }
+
   /** Melee attack: hit if d20 + modifiers >= THAC0 - target AC (descending AC). */
   async rollAttack({ missile = false } = {}) {
     const targetAc = await promptNumber(

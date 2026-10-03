@@ -1,0 +1,57 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <p class="ad2e-note">{{localize "AD2E.Monster.InventoryHint"}}</p>
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Monster.Load.label"}}</legend>
+    <div class="ad2e-prof-summary">
+      <span class="{{#if load.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Enc.Load"}}: <strong>{{load.weight}} lb</strong>{{#if load.bandLabel}} ({{load.bandLabel}}){{/if}}</span>
+      <span>{{localize "AD2E.Move.Movement"}}: <strong>{{load.rate}}</strong> / {{system.movement.base}}</span>
+    </div>
+    <div class="ad2e-prof-summary">
+      <label>{{localize "AD2E.Gear.LoadFull"}} <input type="number" name="system.load.full" value="{{load.full}}" min="0"></label>
+      <label>{{localize "AD2E.Gear.LoadHalf"}} <input type="number" name="system.load.half" value="{{load.half}}" min="0"></label>
+      <label>{{localize "AD2E.Gear.LoadQuarter"}} <input type="number" name="system.load.quarter" value="{{load.quarter}}" min="0"></label>
+      <label>{{localize "AD2E.Monster.Load.other"}} <input type="number" name="system.load.other" value="{{load.other}}" min="0" step="any"></label>
+    </div>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Armor.Armour"}}</legend>
+    {{#each armor as |a|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{a.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}</a><span class="ad2e-weapon-meta">{{a.summary}}</span></div>
+      <label class="ad2e-spec"><input type="checkbox" data-action="toggleEquipped" data-item-id="{{a.id}}" {{checked a.equipped}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Armor.Equipped"}}</label>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Armor.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Weapon.Weapons"}}</legend>
+    {{#each weapons as |w|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{w.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{w.id}}">{{w.name}}</a><span class="ad2e-weapon-meta">{{w.summary}}</span></div>
+      <span></span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{w.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Weapon.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Gear.Gear"}}</legend>
+    {{#each gear as |g|}}
+    <div class="ad2e-prof-row ad2e-gear-row">
+      <img src="{{g.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{g.id}}">{{g.name}}</a><span class="ad2e-weapon-meta">{{g.summary}}</span></div>
+      {{#if g.isEquipment}}<label class="ad2e-spec"><input type="checkbox" data-action="toggleCarried" data-item-id="{{g.id}}" {{checked g.carried}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Gear.Carried"}}</label>{{else}}<span></span>{{/if}}
+      <span class="ad2e-qty">
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{g.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+        {{g.quantity}}
+        {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{g.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+      </span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{g.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Gear.NoneYet"}}</p>
+    {{/each}}
+  </fieldset>
+</section>

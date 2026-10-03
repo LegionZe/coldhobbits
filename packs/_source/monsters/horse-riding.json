@@ -1,0 +1,173 @@
+{
+  "_id": "tVJPcY0g2PCESgFY",
+  "_key": "!actors!tVJPcY0g2PCESgFY",
+  "name": "Riding horse (prototype mount)",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "horse-riding",
+    "role": "mount",
+    "climate": "Any non-mountainous",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "5-50(5d6)",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 24,
+      "text": "24"
+    },
+    "hitDice": "3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Hoof",
+        "damage": "1d2",
+        "bonus": 0
+      },
+      {
+        "name": "Hoof",
+        "damage": "1d2",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1-2/1-2",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 65,
+    "load": {
+      "full": 180,
+      "half": 270,
+      "quarter": 360
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Horse",
+    "notes": ""
+  },
+  "items": [
+    {
+      "_id": "bcY6RjiphLwpU6yH",
+      "_key": "!actors.items!tVJPcY0g2PCESgFY.bcY6RjiphLwpU6yH",
+      "name": "Saddle, riding",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "saddle-riding",
+        "category": "tack",
+        "cost": "10 gp",
+        "weight": 35.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": null,
+          "volume": ""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14500,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "TZg6njtvwHqofcbg",
+      "_key": "!actors.items!tVJPcY0g2PCESgFY.TZg6njtvwHqofcbg",
+      "name": "Bit and bridle",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "bit-and-bridle",
+        "category": "tack",
+        "cost": "15 sp",
+        "weight": 3.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": null,
+          "volume": ""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14000,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "NSvffqVB8Q8vVLgp",
+      "_key": "!actors.items!tVJPcY0g2PCESgFY.NSvffqVB8Q8vVLgp",
+      "name": "Saddle bags, large",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "saddle-bags-large",
+        "category": "tack",
+        "cost": "4 gp",
+        "weight": 8.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": 30,
+          "volume": "18\"×1'×6\""
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Tack_and_Harness_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 14600,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

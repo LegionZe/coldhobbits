@@ -1,0 +1,231 @@
+{
+  "_id": "eSusvy90sWRArViA",
+  "_key": "!actors!eSusvy90sWRArViA",
+  "name": "Mercenary (prototype hireling)",
+  "type": "monster",
+  "img": "icons/svg/mystery-man.svg",
+  "system": {
+    "identifier": "mercenary",
+    "role": "hireling",
+    "climate": "",
+    "frequency": "Rare",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "L,M",
+    "alignment": "Any",
+    "numberAppearing": "10-100 (10d10)",
+    "ac": {
+      "base": 7,
+      "text": "7 to 4"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "2-8 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "",
+    "damageText": "",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "M",
+    "morale": {
+      "value": 12,
+      "text": "Steady (11-12)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Human_(MM)",
+    "notes": ""
+  },
+  "items": [
+    {
+      "_id": "A00K6rTiYaukkNOW",
+      "_key": "!actors.items!eSusvy90sWRArViA.A00K6rTiYaukkNOW",
+      "name": "Spear",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "spear",
+        "proficiency": "spear",
+        "weapon": {
+          "size": "M",
+          "type": "P",
+          "speed": 6,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d6",
+              "l": "1d8",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": true,
+          "range": {
+            "rof": "1",
+            "short": "10",
+            "medium": "20",
+            "long": "30"
+          },
+          "family": "other",
+          "missileColumn": "otherMissile",
+          "strength": "full"
+        },
+        "cost": "8 sp",
+        "weight": 5.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 5500,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "iXrVDjMhpLTmnqJ0",
+      "_key": "!actors.items!eSusvy90sWRArViA.iXrVDjMhpLTmnqJ0",
+      "name": "Short sword",
+      "type": "weapon",
+      "img": "icons/svg/sword.svg",
+      "system": {
+        "identifier": "short-sword",
+        "proficiency": "short-sword",
+        "weapon": {
+          "size": "S",
+          "type": "P",
+          "speed": 3,
+          "damage": [
+            {
+              "label": "",
+              "sm": "1d6",
+              "l": "1d8",
+              "speed": null
+            }
+          ],
+          "melee": true,
+          "missile": false,
+          "range": {
+            "rof": "",
+            "short": "",
+            "medium": "",
+            "long": ""
+          },
+          "family": "other",
+          "missileColumn": "",
+          "strength": "full"
+        },
+        "cost": "10 gp",
+        "weight": 3.0,
+        "quantity": 1,
+        "equipped": false,
+        "bonus": {
+          "hit": 0,
+          "dmg": 0
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 5200,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "JgUvevXzNeq4SFYk",
+      "_key": "!actors.items!eSusvy90sWRArViA.JgUvevXzNeq4SFYk",
+      "name": "Studded leather",
+      "type": "armor",
+      "img": "icons/svg/statue.svg",
+      "system": {
+        "identifier": "studded-leather",
+        "kind": "body",
+        "ac": 7,
+        "shield": {
+          "melee": 0,
+          "missile": 0,
+          "attacks": null
+        },
+        "bonus": 0,
+        "equipped": true,
+        "cost": "20 gp",
+        "weight": 25.0,
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 1900,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    },
+    {
+      "_id": "lmBm36bktC7cStEm",
+      "_key": "!actors.items!eSusvy90sWRArViA.lmBm36bktC7cStEm",
+      "name": "Backpack",
+      "type": "equipment",
+      "img": "icons/svg/item-bag.svg",
+      "system": {
+        "identifier": "backpack",
+        "category": "gear",
+        "cost": "2 gp",
+        "weight": 2.0,
+        "quantity": 1,
+        "carried": true,
+        "capacity": {
+          "weight": 50,
+          "volume": "3'×2'×1'"
+        },
+        "load": {
+          "full": null,
+          "half": null,
+          "quarter": null
+        },
+        "source": "Player's Handbook",
+        "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+        "notes": ""
+      },
+      "effects": [],
+      "folder": null,
+      "sort": 15100,
+      "ownership": {
+        "default": 0
+      },
+      "flags": {}
+    }
+  ],
+  "effects": [],
+  "folder": null,
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
