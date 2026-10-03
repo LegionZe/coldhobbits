@@ -57,6 +57,11 @@ initiative 1d10, lowest acts first.
   ammunition to use and subtracts one; with none left the attack is refused. Throwing a weapon item (daggers, darts,
   spears, axes...) subtracts one from its quantity. Quantities have -/+ buttons on the Weapons tab; recovered
   missiles are added back by hand.
+- Armour is an Item (type `armor`) in the "Armour (PHB)" compendium: 14 body armours with their PHB Table 46 AC,
+  4 shields and 2 helmets, with cost and weight from the PHB armour list (`python3 tools/build-armor-data.py`).
+  Equipped body armour replaces the base AC (minus its magical bonus); an equipped shield improves AC against front
+  and flank attacks (body shield: 2 against missiles). The Weapons & Armour tab shows front, rear (no shield, no
+  beneficial Dexterity adjustment) and missile AC. Helmets have no AC effect in the PHB.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
@@ -67,4 +72,4 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, armor and other equipment, encumbrance, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.
+Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, armour sizes, class armour restrictions, other equipment, encumbrance, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.

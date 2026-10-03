@@ -1,0 +1,31 @@
+{
+  "_id": "5Cgk2vOedNnm1pmS",
+  "_key": "!items!5Cgk2vOedNnm1pmS",
+  "name": "Buckler",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "buckler",
+    "kind": "shield",
+    "ac": null,
+    "shield": {
+      "melee": 1,
+      "missile": 1,
+      "attacks": 1
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "1 gp",
+    "weight": 3.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cAX0umty25NXL1n9",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "VQMlOjXCXosW3X51",
+  "_key": "!items!VQMlOjXCXosW3X51",
+  "name": "Great helm",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "great-helm",
+    "kind": "helmet",
+    "ac": null,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "30 gp",
+    "weight": 10.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "vzZFnjWlWiDeeBMS",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

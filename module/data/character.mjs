@@ -88,7 +88,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       magicDef: wis.magicDef
     };
 
-    this.ac.total = this.ac.base + dex.ac;
+    this.armor = this.#computeArmor(dex.ac);
+    this.ac.total = this.armor.front;
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -180,6 +181,35 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         met: (min === null || rolled >= min) && (max === null || rolled <= max) };
     });
     return { raceItem, race, requirements, requirementsMet: requirements.every(r => r.met) };
+  }
+
+  /**
+   * Armour Class from equipped armour items (Armor (PHB)): the best equipped body armour's Table 46 rating minus
+   * its magical bonus (no body armour: `ac.base`); an equipped shield improves it against front and flank attacks
+   * ("A shield is useful only to protect the front and flanks of the user"), the body shield by 2 against missiles.
+   * Dexterity defensive adjustment applies, except that a beneficial one does not apply "when a character is
+   * attacked from behind" (Dexterity (PHB)). Returns front (= ac.total), vs. missiles, and rear AC.
+   */
+  #computeArmor(dexAc) {
+    const equipped = this.parent?.items?.filter(i => i.type === "armor" && i.system.equipped) ?? [];
+    const bodies = equipped.filter(i => i.system.kind === "body" && i.system.ac !== null)
+      .sort((a, b) => (a.system.ac - a.system.bonus) - (b.system.ac - b.system.bonus));
+    const shields = equipped.filter(i => i.system.kind === "shield")
+      .sort((a, b) => (b.system.shield.melee + b.system.bonus) - (a.system.shield.melee + a.system.bonus));
+    const body = bodies[0] ?? null;
+    const shield = shields[0] ?? null;
+    const base = body ? body.system.ac - body.system.bonus : this.ac.base;
+    const vsMelee = shield ? shield.system.shield.melee + shield.system.bonus : 0;
+    const vsMissile = shield ? shield.system.shield.missile + shield.system.bonus : 0;
+    return {
+      body, shield, base,
+      front: base - vsMelee + dexAc,
+      missile: base - vsMissile + dexAc,
+      rear: base + Math.max(dexAc, 0),
+      shieldAttacks: shield?.system.shield.attacks ?? null,
+      extraBody: bodies.length > 1,
+      extraShield: shields.length > 1
+    };
   }
 
   /**

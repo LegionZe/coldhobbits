@@ -1,0 +1,31 @@
+{
+  "_id": "L6rMCX1m7uJtOm7m",
+  "_key": "!items!L6rMCX1m7uJtOm7m",
+  "name": "Medium shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "medium-shield",
+    "kind": "shield",
+    "ac": null,
+    "shield": {
+      "melee": 1,
+      "missile": 1,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "7 gp",
+    "weight": 10.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cAX0umty25NXL1n9",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

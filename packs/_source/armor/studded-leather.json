@@ -1,0 +1,31 @@
+{
+  "_id": "6t1brBrkNPublxty",
+  "_key": "!items!6t1brBrkNPublxty",
+  "name": "Studded leather",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "studded-leather",
+    "kind": "body",
+    "ac": 7,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "20 gp",
+    "weight": 25.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 1900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "I6So3Zff9cosv3Ae",
+  "_key": "!items!I6So3Zff9cosv3Ae",
+  "name": "Scale mail",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "scale-mail",
+    "kind": "body",
+    "ac": 6,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "120 gp",
+    "weight": 40.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

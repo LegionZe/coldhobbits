@@ -1,0 +1,31 @@
+{
+  "_id": "KalOjmcyHvuBAdHK",
+  "_key": "!items!KalOjmcyHvuBAdHK",
+  "name": "Leather",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "leather",
+    "kind": "body",
+    "ac": 8,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "5 gp",
+    "weight": 15.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

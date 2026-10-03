@@ -1,0 +1,31 @@
+{
+  "_id": "3hctWZS8KptZp3aa",
+  "_key": "!items!3hctWZS8KptZp3aa",
+  "name": "Small shield",
+  "type": "armor",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "small-shield",
+    "kind": "shield",
+    "ac": null,
+    "shield": {
+      "melee": 1,
+      "missile": 1,
+      "attacks": 2
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "3 gp",
+    "weight": 5.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cAX0umty25NXL1n9",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,31 @@
+{
+  "_id": "QAXGFF9tOYlH5out",
+  "_key": "!items!QAXGFF9tOYlH5out",
+  "name": "Chain mail",
+  "type": "armor",
+  "img": "icons/svg/statue.svg",
+  "system": {
+    "identifier": "chain-mail",
+    "kind": "body",
+    "ac": 5,
+    "shield": {
+      "melee": 0,
+      "missile": 0,
+      "attacks": null
+    },
+    "bonus": 0,
+    "equipped": false,
+    "cost": "75 gp",
+    "weight": 40.0,
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "jTcx6qswDJMBABws",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
