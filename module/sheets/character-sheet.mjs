@@ -1,4 +1,5 @@
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
+import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -26,6 +27,27 @@ export function formatKitModifier(m, { resolved = false } = {}) {
   if (m.max !== null && m.max !== undefined) parts.push(game.i18n.format("AD2E.Kit.Max", { n: m.max }));
   if (m.armor) parts.push(i18n(`AD2E.Kit.Armor.${m.armor}`));
   return parts.join(", ") + (m.condition ? ` — ${m.condition}` : "");
+}
+
+/** "Wand (DMG Table 94) · 45/100 charges · 1 lb · unidentified" for a magical item. */
+export function magicSummary(item) {
+  const s = item.system;
+  const table = AD2E.treasureTables.magicCategories.find(c => c.key === s.category)?.table;
+  return [`${game.i18n.localize(`AD2E.Magic.Category.${s.category}`)}${table ? ` (DMG ${table})` : ""}`,
+    s.charges.max !== null ? game.i18n.format("AD2E.Magic.ChargesOf", { value: s.charges.value, max: s.charges.max }) : null,
+    s.weight ? `${s.weight} lb` : null, s.usableBy || null, s.identified ? null : game.i18n.localize("AD2E.Magic.Unidentified")]
+    .filter(Boolean).join(" · ");
+}
+
+/** "Gem, precious · 500 gp each" for a gem, piece of jewellery or object of art. */
+export function jewellerySummary(item) {
+  const s = item.system;
+  const unit = s.unitValue;
+  return [game.i18n.localize(`AD2E.Treasure.Kind.${s.kind}`)
+    + (s.kind === "gem" && s.gemClass ? `, ${game.i18n.localize(`AD2E.Treasure.Gem.${s.gemClass}`)}` : "")
+    + (s.kind === "gem" && s.uncut ? ` (${game.i18n.localize("AD2E.Treasure.Uncut").toLowerCase()})` : ""),
+  unit !== null ? game.i18n.format("AD2E.Treasure.Each", { value: unit }) : null, s.weight ? `${s.weight} lb` : null]
+    .filter(Boolean).join(" · ");
 }
 
 /** "dwarf 15, gnome 6" from a { race: maxLevel | null } map ("unlimited" for null). */
@@ -120,7 +142,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       restSpells: CharacterSheet.onRestSpells,
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
-      layOnHands: CharacterSheet.onLayOnHands
+      layOnHands: CharacterSheet.onLayOnHands,
+      useMagicItem: CharacterSheet.onUseMagicItem
     }
   };
 
@@ -436,7 +459,20 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         total: i.system.weight && i.system.quantity > 1 ? Math.round(i.system.weight * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
     })).filter(g => g.rows.length);
-    return { rows, ammo, armor, enc, coins, gear, ac: acSummary, thac0: sys.thac0.value };
+    // Magical items (DMG Table 88 order) and gems, jewellery and objects of art with their gp value.
+    const catOrder = Object.keys(AD2E.magicCategories);
+    const magic = (actor.items?.filter(i => i.type === "magic") ?? []).map(i => ({
+      id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried, summary: magicSummary(i),
+      category: i.system.category, usable: i.system.usesCharges ? i.system.charges.value > 0 : (!i.system.consumable || i.system.quantity > 0)
+    })).sort((x, y) => catOrder.indexOf(x.category) - catOrder.indexOf(y.category) || x.name.localeCompare(y.name));
+    const jewelleryItems = actor.items?.filter(i => i.type === "jewellery") ?? [];
+    const treasure = {
+      list: jewelleryItems.map(i => ({ id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried,
+        summary: jewellerySummary(i), total: i.system.totalValue })).sort((x, y) => x.name.localeCompare(y.name)),
+      gp: Math.round(jewelleryItems.reduce((n, i) => n + (i.system.totalValue ?? 0), 0) * 100) / 100
+    };
+    treasure.wealth = Math.round((coins.gp + treasure.gp) * 100) / 100;
+    return { rows, ammo, armor, enc, coins, gear, magic, treasure, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -613,6 +649,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return this.actor.rollClassSkill(target.dataset.skill);
   }
 
+  static onUseMagicItem(event, target) {
+    return this.actor.useMagicItem(target.dataset.itemId);
+  }
+
   static onRollTurnUndead() {
     return this.actor.rollTurnUndead();
   }
@@ -632,10 +672,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const half = Math.floor(sys.level / 2);
     const formula = { runningBroad: "2d6 + @level", runningHigh: "1d3 + @half", standingBroad: "1d6 + @half" }[target.dataset.jump];
     if (!formula) return;
-    const roll = await new Roll(formula, { level: sys.level, half }).evaluate();
+    const input = await promptModifier(game.i18n.localize(`AD2E.Move.Jump_${target.dataset.jump}`));
+    if (!input) return;
+    const roll = await new Roll(`${formula} + @mod`, { level: sys.level, half, mod: input.mod }).evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      flavor: `${game.i18n.localize(`AD2E.Move.Jump_${target.dataset.jump}`)}: ${roll.total} ft`
+      flavor: `${game.i18n.localize(`AD2E.Move.Jump_${target.dataset.jump}`)}: ${roll.total} ft${modifierText(input.mod, input.note)}`
         + (target.dataset.jump.endsWith("Broad") && target.dataset.jump.startsWith("running")
           ? ` (${game.i18n.localize("AD2E.Move.BroadCap")})` : "")
         + (target.dataset.jump === "runningHigh" ? ` (${game.i18n.localize("AD2E.Move.HighCap")})` : "")

@@ -1,4 +1,4 @@
-import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
+import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
 import { formatKitModifier, formatKitProficiencies } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -236,5 +236,36 @@ export class SpellSheet extends AD2EItemSheet {
   /** Schools, spheres and sources are edited as comma-separated text. */
   _processFormData(event, form, formData) {
     return parseClassesText(super._processFormData(event, form, formData), ["schools", "spheres", "sources"]);
+  }
+}
+
+export class MagicItemSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["magic"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/magic-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.categories = AD2E.magicCategories;
+    const table = AD2E.treasureTables.magicCategories.find(c => c.key === this.document.system.category);
+    context.categoryTable = table ? game.i18n.format("AD2E.Magic.FromTable", { table: table.table }) : "";
+    return context;
+  }
+}
+
+export class JewellerySheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["jewellery"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/jewellery-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const sys = this.document.system;
+    context.kinds = AD2E.treasureKinds;
+    context.gemClasses = { "": "—", ...AD2E.gemClasses };
+    context.isGem = sys.kind === "gem";
+    const base = gemBaseValue(sys.gemClass);
+    context.baseValue = base;
+    context.unitValue = sys.unitValue;
+    context.totalValue = sys.totalValue;
+    return context;
   }
 }

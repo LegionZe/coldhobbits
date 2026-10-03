@@ -33,7 +33,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       xp: int(0, 0),
       abilities: new SchemaField(abilities),
       hp: new SchemaField({ value: int(1), max: int(1) }),
-      ac: new SchemaField({ base: int(10, -10, 10) }),
+      // misc: other AC adjustment (magical items such as rings or cloaks of protection, spells, cover); positive = better.
+      ac: new SchemaField({ base: int(10, -10, 10), misc: int(0, -20, 20) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
       initiative: new SchemaField({ mod: int(0) }),
       // Weight of gear not held as items (lb); clothing (5 lb) is added automatically.
@@ -111,7 +112,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     this.armor = this.#computeArmor(dex.ac);
     this.kitMods = this.#computeKitModifiers();
-    const kitAc = this.kitMods.total("ac");
+    const kitAc = this.kitMods.total("ac") + (this.ac.misc ?? 0);
     for (const k of ["front", "missile", "rear"]) this.armor[k] -= kitAc;
     this.encumbrance.info = this.#computeEncumbrance();
     const { hit: encHit, ac: encAc } = this.encumbrance.info.penalty;
@@ -290,10 +291,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     let rule = "basic";
     try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
     const items = this.parent?.items ?? [];
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
-    // Equipment counts while carried (animals, transport, services and lodging default to not carried).
+    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    // Equipment, magical items and treasure count while carried (animals, transport, services and lodging default to
+    // not carried).
     const gear = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type)
-      || (i.type === "equipment" && i.system.carried));
+      || (["equipment", "magic", "jewellery"].includes(i.type) && i.system.carried));
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);

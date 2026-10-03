@@ -1,3 +1,4 @@
+import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -26,7 +27,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       deleteItem: MonsterSheet.onDeleteItem,
       toggleEquipped: MonsterSheet.onToggleEquipped,
       toggleCarried: MonsterSheet.onToggleCarried,
-      adjustQuantity: MonsterSheet.onAdjustQuantity
+      adjustQuantity: MonsterSheet.onAdjustQuantity,
+      useMagicItem: MonsterSheet.onUseMagicItem
     }
   };
 
@@ -83,9 +85,10 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img,
       equipped: i.system.equipped, summary: armorSummary(i.system) }));
-    context.gear = items.filter(i => ["equipment", "ammunition", "coin"].includes(i.type)).map(i => ({ id: i.id, name: i.name, img: i.img,
-      quantity: i.system.quantity, isEquipment: i.type === "equipment", carried: i.system.carried,
-      summary: i.type === "equipment" ? equipmentSummary(i.system) : "" })).sort((a, b) => a.name.localeCompare(b.name));
+    context.gear = items.filter(i => ["equipment", "ammunition", "coin", "magic", "jewellery"].includes(i.type)).map(i => ({ id: i.id, name: i.name, img: i.img,
+      quantity: i.system.quantity, isEquipment: ["equipment", "magic", "jewellery"].includes(i.type), isMagic: i.type === "magic", carried: i.system.carried,
+      summary: i.type === "equipment" ? equipmentSummary(i.system) : i.type === "magic" ? magicSummary(i)
+        : i.type === "jewellery" ? jewellerySummary(i) : "" })).sort((a, b) => a.name.localeCompare(b.name));
     const enc = sys.encumbrance;
     context.load = { ...sys.load, weight: enc.weight, rate: enc.rate, hasLoad: sys.load.full !== null,
       bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
@@ -129,6 +132,10 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onToggleCarried(event, target) {
     return this.document.items.get(target.dataset.itemId)?.update({ "system.carried": target.checked });
   }
+  static onUseMagicItem(event, target) {
+    return this.actor.useMagicItem(target.dataset.itemId);
+  }
+
   static onAdjustQuantity(event, target) {
     const item = this.document.items.get(target.dataset.itemId);
     return item?.update({ "system.quantity": Math.max(item.system.quantity + Number(target.dataset.delta), 0) });
