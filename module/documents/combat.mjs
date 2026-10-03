@@ -1,4 +1,23 @@
-import { modifierText, promptModifier } from "../roll-modifiers.mjs";
+import { modifierFields, modifierText, readModifier } from "../roll-modifiers.mjs";
+import { defaultAction, initiativeActions, STANDARD_MODIFIERS } from "../initiative.mjs";
+
+/** Roll term flavor text (no brackets). */
+const flavor = s => String(s ?? "").replace(/[[\]]/g, "").trim();
+
+/**
+ * Combatants: an initiative roll made without the dialog (Roll All, Roll NPCs) adds the automatic action's modifier
+ * (module/initiative.mjs: weapon speed factor, or a monster's size with natural weapons). Same override point as
+ * dnd5e's Combatant5e#getInitiativeRoll on v14.
+ */
+export class AD2ECombatant extends Combatant {
+  /** @override */
+  getInitiativeRoll(formula) {
+    if (formula || !this.actor) return super.getInitiativeRoll(formula);
+    const action = defaultAction(this.actor);
+    const base = CONFIG.Combat.initiative.formula;
+    return super.getInitiativeRoll(action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base);
+  }
+}
 
 /** AD&D 2e initiative: d10, lowest result acts first. */
 export default class AD2ECombat extends Combat {
@@ -9,9 +28,11 @@ export default class AD2ECombat extends Combat {
   }
 
   /**
-   * Rolling one combatant (the tracker's die icon) asks for a situational modifier and reason, e.g. a weapon speed
-   * factor or a magical item; it is added to the 1d10 (lower acts first) and shown in chat. Rolling several at once
-   * (roll all, roll NPCs) does not ask. World setting "initiativePrompt" turns the question off.
+   * Rolling one combatant (the tracker's die icon) asks for its action (weapon speed factor, casting time, magical
+   * item, breath weapon, innate ability or natural weapons; Initiative (PHB) Table 56), the Table 55 situations and a
+   * modifier with reason; all are added to the 1d10 (lower acts first) and shown in chat. Rolling several at once
+   * (Roll All, Roll NPCs) uses each combatant's automatic action (AD2ECombatant). World setting "initiativePrompt"
+   * turns the question off.
    */
   async rollInitiative(ids, options = {}) {
     const list = typeof ids === "string" ? [ids] : Array.from(ids);
@@ -19,19 +40,50 @@ export default class AD2ECombat extends Combat {
     try { ask &&= game.settings.get("ad2e", "initiativePrompt"); } catch { /* setting not registered */ }
     if (ask) {
       const combatant = this.combatants.get(list[0]);
-      const input = await promptModifier(game.i18n.format("AD2E.Init.Title", { name: combatant?.name ?? "" }));
+      const input = await AD2ECombat.#prompt(combatant);
       if (!input) return this;
-      if (input.mod || input.note) {
-        const base = CONFIG.Combat.initiative.formula;
-        options = {
-          ...options,
-          formula: input.mod ? `${base} + ${input.mod}` : base,
-          messageOptions: { ...(options.messageOptions ?? {}),
-            flavor: game.i18n.format("COMBAT.RollsInitiative", { name: foundry.utils.escapeHTML?.(combatant?.name ?? "") ?? "" })
-              + modifierText(input.mod, input.note) }
-        };
-      }
+      const base = CONFIG.Combat.initiative.formula;
+      const terms = [input.action.value ? `${input.action.value}[${flavor(input.action.short)}]` : null,
+        ...input.situations.map(s => `${s.value}[${flavor(s.label)}]`), input.mod ? `${input.mod}[${flavor(input.note || "modifier")}]` : null]
+        .filter(Boolean);
+      const parts = [input.action.key !== "none" ? input.action.label : null, input.action.note || null,
+        ...input.situations.map(s => `${s.label} ${s.value > 0 ? "+" : ""}${s.value}`)].filter(Boolean);
+      options = {
+        ...options,
+        formula: [base, ...terms].join(" + ").replace(/\+ -/g, "- "),
+        messageOptions: { ...(options.messageOptions ?? {}),
+          flavor: game.i18n.format("COMBAT.RollsInitiative", { name: foundry.utils.escapeHTML?.(combatant?.name ?? "") ?? "" })
+            + (parts.length ? ` [${foundry.utils.escapeHTML?.(parts.join("; ")) ?? parts.join("; ")}]` : "")
+            + modifierText(input.mod, input.note) }
+      };
     }
     return super.rollInitiative(list, options);
+  }
+
+  /** Initiative dialog: action (default: the automatic one), Table 55 situations, modifier and reason. */
+  static async #prompt(combatant) {
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const actor = combatant?.actor;
+    const actions = initiativeActions(actor);
+    const chosen = defaultAction(actor, [...actions]);
+    const content = `<p class="ad2e-note">${i18n("AD2E.Init.Hint")}</p>`
+      + `<div class="form-group"><label>${i18n("AD2E.Init.ActionLabel")}</label><select name="action">${actions.map(a =>
+        `<option value="${esc(a.key)}"${a.key === chosen.key ? " selected" : ""}>${esc(a.label)}</option>`).join("")}</select></div>`
+      + `<fieldset><legend>${i18n("AD2E.Init.Standard")}</legend><div class="ad2e-check-grid">${STANDARD_MODIFIERS.map(m =>
+        `<label><input type="checkbox" name="t55-${m.key}" value="${m.value}"> ${esc(m.label)} (${m.value > 0 ? "+" : ""}${m.value})</label>`).join("")}</div></fieldset>`
+      + modifierFields();
+    return foundry.applications.api.DialogV2.prompt({
+      classes: ["ad2e"],
+      window: { title: game.i18n.format("AD2E.Init.Title", { name: combatant?.name ?? "" }) },
+      content,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const f = button.form.elements;
+        const action = actions.find(a => a.key === f.action?.value) ?? chosen;
+        const situations = STANDARD_MODIFIERS.filter(m => f[`t55-${m.key}`]?.checked);
+        return { action, situations, ...readModifier(button.form) };
+      } },
+      rejectClose: false
+    });
   }
 }

@@ -143,6 +143,15 @@ initiative 1d10, lowest acts first.
   Class; and the class abilities (thief, bard and ranger skills, backstab, turning undead, paladin powers). Weapons and
   armour are equipped with the Equipped tick box on the Equipment tab only. The Equipment and Class Abilities tabs use
   the same lists (shared partials).
+- Initiative ("Initiative (PHB)"): 1d10, lowest first. Rolling one combatant from the combat tracker asks for its
+  action: attack with a weapon in hand (speed factor, less its magical bonus, never below 0; the bastard sword one- or
+  two-handed), cast a memorized spell (numeric casting time; a round or more acts at the end of the round), use a
+  magical item (potion +4, ring +3, rod +1, staff +2, wand +3, other +3), breath weapon +1, innate ability +3, or a
+  monster's natural weapons by size (Table 56); plus the Table 55 situations (hasted, slowed, higher ground, ...) and a
+  modifier with reason. Roll All / Roll NPCs add each combatant's automatic action: the weapon of its last attack if
+  still in hand, else its fastest weapon in hand; a monster without weapons, its natural weapons (size). Scrolls are
+  not listed (their modifier is the spell's casting time: enter it as the modifier). Tables from
+  `python3 tools/build-combat-tables.py`.
 - Targets: attack and damage rolls record the tokens the rolling user has targeted (shown as "→ name" in chat); a damage
   roll made with no target uses the targets of the same actor's last attack with that weapon. The attack dialog's
   target AC is filled in from the first target (vs. missiles for missile attacks) when the user may see that actor.

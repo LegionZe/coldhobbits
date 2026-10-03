@@ -290,6 +290,7 @@ export default class AD2EActor extends Actor {
     const kitOptions = this.#kitOptions("attack");
     const targets = AD2EActor.#targetsNow();
     this.#rememberTargets(itemId, targets);
+    this._ad2eLastWeapon = itemId; // initiative: the weapon of the last attack (module/initiative.mjs)
     const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     // Two weapons (warriors and rogues, melee) and non-lethal attacks with a blade ("Attacking with Two Weapons (PHB)",

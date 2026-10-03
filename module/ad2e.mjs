@@ -21,7 +21,7 @@ import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
-import AD2ECombat from "./documents/combat.mjs";
+import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
 import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet, EquipmentSheet, SpellSheet, MagicItemSheet, JewellerySheet } from "./sheets/item-sheets.mjs";
@@ -86,6 +86,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.jewellery = JewelleryData;
 
   CONFIG.Combat.documentClass = AD2ECombat;
+  CONFIG.Combatant.documentClass = AD2ECombatant;
   CONFIG.Combat.initiative = { formula: "1d10 + @init", decimals: 2 };
 
   const { DocumentSheetConfig } = foundry.applications.apps;
