@@ -1,0 +1,32 @@
+{
+  "_id": "pNHScOoM9BmaPqAA",
+  "_key": "!items!pNHScOoM9BmaPqAA",
+  "name": "Dwarf Runes",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "dwarf-runes",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Dwarf_Runes_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 10900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

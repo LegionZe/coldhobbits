@@ -1,0 +1,32 @@
+{
+  "_id": "fk8qm9VKa4ka2ApX",
+  "_key": "!items!fk8qm9VKa4ka2ApX",
+  "name": "Gunsmithing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "gunsmithing",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Demihumans of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Gunsmithing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ki5cznJr9M80uQfR",
+  "sort": 14800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

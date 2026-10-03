@@ -1,0 +1,32 @@
+{
+  "_id": "3cz0KNjyU2RRMVQ0",
+  "_key": "!items!3cz0KNjyU2RRMVQ0",
+  "name": "Mining",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "mining",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -3,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Strength/Stamina",
+      "rating": 5,
+      "cost": 5
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Mining_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 20500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "Hmwg2OKbGrA1naOR",
+  "_key": "!items!Hmwg2OKbGrA1naOR",
+  "name": "Thespian",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "thespian",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Thespian_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 32700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

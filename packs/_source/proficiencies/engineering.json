@@ -1,0 +1,33 @@
+{
+  "_id": "Kb1Kxz0eu2AF3YoL",
+  "_key": "!items!Kb1Kxz0eu2AF3YoL",
+  "name": "Engineering",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "engineering",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason, Wisdom/Intuition",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Engineering_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 11400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "6QLGfZ4sZnawnyEh",
+  "_key": "!items!6QLGfZ4sZnawnyEh",
+  "name": "Escape",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "escape",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Escape_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 11500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

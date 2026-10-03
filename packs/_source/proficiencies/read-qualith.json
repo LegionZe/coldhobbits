@@ -1,0 +1,30 @@
+{
+  "_id": "23kxsco2p7878fzi",
+  "_key": "!items!23kxsco2p7878fzi",
+  "name": "Read Qualith",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "read-qualith",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Read_Qualith_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 25600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

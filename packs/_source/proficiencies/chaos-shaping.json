@@ -1,0 +1,32 @@
+{
+  "_id": "0rrQQNfrjYE0CmSn",
+  "_key": "!items!0rrQQNfrjYE0CmSn",
+  "name": "Chaos Shaping",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "chaos-shaping",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Planes of Chaos",
+    "url": "https://adnd2e.fandom.com/wiki/Chaos_Shaping_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kpFz2PXMCXvVbKo5",
+  "sort": 6500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

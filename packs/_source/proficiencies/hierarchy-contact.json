@@ -1,0 +1,30 @@
+{
+  "_id": "dnPNCG83MLkAqA6e",
+  "_key": "!items!dnPNCG83MLkAqA6e",
+  "name": "Hierarchy Contact",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "hierarchy-contact",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "cha",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Hierarchy_Contact_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 15900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "rAf2ciYyEIiEM1Oe",
+  "_key": "!items!rAf2ciYyEIiEM1Oe",
+  "name": "Astral Combat",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "astral-combat",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": 8,
+      "cost": 5
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Astral_Combat_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

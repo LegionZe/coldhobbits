@@ -1,0 +1,32 @@
+{
+  "_id": "f4Vs9mrDxCUv2Z6K",
+  "_key": "!items!f4Vs9mrDxCUv2Z6K",
+  "name": "Animal Training",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "animal-training",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Willpower, Charisma/Leadership",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animal_Training_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -22,7 +22,26 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Peasant_Hero_-_Fighter_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "agriculture",
+          "fishing"
+        ]
+      },
+      {
+        "choice": [
+          "weather-sense",
+          "animal-lore"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",

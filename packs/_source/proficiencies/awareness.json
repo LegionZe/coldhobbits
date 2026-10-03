@@ -1,0 +1,33 @@
+{
+  "_id": "DphLQYa710FUl3vO",
+  "_key": "!items!DphLQYa710FUl3vO",
+  "name": "Awareness",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "awareness",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Awareness_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

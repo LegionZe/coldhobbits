@@ -1,0 +1,33 @@
+{
+  "_id": "U972SY6RMzXA0P2x",
+  "_key": "!items!U972SY6RMzXA0P2x",
+  "name": "Trail Signs",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "trail-signs",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ranger's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Trail_Signs_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ppQrRuhWaQxXDj9e",
+  "sort": 33400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

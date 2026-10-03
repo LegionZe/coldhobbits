@@ -1,0 +1,32 @@
+{
+  "_id": "k4w50Id6bLLEhqJ7",
+  "_key": "!items!k4w50Id6bLLEhqJ7",
+  "name": "Cheesemaking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "cheesemaking",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Cheesemaking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 6800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

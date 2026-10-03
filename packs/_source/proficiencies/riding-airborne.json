@@ -1,0 +1,32 @@
+{
+  "_id": "pVGvSRuFsDRMMcaA",
+  "_key": "!items!pVGvSRuFsDRMMcaA",
+  "name": "Riding, Airborne",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "riding-airborne",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Willpower, Dexterity/Balance",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Riding%2C_Airborne_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 26600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

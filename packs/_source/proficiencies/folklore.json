@@ -1,0 +1,32 @@
+{
+  "_id": "DuhXpLjAkKDq0Mgg",
+  "_key": "!items!DuhXpLjAkKDq0Mgg",
+  "name": "Folklore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "folklore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Warriors & Priests of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Folklore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "NpFf2bjGqEDa2M12",
+  "sort": 13000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

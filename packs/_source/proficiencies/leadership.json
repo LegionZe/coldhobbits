@@ -1,0 +1,32 @@
+{
+  "_id": "ad2CGxpsCqcKyTWr",
+  "_key": "!items!ad2CGxpsCqcKyTWr",
+  "name": "Leadership",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "leadership",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Leadership_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 18300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

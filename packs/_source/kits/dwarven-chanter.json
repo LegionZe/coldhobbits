@@ -24,7 +24,34 @@
     },
     "raceOnly": true,
     "url": "https://adnd2e.fandom.com/wiki/Dwarven_Chanter_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "crowd-working"
+        ]
+      },
+      {
+        "choice": [
+          "musical-instrument"
+        ]
+      },
+      {
+        "choice": [
+          "chanting"
+        ]
+      },
+      {
+        "choice": [
+          "spellcraft"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

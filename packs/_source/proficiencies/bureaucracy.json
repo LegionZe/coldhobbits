@@ -1,0 +1,32 @@
+{
+  "_id": "vX7dnkcytt2Mmsrl",
+  "_key": "!items!vX7dnkcytt2Mmsrl",
+  "name": "Bureaucracy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "bureaucracy",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Bureaucracy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 5500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

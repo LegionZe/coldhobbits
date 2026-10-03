@@ -1,0 +1,30 @@
+{
+  "_id": "CaXWqwfuTfiYpcHo",
+  "_key": "!items!CaXWqwfuTfiYpcHo",
+  "name": "Psionic Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "psionic-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Will and the Way",
+    "url": "https://adnd2e.fandom.com/wiki/Psionic_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kt2XmNf4Jq8cpnGB",
+  "sort": 25300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

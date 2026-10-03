@@ -1,0 +1,33 @@
+{
+  "_id": "REvKtiw5zvKqFl2f",
+  "_key": "!items!REvKtiw5zvKqFl2f",
+  "name": "Spelljamming",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spelljamming",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Spacefarer's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Spelljamming_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Ve5ziclOHCfV6354",
+  "sort": 30800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

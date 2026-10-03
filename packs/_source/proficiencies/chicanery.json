@@ -1,0 +1,32 @@
+{
+  "_id": "U42fH4dmoGPpVkxP",
+  "_key": "!items!U42fH4dmoGPpVkxP",
+  "name": "Chicanery",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "chicanery",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Age of Heroes Campaign Sourcebook",
+    "url": "https://adnd2e.fandom.com/wiki/Chicanery_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "E3YjwMe26PcX9B3l",
+  "sort": 7000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

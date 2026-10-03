@@ -2,6 +2,12 @@ import { AD2E } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
+/** "Agriculture or Fishing, Survival" from kit proficiency entries ({ choice: [identifier, ...] }). */
+export function formatKitProficiencies(entries) {
+  const title = id => id.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  return (entries ?? []).map(e => e.choice.map(title).join(` ${game.i18n.localize("AD2E.Prof.Or")} `)).join(", ");
+}
+
 /** "dwarf 15, gnome 6" from a { race: maxLevel | null } map ("unlimited" for null). */
 export function formatRaceLimits(limits) {
   return Object.entries(limits ?? {}).map(([race, max]) =>
@@ -54,6 +60,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollFirstLevelHp: CharacterSheet.onRollFirstLevelHp,
       levelUp: CharacterSheet.onLevelUp,
       deleteItem: CharacterSheet.onDeleteItem,
+      rollProficiency: CharacterSheet.onRollProficiency,
       rollAttack: CharacterSheet.onRollAttack
     }
   };
@@ -63,13 +70,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
+    proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
     abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
     bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" }
   };
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "class" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "class" }, { id: "proficiencies" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -129,6 +137,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     });
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
+    context.profTab = this._proficiencyTabContext(sys);
     context.classGroups = AD2E.classGroups;
     return context;
   }
@@ -157,6 +166,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       levelLimit: info.levelLimit,
       needsRaceKit: info.needsRaceKit,
       kitRaceLimits: formatRaceLimits(info.kitItem?.system.raceLimits),
+      kitBonusProfs: formatKitProficiencies(info.kitItem?.system.bonusProficiencies),
+      kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
+      kitBonusSlots: info.kitItem ? [["weapon", "AD2E.Prof.Weapon"], ["nonweapon", "AD2E.Prof.Nonweapon"]]
+        .filter(([k]) => info.kitItem.system.bonusSlots?.[k]).map(([k, l]) => `+${info.kitItem.system.bonusSlots[k]} ${game.i18n.localize(l)}`).join(", ") : "",
       overLevelLimit: !!info.levelLimit && sys.level > info.levelLimit,
       classItem: info.classItem,
       kitItem: info.kitItem,
@@ -179,12 +192,42 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     };
   }
 
+  /** Display data for the Proficiencies tab. */
+  _proficiencyTabContext(sys) {
+    const p = sys.proficiencies;
+    const abilityAbbr = key => (key ? game.i18n.localize(`AD2E.Ability.${key}`).slice(0, 3) : "—");
+    const row = e => ({
+      id: e.item.id, name: e.item.name, img: e.item.img, cost: e.cost, crossGroup: e.crossGroup,
+      granted: !!e.item.system.grantedBy, target: e.target,
+      ability: abilityAbbr(e.item.system.ability),
+      modifier: e.item.system.modifier === null ? "" : (e.item.system.modifier > 0 ? `+${e.item.system.modifier}` : `${e.item.system.modifier}`),
+      url: e.item.system.url
+    });
+    const sortByName = (a, b) => a.name.localeCompare(b.name);
+    return {
+      weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
+        rows: p.entries.filter(e => e.item.system.kind === "weapon").map(row).sort(sortByName) },
+      nonweapon: { ...p.nonweapon, over: p.nonweapon.used > p.nonweapon.available,
+        rows: p.entries.filter(e => e.item.system.kind === "nonweapon").map(row).sort(sortByName) },
+      penalty: p.penalty,
+      groups: p.groups.map(g => game.i18n.localize(AD2E.nonweaponGroups[g])).join(", ")
+    };
+  }
+
   /**
    * Race, class and kit items: one of each per character. A race or class is refused if the
    * race does not allow the class. A dropped class replaces the current class (and drops a kit
    * that does not fit it); a kit must be open to the current class.
    */
   async _onDropItem(event, item) {
+    if (this.actor.isOwner && item.type === "proficiency" && item.parent !== this.actor) {
+      const dupe = this.actor.items.find(i => i.type === "proficiency" && i.system.identifier === item.system.identifier
+        && i.system.kind === item.system.kind);
+      if (dupe) {
+        ui.notifications.warn(game.i18n.format("AD2E.Prof.AlreadyHave", { name: item.name }));
+        return null;
+      }
+    }
     if (!this.actor.isOwner || !["race", "class", "kit"].includes(item.type)) return super._onDropItem(event, item);
     if (item.parent === this.actor) return super._onDropItem(event, item); // sorting an owned item
     const current = this.actor.items;
@@ -234,8 +277,15 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }
       if (kitItem) remove.push(kitItem.id);
     }
+    // A removed kit takes the bonus proficiencies it granted with it.
+    for (const id of remove) {
+      const removed = current.get?.(id) ?? current.find(i => i.id === id);
+      if (removed?.type === "kit") await this.actor.removeKitProficiencies(removed.system.identifier);
+    }
     if (remove.length) await this.actor.deleteEmbeddedDocuments("Item", remove);
-    return super._onDropItem(event, item);
+    const created = await super._onDropItem(event, item);
+    if (item.type === "kit" && created) await this.actor.grantKitProficiencies(item);
+    return created;
   }
 
   static async onRollFirstLevelHp() {
@@ -257,8 +307,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return this.actor.items.get(target.dataset.itemId)?.sheet.render({ force: true });
   }
 
-  static onDeleteItem(event, target) {
-    return this.actor.items.get(target.dataset.itemId)?.delete();
+  static async onDeleteItem(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item?.type === "kit") await this.actor.removeKitProficiencies(item.system.identifier);
+    return item?.delete();
+  }
+
+  static onRollProficiency(event, target) {
+    return this.actor.rollProficiency(target.dataset.itemId);
   }
 
   static onRollAbility(event, target) {

@@ -1,0 +1,30 @@
+{
+  "_id": "B8bnfgODgOcu5O5N",
+  "_key": "!items!B8bnfgODgOcu5O5N",
+  "name": "Set Traps",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "set-traps",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": -3,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Set_Traps_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 28800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

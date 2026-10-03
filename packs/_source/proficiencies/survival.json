@@ -1,0 +1,32 @@
+{
+  "_id": "DCiSJ1XeJdoq7nt1",
+  "_key": "!items!DCiSJ1XeJdoq7nt1",
+  "name": "Survival",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "survival",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Willpower",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Survival_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 31600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "4f6H64Q7qkxdYnYm",
+  "_key": "!items!4f6H64Q7qkxdYnYm",
+  "name": "Grooming",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "grooming",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Grooming_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 14500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

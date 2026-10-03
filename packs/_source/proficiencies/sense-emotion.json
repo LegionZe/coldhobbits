@@ -1,0 +1,32 @@
+{
+  "_id": "vBbR6crejobBLu7K",
+  "_key": "!items!vBbR6crejobBLu7K",
+  "name": "Sense Emotion",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sense-emotion",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Sense_Emotion_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 28500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

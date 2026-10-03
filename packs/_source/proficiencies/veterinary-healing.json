@@ -1,0 +1,32 @@
+{
+  "_id": "KhXDiXUiKGfMT7cB",
+  "_key": "!items!KhXDiXUiKGfMT7cB",
+  "name": "Veterinary Healing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "veterinary-healing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ranger's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Veterinary_Healing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ppQrRuhWaQxXDj9e",
+  "sort": 35100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

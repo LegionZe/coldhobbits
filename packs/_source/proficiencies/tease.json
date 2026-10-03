@@ -1,0 +1,30 @@
+{
+  "_id": "8qKd7c8CTkDksEOz",
+  "_key": "!items!8qKd7c8CTkDksEOz",
+  "name": "Tease",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "tease",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Tease_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 32500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

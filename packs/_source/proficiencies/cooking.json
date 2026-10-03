@@ -1,0 +1,32 @@
+{
+  "_id": "UaO3YWmCKXi0q95v",
+  "_key": "!items!UaO3YWmCKXi0q95v",
+  "name": "Cooking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "cooking",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Cooking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 8100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

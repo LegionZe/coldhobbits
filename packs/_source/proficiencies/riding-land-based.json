@@ -1,0 +1,32 @@
+{
+  "_id": "BWPHyOTt7tRfTlSg",
+  "_key": "!items!BWPHyOTt7tRfTlSg",
+  "name": "Riding, Land-Based",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "riding-land-based",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 3,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Willpower, Dexterity/Balance",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Riding%2C_Land-Based_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 26900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

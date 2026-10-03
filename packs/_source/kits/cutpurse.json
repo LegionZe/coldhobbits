@@ -22,7 +22,24 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Cutpurse_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "observation"
+        ]
+      },
+      {
+        "choice": [
+          "trailing"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

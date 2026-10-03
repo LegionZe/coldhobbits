@@ -1,0 +1,34 @@
+{
+  "_id": "CeuAOQRYy3N7KOxg",
+  "_key": "!items!CeuAOQRYy3N7KOxg",
+  "name": "Zero-Gravity Combat",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "zero-gravity-combat",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Spacefarer's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Zero-Gravity_Combat_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Ve5ziclOHCfV6354",
+  "sort": 36900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

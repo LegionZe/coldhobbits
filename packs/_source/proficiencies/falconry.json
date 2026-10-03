@@ -1,0 +1,32 @@
+{
+  "_id": "Bo95mT4z2eLwT0r5",
+  "_key": "!items!Bo95mT4z2eLwT0r5",
+  "name": "Falconry",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "falconry",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ranger's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Falconry_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ppQrRuhWaQxXDj9e",
+  "sort": 12100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

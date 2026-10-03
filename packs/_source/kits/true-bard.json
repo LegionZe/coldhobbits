@@ -22,7 +22,34 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/True_Bard_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "singing"
+        ]
+      },
+      {
+        "choice": [
+          "musical-instrument"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      },
+      {
+        "choice": [
+          "local-history"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

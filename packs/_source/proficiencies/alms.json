@@ -1,0 +1,32 @@
+{
+  "_id": "OkDKsJiALpZxRhn7",
+  "_key": "!items!OkDKsJiALpZxRhn7",
+  "name": "Alms",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "alms",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Alms_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

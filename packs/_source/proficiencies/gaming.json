@@ -1,0 +1,33 @@
+{
+  "_id": "5K8jFdCLkCq6yDex",
+  "_key": "!items!5K8jFdCLkCq6yDex",
+  "name": "Gaming",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "gaming",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Intelligence/Knowledge",
+      "rating": 5,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Gaming_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 13600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

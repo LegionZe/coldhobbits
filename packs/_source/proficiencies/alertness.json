@@ -1,0 +1,32 @@
+{
+  "_id": "W2SQEQJVWfwRYeRj",
+  "_key": "!items!W2SQEQJVWfwRYeRj",
+  "name": "Alertness",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "alertness",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Shaman",
+    "url": "https://adnd2e.fandom.com/wiki/Alertness_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TOmJGMYrVHC0WKlo",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

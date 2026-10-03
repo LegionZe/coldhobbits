@@ -1,0 +1,32 @@
+{
+  "_id": "mcmvXHgEIZHZUYWz",
+  "_key": "!items!mcmvXHgEIZHZUYWz",
+  "name": "Healing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "healing",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Charisma/Leadership",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Healing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 15200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "mtZmFhxEKNVPC3bd",
+  "_key": "!items!mtZmFhxEKNVPC3bd",
+  "name": "Fortune Telling",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "fortune-telling",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "cha",
+    "modifier": 2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Fortune_Telling_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 13300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

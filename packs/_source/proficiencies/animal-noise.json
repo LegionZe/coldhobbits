@@ -1,0 +1,32 @@
+{
+  "_id": "eNEIOGcOitmPwUNG",
+  "_key": "!items!eNEIOGcOitmPwUNG",
+  "name": "Animal Noise",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "animal-noise",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Animal_Noise_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "7MMnHpUqNV51Br0K",
+  "_key": "!items!7MMnHpUqNV51Br0K",
+  "name": "Psychic Defense",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "psychic-defense",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Will and the Way",
+    "url": "https://adnd2e.fandom.com/wiki/Psychic_Defense_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kt2XmNf4Jq8cpnGB",
+  "sort": 25400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

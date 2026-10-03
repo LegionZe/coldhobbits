@@ -22,7 +22,34 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Blade_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      },
+      {
+        "choice": [
+          "local-history"
+        ]
+      },
+      {
+        "choice": [
+          "blind-fighting"
+        ]
+      },
+      {
+        "choice": [
+          "juggling"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

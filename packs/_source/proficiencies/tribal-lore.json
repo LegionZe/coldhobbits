@@ -1,0 +1,32 @@
+{
+  "_id": "0ZkE0wmYOd0AylKY",
+  "_key": "!items!0ZkE0wmYOd0AylKY",
+  "name": "Tribal Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "tribal-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Tribal_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 33700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

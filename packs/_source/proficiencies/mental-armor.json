@@ -1,0 +1,32 @@
+{
+  "_id": "aCUzSWJndq3xs1v9",
+  "_key": "!items!aCUzSWJndq3xs1v9",
+  "name": "Mental Armor",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "mental-armor",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Mental_Armor_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 20000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

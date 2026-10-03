@@ -1,0 +1,32 @@
+{
+  "_id": "PHov7mh9fZMlnYQO",
+  "_key": "!items!PHov7mh9fZMlnYQO",
+  "name": "Investigation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "investigation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Investigation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 17300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

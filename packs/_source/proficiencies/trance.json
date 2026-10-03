@@ -1,0 +1,32 @@
+{
+  "_id": "wpsqjWg6rHAUWLn9",
+  "_key": "!items!wpsqjWg6rHAUWLn9",
+  "name": "Trance",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "trance",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "con",
+    "modifier": -3,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Shaman",
+    "url": "https://adnd2e.fandom.com/wiki/Trance_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TOmJGMYrVHC0WKlo",
+  "sort": 33600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

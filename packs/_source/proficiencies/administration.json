@@ -1,0 +1,32 @@
+{
+  "_id": "jXAfp7HlAUAgSm6I",
+  "_key": "!items!jXAfp7HlAUAgSm6I",
+  "name": "Administration",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "administration",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 1,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Administration_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

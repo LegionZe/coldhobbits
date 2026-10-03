@@ -1,0 +1,34 @@
+{
+  "_id": "GnMIMTo5eBYOGWCe",
+  "_key": "!items!GnMIMTo5eBYOGWCe",
+  "name": "Ancient History",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "ancient-history",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "priest",
+      "rogue",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Intelligence/Knowledge",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Ancient_History_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

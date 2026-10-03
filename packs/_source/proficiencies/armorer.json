@@ -1,0 +1,32 @@
+{
+  "_id": "7sJVt2oSrMUIESSO",
+  "_key": "!items!7sJVt2oSrMUIESSO",
+  "name": "Armorer",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "armorer",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Strength/Muscle",
+      "rating": 5,
+      "cost": 5
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Armorer_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 2200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

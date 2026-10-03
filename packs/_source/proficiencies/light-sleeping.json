@@ -1,0 +1,32 @@
+{
+  "_id": "BA7UnBUQBsHlYSzu",
+  "_key": "!items!BA7UnBUQBsHlYSzu",
+  "name": "Light Sleeping",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "light-sleeping",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "con",
+    "modifier": -1,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Light_Sleeping_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 18500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "iyDye6S7K5q2tBrf",
+  "_key": "!items!iyDye6S7K5q2tBrf",
+  "name": "Crystal Focus",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "crystal-focus",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Will and the Way",
+    "url": "https://adnd2e.fandom.com/wiki/Crystal_Focus_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kt2XmNf4Jq8cpnGB",
+  "sort": 8500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

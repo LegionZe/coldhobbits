@@ -22,7 +22,19 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Thug_-_Thief_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "intimidation"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 1,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

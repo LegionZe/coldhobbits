@@ -1,0 +1,32 @@
+{
+  "_id": "heNl8eiE5ZddQOBK",
+  "_key": "!items!heNl8eiE5ZddQOBK",
+  "name": "Grab-and-Drop",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "grab-and-drop",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Grab-and-Drop_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 14400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

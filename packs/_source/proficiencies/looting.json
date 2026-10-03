@@ -1,0 +1,32 @@
+{
+  "_id": "cpVBKNtA0K3doGOe",
+  "_key": "!items!cpVBKNtA0K3doGOe",
+  "name": "Looting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "looting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Looting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 18900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

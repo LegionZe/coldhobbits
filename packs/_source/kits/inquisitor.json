@@ -22,7 +22,24 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Inquisitor_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "spellcraft"
+        ]
+      },
+      {
+        "choice": [
+          "religion"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",

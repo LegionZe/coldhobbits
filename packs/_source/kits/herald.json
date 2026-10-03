@@ -28,7 +28,34 @@
     },
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Herald_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "etiquette"
+        ]
+      },
+      {
+        "choice": [
+          "heraldry"
+        ]
+      },
+      {
+        "choice": [
+          "local-history"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

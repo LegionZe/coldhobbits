@@ -1,0 +1,32 @@
+{
+  "_id": "PQAKMzVZ15O8Ru5i",
+  "_key": "!items!PQAKMzVZ15O8Ru5i",
+  "name": "Deep Diving",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "deep-diving",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Dexterity/Balance, Constitution/Health",
+      "rating": 5,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Deep_Diving_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 9100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

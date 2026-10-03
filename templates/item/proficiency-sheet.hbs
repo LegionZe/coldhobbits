@@ -1,0 +1,30 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Prof.Kind"}}
+      <select name="system.kind">{{selectOptions kinds selected=system.kind localize=true}}</select></label>
+    <label>{{localize "AD2E.Prof.Slots"}} <input type="number" name="system.slots" value="{{system.slots}}" min="0"></label>
+    <label>{{localize "AD2E.Prof.Ability"}}
+      <select name="system.ability">{{selectOptions abilityLabels selected=system.ability localize=true blank=(localize "AD2E.Prof.NoCheck")}}</select></label>
+    <label>{{localize "AD2E.Prof.Modifier"}} <input type="number" name="system.modifier" value="{{system.modifier}}"></label>
+    <label>{{localize "AD2E.Prof.Groups"}}
+      <multi-select name="system.groups">{{selectOptions nonweaponGroups selected=groupList localize=true}}</multi-select></label>
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    {{#if system.grantedBy}}<p class="ad2e-note">{{localize "AD2E.Prof.GrantedBy"}}: {{system.grantedBy}}</p>{{/if}}
+  </div>
+  <fieldset>
+    <legend>{{localize "AD2E.Prof.SkillsPowers"}}</legend>
+    <div class="ad2e-item-fields">
+      <label>{{localize "AD2E.Prof.Ability"}} <input type="text" name="system.sp.ability" value="{{system.sp.ability}}"></label>
+      <label>{{localize "AD2E.Prof.Rating"}} <input type="number" name="system.sp.rating" value="{{system.sp.rating}}"></label>
+      <label>{{localize "AD2E.Prof.Cost"}} <input type="number" name="system.sp.cost" value="{{system.sp.cost}}"></label>
+    </div>
+  </fieldset>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

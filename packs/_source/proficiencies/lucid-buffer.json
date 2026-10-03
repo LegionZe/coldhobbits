@@ -1,0 +1,30 @@
+{
+  "_id": "2PkFFJFvXnyN6b1Y",
+  "_key": "!items!2PkFFJFvXnyN6b1Y",
+  "name": "Lucid Buffer",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "lucid-buffer",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Lucid_Buffer_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 19200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

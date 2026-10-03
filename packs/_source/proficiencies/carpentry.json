@@ -1,0 +1,32 @@
+{
+  "_id": "u8ThbCBuIqYFKiO8",
+  "_key": "!items!u8ThbCBuIqYFKiO8",
+  "name": "Carpentry",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "carpentry",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Strength/Stamina, Intelligence/Knowledge",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Carpentry_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 5900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "re9pkiLaLshH2ppb",
+  "_key": "!items!re9pkiLaLshH2ppb",
+  "name": "Art Expression/Dramatist",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "art-expression-dramatist",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Age of Heroes Campaign Sourcebook",
+    "url": "https://adnd2e.fandom.com/wiki/Art_Expression/Dramatist_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "E3YjwMe26PcX9B3l",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -22,7 +22,30 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Explorer_-_Ranger_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "survival"
+        ]
+      }
+    ],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "cartography"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",

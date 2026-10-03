@@ -1,0 +1,33 @@
+{
+  "_id": "g26QWhLkaBR90k3b",
+  "_key": "!items!g26QWhLkaBR90k3b",
+  "name": "Local History",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "local-history",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Charisma/Appearance",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Local_History_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 18700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

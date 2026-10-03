@@ -1,0 +1,30 @@
+{
+  "_id": "gNfSgDNSVQvxWAeM",
+  "_key": "!items!gNfSgDNSVQvxWAeM",
+  "name": "Spellcraft, Wizard",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spellcraft-wizard",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Spellcraft%2C_Wizard_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 30600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

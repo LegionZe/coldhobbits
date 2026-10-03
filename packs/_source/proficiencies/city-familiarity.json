@@ -1,0 +1,32 @@
+{
+  "_id": "6VbLvitNQwMNRl0z",
+  "_key": "!items!6VbLvitNQwMNRl0z",
+  "name": "City Familiarity",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "city-familiarity",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/City_Familiarity_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 7300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

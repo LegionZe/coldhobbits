@@ -1,0 +1,32 @@
+{
+  "_id": "0ysvtrVHGCgbNNUJ",
+  "_key": "!items!0ysvtrVHGCgbNNUJ",
+  "name": "Leatherworking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "leatherworking",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Dexterity/Aim",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Leatherworking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 18400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

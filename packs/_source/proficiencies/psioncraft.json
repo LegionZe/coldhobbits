@@ -1,0 +1,30 @@
+{
+  "_id": "mZZVF70YlxFx9gQZ",
+  "_key": "!items!mZZVF70YlxFx9gQZ",
+  "name": "Psioncraft",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "psioncraft",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Psioncraft_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 25100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

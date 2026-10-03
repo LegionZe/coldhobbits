@@ -1,0 +1,30 @@
+{
+  "_id": "gdEeXIm5DhP4WOtE",
+  "_key": "!items!gdEeXIm5DhP4WOtE",
+  "name": "Harness Subconscious",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "harness-subconscious",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Complete Psionics Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Harness_Subconscious_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Q75eBqCeQIQQqG3G",
+  "sort": 15100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

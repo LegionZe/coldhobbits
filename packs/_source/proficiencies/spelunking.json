@@ -1,0 +1,32 @@
+{
+  "_id": "u0rsSq86fpEI7xfJ",
+  "_key": "!items!u0rsSq86fpEI7xfJ",
+  "name": "Spelunking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spelunking",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ranger's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Spelunking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ppQrRuhWaQxXDj9e",
+  "sort": 30900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

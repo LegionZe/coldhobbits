@@ -1,0 +1,32 @@
+{
+  "_id": "bpK9Rzg2bFU0fofS",
+  "_key": "!items!bpK9Rzg2bFU0fofS",
+  "name": "Endurance",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "endurance",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "con",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Constitution/Fitness",
+      "rating": 3,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Endurance_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 11300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "jFpSaDu3HmUhvSYD",
+  "_key": "!items!jFpSaDu3HmUhvSYD",
+  "name": "Cryptography",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "cryptography",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "rogue",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason, Wisdom/Intuition",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Cryptography_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 8400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

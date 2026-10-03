@@ -1,0 +1,32 @@
+{
+  "_id": "tC4RbtoR9BLLI2sJ",
+  "_key": "!items!tC4RbtoR9BLLI2sJ",
+  "name": "Throwing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "throwing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Dexterity/Aim, Strength/Muscle",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Throwing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 32800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

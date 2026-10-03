@@ -1,0 +1,32 @@
+{
+  "_id": "WmEFXstajRMIA7lo",
+  "_key": "!items!WmEFXstajRMIA7lo",
+  "name": "Reading Lips",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "reading-lips",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Intuition",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Reading_Lips_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 25800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "1s5HkmVHRA97uLM4",
+  "_key": "!items!1s5HkmVHRA97uLM4",
+  "name": "Weapon Improvisation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "weapon-improvisation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Improvisation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 35800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

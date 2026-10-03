@@ -1,0 +1,32 @@
+{
+  "_id": "vlBZ8N4hLSm07wsv",
+  "_key": "!items!vlBZ8N4hLSm07wsv",
+  "name": "Psionic Detection",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "psionic-detection",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Psionic_Detection_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 25200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

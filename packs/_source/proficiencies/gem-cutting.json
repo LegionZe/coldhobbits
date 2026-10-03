@@ -1,0 +1,33 @@
+{
+  "_id": "zt6hKFNv26rdfPRM",
+  "_key": "!items!zt6hKFNv26rdfPRM",
+  "name": "Gem Cutting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "gem-cutting",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": -2,
+    "groups": [
+      "rogue",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Dexterity/Aim",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Gem_Cutting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 13700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

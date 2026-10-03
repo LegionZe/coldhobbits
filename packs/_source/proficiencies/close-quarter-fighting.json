@@ -1,0 +1,33 @@
+{
+  "_id": "tpZLKHGo4zMBJhJW",
+  "_key": "!items!tpZLKHGo4zMBJhJW",
+  "name": "Close-quarter Fighting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "close-quarter-fighting",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Close-quarter_Fighting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 7500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

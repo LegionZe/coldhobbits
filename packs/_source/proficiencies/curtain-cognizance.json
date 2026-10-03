@@ -1,0 +1,32 @@
+{
+  "_id": "efARTEQo1c0yC1ZZ",
+  "_key": "!items!efARTEQo1c0yC1ZZ",
+  "name": "Curtain Cognizance",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "curtain-cognizance",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Curtain_Cognizance_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 8600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "syRFuRwfFwbBEvVI",
+  "_key": "!items!syRFuRwfFwbBEvVI",
+  "name": "Orienteering",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "orienteering",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Intuition",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Orienteering_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 22700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

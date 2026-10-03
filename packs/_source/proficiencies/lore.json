@@ -1,0 +1,30 @@
+{
+  "_id": "8hy1aHrKNVxIRdtb",
+  "_key": "!items!8hy1aHrKNVxIRdtb",
+  "name": "Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 19000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "YRrbgX3gMhwFJfXA",
+  "_key": "!items!YRrbgX3gMhwFJfXA",
+  "name": "Artillerist",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "artillerist",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Artillerist_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aDZ9xOJQaBKTKpU4",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

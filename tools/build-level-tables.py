@@ -98,7 +98,24 @@ def build_levels():
     return hit_dice, xp, sources
 
 
+def build_thac0():
+    """Table 53: Calculated THAC0s (page "Calculating THAC0 (PHB)"), levels 1-20 per group."""
+    wiki, rev = page("Calculating THAC0 (PHB)")
+    t = wiki[wiki.index("Table 53"):]
+    t = t[:t.index("|}")]
+    out = {}
+    for name, row in re.findall(r"\|\s*(Priest|Rogue|Warrior|Wizard)\s*\|\|([^\n]+)", t):
+        out[name.lower()] = [int(c) for c in row.split("||")]
+        assert len(out[name.lower()]) == 20, name
+    # The progression in module/config.mjs (used past level 20) must reproduce Table 53.
+    prog = {"warrior": (1, 1), "priest": (3, 2), "rogue": (2, 1), "wizard": (3, 1)}
+    for g, (div, step) in prog.items():
+        assert out[g] == [20 - ((l - 1) // div) * step for l in range(1, 21)], f"THAC0 progression mismatch: {g}"
+    return out, {"page": WIKI + "Calculating_THAC0_(PHB)", "revid": rev}
+
+
 if __name__ == "__main__":
+    thac0, thac0_src = build_thac0()
     saves, save_src = build_saves()
     hit_dice, xp, lvl_src = build_levels()
     for g in GROUP_NAMES.values():
@@ -113,6 +130,8 @@ if __name__ == "__main__":
     lines += [f" *   {g}: {s['page']} (revision {s['revid']})" for g, s in lvl_src.items()]
     lines += [" */",
               "export const SAVE_TABLE = " + json.dumps(saves, indent=2) + ";", "",
+              f"/** PHB Table 53 (Calculated THAC0s), levels 1-20 per group: {thac0_src['page']} (revision {thac0_src['revid']}). */",
+              "export const THAC0_TABLE = " + json.dumps(thac0) + ";", "",
               "/** Per group: hit die size and, per level, number of dice and fixed bonus HP. */",
               "export const HIT_DICE = " + json.dumps(hit_dice, indent=2) + ";", "",
               "/** Per class identifier: total XP needed for levels 1..20 (index 0 = level 1). */",

@@ -1,0 +1,33 @@
+{
+  "_id": "iukiZfkQBT3pDjeh",
+  "_key": "!items!iukiZfkQBT3pDjeh",
+  "name": "Genie Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "genie-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Genie_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 13800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

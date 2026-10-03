@@ -1,0 +1,32 @@
+{
+  "_id": "K7DV4FmQGNIZezVq",
+  "_key": "!items!K7DV4FmQGNIZezVq",
+  "name": "Intrigue",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "intrigue",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "cha",
+    "modifier": -2,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Charisma/Leadership",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Intrigue_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 17200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

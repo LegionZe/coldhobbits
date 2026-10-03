@@ -1,0 +1,32 @@
+{
+  "_id": "UMlt7PGDXxvMyr6C",
+  "_key": "!items!UMlt7PGDXxvMyr6C",
+  "name": "Burial Customs",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "burial-customs",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Warriors & Priests of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Burial_Customs_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "NpFf2bjGqEDa2M12",
+  "sort": 5600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

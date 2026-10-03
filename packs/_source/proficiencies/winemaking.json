@@ -1,0 +1,32 @@
+{
+  "_id": "whRN9whw52R1Usz3",
+  "_key": "!items!whRN9whw52R1Usz3",
+  "name": "Winemaking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "winemaking",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Winemaking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 36600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

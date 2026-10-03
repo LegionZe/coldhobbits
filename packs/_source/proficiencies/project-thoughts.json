@@ -1,0 +1,32 @@
+{
+  "_id": "SZktPH84hviv0QiH",
+  "_key": "!items!SZktPH84hviv0QiH",
+  "name": "Project Thoughts",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "project-thoughts",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": 6,
+      "cost": 4
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Project_Thoughts_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 24800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "OfPh56kZJeKVtZvP",
+  "_key": "!items!OfPh56kZJeKVtZvP",
+  "name": "Survival, Underground",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "survival-underground",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Survival%2C_Underground_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 31700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

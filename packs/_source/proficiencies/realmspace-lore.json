@@ -1,0 +1,32 @@
+{
+  "_id": "bznAL66HLEHRXIOP",
+  "_key": "!items!bznAL66HLEHRXIOP",
+  "name": "Realmspace Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "realmspace-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Demihumans of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Realmspace_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ki5cznJr9M80uQfR",
+  "sort": 26000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

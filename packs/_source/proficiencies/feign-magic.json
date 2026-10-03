@@ -1,0 +1,32 @@
+{
+  "_id": "Jad8vsE5IyLfP0bF",
+  "_key": "!items!Jad8vsE5IyLfP0bF",
+  "name": "Feign Magic",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "feign-magic",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Feign_Magic_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 12300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

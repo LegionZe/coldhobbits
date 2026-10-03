@@ -1,0 +1,33 @@
+{
+  "_id": "1gwu9NaMXTlqNRbz",
+  "_key": "!items!1gwu9NaMXTlqNRbz",
+  "name": "Underwater Spellcasting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "underwater-spellcasting",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Sea of Fallen Stars",
+    "url": "https://adnd2e.fandom.com/wiki/Underwater_Spellcasting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "gxFL53q7PPFhZOmw",
+  "sort": 34600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

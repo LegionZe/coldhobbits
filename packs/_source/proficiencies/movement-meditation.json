@@ -1,0 +1,30 @@
+{
+  "_id": "JLIZwT00W6g79g9r",
+  "_key": "!items!JLIZwT00W6g79g9r",
+  "name": "Movement Meditation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "movement-meditation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Movement_Meditation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 20800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "sNG6mhA6iLPm2Hz6",
+  "_key": "!items!sNG6mhA6iLPm2Hz6",
+  "name": "Brain Nausea",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "brain-nausea",
+    "kind": "nonweapon",
+    "slots": 4,
+    "ability": "wis",
+    "modifier": -3,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Brain_Nausea_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 5200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

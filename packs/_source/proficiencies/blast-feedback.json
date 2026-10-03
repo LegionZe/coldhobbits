@@ -1,0 +1,30 @@
+{
+  "_id": "dnMLGDLStk8f9f4B",
+  "_key": "!items!dnMLGDLStk8f9f4B",
+  "name": "Blast Feedback",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "blast-feedback",
+    "kind": "nonweapon",
+    "slots": 4,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Blast_Feedback_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 4200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

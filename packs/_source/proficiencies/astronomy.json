@@ -1,0 +1,32 @@
+{
+  "_id": "GMFge7NinH60XWmZ",
+  "_key": "!items!GMFge7NinH60XWmZ",
+  "name": "Astronomy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "astronomy",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 7,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Astronomy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

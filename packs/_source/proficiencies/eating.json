@@ -1,0 +1,32 @@
+{
+  "_id": "zx6HPdazs8bZ1wN8",
+  "_key": "!items!zx6HPdazs8bZ1wN8",
+  "name": "Eating",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "eating",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "con",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Eating_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 11000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

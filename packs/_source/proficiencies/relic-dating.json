@@ -1,0 +1,32 @@
+{
+  "_id": "j1Z6w0BpNjX0v1lS",
+  "_key": "!items!j1Z6w0BpNjX0v1lS",
+  "name": "Relic Dating",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "relic-dating",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Relic_Dating_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 26200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

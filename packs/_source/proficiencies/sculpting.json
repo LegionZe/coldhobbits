@@ -1,0 +1,32 @@
+{
+  "_id": "xuR6mxB574gN1W8d",
+  "_key": "!items!xuR6mxB574gN1W8d",
+  "name": "Sculpting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sculpting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Dexterity/Aim, Wisdom/Intuition",
+      "rating": 5,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Sculpting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 28100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

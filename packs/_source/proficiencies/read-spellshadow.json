@@ -1,0 +1,32 @@
+{
+  "_id": "alDTdTGv1nzNt45C",
+  "_key": "!items!alDTdTGv1nzNt45C",
+  "name": "Read Spellshadow",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "read-spellshadow",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Read_Spellshadow_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 25700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

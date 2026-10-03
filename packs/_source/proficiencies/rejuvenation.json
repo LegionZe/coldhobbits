@@ -1,0 +1,30 @@
+{
+  "_id": "6CRIWYgqLehnTw7r",
+  "_key": "!items!6CRIWYgqLehnTw7r",
+  "name": "Rejuvenation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "rejuvenation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Complete Psionics Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Rejuvenation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Q75eBqCeQIQQqG3G",
+  "sort": 26100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

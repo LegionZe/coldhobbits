@@ -1,0 +1,32 @@
+{
+  "_id": "6zlKWNE4M8vjMvhK",
+  "_key": "!items!6zlKWNE4M8vjMvhK",
+  "name": "Persuasion",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "persuasion",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -2,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Persuasion_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 23000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

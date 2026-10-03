@@ -1,0 +1,33 @@
+{
+  "_id": "0y2bl68lu8tWNjDu",
+  "_key": "!items!0y2bl68lu8tWNjDu",
+  "name": "Religion",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "religion",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition",
+      "rating": 6,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Religion_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 26300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
