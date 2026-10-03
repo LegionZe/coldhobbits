@@ -17,6 +17,27 @@
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
     {{#if system.grantedBy}}<p class="ad2e-note">{{localize "AD2E.Prof.GrantedBy"}}: {{system.grantedBy}}</p>{{/if}}
   </div>
+  {{#if isWeapon}}
+  <fieldset class="ad2e-weapon-details">
+    <legend>{{localize "AD2E.Weapon.Details"}}</legend>
+    <label class="ad2e-check"><input type="checkbox" name="system.specialized" {{checked system.specialized}}>
+      {{localize "AD2E.Weapon.Specialized"}}</label>
+    <p class="ad2e-note">{{localize "AD2E.Weapon.Specialize"}}</p>
+    <dl class="ad2e-weapon-stats">
+      <dt>{{localize "AD2E.Weapon.Size"}}</dt><dd>{{weapon.size}}</dd>
+      <dt>{{localize "AD2E.Weapon.Type"}}</dt><dd>{{weapon.type}}</dd>
+      <dt>{{localize "AD2E.Weapon.Speed"}}</dt><dd>{{weapon.speed}}</dd>
+      <dt>{{localize "AD2E.Weapon.melee"}} / {{localize "AD2E.Weapon.missile"}}</dt><dd>{{weapon.uses}}</dd>
+      {{#each weapon.damage as |d|}}
+      <dt>{{localize "AD2E.Weapon.Damage"}}{{#if d.label}} ({{d.label}}){{/if}}</dt><dd>{{d.sm}} / {{d.l}}</dd>
+      {{/each}}
+      {{#if weapon.missile}}
+      <dt>{{localize "AD2E.Weapon.ROF"}}</dt><dd>{{weapon.range.rof}}</dd>
+      <dt>{{localize "AD2E.Weapon.MissileRange"}}</dt><dd>{{weapon.range.short}} / {{weapon.range.medium}} / {{weapon.range.long}}</dd>
+      {{/if}}
+    </dl>
+  </fieldset>
+  {{/if}}
   <fieldset>
     <legend>{{localize "AD2E.Prof.SkillsPowers"}}</legend>
     <div class="ad2e-item-fields">

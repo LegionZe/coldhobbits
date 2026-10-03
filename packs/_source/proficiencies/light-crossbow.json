@@ -16,6 +16,29 @@
       "rating": null,
       "cost": null
     },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "Light quarrel",
+          "sm": "1d4",
+          "l": "1d4"
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "60",
+        "medium": "120",
+        "long": "180"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
     "notes": ""

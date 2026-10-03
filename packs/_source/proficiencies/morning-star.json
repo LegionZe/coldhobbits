@@ -16,6 +16,29 @@
       "rating": null,
       "cost": null
     },
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d6+1"
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
     "notes": ""

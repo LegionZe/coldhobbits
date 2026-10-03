@@ -16,6 +16,34 @@
       "rating": null,
       "cost": null
     },
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 11,
+      "damage": [
+        {
+          "label": "Sling bullet",
+          "sm": "1d4+1",
+          "l": "1d6+1"
+        },
+        {
+          "label": "Sling stone",
+          "sm": "1d4",
+          "l": "1d4"
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "—",
+        "medium": "30-60",
+        "long": "90"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "damage"
+    },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
     "notes": ""

@@ -61,7 +61,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       levelUp: CharacterSheet.onLevelUp,
       deleteItem: CharacterSheet.onDeleteItem,
       rollProficiency: CharacterSheet.onRollProficiency,
-      rollAttack: CharacterSheet.onRollAttack
+      rollAttack: CharacterSheet.onRollAttack,
+      rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
+      rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
+      toggleSpecialized: CharacterSheet.onToggleSpecialized
     }
   };
 
@@ -204,9 +207,24 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       url: e.item.system.url
     });
     const sortByName = (a, b) => a.name.localeCompare(b.name);
+    const signed = n => (n >= 0 ? `+${n}` : `${n}`);
+    const weaponRow = e => {
+      const w = e.item.system.weapon;
+      const damage = w.damage.filter(d => d.sm || d.l)
+        .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ");
+      const uses = ["melee", "missile"].filter(u => e.attack?.[u]).map(u => {
+        const a = e.attack[u];
+        const label = u === "melee" ? "AD2E.Weapon.Attack" : (w.melee ? "AD2E.Weapon.Throw" : "AD2E.Weapon.Fire");
+        return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg), rate: a.rate,
+          pointBlank: !!a.pointBlank, damageHint: damage };
+      });
+      const meta = [w.size, w.type, w.speed !== null ? `${game.i18n.localize("AD2E.Weapon.Speed")} ${w.speed}` : null, damage]
+        .filter(v => v).join(" · ");
+      return { ...row(e), specialized: e.specialized, specInvalid: e.specInvalid, uses, meta };
+    };
     return {
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
-        rows: p.entries.filter(e => e.item.system.kind === "weapon").map(row).sort(sortByName) },
+        rows: p.entries.filter(e => e.item.system.kind === "weapon").map(weaponRow).sort(sortByName) },
       nonweapon: { ...p.nonweapon, over: p.nonweapon.used > p.nonweapon.available,
         rows: p.entries.filter(e => e.item.system.kind === "nonweapon").map(row).sort(sortByName) },
       penalty: p.penalty,
@@ -311,6 +329,19 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const item = this.actor.items.get(target.dataset.itemId);
     if (item?.type === "kit") await this.actor.removeKitProficiencies(item.system.identifier);
     return item?.delete();
+  }
+
+  static onRollWeaponAttack(event, target) {
+    return this.actor.rollWeaponAttack(target.dataset.itemId, target.dataset.use);
+  }
+
+  static onRollWeaponDamage(event, target) {
+    return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  static onToggleSpecialized(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item?.update({ "system.specialized": target.checked });
   }
 
   static onRollProficiency(event, target) {

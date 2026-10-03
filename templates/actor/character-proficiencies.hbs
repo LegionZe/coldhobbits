@@ -13,8 +13,25 @@
     {{#each pt.weapon.rows as |r|}}
     <div class="ad2e-prof-row ad2e-prof-row-weapon">
       <img src="{{r.img}}" alt="" width="24" height="24">
-      <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
-      <span class="ad2e-prof-cost" data-tooltip="{{localize 'AD2E.Prof.SlotsUsed'}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{else}}{{r.cost}}{{/if}}</span>
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+        <span class="ad2e-weapon-meta">{{r.meta}}</span>
+      </div>
+      <label class="ad2e-spec {{#if r.specInvalid}}ad2e-unmet{{/if}}" data-tooltip="{{#if r.specInvalid}}{{localize 'AD2E.Weapon.SpecInvalid'}}{{else}}{{localize 'AD2E.Weapon.Specialize'}}{{/if}}">
+        <input type="checkbox" data-action="toggleSpecialized" data-item-id="{{r.id}}" {{checked r.specialized}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.Weapon.Specialized"}}</label>
+      <div class="ad2e-weapon-uses">
+        {{#each r.uses as |u|}}
+        <span class="ad2e-weapon-use">
+          <button type="button" data-action="rollWeaponAttack" data-item-id="{{r.id}}" data-use="{{u.use}}">{{u.label}} {{u.hit}}</button>
+          <button type="button" data-action="rollWeaponDamage" data-item-id="{{r.id}}" data-use="{{u.use}}" data-tooltip="{{u.damageHint}}">{{localize "AD2E.Weapon.Damage"}} {{u.dmg}}</button>
+          <span class="ad2e-weapon-rate" data-tooltip="{{localize 'AD2E.Weapon.Rate'}}">{{u.rate}}</span>
+          {{#if u.pointBlank}}<span class="ad2e-weapon-pb" data-tooltip="{{localize 'AD2E.Weapon.PointBlankHint'}}">PB</span>{{/if}}
+        </span>
+        {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>
+        {{/each}}
+      </div>
+      <span class="ad2e-prof-cost" data-tooltip="{{localize 'AD2E.Prof.SlotsUsed'}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{#if r.cost}} +{{r.cost}}{{/if}}{{else}}{{r.cost}}{{/if}}</span>
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Prof.NoneYet"}}</p>

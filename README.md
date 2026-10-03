@@ -38,6 +38,15 @@ initiative 1d10, lowest acts first.
   `python3 tools/build-proficiency-data.py`. Slots follow PHB Table 34 (+ Intelligence languages for nonweapon,
   + kit bonus slots); cross-group nonweapon proficiencies (Table 38) cost one extra slot. Adding a kit adds its bonus
   proficiencies (free) and required proficiencies (use slots). THAC0 now comes from PHB Table 53.
+- Weapon proficiencies carry PHB weapon data (Weapon List: size, type, speed factor, damage S-M/L incl. ammunition and
+  bastard-sword grips; Table 45: rate of fire and ranges). The Proficiencies tab rolls attack and damage per weapon:
+  melee uses Strength; missile uses Dexterity plus Strength for hurled weapons (bows: Strength penalties only; crossbows:
+  none; slings: damage only), range modifiers medium -2 / long -5; damage never below 1. Attacks per round: Table 15
+  (warriors) or Table 45 rate of fire.
+- Weapon specialization (optional PHB rule; single-class fighters, one weapon): +1 slot (+2 for bows); melee +1 to hit
+  and +2 damage; bow/crossbow point-blank range (+2 to hit); Table 35 attacks per round (bow specialists gain none).
+  Toggle it on the weapon row or the proficiency sheet. Weapon proficiencies added before 0.0.14 have no weapon data;
+  remove and re-add them from the compendium.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
@@ -48,4 +57,4 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-Weapon specialization, kit recommended proficiencies, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.
+Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.

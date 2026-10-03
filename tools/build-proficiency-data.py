@@ -12,6 +12,9 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
     Skills & Powers fields); PHB entries use Table 37 values.
   * Weapon List (PHB): "Each weapon listed in Table 44 (Weapons) requires its own proficiency"
     ("Weapon Proficiencies (PHB)"); ammunition and heading rows are not proficiencies.
+    Each weapon proficiency carries `system.weapon`: size, type, speed, damage (ammunition rows are added to
+    their launchers, the One-/Two-handed rows to the bastard sword), Table 45 rate of fire and ranges
+    ("Combat Tables (PHB)"), bow/crossbow family and the Table 35 column for missile use.
   * Kit pages (Nonweapon Proficiencies "Bonus"/"Required" lines) -> written into packs/_source/kits.
 Run after build-class-data.py (it adds fields to the kit sources):  python3 tools/build-proficiency-data.py
 """
@@ -142,29 +145,117 @@ def build_nonweapon(phb):
 # --- Weapon proficiencies -----------------------------------------------------------------------
 AMMO = re.compile(r"arrow|quarrel|bullet|stone|barbed dart|needle", re.I)
 
+# Table 45 (Missile Weapon Ranges) names -> Weapon List names.
+T45_NAMES = {"Comp. long bow": "Composite long bow", "Comp. short bow": "Composite short bow", "Longbow": "Long bow",
+             "Short bow": "Short bow", "Hand crossbow": "Hand crossbow", "Heavy crossbow": "Heavy crossbow",
+             "Light crossbow": "Light crossbow", "Dagger": "Dagger or dirk", "Hammer": "Warhammer",
+             "Hand axe": "Hand or throwing axe", "Sling": "Sling", "Staff sling": "Staff sling"}
+# Weapons used only as missiles (no melee use); every other Table 45 weapon is a thrown melee weapon.
+MISSILE_ONLY = {"Arquebus", "Blowgun", "Composite long bow", "Composite short bow", "Long bow", "Short bow",
+                "Hand crossbow", "Heavy crossbow", "Light crossbow", "Dart", "Sling", "Staff sling"}
+BOWS = {"Composite long bow", "Composite short bow", "Long bow", "Short bow"}
+CROSSBOWS = {"Hand crossbow", "Heavy crossbow", "Light crossbow"}
+# Table 35 column used for a weapon's missile attacks ("Other (Non-bow) Missiles" unless named).
+T35_MISSILE = {"Light crossbow": "lightCrossbow", "Heavy crossbow": "heavyCrossbow", "Dagger or dirk": "thrownDagger",
+               "Dart": "thrownDart"}
+# Weapon List (PHB) gives no damage ("—") for these; footnote 2: "This weapon can dismount a rider on a successful hit."
+NO_DAMAGE = {"Mancatcher"}
+
+
+def strength_use(name, missile):
+    """How Strength applies when the weapon is used as a missile ("The Attack Roll (PHB)" rev 158151:
+    "This modifier is always applied to melees and attacks with hurled missile weapons (a spear or an axe)."
+    / "Characters with Strength penalties always suffer them when using a bow weapon." / "Characters never
+    have Strength modifiers when using crossbows"; "Strength (PHB)" rev 177331: "The damage adjustment also
+    applies to missile weapons"). full = hit and damage; damage = damage only; penalty = penalties only
+    (bows; a special bow for a positive bonus is not modelled); none."""
+    if not missile:
+        return "full"
+    if name in BOWS:
+        return "penalty"
+    if name in CROSSBOWS or name in ("Arquebus", "Blowgun"):
+        return "none"  # crossbows per the PHB; the arquebus and blowgun are not hurled (interpretation)
+    if name in ("Sling", "Staff sling"):
+        return "damage"
+    return "full"  # hurled: thrown melee weapons and darts
+
+
+def build_ranges():
+    """Table 45 (Combat Tables (PHB)): rate of fire and S/M/L range in yards, per weapon."""
+    wiki, rev, _ = classdata.page("Combat Tables (PHB)")
+    t = wiki[wiki.index("Table 45: Missile Weapon Ranges"):]
+    t = t[:t.index("|}")]
+    t = re.sub(r"\{\{frac\|(\d+)\|(\d+)\}\}", r"\1/\2", t)          # before splitting on "|"
+    t = re.sub(r"\n<nowiki>\s*</nowiki>", " ", t)                       # names wrapped onto a 2nd line
+    ranges = {}
+    for r in re.split(r"\n\s*\|-", t)[1:]:
+        cells = [l.strip()[1:].strip() for l in r.split("\n") if l.strip().startswith("|") and not l.strip().startswith("|+")]
+        if len(cells) < 5:
+            continue  # caption / header rows
+        name = re.sub(r"\s+", " ", cells[0].split(",")[0]).strip()
+        name = re.sub(r" (bullet|stone)$", "", name)
+        weapon = T45_NAMES.get(name, name)
+        # first listed ammunition per weapon (e.g. flight arrow, sling bullet) gives the range
+        nw = lambda v: re.sub(r"</?nowiki>", "", v).strip()
+        ranges.setdefault(weapon, {"rof": nw(cells[1]), "short": nw(cells[2]), "medium": nw(cells[3]), "long": nw(cells[4])})
+    return ranges, rev
+
+
+def ammo_targets(ammo, launchers):
+    """Which launchers an ammunition row belongs to (Weapon List (PHB) groups ammunition under its launcher)."""
+    n = ammo.lower()
+    if "arrow" in n:
+        return [l for l in launchers if l in BOWS]
+    if "quarrel" in n:
+        return [l for l in launchers if l in CROSSBOWS and l.split()[0].lower() == n.split()[0]]
+    if n in ("barbed dart", "needle"):
+        return ["Blowgun"]
+    if n.startswith("sling"):
+        return ["Sling", "Staff sling"]
+    return []
+
 
 def build_weapons():
+    ranges, _ = build_ranges()
     wiki, rev, _ = classdata.page("Weapon List (PHB)")
     t = wiki[wiki.index("{|"):wiki.index("|}")]
-    docs, parent = [], None
+    dash = lambda v: None if v in ("—", "-", "", "*") else v
+    rows = []
     for chunk in re.split(r"\n\|-", t)[1:]:
         cells = [l[1:].strip() for l in chunk.strip().split("\n") if l.startswith("|") and not l.startswith(("|}", "|+"))]
-        if not cells:
+        if cells:
+            rows.append([re.sub(r"<sup>.*?</sup>|\s+\d$", "", cells[0]).strip()] + cells[1:])
+    weapons, order = {}, []
+    for name, cost, wt, size, typ, speed, sm, lg in rows:
+        if AMMO.search(name) or name in ("One-handed", "Two-handed") or name in ("Bow", "Crossbow", "Lance", "Polearm", "Sword"):
             continue
-        name = re.sub(r"<sup>.*?</sup>|\s+\d$", "", cells[0]).strip()
-        speed = cells[5] if len(cells) > 5 else "—"
+        weapons[name] = {"size": dash(size), "type": dash(typ), "speed": int(speed) if speed.isdigit() else None,
+                         "damage": [{"label": "", "sm": dash(sm), "l": dash(lg)}] if dash(sm) else []}
+        order.append(name)
+    # Damage that lives on other rows: ammunition (launchers) and the bastard sword's grips.
+    for i, (name, cost, wt, size, typ, speed, sm, lg) in enumerate(rows):
         if AMMO.search(name):
-            continue
-        if name in ("One-handed", "Two-handed"):  # rows of "Bastard sword": one weapon, one proficiency
-            continue
-        if speed == "—" and name != "Lance" and name != "Bastard sword":
-            continue  # headings: Bow, Crossbow, Polearm, Sword
-        if name == "Lance":
-            continue  # heading for the horse lances
+            for launcher in ammo_targets(name, order):
+                weapons[launcher]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg)})
+                weapons[launcher]["type"] = weapons[launcher]["type"] or dash(typ)  # damage type is the ammunition's
+        elif name in ("One-handed", "Two-handed"):
+            weapons["Bastard sword"]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg)})
+            weapons["Bastard sword"]["speed"] = weapons["Bastard sword"]["speed"] or int(speed)
+            weapons["Bastard sword"]["size"], weapons["Bastard sword"]["type"] = "M", dash(typ)
+    docs = []
+    for name in order:
+        w = weapons[name]
+        assert w["damage"] or name in NO_DAMAGE, f"no damage found for {name}"
+        rng = ranges.get(name)
         key = slug(name)
+        weapon = {**w, "melee": name not in MISSILE_ONLY, "missile": rng is not None,
+                  "range": rng or {"rof": "", "short": "", "medium": "", "long": ""},
+                  "family": "bow" if name in BOWS else ("crossbow" if name in CROSSBOWS else "other"),
+                  "missileColumn": T35_MISSILE.get(name, "otherMissile") if rng else "",
+                  "strength": strength_use(name, rng is not None)}
         docs.append({"key": key, "name": name, "source": "Player's Handbook", "revid": rev,
                      "system": {"identifier": key, "kind": "weapon", "slots": 1, "ability": None, "modifier": None,
-                                "groups": [], "sp": {"ability": "", "rating": None, "cost": None},
+                                "groups": [], "sp": {"ability": "", "rating": None, "cost": None}, "weapon": weapon,
                                 "source": "Player's Handbook", "url": classdata.url("Weapon List (PHB)"), "notes": ""}})
     return docs
 
