@@ -1,0 +1,51 @@
+{{!-- Weapon list: rows = weapon rows to show, wt = weaponTab, note = optional text (Equipment and Combat tabs). --}}
+<fieldset class="ad2e-prof-list">
+  <legend>{{localize "AD2E.Weapon.Weapons"}} (THAC0 {{wt.thac0}})</legend>
+  {{#if note}}<p class="ad2e-note">{{note}}</p>{{/if}}
+  {{#each rows as |r|}}
+  <div class="ad2e-prof-row ad2e-weapon-row">
+    <img src="{{r.img}}" alt="" width="24" height="24">
+    <div class="ad2e-weapon-main">
+      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.bonus}} {{r.bonus}}{{/if}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if r.url}}<a class="ad2e-item-link" href="{{r.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
+      <span class="ad2e-weapon-meta">{{r.meta}}</span>
+      {{#if r.launcher}}<span class="ad2e-weapon-meta {{#unless r.ammo}}ad2e-unmet{{/unless}}">{{localize "AD2E.Ammo.Ammunition"}}: {{#if r.ammo}}{{r.ammo}}{{else}}{{localize "AD2E.Ammo.NoneOwned"}}{{/if}}</span>{{/if}}
+    </div>
+    {{#if r.profId}}<a class="ad2e-weapon-status" data-action="openItem" data-item-id="{{r.profId}}">{{r.status}}</a>
+    {{else}}<span class="ad2e-weapon-status ad2e-unmet">{{r.status}}</span>{{/if}}
+    <div class="ad2e-weapon-uses">
+      {{#each r.uses as |u|}}
+      <span class="ad2e-weapon-use">
+        <button type="button" data-action="rollWeaponAttack" data-item-id="{{r.id}}" data-use="{{u.use}}">{{u.label}} {{u.hit}}</button>
+        <button type="button" data-action="rollWeaponDamage" data-item-id="{{r.id}}" data-use="{{u.use}}" data-tooltip="{{u.damageHint}}">{{localize "AD2E.Weapon.Damage"}} {{u.dmg}}</button>
+        <span class="ad2e-weapon-rate" data-tooltip="{{localize 'AD2E.Weapon.Rate'}}">{{u.rate}}</span>
+        {{#if u.pointBlank}}<span class="ad2e-weapon-pb" data-tooltip="{{localize 'AD2E.Weapon.PointBlankHint'}}">PB</span>{{/if}}
+      </span>
+      {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>
+      {{/each}}
+    </div>
+    <label class="ad2e-spec"><input type="checkbox" data-action="toggleEquipped" data-item-id="{{r.id}}" {{checked r.equipped}} {{#unless @root.editable}}disabled{{/unless}}>
+      {{localize "AD2E.Armor.Equipped"}}</label>
+    <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
+      {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
+      {{r.quantity}}
+      {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
+    </span>
+    {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+  </div>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Weapon.NoneYet"}}</p>
+  {{/each}}
+  <div class="ad2e-prof-row ad2e-weapon-row">
+    <i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i>
+    <div class="ad2e-weapon-main">
+      <span class="ad2e-item-title">{{localize "AD2E.Unarmed.Title"}}</span>
+      <span class="ad2e-weapon-meta">{{localize "AD2E.Unarmed.Meta"}}{{#if wt.unarmed.twoWeapons}} · {{wt.unarmed.twoWeapons}}{{/if}}</span>
+    </div>
+    <div class="ad2e-weapon-uses">
+      <span class="ad2e-weapon-use">
+        <button type="button" data-action="rollUnarmed" data-form="punch">{{localize "AD2E.Unarmed.punch"}} {{wt.unarmed.hit}}</button>
+        <button type="button" data-action="rollUnarmed" data-form="wrestle">{{localize "AD2E.Unarmed.wrestle"}}</button>
+        <button type="button" data-action="rollUnarmed" data-form="overbear">{{localize "AD2E.Unarmed.overbear"}}</button>
+      </span>
+    </div>
+  </div>
+</fieldset>

@@ -164,6 +164,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     header: { template: "systems/ad2e/templates/actor/character-header.hbs" },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
+    combat: { template: "systems/ad2e/templates/actor/character-combat.hbs", scrollable: [""] },
     weapons: { template: "systems/ad2e/templates/actor/character-weapons.hbs", scrollable: [""] },
     class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
     features: { template: "systems/ad2e/templates/actor/character-features.hbs", scrollable: [""] },
@@ -176,7 +177,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "weapons" }, { id: "class" }, { id: "features" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "combat" }, { id: "weapons" }, { id: "class" }, { id: "features" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
@@ -418,6 +419,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const actor = this.document;
     const rows = sys.weapons.map(e => ({
       id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
+      equipped: !!e.item.system.equipped,
       status: e.proficient
         ? game.i18n.localize(e.specialized ? "AD2E.Weapon.Specialized" : "AD2E.Weapon.Proficient")
         : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: e.penalty }),
@@ -497,7 +499,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
       twoWeapons: canFightTwoWeapons(sys.classGroup) ? game.i18n.format("AD2E.TwoWeapons.Summary",
         { main: sign(twoWeaponPenalty("main", twoOpts)), off: sign(twoWeaponPenalty("off", twoOpts)) }) : "" };
-    return { rows, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
+    // Combat tab: the equipped weapons; with none equipped, all weapons (and a hint to equip them).
+    const equippedRows = rows.filter(r => r.equipped);
+    const combatRows = equippedRows.length ? equippedRows : rows;
+    const combatNote = rows.length && !equippedRows.length ? game.i18n.localize("AD2E.Weapon.EquipHint") : "";
+    return { rows, combatRows, combatNote, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */

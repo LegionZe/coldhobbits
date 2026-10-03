@@ -1,0 +1,25 @@
+{{!-- Armour list and Armor Class summary: wt = weaponTab (Equipment and Combat tabs). --}}
+<fieldset class="ad2e-prof-list">
+  <legend>{{localize "AD2E.Armor.Armour"}}</legend>
+  <div class="ad2e-prof-summary">
+    <span>{{localize "AD2E.Character.acTotal"}}: <strong>{{wt.ac.front}}</strong></span>
+    <span data-tooltip="{{localize 'AD2E.Armor.RearHint'}}">{{localize "AD2E.Armor.Rear"}}: <strong>{{wt.ac.rear}}</strong></span>
+    {{#if wt.ac.missileDiffers}}<span>{{localize "AD2E.Armor.VsMissiles"}}: <strong>{{wt.ac.missile}}</strong></span>{{/if}}
+    <span>{{wt.ac.source}}{{#if wt.ac.shield}} + {{wt.ac.shield}}{{/if}}</span>
+    <label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
+  </div>
+  {{#each wt.armor as |a|}}
+  <div class="ad2e-prof-row ad2e-armor-row">
+    <img src="{{a.img}}" alt="" width="24" height="24">
+    <div class="ad2e-weapon-main">
+      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if a.url}}<a class="ad2e-item-link" href="{{a.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
+      <span class="ad2e-weapon-meta">{{a.summary}}{{#if a.meta}} · {{a.meta}}{{/if}}</span>
+    </div>
+    <label class="ad2e-spec {{#if a.unused}}ad2e-unmet{{/if}}" {{#if a.unused}}data-tooltip="{{localize 'AD2E.Armor.Unused'}}"{{/if}}>
+      <input type="checkbox" data-action="toggleEquipped" data-item-id="{{a.id}}" {{checked a.equipped}} {{#unless @root.editable}}disabled{{/unless}}>
+      {{localize "AD2E.Armor.Equipped"}}</label>
+    {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+  </div>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Armor.NoneYet"}}</p>
+  {{/each}}
+</fieldset>

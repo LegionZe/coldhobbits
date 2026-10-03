@@ -64,6 +64,12 @@ Hooks.once("init", () => {
 
   CONFIG.Actor.documentClass = AD2EActor;
   CONFIG.ChatMessage.documentClass = AD2EChatMessage;
+  // Sheet partials shared by tabs (registered by name, as dnd5e's preloadHandlebarsTemplates).
+  foundry.applications.handlebars.loadTemplates({
+    "ad2e.weapon-list": "systems/ad2e/templates/actor/parts/weapon-list.hbs",
+    "ad2e.armor-list": "systems/ad2e/templates/actor/parts/armor-list.hbs",
+    "ad2e.class-abilities": "systems/ad2e/templates/actor/parts/class-abilities.hbs"
+  });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;
   CONFIG.Item.dataModels.class = ClassData;

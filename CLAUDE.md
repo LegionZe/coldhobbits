@@ -68,6 +68,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `foundry.utils.fromUuidSync(uuid, { strict: false })`.
   Buttons: `module/documents/chat-message.mjs` (CONFIG.ChatMessage.documentClass) overrides `renderHTML` like dnd5e's
   ChatMessage5e and calls `damageButtons` (GM only); buttons and context menu share `applyFromMessage`.
+- Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with
+  `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e); used by the Equipment, Class
+  Abilities and Combat tabs. Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with
+  `{{#with x as |x|}}` (class-abilities does).
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.
