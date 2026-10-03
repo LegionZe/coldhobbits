@@ -80,12 +80,12 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
     const items = actor.items ?? [];
-    context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, key: `w${i.id}`,
+    context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
       hit: i.system.bonus.hit, summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
-    context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img,
+    context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       equipped: i.system.equipped, summary: armorSummary(i.system) }));
-    context.gear = items.filter(i => ["equipment", "ammunition", "coin", "magic", "jewellery"].includes(i.type)).map(i => ({ id: i.id, name: i.name, img: i.img,
+    context.gear = items.filter(i => ["equipment", "ammunition", "coin", "magic", "jewellery"].includes(i.type)).map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       quantity: i.system.quantity, isEquipment: ["equipment", "magic", "jewellery"].includes(i.type), isMagic: i.type === "magic", carried: i.system.carried,
       summary: i.type === "equipment" ? equipmentSummary(i.system) : i.type === "magic" ? magicSummary(i)
         : i.type === "jewellery" ? jewellerySummary(i) : "" })).sort((a, b) => a.name.localeCompare(b.name));

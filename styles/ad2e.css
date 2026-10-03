@@ -149,3 +149,7 @@
 .ad2e-kit-mods { margin: 0.25rem 0; padding-left: 1.25rem; }
 .ad2e-kit-status { font-size: 0.8em; padding: 0 0.3em; border: 1px solid currentColor; border-radius: 3px; opacity: 0.75; }
 .ad2e-kit-mod-inactive, .ad2e-kit-mod-armor { opacity: 0.6; }
+.ad2e-item-title { display: flex; align-items: center; gap: 0.35rem; min-width: 0; }
+.ad2e-item-link { opacity: 0.6; font-size: 0.85em; }
+.ad2e-item-link:hover { opacity: 1; }
+.ad2e-source-link { white-space: nowrap; }
