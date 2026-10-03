@@ -1,0 +1,30 @@
+{
+  "_id": "8gW9JjrxXNfmVQQR",
+  "_key": "!items!8gW9JjrxXNfmVQQR",
+  "name": "Explosive Energy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "explosive-energy",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Explosive_Energy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 12000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

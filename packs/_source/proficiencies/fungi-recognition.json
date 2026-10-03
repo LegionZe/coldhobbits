@@ -1,0 +1,32 @@
+{
+  "_id": "2F4HqQwEMqqZKO9C",
+  "_key": "!items!2F4HqQwEMqqZKO9C",
+  "name": "Fungi Recognition",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "fungi-recognition",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 3,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Fungi_Recognition_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 13400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

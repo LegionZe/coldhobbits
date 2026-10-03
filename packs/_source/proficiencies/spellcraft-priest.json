@@ -1,0 +1,30 @@
+{
+  "_id": "J3p2qrzWQRB1I31C",
+  "_key": "!items!J3p2qrzWQRB1I31C",
+  "name": "Spellcraft, Priest",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spellcraft-priest",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Spellcraft%2C_Priest_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 30500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

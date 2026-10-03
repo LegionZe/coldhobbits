@@ -1,0 +1,30 @@
+{
+  "_id": "H2DPGJ4bPNXdIKOU",
+  "_key": "!items!H2DPGJ4bPNXdIKOU",
+  "name": "Body Language",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "body-language",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Body_Language_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 4700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

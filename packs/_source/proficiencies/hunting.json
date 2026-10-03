@@ -1,0 +1,32 @@
+{
+  "_id": "EnGTfVnsUdWj3XPa",
+  "_key": "!items!EnGTfVnsUdWj3XPa",
+  "name": "Hunting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "hunting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition",
+      "rating": 7,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Hunting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 16300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

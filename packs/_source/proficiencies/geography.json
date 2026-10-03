@@ -1,0 +1,32 @@
+{
+  "_id": "EvXJkLvA2h7VovhS",
+  "_key": "!items!EvXJkLvA2h7VovhS",
+  "name": "Geography",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "geography",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Shaman",
+    "url": "https://adnd2e.fandom.com/wiki/Geography_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TOmJGMYrVHC0WKlo",
+  "sort": 13900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

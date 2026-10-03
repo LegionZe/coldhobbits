@@ -71,6 +71,9 @@
       </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Class.Source"}}</dt><dd>{{ct.kit.source}}</dd>
+        {{#if ct.kitBonusProfs}}<dt>{{localize "AD2E.Prof.Bonus"}}</dt><dd>{{ct.kitBonusProfs}}</dd>{{/if}}
+        {{#if ct.kitRequiredProfs}}<dt>{{localize "AD2E.Prof.Required"}}</dt><dd>{{ct.kitRequiredProfs}}</dd>{{/if}}
+        {{#if ct.kitBonusSlots}}<dt>{{localize "AD2E.Prof.BonusSlots"}}</dt><dd>{{ct.kitBonusSlots}}</dd>{{/if}}
         {{#if ct.kitRaceLimits}}<dt>{{localize "AD2E.Race.KitRaceLimits"}}</dt><dd>{{ct.kitRaceLimits}}{{#if ct.kit.raceOnly}} ({{localize "AD2E.Race.RaceOnly"}}){{/if}}</dd>{{/if}}
       </dl>
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}

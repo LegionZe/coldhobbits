@@ -1,0 +1,32 @@
+{
+  "_id": "87FD4D8oBDHpnRwV",
+  "_key": "!items!87FD4D8oBDHpnRwV",
+  "name": "Taunting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "taunting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Gladiator's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Taunting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "krozBhnjGzHbrxEF",
+  "sort": 32400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

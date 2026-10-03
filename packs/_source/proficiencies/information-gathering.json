@@ -1,0 +1,32 @@
+{
+  "_id": "Cw0x1pK1uaqx3IA8",
+  "_key": "!items!Cw0x1pK1uaqx3IA8",
+  "name": "Information Gathering",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "information-gathering",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": null,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Information_Gathering_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 16900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "l268vgVlIS5AuaIU",
+  "_key": "!items!l268vgVlIS5AuaIU",
+  "name": "Animal Husbandry",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "animal-husbandry",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Animal_Husbandry_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 1200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

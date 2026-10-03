@@ -1,0 +1,32 @@
+{
+  "_id": "TUb4hFgxePHmLZUx",
+  "_key": "!items!TUb4hFgxePHmLZUx",
+  "name": "Intimidation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "intimidation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Intimidation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 17100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

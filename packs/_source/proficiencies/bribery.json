@@ -1,0 +1,32 @@
+{
+  "_id": "pA1q0B8960f1Yrkt",
+  "_key": "!items!pA1q0B8960f1Yrkt",
+  "name": "Bribery",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "bribery",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Castle Guide",
+    "url": "https://adnd2e.fandom.com/wiki/Bribery_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "zJQc0KQ52Nnyb9Hm",
+  "sort": 5400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "H8DLnu0LozZxwJME",
+  "_key": "!items!H8DLnu0LozZxwJME",
+  "name": "Inquisitor",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "inquisitor",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Warriors & Priests of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Inquisitor_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "NpFf2bjGqEDa2M12",
+  "sort": 17000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

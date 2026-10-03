@@ -1,0 +1,32 @@
+{
+  "_id": "R6UY3QoRgVQcchmG",
+  "_key": "!items!R6UY3QoRgVQcchmG",
+  "name": "Dragon Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "dragon-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -4,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Dragon_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 10500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

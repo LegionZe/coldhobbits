@@ -22,7 +22,35 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Pathfinder_-_Ranger_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "direction-sense"
+        ]
+      },
+      {
+        "choice": [
+          "distance-sense"
+        ]
+      },
+      {
+        "choice": [
+          "trail-marking"
+        ]
+      }
+    ],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "alertness"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",

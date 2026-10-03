@@ -1,0 +1,30 @@
+{
+  "_id": "kWBYGdHkYwHLJ088",
+  "_key": "!items!kWBYGdHkYwHLJ088",
+  "name": "Pest Control",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "pest-control",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Pest_Control_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 23100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "BK45bai356dgP82t",
+  "_key": "!items!BK45bai356dgP82t",
+  "name": "Light crossbow",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "light-crossbow",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "oG4EmEWOjnqDljkg",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "o4qgsowkEkfFf1kj",
+  "_key": "!items!o4qgsowkEkfFf1kj",
+  "name": "Heat Protection",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "heat-protection",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Heat_Protection_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 15300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

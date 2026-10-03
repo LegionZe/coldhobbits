@@ -1,0 +1,32 @@
+{
+  "_id": "HBgcbraxJ9wL9fQQ",
+  "_key": "!items!HBgcbraxJ9wL9fQQ",
+  "name": "Elephant Care",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "elephant-care",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Elephant_Care_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 11100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

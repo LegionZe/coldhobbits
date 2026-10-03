@@ -1,0 +1,30 @@
+{
+  "_id": "83nY3dsq1M4xFw6l",
+  "_key": "!items!83nY3dsq1M4xFw6l",
+  "name": "Time Sense",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "time-sense",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Chronomancer Book",
+    "url": "https://adnd2e.fandom.com/wiki/Time_Sense_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wq6MzHLTN18EDna8",
+  "sort": 33000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

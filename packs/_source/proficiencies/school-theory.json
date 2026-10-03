@@ -1,0 +1,32 @@
+{
+  "_id": "t5zx4dh2jrsLyHs1",
+  "_key": "!items!t5zx4dh2jrsLyHs1",
+  "name": "(School) Theory",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "school-theory",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 7,
+      "cost": 5
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/(School)_Theory_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "TzDh5huB44mVXIGH",
+  "_key": "!items!TzDh5huB44mVXIGH",
+  "name": "Sacred Legends",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sacred-legends",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Sacred_Legends_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 27500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

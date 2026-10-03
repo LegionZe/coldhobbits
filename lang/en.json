@@ -99,6 +99,7 @@
   "AD2E.Tab": {
     "main": "Main",
     "class": "Race & Class",
+    "proficiencies": "Proficiencies",
     "abilities": "Abilities",
     "bio": "Biography"
   },
@@ -130,7 +131,8 @@
   "TYPES.Item": {
     "class": "Class",
     "kit": "Class Kit",
-    "race": "Race"
+    "race": "Race",
+    "proficiency": "Proficiency"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -187,5 +189,41 @@
     "NeedsRaceKit": "{race} can only be a {class} through a kit that allows {race}; add one.",
     "NeedsKitNote": "This race can only take this class through a kit that allows the race; add a qualifying kit.",
     "KitNotForRace": "{kit} is not available to {race} for this class."
+  },
+  "AD2E.Sheet.Proficiency": "AD&D 2e Proficiency",
+  "AD2E.Prof": {
+    "Weapon": "Weapon Proficiencies",
+    "Nonweapon": "Nonweapon Proficiencies",
+    "Group": {
+      "general": "General"
+    },
+    "Kind": "Kind",
+    "Slots": "Slots",
+    "Ability": "Ability",
+    "Modifier": "Check Modifier",
+    "Groups": "Groups",
+    "NoCheck": "— (no check)",
+    "SkillsPowers": "Skills & Powers",
+    "Rating": "Rating",
+    "Cost": "Cost (CP)",
+    "GrantedBy": "Granted free by kit",
+    "WeaponSlots": "Weapon slots used / available",
+    "NonweaponSlots": "Nonweapon slots used / available",
+    "Penalty": "Non-proficiency penalty",
+    "SlotsUsed": "Slots used",
+    "KitBonus": "kit",
+    "NoneYet": "None yet.",
+    "CrossGroup": "Outside this class's proficiency groups (Table 38): +1 slot",
+    "CheckHint": "Proficiency check: 1d20 ≤ this number (a 20 always fails)",
+    "TwentyFails": "a 20 always fails",
+    "DragHint": "Drag proficiencies from the \"Proficiencies\" compendium onto this sheet. Adding a Class Kit adds its bonus proficiencies (free) and required proficiencies (use slots); removing the kit removes its bonus proficiencies.",
+    "AlreadyHave": "{name} is already on this character.",
+    "ChooseOne": "Choose one proficiency granted by this kit.",
+    "Bonus": "Bonus proficiencies",
+    "Required": "Required proficiencies",
+    "Or": "or",
+    "BonusSlots": "Bonus slots",
+    "BonusWeaponSlots": "Bonus weapon slots",
+    "BonusNonweaponSlots": "Bonus nonweapon slots"
   }
 }

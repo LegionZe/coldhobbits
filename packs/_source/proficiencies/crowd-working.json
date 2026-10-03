@@ -1,0 +1,30 @@
+{
+  "_id": "OF9p1Cz0dmPDaqAT",
+  "_key": "!items!OF9p1Cz0dmPDaqAT",
+  "name": "Crowd Working",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "crowd-working",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Bard's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Crowd_Working_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dlMzUbQK6cYpzvub",
+  "sort": 8300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

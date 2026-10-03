@@ -1,0 +1,33 @@
+{
+  "_id": "ntgmJJgKyixndnMe",
+  "_key": "!items!ntgmJJgKyixndnMe",
+  "name": "Spirit Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spirit-lore",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "cha",
+    "modifier": -4,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Necromancers",
+    "url": "https://adnd2e.fandom.com/wiki/Spirit_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "BpgGBcorTP8jqREG",
+  "sort": 31000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

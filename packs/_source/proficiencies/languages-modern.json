@@ -1,0 +1,32 @@
+{
+  "_id": "rSl62AfJC6lHSQgu",
+  "_key": "!items!rSl62AfJC6lHSQgu",
+  "name": "Languages, Modern",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "languages-modern",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 9,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Languages%2C_Modern_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 18000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

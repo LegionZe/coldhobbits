@@ -1,0 +1,33 @@
+{
+  "_id": "gbO1oBVpZAHLlbJu",
+  "_key": "!items!gbO1oBVpZAHLlbJu",
+  "name": "Omen Reading",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "omen-reading",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Omen_Reading_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 22400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

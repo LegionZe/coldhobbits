@@ -22,7 +22,25 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Feralan_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "hunting",
+          "fishing"
+        ]
+      },
+      {
+        "choice": [
+          "trail-signs"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",

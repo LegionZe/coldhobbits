@@ -1,0 +1,33 @@
+{
+  "_id": "QkVOSJexOzSlSnZz",
+  "_key": "!items!QkVOSJexOzSlSnZz",
+  "name": "Foraging",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "foraging",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Foraging_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 13100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

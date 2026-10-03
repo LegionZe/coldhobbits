@@ -30,7 +30,29 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Anagakok_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "endurance"
+        ]
+      },
+      {
+        "choice": [
+          "survival"
+        ]
+      },
+      {
+        "choice": [
+          "weather-sense"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",

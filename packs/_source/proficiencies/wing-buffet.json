@@ -1,0 +1,32 @@
+{
+  "_id": "IYrlS7SG0xYBfp5D",
+  "_key": "!items!IYrlS7SG0xYBfp5D",
+  "name": "Wing Buffet",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "wing-buffet",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Wing_Buffet_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 36700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "H9Tw1cLxnc1klMtz",
+  "_key": "!items!H9Tw1cLxnc1klMtz",
+  "name": "Rhetoric",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "rhetoric",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Glory of Rome Campaign Sourcebook",
+    "url": "https://adnd2e.fandom.com/wiki/Rhetoric_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "JQGNlsDKQBNp87AC",
+  "sort": 26500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

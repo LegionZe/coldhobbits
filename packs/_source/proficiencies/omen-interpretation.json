@@ -1,0 +1,32 @@
+{
+  "_id": "e69UpTsc8NskBAwR",
+  "_key": "!items!e69UpTsc8NskBAwR",
+  "name": "Omen Interpretation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "omen-interpretation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Shaman",
+    "url": "https://adnd2e.fandom.com/wiki/Omen_Interpretation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TOmJGMYrVHC0WKlo",
+  "sort": 22300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

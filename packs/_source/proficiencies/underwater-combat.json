@@ -1,0 +1,33 @@
+{
+  "_id": "VxeyF1JzVme2FMQ9",
+  "_key": "!items!VxeyF1JzVme2FMQ9",
+  "name": "Underwater Combat",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "underwater-combat",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": 0,
+      "cost": 4
+    },
+    "source": "Of Ships and the Sea",
+    "url": "https://adnd2e.fandom.com/wiki/Underwater_Combat_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "LK6TO3YQufFwNbbw",
+  "sort": 34400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "2fvr2aZQFYlqiANR",
+  "_key": "!items!2fvr2aZQFYlqiANR",
+  "name": "Camouflage",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "camouflage",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Camouflage_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 5800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

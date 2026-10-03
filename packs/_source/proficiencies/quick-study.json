@@ -1,0 +1,32 @@
+{
+  "_id": "QUhYMJeav7dWn2yY",
+  "_key": "!items!QUhYMJeav7dWn2yY",
+  "name": "Quick Study",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "quick-study",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": -3,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Quick_Study_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 25500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

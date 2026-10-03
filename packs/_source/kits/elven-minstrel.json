@@ -25,7 +25,34 @@
     },
     "raceOnly": true,
     "url": "https://adnd2e.fandom.com/wiki/Elven_Minstrel_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "musical-instrument"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      },
+      {
+        "choice": [
+          "singing"
+        ]
+      },
+      {
+        "choice": [
+          "spellcraft"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

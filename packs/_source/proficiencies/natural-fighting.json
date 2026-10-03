@@ -1,0 +1,32 @@
+{
+  "_id": "xoW3Q56B56W5jQOf",
+  "_key": "!items!xoW3Q56B56W5jQOf",
+  "name": "Natural Fighting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "natural-fighting",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "str",
+    "modifier": 1,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Humanoids",
+    "url": "https://adnd2e.fandom.com/wiki/Natural_Fighting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "cpwX0t8n8mrwjI45",
+  "sort": 21100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "P3XhXgLCk9PPSJOk",
+  "_key": "!items!P3XhXgLCk9PPSJOk",
+  "name": "Debate",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "debate",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Debate_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

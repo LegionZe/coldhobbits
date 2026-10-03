@@ -1,0 +1,32 @@
+{
+  "_id": "WsWvbsKiMDLNg5IW",
+  "_key": "!items!WsWvbsKiMDLNg5IW",
+  "name": "Weaponsmithing, Crude",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "weaponsmithing-crude",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -3,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weaponsmithing%2C_Crude_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 36000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "eZ1g2ACyvjwaTWqC",
+  "_key": "!items!eZ1g2ACyvjwaTWqC",
+  "name": "Field of Study",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "field-of-study",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Field_of_Study_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 12600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -22,7 +22,24 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Beast-Rider_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "animal-training"
+        ]
+      },
+      {
+        "choice": [
+          "riding-land-based"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",

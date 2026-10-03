@@ -23,7 +23,19 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Prophet_Priest_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "weather-sense"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",

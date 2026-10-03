@@ -1,0 +1,32 @@
+{
+  "_id": "PgvKz3KnUmnyOO38",
+  "_key": "!items!PgvKz3KnUmnyOO38",
+  "name": "Giant Kite Flying",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "giant-kite-flying",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": -3,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Giant_Kite_Flying_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 14100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

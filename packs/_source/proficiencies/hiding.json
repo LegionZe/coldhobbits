@@ -1,0 +1,32 @@
+{
+  "_id": "wFHnnjxW6pTY9hEG",
+  "_key": "!items!wFHnnjxW6pTY9hEG",
+  "name": "Hiding",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "hiding",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Hiding_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 15800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -24,7 +24,34 @@
     },
     "raceOnly": true,
     "url": "https://adnd2e.fandom.com/wiki/Gnome_Professor_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "ancient-history"
+        ]
+      },
+      {
+        "choice": [
+          "languages-ancient"
+        ]
+      },
+      {
+        "choice": [
+          "languages-modern"
+        ]
+      },
+      {
+        "choice": [
+          "reading-writing"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

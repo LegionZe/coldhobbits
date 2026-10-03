@@ -1,0 +1,32 @@
+{
+  "_id": "QF68MVToBgMrkPD8",
+  "_key": "!items!QF68MVToBgMrkPD8",
+  "name": "Acting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "acting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Bard's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Acting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dlMzUbQK6cYpzvub",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

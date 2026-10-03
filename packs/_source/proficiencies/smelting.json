@@ -1,0 +1,32 @@
+{
+  "_id": "evJuDevvcHtvY4Fy",
+  "_key": "!items!evJuDevvcHtvY4Fy",
+  "name": "Smelting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "smelting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Smelting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 29700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

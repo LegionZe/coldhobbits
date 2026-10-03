@@ -1,0 +1,32 @@
+{
+  "_id": "3ipXK2rruvQlKs41",
+  "_key": "!items!3ipXK2rruvQlKs41",
+  "name": "Numeracy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "numeracy",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Sha'ir's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Numeracy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "pKc6Te9fJsWgwKHO",
+  "sort": 21900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

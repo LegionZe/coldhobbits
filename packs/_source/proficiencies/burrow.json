@@ -1,0 +1,30 @@
+{
+  "_id": "Hot3r0c7Nx53kFcN",
+  "_key": "!items!Hot3r0c7Nx53kFcN",
+  "name": "Burrow",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "burrow",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Burrow_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 5700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

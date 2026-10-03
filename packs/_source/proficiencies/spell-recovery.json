@@ -1,0 +1,33 @@
+{
+  "_id": "OiwQxQXDQ9Se1aBX",
+  "_key": "!items!OiwQxQXDQ9Se1aBX",
+  "name": "Spell Recovery",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "spell-recovery",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -5,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Planewalker's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Recovery_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "S4K3CyqmR102bJP0",
+  "sort": 30300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,33 @@
+{
+  "_id": "sNlVU1bFIrStlVAi",
+  "_key": "!items!sNlVU1bFIrStlVAi",
+  "name": "Languages, Ancient",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "languages-ancient",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Languages%2C_Ancient_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 17800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

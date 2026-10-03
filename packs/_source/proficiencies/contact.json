@@ -1,0 +1,32 @@
+{
+  "_id": "YzjDOrNZlvgIVx2E",
+  "_key": "!items!YzjDOrNZlvgIVx2E",
+  "name": "Contact",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "contact",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dark Sun Campaign Setting Revised",
+    "url": "https://adnd2e.fandom.com/wiki/Contact_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "axuyzKRJiigHaJn2",
+  "sort": 8000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

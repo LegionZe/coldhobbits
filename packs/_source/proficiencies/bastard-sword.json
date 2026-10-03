@@ -1,0 +1,30 @@
+{
+  "_id": "2th5cw4i3T7a7zv5",
+  "_key": "!items!2th5cw4i3T7a7zv5",
+  "name": "Bastard sword",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bastard-sword",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "oG4EmEWOjnqDljkg",
+  "sort": 5300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

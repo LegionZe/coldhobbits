@@ -1,0 +1,30 @@
+{
+  "_id": "N3nNVRzzHK2Iwg9M",
+  "_key": "!items!N3nNVRzzHK2Iwg9M",
+  "name": "Warhammer",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "warhammer",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "oG4EmEWOjnqDljkg",
+  "sort": 6100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

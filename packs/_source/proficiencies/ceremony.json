@@ -1,0 +1,32 @@
+{
+  "_id": "xRV33W8EeRa0TKQo",
+  "_key": "!items!xRV33W8EeRa0TKQo",
+  "name": "Ceremony",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "ceremony",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Ceremony_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 6300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

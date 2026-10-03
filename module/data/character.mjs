@@ -1,4 +1,4 @@
-import { AD2E, conSaveBonus, hitDiceAt, lookup } from "../config.mjs";
+import { AD2E, conSaveBonus, hitDiceAt, lookup, thac0At } from "../config.mjs";
 
 const { SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
@@ -107,8 +107,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const xp = AD2E.xpTable[this.classInfo.classItem?.system.identifier];
     this.xpNext = xp?.[this.level] ?? null; // index = level -> XP for level + 1
 
-    const prog = AD2E.thac0Progression[this.classGroup];
-    const computed = 20 - Math.floor((this.level - 1) / prog.divisor) * prog.step;
+    this.proficiencies = this.#computeProficiencies();
+
+    const computed = thac0At(this.classGroup, this.level);
     this.thac0.computed = computed;
     this.thac0.value = this.thac0.override ?? computed;
   }
@@ -175,6 +176,40 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         met: (min === null || rolled >= min) && (max === null || rolled <= max) };
     });
     return { raceItem, race, requirements, requirementsMet: requirements.every(r => r.met) };
+  }
+
+  /**
+   * Proficiency slots (PHB Table 34): initial + one per level evenly divisible by the rate, plus kit
+   * bonus slots; nonweapon slots also add the Intelligence "number of languages" (Table 4). Owned
+   * proficiency items use slots unless granted by a kit (`grantedBy`); a nonweapon proficiency from a
+   * group outside the class's Table 38 groups costs one additional slot.
+   */
+  #computeProficiencies() {
+    const rules = AD2E.proficiencySlots[this.classGroup];
+    const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
+    const classId = this.classInfo.classItem?.system.identifier;
+    const groups = AD2E.proficiencyGroups[classId] ?? AD2E.defaultProficiencyGroups[this.classGroup];
+    const items = this.parent?.items?.filter(i => i.type === "proficiency") ?? [];
+    const entries = items.map(item => {
+      const p = item.system;
+      const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
+      const cost = p.grantedBy ? 0 : (p.kind === "weapon" ? 1 : p.slots + (crossGroup ? 1 : 0));
+      const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) : null;
+      return { item, cost, crossGroup, target };
+    });
+    const used = kind => entries.filter(e => e.item.system.kind === kind).reduce((n, e) => n + e.cost, 0);
+    const available = {
+      weapon: rules.weaponInitial + Math.floor(this.level / rules.weaponRate) + (kit?.bonusSlots.weapon ?? 0),
+      nonweapon: rules.nonweaponInitial + Math.floor(this.level / rules.nonweaponRate)
+        + (this.abilityData.int.languages ?? 0) + (kit?.bonusSlots.nonweapon ?? 0)
+    };
+    return {
+      groups,
+      penalty: rules.penalty,
+      entries,
+      weapon: { available: available.weapon, used: used("weapon") },
+      nonweapon: { available: available.nonweapon, used: used("nonweapon") }
+    };
   }
 
   getRollData() {

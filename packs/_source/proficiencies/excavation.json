@@ -1,0 +1,32 @@
+{
+  "_id": "3TNc88LQ3DzTmjz7",
+  "_key": "!items!3TNc88LQ3DzTmjz7",
+  "name": "Excavation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "excavation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Excavation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 11900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "19uFUBpwsmrqTffk",
+  "_key": "!items!19uFUBpwsmrqTffk",
+  "name": "Style Analysis",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "style-analysis",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Style_Analysis_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 31500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

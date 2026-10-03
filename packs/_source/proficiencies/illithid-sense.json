@@ -1,0 +1,30 @@
+{
+  "_id": "X8KLRtSi8u40kD1W",
+  "_key": "!items!X8KLRtSi8u40kD1W",
+  "name": "Illithid Sense",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "illithid-sense",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -4,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Illithid_Sense_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 16600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "pqHZMlY9dVxSrRiu",
+  "_key": "!items!pqHZMlY9dVxSrRiu",
+  "name": "Animal Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "animal-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Intuition",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animal_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

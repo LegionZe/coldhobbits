@@ -1,0 +1,30 @@
+{
+  "_id": "lvC2uwwrefJDwWlC",
+  "_key": "!items!lvC2uwwrefJDwWlC",
+  "name": "Meditation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "meditation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 1,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Meditation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 19600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

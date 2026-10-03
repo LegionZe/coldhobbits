@@ -1,0 +1,32 @@
+{
+  "_id": "kHcGwJjCDQoGHlSc",
+  "_key": "!items!kHcGwJjCDQoGHlSc",
+  "name": "Mountaineering",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "mountaineering",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Strength/Stamina, Wisdom/Willpower",
+      "rating": 7,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Mountaineering_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 20700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

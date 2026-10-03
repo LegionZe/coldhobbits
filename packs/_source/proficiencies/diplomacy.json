@@ -1,0 +1,32 @@
+{
+  "_id": "D840WYcHh0upHcRR",
+  "_key": "!items!D840WYcHh0upHcRR",
+  "name": "Diplomacy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "diplomacy",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Diplomacy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 9700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

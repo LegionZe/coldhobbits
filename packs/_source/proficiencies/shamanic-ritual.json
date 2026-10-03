@@ -1,0 +1,32 @@
+{
+  "_id": "CsWFy7W0mGwApmpH",
+  "_key": "!items!CsWFy7W0mGwApmpH",
+  "name": "Shamanic Ritual",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "shamanic-ritual",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 1,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Shaman",
+    "url": "https://adnd2e.fandom.com/wiki/Shamanic_Ritual_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TOmJGMYrVHC0WKlo",
+  "sort": 28900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

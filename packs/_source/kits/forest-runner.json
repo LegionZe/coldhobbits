@@ -22,7 +22,19 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Forest_Runner_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "bowyer-fletcher"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 1,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",

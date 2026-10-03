@@ -1,0 +1,32 @@
+{
+  "_id": "HWsWKjvXqMB66psO",
+  "_key": "!items!HWsWKjvXqMB66psO",
+  "name": "Pottery",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "pottery",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Dexterity/Aim",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Pottery_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 24400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

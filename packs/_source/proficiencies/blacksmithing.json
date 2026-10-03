@@ -1,0 +1,32 @@
+{
+  "_id": "tqr1ZbfnRLTEXDRj",
+  "_key": "!items!tqr1ZbfnRLTEXDRj",
+  "name": "Blacksmithing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "blacksmithing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Strength/Muscle, Intelligence/Knowledge",
+      "rating": 6,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Blacksmithing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "EqRsJy4wmuZ4He7N",
+  "_key": "!items!EqRsJy4wmuZ4He7N",
+  "name": "Concocting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "concocting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Concocting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 7900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

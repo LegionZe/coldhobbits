@@ -1,4 +1,5 @@
 import { AD2E } from "../config.mjs";
+import { formatKitProficiencies } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -17,9 +18,10 @@ class AD2EItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const system = this.document.system;
     context.item = this.document;
     context.system = system;
-    context.minimums = AD2E.abilities.map(key => ({
+    // Ability minimums (class, kit, race); proficiencies have none.
+    context.minimums = system.min ? AD2E.abilities.map(key => ({
       key, label: game.i18n.localize(`AD2E.Ability.${key}`), value: system.min[key] ?? ""
-    }));
+    })) : [];
     return context;
   }
 }
@@ -70,6 +72,8 @@ export class KitSheet extends AD2EItemSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.classesText = [...this.document.system.classes].join(", ");
+    context.kitBonusProfs = formatKitProficiencies(this.document.system.bonusProficiencies);
+    context.kitRequiredProfs = formatKitProficiencies(this.document.system.requiredProficiencies);
     context.raceLimitsText = Object.entries(this.document.system.raceLimits ?? {})
       .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");
     return context;
@@ -99,5 +103,19 @@ export class RaceSheet extends AD2EItemSheet {
 
   _processFormData(event, form, formData) {
     return parseClassesText(super._processFormData(event, form, formData), ["classes", "kitClasses"]);
+  }
+}
+
+export class ProficiencySheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["proficiency"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/proficiency-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.kinds = AD2E.proficiencyKinds;
+    context.abilityLabels = AD2E.abilityLabels;
+    context.nonweaponGroups = AD2E.nonweaponGroups;
+    context.groupList = [...this.document.system.groups];
+    return context;
   }
 }

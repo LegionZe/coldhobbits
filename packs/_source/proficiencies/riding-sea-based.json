@@ -1,0 +1,32 @@
+{
+  "_id": "174wYzU25QDti2HL",
+  "_key": "!items!174wYzU25QDti2HL",
+  "name": "Riding, Sea-based",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "riding-sea-based",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": 7,
+      "cost": 4
+    },
+    "source": "The Complete Ranger's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Riding%2C_Sea-based_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ppQrRuhWaQxXDj9e",
+  "sort": 27000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "BJAg8riw1Cx3wOpJ",
+  "_key": "!items!BJAg8riw1Cx3wOpJ",
+  "name": "Painting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "painting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Dexterity/Aim, Wisdom/Intuition",
+      "rating": 7,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Painting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 22800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

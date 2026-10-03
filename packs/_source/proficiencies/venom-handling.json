@@ -1,0 +1,33 @@
+{
+  "_id": "qrUp5AUk4iZ0H3qG",
+  "_key": "!items!qrUp5AUk4iZ0H3qG",
+  "name": "Venom Handling",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "venom-handling",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Necromancers",
+    "url": "https://adnd2e.fandom.com/wiki/Venom_Handling_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "BpgGBcorTP8jqREG",
+  "sort": 34900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

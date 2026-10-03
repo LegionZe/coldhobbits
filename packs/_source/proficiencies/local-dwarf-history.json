@@ -1,0 +1,32 @@
+{
+  "_id": "OMMwhkGuIxxs9Bcy",
+  "_key": "!items!OMMwhkGuIxxs9Bcy",
+  "name": "Local Dwarf History",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "local-dwarf-history",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Local_Dwarf_History_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 18600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

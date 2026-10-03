@@ -1,0 +1,30 @@
+{
+  "_id": "s6EnwiKtCpbJug7t",
+  "_key": "!items!s6EnwiKtCpbJug7t",
+  "name": "Seance",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "seance",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "cha",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Seance_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 28400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

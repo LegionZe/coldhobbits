@@ -13,6 +13,17 @@
     <label class="ad2e-checkbox"><input type="checkbox" name="system.otherRequirements" {{#if system.otherRequirements}}checked{{/if}}> {{localize "AD2E.Item.otherRequirements"}}</label>
   </div>
   <fieldset>
+    <legend>{{localize "AD2E.Prof.Nonweapon"}}</legend>
+    <dl class="ad2e-facts">
+      <dt>{{localize "AD2E.Prof.Bonus"}}</dt><dd>{{#if kitBonusProfs}}{{kitBonusProfs}}{{else}}—{{/if}}</dd>
+      <dt>{{localize "AD2E.Prof.Required"}}</dt><dd>{{#if kitRequiredProfs}}{{kitRequiredProfs}}{{else}}—{{/if}}</dd>
+    </dl>
+    <div class="ad2e-item-fields">
+      <label>{{localize "AD2E.Prof.BonusWeaponSlots"}} <input type="number" name="system.bonusSlots.weapon" value="{{system.bonusSlots.weapon}}" min="0"></label>
+      <label>{{localize "AD2E.Prof.BonusNonweaponSlots"}} <input type="number" name="system.bonusSlots.nonweapon" value="{{system.bonusSlots.nonweapon}}" min="0"></label>
+    </div>
+  </fieldset>
+  <fieldset>
     <legend>{{localize "AD2E.Class.KitMin"}}</legend>
     <p class="ad2e-note">{{localize "AD2E.Item.kitMinHint"}}</p>
     <div class="ad2e-min-grid">

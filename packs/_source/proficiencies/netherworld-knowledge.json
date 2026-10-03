@@ -1,0 +1,33 @@
+{
+  "_id": "j5mWcMliYScCfwYr",
+  "_key": "!items!j5mWcMliYScCfwYr",
+  "name": "Netherworld Knowledge",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "netherworld-knowledge",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -3,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Necromancers",
+    "url": "https://adnd2e.fandom.com/wiki/Netherworld_Knowledge_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "BpgGBcorTP8jqREG",
+  "sort": 21700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "j1z2FhYxJMKpkIsy",
+  "_key": "!items!j1z2FhYxJMKpkIsy",
+  "name": "Dirty Tricks",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "dirty-tricks",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Gladiator's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Dirty_Tricks_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "krozBhnjGzHbrxEF",
+  "sort": 9900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

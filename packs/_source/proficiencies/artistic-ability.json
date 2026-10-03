@@ -1,0 +1,32 @@
+{
+  "_id": "hW94tyq6oom7Xysa",
+  "_key": "!items!hW94tyq6oom7Xysa",
+  "name": "Artistic Ability",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "artistic-ability",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Artistic_Ability_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "PoZSBU4HQFa5pmyF",
+  "_key": "!items!PoZSBU4HQFa5pmyF",
+  "name": "Animal Handling",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "animal-handling",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Wisdom/Willpower",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animal_Handling_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

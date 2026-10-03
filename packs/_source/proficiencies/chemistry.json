@@ -1,0 +1,32 @@
+{
+  "_id": "RWB5Q6nvbCgWbYim",
+  "_key": "!items!RWB5Q6nvbCgWbYim",
+  "name": "Chemistry",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "chemistry",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Chemistry_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 6900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

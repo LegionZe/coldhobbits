@@ -1,0 +1,33 @@
+{
+  "_id": "ITVkhs1BP85sirEM",
+  "_key": "!items!ITVkhs1BP85sirEM",
+  "name": "Reading/Writing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "reading-writing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 1,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Reading/Writing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 25900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

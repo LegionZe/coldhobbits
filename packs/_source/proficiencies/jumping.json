@@ -1,0 +1,32 @@
+{
+  "_id": "EPMk6Wb9aB3YOMYm",
+  "_key": "!items!EPMk6Wb9aB3YOMYm",
+  "name": "Jumping",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "jumping",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "str",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Strength/Muscle, Dexterity/Balance",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Jumping_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 17600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

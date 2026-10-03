@@ -1,0 +1,33 @@
+{
+  "_id": "ICljaqd2ANvqULLe",
+  "_key": "!items!ICljaqd2ANvqULLe",
+  "name": "Blind-fighting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "blind-fighting",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Dexterity/Balance",
+      "rating": null,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Blind-fighting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 4300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

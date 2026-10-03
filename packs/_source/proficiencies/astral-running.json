@@ -1,0 +1,32 @@
+{
+  "_id": "4OuL9KOjxuJ5rThU",
+  "_key": "!items!4OuL9KOjxuJ5rThU",
+  "name": "Astral Running",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "astral-running",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": null,
+      "cost": 2
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Astral_Running_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

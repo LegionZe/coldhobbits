@@ -1,0 +1,32 @@
+{
+  "_id": "cVDcPFj7OwsAmTXC",
+  "_key": "!items!cVDcPFj7OwsAmTXC",
+  "name": "Storytelling",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "storytelling",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Charisma/Leadership",
+      "rating": 6,
+      "cost": 5
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Storytelling_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 31400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

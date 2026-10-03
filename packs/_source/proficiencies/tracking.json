@@ -1,0 +1,32 @@
+{
+  "_id": "0jDZrCp4rnA16Hor",
+  "_key": "!items!0jDZrCp4rnA16Hor",
+  "name": "Tracking",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "tracking",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition",
+      "rating": 7,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Tracking_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 33200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

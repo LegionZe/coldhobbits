@@ -1,0 +1,32 @@
+{
+  "_id": "MyHyxxC5RxskKUh8",
+  "_key": "!items!MyHyxxC5RxskKUh8",
+  "name": "Danger Sense",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "danger-sense",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": 1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Danger_Sense_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 8800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

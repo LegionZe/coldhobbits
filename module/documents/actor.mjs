@@ -76,6 +76,66 @@ export default class AD2EActor extends Actor {
     });
   }
 
+  /**
+   * Nonweapon proficiency check: 1d20 <= ability (effective) + modifier; a roll of 20 always fails
+   * ("Nonweapon Proficiencies II (PHB)").
+   */
+  async rollProficiency(itemId) {
+    const item = this.items.get(itemId);
+    const entry = this.system.proficiencies.entries.find(e => e.item.id === itemId);
+    if (!item || entry?.target === null || entry?.target === undefined) return;
+    const roll = await new Roll("1d20").evaluate();
+    const success = roll.total < 20 && roll.total <= entry.target;
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${entry.target}): `
+        + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
+        + (roll.total === 20 ? ` (${game.i18n.localize("AD2E.Prof.TwentyFails")})` : "")
+    });
+  }
+
+  /**
+   * Add a kit's proficiencies from the system compendium: bonus ones are free (marked `grantedBy`),
+   * required ones use slots. "Choose one" entries prompt the user. Already-owned ones are skipped.
+   */
+  async grantKitProficiencies(kit) {
+    const pack = game.packs?.get("ad2e.proficiencies");
+    if (!pack) return;
+    const index = await pack.getIndex({ fields: ["system.identifier", "system.kind"] });
+    const byId = new Map(index.filter(e => e.system?.kind === "nonweapon").map(e => [e.system.identifier, e]));
+    const owned = new Set(this.items.filter(i => i.type === "proficiency").map(i => i.system.identifier));
+    const toCreate = [];
+    const pick = async (entry, label) => {
+      const options = entry.choice.filter(id => byId.has(id));
+      if (options.length <= 1) return options[0];
+      const buttons = options.map((id, i) => ({ action: id, label: byId.get(id).name, default: i === 0 }));
+      return foundry.applications.api.DialogV2.wait({
+        window: { title: `${kit.name}: ${game.i18n.localize(label)}` },
+        content: `<p>${game.i18n.localize("AD2E.Prof.ChooseOne")}</p>`, buttons, rejectClose: false
+      });
+    };
+    for (const [list, label, free] of [[kit.system.bonusProficiencies, "AD2E.Prof.Bonus", true],
+      [kit.system.requiredProficiencies, "AD2E.Prof.Required", false]]) {
+      for (const entry of list) {
+        const id = await pick(entry, label);
+        if (!id || owned.has(id)) continue;
+        const doc = await pack.getDocument(byId.get(id)._id);
+        const data = doc.toObject();
+        delete data._id;
+        data.system.grantedBy = free ? kit.system.identifier : "";
+        toCreate.push(data);
+        owned.add(id);
+      }
+    }
+    if (toCreate.length) await this.createEmbeddedDocuments("Item", toCreate);
+  }
+
+  /** Delete the bonus proficiencies a kit granted. */
+  async removeKitProficiencies(kitIdentifier) {
+    const ids = this.items.filter(i => i.type === "proficiency" && i.system.grantedBy === kitIdentifier).map(i => i.id);
+    if (ids.length) await this.deleteEmbeddedDocuments("Item", ids);
+  }
+
   /** Roll-under ability check: d20 <= score + modifier. */
   async rollAbilityCheck(key) {
     const mod = await promptNumber(

@@ -1,0 +1,32 @@
+{
+  "_id": "SS8DqNG4JhdySp96",
+  "_key": "!items!SS8DqNG4JhdySp96",
+  "name": "Etiquette",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "etiquette",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Charisma/Appearance, Wisdom/Intuition",
+      "rating": 8,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Etiquette_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 11800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

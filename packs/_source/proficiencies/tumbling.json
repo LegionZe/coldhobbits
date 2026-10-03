@@ -1,0 +1,32 @@
+{
+  "_id": "Hs1Ci12sX0g0KqT4",
+  "_key": "!items!Hs1Ci12sX0g0KqT4",
+  "name": "Tumbling",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "tumbling",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Dexterity/Balance, Strength/Muscle",
+      "rating": 7,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Tumbling_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 33900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

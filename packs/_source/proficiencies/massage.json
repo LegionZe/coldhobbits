@@ -1,0 +1,32 @@
+{
+  "_id": "hT9qI3MeFO9rwS5G",
+  "_key": "!items!hT9qI3MeFO9rwS5G",
+  "name": "Massage",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "massage",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Gladiator's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Massage_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "krozBhnjGzHbrxEF",
+  "sort": 19500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

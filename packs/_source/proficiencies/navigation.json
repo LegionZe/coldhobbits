@@ -1,0 +1,34 @@
+{
+  "_id": "c7ozBcnnMSi3udeb",
+  "_key": "!items!c7ozBcnnMSi3udeb",
+  "name": "Navigation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "navigation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "warrior",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Intuition",
+      "rating": 6,
+      "cost": 3
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Navigation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 21300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

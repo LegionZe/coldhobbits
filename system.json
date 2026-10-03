@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -39,7 +39,8 @@
     "Item": {
       "class": {},
       "kit": {},
-      "race": {}
+      "race": {},
+      "proficiency": {}
     }
   },
   "primaryTokenAttribute": "hp",
@@ -75,6 +76,17 @@
       "label": "Class Kits (Complete Handbooks)",
       "system": "ad2e",
       "path": "packs/kits",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "proficiencies",
+      "label": "Proficiencies",
+      "system": "ad2e",
+      "path": "packs/proficiencies",
       "type": "Item",
       "ownership": {
         "PLAYER": "OBSERVER",

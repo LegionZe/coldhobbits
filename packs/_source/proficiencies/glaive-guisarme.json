@@ -1,0 +1,30 @@
+{
+  "_id": "JWtWLKw35s3VZK8l",
+  "_key": "!items!JWtWLKw35s3VZK8l",
+  "name": "Glaive-guisarme",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "glaive-guisarme",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "oG4EmEWOjnqDljkg",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

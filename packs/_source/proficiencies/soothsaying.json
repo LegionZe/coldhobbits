@@ -1,0 +1,32 @@
+{
+  "_id": "M95H9erxj7wpoZMH",
+  "_key": "!items!M95H9erxj7wpoZMH",
+  "name": "Soothsaying",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "soothsaying",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Barbarian's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Soothsaying_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "GyIK8GegVKRS9ouo",
+  "sort": 29900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "Mn4f3yl3zGXZ8IXS",
+  "_key": "!items!Mn4f3yl3zGXZ8IXS",
+  "name": "Astral Navigation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "astral-navigation",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "warrior",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Reason",
+      "rating": 6,
+      "cost": 4
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Astral_Navigation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

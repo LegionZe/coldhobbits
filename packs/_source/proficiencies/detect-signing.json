@@ -1,0 +1,32 @@
+{
+  "_id": "Wqwf02at15sHn8gQ",
+  "_key": "!items!Wqwf02at15sHn8gQ",
+  "name": "Detect Signing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "detect-signing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 1,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Detect_Signing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 9400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

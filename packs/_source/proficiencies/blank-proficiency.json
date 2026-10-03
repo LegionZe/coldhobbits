@@ -1,0 +1,30 @@
+{
+  "_id": "QIudNQW2caSS2DBO",
+  "_key": "!items!QIudNQW2caSS2DBO",
+  "name": "Blank Proficiency",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "blank-proficiency",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "?",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Blank_Proficiency",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 4100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

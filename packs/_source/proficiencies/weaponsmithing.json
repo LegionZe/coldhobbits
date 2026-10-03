@@ -1,0 +1,32 @@
+{
+  "_id": "01oI87bwuBXMYRNO",
+  "_key": "!items!01oI87bwuBXMYRNO",
+  "name": "Weaponsmithing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "weaponsmithing",
+    "kind": "nonweapon",
+    "slots": 3,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Dexterity/Aim",
+      "rating": 5,
+      "cost": 5
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weaponsmithing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 35900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

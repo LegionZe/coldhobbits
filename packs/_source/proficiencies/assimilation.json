@@ -1,0 +1,32 @@
+{
+  "_id": "528wMx4nNPRgz11Q",
+  "_key": "!items!528wMx4nNPRgz11Q",
+  "name": "Assimilation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "assimilation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Assimilation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,30 @@
+{
+  "_id": "YzbB9RBzwPXob5RI",
+  "_key": "!items!YzbB9RBzwPXob5RI",
+  "name": "Spetum",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "spetum",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "oG4EmEWOjnqDljkg",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

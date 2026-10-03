@@ -1,0 +1,32 @@
+{
+  "_id": "JdFRH2OcoNyoorNQ",
+  "_key": "!items!JdFRH2OcoNyoorNQ",
+  "name": "Disguise",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "disguise",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": -1,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "Wisdom/Intuition, Charisma/Leadership",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Disguise_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 10000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

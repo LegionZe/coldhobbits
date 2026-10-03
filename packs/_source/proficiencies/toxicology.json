@@ -1,0 +1,32 @@
+{
+  "_id": "toN9XrCToUc8bDyr",
+  "_key": "!items!toN9XrCToUc8bDyr",
+  "name": "Toxicology",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "toxicology",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "rogue"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Ninja's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Toxicology_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "md5ElGbEg0o8MeP6",
+  "sort": 33100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

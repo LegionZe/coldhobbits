@@ -1,0 +1,33 @@
+{
+  "_id": "t1LxRf9vjPAfKLSn",
+  "_key": "!items!t1LxRf9vjPAfKLSn",
+  "name": "Pharmacy",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "pharmacy",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Pharmacy_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 23200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

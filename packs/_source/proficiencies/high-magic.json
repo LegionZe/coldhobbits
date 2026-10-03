@@ -1,0 +1,32 @@
+{
+  "_id": "q7mcQQIRTyg1QzUA",
+  "_key": "!items!q7mcQQIRTyg1QzUA",
+  "name": "High Magic",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "high-magic",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -3,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge, Wisdom/Willpower",
+      "rating": 7,
+      "cost": 4
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/High_Magic_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 16000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

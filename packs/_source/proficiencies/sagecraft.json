@@ -1,0 +1,30 @@
+{
+  "_id": "bKQnQOhuO3ghcruU",
+  "_key": "!items!bKQnQOhuO3ghcruU",
+  "name": "Sagecraft",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sagecraft",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Campaign Option: Council of Wyrms Setting",
+    "url": "https://adnd2e.fandom.com/wiki/Sagecraft_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "w8TJHgIEm4c2e0Lk",
+  "sort": 27700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "CTI4Pdj8ojiPGFTC",
+  "_key": "!items!CTI4Pdj8ojiPGFTC",
+  "name": "Herding",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "herding",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 1,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Herding_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 15700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

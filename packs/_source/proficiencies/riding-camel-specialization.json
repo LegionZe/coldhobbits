@@ -1,0 +1,33 @@
+{
+  "_id": "IfSakgyliqzb05wT",
+  "_key": "!items!IfSakgyliqzb05wT",
+  "name": "Riding, Camel Specialization",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "riding-camel-specialization",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "wis",
+    "modifier": 4,
+    "groups": [
+      "rogue",
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Riding%2C_Camel_Specialization_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 26700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "tO0A1u6I6exbXBWc",
+  "_key": "!items!tO0A1u6I6exbXBWc",
+  "name": "Sound Analysis",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sound-analysis",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Sound_Analysis_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 30100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

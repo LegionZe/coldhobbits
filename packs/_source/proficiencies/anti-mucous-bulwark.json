@@ -1,0 +1,30 @@
+{
+  "_id": "YtuSUvmcDoL7drXL",
+  "_key": "!items!YtuSUvmcDoL7drXL",
+  "name": "Anti-Mucous Bulwark",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "anti-mucous-bulwark",
+    "kind": "nonweapon",
+    "slots": 5,
+    "ability": "wis",
+    "modifier": -3,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Anti-Mucous_Bulwark_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

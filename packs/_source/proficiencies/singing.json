@@ -1,0 +1,32 @@
+{
+  "_id": "ft2XxkQ4RVPEMIwk",
+  "_key": "!items!ft2XxkQ4RVPEMIwk",
+  "name": "Singing",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "singing",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "cha",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Charisma/Leadership",
+      "rating": 5,
+      "cost": 2
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Singing_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "wkfoMBqQ53ydAn3f",
+  "sort": 29400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

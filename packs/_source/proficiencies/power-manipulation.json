@@ -1,0 +1,30 @@
+{
+  "_id": "5Up1c94GUbzcGw4E",
+  "_key": "!items!5Up1c94GUbzcGw4E",
+  "name": "Power Manipulation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "power-manipulation",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -4,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Will and the Way",
+    "url": "https://adnd2e.fandom.com/wiki/Power_Manipulation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kt2XmNf4Jq8cpnGB",
+  "sort": 24500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

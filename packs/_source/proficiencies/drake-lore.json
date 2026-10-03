@@ -1,0 +1,32 @@
+{
+  "_id": "5nDrnp4AU2Bmie9u",
+  "_key": "!items!5nDrnp4AU2Bmie9u",
+  "name": "Drake Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "drake-lore",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "Intelligence/Knowledge",
+      "rating": 5,
+      "cost": 4
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Drake_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 10600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

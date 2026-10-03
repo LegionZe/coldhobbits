@@ -1,0 +1,32 @@
+{
+  "_id": "wNhdF8bAWGnTMlRR",
+  "_key": "!items!wNhdF8bAWGnTMlRR",
+  "name": "Boat Piloting",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "boat-piloting",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "Strength/Muscle, Intelligence/Reason",
+      "rating": 6,
+      "cost": 2
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Boat_Piloting_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "Yd47h0fPD0JKhJ9D",
+  "sort": 4400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

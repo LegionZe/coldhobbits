@@ -1,0 +1,32 @@
+{
+  "_id": "pwoTCg2uq4jX9SHi",
+  "_key": "!items!pwoTCg2uq4jX9SHi",
+  "name": "Underground Navigation",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "underground-navigation",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "The Complete Book of Dwarves",
+    "url": "https://adnd2e.fandom.com/wiki/Underground_Navigation_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "MQp95hxYTXVsUcrd",
+  "sort": 34300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

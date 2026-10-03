@@ -1,0 +1,32 @@
+{
+  "_id": "fkolmMADgGXkdUVk",
+  "_key": "!items!fkolmMADgGXkdUVk",
+  "name": "Delude Sensors",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "delude-sensors",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "wis",
+    "modifier": -2,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Delude_Sensors_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 9200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,32 @@
+{
+  "_id": "ePrEIfgskA1P0QuJ",
+  "_key": "!items!ePrEIfgskA1P0QuJ",
+  "name": "Display Weapon Prowess",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "display-weapon-prowess",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Display_Weapon_Prowess_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "onWRE9pulpN3Pbq2",
+  "sort": 10100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

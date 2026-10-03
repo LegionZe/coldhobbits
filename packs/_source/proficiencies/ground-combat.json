@@ -1,0 +1,32 @@
+{
+  "_id": "e7DSo01U4qgQfHZm",
+  "_key": "!items!e7DSo01U4qgQfHZm",
+  "name": "Ground Combat",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "ground-combat",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "dex",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Ground_Combat_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 14600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

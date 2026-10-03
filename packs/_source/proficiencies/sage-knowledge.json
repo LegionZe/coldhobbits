@@ -1,0 +1,33 @@
+{
+  "_id": "rGomHaXtf9uugq4d",
+  "_key": "!items!rGomHaXtf9uugq4d",
+  "name": "Sage Knowledge",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "sage-knowledge",
+    "kind": "nonweapon",
+    "slots": 2,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "| Rating_SP =",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Spells & Magic",
+    "url": "https://adnd2e.fandom.com/wiki/Sage_Knowledge_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "TJnOgaCk244FRODI",
+  "sort": 27600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

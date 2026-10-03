@@ -22,7 +22,29 @@
     "raceLimits": {},
     "raceOnly": false,
     "url": "https://adnd2e.fandom.com/wiki/Scout_-_Thief_(Character_Kit)",
-    "notes": ""
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "alertness"
+        ]
+      },
+      {
+        "choice": [
+          "direction-sense"
+        ]
+      },
+      {
+        "choice": [
+          "tracking"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

@@ -1,0 +1,32 @@
+{
+  "_id": "wPBq61RQI3j64OuE",
+  "_key": "!items!wPBq61RQI3j64OuE",
+  "name": "Naval Combat",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "naval-combat",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": 0,
+    "groups": [
+      "warrior"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Wizards & Rogues of the Realms",
+    "url": "https://adnd2e.fandom.com/wiki/Naval_Combat_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "aWiFNlDjJwuQYuZL",
+  "sort": 21200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

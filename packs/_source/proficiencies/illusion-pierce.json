@@ -1,0 +1,32 @@
+{
+  "_id": "2qImqopNfuhqyaMK",
+  "_key": "!items!2qImqopNfuhqyaMK",
+  "name": "Illusion Pierce",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "illusion-pierce",
+    "kind": "nonweapon",
+    "slots": 3,
+    "ability": null,
+    "modifier": null,
+    "groups": [
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Other",
+    "url": "https://adnd2e.fandom.com/wiki/Illusion_Pierce_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "twPZJOvqBEzsnGlj",
+  "sort": 16800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

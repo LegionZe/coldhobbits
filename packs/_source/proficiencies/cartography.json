@@ -1,0 +1,32 @@
+{
+  "_id": "Qi3hroj8CKm1jBTo",
+  "_key": "!items!Qi3hroj8CKm1jBTo",
+  "name": "Cartography",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "cartography",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -2,
+    "groups": [
+      "general"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Sages & Specialists",
+    "url": "https://adnd2e.fandom.com/wiki/Cartography_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ABVVxApDgW4clV7r",
+  "sort": 6000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

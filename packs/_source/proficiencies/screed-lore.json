@@ -1,0 +1,33 @@
+{
+  "_id": "DXFMRVmFbwU12AA6",
+  "_key": "!items!DXFMRVmFbwU12AA6",
+  "name": "Screed Lore",
+  "type": "proficiency",
+  "img": "icons/svg/book.svg",
+  "system": {
+    "identifier": "screed-lore",
+    "kind": "nonweapon",
+    "slots": 1,
+    "ability": "int",
+    "modifier": -1,
+    "groups": [
+      "priest",
+      "wizard"
+    ],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Dragon Magazine",
+    "url": "https://adnd2e.fandom.com/wiki/Screed_Lore_(Proficiency)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CN6p74LTolRXZ837",
+  "sort": 27900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
