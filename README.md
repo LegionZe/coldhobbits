@@ -196,6 +196,11 @@ initiative 1d10, lowest acts first.
   (Table 13 minimums, Table 22 specialist wizards) and the kits of the Complete Fighter's, Paladin's, Ranger's, Wizard's,
   Priest's, Thief's and Bard's Handbooks. Kit ability minimums are curated by hand from each kit page; other kit rules are
   linked, not copied.
+  Al-Qadim kits (33): Arabian Adventures (eligible classes from its Table 3: Character Kit Summary) and The Complete
+  Sha'ir's Handbook (wizard kits, for mages), in an "Al-Qadim" folder under each group. Ability minimums (Hakima, Kahin,
+  Clockwork Mage) are set; race, sex and alignment restrictions are flagged with a link to the kit page; bonus
+  proficiencies are added as for the other kits. Kahin uses the druid experience table (noted on the kit; the system
+  still uses the cleric table). Kit special abilities (sha'ir genie summoning, elemental provinces) are not automated.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned

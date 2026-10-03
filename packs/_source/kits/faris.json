@@ -1,0 +1,63 @@
+{
+  "_id": "oGgoQBjzCOD48W8y",
+  "_key": "!items!oGgoQBjzCOD48W8y",
+  "name": "Faris",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "faris",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Faris_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "religion"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "AKpnHCDNvBQdGgBS",
+  "sort": 43000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

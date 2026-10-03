@@ -1,0 +1,63 @@
+{
+  "_id": "uUCn7zKkhF3tH4qi",
+  "_key": "!items!uUCn7zKkhF3tH4qi",
+  "name": "Ajami",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ajami",
+    "classes": [
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Ajami_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "DCFEhIWLnnL5YaYc",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,61 @@
+{
+  "_id": "r3V7Ux7fWtamz7Jr",
+  "_key": "!items!r3V7Ux7fWtamz7Jr",
+  "name": "Beggar-Thief",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "beggar-thief-al-qadim",
+    "classes": [
+      "thief"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Beggar-Thief_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "begging"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "BVfipmiC4r0zp30k",
+  "sort": 18000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

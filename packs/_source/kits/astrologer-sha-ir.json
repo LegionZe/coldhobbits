@@ -1,0 +1,67 @@
+{
+  "_id": "fE4wVf6HL6m1d5Os",
+  "_key": "!items!fE4wVf6HL6m1d5Os",
+  "name": "Astrologer",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "astrologer-sha-ir",
+    "classes": [
+      "mage"
+    ],
+    "source": "The Complete Sha'ir's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Astrologer_-_Sha'ir_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "astrology"
+        ]
+      }
+    ],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "gem-cutting"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "DCFEhIWLnnL5YaYc",
+  "sort": 10000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

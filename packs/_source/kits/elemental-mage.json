@@ -1,0 +1,64 @@
+{
+  "_id": "Obe4L5lZDrZE28nX",
+  "_key": "!items!Obe4L5lZDrZE28nX",
+  "name": "Elemental Mage",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "elemental-mage",
+    "classes": [
+      "mage"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Elemental_Mage_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "fire-building",
+          "weather-sense",
+          "swimming",
+          "survival"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "DCFEhIWLnnL5YaYc",
+  "sort": 34000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,67 @@
+{
+  "_id": "FFxjhX7FvO3eMbNY",
+  "_key": "!items!FFxjhX7FvO3eMbNY",
+  "name": "Mystic of Nog",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "mystic-of-nog",
+    "classes": [
+      "mage"
+    ],
+    "source": "The Complete Sha'ir's Handbook",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Mystic_of_Nog_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [
+      {
+        "choice": [
+          "dancing",
+          "swimming",
+          "jumping",
+          "tightrope-walking",
+          "tumbling",
+          "endurance",
+          "running"
+        ]
+      }
+    ],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "DCFEhIWLnnL5YaYc",
+  "sort": 83000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

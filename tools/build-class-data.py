@@ -15,7 +15,7 @@ Sources (AD&D 2e fandom wiki, via the MediaWiki API; the HTML pages return a JS 
 Only mechanical facts are emitted (names, minimums, flags, links); no rulebook prose.
 Run from the repo root:  python3 tools/build-class-data.py
 """
-import hashlib, json, os, re, shutil, urllib.parse, urllib.request
+import hashlib, json, os, re, shutil, sys, time, urllib.error, urllib.parse, urllib.request
 
 API = "https://adnd2e.fandom.com/api.php"
 WIKI = "https://adnd2e.fandom.com/wiki/"
@@ -24,10 +24,19 @@ ABIL = {"Str": "str", "Dex": "dex", "Con": "con", "Int": "int", "Wis": "wis", "C
 
 
 def api(**params):
+    """MediaWiki API call; on HTTP 429 (rate limit) waits (Retry-After, else 10, 20, 40 ... s) and retries."""
     params["format"] = "json"
     req = urllib.request.Request(API + "?" + urllib.parse.urlencode(params), headers=UA)
-    with urllib.request.urlopen(req) as r:
-        return json.load(r)
+    for attempt in range(8):
+        try:
+            with urllib.request.urlopen(req) as r:
+                return json.load(r)
+        except urllib.error.HTTPError as e:
+            if e.code != 429 or attempt == 7:
+                raise
+            wait = int(e.headers.get("Retry-After") or 0) or 10 * 2 ** attempt
+            print(f"rate limited; retrying in {wait}s", file=sys.stderr)
+            time.sleep(wait)
 
 
 def page(title):
@@ -120,7 +129,57 @@ KIT_SOURCES = {  # category -> (book, classes the kits apply to)
     "Character Kit CPrH": ("Complete Priest's Handbook", ["cleric", "druid"]),
     "Character Kit CTH": ("Complete Thief's Handbook", ["thief"]),
     "The_Complete_Bard's_Handbook": ("Complete Bard's Handbook", ["bard"]),
+    "Character Kit AA": ("Al-Qadim: Arabian Adventures", None),       # classes per kit: "Kits (AA)" Table 3
+    "Character Kit CShaH": ("The Complete Sha'ir's Handbook", ["mage"]),  # "the new wizard kits" (Wizard Kits (CShaH))
 }
+AL_QADIM = {"Character Kit AA", "Character Kit CShaH"}
+WARRIORS, ROGUES = ["fighter", "paladin", "ranger"], ["thief", "bard"]
+WIZARDS = ["mage", "abjurer", "conjurer", "diviner", "enchanter", "illusionist", "invoker", "necromancer", "transmuter"]
+# "Kits (AA)" Table 3 "Eligible Classes" -> class identifiers. "Clerics*": "Uses Druid Experience Table" (kahin).
+AA_CLASSES = {"All warriors": WARRIORS, "Fighters, paladins": ["fighter", "paladin"], "Mages": ["mage"],
+              "All wizards": WIZARDS, "All rogues": ROGUES, "Thieves": ["thief"], "Bards": ["bard"],
+              "Clerics": ["cleric"], "Clerics*": ["cleric"], "All priests": ["cleric", "druid"]}
+# Table 3 links two kits under a misspelt title ("Al-Quadim"); the category pages are "Al-Qadim".
+AA_ALIASES = {"Corsair - Al-Quadim (Character Kit)": "Corsair - Al-Qadim (Character Kit)",
+              "Mystic - Al-Quadim (Character Kit)": "Mystic - Al-Qadim (Character Kit)"}
+# Al-Qadim kit requirements: (ability minimums, other restriction, regex the kit page must contain).
+REQ_NONE = r"'''Requirements:''' None\."
+AQ_REQ = {
+    "Ajami (Character Kit)": ({}, False, REQ_NONE + r" All races"),
+    "Askar (Character Kit)": ({}, False, r"'''Requirements:''' None; all races"),
+    "Barber (Character Kit)": ({}, False, r"Barbers may be of either gender and any race"),
+    "Beggar-Thief (Character Kit)": ({}, False, r"members of this kit must be thieves"),
+    "Corsair - Al-Qadim (Character Kit)": ({}, False, r"All warriors except rangers are eligible"),
+    "Desert Rider (Character Kit)": ({}, True, r"only humans, elves, and human-elf crossbreeds may assume this role"),
+    "Elemental Mage (Character Kit)": ({}, False, REQ_NONE + r" Either gender, all races, and all alignments"),
+    "Ethoist (Character Kit)": ({}, True, r"Characters of chaotic alignment are not eligible"),
+    "Faris (Character Kit)": ({}, False, REQ_NONE + r" Although all alignments"),
+    "Hakima (Character Kit)": ({"wis": 15}, True, r"must be female clerics, and they must have a Wisdom of 15 or higher"),
+    "Holy Slayer (Character Kit)": ({}, True, r"must always be lawful\. They must also be thieves"),
+    "Kahin (Character Kit)": ({"wis": 12, "con": 14}, True, r"They are always neutral.*Wisdom of at least 12 and a Constitution of at least 14"),
+    "Mamluk (Character Kit)": ({}, False, REQ_NONE),
+    "Matrud (Character Kit)": ({}, False, r"Only thieves are matruds"),
+    "Mercenary Barbarian (Character Kit)": ({}, False, r"Either gender and all races are allowed"),
+    "Merchant-Rogue (Character Kit)": ({}, False, r"Only members of the thief class may be merchant-rogues"),
+    "Moralist (Character Kit)": ({}, True, r"Moralist clerics must be lawful"),
+    "Mystic - Al-Qadim (Character Kit)": ({}, False, r"any race or faith which allows standard priests"),
+    "Outland Priest (Character Kit)": ({}, True, r"Natives of Zakhara cannot be outland priests"),
+    "Outland Warrior (Character Kit)": ({}, False, r"Any race and both genders are eligible"),
+    "Pragmatist (Character Kit)": ({}, False, r"No specialty priest is eligible"),
+    "Rawun (Character Kit)": ({}, False, r"Rawuns must first be bards"),
+    "Sa'luk (Character Kit)": ({}, False, r"Any rogue class is eligible"),
+    "Sha'ir (Character Kit)": ({}, False, REQ_NONE + r" Both genders are allowed"),
+    "Sorcerer (Character Kit)": ({}, False, REQ_NONE),
+    "Astrologer - Sha'ir (Character Kit)": ({}, True, r"Astrologers must be of a lawful alignment"),
+    "Clockwork Mage (Character Kit)": ({"int": 14, "dex": 16}, False, r"at least an \[\[Intelligence\]\] of 14 and a \[\[Dexterity\]\] of 16"),
+    "Digitalogist (Character Kit)": ({}, True, r"Digitalogists can be of any lawful alignment"),
+    "Ghul Lord (Character Kit)": ({}, True, r"All ghul lords are of chaotic alignments"),
+    "Jackal (Character Kit)": ({}, True, r"Jackals cannot be of lawful alignments"),
+    "Mageweaver (Character Kit)": ({}, False, REQ_NONE + r" Anyone may become a mageweaver"),
+    "Mystic of Nog (Character Kit)": ({}, True, r"must be of any alignment that is not neutral"),
+    "Spellslayer (Character Kit)": ({}, True, r"may only be of non-good, chaotic alignments"),
+}
+KIT_NOTES = {"Kahin (Character Kit)": "Uses the druid experience table (Kits (AA), Table 3)."}
 # Ability minimums per kit page (overrides the class minimum for that ability; 0 removes it).
 # "other": the kit page states race/alignment/other restrictions - shown as a flag + link.
 KIT_REQ = {
@@ -262,7 +321,21 @@ KIT_RACES = {
 
 def kit_name(title):
     name = title.replace(" (Character Kit)", "")
-    return re.sub(r" - (Fighter|Paladin|Ranger|Wizard|Thief|Bard)$", "", name)
+    name = re.sub(r" - Al-Qadim$", " (Al-Qadim)", name)  # Corsair, Mystic: other books have kits of these names
+    return re.sub(r" - (Fighter|Paladin|Ranger|Wizard|Thief|Bard|Sha'ir)$", "", name)
+
+
+def aa_classes():
+    """Kit title -> class identifiers from "Kits (AA)" Table 3 (Eligible Classes)."""
+    wiki, _, _ = page("Kits (AA)")
+    out = {}
+    for r in table_rows(wiki, "Table 3: Character Kit Summary"):
+        m = re.search(r"\[\[([^\]|]+)\|", r[0])
+        if not m:
+            continue  # group heading rows
+        title = AA_ALIASES.get(m.group(1).strip(), m.group(1).strip())
+        out[title] = AA_CLASSES[r[1].strip()]
+    return out
 
 
 def slug(title):
@@ -271,24 +344,44 @@ def slug(title):
 
 def build_kits():
     kits, seen = {}, set()
+    table3 = aa_classes()
     for cat, (book, classes) in KIT_SOURCES.items():
         members = api(action="query", list="categorymembers", cmtitle="Category:" + cat, cmlimit=500)["query"]["categorymembers"]
         for m in members:
             title = m["title"]
             if m["ns"] != 0 or not title.endswith("(Character Kit)"):
                 continue
-            if title not in KIT_REQ:
-                raise SystemExit(f"No curated requirements for {title!r}; add it to KIT_REQ.")
-            rev = api(action="query", prop="revisions", titles=title, rvprop="ids")["query"]["pages"]
-            revid = next(iter(rev.values()))["revisions"][0]["revid"]
-            req = KIT_REQ[title]
+            if cat in AL_QADIM:
+                if title not in AQ_REQ:
+                    raise SystemExit(f"No curated requirements for {title!r}; add it to AQ_REQ.")
+                mins, other, pattern = AQ_REQ[title]
+                wiki, revid, _ = page(title)
+                if not re.search(pattern, wiki, re.S):
+                    raise SystemExit(f"{title}: requirement text changed (AQ_REQ pattern {pattern!r} not found)")
+                req = {"min": mins, "other": other}
+                if classes is None and title not in table3:
+                    raise SystemExit(f"{title} is not in Kits (AA) Table 3")
+                kit_classes = table3[title] if classes is None else classes
+            else:
+                if title not in KIT_REQ:
+                    raise SystemExit(f"No curated requirements for {title!r}; add it to KIT_REQ.")
+                rev = api(action="query", prop="revisions", titles=title, rvprop="ids")["query"]["pages"]
+                revid = next(iter(rev.values()))["revisions"][0]["revid"]
+                req, kit_classes = KIT_REQ[title], classes
             race_limits, race_only = KIT_RACES.get(title, ({}, False))
-            kits[slug(title)] = {"name": kit_name(title), "classes": classes, "source": book,
+            key = slug(title)
+            if key in kits and cat in AL_QADIM:
+                key += "-al-qadim"  # "Beggar-Thief" (AA) and "Beggar - Thief" (CTH) give the same slug
+            if key in kits:
+                raise SystemExit(f"Duplicate kit identifier {key!r} ({title})")
+            kits[key] = {"name": kit_name(title), "classes": kit_classes, "source": book,
                                  "min": req.get("min", {}), "otherRequirements": req.get("other", False),
-                                 "raceLimits": race_limits, "raceOnly": race_only,
-                                 "url": url(title), "revid": revid}
+                                 "raceLimits": race_limits, "raceOnly": race_only, "alQadim": cat in AL_QADIM,
+                                 "notes": KIT_NOTES.get(title, ""), "url": url(title), "revid": revid}
             seen.add(title)
-    stale = (set(KIT_REQ) | set(KIT_RACES)) - seen
+    if set(table3) - seen:
+        raise SystemExit(f"Kits (AA) Table 3 kits missing from the category: {sorted(set(table3) - seen)}")
+    stale = (set(KIT_REQ) | set(KIT_RACES) | set(AQ_REQ)) - seen
     if stale:
         raise SystemExit(f"Curated kits not found on the wiki: {sorted(stale)}")
     return dict(sorted(kits.items(), key=lambda kv: kv[1]["name"].lower()))
@@ -356,6 +449,13 @@ if __name__ == "__main__":
             sub = folder_doc(f"kits.{g}.{cls}", label, parent=group_ids[g][1], sort=len(kit_folders) * 1000)
             kit_folders.append(sub)
             kit_folder_for[cls] = sub["_id"]
+    # Al-Qadim kits: one "Al-Qadim" folder per group (most of them apply to the whole group).
+    group_of = {c["key"]: c["group"] for c in CLASS_FACTS.values()}
+    aq_folder = {}
+    for g in GROUP_FOLDERS:
+        sub = folder_doc(f"kits.{g}.alqadim", "Al-Qadim", parent=group_ids[g][1], sort=90000)
+        kit_folders.append(sub)
+        aq_folder[g] = sub["_id"]
 
     class_docs = []
     for i, (key, c) in enumerate(classes.items()):
@@ -372,8 +472,8 @@ if __name__ == "__main__":
             "identifier": key, "classes": k["classes"], "source": k["source"],
             "min": {a: k["min"].get(a) for a in MINS},
             "otherRequirements": k["otherRequirements"], "raceLimits": k["raceLimits"], "raceOnly": k["raceOnly"],
-            "url": k["url"], "notes": ""}, i * 1000))
-        kit_docs[-1]["folder"] = kit_folder_for[k["classes"][0]]
+            "url": k["url"], "notes": k["notes"]}, i * 1000))
+        kit_docs[-1]["folder"] = aq_folder[group_of[k["classes"][0]]] if k["alQadim"] else kit_folder_for[k["classes"][0]]
     write_docs("packs/_source/classes", class_folders + class_docs)
     write_docs("packs/_source/kits", kit_folders + kit_docs)
     print(f"wrote packs/_source: {len(class_docs)} classes, {len(kit_docs)} kits "

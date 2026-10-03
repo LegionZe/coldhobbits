@@ -1,0 +1,61 @@
+{
+  "_id": "MtWNjOqyqQJfRRkS",
+  "_key": "!items!MtWNjOqyqQJfRRkS",
+  "name": "Kahin",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "kahin",
+    "classes": [
+      "cleric"
+    ],
+    "source": "Al-Qadim: Arabian Adventures",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": 14,
+      "int": null,
+      "wis": 12,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "url": "https://adnd2e.fandom.com/wiki/Kahin_(Character_Kit)",
+    "notes": "Uses the druid experience table (Kits (AA), Table 3).",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "survival"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
+    }
+  },
+  "effects": [],
+  "folder": "InEiVfQCHSnHco4F",
+  "sort": 67000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -38,10 +38,7 @@ SPECIALISTS = ["abjurer", "conjurer", "diviner", "enchanter", "illusionist", "in
 
 
 def api(**p):
-    p["format"] = "json"
-    req = urllib.request.Request(API + "?" + urllib.parse.urlencode(p), headers=UA)
-    with urllib.request.urlopen(req) as r:
-        return json.load(r)
+    return classdata.api(**p)  # retries on HTTP 429
 
 
 def slug(s):
@@ -314,6 +311,29 @@ KIT_OVERRIDES = {
     "Fence (Character Kit)": {"bonus": ["Information Gathering", "Appraising"]},
     # Special Benefits: "the large number of bonus nonweapon proficiencies" = its Required list.
     "Beggar - Thief (Character Kit)": {"bonus": ["Begging", "Disguise", "Information Gathering", "Observation"], "required": []},
+    # Al-Qadim (Arabian Adventures, Complete Sha'ir's Handbook):
+    # "Bonus Proficiencies: Riding, horse specialization (alternately, camel specialization, but not both); survival (desert)."
+    "Desert Rider (Character Kit)": {"bonus": [{"choice": ["Riding, Horse Specialization", "Riding, Camel Specialization"]}, "Survival"]},
+    # "Bonus Proficiencies: None, unless provided for by another kit approved by the DM."
+    "Outland Warrior (Character Kit)": {"bonus": []},
+    # "Fire-building (flame), weather sense (wind), swimming (sea), or desert survival (sand). The mage's bonus
+    # proficiency matches his or her specialty."
+    "Elemental Mage (Character Kit)": {"bonus": [{"choice": ["Fire-building", "Weather Sense", "Swimming", "Survival"]}]},
+    # "Survival (in same type as character's homeland); modern language, Midani (in addition to the character's native tongue)"
+    "Mercenary Barbarian (Character Kit)": {"bonus": ["Survival", "Languages, Modern"],
+                                            "note": "Bonus modern language: Midani (Zakharan Common), in addition to the native tongue."},
+    # "Healing, herbalism; for bards also modern language and reading/writing."
+    "Barber (Character Kit)": {"bonus": ["Healing", "Herbalism"],
+                               "note": "Bards also gain Languages, Modern and Reading/Writing as bonus proficiencies."},
+    # "Religion, plus one priest or general proficiency that reflects the action required to receive spells (player's choice)."
+    "Mystic - Al-Qadim (Character Kit)": {"bonus": ["Religion"],
+                                          "note": "Bonus: one priest or general proficiency for the action that brings spells (player's choice; none for solitude and meditation)."},
+    # "Reading/writing, plus any one general proficiency (player's choice)."
+    "Askar (Character Kit)": {"bonus": ["Reading/Writing"], "note": "Bonus: one general proficiency of the player's choice."},
+    # "Choose one from among blind-fighting, awareness, or display weapons."
+    "Spellslayer (Character Kit)": {"bonus": [{"choice": ["Blind-fighting", "Awareness", "Display Weapon Prowess"]}]},
+    # "The clockwork mage receives the clockwork creation nonweapon proficiency"
+    "Clockwork Mage (Character Kit)": {"bonus": ["Clockwork Creation"]},
 }
 # Extra proficiency slots granted by a kit.
 KIT_SLOTS = {
