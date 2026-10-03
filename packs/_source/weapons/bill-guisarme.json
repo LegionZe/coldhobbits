@@ -1,0 +1,53 @@
+{
+  "_id": "8pMUih5HGKsioDpU",
+  "_key": "!items!8pMUih5HGKsioDpU",
+  "name": "Bill-guisarme",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bill-guisarme",
+    "proficiency": "bill-guisarme",
+    "weapon": {
+      "size": "L",
+      "type": "P/S",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "7 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

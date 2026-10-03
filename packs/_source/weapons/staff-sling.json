@@ -1,0 +1,59 @@
+{
+  "_id": "WPaqhKFGDh9aTxLB",
+  "_key": "!items!WPaqhKFGDh9aTxLB",
+  "name": "Staff sling",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "staff-sling",
+    "proficiency": "staff-sling",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 11,
+      "damage": [
+        {
+          "label": "Sling bullet",
+          "sm": "1d4+1",
+          "l": "1d6+1",
+          "speed": null
+        },
+        {
+          "label": "Sling stone",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "—",
+        "medium": "30-60",
+        "long": "90"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "damage"
+    },
+    "cost": "2 sp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 5700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

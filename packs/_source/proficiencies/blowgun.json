@@ -24,12 +24,14 @@
         {
           "label": "Barbed Dart",
           "sm": "1d3",
-          "l": "1d2"
+          "l": "1d2",
+          "speed": null
         },
         {
           "label": "Needle",
           "sm": "1",
-          "l": "1"
+          "l": "1",
+          "speed": null
         }
       ],
       "melee": false,

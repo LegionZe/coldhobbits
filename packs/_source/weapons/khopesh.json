@@ -1,0 +1,53 @@
+{
+  "_id": "13RkyWbqmLaY57ay",
+  "_key": "!items!13RkyWbqmLaY57ay",
+  "name": "Khopesh",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "khopesh",
+    "proficiency": "khopesh",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "10 gp",
+    "weight": 7.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

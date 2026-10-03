@@ -1,0 +1,53 @@
+{
+  "_id": "XBnh8Divyy9BC8Xy",
+  "_key": "!items!XBnh8Divyy9BC8Xy",
+  "name": "Horseman's mace",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horseman-s-mace",
+    "proficiency": "horseman-s-mace",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

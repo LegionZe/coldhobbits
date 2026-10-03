@@ -1,0 +1,36 @@
+{
+  "_id": "hVS0eM2vGxJcvRit",
+  "_key": "!items!hVS0eM2vGxJcvRit",
+  "name": "Heavy quarrel",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "heavy-quarrel",
+    "launchers": [
+      "heavy-crossbow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d4+1",
+      "l": "1d6+1"
+    },
+    "cost": "2 sp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

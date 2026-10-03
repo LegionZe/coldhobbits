@@ -108,6 +108,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.xpNext = xp?.[this.level] ?? null; // index = level -> XP for level + 1
 
     this.proficiencies = this.#computeProficiencies();
+    this.weapons = this.#computeWeapons();
 
     const computed = thac0At(this.classGroup, this.level);
     this.thac0.computed = computed;
@@ -204,7 +205,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         entry.specialized = p.specialized;
         // Fighters only, and a single weapon ("choose a single weapon and specialize in its use").
         entry.specInvalid = p.specialized && (!canSpecialize || specializedCount > 1);
-        entry.attack = this.#weaponAttack(p, p.specialized && canSpecialize);
+        entry.attack = this.#weaponAttack(p.weapon, p.specialized && canSpecialize);
       }
       return entry;
     });
@@ -231,8 +232,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * crossbows: none); rate of fire from Table 45, or Table 35 for non-bow specialists (bow specialists gain no
    * extra attacks); bow/crossbow specialists gain the point-blank range (+2 to hit). Damage never below 1.
    */
-  #weaponAttack(p, specialized) {
-    const w = p.weapon;
+  #weaponAttack(w, specialized, extra = { hit: 0, dmg: 0 }) {
     const { hit, dmg, missile } = this.mods;
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
@@ -240,8 +240,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const table = specialized ? AD2E.specialistAttacks.melee
         : (this.classGroup === "warrior" ? AD2E.warriorAttacks : null);
       out.melee = {
-        hit: hit + (specialized ? spec.meleeHit : 0),
-        dmg: dmg + (specialized ? spec.meleeDamage : 0),
+        hit: hit + (specialized ? spec.meleeHit : 0) + extra.hit,
+        dmg: dmg + (specialized ? spec.meleeDamage : 0) + extra.dmg,
         rate: table ? formatRate(attackRate(table, this.level)) : "1"
       };
     }
@@ -250,14 +250,33 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const strDmg = { full: dmg, damage: dmg, penalty: Math.min(dmg, 0) }[w.strength] ?? 0;
       const column = specialized && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
       out.missile = {
-        hit: missile + strHit,
-        dmg: strDmg,
+        hit: missile + strHit + extra.hit,
+        dmg: strDmg + extra.dmg,
         rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
         pointBlank: specialized && w.family !== "other",
         range: w.range
       };
     }
     return out;
+  }
+
+  /**
+   * Owned weapon items, linked to the weapon proficiency with the same identifier (`system.proficiency`).
+   * Not proficient: Table 34 non-proficiency penalty to the attack roll. Specialized (on the proficiency,
+   * fighters only): the specialization bonuses and attacks per round. Magical `bonus` adds to hit and damage.
+   */
+  #computeWeapons() {
+    const p = this.proficiencies;
+    const profEntries = p.entries.filter(e => e.item.system.kind === "weapon");
+    const items = this.parent?.items?.filter(i => i.type === "weapon") ?? [];
+    return items.map(item => {
+      const w = item.system;
+      const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
+      const specialized = !!(prof?.specialized && p.canSpecialize);
+      const penalty = prof ? 0 : p.penalty;
+      return { item, proficient: !!prof, proficiency: prof?.item ?? null, specialized, penalty,
+        attack: this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg }) };
+    });
   }
 
   getRollData() {

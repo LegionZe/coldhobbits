@@ -1,0 +1,36 @@
+{
+  "_id": "xxOLoqjO3v9ObnPI",
+  "_key": "!items!xxOLoqjO3v9ObnPI",
+  "name": "Needle",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "needle",
+    "launchers": [
+      "blowgun"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1",
+      "l": "1"
+    },
+    "cost": "2 cp",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

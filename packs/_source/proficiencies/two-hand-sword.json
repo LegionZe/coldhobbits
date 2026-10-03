@@ -24,7 +24,8 @@
         {
           "label": "",
           "sm": "1d10",
-          "l": "3d6"
+          "l": "3d6",
+          "speed": null
         }
       ],
       "melee": true,

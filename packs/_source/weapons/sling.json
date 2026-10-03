@@ -1,0 +1,59 @@
+{
+  "_id": "z06m5xYh2h1FGyUf",
+  "_key": "!items!z06m5xYh2h1FGyUf",
+  "name": "Sling",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sling",
+    "proficiency": "sling",
+    "weapon": {
+      "size": "S",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "Sling bullet",
+          "sm": "1d4+1",
+          "l": "1d6+1",
+          "speed": null
+        },
+        {
+          "label": "Sling stone",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "50",
+        "medium": "100",
+        "long": "200"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "damage"
+    },
+    "cost": "5 cp.",
+    "weight": 0.1,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 5400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

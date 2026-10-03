@@ -1,0 +1,53 @@
+{
+  "_id": "Ch7nykA9VpaOmGD5",
+  "_key": "!items!Ch7nykA9VpaOmGD5",
+  "name": "Horseman's flail",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horseman-s-flail",
+    "proficiency": "horseman-s-flail",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "8 gp",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

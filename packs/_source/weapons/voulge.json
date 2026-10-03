@@ -1,0 +1,53 @@
+{
+  "_id": "HmV5Hi759IfPHAX4",
+  "_key": "!items!HmV5Hi759IfPHAX4",
+  "name": "Voulge",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "voulge",
+    "proficiency": "voulge",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "2d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 6000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

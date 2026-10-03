@@ -1,0 +1,53 @@
+{
+  "_id": "DKwYF7RUsE9xETIw",
+  "_key": "!items!DKwYF7RUsE9xETIw",
+  "name": "Footman's pick",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "footman-s-pick",
+    "proficiency": "footman-s-pick",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "2d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "8 gp",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

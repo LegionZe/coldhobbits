@@ -1,0 +1,53 @@
+{
+  "_id": "LOIYbNz1vV4jfYMS",
+  "_key": "!items!LOIYbNz1vV4jfYMS",
+  "name": "Footman's flail",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "footman-s-flail",
+    "proficiency": "footman-s-flail",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "2d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "15 gp",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

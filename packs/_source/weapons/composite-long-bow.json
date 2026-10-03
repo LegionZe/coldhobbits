@@ -1,0 +1,59 @@
+{
+  "_id": "NmPgT0m2YeqL5x7a",
+  "_key": "!items!NmPgT0m2YeqL5x7a",
+  "name": "Composite long bow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "composite-long-bow",
+    "proficiency": "composite-long-bow",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "Flight arrow",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        },
+        {
+          "label": "Sheaf arrow",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "60",
+        "medium": "120",
+        "long": "210"
+      },
+      "family": "bow",
+      "missileColumn": "otherMissile",
+      "strength": "penalty"
+    },
+    "cost": "100 gp",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

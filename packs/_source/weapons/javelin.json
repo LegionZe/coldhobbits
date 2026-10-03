@@ -1,0 +1,53 @@
+{
+  "_id": "8WcECDgZNSUqrswT",
+  "_key": "!items!8WcECDgZNSUqrswT",
+  "name": "Javelin",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "javelin",
+    "proficiency": "javelin",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "cost": "5 sp",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "SuH8aymL1D9wY4S8",
+  "_key": "!items!SuH8aymL1D9wY4S8",
+  "name": "Fauchard",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "fauchard",
+    "proficiency": "fauchard",
+    "weapon": {
+      "size": "L",
+      "type": "P/S",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp",
+    "weight": 7.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

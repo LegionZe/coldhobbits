@@ -1,0 +1,59 @@
+{
+  "_id": "0Ti41aVk8Wddfwq3",
+  "_key": "!items!0Ti41aVk8Wddfwq3",
+  "name": "Bastard sword",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "bastard-sword",
+    "proficiency": "bastard-sword",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "One-handed",
+          "sm": "1d8",
+          "l": "1d12",
+          "speed": 6
+        },
+        {
+          "label": "Two-handed",
+          "sm": "2d4",
+          "l": "2d8",
+          "speed": 8
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "25 gp",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

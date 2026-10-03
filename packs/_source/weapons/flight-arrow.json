@@ -1,0 +1,39 @@
+{
+  "_id": "rEBqlMeL3JKsryPV",
+  "_key": "!items!rEBqlMeL3JKsryPV",
+  "name": "Flight arrow",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "flight-arrow",
+    "launchers": [
+      "composite-long-bow",
+      "composite-short-bow",
+      "long-bow",
+      "short-bow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d6",
+      "l": "1d6"
+    },
+    "cost": "3sp/12",
+    "weight": 0.1,
+    "quantity": 12,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

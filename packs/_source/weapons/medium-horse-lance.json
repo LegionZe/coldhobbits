@@ -1,0 +1,53 @@
+{
+  "_id": "y8V0i4k0KgUPbqFQ",
+  "_key": "!items!y8V0i4k0KgUPbqFQ",
+  "name": "Medium horse lance",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "medium-horse-lance",
+    "proficiency": "medium-horse-lance",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "10 gp",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 4300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

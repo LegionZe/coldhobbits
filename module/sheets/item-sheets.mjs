@@ -116,18 +116,57 @@ export class ProficiencySheet extends AD2EItemSheet {
     context.abilityLabels = AD2E.abilityLabels;
     context.nonweaponGroups = AD2E.nonweaponGroups;
     context.groupList = [...this.document.system.groups];
+    context.isWeapon = this.document.system.kind === "weapon";
+    if (context.isWeapon) context.weapon = weaponStats(this.document.system.weapon);
+    return context;
+  }
+}
+
+/** Read-only display of PHB weapon data (weapon items). */
+function weaponStats(w) {
+  const dash = v => v ?? "—";
+  return {
+    size: dash(w.size), type: dash(w.type), speed: dash(w.speed), missile: w.missile, range: w.range,
+    uses: [w.melee && game.i18n.localize("AD2E.Weapon.melee"), w.missile && game.i18n.localize("AD2E.Weapon.missile")]
+      .filter(Boolean).join(", ") || "—",
+    damage: w.damage.map(d => ({ label: d.speed ? `${d.label}, ${game.i18n.localize("AD2E.Weapon.Speed")} ${d.speed}` : d.label,
+      sm: dash(d.sm), l: dash(d.l) }))
+  };
+}
+
+export class WeaponSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["weapon"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/weapon-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
     const sys = this.document.system;
-    context.isWeapon = sys.kind === "weapon";
-    if (context.isWeapon) {
-      const w = sys.weapon;
-      const dash = v => v ?? "—";
-      context.weapon = {
-        size: dash(w.size), type: dash(w.type), speed: dash(w.speed), missile: w.missile, range: w.range,
-        uses: [w.melee && game.i18n.localize("AD2E.Weapon.melee"), w.missile && game.i18n.localize("AD2E.Weapon.missile")]
-          .filter(Boolean).join(", ") || "—",
-        damage: w.damage.map(d => ({ label: d.label, sm: dash(d.sm), l: dash(d.l) }))
-      };
+    context.weapon = weaponStats(sys.weapon);
+    // On an actor: the linked weapon proficiency, if owned.
+    const actor = this.document.parent;
+    const entry = actor?.system?.weapons?.find(e => e.item.id === this.document.id);
+    if (entry) {
+      context.linked = entry.proficient
+        ? `${game.i18n.localize("AD2E.Weapon.Proficiency")}: ${entry.proficiency.name}`
+          + (entry.specialized ? ` (${game.i18n.localize("AD2E.Weapon.Specialized")})` : "")
+        : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: entry.penalty });
     }
     return context;
+  }
+}
+
+export class AmmunitionSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["ammunition"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/ammunition-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.launchersText = [...this.document.system.launchers].join(", ");
+    return context;
+  }
+
+  /** Launchers are edited as comma-separated weapon identifiers. */
+  _processFormData(event, form, formData) {
+    return parseClassesText(super._processFormData(event, form, formData), ["launchers"]);
   }
 }

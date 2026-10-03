@@ -1,0 +1,53 @@
+{
+  "_id": "PN8mlPZ0o7UxASkz",
+  "_key": "!items!PN8mlPZ0o7UxASkz",
+  "name": "Dart",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "dart",
+    "proficiency": "dart",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "3/1",
+        "short": "10",
+        "medium": "20",
+        "long": "40"
+      },
+      "family": "other",
+      "missileColumn": "thrownDart",
+      "strength": "full"
+    },
+    "cost": "5 sp",
+    "weight": 0.5,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

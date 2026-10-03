@@ -24,12 +24,14 @@
         {
           "label": "Sling bullet",
           "sm": "1d4+1",
-          "l": "1d6+1"
+          "l": "1d6+1",
+          "speed": null
         },
         {
           "label": "Sling stone",
           "sm": "1d4",
-          "l": "1d4"
+          "l": "1d4",
+          "speed": null
         }
       ],
       "melee": false,

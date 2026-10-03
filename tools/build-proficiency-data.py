@@ -15,6 +15,9 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
     Each weapon proficiency carries `system.weapon`: size, type, speed, damage (ammunition rows are added to
     their launchers, the One-/Two-handed rows to the bastard sword), Table 45 rate of fire and ranges
     ("Combat Tables (PHB)"), bow/crossbow family and the Table 35 column for missile use.
+  * The same data, with cost and weight, as weapon Items (packs/_source/weapons), linked to the weapon
+    proficiency by identifier (`system.proficiency`); ammunition rows as ammunition Items with the
+    identifiers of the launchers they fit (`system.launchers`) and the bundle size from the cost ("3 sp/12").
   * Kit pages (Nonweapon Proficiencies "Bonus"/"Required" lines) -> written into packs/_source/kits.
 Run after build-class-data.py (it adds fields to the kit sources):  python3 tools/build-proficiency-data.py
 """
@@ -201,6 +204,17 @@ def build_ranges():
     return ranges, rev
 
 
+def weight(v):
+    """Weight in pounds; "*" = "Ten of these weigh one pound" (Weapon List (PHB) footnote)."""
+    v = v.strip()
+    if v == "*":
+        return 0.1
+    m = re.fullmatch(r"\{\{frac\|(\d+)\|(\d+)\}\}", v)
+    if m:
+        return int(m.group(1)) / int(m.group(2))
+    return float(v) if re.fullmatch(r"\d+(\.\d+)?", v) else None
+
+
 def ammo_targets(ammo, launchers):
     """Which launchers an ammunition row belongs to (Weapon List (PHB) groups ammunition under its launcher)."""
     n = ammo.lower()
@@ -225,24 +239,34 @@ def build_weapons():
         cells = [l[1:].strip() for l in chunk.strip().split("\n") if l.startswith("|") and not l.startswith(("|}", "|+"))]
         if cells:
             rows.append([re.sub(r"<sup>.*?</sup>|\s+\d$", "", cells[0]).strip()] + cells[1:])
-    weapons, order = {}, []
+    weapons, order, items, ammo = {}, [], {}, []
     for name, cost, wt, size, typ, speed, sm, lg in rows:
         if AMMO.search(name) or name in ("One-handed", "Two-handed") or name in ("Bow", "Crossbow", "Lance", "Polearm", "Sword"):
             continue
         weapons[name] = {"size": dash(size), "type": dash(typ), "speed": int(speed) if speed.isdigit() else None,
-                         "damage": [{"label": "", "sm": dash(sm), "l": dash(lg)}] if dash(sm) else []}
+                         "damage": [{"label": "", "sm": dash(sm), "l": dash(lg), "speed": None}] if dash(sm) else []}
+        items[name] = {"cost": dash(cost) or "", "weight": weight(wt)}
         order.append(name)
     # Damage that lives on other rows: ammunition (launchers) and the bastard sword's grips.
     for i, (name, cost, wt, size, typ, speed, sm, lg) in enumerate(rows):
         if AMMO.search(name):
+            bundle = re.search(r"/\s*(\d+)\s*$", cost or "")
+            ammo.append({"key": slug(name), "name": name, "system": {
+                "identifier": slug(name), "launchers": [slug(l) for l in ammo_targets(name, order)],
+                "size": dash(size), "type": dash(typ), "damage": {"sm": dash(sm), "l": dash(lg)},
+                "cost": dash(cost) or "", "weight": weight(wt), "quantity": int(bundle.group(1)) if bundle else 1,
+                "bonus": {"hit": 0, "dmg": 0}, "source": "Player's Handbook", "url": classdata.url("Weapon List (PHB)"),
+                "notes": ""}})
             for launcher in ammo_targets(name, order):
-                weapons[launcher]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg)})
+                weapons[launcher]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg), "speed": None})
                 weapons[launcher]["type"] = weapons[launcher]["type"] or dash(typ)  # damage type is the ammunition's
         elif name in ("One-handed", "Two-handed"):
-            weapons["Bastard sword"]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg)})
+            # speed factor per grip (one-handed 6, two-handed 8); the weapon's speed is the first grip's
+            weapons["Bastard sword"]["damage"].append({"label": name, "sm": dash(sm), "l": dash(lg), "speed": int(speed)})
             weapons["Bastard sword"]["speed"] = weapons["Bastard sword"]["speed"] or int(speed)
-            weapons["Bastard sword"]["size"], weapons["Bastard sword"]["type"] = "M", dash(typ)
-    docs = []
+            weapons["Bastard sword"]["size"], weapons["Bastard sword"]["type"] = dash(size), dash(typ)
+            items["Bastard sword"] = {"cost": dash(cost) or "", "weight": weight(wt)}
+    docs, gear = [], []
     for name in order:
         w = weapons[name]
         assert w["damage"] or name in NO_DAMAGE, f"no damage found for {name}"
@@ -257,7 +281,14 @@ def build_weapons():
                      "system": {"identifier": key, "kind": "weapon", "slots": 1, "ability": None, "modifier": None,
                                 "groups": [], "sp": {"ability": "", "rating": None, "cost": None}, "weapon": weapon,
                                 "source": "Player's Handbook", "url": classdata.url("Weapon List (PHB)"), "notes": ""}})
-    return docs
+        # The weapon item: same weapon data, linked to its proficiency by identifier.
+        gear.append({"key": key, "name": name, "system": {
+            "identifier": key, "proficiency": key, "weapon": weapon, **items[name], "quantity": 1, "equipped": False,
+            "bonus": {"hit": 0, "dmg": 0}, "source": "Player's Handbook", "url": classdata.url("Weapon List (PHB)"),
+            "notes": ""}})
+    for a in ammo:
+        assert a["system"]["launchers"], f"no launcher for {a['name']}"
+    return docs, gear, ammo
 
 
 # --- Kit bonus / required proficiencies -----------------------------------------------------------
@@ -408,7 +439,7 @@ def apply_kits(prof_names):
 if __name__ == "__main__":
     slots, phb, crossover, revs = build_tables()
     nonweapon, names = build_nonweapon(phb)
-    weapons = build_weapons()
+    weapons, gear, ammo = build_weapons()
 
     folders, folder_of = [], {}
     sources = sorted({d["source"] for d in nonweapon}, key=lambda s: (s != "Player's Handbook", s))
@@ -430,6 +461,17 @@ if __name__ == "__main__":
         docs.append(item)
     classdata.write_docs("packs/_source/proficiencies", docs)
 
+    w_folder = classdata.folder_doc("weapons.weapons", "Weapons", sort=0)
+    a_folder = classdata.folder_doc("weapons.ammunition", "Ammunition", sort=1000)
+    wdocs = [w_folder, a_folder]
+    for i, d in enumerate(sorted(gear, key=lambda d: d["name"].lower())):
+        wdocs.append({**classdata.item_doc("weapon", "w." + d["key"], d["name"], "icons/svg/sword.svg", d["system"], i * 100),
+                      "folder": w_folder["_id"]})
+    for i, d in enumerate(sorted(ammo, key=lambda d: d["name"].lower())):
+        wdocs.append({**classdata.item_doc("ammunition", "a." + d["key"], d["name"], "icons/svg/target.svg", d["system"], i * 100),
+                      "folder": a_folder["_id"]})
+    classdata.write_docs("packs/_source/weapons", wdocs)
+
     apply_kits(names)
 
     open("module/rules/proficiency-tables.mjs", "w").write("\n".join([
@@ -444,4 +486,4 @@ if __name__ == "__main__":
         "export const PROFICIENCY_SLOTS = " + json.dumps(slots, indent=2) + ";", "",
         "export const PROFICIENCY_GROUPS = " + json.dumps(crossover, indent=2) + ";", ""]))
     print(f"wrote packs/_source/proficiencies: {len(nonweapon)} nonweapon, {len(weapons)} weapon, "
-          f"{len(folders)} folders; kits updated; module/rules/proficiency-tables.mjs")
+          f"{len(folders)} folders; packs/_source/weapons: {len(gear)} weapons, {len(ammo)} ammunition; kits updated; module/rules/proficiency-tables.mjs")

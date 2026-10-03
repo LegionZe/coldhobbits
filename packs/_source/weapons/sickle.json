@@ -1,0 +1,53 @@
+{
+  "_id": "p3FBZgsWB8U6bPKb",
+  "_key": "!items!p3FBZgsWB8U6bPKb",
+  "name": "Sickle",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sickle",
+    "proficiency": "sickle",
+    "weapon": {
+      "size": "S",
+      "type": "S",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "6 sp",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 5300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

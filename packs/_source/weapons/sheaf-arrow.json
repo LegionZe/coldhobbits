@@ -1,0 +1,39 @@
+{
+  "_id": "nt1t0AlFci4xeLFB",
+  "_key": "!items!nt1t0AlFci4xeLFB",
+  "name": "Sheaf arrow",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "sheaf-arrow",
+    "launchers": [
+      "composite-long-bow",
+      "composite-short-bow",
+      "long-bow",
+      "short-bow"
+    ],
+    "size": "S",
+    "type": "P",
+    "damage": {
+      "sm": "1d8",
+      "l": "1d8"
+    },
+    "cost": "3 sp/6",
+    "weight": 0.1,
+    "quantity": 6,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "CtturimrndrUB658",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

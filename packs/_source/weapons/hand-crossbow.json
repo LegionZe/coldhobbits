@@ -1,0 +1,53 @@
+{
+  "_id": "Eh5V3djRvGUJEenC",
+  "_key": "!items!Eh5V3djRvGUJEenC",
+  "name": "Hand crossbow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hand-crossbow",
+    "proficiency": "hand-crossbow",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "Hand quarrel",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "crossbow",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "300 gp",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "2pILnUNL4e0u4YkM",
+  "_key": "!items!2pILnUNL4e0u4YkM",
+  "name": "Quarterstaff",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "quarterstaff",
+    "proficiency": "quarterstaff",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_List_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FOMmB7vwn6PQiKaM",
+  "sort": 4700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
