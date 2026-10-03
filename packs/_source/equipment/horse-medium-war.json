@@ -1,0 +1,34 @@
+{
+  "_id": "jBcswOGMLH3UiCRl",
+  "_key": "!items!jBcswOGMLH3UiCRl",
+  "name": "Horse, medium war",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horse-medium-war",
+    "category": "animal",
+    "cost": "225 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 220,
+      "half": 330,
+      "quarter": 440
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 10900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

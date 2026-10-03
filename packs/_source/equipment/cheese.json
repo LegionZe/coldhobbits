@@ -1,0 +1,34 @@
+{
+  "_id": "eXJxYbrX3VuXW4fe",
+  "_key": "!items!eXJxYbrX3VuXW4fe",
+  "name": "Cheese",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cheese",
+    "category": "lodging",
+    "cost": "4 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Daily_Food_and_Lodging_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "LSRzHWkk8dKRfqNl",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "9wFvk5FwBQGYPCfq",
+  "_key": "!items!9wFvk5FwBQGYPCfq",
+  "name": "Cloth, rich (per 10 sq. yds.)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cloth-rich-per-10-sq-yds",
+    "category": "gear",
+    "cost": "100 gp",
+    "weight": 10.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "faXqPLnTYGFkIwhf",
+  "sort": 16700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "13VKUWnBbv1Pwfcm",
+  "_key": "!items!13VKUWnBbv1Pwfcm",
+  "name": "Dog, hunting",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "dog-hunting",
+    "category": "animal",
+    "cost": "17 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 15,
+      "half": 20,
+      "quarter": 30
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 9700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

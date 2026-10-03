@@ -1,0 +1,34 @@
+{
+  "_id": "mjNDTBBSPuAjTkYk",
+  "_key": "!items!mjNDTBBSPuAjTkYk",
+  "name": "Soap (per lb.)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "soap-per-lb",
+    "category": "gear",
+    "cost": "5 sp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "faXqPLnTYGFkIwhf",
+  "sort": 20700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

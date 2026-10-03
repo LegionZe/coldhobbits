@@ -1,0 +1,34 @@
+{
+  "_id": "LK4KWgjk9pgSp0Az",
+  "_key": "!items!LK4KWgjk9pgSp0Az",
+  "name": "Elephant, war",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "elephant-war",
+    "category": "animal",
+    "cost": "500 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 500,
+      "half": 750,
+      "quarter": 1000
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 10100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "5xJgNrktL3ZWmVZ6",
+  "_key": "!items!5xJgNrktL3ZWmVZ6",
+  "name": "Camel",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "camel",
+    "category": "animal",
+    "cost": "50 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 330,
+      "half": 500,
+      "quarter": 660
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 9100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

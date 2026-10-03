@@ -72,6 +72,11 @@ initiative 1d10, lowest acts first.
   of the same coin. The Equipment tab lists coin stacks with editable quantities, the total value in gp and the weight
   (50 coins of any metal to the pound, DMG), which counts toward encumbrance. Coin counts entered in 0.0.20 are moved
   into coin items when a GM loads the world.
+- The rest of the PHB Table 44 equipment lists are Items (type `equipment`) in the same compendium, one folder per list:
+  clothing, daily food and lodging, household provisioning, transport, animals, services, tack and harness, and
+  miscellaneous equipment (219 items, cost and weight as listed; "*" items weigh 1/10 lb, "**" none). Containers carry
+  their Table 50 capacity and animals their Table 49 carrying capacity. Carried items count toward encumbrance (weight x
+  quantity); animals, transport, services, lodging and tack start as not carried.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
@@ -82,4 +87,4 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, armour sizes, class armour restrictions, other equipment items, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.
+Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, armour sizes, class armour restrictions, items inside containers, mount encumbrance, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet, class save bonuses (e.g. paladin), multi-classing.

@@ -1,0 +1,34 @@
+{
+  "_id": "5J7pGeou6lA4xjig",
+  "_key": "!items!5J7pGeou6lA4xjig",
+  "name": "Calf",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "calf",
+    "category": "animal",
+    "cost": "5 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

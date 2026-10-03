@@ -1,0 +1,34 @@
+{
+  "_id": "GkTynDpqrXIuQFxm",
+  "_key": "!items!GkTynDpqrXIuQFxm",
+  "name": "Meals, good (per day)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "meals-good-per-day",
+    "category": "lodging",
+    "cost": "5 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Daily_Food_and_Lodging_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "LSRzHWkk8dKRfqNl",
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

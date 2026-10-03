@@ -1,0 +1,25 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" data-edit="img" alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Gear.Category"}}
+      <select name="system.category">{{selectOptions categories selected=system.category localize=true}}</select></label>
+    <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
+    <label>{{localize "AD2E.Gear.WeightEach"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
+    <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" step="1"></label>
+    <label class="ad2e-check"><input type="checkbox" name="system.carried" {{checked system.carried}}> {{localize "AD2E.Gear.Carried"}}</label>
+    <label>{{localize "AD2E.Gear.Capacity"}} <input type="number" name="system.capacity.weight" value="{{system.capacity.weight}}" min="0"></label>
+    <label>{{localize "AD2E.Gear.Volume"}} <input type="text" name="system.capacity.volume" value="{{system.capacity.volume}}"></label>
+    <label>{{localize "AD2E.Gear.LoadFull"}} <input type="number" name="system.load.full" value="{{system.load.full}}" min="0"></label>
+    <label>{{localize "AD2E.Gear.LoadHalf"}} <input type="number" name="system.load.half" value="{{system.load.half}}" min="0"></label>
+    <label>{{localize "AD2E.Gear.LoadQuarter"}} <input type="number" name="system.load.quarter" value="{{system.load.quarter}}" min="0"></label>
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  <p class="ad2e-note">{{summary}}</p>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

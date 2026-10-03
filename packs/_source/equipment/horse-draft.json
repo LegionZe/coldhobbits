@@ -1,0 +1,34 @@
+{
+  "_id": "rWpaeoEbIORgokQi",
+  "_key": "!items!rWpaeoEbIORgokQi",
+  "name": "Horse, draft",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "horse-draft",
+    "category": "animal",
+    "cost": "200 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 260,
+      "half": 390,
+      "quarter": 520
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 10600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

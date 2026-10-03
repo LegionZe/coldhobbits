@@ -1,0 +1,34 @@
+{
+  "_id": "bNzU0xYjxiwnaG2v",
+  "_key": "!items!bNzU0xYjxiwnaG2v",
+  "name": "Ox",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ox",
+    "category": "animal",
+    "cost": "15 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": false,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": 220,
+      "half": 330,
+      "quarter": 440
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Animals_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "dgYLQ6v5hXEPve5G",
+  "sort": 11200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "YxVUplS47pIuue0G",
+  "_key": "!items!YxVUplS47pIuue0G",
+  "name": "Girdle",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "girdle",
+    "category": "clothing",
+    "cost": "3 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Clothing_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "83sefHS7GWMecduo",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,34 @@
+{
+  "_id": "LGK492Hc1QE97h0q",
+  "_key": "!items!LGK492Hc1QE97h0q",
+  "name": "Canvas (per sq. yard)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "canvas-per-sq-yard",
+    "category": "gear",
+    "cost": "4 sp",
+    "weight": 1.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "faXqPLnTYGFkIwhf",
+  "sort": 16900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

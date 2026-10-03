@@ -96,3 +96,5 @@
 .ad2e-coin-row { grid-template-columns: 24px 1fr 6rem auto auto; }
 .ad2e-coin-row input { width: 6rem; }
 .ad2e-coin-value { white-space: nowrap; font-size: 0.85em; }
+.ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
+.ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }

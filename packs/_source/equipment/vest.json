@@ -1,0 +1,34 @@
+{
+  "_id": "rosb3zdErD2DFN8f",
+  "_key": "!items!rosb3zdErD2DFN8f",
+  "name": "Vest",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "vest",
+    "category": "clothing",
+    "cost": "6 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "Player's Handbook",
+    "url": "https://adnd2e.fandom.com/wiki/Clothing_(PHB)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "83sefHS7GWMecduo",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

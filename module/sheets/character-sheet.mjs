@@ -1,4 +1,4 @@
-import { AD2E, armorSummary } from "../config.mjs";
+import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -93,7 +93,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleSpecialized: CharacterSheet.onToggleSpecialized,
       adjustQuantity: CharacterSheet.onAdjustQuantity,
       toggleEquipped: CharacterSheet.onToggleEquipped,
-      rollJump: CharacterSheet.onRollJump
+      rollJump: CharacterSheet.onRollJump,
+      toggleCarried: CharacterSheet.onToggleCarried
     }
   };
 
@@ -320,7 +321,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       })).sort((x, y) => order.indexOf(x.denomination) - order.indexOf(y.denomination) || x.name.localeCompare(y.name)),
       gp: Math.round(e.coinValue / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
     };
-    return { rows, ammo, armor, enc, coins, ac: acSummary, thac0: sys.thac0.value };
+    // Equipment items grouped by category (PHB Table 44 lists).
+    const gearItems = actor.items?.filter(i => i.type === "equipment") ?? [];
+    const gear = Object.entries(AD2E.equipmentCategories).map(([key, label]) => ({
+      key, label: i18n(label),
+      rows: gearItems.filter(i => i.system.category === key).map(i => ({
+        id: i.id, name: i.name, img: i.img, quantity: i.system.quantity, carried: i.system.carried,
+        summary: equipmentSummary(i.system),
+        total: i.system.weight && i.system.quantity > 1 ? Math.round(i.system.weight * i.system.quantity * 10) / 10 : null
+      })).sort((x, y) => x.name.localeCompare(y.name))
+    })).filter(g => g.rows.length);
+    return { rows, ammo, armor, enc, coins, gear, ac: acSummary, thac0: sys.thac0.value };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -462,6 +473,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onRollWeaponDamage(event, target) {
     return this.actor.rollWeaponDamage(target.dataset.itemId, target.dataset.use);
+  }
+
+  /** Carried equipment counts toward encumbrance. */
+  static onToggleCarried(event, target) {
+    return this.actor.items.get(target.dataset.itemId)?.update({ "system.carried": target.checked });
   }
 
   /** Roll a jump distance (Jumping proficiency, PHB) in feet. */
