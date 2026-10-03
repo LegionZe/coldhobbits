@@ -157,3 +157,7 @@
 .ad2e-header-main { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
 .ad2e-portrait { width: 96px; height: 96px; flex: 0 0 96px; object-fit: cover; border: 1px solid currentColor; border-radius: 4px; }
 .ad2e-portrait[data-action="editImage"] { cursor: pointer; }
+/* Long roll dialogs (surprise): the option list scrolls inside its own box; checkboxes in two columns. */
+.ad2e-dialog-scroll { max-height: min(55vh, calc(100vh - 20rem)); min-height: 8rem; overflow-y: auto; padding-right: 0.25rem; }
+.ad2e-check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.15rem 0.75rem; }
+.ad2e-check-grid label { display: flex; align-items: center; gap: 0.3rem; }
