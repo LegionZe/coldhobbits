@@ -329,8 +329,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const fmt = (k, d) => game.i18n.format(k, d);
     const sgn = v => (v ? signed(v) : "—");
     const def = AD2E.skillClasses[info.classId] ?? null;
-    const features = (AD2E.classFeatures[info.classId] ?? []).map(([key, level]) => ({
-      name: i18n(`AD2E.Feature.${info.classId}.${key}.name`), text: i18n(`AD2E.Feature.${info.classId}.${key}.text`),
+    const features = (AD2E.classFeatures[info.classId] ?? []).map(([key, level, ns]) => ({
+      name: i18n(`AD2E.Feature.${ns ?? info.classId}.${key}.name`), text: i18n(`AD2E.Feature.${ns ?? info.classId}.${key}.text`),
       level: fmt("AD2E.Ability2.Level", { n: level }), gained: sys.level >= level
     }));
     const kitItem = sys.classInfo.kitFits ? sys.classInfo.kitItem : null;
