@@ -1,19 +1,15 @@
 <header class="ad2e-header ad2e-monster-header">
-  <img class="ad2e-portrait" src="{{actor.img}}" data-edit="img" alt="" width="80" height="80">
-  <div class="ad2e-header-fields">
+  <img class="ad2e-portrait" src="{{actor.img}}" data-edit="img" alt="" width="72" height="72">
+  <div class="ad2e-monster-title">
     <input class="ad2e-name" type="text" name="name" value="{{actor.name}}">
     <div class="ad2e-monster-line">
       <label>{{localize "AD2E.Monster.Role.label"}} <select name="system.role">{{selectOptions roles selected=system.role localize=true}}</select></label>
-      <label>{{localize "AD2E.Monster.HitDice"}} <input type="text" name="system.hitDice" value="{{system.hitDice}}" data-tooltip="{{localize 'AD2E.Monster.HitDiceHint'}}"></label>
       <label>HP <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></label>
-      {{#if editable}}<button type="button" data-action="rollHp" data-tooltip="{{hd.formula}}">{{localize "AD2E.Monster.RollHp"}}</button>{{/if}}
-    </div>
-    <div class="ad2e-monster-line">
-      <span>AC <strong>{{system.ac.value}}</strong>{{#if system.ac.armor}} ({{system.ac.armor}}){{/if}}</span>
-      <span>THAC0 <strong>{{system.thac0.value}}</strong></span>
-      <span>{{localize "AD2E.Move.Movement"}} <strong>{{system.encumbrance.rate}}</strong></span>
-      <a data-action="rollMorale" data-tooltip="{{localize 'AD2E.Monster.MoraleHint'}}">{{localize "AD2E.Monster.Morale"}} <strong>{{system.morale.value}}</strong></a>
-      <span>XP <strong>{{system.xp}}</strong></span>
+      {{#if editable}}<button type="button" data-action="rollHp" data-tooltip="{{hd.formula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Monster.RollHp"}}</button>{{/if}}
+      <button type="button" data-action="rollMorale" data-tooltip="{{localize 'AD2E.Monster.MoraleHint'}}"><i class="fa-solid fa-person-running"></i> {{localize "AD2E.Monster.Morale"}}</button>
     </div>
   </div>
+  <dl class="ad2e-monster-summary">
+    {{#each summary as |s|}}<div class="ad2e-summary-cell"><dt>{{s.label}}</dt><dd {{#if s.tooltip}}data-tooltip="{{s.tooltip}}"{{/if}}>{{s.value}}</dd></div>{{/each}}
+  </dl>
 </header>

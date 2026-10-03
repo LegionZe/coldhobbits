@@ -3,9 +3,9 @@ import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
 
-/** Stat block rows shown as text inputs (Monstrous Manual order). */
-const STAT_FIELDS = ["climate", "frequency", "organization", "activity", "diet", "intelligence", "treasure", "alignment",
-  "numberAppearing", "attacksText", "damageText", "specialAttacks", "specialDefenses", "magicResistance", "size"];
+/** Habitat and background rows (Ecology tab), Monstrous Manual order; XP last. */
+const ECOLOGY_FIELDS = ["climate", "frequency", "organization", "activity", "diet", "intelligence", "alignment",
+  "treasure", "numberAppearing", "size", "xp"];
 
 /** Sheet for monsters, hirelings, mounts and pets (actor type "monster"). */
 export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -34,12 +34,14 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     header: { template: "systems/ad2e/templates/actor/monster-header.hbs" },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     stats: { template: "systems/ad2e/templates/actor/monster-stats.hbs", scrollable: [""] },
+    specials: { template: "systems/ad2e/templates/actor/monster-specials.hbs", scrollable: [""] },
+    ecology: { template: "systems/ad2e/templates/actor/monster-ecology.hbs", scrollable: [""] },
     inventory: { template: "systems/ad2e/templates/actor/monster-inventory.hbs", scrollable: [""] },
     notes: { template: "systems/ad2e/templates/actor/monster-notes.hbs" }
   };
 
   static TABS = {
-    primary: { tabs: [{ id: "stats" }, { id: "inventory" }, { id: "notes" }], initial: "stats", labelPrefix: "AD2E.Monster.Tab" }
+    primary: { tabs: [{ id: "stats" }, { id: "specials" }, { id: "ecology" }, { id: "inventory" }, { id: "notes" }], initial: "stats", labelPrefix: "AD2E.Monster.Tab" }
   };
 
   async _preparePartContext(partId, context, options) {
@@ -57,7 +59,22 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.system = sys;
     context.roles = AD2E.monsterRoles;
     context.saveGroups = AD2E.classGroups;
-    context.statFields = STAT_FIELDS.map(key => ({ key, label: i18n(`AD2E.Monster.Field.${key}`), value: sys[key] }));
+    context.ecology = ECOLOGY_FIELDS.map(key => ({ key, label: i18n(`AD2E.Monster.Field.${key}`), value: sys[key],
+      type: key === "xp" ? "number" : "text" }));
+    // Summary line: the figures needed at the table, read-only (edited on the tabs).
+    const dash = v => (v === "" || v === null || v === undefined ? "—" : v);
+    context.summary = [
+      { label: "AC", value: sys.ac.value, tooltip: [sys.ac.text, sys.ac.armor].filter(Boolean).join(" · ") },
+      { label: "THAC0", value: sys.thac0.value },
+      { label: i18n("AD2E.Monster.HitDice"), value: dash(sys.hitDice), tooltip: sys.hd.formula },
+      { label: i18n("AD2E.Move.Movement"), value: dash(sys.movement.text || sys.encumbrance.rate) },
+      { label: i18n("AD2E.Monster.Field.attacksText"), value: dash(sys.attacksText) },
+      { label: i18n("AD2E.Monster.Field.damageText"), value: dash(sys.damageText) },
+      { label: i18n("AD2E.Monster.Morale"), value: sys.morale.value, tooltip: sys.morale.text },
+      { label: i18n("AD2E.Monster.Field.numberAppearing"), value: dash(sys.numberAppearing) },
+      { label: i18n("AD2E.Monster.Field.treasure"), value: dash(sys.treasure) },
+      { label: "XP", value: sys.xp }
+    ];
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
     const items = actor.items ?? [];
@@ -73,6 +90,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.load = { ...sys.load, weight: enc.weight, rate: enc.rate, hasLoad: sys.load.full !== null,
       bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
     context.hd = sys.hd;
+    context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;
   }
 

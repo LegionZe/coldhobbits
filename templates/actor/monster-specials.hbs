@@ -1,0 +1,15 @@
+<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  <fieldset>
+    <legend>{{localize "AD2E.Monster.Field.specialAttacks"}}</legend>
+    <textarea class="ad2e-monster-text" name="system.specialAttacks" rows="4">{{system.specialAttacks}}</textarea>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Monster.Field.specialDefenses"}}</legend>
+    <textarea class="ad2e-monster-text" name="system.specialDefenses" rows="4">{{system.specialDefenses}}</textarea>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Monster.Field.magicResistance"}}</legend>
+    <input type="text" name="system.magicResistance" value="{{system.magicResistance}}">
+  </fieldset>
+  {{#if system.url}}<p class="ad2e-note">{{localize "AD2E.Monster.SeeSource"}} <a href="{{system.url}}" target="_blank" rel="noopener">{{system.url}}</a></p>{{/if}}
+</section>

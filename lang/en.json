@@ -409,7 +409,9 @@
   "AD2E.Sheet.Monster": "AD&D 2e Monster / NPC",
   "AD2E.Monster": {
     "Tab": {
-      "stats": "Stats",
+      "stats": "Combat",
+      "specials": "Specials",
+      "ecology": "Ecology",
       "inventory": "Inventory",
       "notes": "Notes"
     },
@@ -433,7 +435,7 @@
     "Attacks": "Attacks",
     "AddAttack": "Add attack",
     "DamageHint": "Damage roll, e.g. 1d8 or 2d4+1",
-    "AttackBonus": "Attack roll bonus",
+    "AttackBonus": "To hit",
     "InventoryHint": "Drag weapons, armour, equipment and coins here. Equipped armour sets AC; weapons add attacks; carried weight counts toward a mount's load.",
     "Load": {
       "label": "Load (mounts: PHB Table 49)",
@@ -462,9 +464,16 @@
       "acBase": "AC (no armour items)",
       "movement": "Movement",
       "movementText": "Movement (all modes)",
-      "moraleText": "Morale (as written)"
+      "moraleText": "Morale (as written)",
+      "acText": "AC (as written)",
+      "xp": "XP value"
     },
-    "Attack": "Attack"
+    "Attack": "Attack",
+    "Combat": "Combat",
+    "Ecology": "Habitat and society",
+    "AttackName": "Attack",
+    "NoAttacks": "No attacks: add one, or drag a weapon onto the sheet.",
+    "SeeSource": "Full description:"
   },
   "AD2E.Importer": {
     "Title": "Monster importer (Complete Compendium)",

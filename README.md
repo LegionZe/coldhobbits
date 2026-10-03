@@ -77,7 +77,8 @@ initiative 1d10, lowest acts first.
   miscellaneous equipment (219 items, cost and weight as listed; "*" items weigh 1/10 lb, "**" none). Containers carry
   their Table 50 capacity and animals their Table 49 carrying capacity. Carried items count toward encumbrance (weight x
   quantity); animals, transport, services, lodging and tack start as not carried.
-- Monster / NPC actors (type `monster`) for monsters, hirelings, mounts and pets: Monstrous Manual stat block, Hit Dice
+- Monster / NPC actors (type `monster`) for monsters, hirelings, mounts and pets (tabs: Combat, Specials, Ecology,
+  Inventory, Notes; a summary line with AC, THAC0, HD, movement, attacks, damage, morale, no. appearing, treasure, XP): Monstrous Manual stat block, Hit Dice
   as written (3, 3+3, 1-1, 1/2, 2-8 hp) with HP rolls, THAC0 from DMG Table 39, saving throws by Hit Dice (DMG; half for
   non-intelligent creatures except vs. paralyzation, poison and death), 2d10 morale checks, natural attacks plus owned
   weapons, AC from equipped armour, and a mount's load against PHB Table 49. The "Monsters & NPCs (prototypes)"

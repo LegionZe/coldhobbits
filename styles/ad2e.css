@@ -99,13 +99,33 @@
 .ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
 .ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }
 
-/* Monster / NPC sheet */
-.ad2e.monster .ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.9rem; margin-top: 0.25rem; }
-.ad2e.monster .ad2e-monster-line input[type="number"] { width: 3.5rem; }
-.ad2e.monster .ad2e-monster-line input[type="text"] { width: 5rem; }
-.ad2e-monster-attack { display: grid; grid-template-columns: 1fr 5rem 3rem auto auto auto; gap: 0.3rem; align-items: center; margin-bottom: 0.2rem; }
-.ad2e-monster-weapon { grid-template-columns: auto 1fr auto auto; }
-.ad2e-monster-right { display: flex; flex-direction: column; gap: 0.5rem; }
+/* Monster / NPC sheet: the same window/tab layout as the character sheet (from its rendered HTML), then the
+   elements authored in templates/actor/monster-*.hbs. */
+.ad2e.monster .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.ad2e.monster .ad2e-tab { flex: 1; min-height: 0; overflow-y: auto; padding: 0.25rem 0.5rem; }
+.ad2e.monster .ad2e-tab:not(.active) { display: none; }
+.ad2e-monster-header { display: grid; grid-template-columns: 72px 1fr; gap: 0.25rem 0.75rem; padding-bottom: 0.4rem; }
+.ad2e-monster-title { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; }
+.ad2e-monster-line input[type="number"] { width: 3.5rem; }
+.ad2e-monster-line button { flex: 0 0 auto; width: auto; }
+.ad2e-monster-summary { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.25rem; margin: 0; }
+.ad2e-summary-cell { border: 1px solid currentColor; border-radius: 4px; padding: 0.15rem 0.35rem; opacity: 0.95; min-width: 0; }
+.ad2e-summary-cell dt { font-size: 0.75em; text-transform: uppercase; opacity: 0.8; }
+.ad2e-summary-cell dd { margin: 0; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ad2e-monster-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 0.5rem; align-items: start; }
+.ad2e-form-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.25rem 0.6rem; align-items: center; }
+.ad2e-form-grid input, .ad2e-form-grid select { width: 100%; }
+.ad2e-monster-saves { width: 100%; border-collapse: collapse; margin-top: 0.3rem; }
+.ad2e-monster-saves td { padding: 0.15rem 0.25rem; }
+.ad2e-num { text-align: center; font-weight: bold; }
+.ad2e-monster-attacks { width: 100%; border-collapse: collapse; margin: 0.25rem 0; }
+.ad2e-monster-attacks th { text-align: left; font-size: 0.85em; }
+.ad2e-monster-attacks td { padding: 0.15rem 0.2rem; }
+.ad2e-monster-attacks td:nth-child(3) input { width: 3.5rem; }
+.ad2e-monster-buttons { white-space: nowrap; }
+.ad2e-monster-buttons button { width: auto; }
+.ad2e-monster-text { width: 100%; resize: vertical; }
 
 /* Monster importer */
 .ad2e.monster-importer .ad2e-importer { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
