@@ -1,4 +1,5 @@
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
+import { promptHitPoints } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -28,7 +29,9 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       toggleEquipped: MonsterSheet.onToggleEquipped,
       toggleCarried: MonsterSheet.onToggleCarried,
       adjustQuantity: MonsterSheet.onAdjustQuantity,
-      useMagicItem: MonsterSheet.onUseMagicItem
+      useMagicItem: MonsterSheet.onUseMagicItem,
+      hpDamage: MonsterSheet.onHpDamage,
+      hpHeal: MonsterSheet.onHpHeal
     }
   };
 
@@ -96,6 +99,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Header link to the stat block's source page (completecompendium.com for imported monsters).
     // Wage (hirelings) or price (mounts); shown for those roles or whenever one is set.
     context.showCost = ["hireling", "mount"].includes(sys.role) || !!sys.cost;
+    context.dead = sys.hpState?.state === "dead";
     context.sourceLabel = game.i18n.localize(/completecompendium\.com/.test(sys.url) ? "AD2E.Monster.CompleteCompendium" : "AD2E.Monster.SourcePage");
     context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;
@@ -132,6 +136,10 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onToggleCarried(event, target) {
     return this.document.items.get(target.dataset.itemId)?.update({ "system.carried": target.checked });
   }
+  static onHpDamage() { return promptHitPoints(this.actor, false); }
+
+  static onHpHeal() { return promptHitPoints(this.actor, true); }
+
   static onUseMagicItem(event, target) {
     return this.actor.useMagicItem(target.dataset.itemId);
   }

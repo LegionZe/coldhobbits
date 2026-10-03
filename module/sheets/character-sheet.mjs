@@ -1,6 +1,7 @@
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
+import { promptHitPoints } from "../health.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -145,7 +146,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
       layOnHands: CharacterSheet.onLayOnHands,
       useMagicItem: CharacterSheet.onUseMagicItem,
-      rollAbilityScores: CharacterSheet.onRollAbilityScores
+      rollAbilityScores: CharacterSheet.onRollAbilityScores,
+      hpDamage: CharacterSheet.onHpDamage,
+      hpHeal: CharacterSheet.onHpHeal,
+      hpRest: CharacterSheet.onHpRest,
+      bindWounds: CharacterSheet.onBindWounds,
+      raiseDead: CharacterSheet.onRaiseDead
     }
   };
 
@@ -244,6 +250,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const enc = sys.encumbrance.info;
     context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
     context.weaponTab = this._weaponTabContext(sys);
+    const st = sys.hpState ?? {};
+    context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
+      bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
+      rule: game.i18n.localize(st.doorRule ? "AD2E.Health.RuleDeathsDoorShort" : "AD2E.Health.RuleStandardShort") };
     context.classGroups = AD2E.classGroups;
     return context;
   }
@@ -650,6 +660,16 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollClassSkill(event, target) {
     return this.actor.rollClassSkill(target.dataset.skill);
   }
+
+  static onHpDamage() { return promptHitPoints(this.actor, false); }
+
+  static onHpHeal() { return promptHitPoints(this.actor, true); }
+
+  static onHpRest() { return this.actor.restHeal(); }
+
+  static onBindWounds() { return this.actor.bindWounds(); }
+
+  static onRaiseDead() { return this.actor.raiseFromDead(); }
 
   /** Generate ability scores (PHB Methods II-VI). */
   static onRollAbilityScores() {

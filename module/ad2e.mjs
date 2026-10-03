@@ -14,6 +14,7 @@ import MagicItemData from "./data/item-magic.mjs";
 import JewelleryData from "./data/item-jewellery.mjs";
 import { migrateCurrency, migrateKitMechanics } from "./migrations.mjs";
 import { registerOpaqueWindows } from "./opaque-windows.mjs";
+import { registerHealth } from "./health.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter from "./apps/spell-importer.mjs";
 import SpellData from "./data/item-spell.mjs";
@@ -49,6 +50,7 @@ Hooks.once("init", () => {
   });
   // Ask for a situational modifier (and reason) when one combatant rolls initiative.
   registerOpaqueWindows();
+  registerHealth();
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });

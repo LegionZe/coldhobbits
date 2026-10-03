@@ -130,6 +130,14 @@ initiative 1d10, lowest acts first.
   six; V 4d6 drop lowest six times, assign; VI every ability 8 plus seven d6 added whole, none above 18. Rolls use
   Foundry dice and are posted to chat; the racial adjustment and effective score are previewed; Apply sets the rolled
   scores, and a warrior whose Strength comes to 18 can roll percentile dice for exceptional Strength (Strength (PHB)).
+- Hit points, death and healing (world setting "Death rule"): dead at 0 hit points (Character Death, PHB), or the DMG
+  optional "Hovering on Death's Door": characters fall unconscious at 0, lose 1 hit point each combat round until their
+  wounds are bound, and die at -10; a cure restores such a character to 1 hit point only, weak and feeble until a day of
+  rest. Monsters die at 0. Damage of 50 or more from a single attack calls for a saving throw vs. death. Damage, Heal,
+  Rest (natural healing: 1 a day, 3 a day of bed rest plus the Constitution bonus per week), Bind wounds and Raise
+  (resurrection survival roll, Constitution -1) on the character sheet; Damage and Heal on monster sheets. Token status
+  icons show unconscious and dead. Weapon and monster damage rolls in chat have "Apply damage / healing to selected
+  tokens" in their context menu.
 - Opaque windows: Foundry's dark theme gives windows a 90% opaque background and hides what is behind with a blur,
   which is off in low-performance mode, so text behind a sheet showed through. AD&D 2e sheets and windows now use the
   same colour fully opaque (client setting "Opaque sheet backgrounds", on by default).
