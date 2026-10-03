@@ -1,4 +1,5 @@
-import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, lookup, strengthKey, thac0At, thiefArmorColumn } from "../config.mjs";
+import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
+  thac0At, thiefArmorColumn } from "../config.mjs";
 
 const { BooleanField, SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
@@ -74,6 +75,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Class next: the class item sets the group used below (warrior CON bonus, THAC0).
     this.classInfo = this.#computeClassInfo();
     if (this.classInfo.classItem) this.classGroup = this.classInfo.classItem.system.group;
+    // Kit ability score bonuses (e.g. Pacifist priest Charisma +2, at most 18) count after the kit's requirements.
+    for (const mod of this.#kitModifierList()) {
+      if (mod.target !== "score" || !this.abilities[mod.key]) continue;
+      const v = kitModifierValue(mod, this.level) ?? 0;
+      const ab = this.abilities[mod.key];
+      ab.total = mod.max !== null && mod.max !== undefined ? Math.max(ab.total, Math.min(ab.total + v, mod.max)) : ab.total + v;
+    }
 
     const a = this.abilities;
     const T = AD2E.abilityTables;
@@ -102,13 +110,16 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
 
     this.armor = this.#computeArmor(dex.ac);
+    this.kitMods = this.#computeKitModifiers();
+    const kitAc = this.kitMods.total("ac");
+    for (const k of ["front", "missile", "rear"]) this.armor[k] -= kitAc;
     this.encumbrance.info = this.#computeEncumbrance();
     const { hit: encHit, ac: encAc } = this.encumbrance.info.penalty;
     for (const k of ["front", "missile", "rear"]) this.armor[k] += encAc;
     this.ac.total = this.armor.front;
     this.mods.encumbranceHit = encHit;
-    this.mods.meleeAttack = this.mods.hit + encHit;
-    this.mods.missileAttack = this.mods.missile + encHit;
+    this.mods.meleeAttack = this.mods.hit + encHit + this.kitMods.total("attack");
+    this.mods.missileAttack = this.mods.missile + encHit + this.kitMods.total("attack");
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -122,7 +133,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     for (const key of AD2E.saves) {
       this.saves[key].table = saveRow[key];
       this.saves[key].value = this.saves[key].override ?? saveRow[key];
-      this.saves[key].bonus = (["rsw", "sp"].includes(key) ? raceCon : 0) + classSave;
+      this.saves[key].bonus = (["rsw", "sp"].includes(key) ? raceCon : 0) + classSave + this.kitMods.total("save", key);
     }
 
     const hd = hitDiceAt(this.classGroup, this.level);
@@ -205,6 +216,36 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         met: (min === null || rolled >= min) && (max === null || rolled <= max) };
     });
     return { raceItem, race, requirements, requirementsMet: requirements.every(r => r.met) };
+  }
+
+  /** Modifiers of the kit, when the kit fits the class (an empty list otherwise). */
+  #kitModifierList() {
+    return this.classInfo?.kitFits ? (this.classInfo.kitItem.system.modifiers ?? []) : [];
+  }
+
+  /**
+   * Kit modifiers at the character's level (kit pages via tools/build-kit-mechanics.py). A modifier without a condition
+   * whose armour requirement the equipped body armour meets applies automatically (`auto`); `current` is the value at
+   * the character's level and `status` one of applied / situational (roll dialogs) / dm (reaction, surprise, conditional
+   * AC) / armor (armour requirement not met) / inactive (below its level); `total(target, key)` sums the applied ones. Conditional ones are listed for the roll dialogs; reaction and surprise ones are shown on the sheet only.
+   */
+  #computeKitModifiers() {
+    const body = this.armor?.body ?? null;
+    const list = this.#kitModifierList().map((mod, index) => {
+      const current = kitModifierValue(mod, this.level);
+      const armorOk = kitArmorMatches(mod.armor, body);
+      const active = current !== null;
+      const auto = active && !mod.condition && armorOk;
+      // Reaction and surprise rolls are the DM's; conditional AC changes are not rolled either.
+      const dm = ["reaction", "surprise"].includes(mod.target) || (mod.target === "ac" && !!mod.condition);
+      const status = !active ? "inactive" : dm ? "dm" : auto ? "applied" : mod.condition ? "situational" : "armor";
+      return { ...mod, index, current, armorOk, active, auto, status };
+    });
+    const total = (target, key = null) => list.filter(m => m.auto && m.target === target
+      && (key === null ? !m.key : kitKeyMatches(m.key, key))).reduce((n, m) => n + m.current, 0);
+    const options = (target, key = null) => list.filter(m => m.active && m.condition && m.target === target
+      && (key === null ? !m.key : kitKeyMatches(m.key, key)));
+    return { list, total, options };
   }
 
   /**
@@ -311,7 +352,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
       const specCost = (p.kind === "weapon" && p.specialized) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
       const cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
-      const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) : null;
+      const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) + this.kitMods.total("proficiency", p.identifier) : null;
       const entry = { item, cost, crossGroup, target };
       if (p.kind === "weapon") {
         entry.specialized = p.specialized;
@@ -348,8 +389,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
   #weaponAttack(w, specialized, extra = { hit: 0, dmg: 0 }) {
     const { dmg, missile: dexMissile, encumbranceHit } = this.mods;
     // Encumbrance attack penalty (Encumbrance (PHB)) applies to every attack roll.
-    const hit = this.mods.hit + encumbranceHit;
-    const missile = dexMissile + encumbranceHit;
+    const kitHit = this.kitMods?.total("attack") ?? 0;
+    const kitDmg = this.kitMods?.total("damage") ?? 0;
+    const hit = this.mods.hit + encumbranceHit + kitHit;
+    const missile = dexMissile + encumbranceHit + kitHit;
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
     if (w.melee) {
@@ -357,7 +400,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         : (this.classGroup === "warrior" ? AD2E.warriorAttacks : null);
       out.melee = {
         hit: hit + (specialized ? spec.meleeHit : 0) + extra.hit,
-        dmg: dmg + (specialized ? spec.meleeDamage : 0) + extra.dmg,
+        dmg: dmg + kitDmg + (specialized ? spec.meleeDamage : 0) + extra.dmg,
         rate: table ? formatRate(attackRate(table, this.level)) : "1"
       };
     }
@@ -371,7 +414,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const thrownSpec = specialized && w.melee;
       out.missile = {
         hit: missile + strHit + (thrownSpec ? spec.meleeHit : 0) + extra.hit,
-        dmg: strDmg + (thrownSpec ? spec.meleeDamage : 0) + extra.dmg,
+        dmg: strDmg + kitDmg + (thrownSpec ? spec.meleeDamage : 0) + extra.dmg,
         rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
         pointBlank: specialized && w.family !== "other",
         range: w.range
@@ -495,7 +538,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         const race = T.thief.race[key]?.[raceId] ?? 0;
         const dexAdj = dexRow[key] ?? 0;
         const armor = armorAdj(key);
-        const kitAdj = kit?.skillAdjust?.[key] ?? 0;
+        const kitAdj = (kit?.skillAdjust?.[key] ?? 0) + this.kitMods.total("skill", key);
         const pts = def.points ? (points[key] ?? 0) : 0;
         let total = base + race + dexAdj + armor + kitAdj + pts;
         const capped = def.cap !== null && total > def.cap;
@@ -504,7 +547,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
           available: !out.armorBlocked });
       }
       if (def.points) {
-        const [first, per] = def.points;
+        const kitPoints = id === "thief" ? kit?.skillPoints : null;
+        const first = kitPoints?.first ?? def.points[0];
+        const per = kitPoints?.perLevel ?? def.points[1];
         const used = def.skills.reduce((n, k) => n + (points[k] ?? 0), 0);
         out.budget = { total: first + per * (this.level - 1), used };
         out.budget.over = used > out.budget.total;
@@ -532,7 +577,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       abilities: Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].total])),
       level: this.level,
       thac0: this.thac0.value,
-      init: this.initiative.mod,
+      // Initiative is 1d10 + @init, lowest first: a kit's initiative bonus lowers the roll.
+      init: this.initiative.mod - (this.kitMods?.total("initiative") ?? 0),
       hit: this.mods.hit + (this.mods.encumbranceHit ?? 0),
       dmg: this.mods.dmg,
       missile: this.mods.missile + (this.mods.encumbranceHit ?? 0),

@@ -42,6 +42,66 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": 3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "NPCs who know his reputation, correspondents, scholars, authors, teachers",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "ability",
+        "key": "int",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "ability",
+        "key": "wis",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "attack",
+        "key": "",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "first melee blow against each new opponent",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
     }
   },
   "effects": [],

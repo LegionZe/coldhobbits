@@ -32,3 +32,35 @@ export async function migrateCurrency() {
     console.log(`AD2E | Moved coins on ${actor.name} into coin items`);
   }
 }
+
+/**
+ * 0.0.31 added kit mechanics (system.modifiers, skillPoints, generated skillAdjust) to the "Class Kits" compendium.
+ * Kit items copied into the world or onto characters before that have none: fill them from the compendium kit with
+ * the same identifier. Only kits with no modifiers are touched; skill adjustments are filled only if all are 0, so
+ * values a GM entered are kept.
+ */
+export async function migrateKitMechanics() {
+  const pack = game.packs.get("ad2e.kits");
+  if (!pack) return;
+  const docs = await pack.getDocuments();
+  const byId = new Map(docs.map(d => [d.system.identifier, d.system]));
+  const patch = item => {
+    const src = byId.get(item.system.identifier);
+    if (!src || item.system.modifiers?.length) return null;
+    const empty = !src.modifiers.length && src.skillPoints.first === null && !Object.values(src.skillAdjust).some(v => v);
+    if (empty) return null;
+    const update = { _id: item.id, "system.modifiers": foundry.utils.deepClone(src.modifiers),
+      "system.skillPoints": { ...src.skillPoints } };
+    if (!Object.values(item.system.skillAdjust ?? {}).some(v => v)) update["system.skillAdjust"] = { ...src.skillAdjust };
+    return update;
+  };
+  const world = game.items.filter(i => i.type === "kit").map(patch).filter(Boolean);
+  if (world.length) await Item.updateDocuments(world);
+  for (const actor of game.actors) {
+    const updates = actor.items.filter(i => i.type === "kit").map(patch).filter(Boolean);
+    if (updates.length) {
+      await actor.updateEmbeddedDocuments("Item", updates);
+      console.log(`AD2E | Added kit mechanics to ${actor.name}`);
+    }
+  }
+}

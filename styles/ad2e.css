@@ -146,3 +146,6 @@
 .ad2e-spell-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.1rem 0.5rem; margin: 0.25rem 0; }
 .ad2e-spell-card dt { font-weight: bold; }
 .ad2e-spell-card dd { margin: 0; }
+.ad2e-kit-mods { margin: 0.25rem 0; padding-left: 1.25rem; }
+.ad2e-kit-status { font-size: 0.8em; padding: 0 0.3em; border: 1px solid currentColor; border-radius: 3px; opacity: 0.75; }
+.ad2e-kit-mod-inactive, .ad2e-kit-mod-armor { opacity: 0.6; }

@@ -39,6 +39,44 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": 5,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "animals of his mount's kind",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "NPCs of other cultures",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null
     }
   },
   "effects": [],

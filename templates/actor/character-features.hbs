@@ -85,6 +85,13 @@
     <legend>{{localize "AD2E.Ability2.KitAbilities"}}</legend>
     <p>{{localize "AD2E.Ability2.KitText"}} {{#if ft.kitItem.system.url}}<a href="{{ft.kitItem.system.url}}" target="_blank" rel="noopener">{{ft.kitItem.name}} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{else}}{{ft.kitItem.name}}{{/if}}</p>
     {{#if ft.kitAdjust}}<p>{{localize "AD2E.Skill.KitAdjust"}}: {{ft.kitAdjust}}</p>{{/if}}
+    {{#if ft.kitPoints}}<p>{{ft.kitPoints}}</p>{{/if}}
+    {{#if ft.kitMods.length}}
+    <p class="ad2e-note">{{localize "AD2E.Kit.ModifiersHint"}}</p>
+    <ul class="ad2e-kit-mods">
+      {{#each ft.kitMods as |m|}}<li class="ad2e-kit-mod-{{m.status}}"><span class="ad2e-kit-status">{{m.statusLabel}}</span> {{m.text}}</li>{{/each}}
+    </ul>
+    {{/if}}
   </fieldset>
   {{/if}}
   {{/with}}

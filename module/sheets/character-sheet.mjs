@@ -8,6 +8,26 @@ export function formatKitProficiencies(entries) {
   return (entries ?? []).map(e => e.choice.map(title).join(` ${game.i18n.localize("AD2E.Prof.Or")} `)).join(", ");
 }
 
+/**
+ * One kit modifier as text: "Saving throws +2 (magical effects based on music)", "Attack +1, +1 per 6 levels from
+ * level 3 (his chosen type of sword)". `m` may carry `value` already resolved at a level (derived kitMods list).
+ */
+export function formatKitModifier(m, { resolved = false } = {}) {
+  const i18n = k => game.i18n.localize(k);
+  const title = id => id.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const keyLabel = k => ({ save: `AD2E.Save.${k}`, skill: `AD2E.Skill.${k}`, ability: `AD2E.Ability.${k}`, score: `AD2E.Ability.${k}` }[m.target]);
+  const keys = m.key ? m.key.split(",").map(k => k.trim()).map(k => (keyLabel(k) ? i18n(keyLabel(k)) : title(k))).join(", ") : "";
+  const unit = m.target === "skill" ? "%" : "";
+  const value = resolved ? m.current : m.value;
+  const parts = [`${i18n(`AD2E.Kit.Target.${m.target}`)}${keys ? ` (${keys})` : ""} ${value > 0 ? "+" : ""}${value}${unit}`];
+  if (m.every > 0) {
+    parts.push(game.i18n.format(m.every === 1 ? "AD2E.Kit.ScalingLevel" : "AD2E.Kit.Scaling", { step: m.step, every: m.every, from: m.from }));
+  } else if (m.from > 1) parts.push(game.i18n.format("AD2E.Kit.FromLevel", { n: m.from }));
+  if (m.max !== null && m.max !== undefined) parts.push(game.i18n.format("AD2E.Kit.Max", { n: m.max }));
+  if (m.armor) parts.push(i18n(`AD2E.Kit.Armor.${m.armor}`));
+  return parts.join(", ") + (m.condition ? ` — ${m.condition}` : "");
+}
+
 /** "dwarf 15, gnome 6" from a { race: maxLevel | null } map ("unlimited" for null). */
 export function formatRaceLimits(limits) {
   return Object.entries(limits ?? {}).map(([race, max]) =>
@@ -291,6 +311,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const kitItem = sys.classInfo.kitFits ? sys.classInfo.kitItem : null;
     const kitAdjust = kitItem ? AD2E.thiefSkills.filter(k => kitItem.system.skillAdjust?.[k])
       .map(k => `${i18n(`AD2E.Skill.${k}`)} ${signed(kitItem.system.skillAdjust[k])}%`).join(", ") : "";
+    // Kit modifiers at the character's level: applied automatically, situational (roll dialogs), or for the DM.
+    const kitMods = (sys.kitMods?.list ?? []).map(m => ({
+      text: formatKitModifier(m, { resolved: m.active }), status: m.status, statusLabel: i18n(`AD2E.Kit.Status.${m.status}`)
+    }));
+    const kitPoints = kitItem?.system.skillPoints?.first !== null && kitItem?.system.skillPoints?.first !== undefined
+      ? fmt("AD2E.Kit.SkillPoints", { first: kitItem.system.skillPoints.first, per: kitItem.system.skillPoints.perLevel ?? 30 }) : "";
     return {
       classItem: sys.classInfo.classItem,
       hasSkills: info.skills.length > 0,
@@ -315,7 +341,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       saveBonus: sys.classInfo.saveBonus,
       features,
       kitItem,
-      kitAdjust
+      kitAdjust,
+      kitMods,
+      kitPoints
     };
   }
 

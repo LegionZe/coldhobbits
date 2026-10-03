@@ -794,5 +794,43 @@
         "text": "From 10th level; 15% chance of reading an item wrongly."
       }
     }
+  },
+  "AD2E.Kit": {
+    "Target": {
+      "attack": "Attack",
+      "damage": "Damage",
+      "save": "Saving throws",
+      "ac": "Armour Class",
+      "skill": "Thief skills",
+      "proficiency": "Proficiency checks",
+      "ability": "Ability checks",
+      "initiative": "Initiative",
+      "surprise": "Surprise",
+      "reaction": "Reaction",
+      "hp": "Hit points per level",
+      "score": "Ability score"
+    },
+    "Armor": {
+      "none": "without body armour",
+      "light": "in no armour, leather or padded",
+      "any": "while wearing body armour"
+    },
+    "Status": {
+      "applied": "applied",
+      "situational": "in roll dialog",
+      "dm": "for the DM",
+      "armor": "armour not met",
+      "inactive": "not yet"
+    },
+    "Scaling": "+{step} per {every} levels after level {from}",
+    "FromLevel": "from level {n}",
+    "Max": "to at most {n}",
+    "Situational": "{kit}: situational modifiers",
+    "Modifiers": "Kit modifiers",
+    "ModifiersHint": "Taken from the kit page (curated; the kit link has the full rules). Applied modifiers are already in the sheet's numbers; situational ones can be ticked in the roll dialog; reaction and surprise modifiers are for the DM's rolls. Armour Class bonuses mean a better (lower) AC; an initiative bonus lowers the initiative roll.",
+    "SheetHint": "Generated from the kit page by tools/build-kit-mechanics.py; modifiers without a condition apply automatically while the kit fits the character's class.",
+    "NoModifiers": "No numeric modifiers are stated on the kit page.",
+    "SkillPoints": "Thief skill points: {first} at 1st level, {per} per level after",
+    "ScalingLevel": "+{step} per level after level {from}"
   }
 }

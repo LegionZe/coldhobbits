@@ -10,7 +10,7 @@ import AmmunitionData from "./data/item-ammunition.mjs";
 import ArmorData from "./data/item-armor.mjs";
 import CoinData from "./data/item-coin.mjs";
 import EquipmentData from "./data/item-equipment.mjs";
-import { migrateCurrency } from "./migrations.mjs";
+import { migrateCurrency, migrateKitMechanics } from "./migrations.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter from "./apps/spell-importer.mjs";
 import SpellData from "./data/item-spell.mjs";
@@ -84,5 +84,8 @@ Hooks.once("init", () => {
 
 // 0.0.20 stored coins as numbers on the character; convert them to coin items once (GM only).
 Hooks.once("ready", () => {
-  if (game.user.isGM) migrateCurrency();
+  if (game.user.isGM) {
+    migrateCurrency();
+    migrateKitMechanics();
+  }
 });
