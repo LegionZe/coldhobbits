@@ -208,7 +208,8 @@ export function strengthKey(score, exceptional = 0) {
 
 /** Monster actor roles (the monster sheet also serves hirelings, mounts and pets). */
 AD2E.monsterRoles = { monster: "AD2E.Monster.Role.monster", hireling: "AD2E.Monster.Role.hireling",
-  mount: "AD2E.Monster.Role.mount", pack: "AD2E.Monster.Role.pack", pet: "AD2E.Monster.Role.pet" };
+  mount: "AD2E.Monster.Role.mount", pack: "AD2E.Monster.Role.pack", pet: "AD2E.Monster.Role.pet",
+  familiar: "AD2E.Monster.Role.familiar" };
 /** DMG Table 39 (generated): index 0 = less than one Hit Die, index n = n Hit Dice, last = 16 and more. */
 AD2E.creatureThac0 = CREATURE_THAC0;
 

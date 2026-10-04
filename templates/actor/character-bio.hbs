@@ -1,4 +1,32 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#with familiar as |f|}}
+  <fieldset class="ad2e-prof-list ad2e-familiar">
+    <legend>{{localize "AD2E.Familiar.Title"}}</legend>
+    <p class="ad2e-note">{{f.rule}}</p>
+    {{#if f.actor}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{f.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{f.uuid}}">{{f.name}}</a></span>
+        <span class="ad2e-weapon-meta {{#if f.dead}}ad2e-unmet{{/if}}">{{f.meta}}{{#if f.dead}} · {{localize "AD2E.Familiar.Dead"}}{{/if}}</span>
+      </div>
+      {{#if @root.editable}}<a data-action="removeFamiliar" data-tooltip="{{localize 'AD2E.Familiar.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{else}}<span></span>{{/if}}
+    </div>
+    <div class="ad2e-prof-summary">
+      <label data-tooltip="{{localize 'AD2E.Familiar.NearHint'}}"><input type="checkbox" name="system.familiar.near" {{checked f.near}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Familiar.Near"}}</label>
+      <label data-tooltip="{{localize 'AD2E.Familiar.SeparatedHint'}}"><input type="checkbox" name="system.familiar.separated" {{checked f.separated}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Familiar.Separated"}}</label>
+      {{#if f.needsDeathRoll}}<button type="button" data-action="familiarDeath" class="ad2e-unmet">{{localize "AD2E.Familiar.DeathButton"}}</button>{{/if}}
+    </div>
+    {{else}}
+    {{#if f.missing}}<p class="ad2e-placeholder ad2e-unmet">{{localize "AD2E.Familiar.Missing"}} {{#if @root.editable}}<a data-action="removeFamiliar"><i class="fa-solid fa-trash"></i></a>{{/if}}</p>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Familiar.None"}}</p>{{/if}}
+    {{/if}}
+    <div class="ad2e-prof-summary">
+      <span class="{{#if f.tooSoon}}ad2e-unmet{{/if}}">{{f.attemptText}}</span>
+      {{#if f.isGM}}<button type="button" data-action="findFamiliar" data-tooltip="{{localize 'AD2E.Familiar.FindHint'}}">{{localize "AD2E.Familiar.Find"}}</button>{{/if}}
+    </div>
+  </fieldset>
+  {{/with}}
   {{#with henchmen as |h|}}
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Henchmen.Title"}}</legend>

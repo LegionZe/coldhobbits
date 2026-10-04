@@ -1,0 +1,74 @@
+{
+  "_id": "UK2bnk1xCL6ZDCeC",
+  "_key": "!actors!UK2bnk1xCL6ZDCeC",
+  "name": "Owl",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "familiar-owl",
+    "role": "familiar",
+    "climate": "Any wilderness",
+    "frequency": "Uncommon",
+    "organization": "Pair",
+    "activity": "Dusk, night",
+    "diet": "Carnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1 (2)",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 1,
+      "text": "1, Fl 27 (D)"
+    },
+    "hitDice": "1",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d2",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d2",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "3",
+    "damageText": "1-2/1-2/1",
+    "specialAttacks": "Swoop, surprise",
+    "specialDefenses": "See below",
+    "magicResistance": "Nil",
+    "size": "S (4' wingspan)",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 65,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Owl",
+    "notes": "<p>Familiar (Find Familiar (Wizard Spell)): Night vision equals human daylight vision, superior hearing. Hit points 2-4 + 1 per caster level, AC 7. Other statistics: Owl, Common.</p>",
+    "hp": {
+      "value": 3,
+      "max": 3
+    }
+  },
+  "items": [],
+  "effects": [],
+  "folder": "JEMQLLRHjKFKuxjW",
+  "sort": 4100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -18,6 +18,7 @@ import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
 import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
+import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
@@ -65,6 +66,7 @@ Hooks.once("init", () => {
   registerSidebarColours();
   registerHealth();
   registerAnimalHooks();
+  registerFamiliarHooks();
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });

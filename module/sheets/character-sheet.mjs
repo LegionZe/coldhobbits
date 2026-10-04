@@ -5,6 +5,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
+import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
 import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 
@@ -190,6 +191,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       takeOut: CharacterSheet.onTakeOut,
       toggleRiding: CharacterSheet.onToggleRiding,
       importAnimal: CharacterSheet.onImportAnimal,
+      findFamiliar: CharacterSheet.onFindFamiliar,
+      familiarDeath: CharacterSheet.onFamiliarDeath,
+      removeFamiliar: CharacterSheet.onRemoveFamiliar,
       removeAnimal: CharacterSheet.onRemoveAnimal,
       rollBodyWeight: CharacterSheet.onRollBodyWeight
     }
@@ -287,6 +291,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
     context.henchmen = this._henchmenContext();
+    context.familiar = this._familiarContext();
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
     // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
@@ -819,6 +824,23 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
 
   /** Henchmen section (Bio tab): Charisma limits (PHB Table 6), the list, and level / lifetime-limit warnings. */
+  /** Familiar (module/familiars.mjs): shown for wizards and whenever one is linked. */
+  _familiarContext() {
+    const sys = this.actor.system;
+    const f = familiarInfo(this.actor);
+    if (sys.classGroup !== "wizard" && !f.uuid) return null;
+    const i18n = k => game.i18n.localize(k);
+    const days = daysSinceAttempt(this.actor);
+    const a = f.actor;
+    return { ...f, isGM: !!game.user?.isGM, name: a?.name ?? "", img: a?.img ?? "icons/svg/pawprint.svg",
+      meta: a ? [`HP ${a.system.hp.value}/${a.system.hp.max}`, `AC ${a.system.ac?.value ?? a.system.ac?.base}`, f.senses,
+        f.surprise ? `${i18n("AD2E.Familiar.Surprise")} +${f.surprise}` : null].filter(Boolean).join(" · ") : "",
+      needsDeathRoll: f.dead && !f.deathResolved,
+      attemptText: days === null ? i18n("AD2E.Familiar.NoAttempt") : game.i18n.format("AD2E.Familiar.LastAttempt", { days }),
+      tooSoon: days !== null && days < 365,
+      rule: game.i18n.format("AD2E.Familiar.Rule", { range: FAMILIAR.rules.range }) };
+  }
+
   _henchmenContext() {
     const info = henchmenInfo(this.actor);
     const sign = n => `${n >= 0 ? "+" : ""}${n}`;
@@ -830,6 +852,20 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** An actor dropped on the sheet becomes a henchman (Henchmen (PHB)); not the character itself, not twice. */
   async _onDropActor(event, actor) {
     if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
+    // A familiar (module/familiars.mjs): one at a time; from a compendium it is imported into the world first.
+    if (isFamiliar(actor)) {
+      if (this.actor.system.familiar?.uuid && this.actor.system.familiar.uuid !== actor.uuid) {
+        const cur = familiarInfo(this.actor);
+        if (cur.actor && !cur.dead) {
+          ui.notifications.warn(game.i18n.format("AD2E.Familiar.HasOne", { name: cur.actor.name }));
+          return null;
+        }
+      }
+      const fam = actor.pack ? await CharacterSheet.#importToWorld(actor) : actor;
+      if (!fam) return null;
+      await this.actor.update({ "system.familiar.uuid": fam.uuid, "system.familiar.deathResolved": false });
+      return fam;
+    }
     // Mounts, pack animals and pets go to the animal list (module/animals.mjs); other actors are henchmen.
     if (isAnimal(actor)) {
       // From a compendium: import a copy into the world (a compendium entry cannot carry a load or a rider).
@@ -884,6 +920,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   static onRollBodyWeight() { return rollBodyWeight(this.actor); }
+
+  static onFindFamiliar() { return findFamiliar(this.actor); }
+
+  static onFamiliarDeath() { return familiarDeath(this.actor); }
+
+  static onRemoveFamiliar() {
+    return this.actor.update({ "system.familiar.uuid": "", "system.familiar.separated": false, "system.familiar.deathResolved": false });
+  }
 
   static async onOpenHenchman(event, target) {
     const actor = (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(target.dataset.uuid, { strict: false });

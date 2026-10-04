@@ -117,6 +117,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Table 10) counts toward a ridden animal's load.
       animals: new SchemaField({ actors: new ArrayField(new StringField()), riding: new StringField({ required: true, blank: true, initial: "" }) }),
       bodyWeight: new NumberField({ min: 0, nullable: true, initial: null }),
+      // Familiar (module/familiars.mjs): its actor UUID, within the 1 mile link (surprise bonus), separated (loses 1 hp a
+      // day), its death resolved (system shock rolled), world time of the last Find Familiar attempt.
+      familiar: new SchemaField({ uuid: new StringField({ required: true, blank: true, initial: "" }),
+        near: new BooleanField({ initial: true }), separated: new BooleanField({ initial: false }),
+        deathResolved: new BooleanField({ initial: false }), lastAttempt: new NumberField({ nullable: true, initial: null }) }),
       biography: new HTMLField()
     };
   }

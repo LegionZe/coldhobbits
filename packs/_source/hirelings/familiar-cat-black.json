@@ -1,0 +1,69 @@
+{
+  "_id": "WaLlckfb2XyZlVIM",
+  "_key": "!actors!WaLlckfb2XyZlVIM",
+  "name": "Cat, black",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "familiar-cat-black",
+    "role": "familiar",
+    "climate": "Any inhabited",
+    "frequency": "Common",
+    "organization": "Solitary",
+    "activity": "Any",
+    "diet": "Carnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1 (1-12)",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 9,
+      "text": "9"
+    },
+    "hitDice": "1/2",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d2",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1-2/1 (claws/bite)",
+    "specialAttacks": "Rear claw rake, 1-2",
+    "specialDefenses": "See below",
+    "magicResistance": "Nil",
+    "size": "T (1' tall)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 7,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Small_Cat_(MM)",
+    "notes": "<p>Familiar (Find Familiar (Wizard Spell)): Excellent night vision & superior hearing. Hit points 2-4 + 1 per caster level, AC 7. Other statistics: Small Cat (MM), Domestic.</p>",
+    "hp": {
+      "value": 3,
+      "max": 3
+    }
+  },
+  "items": [],
+  "effects": [],
+  "folder": "JEMQLLRHjKFKuxjW",
+  "sort": 3800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

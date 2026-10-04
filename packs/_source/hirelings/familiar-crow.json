@@ -1,0 +1,63 @@
+{
+  "_id": "n0oqTipUIVPvGGU8",
+  "_key": "!actors!n0oqTipUIVPvGGU8",
+  "name": "Crow",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "familiar-crow",
+    "role": "familiar",
+    "climate": "Any/Land",
+    "frequency": "Common",
+    "organization": "Flock",
+    "activity": "Day",
+    "diet": "Omnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "See below",
+    "alignment": "Neutral",
+    "numberAppearing": "4-36",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 1,
+      "text": "1, Fl 36"
+    },
+    "hitDice": "1-2 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [],
+    "attacksText": "1",
+    "damageText": "1",
+    "specialAttacks": "Eye peck",
+    "specialDefenses": "Not surprised",
+    "magicResistance": "Nil",
+    "size": "S (2-4' span)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 15,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Raven",
+    "notes": "<p>Familiar (Find Familiar (Wizard Spell)): Excellent vision. Hit points 2-4 + 1 per caster level, AC 7. Other statistics: Raven, Ordinary.</p>",
+    "hp": {
+      "value": 3,
+      "max": 3
+    }
+  },
+  "items": [],
+  "effects": [],
+  "folder": "JEMQLLRHjKFKuxjW",
+  "sort": 3900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
