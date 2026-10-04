@@ -18,6 +18,7 @@
       "somatic": true,
       "material": false
     },
+    "materials": [],
     "range": "0",
     "area": "10 x 60 ft.",
     "castingTime": "1",

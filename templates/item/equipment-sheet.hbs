@@ -19,6 +19,13 @@
     <label>{{localize "AD2E.Gear.LoadFull"}} <input type="number" name="system.load.full" value="{{system.load.full}}" min="0"></label>
     <label>{{localize "AD2E.Gear.LoadHalf"}} <input type="number" name="system.load.half" value="{{system.load.half}}" min="0"></label>
     <label>{{localize "AD2E.Gear.LoadQuarter"}} <input type="number" name="system.load.quarter" value="{{system.load.quarter}}" min="0"></label>
+    {{#if isComponent}}
+    <label>{{localize "AD2E.Gear.CompGroup"}} <input type="text" name="system.component.group" value="{{system.component.group}}"></label>
+    <label data-tooltip="{{localize 'AD2E.Gear.AcquisitionHint'}}">{{localize "AD2E.Gear.Acquisition"}} <input type="text" name="system.component.acquisition" value="{{system.component.acquisition}}"></label>
+    <label>{{localize "AD2E.Gear.Scarcity"}} <input type="text" name="system.component.scarcity" value="{{system.component.scarcity}}"></label>
+    <label class="ad2e-check"><input type="checkbox" name="system.component.perishable" {{checked system.component.perishable}}> {{localize "AD2E.Gear.Perishable"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.component.laboratory" {{checked system.component.laboratory}}> {{localize "AD2E.Gear.Laboratory"}}</label>
+    {{/if}}
     <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
   </div>

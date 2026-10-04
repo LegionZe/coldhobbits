@@ -21,6 +21,7 @@
       "somatic": false,
       "material": false
     },
+    "materials": [],
     "range": "30 yds.",
     "area": "1 creature",
     "castingTime": "1",

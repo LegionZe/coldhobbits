@@ -20,6 +20,7 @@
       "somatic": true,
       "material": false
     },
+    "materials": [],
     "range": "Touch",
     "area": "1 creature",
     "castingTime": "1 rd.",

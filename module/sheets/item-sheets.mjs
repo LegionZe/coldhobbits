@@ -1,5 +1,6 @@
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
 import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
+import { HOLY_ITEM } from "../importers/spell-components.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -239,12 +240,48 @@ export class EquipmentSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     context.categories = AD2E.equipmentCategories;
     context.summary = equipmentSummary(this.document.system);
+    context.isComponent = this.document.system.category === "component";
     return context;
   }
 }
 
 export class SpellSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["spell"] };
+  static DEFAULT_OPTIONS = { classes: ["spell"], actions: { toggleConsumed: SpellSheet.#onToggleConsumed,
+    removeMaterial: SpellSheet.#onRemoveMaterial, addMaterial: SpellSheet.#onAddMaterial } };
+
+  /** Component items to link: the Spell Components compendium (POSM Table 16) and the PHB holy item. */
+  static #catalog = null;
+  static async catalog() {
+    if (SpellSheet.#catalog) return SpellSheet.#catalog;
+    const index = await game.packs?.get("ad2e.components")?.getIndex({ fields: ["system.identifier"] });
+    SpellSheet.#catalog = [HOLY_ITEM, ...[...(index ?? [])].map(e => ({ identifier: e.system?.identifier ?? "", name: e.name }))
+      .filter(c => c.identifier).sort((a, b) => a.name.localeCompare(b.name))];
+    return SpellSheet.#catalog;
+  }
+
+  /** Material links are edited by actions, not form fields (an array of objects). */
+  async _setMaterials(fn) {
+    const list = foundry.utils.deepClone(this.document.system.materials ?? []);
+    return this.document.update({ "system.materials": fn(list) });
+  }
+
+  static #onToggleConsumed(event, target) {
+    const i = Number(target.dataset.index);
+    return this._setMaterials(list => { if (list[i]) list[i].consumed = !list[i].consumed; return list; });
+  }
+
+  static #onRemoveMaterial(event, target) {
+    const i = Number(target.dataset.index);
+    return this._setMaterials(list => list.filter((_, n) => n !== i));
+  }
+
+  static async #onAddMaterial(event, target) {
+    const id = target.closest(".ad2e-materials")?.querySelector("select[data-material-pick]")?.value;
+    const c = (await SpellSheet.catalog()).find(x => x.identifier === id);
+    if (!c) return;
+    return this._setMaterials(list => [...list, { identifier: c.identifier, name: c.name,
+      consumed: c.identifier !== HOLY_ITEM.identifier, label: "" }]);
+  }
   static PARTS = { body: { template: "systems/ad2e/templates/item/spell-sheet.hbs", scrollable: [""] } };
 
   async _prepareContext(options) {
@@ -254,6 +291,9 @@ export class SpellSheet extends AD2EItemSheet {
     context.schoolsText = sys.schools.join(", ");
     context.spheresText = sys.spheres.join(", ");
     context.sourcesText = sys.sources.join(", ");
+    // Material component links (module/importers/spell-components.mjs).
+    context.materials = (sys.materials ?? []).map((m, index) => ({ ...m, index }));
+    context.materialChoices = sys.components.material ? await SpellSheet.catalog() : [];
     return context;
   }
 

@@ -19,6 +19,20 @@
       "somatic": true,
       "material": true
     },
+    "materials": [
+      {
+        "identifier": "rose-petal",
+        "name": "Rose petal",
+        "consumed": true,
+        "label": ""
+      },
+      {
+        "identifier": "cricket-live",
+        "name": "Cricket, live",
+        "consumed": true,
+        "label": ""
+      }
+    ],
     "range": "30 yds.",
     "area": "Special",
     "castingTime": "1",

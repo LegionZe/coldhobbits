@@ -18,6 +18,14 @@
       "somatic": true,
       "material": true
     },
+    "materials": [
+      {
+        "identifier": "spider-web",
+        "name": "Spider web",
+        "consumed": true,
+        "label": ""
+      }
+    ],
     "range": "5 yds./level",
     "area": "Special",
     "castingTime": "2",

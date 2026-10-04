@@ -1,0 +1,42 @@
+{
+  "_id": "alJ8WBW34kjSrIwU",
+  "_key": "!items!alJ8WBW34kjSrIwU",
+  "name": "Salts, alkaline",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "salts-alkaline",
+    "category": "component",
+    "cost": "8 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Minerals",
+      "acquisition": "FS, SO",
+      "scarcity": "Rare",
+      "laboratory": true,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "xCim8tvoKxw6bJ9O",
+  "sort": 1560,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

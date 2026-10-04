@@ -1,0 +1,42 @@
+{
+  "_id": "BZpeS8ccnS9Tcm6r",
+  "_key": "!items!BZpeS8ccnS9Tcm6r",
+  "name": "Vellum, blessed",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "vellum-blessed",
+    "category": "component",
+    "cost": "50 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Other Components",
+      "acquisition": "SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "EAYjgekc4pZ4j7CE",
+  "sort": 3750,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

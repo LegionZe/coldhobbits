@@ -1,0 +1,42 @@
+{
+  "_id": "PdclUjEuHQ1Pl7Gh",
+  "_key": "!items!PdclUjEuHQ1Pl7Gh",
+  "name": "Coin, copper piece",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "coin-copper-piece",
+    "category": "component",
+    "cost": "1 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Common/Household Materials",
+      "acquisition": "TM",
+      "scarcity": "Common",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "3D1aBHB0Np29falT",
+  "sort": 1810,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

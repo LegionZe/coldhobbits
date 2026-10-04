@@ -18,6 +18,20 @@
       "somatic": true,
       "material": true
     },
+    "materials": [
+      {
+        "identifier": "guano-bat",
+        "name": "Guano, bat",
+        "consumed": true,
+        "label": ""
+      },
+      {
+        "identifier": "sulphur",
+        "name": "Sulphur",
+        "consumed": true,
+        "label": ""
+      }
+    ],
     "range": "10 yds. + 10 yds./level",
     "area": "20-ft. radius",
     "castingTime": "3",

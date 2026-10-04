@@ -1,0 +1,42 @@
+{
+  "_id": "VQScvXgdQkK1uT0x",
+  "_key": "!items!VQScvXgdQkK1uT0x",
+  "name": "Cloth, linen & gold thread",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cloth-linen-gold-thread",
+    "category": "component",
+    "cost": "6 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Other Components",
+      "acquisition": "SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "EAYjgekc4pZ4j7CE",
+  "sort": 3570,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,42 @@
+{
+  "_id": "h8dCrxdbNAK1HD5J",
+  "_key": "!items!h8dCrxdbNAK1HD5J",
+  "name": "Skunk cabbage, leaf",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "skunk-cabbage-leaf",
+    "category": "component",
+    "cost": "",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Herbs and Plant Specimens",
+      "acquisition": "FS",
+      "scarcity": "Common",
+      "laboratory": false,
+      "perishable": true
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "24UBBU6dKn43kxfw",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,42 @@
+{
+  "_id": "7cjP9nE4VeFfSQog",
+  "_key": "!items!7cjP9nE4VeFfSQog",
+  "name": "Bone, from undead",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bone-from-undead",
+    "category": "component",
+    "cost": "20 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Other Components",
+      "acquisition": "FS, SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "EAYjgekc4pZ4j7CE",
+  "sort": 3510,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

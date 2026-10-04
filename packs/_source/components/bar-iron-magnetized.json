@@ -1,0 +1,42 @@
+{
+  "_id": "8q5whwaD4ECHnhYr",
+  "_key": "!items!8q5whwaD4ECHnhYr",
+  "name": "Bar, iron, magnetized",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bar-iron-magnetized",
+    "category": "component",
+    "cost": "8 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Refined/Finished Items",
+      "acquisition": "TM",
+      "scarcity": "Uncommon",
+      "laboratory": true,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "vQcKIzCNKCwqEfKJ",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

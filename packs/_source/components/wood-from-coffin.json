@@ -1,0 +1,42 @@
+{
+  "_id": "bVj3Vyp204FbtsLW",
+  "_key": "!items!bVj3Vyp204FbtsLW",
+  "name": "Wood, from coffin",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wood-from-coffin",
+    "category": "component",
+    "cost": "1 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Other Components",
+      "acquisition": "FS, TM",
+      "scarcity": "Common",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "EAYjgekc4pZ4j7CE",
+  "sort": 3790,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

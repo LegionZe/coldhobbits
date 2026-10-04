@@ -1,0 +1,42 @@
+{
+  "_id": "I4LYQNL1p2L5U4Hb",
+  "_key": "!items!I4LYQNL1p2L5U4Hb",
+  "name": "Iron pyrite",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "iron-pyrite",
+    "category": "component",
+    "cost": "2 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Minerals",
+      "acquisition": "FS, TM",
+      "scarcity": "Common",
+      "laboratory": true,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "xCim8tvoKxw6bJ9O",
+  "sort": 1410,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

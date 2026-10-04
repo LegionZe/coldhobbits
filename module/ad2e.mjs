@@ -67,6 +67,11 @@ Hooks.once("init", () => {
   registerHealth();
   registerAnimalHooks();
   registerFamiliarHooks();
+  // Material components used up when casting (module/components.mjs); optional (Material Spell Components (POSM)).
+  game.settings.register("ad2e", "trackComponents", {
+    name: "AD2E.Components.Setting", hint: "AD2E.Components.SettingHint", scope: "world", config: true, type: Boolean,
+    default: false
+  });
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });

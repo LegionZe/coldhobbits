@@ -1,0 +1,42 @@
+{
+  "_id": "AKcWJa10pxISHtRy",
+  "_key": "!items!AKcWJa10pxISHtRy",
+  "name": "Mirror, tiny",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "mirror-tiny",
+    "category": "component",
+    "cost": "20 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Models and Miniatures",
+      "acquisition": "TM, SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "0AxCkgKsByIj81OT",
+  "sort": 430,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

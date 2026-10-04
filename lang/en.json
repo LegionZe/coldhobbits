@@ -440,6 +440,13 @@
     "animal": "Animals",
     "transport": "Transport",
     "service": "Services",
+    "component": "Spell components",
+    "CompGroup": "Table 16 group",
+    "Acquisition": "Acquisition",
+    "AcquisitionHint": "POSM Table 16: FS field search, TM town or market, SO special order, Auto found by anyone who looks.",
+    "Scarcity": "Scarcity",
+    "Perishable": "perishable",
+    "Laboratory": "in a wizard's laboratory",
     "WeightEach": "Weight per unit (lb)",
     "Each": "each",
     "Carried": "Carried",
@@ -551,6 +558,13 @@
   "AD2E.Sheet.Magic": "AD&D 2e Magical Item",
   "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
   "AD2E.Spell": {
+    "Materials": "Material components",
+    "MaterialsHint": "Linked to items in the Spell Components compendium (matched automatically at import: check them against the spell's page). Consumed components are used up when the spell is cast (Casting Spells (PHB)); holy symbols are not.",
+    "Consumed": "Consumed",
+    "ConsumedHint": "Used up when the spell is cast. \"Whatever the component, it is automatically destroyed or lost when the spell is cast, unless the spell description specifically notes otherwise\" (Casting Spells (PHB)).",
+    "RemoveMaterial": "Remove this link",
+    "AddMaterial": "Add",
+    "NoMaterials": "No components linked.",
     "wizard": "Wizard",
     "priest": "Priest",
     "Kind": "Class",
@@ -603,7 +617,7 @@
     "Title": "Spell importer (AD&D 2e wiki)",
     "Open": "Import spells",
     "MenuHint": "Import spells from the AD&D 2e wiki into this world as spell items, by source book, class and level.",
-    "Hint": "Imports game statistics (school, sphere, level, range, components, casting time, duration, area, save) and a link to each spell's page; the descriptions stay on the wiki. Source:",
+    "Hint": "Imports game statistics (school, sphere, level, range, components, casting time, duration, area, save), a link to each spell's page and links to its material components (Spell Components compendium; matched automatically, check them on the spell sheet) into the world compendium \"Imported Spells\"; the descriptions stay on the wiki. Source:",
     "Load": "Load spells",
     "AllClasses": "All classes",
     "AllLevels": "All levels",
@@ -613,7 +627,9 @@
     "Import": "Import shown and selected",
     "Loading": "Loading spell pages: {done} / {total}",
     "Skipped": "{n} page(s) without a usable spell infobox were skipped.",
-    "Done": "Spells imported: {created} created, {updated} updated.",
+    "Done": "Spells imported into {pack}: {created} created, {updated} updated.",
+    "PackLabel": "Imported Spells",
+    "Locked": "The compendium {pack} is locked: unlock it to import spells.",
     "ClassFolder": "{kind} Spells"
   },
   "AD2E.Skill": {
@@ -1410,5 +1426,14 @@
     "ConLoss": "Constitution {from} to {to}.",
     "Pines": "{name} is apart from its master: -{days} hit point(s), now {hp}.",
     "PinedAway": "{name} is apart from its master and dies (0 hit points)."
+  },
+  "AD2E.Components": {
+    "Setting": "Track material components",
+    "SettingHint": "Casting a spell with linked material components checks the caster's items (Spell Components compendium) and removes one of each consumed component; missing components ask to cast anyway. Optional: Material Spell Components (POSM).",
+    "MissingWarn": "{name}: missing material components: {list}.",
+    "MissingTitle": "{name}: material components missing",
+    "MissingText": "{actor} does not carry: {list}. Cast the spell anyway?",
+    "Used": "Components used: {list}.",
+    "CastWithout": "Cast without: {list}."
   }
 }

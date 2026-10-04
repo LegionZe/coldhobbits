@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.78",
+  "version": "0.0.79",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -140,6 +140,17 @@
       }
     },
     {
+      "name": "components",
+      "label": "Spell Components (POSM)",
+      "system": "ad2e",
+      "path": "packs/components",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "name": "aq-equipment",
       "label": "Al-Qadim Equipment (AA)",
       "system": "ad2e",
@@ -219,6 +230,7 @@
         "weapons",
         "armor",
         "equipment",
+        "components",
         "aq-equipment",
         "magic-items",
         "gems",

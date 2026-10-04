@@ -20,6 +20,14 @@
       "somatic": true,
       "material": true
     },
+    "materials": [
+      {
+        "identifier": "holy-item-symbol-water-etc",
+        "name": "Holy item (symbol, water, etc.)",
+        "consumed": true,
+        "label": "holy water"
+      }
+    ],
     "range": "60 yds.",
     "area": "50-ft. cube",
     "castingTime": "1 rd.",

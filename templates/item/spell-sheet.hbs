@@ -22,6 +22,25 @@
     <label>{{localize "AD2E.Spell.Sources"}} <input type="text" name="sourcesText" value="{{sourcesText}}"></label>
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
   </div>
+  {{#if system.components.material}}
+  <fieldset class="ad2e-materials">
+    <legend>{{localize "AD2E.Spell.Materials"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Spell.MaterialsHint"}}</p>
+    {{#each materials as |m|}}
+    <div class="ad2e-prof-row ad2e-content-row">
+      <i class="fa-solid fa-flask"></i>
+      <span>{{m.name}}{{#if m.label}} ({{m.label}}){{/if}}</span>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Spell.ConsumedHint'}}"><input type="checkbox" data-action="toggleConsumed" data-index="{{m.index}}" {{checked m.consumed}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Spell.Consumed"}}</label>
+      {{#if @root.editable}}<a data-action="removeMaterial" data-index="{{m.index}}" data-tooltip="{{localize 'AD2E.Spell.RemoveMaterial'}}"><i class="fa-solid fa-trash"></i></a>{{else}}<span></span>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoMaterials"}}</p>
+    {{/each}}
+    {{#if @root.editable}}<div class="ad2e-prof-summary">
+      <select data-material-pick>{{#each materialChoices as |c|}}<option value="{{c.identifier}}">{{c.name}}</option>{{/each}}</select>
+      <button type="button" data-action="addMaterial">{{localize "AD2E.Spell.AddMaterial"}}</button>
+    </div>{{/if}}
+  </fieldset>
+  {{/if}}
   {{#if system.url}}<p class="ad2e-note">{{localize "AD2E.Spell.FullText"}} <a href="{{system.url}}" target="_blank" rel="noopener">{{system.url}}</a></p>{{/if}}
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>

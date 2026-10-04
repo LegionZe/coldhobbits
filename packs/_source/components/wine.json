@@ -1,0 +1,42 @@
+{
+  "_id": "9uTKjYW9myKTZ5Yt",
+  "_key": "!items!9uTKjYW9myKTZ5Yt",
+  "name": "Wine",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wine",
+    "category": "component",
+    "cost": "4 sp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Common/Household Materials",
+      "acquisition": "TM",
+      "scarcity": "Common",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "3D1aBHB0Np29falT",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

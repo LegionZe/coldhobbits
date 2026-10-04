@@ -3,6 +3,7 @@ import { modifierFields, modifierText, promptModifier, readModifier } from "../r
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { promptMorale } from "../henchmen.mjs";
 import { familiarSurpriseBonus } from "../familiars.mjs";
+import { useComponents } from "../components.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -900,6 +901,9 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(game.i18n.format("AD2E.Spell.NotMemorized", { name: spell.name }));
       return;
     }
+    // Material components (module/components.mjs; world setting "trackComponents"): missing ones ask to cast anyway.
+    const comp = await useComponents(this, spell);
+    if (!comp.cast) return;
     const left = sys.prepared - sys.cast - 1;
     await spell.update({ "system.cast": sys.cast + 1 });
     const i18n = k => game.i18n.localize(k);
@@ -915,6 +919,8 @@ export default class AD2EActor extends Actor {
     const content = `<div class="ad2e-spell-card"><h3>${esc(spell.name)}${sys.reversible ? ` <em>(${i18n("AD2E.Spell.Reversible")})</em>` : ""}</h3>`
       + `<dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
       + (sys.url ? `<p><a href="${esc(sys.url)}" target="_blank" rel="noopener">${i18n("AD2E.Spell.FullText")}</a></p>` : "")
+      + (comp.used.length ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Components.Used", { list: comp.used.join(", ") }))}</p>` : "")
+      + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
   }

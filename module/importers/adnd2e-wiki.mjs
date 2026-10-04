@@ -7,6 +7,7 @@
  *   material, range, aoe, castingTime, duration, save).
  * Only the infobox (game mechanics) and a link to the page are imported; spell descriptions are not.
  */
+import { matchComponents } from "./spell-components.mjs";
 export const WIKI = "https://adnd2e.fandom.com";
 export const API = `${WIKI}/api.php`;
 export const BOOK_PREFIX = "Spells from ";
@@ -80,8 +81,9 @@ export function booksOf(categories) {
  * @param {string} title       page title, e.g. "Magic Missile (Wizard Spell)"
  * @param {string} wiki        page wikitext
  * @param {string[]} categories category titles without the "Category:" prefix
+ * @param {Array<{identifier: string, name: string}>|null} components spell component items to link (POSM Table 16)
  */
-export function spellItemData(title, wiki, categories = []) {
+export function spellItemData(title, wiki, categories = [], components = null) {
   const box = infobox(wiki);
   if (!box) return null;
   const level = levelOf(box.level, categories);
@@ -101,6 +103,8 @@ export function spellItemData(title, wiki, categories = []) {
       identifier: slug(title), kind, level,
       schools: values(box.school), spheres: values(box.sphere), reversible,
       components: { verbal: flag(box.verbal), somatic: flag(box.somatic), material: flag(box.material) },
+      // Links to component items (module/importers/spell-components.mjs) when a component catalog is given.
+      materials: components && flag(box.material) ? matchComponents(wiki, components) : [],
       range: first(box.range), area: first(box.aoe), castingTime: first(box.castingTime),
       duration: first(box.duration), save: first(box.save),
       sources: booksOf(categories), url: pageUrl(title), prepared: 0, cast: 0, notes: ""

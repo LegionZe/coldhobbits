@@ -1,0 +1,42 @@
+{
+  "_id": "wc1LWMTrm6U9NmqP",
+  "_key": "!items!wc1LWMTrm6U9NmqP",
+  "name": "Legs, millipede",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "legs-millipede",
+    "category": "component",
+    "cost": "",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Animal Specimens",
+      "acquisition": "FS",
+      "scarcity": "Uncommon",
+      "laboratory": false,
+      "perishable": true
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FHUQeRnluiR9rVaG",
+  "sort": 2860,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
