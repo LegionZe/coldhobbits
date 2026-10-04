@@ -565,6 +565,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   /** Mounts and pack animals (module/animals.mjs): each animal's load with this character's weight when ridden. */
   _animalsContext(sys) {
+    try {
+      return this._animalsContextInner(sys);
+    } catch (err) {
+      // Never let this section stop the sheet from opening.
+      console.error("ad2e | mounts and pack animals", err);
+      return { bodyWeight: sys.bodyWeight ?? "", canRoll: false, riderTotal: 0, riderText: "", rows: [],
+        error: game.i18n.localize("AD2E.Animal.Error") };
+    }
+  }
+
+  _animalsContextInner(sys) {
     const i18n = k => game.i18n.localize(k);
     const info = animalsInfo(this.document);
     const r = info.rider;
@@ -574,7 +585,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       riderTotal: r.total,
       riderText: game.i18n.format(r.missingBody ? "AD2E.Animal.RiderNoBody" : "AD2E.Animal.RiderParts", { body: r.body ?? 0, gear: r.gear }),
       missingBody: r.missingBody,
-      rows: info.rows.map(x => x.missing ? { ...x, meta: i18n("AD2E.Animal.Missing") } : {
+      rows: info.rows.map(x => x.missing ? { ...x, meta: i18n(x.compendium ? "AD2E.Animal.InCompendium" : "AD2E.Animal.Missing") } : {
         ...x,
         over: x.band === "over",
         meta: [x.role ? i18n(`AD2E.Monster.Role.${x.role}`) : null,
@@ -820,10 +831,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
     // Mounts, pack animals and pets go to the animal list (module/animals.mjs); other actors are henchmen.
     if (isAnimal(actor)) {
+      let animal = actor;
+      // From a compendium: import a copy into the world (a compendium entry cannot carry a load or a rider).
+      if (actor.pack) {
+        if (!(Actor.implementation.canUserCreate?.(game.user) ?? game.user.isGM)) {
+          ui.notifications.warn(game.i18n.format("AD2E.Animal.ImportFirst", { name: actor.name }));
+          return null;
+        }
+        animal = await Actor.implementation.create(game.actors.fromCompendium(actor));
+        if (!animal) return null;
+        ui.notifications.info(game.i18n.format("AD2E.Animal.Imported", { name: animal.name }));
+      }
       const animals = this.actor.system.animals?.actors ?? [];
-      if (animals.includes(actor.uuid)) return null;
-      await this.actor.update({ "system.animals.actors": [...animals, actor.uuid] });
-      return actor;
+      if (animals.includes(animal.uuid)) return null;
+      await this.actor.update({ "system.animals.actors": [...animals, animal.uuid] });
+      return animal;
     }
     const list = this.actor.system.henchmen?.actors ?? [];
     if (list.includes(actor.uuid)) return null;

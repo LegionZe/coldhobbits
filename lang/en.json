@@ -1366,7 +1366,11 @@
     "WithRider": "includes rider {lb} lb",
     "RiddenBy": "Ridden by {name}",
     "Remove": "Remove from this character",
-    "Missing": "Actor not found (deleted, or in a compendium).",
+    "Missing": "Actor not found (deleted).",
+    "InCompendium": "This is a compendium entry, which cannot carry a load: remove it, then drag the animal onto the sheet again to import a copy into the world.",
+    "ImportFirst": "{name} is in a compendium: import it into the world (Actors sidebar) first, then drag it onto the character.",
+    "Imported": "{name} imported from the compendium into the world and added to the character.",
+    "Error": "The mounts and pack animals could not be shown (see the browser console).",
     "RiderOnMount": "Rider: {name} (body {body} + gear {gear} lb; own load {own} lb)",
     "RiderOnMountNoBody": "Rider: {name} (body weight not set; gear {gear} lb; own load {own} lb)"
   }

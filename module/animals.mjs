@@ -54,7 +54,9 @@ export function animalsInfo(character) {
   const rider = riderWeight(character);
   const rows = (sys.animals?.actors ?? []).map(uuid => {
     const actor = resolve(uuid);
-    if (!actor) return { uuid, missing: true, name: uuid, img: "icons/svg/mystery-man.svg" };
+    // A compendium link resolves to its index entry (name and image, no data): it cannot carry a load.
+    if (!actor?.system) return { uuid, missing: true, compendium: String(uuid).startsWith("Compendium."),
+      name: actor?.name ?? uuid, img: actor?.img ?? "icons/svg/mystery-man.svg" };
     const enc = actor.system.encumbrance ?? {};
     const riding = sys.animals.riding === uuid;
     const own = enc.own ?? enc.weight ?? 0;
@@ -75,7 +77,7 @@ export function animalsInfo(character) {
 export function refreshAnimals(character, extra = []) {
   for (const uuid of new Set([...(character?.system?.animals?.actors ?? []), ...extra])) {
     const animal = resolve(uuid);
-    if (!animal?.prepareData) continue;
+    if (!animal?.system || typeof animal.prepareData !== "function") continue;
     animal.prepareData();
     if (animal.sheet?.rendered) animal.sheet.render();
   }
