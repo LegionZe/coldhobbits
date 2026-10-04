@@ -189,6 +189,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       awardXp: CharacterSheet.onAwardXp,
       takeOut: CharacterSheet.onTakeOut,
       toggleRiding: CharacterSheet.onToggleRiding,
+      importAnimal: CharacterSheet.onImportAnimal,
       removeAnimal: CharacterSheet.onRemoveAnimal,
       rollBodyWeight: CharacterSheet.onRollBodyWeight
     }
@@ -831,17 +832,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
     // Mounts, pack animals and pets go to the animal list (module/animals.mjs); other actors are henchmen.
     if (isAnimal(actor)) {
-      let animal = actor;
       // From a compendium: import a copy into the world (a compendium entry cannot carry a load or a rider).
-      if (actor.pack) {
-        if (!(Actor.implementation.canUserCreate?.(game.user) ?? game.user.isGM)) {
-          ui.notifications.warn(game.i18n.format("AD2E.Animal.ImportFirst", { name: actor.name }));
-          return null;
-        }
-        animal = await Actor.implementation.create(game.actors.fromCompendium(actor));
-        if (!animal) return null;
-        ui.notifications.info(game.i18n.format("AD2E.Animal.Imported", { name: animal.name }));
-      }
+      const animal = actor.pack ? await CharacterSheet.#importToWorld(actor) : actor;
+      if (!animal) return null;
       const animals = this.actor.system.animals?.actors ?? [];
       if (animals.includes(animal.uuid)) return null;
       await this.actor.update({ "system.animals.actors": [...animals, animal.uuid] });
@@ -851,6 +844,29 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (list.includes(actor.uuid)) return null;
     await this.actor.update({ "system.henchmen.actors": [...list, actor.uuid] });
     return actor;
+  }
+
+  /** A world copy of a compendium actor (null, with a warning, when the user may not create actors). */
+  static async #importToWorld(actor) {
+    if (!(Actor.implementation.canUserCreate?.(game.user) ?? game.user.isGM)) {
+      ui.notifications.warn(game.i18n.format("AD2E.Animal.ImportFirst", { name: actor.name }));
+      return null;
+    }
+    const animal = await Actor.implementation.create(game.actors.fromCompendium(actor));
+    if (animal) ui.notifications.info(game.i18n.format("AD2E.Animal.Imported", { name: animal.name }));
+    return animal ?? null;
+  }
+
+  /** An animal saved as a compendium link (0.0.75): import it into the world and replace the link in place. */
+  static async onImportAnimal(event, target) {
+    const uuid = target.dataset.uuid;
+    const source = await fromUuid(uuid);
+    if (!source) return ui.notifications.warn(game.i18n.localize("AD2E.Animal.Missing"));
+    const animal = await CharacterSheet.#importToWorld(source);
+    if (!animal) return null;
+    const animals = this.actor.system.animals ?? { actors: [], riding: "" };
+    return this.actor.update({ "system.animals.actors": animals.actors.map(u => (u === uuid ? animal.uuid : u)),
+      "system.animals.riding": animals.riding === uuid ? animal.uuid : animals.riding });
   }
 
   /** Ride an animal (one at a time) or dismount. */
