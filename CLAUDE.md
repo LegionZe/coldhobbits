@@ -95,6 +95,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   (+4 vs an unarmed attacker, `vsUnarmed`) options in rollWeaponAttack/Damage and rollMonsterAttack/Damage.
   PHB Table 51 (`COMBAT_TABLES.combatModifiers`, `STATUS_51` in the generator maps core status ids from the owner's
   diagnostic: sleep/paralysis/restrain/unconscious = automatic hit, stun/prone +4, invisible -4) in every attack dialog.
+  Automatic damage on a hit (client setting `autoDamage`): rollWeaponDamage / rollMonsterDamage take a `preset` (no dialog).
   Character size (`system.sizeCategory`, derived) comes from `RACE_SIZE` in race-tables.mjs (build-race-data.py, Monstrous
   Manual sizes asserted by regex); `needsTwoHands` / `twoWeaponRate` give two-handed weapons and the extra-attack rate.
 - Initiative: `module/initiative.mjs` (Tables 55/56 from combat-tables.mjs: weapon speed, casting time, items, size;

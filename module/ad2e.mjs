@@ -66,6 +66,10 @@ Hooks.once("init", () => {
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });
+  // Roll damage automatically when an attack hits (per user).
+  game.settings.register("ad2e", "autoDamage", {
+    name: "AD2E.Weapon.AutoDamageSetting", hint: "AD2E.Weapon.AutoDamageHint", scope: "client", config: true, type: Boolean, default: true
+  });
   // Initiative method (Initiative (PHB)): one roll per side (standard procedure, or group with individual modifiers) or
   // one roll per combatant (individual, optional rule).
   game.settings.register("ad2e", "initiativeMode", {
