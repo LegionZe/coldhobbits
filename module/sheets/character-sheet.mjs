@@ -4,6 +4,7 @@ import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
+import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -180,6 +181,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollSurprise: CharacterSheet.onRollSurprise,
       rollUnarmed: CharacterSheet.onRollUnarmed,
       openHenchman: CharacterSheet.onOpenHenchman,
+      learnSpell: CharacterSheet.onLearnSpell,
       removeHenchman: CharacterSheet.onRemoveHenchman,
       henchmanMorale: CharacterSheet.onHenchmanMorale,
       awardXp: CharacterSheet.onAwardXp
@@ -433,8 +435,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rows: l.spells.map(i => {
         const s = i.system;
         const comps = ["verbal", "somatic", "material"].filter(c => s.components[c]).map(c => c[0].toUpperCase()).join("");
+        // Wizard spells not yet understood: the chance to learn and why a roll is not possible now.
+        const unlearned = s.kind === "wizard" && s.learned === false;
+        const lc = unlearned ? learnChance(this.document, i) : null;
         return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared,
-          remaining: Math.max(s.prepared - s.cast, 0), usable: s.kind === sp.kind,
+          remaining: Math.max(s.prepared - s.cast, 0), usable: s.kind === sp.kind, unlearned,
+          learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
+            : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
+          learnBlocked: !!lc?.blocked,
           meta: [(s.kind === "priest" ? s.spheres : s.schools).join("/"), comps,
             `${i18n("AD2E.Spell.CT")} ${s.castingTime}`, `${i18n("AD2E.Spell.R")} ${s.range}`,
             `${i18n("AD2E.Spell.D")} ${s.duration}`, `${i18n("AD2E.Spell.AoE")} ${s.area}`, `${i18n("AD2E.Spell.Save")} ${s.save}`]
@@ -599,6 +607,26 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         && !item.system.spheres.some(sp2 => ["all", ...AD2E.limitedSpheres[sp.table]].includes(sp2.toLowerCase()))) {
         warn("AD2E.Spell.SphereNotAllowed");
       }
+      // A wizard spell found by a wizard (or bard): roll to learn it (Intelligence (PHB)), or add it without a roll.
+      if (sp.kind === "wizard" && item.system.kind === "wizard") {
+        const choice = await foundry.applications.api.DialogV2.wait({
+          window: { title: game.i18n.format("AD2E.Learn.DropTitle", { name: item.name }) },
+          content: `<p>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Learn.DropText", { chance: learnChance(this.actor, item).chance })) ?? ""}</p>`,
+          buttons: [{ action: "roll", label: game.i18n.localize("AD2E.Learn.Roll"), default: true },
+            { action: "add", label: game.i18n.localize("AD2E.Learn.AddKnown") },
+            { action: "cancel", label: game.i18n.localize("AD2E.Learn.Cancel") }],
+          rejectClose: false
+        });
+        if (!choice || choice === "cancel") return null;
+        if (choice === "roll") {
+          const data = item.toObject();
+          delete data._id;
+          foundry.utils.mergeObject(data, { system: { learned: false, learnFailedLevel: null, prepared: 0, cast: 0 } });
+          const [created] = await this.actor.createEmbeddedDocuments("Item", [data]);
+          if (created) await rollLearnSpell(this.actor, created);
+          return created ?? null;
+        }
+      }
     }
     if (this.actor.isOwner && item.type === "weapon" && item.parent !== this.actor) {
       const prof = this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon"
@@ -702,9 +730,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** +/- memorized count of a spell. */
   static onAdjustPrepared(event, target) {
     const spell = this.actor.items.get(target.dataset.itemId);
-    if (!spell) return;
+    if (!spell || spell.system.learned === false) return;
     const prepared = Math.max(spell.system.prepared + Number(target.dataset.delta), 0);
     return spell.update({ "system.prepared": prepared, "system.cast": Math.min(spell.system.cast, prepared) });
+  }
+
+  static onLearnSpell(event, target) {
+    const spell = this.actor.items.get(target.dataset.itemId);
+    return spell ? rollLearnSpell(this.actor, spell) : null;
   }
 
   static onCastSpell(event, target) {

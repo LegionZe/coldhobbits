@@ -21,7 +21,9 @@
       <div class="ad2e-weapon-main">
         <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.reversible}} <em>(R)</em>{{/if}}</a>
         <span class="ad2e-weapon-meta">{{r.meta}}{{#unless r.usable}} · <span class="ad2e-unmet">{{localize "AD2E.Spell.NotForClass"}}</span>{{/unless}}</span>
+        {{#if r.unlearned}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Learn.NotLearned"}} · {{r.learnText}}</span>{{/if}}
       </div>
+      {{#if r.unlearned}}<button type="button" data-action="learnSpell" data-item-id="{{r.id}}" {{#if r.learnBlocked}}disabled{{/if}}>{{localize "AD2E.Learn.Learn"}}</button>{{/if}}
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Spell.MemorizedHint'}}">
         {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
         {{r.remaining}}/{{r.prepared}}

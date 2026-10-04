@@ -22,6 +22,10 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       }),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
       sources: new ArrayField(new StringField()),
+      // Wizard spells: understood and in the spell book (module/learn-spells.mjs); a failed roll records the level
+      // ("they cannot check that spell again until they advance to the next level", Intelligence (PHB)).
+      learned: new BooleanField({ initial: true }),
+      learnFailedLevel: new NumberField({ integer: true, min: 0, nullable: true, initial: null }),
       prepared: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
       cast: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
       url: text(),
