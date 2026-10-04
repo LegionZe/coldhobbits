@@ -410,7 +410,10 @@
     "BroadCap": "no more than six times the character's height",
     "HighCap": "no more than 1 1/2 times the character's height",
     "March": "March",
-    "MarchHint": "Miles per 10-hour day: march (x2) / force march (x2 1/2, Constitution check each day) (Movement (PHB))"
+    "MarchHint": "Miles per 10-hour day: march (x2) / force march (x2 1/2, Constitution check each day) (Movement (PHB))",
+    "Mounted": "Mounted",
+    "MountedShort": "mounted {rate}",
+    "MountedHint": "Riding {name} (load {weight} / {full} lb, rider included): its movement per round in tens of yards outdoors; miles per day equal to its movement rate, pushed to double at the risk of lameness and exhaustion (Movement (DMG), Mounted Overland Movement)."
   },
   "AD2E.Coin": {
     "Coins": "Coins",

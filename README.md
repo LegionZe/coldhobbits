@@ -187,7 +187,10 @@ initiative 1d10, lowest acts first.
   character carries (encumbrance load, clothing included). Body weight is entered on the Equipment tab or rolled on PHB
   Table 10 (base for the race and sex plus the modifier dice; generated into race-tables.mjs). Animals are loaded with
   items as before (saddle bags and other containers count while carried); "up to a maximum of twice their normal load",
-  beyond which the animal cannot move. The animal's own sheet shows its rider.
+  beyond which the animal cannot move. The animal's own sheet shows its rider. While riding, the sheet footer and the
+  movement figure show the mount's movement with the rider in its load, per round (tens of yards outdoors) and per day:
+  "all mounts are able to move a number of miles per day equal to their movement rate", pushed to double (Movement (DMG),
+  Mounted Overland Movement).
 - Ability score generation: the dice button on the Abilities panel opens a roller for PHB Methods II-VI ("Rolling
   Ability Scores (PHB)"): II 3d6 twice per ability, keep one; III 3d6 six times, assign; IV 3d6 twelve times, assign
   six; V 4d6 drop lowest six times, assign; VI every ability 8 plus seven d6 added whole, none above 18. Rolls use

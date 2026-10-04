@@ -13,5 +13,6 @@
     <a data-action="rollJump" data-jump="standingBroad">{{m.jump.standingBroad}}</a> / {{m.jump.standingHigh}}
     {{else}}—{{/if}}</span>
   <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.MarchHint'}}"><strong>{{localize "AD2E.Move.March"}}</strong> {{m.march}} / {{m.forceMarch}} mi</span>
+  {{#if m.mounted}}<span class="ad2e-move-item {{#if m.mounted.over}}ad2e-unmet{{/if}}" data-tooltip="{{m.mounted.hint}}"><strong>{{localize "AD2E.Move.Mounted"}}</strong> {{m.mounted.name}}: {{m.mounted.rate}}{{#if m.mounted.band}} ({{m.mounted.band}}){{/if}} · {{m.mounted.round}} yd · {{m.mounted.day}} / {{m.mounted.pushed}} mi</span>{{/if}}
   {{/with}}
 </footer>
