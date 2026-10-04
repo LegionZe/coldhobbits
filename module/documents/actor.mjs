@@ -311,6 +311,7 @@ export default class AD2EActor extends Actor {
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + backstabField + twoField + nonlethalField
+        + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -321,7 +322,8 @@ export default class AD2EActor extends Actor {
           const m = readModifier(button.form);
           return { ac: Number(f.ac.value) || 0, mod: m.mod + kit.sum, range: f.range?.value ?? null,
             ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
-            twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked };
+            twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
+            vsUnarmed: !!f.vsUnarmed?.checked };
         }
       },
       rejectClose: false
@@ -377,12 +379,14 @@ export default class AD2EActor extends Actor {
     }
     if (a.nonlethal) notes.push(`${i18n("AD2E.Nonlethal.Weapon")} ${COMBAT_TABLES.nonlethal.hit}`);
     if (a.noBackstab) notes.push(i18n("AD2E.TwoWeapons.NoBackstab"));
+    const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
+    if (vsUnarmed) notes.push(game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed }));
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0);
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     const hit = roll.total >= needed;
     // Use up the piece fired or thrown.
@@ -502,6 +506,7 @@ export default class AD2EActor extends Actor {
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
         + backstabField + nonlethalField
+        + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -511,7 +516,8 @@ export default class AD2EActor extends Actor {
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
           const m = readModifier(button.form);
           return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
-            backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m };
+            backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m,
+            vsUnarmed: !!f.vsUnarmed?.checked };
         }
       },
       rejectClose: false
@@ -522,7 +528,8 @@ export default class AD2EActor extends Actor {
     // Backstab: "The weapon's standard damage is multiplied by the value given in Table 30. Then Strength and magical
     // weapon bonuses are added" (Thief Skill Explanations (PHB)).
     const formula = input.backstab && mult ? `(${dice}) * ${mult} + @adj + @mod` : `${dice} + @adj + @mod`;
-    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0), mod: input.mod }).evaluate();
+    const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
+    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed, mod: input.mod }).evaluate();
     const full = Math.max(roll.total, 1);
     // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
     // temporary (rounded down).
@@ -534,6 +541,7 @@ export default class AD2EActor extends Actor {
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}${AD2EActor.#targetText(targets)}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
+        + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
           : (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : ""))
@@ -550,17 +558,20 @@ export default class AD2EActor extends Actor {
    * attackers modifiers. Punching damage is applied as temporary damage (module/health.mjs).
    */
   async rollUnarmed(form = "punch") {
-    if (this.type !== "character") return;
+    if (!["character", "monster"].includes(this.type)) return;
+    const monster = this.type === "monster";
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const sys = this.system;
     const C = COMBAT_TABLES;
-    const kitOptions = this.#kitOptions("attack");
+    const kitOptions = monster ? [] : this.#kitOptions("attack");
     const targets = AD2EActor.#targetsNow();
+    const targetActors = AD2EActor.#visibleTargetActors(targets);
     const field = (label, html) => `<div class="form-group"><label>${label}</label>${html}</div>`;
     const sizeSelect = (name, value) => `<select name="${name}">${C.overbear.sizes.map(z =>
       `<option value="${z}"${z === value ? " selected" : ""}>${i18n(`AD2E.Unarmed.Size.${z}`)}</option>`).join("")}</select>`;
-    const armorRow = form === "wrestle" ? wrestlingArmor(sys.armor?.body?.system.identifier) : null;
+    const body = monster ? this.items.find(i => i.type === "armor" && i.system.equipped && i.system.kind === "body") : sys.armor?.body;
+    const armorRow = form === "wrestle" ? wrestlingArmor(body?.system.identifier) : null;
     let extra = "";
     if (form === "punch") {
       extra = field(i18n("AD2E.Unarmed.Gauntlet"), `<input type="checkbox" name="gauntlet">`)
@@ -570,15 +581,16 @@ export default class AD2EActor extends Actor {
         + field(i18n("AD2E.Unarmed.AddStrength"), `<input type="checkbox" name="addStr" checked>`)
         + (armorRow ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Unarmed.ArmorPenalty", { armor: armorRow.label, value: armorRow.value }))}</p>` : "");
     } else {
-      extra = field(i18n("AD2E.Unarmed.AttackerSize"), sizeSelect("attacker", "M"))
-        + field(i18n("AD2E.Unarmed.DefenderSize"), sizeSelect("defender", "M"))
+      extra = field(i18n("AD2E.Unarmed.AttackerSize"), sizeSelect("attacker", AD2EActor.#sizeOf(this)))
+        + field(i18n("AD2E.Unarmed.DefenderSize"), sizeSelect("defender", targetActors[0] ? AD2EActor.#sizeOf(targetActors[0]) : "M"))
         + field(i18n("AD2E.Unarmed.Legs"), `<input type="number" name="legs" value="2" min="0" step="1">`)
         + field(i18n("AD2E.Unarmed.Attackers"), `<input type="number" name="attackers" value="1" min="1" step="1">`)
         + field(i18n("AD2E.Unarmed.Down"), `<input type="checkbox" name="down">`);
     }
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${i18n(`AD2E.Unarmed.${form}`)}` },
-      content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}</p>`
+      content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}`
+        + `${monster ? ` ${i18n("AD2E.Unarmed.CreatureHint")}` : ""}</p>`
         + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus>`)
         + extra + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
@@ -593,12 +605,18 @@ export default class AD2EActor extends Actor {
     });
     if (!input) return;
     const speaker = ChatMessage.getSpeaker({ actor: this });
-    const str = sys.mods?.dmg ?? 0;
+    const str = monster ? 0 : (sys.mods?.dmg ?? 0);
     const parts = [input.kitText].filter(Boolean);
+    // "an armed defender is automatically allowed to strike with his weapon before the unarmed attack is made ... the
+    // defender gains a +4 bonus to his attack and damage rolls" (Attacking Without Killing (PHB)); targets the user can see.
+    const armed = targetActors.filter(a => AD2EActor.#isArmed(a));
+    const armedText = armed.length ? game.i18n.format("AD2E.Unarmed.ArmedTarget",
+      { names: armed.map(a => a.name).join(", "), bonus: C.armedDefender }) : "";
+    const armedNote = armedText ? `<p class="ad2e-note">${esc(armedText)}</p>` : "";
     // A maintained hold needs no attack roll: 1 more point each round (round 2 = 2 points, ...).
     if (form === "wrestle" && input.holdRound >= 2) {
       const dmg = Math.max(input.holdRound + (input.addStr ? str : 0), 0);
-      return ChatMessage.create({ speaker, flags: dmg > 0 ? { ad2e: { damage: dmg, targets } } : {}, content: `<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
+      return ChatMessage.create({ speaker, flags: dmg > 0 ? { ad2e: { damage: dmg, targets } } : {}, content: `${armedNote}<p>${esc(game.i18n.format("AD2E.Unarmed.HoldResult",
         { round: input.holdRound, damage: dmg }))}${AD2EActor.#targetText(targets)}${input.addStr && str ? ` (${i18n("AD2E.Unarmed.StrengthShort")} ${str > 0 ? "+" : ""}${str})` : ""}</p>` });
     }
     let situation = 0;
@@ -610,7 +628,7 @@ export default class AD2EActor extends Actor {
       if (o.legs) parts.push(`${i18n("AD2E.Unarmed.Legs")} ${o.legs}`);
       if (o.attackers) parts.push(`${i18n("AD2E.Unarmed.Attackers")} +${o.attackers}`);
     }
-    const hitAdj = sys.mods?.meleeAttack ?? 0;
+    const hitAdj = monster ? 0 : (sys.mods?.meleeAttack ?? 0);
     const roll = await new Roll("1d20 + @hit + @situation + @kit + @mod", { hit: hitAdj, situation, kit: input.kit, mod: input.mod }).evaluate();
     const needed = sys.thac0.value - input.ac;
     const hit = roll.total >= needed;
@@ -644,7 +662,33 @@ export default class AD2EActor extends Actor {
     }
     const flavor = `${i18n(`AD2E.Unarmed.${form}`)} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${sys.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+)`
       + `${parts.length ? ` [${parts.map(esc).join("; ")}]` : ""}${modifierText(input.mod, input.note)}: ${result}`;
-    return ChatMessage.create({ speaker, flavor, rolls, flags: damageFlags });
+    return ChatMessage.create({ speaker, flavor: flavor + (armedText ? ` [${esc(armedText)}]` : ""), rolls, flags: damageFlags });
+  }
+
+  /** Actors of the targets the current user may see (observer or owner). */
+  static #visibleTargetActors(targets) {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    return targets.map(t => resolve?.(t.uuid, { strict: false })?.actor)
+      .filter(a => a && (a.isOwner || a.testUserPermission?.(game.user, "OBSERVER")));
+  }
+
+  /** Whether an actor holds a melee weapon: characters - equipped and not dropped; monsters - any not dropped. */
+  static #isArmed(actor) {
+    return !!actor?.items?.some?.(i => i.type === "weapon" && i.system.weapon?.melee && !i.system.dropped
+      && (actor.type !== "character" || i.system.equipped));
+  }
+
+  /** Size category of an actor: characters from the race, monsters from the size text ("L (9' tall)"). */
+  static #sizeOf(actor) {
+    if (actor?.type === "character") return actor.system.sizeCategory ?? "M";
+    const m = String(actor?.system?.size ?? "").trim().match(/^[TSMLHG]/i);
+    return m ? m[0].toUpperCase() : "M";
+  }
+
+  /** Dialog field: the attacker is an unarmed opponent closing in (+4 attack and damage, Attacking Without Killing (PHB)). */
+  static #armedDefenderField() {
+    return `<div class="form-group"><label>${game.i18n.format("AD2E.Unarmed.VsUnarmed", { bonus: COMBAT_TABLES.armedDefender })}</label>`
+      + `<input type="checkbox" name="vsUnarmed"></div>`;
   }
 
   /**
@@ -654,9 +698,10 @@ export default class AD2EActor extends Actor {
    */
   monsterAttacks() {
     if (this.type !== "monster") return [];
-    const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus,
+    const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
       damage: [{ label: "", formula: a.damage }], dmgBonus: 0 }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
+      melee: !!i.system.weapon?.melee,
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
       dmgBonus: i.system.bonus.dmg }));
     return [...natural, ...weapons];
@@ -671,19 +716,22 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
+        + (attack.melee ? AD2EActor.#armedDefenderField() : "")
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-        ac: Number(button.form.elements.ac.value) || 0, ...readModifier(button.form) }) },
+        ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked, ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
     const thac0 = this.system.thac0.value;
     const needed = thac0 - input.ac;
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit, mod: input.mod }).evaluate();
+    const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed, mod: input.mod }).evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
-        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + modifierText(input.mod, input.note)
+        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+        + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "") + modifierText(input.mod, input.note)
     });
   }
 
@@ -703,10 +751,11 @@ export default class AD2EActor extends Actor {
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
         + (weapon ? `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
           + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>` : "")
+        + (attack.melee ? AD2EActor.#armedDefenderField() : "")
         + modifierFields({ autofocus: !weapon }),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         option: Number(button.form.elements.option?.value ?? 0), size: button.form.elements.size?.value ?? "sm",
-        ...readModifier(button.form) }) },
+        vsUnarmed: !!button.form.elements.vsUnarmed?.checked, ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
@@ -715,12 +764,14 @@ export default class AD2EActor extends Actor {
       formula = opt[input.size] ?? opt.sm ?? opt.l;
       label = `${opt.label ? ` (${opt.label})` : ""} vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`;
     }
-    const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus, mod: input.mod }).evaluate();
+    const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
+    const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus + vsUnarmed, mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flags: { ad2e: { damage: total, targets } },
       flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+        + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + modifierText(input.mod, input.note)
     });
   }

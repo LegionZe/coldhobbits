@@ -1160,6 +1160,10 @@
     "DamageResult": "{total} non-lethal ({temp} of it temporary)"
   },
   "AD2E.Unarmed": {
+    "CreatureHint": "Unintelligent creatures do not punch, wrestle or overbear; a creature's natural weapons stay usable at close quarters (Nonlethal Combat and Creatures, PHB).",
+    "ArmedTarget": "{names} armed: strikes first, before this attack, with +{bonus} to attack and damage",
+    "VsUnarmed": "Against an unarmed attacker closing in (+{bonus} attack and damage)",
+    "VsUnarmedShort": "vs unarmed attacker +{bonus}",
     "Title": "Unarmed",
     "Meta": "Punching, wrestling, overbearing (Attacking Without Killing, PHB)",
     "punch": "Punch",
