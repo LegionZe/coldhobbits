@@ -15,6 +15,7 @@
     <label>{{localize "AD2E.Armor.ShieldAttacks"}} <input type="number" name="system.shield.attacks" value="{{system.shield.attacks}}" min="1" placeholder="{{localize 'AD2E.Armor.AnyFrontal'}}"></label>
     {{/if}}
     <label>{{localize "AD2E.Armor.Bonus"}} <input type="number" name="system.bonus" value="{{system.bonus}}"></label>
+    <label data-tooltip="{{localize 'AD2E.Armor.SizeHint'}}">{{localize "AD2E.Armor.Size"}} <select name="system.size">{{#each sizeOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label class="ad2e-check"><input type="checkbox" name="system.equipped" {{checked system.equipped}}> {{localize "AD2E.Armor.Equipped"}}</label>
     <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
     <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>

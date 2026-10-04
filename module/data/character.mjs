@@ -9,6 +9,46 @@ const { BooleanField, SchemaField, NumberField, StringField, HTMLField } = found
 const int = (initial, min = null, max = null) =>
   new NumberField({ required: true, integer: true, initial, min, max, nullable: false });
 
+/** Size an armour item is made for: its own size, or the wearer's ("" = made for the wearer). */
+export function armorSize(sys, wearer = "M") {
+  return sys?.size || (["S", "M", "L"].includes(wearer) ? wearer : (wearer === "T" ? "S" : "L"));
+}
+
+/** Whether armour fits the wearer (made for the wearer's size, or for no particular size). */
+export function armorFits(sys, wearer = "M") {
+  return !sys?.size || sys.size === armorSize({}, wearer);
+}
+
+/** Weight factor by armour size: "Small armor weighs half the amount listed, while large armor weighs 50% more" (Armor (PHB)). */
+export function armorWeightFactor(sys, wearer = "M") {
+  return { S: 0.5, M: 1, L: 1.5 }[armorSize(sys, wearer)] ?? 1;
+}
+
+/**
+ * Why a class may not use an armour item (AD2E.classTables.classArmor), or "" if allowed: "none" (wizards: body,
+ * shield and helmet), a list of body armours (thieves: also elven chain; druids), a maximum AC ("up to, and including,
+ * chain mail": base AC 5 or worse), shields "none" (wizards, bards); druids' "wooden" shields are a note only.
+ */
+export function armorRestriction(classId, item) {
+  const rule = AD2E.classTables?.classArmor?.[classId];
+  if (!rule) return "";
+  const sys = item.system;
+  const id = sys.identifier ?? "";
+  if (sys.kind === "shield") {
+    if (rule.shield === "none") return "noShield";
+    return rule.shield === "wooden" ? "woodenShield" : "";
+  }
+  const body = rule.body;
+  if (body === "none") return "noArmor";
+  if (sys.kind !== "body") return "";
+  if (Array.isArray(body)) {
+    const elven = rule.elvenChain && /elven[- ]chain/i.test(`${id} ${item.name ?? ""}`);
+    return body.includes(id) || elven ? "" : "notAllowed";
+  }
+  if (body?.maxAc !== undefined) return (sys.ac ?? 10) >= body.maxAc ? "" : "tooHeavy";
+  return "";
+}
+
 /** Strength table row for a bow's rating ("17", "18/50", "18/00", "19"); null for a standard bow or an unknown rating. */
 export function bowStrengthRow(rating) {
   const m = String(rating ?? "").trim().match(/^(\d+)(?:\/(\d+))?$/);
@@ -92,6 +132,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // table and check below uses. The stored `value` is the rolled score, which is what the
     // race's Table 7 minimums/maximums are checked against.
     this.raceInfo = this.#computeRaceInfo();
+    // Size from the race (weapon and armour size, Weapons / Armor (PHB)).
+    this.sizeCategory = characterSize(this.raceInfo.raceItem?.system.identifier);
     // Class next: the class item sets the group used below (warrior CON bonus, THAC0).
     this.classInfo = this.#computeClassInfo();
     if (this.classInfo.classItem) this.classGroup = this.classInfo.classItem.system.group;
@@ -282,7 +324,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * attacked from behind" (Dexterity (PHB)). Returns front (= ac.total), vs. missiles, and rear AC.
    */
   #computeArmor(dexAc) {
-    const equipped = this.parent?.items?.filter(i => i.type === "armor" && i.system.equipped) ?? [];
+    const worn = this.parent?.items?.filter(i => i.type === "armor" && i.system.equipped) ?? [];
+    // Armour made for another size does not fit ("it will do little good for a halfling", Armor (PHB)): no AC.
+    const misfit = worn.filter(i => !armorFits(i.system, this.sizeCategory));
+    const equipped = worn.filter(i => !misfit.includes(i));
+    // Class armour limits (Wizard, Thief, Bard, Druid (PHB); class-tables.mjs classArmor): shown, still counted.
+    const classId = this.classInfo?.classItem?.system.identifier ?? null;
+    const restricted = worn.map(i => ({ item: i, reason: armorRestriction(classId, i) })).filter(r => r.reason);
     const bodies = equipped.filter(i => i.system.kind === "body" && i.system.ac !== null)
       .sort((a, b) => (a.system.ac - a.system.bonus) - (b.system.ac - b.system.bonus));
     const shields = equipped.filter(i => i.system.kind === "shield")
@@ -299,7 +347,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       rear: base + Math.max(dexAc, 0),
       shieldAttacks: shield?.system.shield.attacks ?? null,
       extraBody: bodies.length > 1,
-      extraShield: shields.length > 1
+      extraShield: shields.length > 1,
+      misfit, restricted
     };
   }
 
@@ -316,7 +365,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     let rule = "basic";
     try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
     const items = this.parent?.items ?? [];
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1)
+      * (i.type === "armor" ? armorWeightFactor(i.system, this.sizeCategory) : 1);
     // Equipment, magical items and treasure count while carried (animals, transport, services and lodging default to
     // not carried).
     const gear = items.filter(i => (["weapon", "ammunition", "armor"].includes(i.type) && !(i.type === "weapon" && i.system.dropped))
@@ -492,7 +542,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const profEntries = p.entries.filter(e => e.item.system.kind === "weapon");
     const items = this.parent?.items?.filter(i => i.type === "weapon") ?? [];
     // Size from the race (weapon size, Weapons (PHB)); a weapon one size larger needs two hands.
-    const size = this.sizeCategory = characterSize(this.raceInfo.raceItem?.system.identifier);
+    const size = this.sizeCategory ?? "M";
     const oneHanded = i => !!i.system.weapon?.melee && !needsTwoHands(i.system.weapon, size);
     // Two weapons in hand (warriors and rogues): one more attack per round with the second weapon.
     const inHand = items.filter(i => i.system.equipped && !i.system.dropped && oneHanded(i));

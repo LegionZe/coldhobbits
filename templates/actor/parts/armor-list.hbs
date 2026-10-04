@@ -16,6 +16,7 @@
     <div class="ad2e-weapon-main">
       <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if a.url}}<a class="ad2e-item-link" href="{{a.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
       <span class="ad2e-weapon-meta">{{a.summary}}{{#if a.meta}} · {{a.meta}}{{/if}}</span>
+      {{#if a.warning}}<span class="ad2e-weapon-meta ad2e-unmet">{{a.warning}}</span>{{/if}}
     </div>
     {{#unless a.combat}}<label class="ad2e-spec {{#if a.unused}}ad2e-unmet{{/if}}" {{#if a.unused}}data-tooltip="{{localize 'AD2E.Armor.Unused'}}"{{/if}}>
       <input type="checkbox" data-action="toggleEquipped" data-item-id="{{a.id}}" {{checked a.equipped}} {{#unless @root.editable}}disabled{{/unless}}>

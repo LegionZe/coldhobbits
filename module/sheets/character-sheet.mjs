@@ -468,7 +468,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       meta: [i.system.cost, i.system.weight !== null ? `${i.system.weight} lb` : null].filter(Boolean).join(" · "),
       // an equipped item that does not count (a second body armour or shield) is marked
       unused: i.system.equipped && ((i.system.kind === "body" && a.body && a.body.id !== i.id)
-        || (i.system.kind === "shield" && a.shield && a.shield.id !== i.id))
+        || (i.system.kind === "shield" && a.shield && a.shield.id !== i.id)),
+      // size and class limits (Armor (PHB); class pages): shown in the row
+      warning: [i.system.size ? game.i18n.format("AD2E.Armor.SizeLabel", { size: i.system.size }) : null,
+        a.misfit?.some(m => m.id === i.id) ? game.i18n.localize("AD2E.Armor.Misfit") : null,
+        (() => { const r = a.restricted?.find(x => x.item.id === i.id)?.reason; return r ? game.i18n.localize(`AD2E.Armor.Restrict.${r}`) : null; })()]
+        .filter(Boolean).join(" · ")
     })).sort((x, y) => AD2E_KIND_ORDER[x.kind] - AD2E_KIND_ORDER[y.kind] || x.name.localeCompare(y.name));
     const acSummary = { front: a.front, rear: a.rear, missile: a.missile, missileDiffers: a.missile !== a.front,
       source: a.body ? a.body.name : game.i18n.localize("AD2E.Armor.NoArmor"), shield: a.shield?.name ?? null,

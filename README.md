@@ -197,6 +197,14 @@ initiative 1d10, lowest acts first.
   modifiers (unconditional ones automatically, conditional ones as tick boxes) are subtracted, so a bonus makes the
   reaction friendlier; a manual modifier covers the creature's description and morale modifiers. The result is shown
   to the GM only. Table from `python3 tools/build-encounter-tables.py`.
+- Armour size and class limits ("Armor (PHB)"; class pages): armour items have "Made for size" (blank = made for its
+  wearer). Armour made for another size does not fit and gives no Armor Class (marked in the armour list); weight
+  follows the size it was made for ("Small armor weighs half the amount listed, while large armor weighs 50% more"),
+  so a halfling's or gnome's own armour weighs half. Class limits are marked in the armour list (the armour still
+  counts): wizards wear no armour, helmet or shield ("Wizards cannot wear any armor"); thieves leather, padded,
+  studded leather or elven chain; bards up to and including chain mail and no shield; druids padded, hide or leather,
+  wooden shields only (material is not recorded: shown as a note). Table in `module/rules/class-tables.mjs`
+  (`classArmor`, from `python3 tools/build-class-ability-tables.py`, each rule checked against its class page).
 - Bows made for Strength: a bow item has "Bow made for Strength" (standard, 3-25 and the 18/xx bands). A standard bow
   applies Strength penalties only; a bow made for a Strength gives the user's Strength attack and damage bonuses up to
   that Strength, penalties always ("bows must be specially made to gain the bonus", Strength (PHB); "the attack roll and
@@ -305,7 +313,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: armour sizes; class armour restrictions; henchmen;
+- Characters: henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
