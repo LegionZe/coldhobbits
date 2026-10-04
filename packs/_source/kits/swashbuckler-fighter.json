@@ -73,6 +73,27 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "dancing",
+      "heraldry",
+      "languages-modern",
+      "riding-land-based",
+      "seamanship",
+      "blind-fighting",
+      "gaming",
+      "musical-instrument",
+      "reading-writing",
+      "appraising",
+      "disguise",
+      "forgery",
+      "juggling",
+      "tightrope-walking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

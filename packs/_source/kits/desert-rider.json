@@ -70,6 +70,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "awareness",
+      "animal-lore",
+      "endurance",
+      "hunting"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

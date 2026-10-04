@@ -112,6 +112,15 @@ initiative 1d10, lowest acts first.
   +2 to all saves, lay on hands (2 hp per level, once a day; Rest restores it), cure disease per week. Rangers: species
   enemy and tracking bonus. Class features are listed with the level gained and a link to the class page. Tables from
   `python3 tools/build-class-ability-tables.py`.
+- Kit recommended proficiencies: the proficiencies a kit page recommends (or suggests) are listed on the kit, the Class
+  tab and the Proficiencies tab (1,272 entries in 118 kits; only names that match a proficiency exactly, weapon ones
+  included; vague entries such as "Any" or "sword (any)" are left to the kit page). They are shown, not granted.
+- Kit weapon specialization exceptions (otherwise fighters only, one weapon): Holy Slayer may specialize in one weapon
+  ("Like a fighter, the holy slayer is allowed to specialize in the use of one weapon"); Justifier must take one
+  specialization (warning on the Proficiencies tab until one is ticked); Errant gets the jousting lance specialized
+  free (no extra slots, automatic; "The Errant receives a free specialization in the jousting lance"); Mystic
+  (Al-Qadim) may not specialize. Curated in `tools/build-kit-mechanics.py` `KIT_SPECIALIZATION`, each checked against
+  the kit page.
 - Kit mechanics: numeric modifiers stated on 61 kit pages (attack, damage, saves, Armour Class, thief skills, proficiency
   and ability checks, initiative, surprise, reaction, hit points per level, Charisma) and thief skill point budgets
   (Assassin, Thug) are curated by `python3 tools/build-kit-mechanics.py`, which checks each against the current kit page.
@@ -289,8 +298,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: kit recommended proficiencies; kit weapon
-  specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
+- Characters: specially made Strength bows; armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.

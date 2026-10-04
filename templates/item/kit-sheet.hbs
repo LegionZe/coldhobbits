@@ -18,6 +18,8 @@
     <dl class="ad2e-facts">
       <dt>{{localize "AD2E.Prof.Bonus"}}</dt><dd>{{#if kitBonusProfs}}{{kitBonusProfs}}{{else}}—{{/if}}</dd>
       <dt>{{localize "AD2E.Prof.Required"}}</dt><dd>{{#if kitRequiredProfs}}{{kitRequiredProfs}}{{else}}—{{/if}}</dd>
+      <dt>{{localize "AD2E.Prof.Recommended"}}</dt><dd>{{#if kitRecommended}}{{kitRecommended}}{{else}}—{{/if}}</dd>
+      <dt>{{localize "AD2E.Prof.Specialization"}}</dt><dd>{{#if kitSpecialization}}{{kitSpecialization}}{{else}}{{localize "AD2E.Prof.SpecClassRule"}}{{/if}}</dd>
     </dl>
     <div class="ad2e-item-fields">
       <label>{{localize "AD2E.Prof.BonusWeaponSlots"}} <input type="number" name="system.bonusSlots.weapon" value="{{system.bonusSlots.weapon}}" min="0"></label>

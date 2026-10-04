@@ -99,6 +99,26 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "crowd-working",
+      "dancing",
+      "etiquette",
+      "jumping",
+      "languages-ancient",
+      "musical-instrument",
+      "poetry",
+      "reading-lips",
+      "seamstress-tailor",
+      "singing",
+      "tumbling",
+      "ventriloquism",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -68,6 +68,28 @@
     "skillPoints": {
       "first": 40,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "haggling",
+      "heraldry",
+      "languages-modern",
+      "singing",
+      "spellcraft",
+      "languages-ancient",
+      "herbalism",
+      "genie-lore",
+      "ancient-history",
+      "appraising",
+      "disguise",
+      "gaming",
+      "grooming",
+      "local-history",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

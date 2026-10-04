@@ -55,6 +55,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "begging",
+      "information-gathering",
+      "jumping",
+      "observation",
+      "rope-use",
+      "tightrope-walking",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

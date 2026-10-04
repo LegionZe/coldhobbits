@@ -58,6 +58,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "direction-sense",
+      "riding-land-based",
+      "swimming",
+      "languages-ancient",
+      "blind-fighting",
+      "tracking",
+      "mountaineering",
+      "running",
+      "set-snares"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

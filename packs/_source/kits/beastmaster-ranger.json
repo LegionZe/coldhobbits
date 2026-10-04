@@ -122,6 +122,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "bowyer-fletcher",
+      "endurance",
+      "hunting",
+      "leatherworking",
+      "running",
+      "swimming",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

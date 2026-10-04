@@ -56,6 +56,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "carpentry",
+      "engineering",
+      "etiquette",
+      "falconry",
+      "heraldry",
+      "hunting",
+      "languages-modern",
+      "reading-writing",
+      "riding-land-based",
+      "stonemasonry",
+      "quarterstaff",
+      "spear"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

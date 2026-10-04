@@ -79,6 +79,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "cartography",
+      "direction-sense",
+      "distance-sense",
+      "endurance",
+      "fishing",
+      "navigation",
+      "riding-sea-based",
+      "rope-use",
+      "dagger-or-dirk",
+      "knife",
+      "harpoon",
+      "trident"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

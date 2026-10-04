@@ -105,6 +105,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "direction-sense",
+      "fishing",
+      "intimidation",
+      "looting",
+      "rope-use",
+      "tightrope-walking",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

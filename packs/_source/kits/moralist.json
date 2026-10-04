@@ -67,6 +67,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "cooking",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "weaving",
+      "ancient-history",
+      "bureaucracy",
+      "healing",
+      "languages-ancient",
+      "local-history",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

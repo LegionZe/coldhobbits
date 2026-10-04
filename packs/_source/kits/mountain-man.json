@@ -79,6 +79,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "endurance",
+      "fire-building",
+      "foraging",
+      "mining",
+      "running",
+      "set-snares",
+      "signaling",
+      "trail-marking",
+      "trail-signs",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

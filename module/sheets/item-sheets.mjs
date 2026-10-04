@@ -1,5 +1,5 @@
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
-import { formatKitModifier, formatKitProficiencies } from "./character-sheet.mjs";
+import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheetV2 } = foundry.applications.sheets;
@@ -73,6 +73,8 @@ export class KitSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     context.classesText = [...this.document.system.classes].join(", ");
     context.kitBonusProfs = formatKitProficiencies(this.document.system.bonusProficiencies);
+    context.kitRecommended = formatKitRecommended(this.document.system.recommendedProficiencies);
+    context.kitSpecialization = formatKitSpecialization(this.document.system.specialization);
     context.kitRequiredProfs = formatKitProficiencies(this.document.system.requiredProficiencies);
     context.raceLimitsText = Object.entries(this.document.system.raceLimits ?? {})
       .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");

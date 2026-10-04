@@ -50,6 +50,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "etiquette",
+      "haggling",
+      "heraldry",
+      "endurance",
+      "local-history",
+      "ancient-history",
+      "languages-ancient",
+      "reading-writing",
+      "spellcraft",
+      "religion",
+      "appraising",
+      "reading-lips"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

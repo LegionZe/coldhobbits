@@ -67,6 +67,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "blind-fighting",
+      "disguise",
+      "fast-talking",
+      "intimidation",
+      "jumping",
+      "navigation",
+      "riding-land-based",
+      "tightrope-walking",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

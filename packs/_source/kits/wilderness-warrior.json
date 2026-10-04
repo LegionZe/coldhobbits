@@ -67,6 +67,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "dancing",
+      "fire-building",
+      "fishing",
+      "riding-land-based",
+      "swimming",
+      "mountaineering",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

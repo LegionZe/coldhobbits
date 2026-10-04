@@ -55,6 +55,31 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "cooking",
+      "heraldry",
+      "riding-land-based",
+      "seamanship",
+      "swimming",
+      "weather-sense",
+      "reading-writing",
+      "disguise",
+      "armorer",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "charioteering",
+      "endurance",
+      "navigation",
+      "set-snares",
+      "survival",
+      "tracking",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

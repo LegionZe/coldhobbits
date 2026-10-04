@@ -79,6 +79,28 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "astrology",
+      "cooking",
+      "craft-instrument",
+      "disguise",
+      "fire-building",
+      "gaming",
+      "herbalism",
+      "hunting",
+      "juggling",
+      "singing",
+      "spellcraft",
+      "survival",
+      "tracking",
+      "ventriloquism",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

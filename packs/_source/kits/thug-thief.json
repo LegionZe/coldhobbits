@@ -62,6 +62,16 @@
     "skillPoints": {
       "first": 40,
       "perLevel": 30
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "endurance",
+      "looting",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

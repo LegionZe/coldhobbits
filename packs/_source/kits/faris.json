@@ -64,6 +64,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "artistic-ability",
+      "etiquette",
+      "singing",
+      "ancient-history",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

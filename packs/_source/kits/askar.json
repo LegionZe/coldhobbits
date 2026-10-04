@@ -64,6 +64,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "awareness",
+      "armorer",
+      "gaming",
+      "weaponsmithing",
+      "local-history",
+      "musical-instrument",
+      "appraising",
+      "disguise"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

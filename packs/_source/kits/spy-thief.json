@@ -60,6 +60,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "begging",
+      "etiquette",
+      "forgery",
+      "heraldry",
+      "local-history",
+      "reading-writing",
+      "reading-lips",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

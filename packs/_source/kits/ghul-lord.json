@@ -50,6 +50,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "artistic-ability",
+      "etiquette",
+      "survival",
+      "set-snares",
+      "languages-ancient",
+      "ancient-history",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

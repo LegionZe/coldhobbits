@@ -50,6 +50,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "bowyer-fletcher",
+      "endurance",
+      "etiquette",
+      "fire-building",
+      "fishing",
+      "hunting",
+      "mountaineering",
+      "riding-airborne",
+      "riding-land-based",
+      "survival"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": [
+        "jousting-lance"
+      ]
     }
   },
   "effects": [],

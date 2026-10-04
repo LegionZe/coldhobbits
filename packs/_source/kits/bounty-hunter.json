@@ -50,6 +50,28 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-noise",
+      "boating",
+      "direction-sense",
+      "fire-building",
+      "information-gathering",
+      "herbalism",
+      "hunting",
+      "intimidation",
+      "observation",
+      "riding-land-based",
+      "set-snares",
+      "survival",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

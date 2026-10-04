@@ -50,6 +50,27 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "rope-use",
+      "bowyer-fletcher",
+      "endurance",
+      "weaponsmithing",
+      "herbalism",
+      "religion",
+      "begging",
+      "blind-fighting",
+      "forgery",
+      "jumping",
+      "tumbling",
+      "tightrope-walking"
+    ],
+    "specialization": {
+      "mode": "allowed",
+      "free": []
     }
   },
   "effects": [],

@@ -63,6 +63,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "riding-land-based",
+      "cooking",
+      "dancing",
+      "singing",
+      "astrology",
+      "herbalism",
+      "spellcraft",
+      "musical-instrument",
+      "blind-fighting",
+      "gaming",
+      "juggling",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -438,6 +438,21 @@ KIT_POINTS = {
 }
 
 
+# Weapon specialization exceptions stated on kit pages (Weapon Specialization (PHB): fighters only, one weapon).
+# mode: "allowed" (the kit's class may specialize), "required" (allowed, and the kit must take one), "forbidden";
+# free: weapon proficiency identifiers specialized at no slot cost (allowed even if the class may not specialize).
+KIT_SPECIALIZATION = {
+    # "Like a fighter, the holy slayer is allowed to specialize in the use of one weapon."
+    "holy-slayer": ({"mode": "allowed", "free": []}, r"Like a fighter, the holy slayer is allowed to specialize in the use of one weapon"),
+    # "the Justifier must use some of his initial proficiency slots to take one weapon specialization"
+    "justifier": ({"mode": "required", "free": []}, r"must use some of his initial proficiency slots to take one weapon specialization"),
+    # "The Errant receives a free specialization in the jousting lance."
+    "errant": ({"mode": "", "free": ["jousting-lance"]}, r"receives a free specialization in the jousting lance"),
+    # "Mystics may not specialize in weapons."
+    "mystic-al-qadim": ({"mode": "forbidden", "free": []}, r"Mystics may not specialize in weapons"),
+}
+
+
 def normalize(wiki):
     w = re.sub(r"\[\[(?:[^\]|]*\|)?([^\]]*)\]\]", r"\1", wiki)
     w = w.replace("'''", "").replace("''", "").replace("&nbsp;", " ")
@@ -464,7 +479,7 @@ if __name__ == "__main__":
     files = sorted(glob.glob("packs/_source/kits/[!_]*.json"))
     docs = [json.load(open(f)) for f in files]
     idents = {d["system"]["identifier"] for d in docs}
-    unknown = (set(KIT_MODIFIERS) | set(KIT_SKILLS) | set(KIT_POINTS)) - idents
+    unknown = (set(KIT_MODIFIERS) | set(KIT_SKILLS) | set(KIT_POINTS) | set(KIT_SPECIALIZATION)) - idents
     assert not unknown, f"curated kits not in packs/_source/kits: {sorted(unknown)}"
     text, revs = kit_pages(docs)
     problems = []
@@ -485,6 +500,11 @@ if __name__ == "__main__":
         if ident in KIT_POINTS:
             points, pattern = KIT_POINTS[ident]
             check(ident, pattern)
+        spec = {"mode": "", "free": []}
+        if ident in KIT_SPECIALIZATION:
+            spec, pattern = KIT_SPECIALIZATION[ident]
+            check(ident, pattern)
+        doc["system"]["specialization"] = spec
         doc["system"]["modifiers"] = mods
         doc["system"]["skillAdjust"] = adjust
         doc["system"]["skillPoints"] = {"first": points[0], "perLevel": points[1]} if points else {"first": None, "perLevel": None}
@@ -498,4 +518,4 @@ if __name__ == "__main__":
             json.dump(doc, out, indent=2, ensure_ascii=False)
             out.write("\n")
     print(f"kits updated: {counts['modifiers']} modifiers in {len(KIT_MODIFIERS)} kits, skill adjustments in "
-          f"{counts['skills']}, skill points in {counts['points']}")
+          f"{counts['skills']}, skill points in {counts['points']}, specialization rules in {len(KIT_SPECIALIZATION)}")

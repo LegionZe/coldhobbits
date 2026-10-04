@@ -78,6 +78,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "fast-talking",
+      "forgery",
+      "gem-cutting",
+      "local-history",
+      "observation"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

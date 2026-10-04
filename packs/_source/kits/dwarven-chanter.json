@@ -67,6 +67,28 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "appraising",
+      "armorer",
+      "blacksmithing",
+      "cobbling",
+      "craft-instrument",
+      "engineering",
+      "gem-cutting",
+      "languages-ancient",
+      "languages-modern",
+      "local-history",
+      "mining",
+      "mountaineering",
+      "pottery",
+      "stonemasonry",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

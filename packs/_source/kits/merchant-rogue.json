@@ -55,6 +55,28 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "debate",
+      "etiquette",
+      "languages-modern",
+      "animal-lore",
+      "navigation",
+      "religion",
+      "spellcraft",
+      "appraising",
+      "bureaucracy",
+      "disguise",
+      "forgery",
+      "gaming",
+      "gem-cutting",
+      "reading-lips"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

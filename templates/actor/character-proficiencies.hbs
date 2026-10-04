@@ -7,6 +7,9 @@
     <span>{{localize "AD2E.Prof.Penalty"}}: <strong>{{pt.penalty}}</strong></span>
     <span>{{localize "AD2E.Prof.Groups"}}: {{pt.groups}}</span>
   </div>
+  {{#if pt.specRule}}<p class="ad2e-note">{{localize "AD2E.Prof.KitSpecialization"}}: {{pt.specRule}}</p>{{/if}}
+  {{#if pt.specMissing}}<p class="ad2e-unmet">{{localize "AD2E.Prof.SpecMissing"}}</p>{{/if}}
+  {{#if pt.recommended}}<p class="ad2e-note">{{localize "AD2E.Prof.KitRecommended"}}: {{pt.recommended}}</p>{{/if}}
 
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Prof.Weapon"}}</legend>

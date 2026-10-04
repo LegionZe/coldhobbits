@@ -50,6 +50,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "healing",
+      "languages-ancient",
+      "languages-modern",
+      "reading-writing",
+      "poetry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -211,6 +211,14 @@
   },
   "AD2E.Sheet.Proficiency": "AD&D 2e Proficiency",
   "AD2E.Prof": {
+    "Recommended": "Recommended",
+    "KitRecommended": "Recommended by the kit",
+    "Specialization": "Weapon specialization",
+    "KitSpecialization": "Kit weapon specialization",
+    "SpecClassRule": "Class rule (fighters only)",
+    "SpecMode": { "allowed": "May specialize in one weapon", "required": "Must specialize in one weapon", "forbidden": "May not specialize" },
+    "SpecFree": "Free specialization: {weapons} (no extra slots, applies automatically)",
+    "SpecMissing": "The kit requires a weapon specialization: tick Specialized on one weapon proficiency.",
     "Weapon": "Weapon Proficiencies",
     "Nonweapon": "Nonweapon Proficiencies",
     "Group": {

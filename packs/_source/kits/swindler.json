@@ -50,6 +50,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "appraising",
+      "artistic-ability",
+      "dancing",
+      "disguise",
+      "etiquette",
+      "forgery",
+      "fortune-telling",
+      "gaming",
+      "local-history",
+      "observation",
+      "singing",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

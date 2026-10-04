@@ -87,6 +87,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "spellcraft",
+      "endurance",
+      "local-history",
+      "languages-ancient",
+      "reading-writing",
+      "religion",
+      "disguise"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

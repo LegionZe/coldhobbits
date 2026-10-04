@@ -51,6 +51,32 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "bowyer-fletcher",
+      "fire-building",
+      "fishing",
+      "foraging",
+      "herbalism",
+      "hunting",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "swimming",
+      "veterinary-healing",
+      "weather-sense",
+      "dagger-or-dirk",
+      "javelin",
+      "knife",
+      "quarterstaff",
+      "sling",
+      "spear",
+      "staff-sling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -92,6 +92,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "brewing",
+      "cooking",
+      "languages-modern",
+      "weather-sense",
+      "ancient-history",
+      "astrology",
+      "languages-ancient",
+      "reading-writing",
+      "religion",
+      "healing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

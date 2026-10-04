@@ -124,6 +124,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "rope-use",
+      "swimming",
+      "astrology",
+      "animal-lore",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

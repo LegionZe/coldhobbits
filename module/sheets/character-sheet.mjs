@@ -12,6 +12,21 @@ export function formatKitProficiencies(entries) {
   return (entries ?? []).map(e => e.choice.map(title).join(` ${game.i18n.localize("AD2E.Prof.Or")} `)).join(", ");
 }
 
+/** Recommended proficiency identifiers as a name list ("Etiquette, Heraldry, ..."). */
+export function formatKitRecommended(ids) {
+  const title = id => id.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  return (ids ?? []).map(title).join(", ");
+}
+
+/** A kit's weapon specialization exception as text ("" when the class rule applies). */
+export function formatKitSpecialization(spec) {
+  if (!spec) return "";
+  const title = id => id.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+  const parts = [spec.mode ? game.i18n.localize(`AD2E.Prof.SpecMode.${spec.mode}`) : null,
+    (spec.free ?? []).length ? game.i18n.format("AD2E.Prof.SpecFree", { weapons: spec.free.map(title).join(", ") }) : null];
+  return parts.filter(Boolean).join("; ");
+}
+
 /**
  * One kit modifier as text: "Saving throws +2 (magical effects based on music)", "Attack +1, +1 per 6 levels from
  * level 3 (his chosen type of sword)". `m` may carry `value` already resolved at a level (derived kitMods list).
@@ -300,6 +315,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       kitRaceLimits: formatRaceLimits(info.kitItem?.system.raceLimits),
       kitBonusProfs: formatKitProficiencies(info.kitItem?.system.bonusProficiencies),
       kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
+      kitRecommended: formatKitRecommended(info.kitItem?.system.recommendedProficiencies),
+      kitSpecialization: formatKitSpecialization(info.kitItem?.system.specialization),
       kitBonusSlots: info.kitItem ? [["weapon", "AD2E.Prof.Weapon"], ["nonweapon", "AD2E.Prof.Nonweapon"]]
         .filter(([k]) => info.kitItem.system.bonusSlots?.[k]).map(([k, l]) => `+${info.kitItem.system.bonusSlots[k]} ${game.i18n.localize(l)}`).join(", ") : "",
       overLevelLimit: !!info.levelLimit && sys.level > info.levelLimit,
@@ -534,7 +551,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       nonweapon: { ...p.nonweapon, over: p.nonweapon.used > p.nonweapon.available,
         rows: p.entries.filter(e => e.item.system.kind === "nonweapon").map(row).sort(sortByName) },
       penalty: p.penalty,
-      groups: p.groups.map(g => game.i18n.localize(AD2E.nonweaponGroups[g])).join(", ")
+      groups: p.groups.map(g => game.i18n.localize(AD2E.nonweaponGroups[g])).join(", "),
+      specRule: formatKitSpecialization(p.specRule),
+      specMissing: !!p.specRule?.missing,
+      recommended: formatKitRecommended(sys.classInfo.kitFits ? sys.classInfo.kitItem?.system.recommendedProficiencies : null)
     };
   }
 

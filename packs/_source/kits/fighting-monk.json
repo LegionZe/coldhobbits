@@ -51,6 +51,16 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "riding-land-based",
+      "dancing",
+      "reading-writing",
+      "religion"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

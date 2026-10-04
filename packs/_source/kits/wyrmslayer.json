@@ -95,6 +95,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "direction-sense",
+      "endurance",
+      "healing",
+      "hunting",
+      "mountaineering",
+      "riding-airborne",
+      "riding-land-based",
+      "survival",
+      "tracking",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

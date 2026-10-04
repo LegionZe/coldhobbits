@@ -135,6 +135,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "crowd-working",
+      "disguise",
+      "jumping",
+      "musical-instrument",
+      "poetry",
+      "singing",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

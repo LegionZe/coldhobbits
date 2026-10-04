@@ -57,6 +57,31 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "awareness",
+      "armorer",
+      "blind-fighting",
+      "display-weapon-prowess",
+      "endurance",
+      "running",
+      "weaponsmithing",
+      "engineering",
+      "languages-ancient",
+      "local-history",
+      "religion",
+      "spellcraft",
+      "forgery",
+      "reading-lips",
+      "spear"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

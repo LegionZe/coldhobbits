@@ -63,6 +63,27 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "artistic-ability",
+      "carpentry",
+      "etiquette",
+      "languages-modern",
+      "leatherworking",
+      "pottery",
+      "seamstress-tailor",
+      "stonemasonry",
+      "weaving",
+      "ancient-history",
+      "herbalism",
+      "languages-ancient",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

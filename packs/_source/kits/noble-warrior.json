@@ -72,6 +72,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "dancing",
+      "blind-fighting",
+      "gaming",
+      "hunting",
+      "tracking",
+      "local-history",
+      "musical-instrument",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

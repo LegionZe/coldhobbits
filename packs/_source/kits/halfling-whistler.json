@@ -67,6 +67,33 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-lore",
+      "astrology",
+      "brewing",
+      "cooking",
+      "crowd-working",
+      "direction-sense",
+      "fire-building",
+      "fishing",
+      "herbalism",
+      "hunting",
+      "leatherworking",
+      "mountaineering",
+      "musical-instrument",
+      "poetry",
+      "rope-use",
+      "singing",
+      "set-snares",
+      "survival",
+      "swimming",
+      "tracking",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

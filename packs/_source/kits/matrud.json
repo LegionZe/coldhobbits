@@ -67,6 +67,26 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "direction-sense",
+      "haggling",
+      "weather-sense",
+      "animal-lore",
+      "endurance",
+      "running",
+      "tracking",
+      "herbalism",
+      "awareness",
+      "begging",
+      "blind-fighting",
+      "bureaucracy",
+      "reading-lips"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

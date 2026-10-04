@@ -50,6 +50,30 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "camouflage",
+      "endurance",
+      "falconry",
+      "hunting",
+      "mountaineering",
+      "navigation",
+      "riding-land-based",
+      "rope-use",
+      "running",
+      "set-snares",
+      "swimming",
+      "weaponsmithing",
+      "dagger-or-dirk",
+      "sling",
+      "spear"
+    ],
+    "specialization": {
+      "mode": "required",
+      "free": []
     }
   },
   "effects": [],

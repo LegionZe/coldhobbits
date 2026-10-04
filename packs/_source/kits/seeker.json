@@ -73,6 +73,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "ancient-history",
+      "artistic-ability",
+      "astrology",
+      "carpentry",
+      "cobbling",
+      "etiquette",
+      "languages-ancient",
+      "pottery",
+      "reading-writing",
+      "spellcraft",
+      "veterinary-healing",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

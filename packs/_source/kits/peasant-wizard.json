@@ -71,6 +71,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "blacksmithing",
+      "carpentry",
+      "cobbling",
+      "cooking",
+      "direction-sense",
+      "fire-building",
+      "leatherworking",
+      "pottery",
+      "riding-land-based",
+      "stonemasonry",
+      "weather-sense",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

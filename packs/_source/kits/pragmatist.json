@@ -50,6 +50,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "ancient-history",
+      "healing",
+      "herbalism",
+      "local-history",
+      "reading-writing",
+      "spellcraft",
+      "genie-lore"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -50,6 +50,31 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "swimming",
+      "weather-sense",
+      "endurance",
+      "mountaineering",
+      "set-snares",
+      "tracking",
+      "ancient-history",
+      "astrology",
+      "herbalism",
+      "local-history",
+      "religion",
+      "spellcraft",
+      "genie-lore"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

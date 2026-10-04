@@ -51,6 +51,11 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

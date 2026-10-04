@@ -50,6 +50,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "seamstress-tailor",
+      "agriculture",
+      "herbalism",
+      "reading-writing",
+      "spellcraft",
+      "appraising"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

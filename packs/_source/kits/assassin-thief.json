@@ -67,6 +67,20 @@
     "skillPoints": {
       "first": 40,
       "perLevel": 20
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "begging",
+      "information-gathering",
+      "herbalism",
+      "riding-land-based",
+      "observation",
+      "tracking",
+      "voice-mimicry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

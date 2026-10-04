@@ -67,6 +67,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-lore",
+      "artistic-ability",
+      "astrology",
+      "direction-sense",
+      "engineering",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "local-history",
+      "musical-instrument",
+      "religion",
+      "spellcraft",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

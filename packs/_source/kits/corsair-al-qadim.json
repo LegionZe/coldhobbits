@@ -63,6 +63,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "direction-sense",
+      "fishing",
+      "haggling",
+      "rope-use",
+      "swimming",
+      "weather-sense",
+      "navigation",
+      "astrology",
+      "jumping",
+      "tightrope-walking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

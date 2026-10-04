@@ -78,6 +78,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "animal-handling",
+      "animal-lore",
+      "animal-training",
+      "heraldry",
+      "herbalism",
+      "languages-ancient",
+      "languages-modern",
+      "reading-writing",
+      "religion",
+      "riding-airborne",
+      "riding-land-based"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],
