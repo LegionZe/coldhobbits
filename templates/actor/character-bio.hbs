@@ -1,3 +1,27 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{#with henchmen as |h|}}
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Henchmen.Title"}}</legend>
+    <div class="ad2e-prof-summary">
+      <span class="{{#if h.over}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Henchmen.LifetimeHint'}}">{{localize "AD2E.Henchmen.Lifetime"}}: <strong>{{h.lifetime}} / {{h.max}}</strong></span>
+      <label data-tooltip="{{localize 'AD2E.Henchmen.LostHint'}}">{{localize "AD2E.Henchmen.Lost"}} <input type="number" name="system.henchmen.lost" value="{{h.lost}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
+      <span data-tooltip="{{localize 'AD2E.Henchmen.LoyaltyHint'}}">{{localize "AD2E.Henchmen.Loyalty"}}: <strong>{{h.loyaltyText}}</strong></span>
+      <span>{{localize "AD2E.Henchmen.Morale"}}: <strong>{{h.morale}}</strong></span>
+    </div>
+    {{#each h.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
+        <span class="ad2e-weapon-meta">{{r.detail}}</span>
+        {{#if r.tooHigh}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Henchmen.TooHigh"}}</span>{{/if}}
+      </div>
+      <button type="button" data-action="henchmanMorale" data-uuid="{{r.uuid}}">{{localize "AD2E.Monster.Morale"}}</button>
+      {{#if @root.editable}}<a data-action="removeHenchman" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Henchmen.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Henchmen.DropHint"}}</p>
+    {{/each}}
+  </fieldset>
+  {{/with}}
   <textarea class="ad2e-biography" name="system.biography">{{system.biography}}</textarea>
 </section>

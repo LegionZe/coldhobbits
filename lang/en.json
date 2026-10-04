@@ -1213,6 +1213,26 @@
       "rear-attack": "Rear attack"
     }
   },
+  "AD2E.Henchmen": {
+    "Title": "Henchmen",
+    "Lifetime": "Henchmen (lifetime)",
+    "LifetimeHint": "Charisma sets the most henchmen a character can ever have: \"This is a lifetime limit, not just a maximum possible at any given time\" (Henchmen, PHB). Current henchmen plus those lost.",
+    "Lost": "Lost",
+    "LostHint": "Former henchmen (dead, departed): they still count toward the lifetime limit.",
+    "Loyalty": "Loyalty base",
+    "LoyaltyHint": "Charisma (PHB Table 6): added to the henchmen's loyalty (morale) score.",
+    "Morale": "Henchman morale",
+    "Level": "Level {level}",
+    "HitDice": "Hit Dice {hd}",
+    "Missing": "actor not found",
+    "TooHigh": "Equal or higher level: \"Should he ever equal or surpass the PC's level, the henchman leaves forever\" (Henchmen, PHB)",
+    "Remove": "Remove from henchmen (add to Lost if the henchman is gone for good)",
+    "DropHint": "Drag an actor here to make it a henchman.",
+    "Situations": "Situational modifiers (DMG Table 50)",
+    "MoraleHint": "2d10: the creature holds if the roll is at or under its morale rating with these modifiers (Morale, DMG).",
+    "MoraleTitle": "Morale: {name}",
+    "MoraleChat": "Morale: {name}, henchman of {master} (roll ≤ {target}: base {base}, loyalty {loyalty})"
+  },
   "AD2E.Reaction": {
     "Title": "Encounter reaction",
     "TitleFor": "Encounter reaction: {name}",

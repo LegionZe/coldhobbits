@@ -1,6 +1,7 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
+import { promptMorale } from "../henchmen.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -862,14 +863,16 @@ export default class AD2EActor extends Actor {
 
   /** Morale check (Morale (DMG)): 2d10 + modifier; the creature stands if the total is at most its morale. */
   async rollMorale() {
-    const input = await promptModifier(game.i18n.localize("AD2E.Monster.Morale"));
+    const input = await promptMorale(game.i18n.localize("AD2E.Monster.Morale"));
     if (!input) return;
-    // Situational modifiers (DMG Table 50) adjust the morale rating: "Add or subtract the modifiers that apply" (Morale (DMG)).
-    const target = this.system.morale.value + input.mod;
+    // Situational modifiers (DMG Table 50, tick boxes) adjust the morale rating: "Add or subtract the modifiers that
+    // apply" (Morale (DMG)).
+    const target = this.system.morale.value + (input.sum ?? 0) + input.mod;
     const roll = await new Roll("2d10").evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${game.i18n.localize("AD2E.Monster.Morale")} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target})${modifierText(input.mod, input.note)}: `
+      flavor: `${game.i18n.localize("AD2E.Monster.Morale")} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target})`
+        + `${input.text ? ` [${foundry.utils.escapeHTML?.(input.text) ?? input.text}]` : ""}${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(roll.total <= target ? "AD2E.Monster.Stands" : "AD2E.Monster.Breaks")
     });
   }
