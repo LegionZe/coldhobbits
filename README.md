@@ -328,6 +328,7 @@ initiative 1d10, lowest acts first.
 
 ## Planned
 - Characters: skills (Skills & Powers).
+- Wizards: familiars (Find Familiar (Wizard Spell): https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell)).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit
