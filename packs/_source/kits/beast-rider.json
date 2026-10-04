@@ -78,6 +78,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "direction-sense",
+      "fire-building",
+      "animal-lore",
+      "hunting",
+      "mountaineering",
+      "set-snares",
+      "survival",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

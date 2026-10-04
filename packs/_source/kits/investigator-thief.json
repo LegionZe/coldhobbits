@@ -55,6 +55,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "appraising",
+      "disguise",
+      "fast-talking",
+      "heraldry",
+      "intimidation",
+      "local-history",
+      "languages-modern",
+      "reading-lips",
+      "religion",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

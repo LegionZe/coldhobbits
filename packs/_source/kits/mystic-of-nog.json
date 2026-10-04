@@ -68,6 +68,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "dancing",
+      "swimming",
+      "endurance",
+      "survival",
+      "healing",
+      "ancient-history",
+      "spellcraft",
+      "jumping",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

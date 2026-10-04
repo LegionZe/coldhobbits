@@ -73,6 +73,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-noise",
+      "fire-building",
+      "intimidation",
+      "looting",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "swimming"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

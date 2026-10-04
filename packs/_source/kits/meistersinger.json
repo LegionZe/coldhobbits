@@ -67,6 +67,30 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "animal-training",
+      "blacksmithing",
+      "craft-instrument",
+      "dancing",
+      "direction-sense",
+      "fire-building",
+      "fishing",
+      "herbalism",
+      "hunting",
+      "mountaineering",
+      "riding-airborne",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "swimming",
+      "tracking",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

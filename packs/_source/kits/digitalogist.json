@@ -56,6 +56,17 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "gaming",
+      "astrology",
+      "engineering",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

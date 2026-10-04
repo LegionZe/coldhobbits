@@ -122,6 +122,33 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "fire-building",
+      "fishing",
+      "riding-land-based",
+      "rope-use",
+      "swimming",
+      "animal-lore",
+      "bowyer-fletcher",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "tracking",
+      "healing",
+      "herbalism",
+      "local-history",
+      "religion",
+      "jumping",
+      "tightrope-walking",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

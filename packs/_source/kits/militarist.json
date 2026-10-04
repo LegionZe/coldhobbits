@@ -73,6 +73,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blind-fighting",
+      "endurance",
+      "jousting",
+      "weaponsmithing",
+      "battle-axe",
+      "dagger-or-dirk",
+      "horseman-s-flail",
+      "horseman-s-mace",
+      "horseman-s-pick"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

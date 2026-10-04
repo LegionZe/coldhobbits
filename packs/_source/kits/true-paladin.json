@@ -50,6 +50,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "endurance",
+      "etiquette",
+      "heraldry",
+      "jousting",
+      "law",
+      "local-history",
+      "oratory",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -56,6 +56,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "endurance",
+      "healing",
+      "languages-ancient",
+      "languages-modern",
+      "religion",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

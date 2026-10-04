@@ -68,6 +68,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "dancing",
+      "gaming",
+      "heraldry",
+      "law",
+      "local-history",
+      "oratory",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -67,6 +67,33 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "animal-lore",
+      "appraising",
+      "astrology",
+      "brewing",
+      "cooking",
+      "direction-sense",
+      "engineering",
+      "etiquette",
+      "fire-building",
+      "gem-cutting",
+      "heraldry",
+      "herbalism",
+      "local-history",
+      "musical-instrument",
+      "navigation",
+      "religion",
+      "rope-use",
+      "spellcraft",
+      "weather-sense",
+      "whistling-humming"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

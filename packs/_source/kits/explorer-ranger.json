@@ -73,6 +73,33 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "bowyer-fletcher",
+      "camouflage",
+      "direction-sense",
+      "distance-sense",
+      "endurance",
+      "fire-building",
+      "fishing",
+      "foraging",
+      "herbalism",
+      "hunting",
+      "languages-ancient",
+      "languages-modern",
+      "mountaineering",
+      "navigation",
+      "rope-use",
+      "signaling",
+      "swimming",
+      "trail-marking",
+      "trail-signs",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

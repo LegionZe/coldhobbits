@@ -94,6 +94,31 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-lore",
+      "animal-noise",
+      "boating",
+      "fire-building",
+      "fishing",
+      "heraldry",
+      "herbalism",
+      "hunting",
+      "mountaineering",
+      "observation",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "survival",
+      "swimming",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

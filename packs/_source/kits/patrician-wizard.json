@@ -80,6 +80,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "dancing",
+      "languages-modern",
+      "riding-land-based",
+      "singing",
+      "ancient-history",
+      "languages-ancient",
+      "reading-writing",
+      "religion",
+      "appraising",
+      "gaming",
+      "local-history",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

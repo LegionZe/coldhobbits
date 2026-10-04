@@ -44,6 +44,17 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "boating",
+      "fast-talking",
+      "information-gathering",
+      "looting"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

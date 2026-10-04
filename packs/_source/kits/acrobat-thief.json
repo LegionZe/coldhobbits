@@ -67,6 +67,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "disguise",
+      "fast-talking",
+      "juggling",
+      "musical-instrument",
+      "riding-land-based",
+      "rope-use",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

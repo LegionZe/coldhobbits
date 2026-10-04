@@ -73,6 +73,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "bowyer-fletcher",
+      "endurance",
+      "hunting",
+      "leatherworking",
+      "veterinary-healing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

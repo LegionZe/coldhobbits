@@ -44,6 +44,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blacksmithing",
+      "brewing",
+      "carpentry",
+      "cobbling",
+      "cooking",
+      "etiquette",
+      "leatherworking",
+      "seamstress-tailor",
+      "weaponsmithing",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -50,6 +50,20 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "haggling",
+      "etiquette",
+      "genie-lore",
+      "reading-writing",
+      "spellcraft",
+      "gaming",
+      "reading-lips"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

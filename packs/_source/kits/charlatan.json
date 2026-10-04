@@ -67,6 +67,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "appraising",
+      "astrology",
+      "healing",
+      "herbalism",
+      "juggling",
+      "reading-lips",
+      "religion",
+      "rope-use",
+      "singing",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

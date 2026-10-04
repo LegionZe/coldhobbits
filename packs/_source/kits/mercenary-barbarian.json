@@ -91,6 +91,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "direction-sense",
+      "fire-building",
+      "fishing",
+      "haggling",
+      "weaving",
+      "animal-lore",
+      "endurance",
+      "gaming",
+      "hunting",
+      "herbalism",
+      "jumping",
+      "set-snares"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

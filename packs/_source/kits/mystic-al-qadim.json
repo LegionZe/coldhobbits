@@ -73,6 +73,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "survival",
+      "ancient-history",
+      "healing",
+      "herbalism",
+      "reading-writing",
+      "spellcraft",
+      "genie-lore",
+      "begging"
+    ],
+    "specialization": {
+      "mode": "forbidden",
+      "free": []
     }
   },
   "effects": [],

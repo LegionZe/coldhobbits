@@ -55,6 +55,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "swimming",
+      "weather-sense",
+      "navigation",
+      "engineering",
+      "reading-writing",
+      "appraising",
+      "set-snares",
+      "rope-use",
+      "tightrope-walking",
+      "tumbling",
+      "long-sword",
+      "quarterstaff"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -422,6 +422,85 @@ def kit_entries(wiki, label, names):
     return entries, unresolved
 
 
+BOLD = "'" * 3
+WEAPON_PROF_NAMES = {}  # weapon proficiency name -> identifier (filled from build_weapons)
+
+
+def kit_recommended(wiki, names, weapon_names=None):
+    """Recommended / suggested proficiencies on a kit page: a list of proficiency identifiers.
+    Nonweapon: the "Recommended"/"Suggested" bullets (and their "**" sub-bullets) of the Nonweapon Proficiencies
+    section; linked proficiency pages resolve exactly, plain names through the same index as bonus/required entries.
+    Weapon recommendations resolve only on an exact weapon proficiency name. Anything else ("Any", a name that is not
+    a proficiency, "sword (any)") is left out, never guessed; the kit page (linked on the kit) has the full wording."""
+    def norm(x):
+        return re.sub(r"[^a-z]", "", x.lower())
+    index = {}
+    for n in names:
+        index[norm(n)] = n
+        m = re.match(r"(.+), (.+)", n)
+        if m:
+            index[norm(f"{m.group(1)} ({m.group(2)})")] = n
+            index[norm(m.group(2) + " " + m.group(1))] = n
+    found = []
+    start = wiki.find("Nonweapon Proficienc")
+    section = []
+    if start >= 0:
+        lines = wiki[start:].split("\n")
+        section.append(re.sub(r"^Nonweapon Proficienc[^:]*:" + BOLD + r"?", "", lines[0]))  # text on the heading line
+        for line in lines[1:61]:
+            if line.startswith(BOLD) and re.match(BOLD + r"[A-Z][^'\n]*:" + BOLD, line):
+                break
+            section.append(line)
+    groups, current = [], None
+    rec = r"(?:Pirate's )?(?:Recommended|Suggested)[^:\n]*:"
+    any_label = r"(?:(?:Pirate's )?(?:Recommended|Suggested)|Forbidden|Bonus(?:es)?(?: Proficienc(?:y|ies))?|Required)[^:\n]{0,30}:"
+    for line in section:
+        st = line.strip()
+        if st.startswith("**") and current is not None:
+            current.append(st.lstrip("*"))
+            continue
+        body = st.lstrip("*").strip().replace("''", "")
+        labels = list(re.finditer(any_label, body))
+        current = None
+        for i, m in enumerate(labels):
+            if not re.match(rec, m.group(0)):
+                continue
+            # A bullet counts only when it starts with its label; text runs to the next label on the line.
+            if st.startswith("*") and i == 0 and not body.startswith(m.group(0)):
+                continue
+            current = [body[m.end():labels[i + 1].start() if i + 1 < len(labels) else len(body)]]
+            groups.append(current)
+    for g in groups:
+        text = " ".join(g)
+        for target in re.findall(r"\[\[([^\]|]+?) \(Proficiency\)", text):
+            n = target if target in names else index.get(norm(target))
+            if n and n not in found:
+                found.append(n)
+        rest = re.sub(r"\[\[[^\]]*\]\]\*?", ",", text)
+        rest = re.sub(r"\((?:General|Warrior|Rogue|Priest|Wizard|Psionicist)[^)]*\)", ",", rest)
+        for tok in re.split(r"[,;]|\band\b", rest):
+            t = unlink(tok).replace("*", "").replace("''", "").strip(" .:()")
+            if not t or re.fullmatch(r"(?i)(none|any|all|or|and|see .*|if .*|any .*|unless .*)", t):
+                continue
+            n = index.get(norm(t)) or index.get(norm(re.sub(r"\(.*?\)", "", t)))
+            if n:
+                if n not in found:
+                    found.append(n)
+    weapons = []
+    weapon = re.search(r"Weapon Proficienc[^\n]*?(?:''|\b)Recommended:?(?:'')?:?\s*([^\n]*?)(?:\.\s|\.?$|\n)", wiki, re.M)
+    if weapon and weapon_names:
+        windex = {}
+        for n, k in weapon_names.items():
+            # "Dagger or dirk" answers to "dagger" and "dirk" too.
+            for v in [n, *re.split(r" or ", n)]:
+                windex.setdefault(norm(v), k)
+        for tok in re.split(r"[,;]|\bor\b|\band\b", unlink(weapon.group(1))):
+            k = windex.get(norm(tok.replace("*", "").strip(" .")))
+            if k and k not in weapons:
+                weapons.append(k)
+    return [names[n] for n in found] + weapons
+
+
 def apply_kits(prof_names):
     """Add bonusProficiencies / requiredProficiencies / bonusSlots to the generated kit sources."""
     key_of = dict(prof_names)
@@ -447,6 +526,7 @@ def apply_kits(prof_names):
         doc["system"]["bonusProficiencies"] = [to_key(e) for e in result["bonus"]]
         doc["system"]["requiredProficiencies"] = [to_key(e) for e in result["required"]]
         doc["system"]["bonusSlots"] = {"weapon": 0, "nonweapon": 0, **KIT_SLOTS.get(title, {})}
+        doc["system"]["recommendedProficiencies"] = kit_recommended(wiki, prof_names, WEAPON_PROF_NAMES)
         if KIT_OVERRIDES.get(title, {}).get("note"):
             doc["system"]["notes"] = KIT_OVERRIDES[title]["note"]
         with open(f, "w") as out:
@@ -460,6 +540,7 @@ if __name__ == "__main__":
     slots, phb, crossover, revs = build_tables()
     nonweapon, names = build_nonweapon(phb)
     weapons, gear, ammo = build_weapons()
+    WEAPON_PROF_NAMES.update({d["name"]: d["key"] for d in weapons})
 
     folders, folder_of = [], {}
     sources = sorted({d["source"] for d in nonweapon}, key=lambda s: (s != "Player's Handbook", s))

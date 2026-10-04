@@ -13,6 +13,8 @@ const proficiencyChoices = () => new ArrayField(new SchemaField({ choice: new Ar
  * own level limit); `raceOnly`: only the listed races may take the kit.
  * `bonusProficiencies`: granted free when the kit is added; `requiredProficiencies`: added too, but use slots.
  * `bonusSlots`: extra proficiency slots from the kit.
+ * `recommendedProficiencies`: proficiency identifiers the kit page recommends (tools/build-proficiency-data.py).
+ * `specialization`: weapon specialization exception (tools/build-kit-mechanics.py `KIT_SPECIALIZATION`).
  * `skillAdjust`: per thief skill, a percentage the kit adds to (or takes from) thief/bard/ranger skills. Kit pages
  * describe these in their text; generated values come from tools/build-kit-mechanics.py, and the GM can change them.
  * `skillPoints`: thief skill discretionary points when the kit changes them ({ first, perLevel }; null = class default).
@@ -33,6 +35,14 @@ export default class KitData extends foundry.abstract.TypeDataModel {
       xpTable: new StringField({ required: true, blank: true, initial: "" }),
       bonusProficiencies: proficiencyChoices(),
       requiredProficiencies: proficiencyChoices(),
+      // Recommended proficiencies from the kit page (identifiers; weapon or nonweapon): shown, not granted.
+      recommendedProficiencies: new ArrayField(new StringField()),
+      // Weapon specialization exception: mode "" (class rule), "allowed", "required" or "forbidden" (blank must be
+      // explicit with choices, see Foundry StringField docs); `free`: weapon proficiencies specialized at no slot cost.
+      specialization: new SchemaField({
+        mode: new StringField({ initial: "", blank: true, choices: ["allowed", "required", "forbidden"] }),
+        free: new ArrayField(new StringField())
+      }),
       bonusSlots: new SchemaField({
         weapon: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         nonweapon: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false })

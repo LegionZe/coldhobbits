@@ -84,6 +84,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "haggling",
+      "endurance",
+      "appraising",
+      "disguise",
+      "forgery",
+      "gaming",
+      "juggling",
+      "local-history",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

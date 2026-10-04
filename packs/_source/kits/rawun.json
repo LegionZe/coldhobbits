@@ -62,6 +62,26 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "languages-modern",
+      "debate",
+      "etiquette",
+      "riding-land-based",
+      "animal-lore",
+      "astrology",
+      "languages-ancient",
+      "herbalism",
+      "spellcraft",
+      "genie-lore",
+      "reading-writing",
+      "ancient-history",
+      "local-history",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

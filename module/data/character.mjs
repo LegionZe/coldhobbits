@@ -361,21 +361,31 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const classId = this.classInfo.classItem?.system.identifier;
     const groups = AD2E.proficiencyGroups[classId] ?? AD2E.defaultProficiencyGroups[this.classGroup];
     const items = this.parent?.items?.filter(i => i.type === "proficiency") ?? [];
-    const canSpecialize = AD2E.specialization.classes.includes(classId);
-    const specializedCount = items.filter(i => i.system.kind === "weapon" && i.system.specialized).length;
+    // Kit exceptions (tools/build-kit-mechanics.py KIT_SPECIALIZATION): "allowed"/"required" open specialization to
+    // the kit's class, "forbidden" closes it; `free` weapons are specialized at no slot cost even for other classes.
+    const kitSpec = kit?.specialization ?? { mode: "", free: [] };
+    const free = new Set(kitSpec.free ?? []);
+    const canSpecialize = kitSpec.mode === "forbidden" ? false
+      : AD2E.specialization.classes.includes(classId) || ["allowed", "required"].includes(kitSpec.mode);
+    const specializedCount = items.filter(i => i.system.kind === "weapon" && i.system.specialized && !free.has(i.system.identifier)).length;
     const entries = items.map(item => {
       const p = item.system;
       const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
       // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
-      const specCost = (p.kind === "weapon" && p.specialized) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
+      const isFree = p.kind === "weapon" && free.has(p.identifier);
+      const specCost = (p.kind === "weapon" && p.specialized && !isFree) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
       const cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
       const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) + this.kitMods.total("proficiency", p.identifier) : null;
       const entry = { item, cost, crossGroup, target };
       if (p.kind === "weapon") {
-        entry.specialized = p.specialized;
-        // Fighters only, and a single weapon ("choose a single weapon and specialize in its use").
-        entry.specInvalid = p.specialized && (!canSpecialize || specializedCount > 1);
-        entry.attack = this.#weaponAttack(p.weapon, p.specialized && canSpecialize);
+        // A kit's free specialization applies on its own (no tick box needed).
+        entry.specialized = p.specialized || isFree;
+        entry.specFree = isFree;
+        // Fighters only (or a kit exception), and a single weapon ("choose a single weapon and specialize in its use");
+        // a kit's free specialization is always valid and does not count.
+        entry.specInvalid = p.specialized && !isFree && (!canSpecialize || specializedCount > 1);
+        entry.specValid = isFree || (p.specialized && canSpecialize);
+        entry.attack = this.#weaponAttack(p.weapon, entry.specValid);
       }
       return entry;
     });
@@ -388,6 +398,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     return {
       groups,
       canSpecialize,
+      specRule: { mode: kitSpec.mode ?? "", free: [...free],
+        missing: kitSpec.mode === "required" && specializedCount === 0 },
       penalty: rules.penalty,
       entries,
       weapon: { available: available.weapon, used: used("weapon") },
@@ -460,7 +472,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
-      const specialized = !!(prof?.specialized && p.canSpecialize);
+      const specialized = !!prof?.specValid;
       const penalty = prof ? 0 : p.penalty;
       const attack = this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg });
       if (twoReady && attack.melee && inHand.includes(item)) attack.melee.rateTwo = formatRate(twoWeaponRate(attack.melee.rateRaw));

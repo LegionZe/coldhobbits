@@ -68,6 +68,17 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "direction-sense",
+      "endurance",
+      "poetry",
+      "rope-use",
+      "running"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

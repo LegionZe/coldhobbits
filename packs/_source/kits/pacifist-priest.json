@@ -74,6 +74,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "languages-modern",
+      "languages-ancient",
+      "ancient-history",
+      "singing",
+      "musical-instrument",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

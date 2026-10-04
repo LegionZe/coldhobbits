@@ -90,6 +90,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blacksmithing",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "crowd-working",
+      "etiquette",
+      "hunting",
+      "leatherworking",
+      "musical-instrument",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -55,6 +55,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "etiquette",
+      "riding-land-based",
+      "armorer",
+      "blind-fighting",
+      "endurance",
+      "gaming",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

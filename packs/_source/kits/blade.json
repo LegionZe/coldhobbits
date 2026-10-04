@@ -65,6 +65,17 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "blacksmithing",
+      "bowyer-fletcher",
+      "disguise",
+      "poetry",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

@@ -66,6 +66,21 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "camouflage",
+      "endurance",
+      "fire-building",
+      "foraging",
+      "mountaineering",
+      "navigation",
+      "signaling",
+      "trail-signs",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

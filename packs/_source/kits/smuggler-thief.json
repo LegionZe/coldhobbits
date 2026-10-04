@@ -56,6 +56,28 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-noise",
+      "appraising",
+      "boating",
+      "direction-sense",
+      "disguise",
+      "fast-talking",
+      "forgery",
+      "information-gathering",
+      "navigation",
+      "observation",
+      "rope-use",
+      "seamanship",
+      "swimming"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

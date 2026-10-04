@@ -80,6 +80,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "artistic-ability",
+      "craft-instrument",
+      "etiquette",
+      "heraldry",
+      "local-history",
+      "poetry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

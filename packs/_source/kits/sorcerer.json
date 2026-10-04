@@ -50,6 +50,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "survival",
+      "local-history",
+      "spellcraft",
+      "languages-ancient",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

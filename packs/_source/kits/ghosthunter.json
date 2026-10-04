@@ -44,6 +44,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "blind-fighting",
+      "languages-ancient",
+      "local-history",
+      "spellcraft",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

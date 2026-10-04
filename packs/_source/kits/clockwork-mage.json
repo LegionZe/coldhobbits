@@ -62,6 +62,18 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "blacksmithing",
+      "artistic-ability",
+      "engineering",
+      "gem-cutting",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

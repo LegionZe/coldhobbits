@@ -44,6 +44,24 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blind-fighting",
+      "bureaucracy",
+      "etiquette",
+      "heraldry",
+      "jousting",
+      "languages-ancient",
+      "languages-modern",
+      "law",
+      "local-history",
+      "oratory",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

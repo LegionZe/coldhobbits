@@ -110,6 +110,25 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "armorer",
+      "artistic-ability",
+      "blacksmithing",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "languages-modern",
+      "leatherworking",
+      "musical-instrument",
+      "riding-land-based",
+      "reading-writing",
+      "singing",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

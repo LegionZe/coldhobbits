@@ -103,6 +103,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "ancient-history",
+      "astrology",
+      "herbalism",
+      "languages-ancient",
+      "spellcraft",
+      "local-history"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

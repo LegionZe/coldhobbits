@@ -62,6 +62,22 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "blacksmithing",
+      "camouflage",
+      "disguise",
+      "endurance",
+      "leatherworking",
+      "persuasion",
+      "riding-land-based",
+      "rope-use",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

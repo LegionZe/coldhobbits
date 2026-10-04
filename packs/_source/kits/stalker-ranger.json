@@ -55,6 +55,19 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "etiquette",
+      "languages-modern",
+      "persuasion",
+      "signaling",
+      "trail-marking",
+      "trail-signs"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

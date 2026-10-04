@@ -74,6 +74,27 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "weather-sense",
+      "blind-fighting",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "survival",
+      "tracking",
+      "herbalism",
+      "agriculture"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],

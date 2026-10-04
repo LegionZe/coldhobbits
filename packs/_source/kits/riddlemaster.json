@@ -146,6 +146,23 @@
     "skillPoints": {
       "first": null,
       "perLevel": null
+    },
+    "recommendedProficiencies": [
+      "appraising",
+      "blind-fighting",
+      "direction-sense",
+      "gaming",
+      "heraldry",
+      "musical-instrument",
+      "navigation",
+      "reading-lips",
+      "singing",
+      "weather-sense",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     }
   },
   "effects": [],
