@@ -165,3 +165,18 @@
 .ad2e-damage-buttons { display: flex; flex-wrap: wrap; gap: 0.25rem; align-items: center; margin-top: 0.35rem; }
 .ad2e-damage-buttons .ad2e-damage-amount { flex: 1 0 100%; font-weight: bold; }
 .ad2e-damage-buttons button { flex: 1 1 auto; width: auto; font-size: 0.85em; line-height: 1.6; }
+
+/* Colour-coded sidebar tabs (module/sidebar-colours.mjs; markup diagnosed on core 14.368). Okabe-Ito colours. */
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button.ui-control[data-action="tab"][data-group="primary"]:is([data-tab="combat"], [data-tab="actors"], [data-tab="scenes"], [data-tab="items"], [data-tab="journal"], [data-tab="compendium"]) {
+  color: var(--ad2e-tab-colour);
+}
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button.ui-control[data-action="tab"][data-group="primary"]:is([data-tab="combat"], [data-tab="actors"], [data-tab="scenes"], [data-tab="items"], [data-tab="journal"], [data-tab="compendium"]):is(.active, [aria-pressed="true"]) {
+  border-color: var(--ad2e-tab-colour);
+  box-shadow: inset 0 -3px 0 var(--ad2e-tab-colour);
+}
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="combat"] { --ad2e-tab-colour: #D55E00; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="actors"] { --ad2e-tab-colour: #E69F00; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="scenes"] { --ad2e-tab-colour: #009E73; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="items"] { --ad2e-tab-colour: #56B4E9; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="journal"] { --ad2e-tab-colour: #F0E442; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="compendium"] { --ad2e-tab-colour: #CC79A7; }
