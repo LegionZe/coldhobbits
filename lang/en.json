@@ -613,6 +613,7 @@
     "BudgetHint": "Thief: 60 at 1st level, +30 per level, no more than 30 on one skill at 1st level and 15 per level after. Bard: 20 at 1st level, +15 per level (PHB).",
     "Cap": "No thief skill above 95% including all adjustments (Thief (PHB))",
     "HeavyArmor": "Not possible in this armour",
+    "BelowOne": "Below 1% after adjustments: spend points to raise it to at least 1% before it can be used (Thief, PHB)",
     "RangerNote": "Studded leather or lighter armour only; halved outside natural surroundings (Ranger (PHB)).",
     "TrapNote": "Removing a trap: a roll of 96-100 sets it off (Thief Skill Explanations (PHB)).",
     "Roll": "Roll",

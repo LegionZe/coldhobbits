@@ -936,7 +936,7 @@ export default class AD2EActor extends Actor {
     const i18n = k => game.i18n.localize(k);
     const name = i18n(`AD2E.Skill.${key}`);
     if (!skill.available) {
-      ui.notifications.warn(`${name}: ${i18n("AD2E.Skill.HeavyArmor")}`);
+      ui.notifications.warn(`${name}: ${i18n(skill.belowOne && !info.armorBlocked ? "AD2E.Skill.BelowOne" : "AD2E.Skill.HeavyArmor")}`);
       return;
     }
     const ranger = info.classId === "ranger";

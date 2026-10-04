@@ -25,7 +25,7 @@
         {{#if ft.showArmor}}<td>{{s.armorText}}</td>{{/if}}<td>{{s.kitText}}</td>
         {{#if ft.showPoints}}<td>{{#if ft.combat}}{{s.points}}{{else}}<input type="number" name="system.classAbilities.points.{{s.key}}" value="{{s.points}}" min="0" max="95" step="1"
           class="{{#if s.overLimit}}ad2e-unmet{{/if}}" {{#unless @root.editable}}disabled{{/unless}}>{{/if}}</td>{{/if}}
-        <td><strong>{{s.total}}%</strong>{{#if s.capped}} <span data-tooltip="{{localize 'AD2E.Skill.Cap'}}">*</span>{{/if}}</td>
+        <td><strong>{{s.total}}%</strong>{{#if s.capped}} <span data-tooltip="{{localize 'AD2E.Skill.Cap'}}">*</span>{{/if}}{{#if s.belowOne}} <span data-tooltip="{{localize 'AD2E.Skill.BelowOne'}}">!</span>{{/if}}</td>
         <td><button type="button" data-action="rollClassSkill" data-skill="{{s.key}}" {{#unless s.available}}disabled{{/unless}}>{{localize "AD2E.Skill.Roll"}}</button></td>
       </tr>
       {{/each}}
