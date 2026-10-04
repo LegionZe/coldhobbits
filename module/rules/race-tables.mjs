@@ -5,3 +5,9 @@
  * Applies to saves vs. rod/staff/wand and spells; dwarves and halflings also vs. poison.
  */
 export const CON_SAVE_BONUS = [{"min": 4, "max": 6, "bonus": 1}, {"min": 7, "max": 10, "bonus": 2}, {"min": 11, "max": 13, "bonus": 3}, {"min": 14, "max": 17, "bonus": 4}, {"min": 18, "max": 19, "bonus": 5}];
+
+/**
+ * Size category per race (weapon size, Weapons (PHB)): Monstrous Manual entries Elf (MM) (revision 159018), Dwarf (MM) (revision 159031), Gnome (MM) (revision 151185), Halfling (MM) (revision 159079);
+ * humans and half-elves are man-sized (M); hill dwarves are "S to M", M is used.
+ */
+export const RACE_SIZE = {"human": "M", "half-elf": "M", "elf": "M", "dwarf": "M", "gnome": "S", "halfling": "S"};

@@ -1143,9 +1143,12 @@
     "both": "Both weapons (this one main, the other second)",
     "MainWeapon": "Weapon in the other hand",
     "NoBackstab": "backstab applies to the main weapon only",
+    "TwoHands": "two hands",
+    "NeedsTwoHands": "{name} needs two hands (size {weapon} weapon, size {size} wielder) and cannot be used with a second weapon",
+    "RateHint": "Attacks per round: {rate}; {two} with a second weapon in hand (one extra attack per round)",
     "Shield": "a shield cannot be used while fighting with two weapons",
     "TooLarge": "the second weapon must be smaller and lighter than {main} (a dagger is always allowed)",
-    "Summary": "Two weapons: main {main}, second {off} (one extra attack per round)"
+    "Summary": "Two weapons: main {main}, second {off} (one extra attack per round, shown in brackets after the attack rate)"
   },
   "AD2E.Nonlethal": {
     "Weapon": "Non-lethal (flat of the blade)",

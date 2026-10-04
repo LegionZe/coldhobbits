@@ -1,5 +1,6 @@
 import { hpState } from "../health.mjs";
 import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
+import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -418,7 +419,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       out.melee = {
         hit: hit + (specialized ? spec.meleeHit : 0) + extra.hit,
         dmg: dmg + kitDmg + (specialized ? spec.meleeDamage : 0) + extra.dmg,
-        rate: table ? formatRate(attackRate(table, this.level)) : "1"
+        rate: table ? formatRate(attackRate(table, this.level)) : "1",
+        rateRaw: table ? attackRate(table, this.level) : [1, 1]
       };
     }
     if (w.missile) {
@@ -449,13 +451,21 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const p = this.proficiencies;
     const profEntries = p.entries.filter(e => e.item.system.kind === "weapon");
     const items = this.parent?.items?.filter(i => i.type === "weapon") ?? [];
+    // Size from the race (weapon size, Weapons (PHB)); a weapon one size larger needs two hands.
+    const size = this.sizeCategory = characterSize(this.raceInfo.raceItem?.system.identifier);
+    const oneHanded = i => !!i.system.weapon?.melee && !needsTwoHands(i.system.weapon, size);
+    // Two weapons in hand (warriors and rogues): one more attack per round with the second weapon.
+    const inHand = items.filter(i => i.system.equipped && !i.system.dropped && oneHanded(i));
+    const twoReady = canFightTwoWeapons(this.classGroup) && inHand.length >= 2;
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
       const specialized = !!(prof?.specialized && p.canSpecialize);
       const penalty = prof ? 0 : p.penalty;
+      const attack = this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg });
+      if (twoReady && attack.melee && inHand.includes(item)) attack.melee.rateTwo = formatRate(twoWeaponRate(attack.melee.rateRaw));
       return { item, proficient: !!prof, proficiency: prof?.item ?? null, specialized, penalty,
-        attack: this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg }) };
+        twoHanded: !!w.weapon?.melee && !oneHanded(item), attack };
     });
   }
 
