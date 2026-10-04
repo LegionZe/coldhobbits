@@ -114,8 +114,8 @@ initiative 1d10, lowest acts first.
   and ability checks, initiative, surprise, reaction, hit points per level, Charisma) and thief skill point budgets
   (Assassin, Thug) are curated by `python3 tools/build-kit-mechanics.py`, which checks each against the current kit page.
   Unconditional ones apply automatically (some only in no/light/any body armour); situational ones are tick boxes in
-  the attack, damage, save, ability check, proficiency, thief skill and surprise dialogs; reaction ones are listed for
-  the DM. A modifier limited to one proficiency (e.g. Cutpurse, -5 on Observation) is offered only on that check. Level-scaled ones (e.g. Cavalier, Wyrmslayer) follow the character's level. Abilities without a number
+  the attack, damage, save, ability check, proficiency, thief skill and surprise dialogs; reaction ones are tick boxes
+  in the encounter reaction roll (below). A modifier limited to one proficiency (e.g. Cutpurse, -5 on Observation) is offered only on that check. Level-scaled ones (e.g. Cavalier, Wyrmslayer) follow the character's level. Abilities without a number
   (special powers, spells, followers) stay on the kit page.
   Kit items copied into a world or onto characters before 0.0.31 get the mechanics from the compendium when a GM
   loads the world (only kits without modifiers; skill adjustments a GM entered are kept).
@@ -168,6 +168,13 @@ initiative 1d10, lowest acts first.
   ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
   a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
+- Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
+  `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
+  characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,
+  threatening or hostile. The speaking character's Charisma reaction adjustment (PHB Table 6) and kit reaction
+  modifiers (unconditional ones automatically, conditional ones as tick boxes) are subtracted, so a bonus makes the
+  reaction friendlier; a manual modifier covers the creature's description and morale modifiers. The result is shown
+  to the GM only. Table from `python3 tools/build-encounter-tables.py`.
 - Two weapons ("Attacking with Two Weapons (PHB)"): warriors and rogues get a "Two weapons" choice in the melee
   attack dialog ("Both weapons" rolls the weapon clicked as the main weapon and the chosen weapon in the other hand as
   the second, one chat message each; a backstab applies to the main weapon only): main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
@@ -269,7 +276,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Combat: encounter reaction rolls; conditions with rule modifiers.
+- Combat: conditions with rule modifiers.
 - Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).

@@ -1171,6 +1171,19 @@
     "Half": "50% damage",
     "DamageResult": "{total} non-lethal ({temp} of it temporary)"
   },
+  "AD2E.Reaction": {
+    "Title": "Encounter reaction",
+    "TitleFor": "Encounter reaction: {name}",
+    "Hint": "2d10 on DMG Table 59, lower is friendlier. Add modifiers from the creature's description or the morale modifiers. The speaking character's Charisma reaction adjustment and kit reaction modifiers are subtracted (a bonus makes the reaction friendlier). The result is shown to the GM only.",
+    "Behaviour": "The player characters are",
+    "Column": { "friendly": "Friendly", "indifferent": "Indifferent", "threatening": "Threatening", "hostile": "Hostile" },
+    "Speaker": "Speaking character",
+    "NoSpeaker": "None (no Charisma adjustment)",
+    "Cha": "Charisma",
+    "Kit": "kit",
+    "KitSituational": "Kit reaction modifiers (speaking character only)",
+    "Result": { "flight": "Flight", "friendly": "Friendly", "indifferent": "Indifferent", "cautious": "Cautious", "threatening": "Threatening", "hostile": "Hostile", "null": "—" }
+  },
   "AD2E.Unarmed": {
     "CreatureHint": "Unintelligent creatures do not punch, wrestle or overbear; a creature's natural weapons stay usable at close quarters (Nonlethal Combat and Creatures, PHB).",
     "ArmedTarget": "{names} armed: strikes first, before this attack, with +{bonus} to attack and damage",
