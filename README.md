@@ -105,7 +105,9 @@ initiative 1d10, lowest acts first.
   adjustment (entered on the kit item) and discretionary points (60 at 1st level, +30 per level; at most 30 on one skill
   at 1st level and 15 per level after; 95% maximum); bard abilities (Table 33, 20 points + 15 per level); ranger hide in
   shadows / move silently (Table 18, studded leather or lighter). Skill rolls are d100 at or under the total (96-100 sets
-  a trap off). Thieves: backstab option in melee attack (+4) and damage (weapon dice x Table 30, then bonuses). Clerics
+  a trap off). A skill below 1% after adjustments is marked "!" and cannot be rolled until points raise it to at least
+  1% ("the character must spend points raising his skill percentage to at least 1% before he can use the skill",
+  Thief (PHB)). Thieves: backstab option in melee attack (+4) and damage (weapon dice x Table 30, then bonuses). Clerics
   (and paladins from 3rd level, two levels lower) turn undead with Table 61 (d20, 2d6 affected, D* 2d4 more). Paladins:
   +2 to all saves, lay on hands (2 hp per level, once a day; Rest restores it), cure disease per week. Rangers: species
   enemy and tracking bonus. Class features are listed with the level gained and a link to the class page. Tables from
@@ -287,7 +289,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
+- Characters: kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);

@@ -528,7 +528,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    *  - Thief skills: Table 26 base + Table 27 race + Table 28 Dexterity (pick pockets, open locks, find/remove traps,
    *    move silently, hide in shadows) + Table 29 armour + kit adjustment + discretionary points, at most 95 for
    *    thieves ("no skill can be raised above 95 percent, including all adjustments", Thief (PHB)). Points: 60 at
-   *    1st level (at most 30 on one skill), +30 per level (at most 15 on one skill per level).
+   *    1st level (at most 30 on one skill), +30 per level (at most 15 on one skill per level). A skill below 1% after
+   *    adjustments cannot be used until points raise it to at least 1% (`belowOne`).
    *  - Bard abilities: Table 33 base + race + Dexterity + armour + kit + points (20 at 1st level, +15 per level).
    *  - Ranger hide in shadows / move silently: Table 18 by level + race + Dexterity; only in studded leather or
    *    lighter armour (Ranger (PHB)); halved outside natural surroundings (shown, not applied).
@@ -570,8 +571,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         let total = base + race + dexAdj + armor + kitAdj + pts;
         const capped = def.cap !== null && total > def.cap;
         if (capped) total = def.cap;
-        out.skills.push({ key, base, race, dex: dexAdj, armor, kit: kitAdj, points: pts, total, capped,
-          available: !out.armorBlocked });
+        // "after adjustments, they have negative scores ... the character must spend points raising his skill
+        // percentage to at least 1% before he can use the skill" (Thief (PHB)).
+        const belowOne = total < 1;
+        out.skills.push({ key, base, race, dex: dexAdj, armor, kit: kitAdj, points: pts, total, capped, belowOne,
+          available: !out.armorBlocked && !belowOne });
       }
       if (def.points) {
         const kitPoints = id === "thief" ? kit?.skillPoints : null;
