@@ -312,6 +312,7 @@ export default class AD2EActor extends Actor {
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
+        + AD2EActor.#combatModFields(targets)
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -320,7 +321,7 @@ export default class AD2EActor extends Actor {
           const f = button.form.elements;
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
           const m = readModifier(button.form);
-          return { ac: Number(f.ac.value) || 0, mod: m.mod + kit.sum, range: f.range?.value ?? null,
+          return { ac: Number(f.ac.value) || 0, t51: AD2EActor.#combatModPicked(button.form), mod: m.mod + kit.sum, range: f.range?.value ?? null,
             ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
             vsUnarmed: !!f.vsUnarmed?.checked };
@@ -381,14 +382,17 @@ export default class AD2EActor extends Actor {
     if (a.noBackstab) notes.push(i18n("AD2E.TwoWeapons.NoBackstab"));
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     if (vsUnarmed) notes.push(game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed }));
+    const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
+    if (t51.text) notes.push(t51.text);
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed;
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
-    const hit = roll.total >= needed;
+    // Defender sleeping or held: "the attack automatically hits" (Table 51).
+    const hit = t51.auto || roll.total >= needed;
     // Use up the piece fired or thrown.
     let spent = "";
     if (ammo) {
@@ -592,11 +596,12 @@ export default class AD2EActor extends Actor {
       content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}`
         + `${monster ? ` ${i18n("AD2E.Unarmed.CreatureHint")}` : ""}</p>`
         + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus>`)
-        + extra + modifierFields() + this.#kitFields(kitOptions),
+        + extra + AD2EActor.#combatModFields(targets) + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form.elements;
         const kit = AD2EActor.#kitPicked(button.form, kitOptions);
         return { ...readModifier(button.form), kit: kit.sum, kitText: kit.text, ac: Number(f.ac.value) || 0,
+          t51: AD2EActor.#combatModPicked(button.form),
           gauntlet: !!f.gauntlet?.checked, pull: !!f.pull?.checked, holdRound: Math.max(Math.floor(Number(f.holdRound?.value) || 0), 0),
           addStr: !!f.addStr?.checked, attacker: f.attacker?.value ?? "M", defender: f.defender?.value ?? "M",
           legs: Math.max(Number(f.legs?.value) || 0, 0), attackers: Math.max(Math.floor(Number(f.attackers?.value) || 1), 1), down: !!f.down?.checked };
@@ -629,9 +634,11 @@ export default class AD2EActor extends Actor {
       if (o.attackers) parts.push(`${i18n("AD2E.Unarmed.Attackers")} +${o.attackers}`);
     }
     const hitAdj = monster ? 0 : (sys.mods?.meleeAttack ?? 0);
+    input.t51 ??= { sum: 0, auto: false, text: "" };
+    if (input.t51.text) { situation += input.t51.sum; parts.push(input.t51.text); }
     const roll = await new Roll("1d20 + @hit + @situation + @kit + @mod", { hit: hitAdj, situation, kit: input.kit, mod: input.mod }).evaluate();
     const needed = sys.thac0.value - input.ac;
-    const hit = roll.total >= needed;
+    const hit = input.t51.auto || roll.total >= needed;
     const rolls = [roll];
     let result = i18n("AD2E.Roll.Miss");
     let damageFlags = {}; // chat context menu: apply to selected tokens (module/health.mjs)
@@ -685,6 +692,44 @@ export default class AD2EActor extends Actor {
     return m ? m[0].toUpperCase() : "M";
   }
 
+  /** Status ids of the first target's actor (token status icons, Actor#statuses); empty without a target. */
+  static #targetStatuses(targets) {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    const doc = targets.length ? resolve?.(targets[0].uuid, { strict: false }) : null;
+    return { statuses: new Set(doc?.actor?.statuses ?? []), name: targets[0]?.name ?? "" };
+  }
+
+  /**
+   * PHB Table 51 Combat Modifiers as tick boxes (missile range is a separate field). Rows whose status ids the first
+   * target has (e.g. Prone, Stunned: +4; Asleep, Paralyzed, Restrained, Unconscious: automatic hit; Invisible: -4) are
+   * ticked, with the condition named.
+   */
+  static #combatModFields(targets) {
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const { statuses } = AD2EActor.#targetStatuses(targets);
+    const statusName = id => {
+      const list = Array.isArray(CONFIG.statusEffects) ? CONFIG.statusEffects : Object.values(CONFIG.statusEffects ?? {});
+      const e = list.find(x => x.id === id);
+      return e ? game.i18n.localize(e.name ?? e.label ?? id) : id;
+    };
+    return `<fieldset><legend>${game.i18n.localize("AD2E.Combat51.Legend")}</legend><div class="ad2e-check-grid">`
+      + COMBAT_TABLES.combatModifiers.map(m => {
+        const hit = m.statuses.filter(id => statuses.has(id));
+        const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
+        return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
+          + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
+      }).join("") + "</div></fieldset>";
+  }
+
+  /** Ticked Table 51 rows: { sum, auto, text }. */
+  static #combatModPicked(form) {
+    const rows = COMBAT_TABLES.combatModifiers.filter(m => form?.elements?.[`t51-${m.key}`]?.checked);
+    const label = m => game.i18n.localize(`AD2E.Combat51.Row.${m.key}`);
+    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0), auto: rows.some(m => m.value === "auto"),
+      text: rows.map(m => m.value === "auto" ? `${label(m)}: ${game.i18n.localize("AD2E.Combat51.Auto")}`
+        : `${label(m)} ${m.value > 0 ? "+" : ""}${m.value}`).join("; ") };
+  }
+
   /** Dialog field: the attacker is an unarmed opponent closing in (+4 attack and damage, Attacking Without Killing (PHB)). */
   static #armedDefenderField() {
     return `<div class="form-group"><label>${game.i18n.format("AD2E.Unarmed.VsUnarmed", { bonus: COMBAT_TABLES.armedDefender })}</label>`
@@ -717,21 +762,25 @@ export default class AD2EActor extends Actor {
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
         + (attack.melee ? AD2EActor.#armedDefenderField() : "")
+        + AD2EActor.#combatModFields(targets)
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
-        ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked, ...readModifier(button.form) }) },
+        ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked,
+        t51: AD2EActor.#combatModPicked(button.form), ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
     const thac0 = this.system.thac0.value;
     const needed = thac0 - input.ac;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed, mod: input.mod }).evaluate();
+    input.t51 ??= { sum: 0, auto: false, text: "" };
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum, mod: input.mod }).evaluate();
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
-        + i18n(roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
-        + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "") + modifierText(input.mod, input.note)
+        + i18n(input.t51.auto || roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+        + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
+        + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "") + modifierText(input.mod, input.note)
     });
   }
 
@@ -1255,20 +1304,23 @@ export default class AD2EActor extends Actor {
   async rollAttack({ missile = false } = {}) {
     const targets = AD2EActor.#targetsNow();
     const input = await promptModifier(game.i18n.localize("AD2E.Roll.Attack"), {
-      extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, missile)}" autofocus></div>`,
-      read: form => ({ ac: Number(form.elements.ac.value) || 0 })
+      extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, missile)}" autofocus></div>`
+        + AD2EActor.#combatModFields(targets),
+      read: form => ({ ac: Number(form.elements.ac.value) || 0, t51: AD2EActor.#combatModPicked(form) })
     });
     if (!input) return;
     const targetAc = Number(input.ac ?? 10);
     const sys = this.system;
     const adj = missile ? sys.mods.missileAttack : sys.mods.meleeAttack; // includes the encumbrance penalty
     const needed = sys.thac0.value - targetAc;
-    const roll = await new Roll("1d20 + @adj + @mod", { adj, mod: input.mod }).evaluate();
-    const hit = roll.total >= needed;
+    const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: adj + t51.sum, mod: input.mod }).evaluate();
+    const hit = t51.auto || roll.total >= needed;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc}${AD2EActor.#targetText(targets)} `
-        + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)${modifierText(input.mod, input.note)}: `
+        + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)`
+        + `${t51.text ? ` [${foundry.utils.escapeHTML?.(t51.text) ?? t51.text}]` : ""}${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
     });
   }

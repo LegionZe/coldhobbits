@@ -168,6 +168,12 @@ initiative 1d10, lowest acts first.
   ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
   a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
+- Combat modifiers (PHB Table 51, "PHB Table 51"): every attack dialog (weapons, monster attacks, unarmed, the generic
+  attack) has tick boxes for attacker on higher ground +1, defender invisible -4, defender off-balance +2, defender
+  sleeping or held (automatic hit: "the attack automatically hits and causes normal damage"), defender stunned or
+  prone +4, defender surprised +1 and rear attack +2 (missile range stays a separate field). The first target's token
+  status icons tick them: Prone or Stunned +4; Asleep, Paralyzed, Restrained or Unconscious automatic hit; Invisible
+  -4 (core status ids, checked on core 14.368). Table from `python3 tools/build-combat-tables.py`.
 - Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
   `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
   characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,
@@ -276,7 +282,6 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Combat: conditions with rule modifiers.
 - Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
