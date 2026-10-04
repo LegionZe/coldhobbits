@@ -1171,6 +1171,20 @@
     "Half": "50% damage",
     "DamageResult": "{total} non-lethal ({temp} of it temporary)"
   },
+  "AD2E.Combat51": {
+    "Legend": "Combat modifiers (PHB Table 51)",
+    "Auto": "automatic hit",
+    "FromStatus": "target: {status}",
+    "Row": {
+      "attacker-on-higher-ground": "Attacker on higher ground",
+      "defender-invisible": "Defender invisible",
+      "defender-off-balance": "Defender off-balance",
+      "defender-sleeping-or-held": "Defender sleeping or held",
+      "defender-stunned-or-prone": "Defender stunned or prone",
+      "defender-surprised": "Defender surprised",
+      "rear-attack": "Rear attack"
+    }
+  },
   "AD2E.Reaction": {
     "Title": "Encounter reaction",
     "TitleFor": "Encounter reaction: {name}",

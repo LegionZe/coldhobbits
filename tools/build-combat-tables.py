@@ -49,6 +49,13 @@ def rows(t):
     return out
 
 
+# Table 51 rows ticked by a target token's status (core 14.368 CONFIG.statusEffects ids, from the owner's diagnostic):
+# held = paralysed or restrained; an unconscious defender is helpless like a sleeping one.
+STATUS_51 = {"defender-sleeping-or-held": ["sleep", "paralysis", "restrain", "unconscious"],
+             "defender-stunned-or-prone": ["stun", "prone"],
+             "defender-invisible": ["invisible"]}
+
+
 def need(text, pattern, what):
     assert re.search(pattern, text), f"rule changed: {what}"
 
@@ -124,6 +131,23 @@ if __name__ == "__main__":
     need(iw, r"When a weapon has two bonuses, the lesser one is used\. No weapon can have a speed factor of less than 0", "speed min 0")
     need(iw, r"a spell requiring one round to cast takes effect at the end of the current round", "round casting")
     need(iw, r"creatures with natural weapons are not affected by weapon speed", "natural weapons")
+    # Table 51 Combat Modifiers ("PHB Table 51" = The Attack Roll (PHB)): situations other than missile range (already
+    # in the attack dialog). Token status ids (core 14.368 CONFIG.statusEffects, owner's diagnostic) that tick a row.
+    a51, rev_51, _ = classdata.page("PHB Table 51")
+    need(a51, r"Positive numbers are bonuses for the attacker; negative numbers are penalties", "Table 51 sign")
+    need(a51, r"the attack automatically hits and causes normal damage", "Table 51 automatic hit")
+    t51 = []
+    for r in rows(table(a51, "<h4>Table 51 Combat Modifiers")):
+        label, value = r[0], r[1]
+        if label.startswith("Missile fire"):
+            continue
+        key = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+        t51.append({"key": key, "label": label, "value": "auto" if value.startswith("Automatic") else int(value.replace("+", "")),
+                    "statuses": STATUS_51.get(key, [])})
+    assert [x["key"] for x in t51] == ["attacker-on-higher-ground", "defender-invisible", "defender-off-balance",
+        "defender-sleeping-or-held", "defender-stunned-or-prone", "defender-surprised", "rear-attack"], t51
+    assert {x["key"]: x["value"] for x in t51}["defender-stunned-or-prone"] == 4 and t51[1]["value"] == -4, t51
+    assert all(k in {x["key"] for x in t51} for k in STATUS_51), STATUS_51
     initiative = {"standard": t55, "breath": int(t56["Breath weapon"]), "innate": int(t56["Innate spell ability"]),
                   "size": size56, "items": items56}
     data = {
@@ -136,6 +160,7 @@ if __name__ == "__main__":
         "wrestle": {"damage": 1},
         "overbear": {"sizes": SIZES, "perSize": 4, "perLeg": -2, "perAttacker": 1},
         "armedDefender": 4,
+        "combatModifiers": t51,
         "nonlethal": {"hit": -4, "damage": 0.5},
     }
     lines = ["/**",
@@ -146,6 +171,7 @@ if __name__ == "__main__":
              f" *   Tables 57/58, overbearing, non-lethal weapon attacks: {classdata.url('Attacking Without Killing (PHB)')} (revision {rev_awk});",
              f" *   DMG Tables 42/43 identical: {classdata.url('Attacking Without Killing (DMG)')} (revision {rev_awk_dmg})",
              f" *   Initiative Tables 55/56: {classdata.url('Initiative (PHB)')} (revision {rev_init})",
+             f" *   Table 51 Combat Modifiers: {classdata.url('PHB Table 51')} (revision {rev_51}); status ids: core CONFIG.statusEffects",
              " */",
              "export const COMBAT_TABLES = " + json.dumps(data) + ";", ""]
     open("module/rules/combat-tables.mjs", "w").write("\n".join(lines))
