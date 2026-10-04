@@ -167,7 +167,12 @@ initiative 1d10, lowest acts first.
   the second, one chat message each; a backstab applies to the main weapon only): main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
   have no penalty in studded leather or lighter ("Ranger (PHB)"). The chat message notes an equipped shield and a
   second weapon that is not smaller and lighter than the main one (a dagger is always allowed). The penalties show on
-  the Unarmed row of the Equipment tab; the extra attack per round is not added to the attack rate shown.
+  the Unarmed row of the Equipment tab. With two one-handed melee weapons equipped, each shows its attack rate with
+  the extra attack in brackets ("3/2 (5/2)": "a warrior able to attack 3/2 ... can attack 5/2"). A weapon one size
+  larger than the character needs two hands ("A character can also use a weapon one size greater than himself
+  although it must be gripped with two hands", Weapons (PHB)): it is marked "two hands", gives no extra attack, and a
+  two-weapon attack with it is noted in chat. Sizes: Monstrous Manual (gnomes and halflings S; dwarves M, the hill
+  dwarf entry reads "S to M"; others M), in `module/rules/race-tables.mjs` from `python3 tools/build-race-data.py`.
 - Unarmed combat ("Attacking Without Killing (PHB)"): Punch, Wrestle and Overbear on the Equipment tab. Punch and
   wrestle results by the modified attack roll (PHB Table 58); punches do the listed damage (1d3 with a metal gauntlet)
   plus Strength damage and roll the knockout chance (stunned 1d10 rounds); wrestling in armour takes the PHB Table 57
@@ -244,8 +249,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Combat: the two-weapon extra attack in the attack rate shown and a one-handed check for the main weapon; monster
-  unarmed attacks and the +4 for an armed defender; initiative for scrolls, side/group initiative and casting while
+- Combat: monster unarmed attacks and the +4 for an armed defender; initiative for scrolls, side/group initiative and casting while
   hasted; encounter reaction rolls; conditions with rule modifiers.
 - Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;

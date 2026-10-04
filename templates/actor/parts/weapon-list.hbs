@@ -17,7 +17,7 @@
       <span class="ad2e-weapon-use">
         <button type="button" data-action="rollWeaponAttack" data-item-id="{{r.id}}" data-use="{{u.use}}">{{u.label}} {{u.hit}}</button>
         <button type="button" data-action="rollWeaponDamage" data-item-id="{{r.id}}" data-use="{{u.use}}" data-tooltip="{{u.damageHint}}">{{localize "AD2E.Weapon.Damage"}} {{u.dmg}}</button>
-        <span class="ad2e-weapon-rate" data-tooltip="{{localize 'AD2E.Weapon.Rate'}}">{{u.rate}}</span>
+        <span class="ad2e-weapon-rate" data-tooltip="{{u.rateHint}}">{{u.rate}}</span>
         {{#if u.pointBlank}}<span class="ad2e-weapon-pb" data-tooltip="{{localize 'AD2E.Weapon.PointBlankHint'}}">PB</span>{{/if}}
       </span>
       {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>

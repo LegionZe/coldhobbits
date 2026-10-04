@@ -1,7 +1,7 @@
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
-import { canFightTwoWeapons, COMBAT_TABLES, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
+import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -336,7 +336,8 @@ export default class AD2EActor extends Actor {
     if (input.twoWeapon === "both" && other) {
       const otherEntry = this.#weaponEntry(other.id);
       if (otherEntry?.attack?.melee) attacks.push({ item: other, entry: otherEntry, attack: otherEntry.attack.melee, hand: "off",
-        main: item, nonlethal: input.nonlethal && nonlethalAllowed(other.system.weapon), backstab: false, noBackstab: input.backstab });
+        main: item, mainRolled: true, nonlethal: input.nonlethal && nonlethalAllowed(other.system.weapon), backstab: false,
+        noBackstab: input.backstab });
     }
     const messages = [];
     for (const a of attacks) messages.push(await this.#weaponAttackMessage(a, { use, input, targets, ammo, ammoList }));
@@ -361,6 +362,12 @@ export default class AD2EActor extends Actor {
         ranger: twoWeaponExempt(sys), armorAc: sys.armor?.body?.system.ac ?? null });
       notes.push(`${i18n(`AD2E.TwoWeapons.${a.hand}`)} ${twoAdj > 0 ? "+" : ""}${twoAdj}`);
       if (sys.armor?.shield) notes.push(i18n("AD2E.TwoWeapons.Shield"));
+      // Each weapon must be usable in one hand (Weapons (PHB): a weapon one size larger needs two hands).
+      const size = sys.sizeCategory ?? "M";
+      for (const w of a.hand === "off" && a.main && !a.mainRolled ? [a.main, item] : [item]) {
+        if (needsTwoHands(w.system.weapon, size)) notes.push(game.i18n.format("AD2E.TwoWeapons.NeedsTwoHands",
+          { name: w.name, weapon: w.system.weapon.size, size }));
+      }
       const main = a.hand === "off" ? a.main : null;
       if (main && !secondWeaponAllowed(
         { proficiency: main.system.proficiency, size: main.system.weapon.size, weight: main.system.weight },

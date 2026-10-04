@@ -7,6 +7,7 @@
  *    overbearing modifiers, non-lethal weapon attacks.
  */
 import { COMBAT_TABLES as T } from "./rules/combat-tables.mjs";
+import { RACE_SIZE } from "./rules/race-tables.mjs";
 
 export { T as COMBAT_TABLES };
 
@@ -17,6 +18,32 @@ export { T as COMBAT_TABLES };
 export function twoWeaponExempt(sys) {
   const kit = sys?.classInfo?.kitFits ? sys.classInfo.kitItem?.system.identifier : null;
   return sys?.classInfo?.classItem?.system.identifier === "ranger" || T.twoWeapon.exemptKits.includes(kit);
+}
+
+/** A character's size category from the race (RACE_SIZE; no race: M). */
+export function characterSize(raceId) {
+  return RACE_SIZE[raceId] ?? "M";
+}
+
+/**
+ * Whether a weapon needs two hands: one size larger than the wielder ("A character can also use a weapon one size
+ * greater than himself although it must be gripped with two hands", Weapons (PHB)), or a two-handed grip (`use.label`,
+ * bastard sword). Unknown sizes: false.
+ */
+export function needsTwoHands(weapon, size = "M", use = null) {
+  if (/^two-handed$/i.test(String(use?.label ?? ""))) return true;
+  const order = T.overbear.sizes;
+  const w = order.indexOf(weapon?.size);
+  const c = order.indexOf(size);
+  return w >= 0 && c >= 0 && w > c;
+}
+
+/**
+ * Attacks per round with a second weapon: one more attack each round ("The character gains only one additional attack
+ * each round ... a warrior able to attack 3/2 ... can attack 5/2", Attacking with Two Weapons (PHB)).
+ */
+export function twoWeaponRate([attacks, rounds]) {
+  return [attacks + rounds, rounds];
 }
 
 /** Whether a class group may fight with two weapons. */

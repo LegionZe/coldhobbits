@@ -107,10 +107,14 @@ function weaponDisplay(e) {
   const uses = ["melee", "missile"].filter(u => e.attack?.[u]).map(u => {
     const a = e.attack[u];
     const label = u === "melee" ? "AD2E.Weapon.Attack" : (w.melee ? "AD2E.Weapon.Throw" : "AD2E.Weapon.Fire");
-    return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg), rate: a.rate,
+    // With a second weapon in hand: the rate including the extra attack, e.g. "3/2 (5/2)".
+    return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg),
+      rate: a.rateTwo ? `${a.rate} (${a.rateTwo})` : a.rate,
+      rateHint: a.rateTwo ? game.i18n.format("AD2E.TwoWeapons.RateHint", { rate: a.rate, two: a.rateTwo }) : game.i18n.localize("AD2E.Weapon.Rate"),
       pointBlank: !!a.pointBlank, damageHint: damage };
   });
-  const meta = [w.size, w.type, w.speed !== null ? `${game.i18n.localize("AD2E.Weapon.Speed")} ${w.speed}` : null, damage]
+  const meta = [w.size, w.type, w.speed !== null ? `${game.i18n.localize("AD2E.Weapon.Speed")} ${w.speed}` : null, damage,
+    e.twoHanded ? game.i18n.localize("AD2E.TwoWeapons.TwoHands") : null]
     .filter(v => v).join(" · ");
   return { uses, meta };
 }
