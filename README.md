@@ -190,6 +190,13 @@ initiative 1d10, lowest acts first.
   prone +4, defender surprised +1 and rear attack +2 (missile range stays a separate field). The first target's token
   status icons tick them: Prone or Stunned +4; Asleep, Paralyzed, Restrained or Unconscious automatic hit; Invisible
   -4 (core status ids, checked on core 14.368). Table from `python3 tools/build-combat-tables.py`.
+- Learning spells (Intelligence (PHB) Table 4, Specialist Wizard (PHB), Wizard (PHB)): dropping a wizard spell on a
+  wizard or bard asks "Roll to learn", "Add as known (no roll)" or "Do not add". The roll is d100 at or under the
+  Intelligence "Chance to Learn Spell", specialists +15% for their school and -15% for other schools; it is not possible
+  for an opposition school, above the Intelligence maximum spell level, when the level already holds Table 4's "Max # of
+  Spells per Level" (optional rule, world setting "Maximum spells per level", on by default), or again before the next
+  level after a failure ("they cannot check that spell again until they advance to the next level"). A spell not
+  understood stays in the list with its chance and a Learn button; it is not counted as known and cannot be memorized.
 - Henchmen ("Henchmen (PHB)", "Henchmen (DMG)", Charisma (PHB) Table 6): drag an actor onto a character sheet to make it
   a henchman (Bio tab). The section shows the Charisma maximum as a lifetime count (current henchmen plus a "Lost"
   number: "This is a lifetime limit, not just a maximum possible at any given time"), the Loyalty Base and the henchman
@@ -320,7 +327,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
+- Characters: skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit

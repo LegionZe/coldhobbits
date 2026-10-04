@@ -1213,6 +1213,31 @@
       "rear-attack": "Rear attack"
     }
   },
+  "AD2E.Learn": {
+    "Base": "Intelligence",
+    "OwnSchool": "own school",
+    "OtherSchool": "other school",
+    "Learn": "Learn",
+    "Roll": "Roll to learn",
+    "AddKnown": "Add as known (no roll)",
+    "Cancel": "Do not add",
+    "DropTitle": "Spell found: {name}",
+    "DropText": "Roll to learn this spell ({chance}% chance, Intelligence PHB Table 4), or add it as already known?",
+    "NotLearned": "not understood yet",
+    "ChanceText": "{chance}% to learn",
+    "Chat": "Learn {name} (roll ≤ {chance}%)",
+    "Success": "understood: copied into the spell book",
+    "Failure": "not understood: no new try until the next level",
+    "MaxSetting": "Maximum spells per level (optional rule)",
+    "MaxSettingHint": "Enforce Intelligence (PHB) Table 4 \"Max # of Spells per Level\" when a wizard learns a spell.",
+    "Blocked": {
+      "notWizard": "{name}: only wizard spells are learned this way",
+      "opposition": "{name}: a specialist cannot learn spells of an opposition school",
+      "level": "{name}: above the highest spell level this Intelligence allows",
+      "full": "{name}: the maximum number of spells of this level is already known",
+      "failed": "{name}: failed at level {level}; another try after the next level"
+    }
+  },
   "AD2E.Henchmen": {
     "Title": "Henchmen",
     "Lifetime": "Henchmen (lifetime)",

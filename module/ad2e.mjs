@@ -66,6 +66,10 @@ Hooks.once("init", () => {
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });
+  // Maximum number of spells per level (Intelligence (PHB) Table 4, an optional rule): enforced when learning spells.
+  game.settings.register("ad2e", "maxSpellsPerLevel", {
+    name: "AD2E.Learn.MaxSetting", hint: "AD2E.Learn.MaxSettingHint", scope: "world", config: true, type: Boolean, default: true
+  });
   // Roll damage automatically when an attack hits (per user).
   game.settings.register("ad2e", "autoDamage", {
     name: "AD2E.Weapon.AutoDamageSetting", hint: "AD2E.Weapon.AutoDamageHint", scope: "client", config: true, type: Boolean, default: true

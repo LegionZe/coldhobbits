@@ -606,7 +606,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       byLevel.get(i.system.level).push(i);
     }
     const out = [...byLevel.entries()].sort((a, b) => a[0] - b[0]).map(([level, spells]) => {
-      const usable = spells.filter(i => i.system.kind === kind);
+      // Spells found but not (yet) understood are not known and cannot be memorized (module/learn-spells.mjs).
+      const usable = spells.filter(i => i.system.kind === kind && i.system.learned !== false);
       const slots = level >= 1 ? (base[level - 1] ?? 0) + (bonus[level - 1] ?? 0) + (school[level - 1] ?? 0) : 0;
       const prepared = usable.reduce((n, i) => n + i.system.prepared, 0);
       const remaining = usable.reduce((n, i) => n + Math.max(i.system.prepared - i.system.cast, 0), 0);
