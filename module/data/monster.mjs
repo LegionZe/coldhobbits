@@ -1,6 +1,7 @@
 import { AD2E, creatureHitDice, lookup } from "../config.mjs";
 import { hpState } from "../health.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
+import { loadBand, riderOf, riderWeight } from "../animals.mjs";
 
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -85,25 +86,21 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
     this.ac.value = base - (shield ? shield.system.shield.melee + shield.system.bonus : 0);
     this.ac.armor = [body?.name, shield?.name].filter(Boolean).join(" + ");
 
-    // Load carried (items + coins + other cargo, e.g. a rider) against PHB Table 49: full movement, 1/2, 1/4;
-    // "up to a maximum of twice their normal load" (Encumbrance (PHB)) - beyond the 1/4 column it cannot move.
-    // Items in a container (e.g. saddle bags) follow the container (module/containers.mjs).
+    // Load carried (items + coins + other cargo) against PHB Table 49: full movement, 1/2, 1/4; "up to a maximum of
+    // twice their normal load" (Encumbrance (PHB)) - beyond the 1/4 column it cannot move. Items in a container (e.g.
+    // saddle bags) follow the container (module/containers.mjs). A character riding this actor adds its body weight
+    // and everything it carries ("be sure to include the weight of the rider!", module/animals.mjs).
     const weightOf = i => i.type === "coin" ? i.system.quantity / AD2E.coinsPerPound
       : (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
     const carriedLoose = i => ["equipment", "magic", "jewellery"].includes(i.type) ? i.system.carried : true;
     const inv = inventory(items, { weightOf, carriedLoose });
-    const weight = Math.round((items.filter(i => PHYSICAL_TYPES.includes(i.type) && inv.counts(i)).reduce((n, i) => n + weightOf(i), 0)
+    const own = Math.round((items.filter(i => PHYSICAL_TYPES.includes(i.type) && inv.counts(i)).reduce((n, i) => n + weightOf(i), 0)
       + (this.load.other ?? 0)) * 10) / 10;
-    const l = this.load;
-    let rate = this.movement.base;
-    let band = null;
-    if (l.full !== null) {
-      if (weight <= l.full) band = "full";
-      else if (l.half !== null && weight <= l.half) { band = "half"; rate = Math.floor(rate / 2); }
-      else if (l.quarter !== null && weight <= l.quarter) { band = "quarter"; rate = Math.floor(rate / 4); }
-      else { band = "over"; rate = 0; }
-    }
-    this.encumbrance = { weight, band, rate, inventory: inv };
+    const riderActor = riderOf(this.parent);
+    const rider = riderActor ? { uuid: riderActor.uuid, name: riderActor.name, ...riderWeight(riderActor) } : null;
+    const weight = Math.round((own + (rider?.total ?? 0)) * 10) / 10;
+    const { band, rate } = loadBand(this.load, weight, this.movement.base);
+    this.encumbrance = { weight, own, rider, band, rate, inventory: inv };
   }
 
   getRollData() {

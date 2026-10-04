@@ -79,8 +79,11 @@ def column_block(title, column):
 
 def infobox_block(title, name):
     wiki, rev, _ = classdata.page(title)
-    box = dict(re.findall(r"\|\s*(\w+?)\s*=\s*([^\n]*)", wiki[:wiki.index("}}\n'''")]))
-    n = [k[4:] for k, v in box.items() if re.fullmatch(r"name\d+", k) and clean(v) == name][0]
+    # Pages with several creatures number the fields (name1, armorclass1, ...); a single creature's are unnumbered.
+    end = wiki.index("}}\n'''") if "}}\n'''" in wiki else wiki.index("\n}}", wiki.index("{{Creature"))
+    box = dict(re.findall(r"\|\s*(\w+?)\s*=\s*([^\n]*)", wiki[:end]))
+    found = [k[4:] for k, v in box.items() if re.fullmatch(r"name\d*", k) and clean(v) == name]
+    n = next((x for x in found if x), found[0])  # a numbered entry first; the unnumbered one only on single-creature pages
     return {key: clean(box.get(f"{src}{n}", "")) for src, key in INFOBOX.items()}, rev
 
 

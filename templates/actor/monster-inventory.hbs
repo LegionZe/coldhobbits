@@ -5,6 +5,7 @@
     <div class="ad2e-prof-summary">
       <span class="{{#if load.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Enc.Load"}}: <strong>{{load.weight}} lb</strong>{{#if load.bandLabel}} ({{load.bandLabel}}){{/if}}</span>
       <span>{{localize "AD2E.Move.Movement"}}: <strong>{{load.rate}}</strong> / {{system.movement.base}}</span>
+      {{#if load.riderText}}<span class="{{#if load.riderMissingBody}}ad2e-unmet{{/if}}">{{load.riderText}}</span>{{/if}}
     </div>
     <div class="ad2e-prof-summary">
       <label>{{localize "AD2E.Gear.LoadFull"}} <input type="number" name="system.load.full" value="{{load.full}}" min="0"></label>

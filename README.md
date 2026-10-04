@@ -147,9 +147,18 @@ initiative 1d10, lowest acts first.
 - "Hirelings & Mounts" compendium (`python3 tools/build-hireling-data.py`): 18 soldier types from DMG Table 64 with
   monthly wage and the equipment their DMG descriptions name (weapons left to the GM where the DMG says they vary;
   the optional handgunner is left out), 8 hirelings from DMG Table 65 with weekly/monthly wage, statistics from the
-  Monstrous Manual human types (Human (MM)), and 10 mounts (draft, heavy, medium, light war and riding horses, pony,
-  mule, desert and war camel, elephant) from the Monstrous Manual with PHB load and price. Wage or price shows in the
-  sheet header.
+  Monstrous Manual human types (Human (MM)), 9 mounts (draft, heavy, medium, light war and riding horses, pony,
+  desert and war camel, elephant) and 3 pack/draft animals (role "Pack / draft animal": mule, ox from the Herd Mammal
+  Cattle column, war dog) from the Monstrous Manual with PHB Table 49 load and price. Wage or price shows in the sheet
+  header.
+- Mounts and pack animals on a character: drop a mount, pack animal or pet actor on the character sheet (other actors
+  become henchmen); the Equipment tab lists each with its load, PHB Table 49 band and movement. Tick "Riding" for the
+  animal the character rides (one at a time): its load then includes the rider, "When calculating a mount's load, be
+  sure to include the weight of the rider!" (Encumbrance (PHB)), i.e. the character's body weight plus everything the
+  character carries (encumbrance load, clothing included). Body weight is entered on the Equipment tab or rolled on PHB
+  Table 10 (base for the race and sex plus the modifier dice; generated into race-tables.mjs). Animals are loaded with
+  items as before (saddle bags and other containers count while carried); "up to a maximum of twice their normal load",
+  beyond which the animal cannot move. The animal's own sheet shows its rider.
 - Ability score generation: the dice button on the Abilities panel opens a roller for PHB Methods II-VI ("Rolling
   Ability Scores (PHB)"): II 3d6 twice per ability, keep one; III 3d6 six times, assign; IV 3d6 twelve times, assign
   six; V 4d6 drop lowest six times, assign; VI every ability 8 plus seven d6 added whole, none above 18. Rolls use
@@ -345,7 +354,7 @@ initiative 1d10, lowest acts first.
 - Wizards: familiars (Find Familiar (Wizard Spell): https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell)).
 - Spells: components when casting (verbal/somatic/material are already stored on spell items; material components as
   inventory, Casting Spells (PHB): https://adnd2e.fandom.com/wiki/Casting_Spells_(PHB)).
-- Equipment and treasure: mount encumbrance; a treasure generator (DMG Tables 84-88);
+- Equipment and treasure: a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit
   bonuses to learning spells.

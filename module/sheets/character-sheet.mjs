@@ -5,6 +5,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
+import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -186,7 +187,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       removeHenchman: CharacterSheet.onRemoveHenchman,
       henchmanMorale: CharacterSheet.onHenchmanMorale,
       awardXp: CharacterSheet.onAwardXp,
-      takeOut: CharacterSheet.onTakeOut
+      takeOut: CharacterSheet.onTakeOut,
+      toggleRiding: CharacterSheet.onToggleRiding,
+      removeAnimal: CharacterSheet.onRemoveAnimal,
+      rollBodyWeight: CharacterSheet.onRollBodyWeight
     }
   };
 
@@ -556,7 +560,30 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const combatNote = game.i18n.localize(rows.length ? "AD2E.Weapon.EquipHint" : "AD2E.Weapon.NoneYet");
     const combatArmor = armor.filter(x => x.equipped).map(x => ({ ...x, combat: true }));
     return { rows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value,
-      containers: containerContext(inv) };
+      containers: containerContext(inv), animals: this._animalsContext(sys) };
+  }
+
+  /** Mounts and pack animals (module/animals.mjs): each animal's load with this character's weight when ridden. */
+  _animalsContext(sys) {
+    const i18n = k => game.i18n.localize(k);
+    const info = animalsInfo(this.document);
+    const r = info.rider;
+    return {
+      bodyWeight: sys.bodyWeight ?? "",
+      canRoll: !!raceWeight(sys.raceInfo?.raceItem?.system.identifier),
+      riderTotal: r.total,
+      riderText: game.i18n.format(r.missingBody ? "AD2E.Animal.RiderNoBody" : "AD2E.Animal.RiderParts", { body: r.body ?? 0, gear: r.gear }),
+      missingBody: r.missingBody,
+      rows: info.rows.map(x => x.missing ? { ...x, meta: i18n("AD2E.Animal.Missing") } : {
+        ...x,
+        over: x.band === "over",
+        meta: [x.role ? i18n(`AD2E.Monster.Role.${x.role}`) : null,
+          `${i18n("AD2E.Enc.Load")} ${x.full !== null ? `${x.weight} / ${x.full} lb` : `${x.weight} lb`}${x.band ? ` (${i18n(`AD2E.Monster.Load.${x.band}`)})` : ""}`,
+          `${i18n("AD2E.Move.Movement")} ${x.rate} / ${x.base}`, x.riding ? game.i18n.format("AD2E.Animal.WithRider", { lb: r.total }) : null]
+          .filter(Boolean).join(" · "),
+        otherRiderText: x.otherRider ? game.i18n.format("AD2E.Animal.RiddenBy", { name: x.otherRider }) : ""
+      })
+    };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -791,11 +818,34 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** An actor dropped on the sheet becomes a henchman (Henchmen (PHB)); not the character itself, not twice. */
   async _onDropActor(event, actor) {
     if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
+    // Mounts, pack animals and pets go to the animal list (module/animals.mjs); other actors are henchmen.
+    if (isAnimal(actor)) {
+      const animals = this.actor.system.animals?.actors ?? [];
+      if (animals.includes(actor.uuid)) return null;
+      await this.actor.update({ "system.animals.actors": [...animals, actor.uuid] });
+      return actor;
+    }
     const list = this.actor.system.henchmen?.actors ?? [];
     if (list.includes(actor.uuid)) return null;
     await this.actor.update({ "system.henchmen.actors": [...list, actor.uuid] });
     return actor;
   }
+
+  /** Ride an animal (one at a time) or dismount. */
+  static onToggleRiding(event, target) {
+    return this.actor.update({ "system.animals.riding": target.checked ? target.dataset.uuid : "" });
+  }
+
+  /** Remove an animal from the list (dismounting first); its load no longer includes this character. */
+  static async onRemoveAnimal(event, target) {
+    const uuid = target.dataset.uuid;
+    const animals = this.actor.system.animals ?? { actors: [], riding: "" };
+    await this.actor.update({ "system.animals.actors": animals.actors.filter(u => u !== uuid),
+      "system.animals.riding": animals.riding === uuid ? "" : animals.riding });
+    refreshAnimals(this.actor, [uuid]);
+  }
+
+  static onRollBodyWeight() { return rollBodyWeight(this.actor); }
 
   static async onOpenHenchman(event, target) {
     const actor = (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(target.dataset.uuid, { strict: false });

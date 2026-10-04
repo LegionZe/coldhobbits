@@ -469,6 +469,7 @@
       "monster": "Monster",
       "hireling": "Hireling",
       "mount": "Mount",
+      "pack": "Pack / draft animal",
       "pet": "Pet"
     },
     "HitDice": "Hit Dice",
@@ -492,7 +493,7 @@
       "half": "1/2 movement",
       "quarter": "1/4 movement",
       "over": "too heavy to move",
-      "other": "Other load (rider, cargo; lb)"
+      "other": "Other load (cargo, or a rider not linked to a character; lb)"
     },
     "Field": {
       "climate": "Climate/Terrain",
@@ -1342,5 +1343,31 @@
     "Clash": "A bag of holding and a portable hole inside one another: see Portable Hole (Magic Container).",
     "Capacity": "Container: holds (lb)",
     "Volume": "Container: volume"
+  },
+  "AD2E.Animal": {
+    "Title": "Mounts & pack animals",
+    "DropHint": "Drag a mount, pack animal or pet actor onto this sheet (Hirelings & Mounts compendium). A ridden animal's load includes the rider and everything the rider carries (Encumbrance (PHB)).",
+    "BodyWeight": "Body weight (lb)",
+    "BodyWeightHint": "The character's own weight (PHB Table 10). It counts toward the load of an animal the character rides.",
+    "RollBodyWeight": "Roll (Table 10)",
+    "RollHint": "PHB Table 10: base weight for the race and sex plus the modifier dice.",
+    "BodyWeightTitle": "Body weight (PHB Table 10)",
+    "BodyWeightText": "{race}: base {male} lb (male) or {female} lb (female), plus {dice}.",
+    "BodyWeightChat": "Body weight (PHB Table 10): {name}, {sex}",
+    "Male": "Male",
+    "Female": "Female",
+    "NoRaceWeight": "No PHB Table 10 weight for this race: enter the body weight by hand.",
+    "RiderWeight": "Weight as a rider",
+    "RiderParts": "body {body} + gear {gear} lb",
+    "RiderNoBody": "body weight not set + gear {gear} lb",
+    "RiderHint": "What a ridden animal carries for this character: body weight plus the encumbrance load (clothing included).",
+    "Riding": "Riding",
+    "RidingHint": "Ride this animal: its load includes this character's weight as a rider. One animal at a time.",
+    "WithRider": "includes rider {lb} lb",
+    "RiddenBy": "Ridden by {name}",
+    "Remove": "Remove from this character",
+    "Missing": "Actor not found (deleted, or in a compendium).",
+    "RiderOnMount": "Rider: {name} (body {body} + gear {gear} lb; own load {own} lb)",
+    "RiderOnMountNoBody": "Rider: {name} (body weight not set; gear {gear} lb; own load {own} lb)"
   }
 }
