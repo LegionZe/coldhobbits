@@ -1,0 +1,35 @@
+{
+  "_id": "Jes7GBeljslKTrhv",
+  "_key": "!items!Jes7GBeljslKTrhv",
+  "name": "Armor proficiency: Leather",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "armor-leather",
+    "kind": "armor",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "leather",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "k3GEl9IKRbS8jPex",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

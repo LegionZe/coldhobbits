@@ -1,0 +1,35 @@
+{
+  "_id": "uIyNyH0Gs1jBrJk3",
+  "_key": "!items!uIyNyH0Gs1jBrJk3",
+  "name": "Fighting style: Weapon and Shield",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "style-weapon-shield",
+    "kind": "style",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Fighting_Style_Specialization_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "weapon-shield",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "8Co6jyXTh1rM7IlZ",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

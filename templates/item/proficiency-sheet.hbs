@@ -24,6 +24,10 @@
     <label class="ad2e-check"><input type="checkbox" name="system.specialized" {{checked system.specialized}}>
       {{localize "AD2E.Weapon.Specialized"}}</label>
     <p class="ad2e-note">{{localize "AD2E.Weapon.Specialize"}}</p>
+    <label class="ad2e-check"><input type="checkbox" name="system.choice" {{checked system.choice}}> {{localize "AD2E.SP.Choice"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.expertise" {{checked system.expertise}}> {{localize "AD2E.SP.Expertise"}}</label>
+    <label class="ad2e-check"><input type="checkbox" name="system.mastery" {{checked system.mastery}}> {{localize "AD2E.SP.Mastery"}}</label>
+    <p class="ad2e-note">{{localize "AD2E.SP.WeaponNote"}}</p>
     <dl class="ad2e-weapon-stats">
       <dt>{{localize "AD2E.Weapon.Size"}}</dt><dd>{{weapon.size}}</dd>
       <dt>{{localize "AD2E.Weapon.Type"}}</dt><dd>{{weapon.type}}</dd>
@@ -38,6 +42,22 @@
       {{/if}}
     </dl>
   </fieldset>
+  {{/if}}
+  {{#if spKind.group}}
+  <div class="ad2e-item-fields"><label>{{localize "AD2E.SP.Kind.group"}}
+    <select name="system.spGroup">{{selectOptions spGroups selected=system.spGroup blank="—"}}</select></label></div>
+  {{/if}}
+  {{#if spKind.style}}
+  <div class="ad2e-item-fields"><label>{{localize "AD2E.SP.Kind.style"}}
+    <select name="system.style">{{selectOptions spStyles selected=system.style blank="—"}}</select></label>
+    <label class="ad2e-check"><input type="checkbox" name="system.improved" {{checked system.improved}}> {{localize "AD2E.SP.Improved"}}</label></div>
+  {{/if}}
+  {{#if spKind.armor}}
+  <div class="ad2e-item-fields"><label>{{localize "AD2E.SP.ArmorType"}} <input type="text" name="system.armorType" value="{{system.armorType}}"></label></div>
+  {{/if}}
+  {{#if spKind.shield}}
+  <div class="ad2e-item-fields"><label>{{localize "AD2E.SP.Kind.shield"}}
+    <select name="system.shieldType">{{selectOptions spShields selected=system.shieldType blank="—" localize=true}}</select></label></div>
   {{/if}}
   <fieldset>
     <legend>{{localize "AD2E.Prof.SkillsPowers"}}</legend>

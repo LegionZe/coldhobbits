@@ -9,6 +9,7 @@ import { isElementalMage, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
 import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
+import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -140,6 +141,22 @@ function weaponDisplay(e) {
   return { uses, meta };
 }
 
+/** Short description of what a Skills & Powers group, style, armour or shield proficiency does (module/sp-weapons.mjs). */
+function spEffect(sys) {
+  const f = (k, d = {}) => game.i18n.format(k, d);
+  if (sys.kind === "group") {
+    const g = SP.groups[sys.spGroup];
+    return g ? f("AD2E.SP.Effect.group", { weapons: g.weapons.join(", ") }) : "";
+  }
+  if (sys.kind === "style") return SP.styles[sys.style] ? game.i18n.localize(`AD2E.SP.Effect.style.${sys.style}`) : "";
+  if (sys.kind === "armor") return f("AD2E.SP.Effect.armor", { armor: sys.armorType });
+  if (sys.kind === "shield") {
+    const r = SP.shields[sys.shieldType];
+    return r ? f("AD2E.SP.Effect.shield", { ac: r.ac, missile: r.missile, n: r.attackers }) : "";
+  }
+  return "";
+}
+
 const { ActorSheetV2 } = foundry.applications.sheets;
 
 export default class CharacterSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
@@ -161,6 +178,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
       toggleSpecialized: CharacterSheet.onToggleSpecialized,
+      toggleProfFlag: CharacterSheet.onToggleProfFlag,
       adjustQuantity: CharacterSheet.onAdjustQuantity,
       toggleEquipped: CharacterSheet.onToggleEquipped,
       stowWeapon: CharacterSheet.onStowWeapon,
@@ -500,8 +518,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
       equipped: !!e.item.system.equipped, dropped: !!e.item.system.dropped,
       status: e.proficient
-        ? game.i18n.localize(e.specialized ? "AD2E.Weapon.Specialized" : "AD2E.Weapon.Proficient")
-        : game.i18n.format("AD2E.Weapon.NotProficient", { penalty: e.penalty }),
+        ? [game.i18n.localize(e.mastery ? "AD2E.SP.Mastery" : (e.specialized ? "AD2E.Weapon.Specialized"
+          : (e.expertise ? "AD2E.SP.Expertise" : "AD2E.Weapon.Proficient"))), e.choice ? game.i18n.localize("AD2E.SP.Choice") : ""]
+          .filter(Boolean).join(", ")
+        : game.i18n.format(e.familiar ? "AD2E.SP.Familiar" : "AD2E.Weapon.NotProficient", { penalty: e.penalty }),
       proficient: e.proficient, specialized: e.specialized, profId: e.proficiency?.id ?? null,
       bonus: magicBonus(e.item.system.bonus),
       ammo: (actor.ammunitionFor?.(e.item) ?? []).map(a => `${a.name} ×${a.system.quantity}`).join(", "),
@@ -581,10 +601,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     treasure.wealth = Math.round((coins.gp + treasure.gp) * 100) / 100;
     // Unarmed attacks (punch, wrestle, overbear) and the two-weapon penalties ("Attacking with Two Weapons (PHB)").
     const sign = n => `${n > 0 ? "+" : ""}${n}`;
+    const twoStyle = !!sys.proficiencies?.sp?.styles?.twoWeapon;
     const twoOpts = { reaction: sys.abilityData?.dex?.reaction ?? 0, ranger: twoWeaponExempt(sys),
-      armorAc: sys.armor?.body?.system.ac ?? null };
+      armorAc: sys.armor?.body?.system.ac ?? null, style: twoStyle ? { main: SP.twoWeapon.main, off: SP.twoWeapon.off } : null };
     const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
-      twoWeapons: canFightTwoWeapons(sys.classGroup) ? game.i18n.format("AD2E.TwoWeapons.Summary",
+      twoWeapons: canFightTwoWeapons(sys.classGroup) || twoStyle ? game.i18n.format("AD2E.TwoWeapons.Summary",
         { main: sign(twoWeaponPenalty("main", twoOpts)), off: sign(twoWeaponPenalty("off", twoOpts)) }) : "" };
     // Combat tab: the equipped weapons (Stow and Drop buttons) and the worn armour (no tick boxes).
     const combatRows = rows.filter(r => r.equipped && !r.dropped).map(r => ({ ...r, combat: true }));
@@ -640,8 +661,29 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       url: e.item.system.url
     });
     const sortByName = (a, b) => a.name.localeCompare(b.name);
-    const weaponRow = e => ({ ...row(e), ...weaponDisplay(e), specialized: e.specialized, specInvalid: e.specInvalid });
+    // Skills & Powers: cost breakdown (CP converted to slots) and reasons a purchase gives no benefit.
+    const spText = e => ({
+      costHint: e.parts?.length ? e.parts.map(x => x.cp === null
+        ? game.i18n.format("AD2E.SP.PartSlots", { part: game.i18n.localize(`AD2E.SP.Part.${x.key}`), slots: x.slots })
+        : game.i18n.format("AD2E.SP.PartCp", { part: game.i18n.localize(`AD2E.SP.Part.${x.key}`), cp: x.cp, slots: x.slots })).join("; ")
+        : game.i18n.localize("AD2E.Prof.SlotsUsed"),
+      invalidText: (e.invalid ?? []).map(k => game.i18n.localize(`AD2E.SP.Invalid.${k}`)).join(" ")
+    });
+    const weaponRow = e => ({ ...row(e), ...weaponDisplay(e), ...spText(e), specialized: e.specialized, specInvalid: e.specInvalid,
+      choice: !!e.item.system.choice, expertise: !!e.item.system.expertise, mastery: !!e.item.system.mastery,
+      masteryInvalid: !!e.masteryInvalid, covered: !!e.covered });
+    const spKinds = ["group", "style", "armor", "shield"];
+    const spRow = e => {
+      const sys = e.item.system;
+      return { ...row(e), ...spText(e), kind: game.i18n.localize(AD2E.proficiencyKinds[sys.kind]), spOff: e.spOff,
+        improvable: sys.kind === "style" && ["one-handed", "two-weapon"].includes(sys.style), improved: !!sys.improved,
+        effect: spEffect(sys) };
+    };
+    const spRows = p.entries.filter(e => spKinds.includes(e.item.system.kind)).map(spRow).sort(sortByName);
     return {
+      sp: !!p.sp,
+      spPenalty: p.sp ? game.i18n.format("AD2E.SP.PenaltySummary", { non: p.sp.penalty.nonproficient, fam: p.sp.penalty.familiar }) : "",
+      spRows,
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
         rows: p.entries.filter(e => e.item.system.kind === "weapon").map(weaponRow).sort(sortByName) },
       nonweapon: { ...p.nonweapon, over: p.nonweapon.used > p.nonweapon.available,
@@ -719,8 +761,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }
     }
     if (this.actor.isOwner && item.type === "weapon" && item.parent !== this.actor) {
-      const prof = this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon"
-        && i.system.identifier === item.system.proficiency);
+      const sp = this.actor.system.proficiencies?.sp;
+      const prof = sp ? weaponFamiliarity(item.system.proficiency, sp.known) === "proficient"
+        : this.actor.items.find(i => i.type === "proficiency" && i.system.kind === "weapon" && i.system.identifier === item.system.proficiency);
       if (!prof) ui.notifications.info(game.i18n.format("AD2E.Weapon.DropNotProficient",
         { name: item.name, penalty: this.actor.system.proficiencies.penalty }));
     }
@@ -1071,6 +1114,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onToggleSpecialized(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     return item?.update({ "system.specialized": target.checked });
+  }
+
+  /** Skills & Powers proficiency options (weapon of choice, expertise, mastery, a style's improvement). */
+  static onToggleProfFlag(event, target) {
+    const field = target.dataset.field;
+    if (!["choice", "expertise", "mastery", "improved"].includes(field)) return;
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item?.update({ [`system.${field}`]: target.checked });
   }
 
   static onRollProficiency(event, target) {

@@ -115,7 +115,10 @@ export function thac0At(group, level) {
  */
 AD2E.proficiencySlots = PROFICIENCY_SLOTS;
 AD2E.proficiencyGroups = PROFICIENCY_GROUPS;
-AD2E.proficiencyKinds = { weapon: "AD2E.Prof.Weapon", nonweapon: "AD2E.Prof.Nonweapon" };
+AD2E.proficiencyKinds = { weapon: "AD2E.Prof.Weapon", nonweapon: "AD2E.Prof.Nonweapon", group: "AD2E.SP.Kind.group",
+  style: "AD2E.SP.Kind.style", armor: "AD2E.SP.Kind.armor", shield: "AD2E.SP.Kind.shield" };
+/** Proficiency kinds that use weapon proficiency slots (Skills & Powers kinds included). */
+AD2E.weaponSlotKinds = ["weapon", "group", "style", "armor", "shield"];
 AD2E.nonweaponGroups = { general: "AD2E.Prof.Group.general", priest: "AD2E.Group.priest", rogue: "AD2E.Group.rogue",
   warrior: "AD2E.Group.warrior", wizard: "AD2E.Group.wizard" };
 /** Default nonweapon groups per class group when no class item is present (Table 38 base classes). */

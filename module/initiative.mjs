@@ -11,6 +11,8 @@
  * attack if still in hand, else the fastest weapon in hand; a monster without weapons uses its natural attacks (size).
  */
 import { COMBAT_TABLES } from "./rules/combat-tables.mjs";
+import { needsTwoHands } from "./combat-options.mjs";
+import { SP } from "./sp-weapons.mjs";
 
 const T = COMBAT_TABLES.initiative;
 /** Added for a casting time of a round or more, so the spell comes after every other action of the round. */
@@ -28,6 +30,16 @@ export function weaponSpeed(item, use = null) {
   const bonuses = [b.hit, b.dmg].map(Number).filter(n => Number.isFinite(n) && n > 0);
   const magic = bonuses.length === 2 ? Math.min(...bonuses) : (bonuses[0] ?? 0);
   return Math.max(base - magic, 0);
+}
+
+/**
+ * Speed factor for a combatant: Skills & Powers two-handed weapon style "improves (lowers) the speed factor of a weapon
+ * by 3 - if that weapon is wielded with two hands" (a weapon too large for one hand, or a use labelled two-handed).
+ */
+export function actorWeaponSpeed(actor, item, use = null) {
+  const speed = weaponSpeed(item, use);
+  if (speed === null || actor?.type !== "character" || !actor.system?.proficiencies?.sp?.styles?.twoHanded) return speed;
+  return needsTwoHands(item.system.weapon, actor.system.sizeCategory ?? "M", use) ? Math.max(speed + SP.twoHanded.speed, 0) : speed;
 }
 
 /** Initiative modifier for a casting time: "3" -> 3; "1 rd.", "2 rounds", "1 turn" -> END_OF_ROUND. */
@@ -58,14 +70,14 @@ export function initiativeActions(actor) {
   const fmt = (k, d) => game.i18n.format(k, d);
   const out = [{ key: "none", label: i18n("AD2E.Init.Action.none"), value: 0 }];
   for (const w of readyWeapons(actor)) {
-    out.push({ key: `weapon.${w.id}`, label: fmt("AD2E.Init.Action.weapon", { name: w.name, n: weaponSpeed(w) }), value: weaponSpeed(w),
-      short: w.name });
+    out.push({ key: `weapon.${w.id}`, label: fmt("AD2E.Init.Action.weapon", { name: w.name, n: actorWeaponSpeed(actor, w) }),
+      value: actorWeaponSpeed(actor, w), short: w.name });
     // Uses with a speed of their own (bastard sword one- or two-handed).
     (w.system.weapon.damage ?? []).forEach((d, i) => {
       if (d.speed === null || d.speed === undefined || Number(d.speed) === Number(w.system.weapon.speed)) return;
       const name = `${w.name} (${d.label})`;
-      out.push({ key: `weapon.${w.id}.${i}`, label: fmt("AD2E.Init.Action.weapon", { name, n: weaponSpeed(w, d) }), value: weaponSpeed(w, d),
-        short: name });
+      out.push({ key: `weapon.${w.id}.${i}`, label: fmt("AD2E.Init.Action.weapon", { name, n: actorWeaponSpeed(actor, w, d) }),
+        value: actorWeaponSpeed(actor, w, d), short: name });
     });
   }
   const size = actor?.type === "monster" ? sizeModifier(actor.system.size) : null;

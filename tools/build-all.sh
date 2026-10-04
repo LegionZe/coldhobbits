@@ -15,6 +15,7 @@ python3 tools/build-armor-data.py        # armour, shields, helmets
 python3 tools/build-equipment-data.py    # coins (Table 42; reads build-movement-tables.py)
 python3 tools/build-component-data.py    # Spell Components (POSM Table 16); spells link them
 python3 tools/build-aq-equipment-data.py  # Al-Qadim Equipment (AA): price lists, new weapons, lamellar, daraq
+python3 tools/build-sp-weapon-data.py     # Skills & Powers weapon rules (POSP Tables 48-54); group/style/armour/shield proficiencies
 python3 tools/build-treasure-tables.py     # DMG Tables 85, 87, 88 (gem classes, art values, magical item categories)
 python3 tools/build-magic-item-data.py     # Magical Items (DMG Tables 89-104) and Gems (DMG) compendiums
 python3 tools/build-province-tables.py   # Al-Qadim wizard spell provinces (Wizard Spells by Province (AA))
