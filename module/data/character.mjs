@@ -1,6 +1,7 @@
 import { hpState } from "../health.mjs";
 import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
+import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -367,12 +368,16 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     let rule = "basic";
     try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
     const items = this.parent?.items ?? [];
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1)
-      * (i.type === "armor" ? armorWeightFactor(i.system, this.sizeCategory) : 1);
+    const weightOf = i => i.type === "coin" ? i.system.quantity / AD2E.coinsPerPound
+      : (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1)
+        * (i.type === "armor" ? armorWeightFactor(i.system, this.sizeCategory) : 1);
     // Equipment, magical items and treasure count while carried (animals, transport, services and lodging default to
-    // not carried).
-    const gear = items.filter(i => (["weapon", "ammunition", "armor"].includes(i.type) && !(i.type === "weapon" && i.system.dropped))
-      || (["equipment", "magic", "jewellery"].includes(i.type) && i.system.carried));
+    // not carried); a dropped weapon does not count. Items in a container follow the container, and add no weight
+    // inside a container whose contents add no weight (module/containers.mjs).
+    const carriedLoose = i => i.type === "weapon" ? !i.system.dropped
+      : (["equipment", "magic", "jewellery"].includes(i.type) ? i.system.carried : true);
+    const inv = inventory(items, { weightOf, carriedLoose });
+    const gear = items.filter(i => PHYSICAL_TYPES.includes(i.type) && i.type !== "coin" && inv.counts(i));
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);
@@ -381,7 +386,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
     const coinValue = coinItems.reduce((n, i) => n + i.system.quantity * i.system.value, 0)
       + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0) * AD2E.coinValues[c], 0);
-    const coinWeight = Math.round(coinCount / AD2E.coinsPerPound * 10) / 10;
+    // Coins that count toward the load (not those in a container left behind or one whose contents add no weight).
+    const coinsCarried = coinItems.filter(i => inv.counts(i)).reduce((n, i) => n + i.system.quantity, 0)
+      + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
+    const coinWeight = Math.round(coinsCarried / AD2E.coinsPerPound * 10) / 10;
     const total = Math.round((itemWeight + coinWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
     const effective = Math.round((total - magicArmor) * 10) / 10;
     const key = strengthKey(this.abilities.str.total, this.abilities.str.exceptional);
@@ -407,7 +415,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       else if (rate * 3 <= base) Object.assign(penalty, { hit: -2, ac: 1 });
       else if (rate * 2 <= base) Object.assign(penalty, { hit: -1, ac: 0 });
     }
-    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinWeight, coinValue, maxCarried: row47.maxCarried, limits: row47.limits,
+    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinsCarried, coinWeight, inventory: inv, coinValue, maxCarried: row47.maxCarried, limits: row47.limits,
       category: rule === "none" ? null : AD2E.encumbranceCategories[category], overMax, base, rate, penalty };
   }
 

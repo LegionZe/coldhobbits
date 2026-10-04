@@ -21,6 +21,7 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
       carried: new BooleanField({ initial: true }),
       capacity: new SchemaField({ weight: optional(), volume: new StringField({ initial: "" }) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional() }),
+      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })

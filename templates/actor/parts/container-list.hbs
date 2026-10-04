@@ -1,0 +1,29 @@
+{{!-- Containers (module/containers.mjs, module/sheets/containers-ui.mjs): each container with its load against its
+      Table 50 capacity and its contents. Drop an item row on a container block to put it in. --}}
+<fieldset class="ad2e-prof-list ad2e-containers">
+  <legend>{{localize "AD2E.Container.Containers"}}</legend>
+  <p class="ad2e-note">{{localize "AD2E.Container.Hint"}}</p>
+  {{#each containers as |c|}}
+  <div class="ad2e-container" data-container-id="{{c.id}}">
+    <div class="ad2e-prof-row ad2e-container-row draggable" data-item-id="{{c.id}}">
+      <img src="{{c.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if c.url}}<a class="ad2e-item-link" href="{{c.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
+        <span class="ad2e-weapon-meta">{{localize "AD2E.Container.Holds"}} {{c.load}}{{#if c.volume}} · {{c.volume}}{{/if}}{{#if c.weightless}} · {{localize "AD2E.Container.Weightless"}}{{/if}}{{#unless c.carried}} · {{localize "AD2E.Container.NotCarried"}}{{/unless}}{{#if c.inside}} · {{c.inside}}{{/if}}</span>
+        {{#if c.over}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Container.Over"}}</span>{{/if}}
+        {{#if c.clash}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Container.Clash"}}</span>{{/if}}
+      </div>
+    </div>
+    {{#each c.contents as |i|}}
+    <div class="ad2e-prof-row ad2e-content-row draggable" data-item-id="{{i.id}}">
+      <img src="{{i.img}}" alt="" width="20" height="20">
+      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{i.id}}">{{i.name}}</a></span>
+      <span class="ad2e-weapon-meta {{#if i.clash}}ad2e-unmet{{/if}}">{{#if i.quantity}}×{{i.quantity}} · {{/if}}{{i.weight}} lb</span>
+      {{#if @root.editable}}<a data-action="takeOut" data-item-id="{{i.id}}" data-tooltip="{{localize 'AD2E.Container.TakeOut'}}"><i class="fa-solid fa-right-from-bracket"></i></a>{{else}}<span></span>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder ad2e-content-empty">{{localize "AD2E.Container.Empty"}}</p>
+    {{/each}}
+  </div>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Container.NoneYet"}}</p>
+  {{/each}}
+</fieldset>

@@ -3,11 +3,11 @@
 <fieldset class="ad2e-prof-list">
   <legend>{{localize "AD2E.Weapon.Weapons"}} (THAC0 {{wt.thac0}})</legend>
   {{#each rows as |r|}}
-  <div class="ad2e-prof-row ad2e-weapon-row">
+  <div class="ad2e-prof-row ad2e-weapon-row draggable" data-item-id="{{r.id}}">
     <img src="{{r.img}}" alt="" width="24" height="24">
     <div class="ad2e-weapon-main">
       <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.bonus}} {{r.bonus}}{{/if}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if r.url}}<a class="ad2e-item-link" href="{{r.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
-      <span class="ad2e-weapon-meta">{{r.meta}}</span>
+      <span class="ad2e-weapon-meta">{{r.meta}}{{#if r.inside}} · {{r.inside}}{{/if}}</span>
       {{#if r.launcher}}<span class="ad2e-weapon-meta {{#unless r.ammo}}ad2e-unmet{{/unless}}">{{localize "AD2E.Ammo.Ammunition"}}: {{#if r.ammo}}{{r.ammo}}{{else}}{{localize "AD2E.Ammo.NoneOwned"}}{{/if}}</span>{{/if}}
     </div>
     {{#if r.profId}}<a class="ad2e-weapon-status" data-action="openItem" data-item-id="{{r.profId}}">{{r.status}}</a>

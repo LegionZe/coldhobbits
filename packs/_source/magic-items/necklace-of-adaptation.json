@@ -11,6 +11,12 @@
     "weight": null,
     "carried": true,
     "equipped": false,
+    "capacity": {
+      "weight": null,
+      "volume": "",
+      "weightless": false
+    },
+    "container": "",
     "charges": {
       "value": 0,
       "max": null,

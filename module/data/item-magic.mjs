@@ -1,4 +1,5 @@
 import { AD2E } from "../config.mjs";
+import { containerPreUpdate } from "../containers.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -21,6 +22,9 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
       weight: optional(),
       carried: new BooleanField({ initial: true }),
       equipped: new BooleanField({ initial: false }),
+      // container (module/containers.mjs): stowage capacity; `weightless` = its contents add no weight (Bag of Holding,
+      // Portable Hole)
+      capacity: new SchemaField({ weight: optional(), volume: new StringField({ initial: "" }), weightless: new BooleanField({ initial: false }) }),
       charges: new SchemaField({
         value: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         max: optional(true),
@@ -30,9 +34,16 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
       identified: new BooleanField({ initial: true }),
       xpValue: optional(true),
       gpValue: optional(true),
+      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
+  }
+
+  /** Equipping takes the item out of its container; putting it into one stops using it (module/containers.mjs). */
+  async _preUpdate(changes, options, user) {
+    if ((await super._preUpdate(changes, options, user)) === false) return false;
+    containerPreUpdate(changes, "magic", this);
   }
 
   /** Spent on use: a charge if the item has charges, otherwise one from the quantity for consumable categories. */

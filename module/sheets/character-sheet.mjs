@@ -5,6 +5,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
+import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -184,7 +185,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       learnSpell: CharacterSheet.onLearnSpell,
       removeHenchman: CharacterSheet.onRemoveHenchman,
       henchmanMorale: CharacterSheet.onHenchmanMorale,
-      awardXp: CharacterSheet.onAwardXp
+      awardXp: CharacterSheet.onAwardXp,
+      takeOut: CharacterSheet.onTakeOut
     }
   };
 
@@ -214,6 +216,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** Coin quantity inputs edit the coin item (they have no form name, so the actor form ignores them). */
   _onRender(context, options) {
     super._onRender?.(context, options);
+    guardDraggableInputs(this.element);
     for (const input of this.element?.querySelectorAll?.("input[data-coin-quantity]") ?? []) {
       input.addEventListener("change", event => {
         const coin = this.actor.items.get(event.currentTarget.dataset.itemId);
@@ -456,7 +459,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** Display data for the Weapons tab: owned weapon items and their proficiency status. */
   _weaponTabContext(sys) {
     const actor = this.document;
+    const inv = sys.encumbrance.info?.inventory;
     const rows = sys.weapons.map(e => ({
+      inside: insideText(inv, e.item),
       id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
       equipped: !!e.item.system.equipped, dropped: !!e.item.system.dropped,
       status: e.proficient
@@ -470,7 +475,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const weaponNames = new Map(sys.weapons.map(e => [e.item.system.identifier, e.item.name]));
     const label = id => weaponNames.get(id) ?? id.replace(/-/g, " ");
     const ammo = (actor.items?.filter(i => i.type === "ammunition") ?? []).map(a => ({
-      id: a.id, name: a.name, img: a.img, url: a.system.url, quantity: a.system.quantity, empty: a.system.quantity < 1,
+      id: a.id, name: a.name, img: a.img, url: a.system.url, quantity: a.system.quantity, empty: a.system.quantity < 1, inside: insideText(inv, a),
       launchers: [...a.system.launchers].map(label).join(", "),
       damage: `${a.system.damage.sm ?? "—"} / ${a.system.damage.l ?? "—"}`,
       bonus: magicBonus(a.system.bonus)
@@ -478,6 +483,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const a = sys.armor;
     const armor = (actor.items?.filter(i => i.type === "armor") ?? []).map(i => ({
       id: i.id, name: i.name, img: i.img, url: i.system.url, kind: i.system.kind, equipped: i.system.equipped, summary: armorSummary(i.system),
+      inside: insideText(inv, i),
       meta: [i.system.cost, i.system.weight !== null ? `${i.system.weight} lb` : null].filter(Boolean).join(" · "),
       // an equipped item that does not count (a second body armour or shield) is marked
       unused: i.system.equipped && ((i.system.kind === "body" && a.body && a.body.id !== i.id)
@@ -508,7 +514,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const order = [...AD2E.coins, "other"];
     const coins = {
       list: (actor.items?.filter(i => i.type === "coin") ?? []).map(i => ({
-        id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, denomination: i.system.denomination,
+        id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, denomination: i.system.denomination, inside: insideText(inv, i),
         value: Math.round(i.system.quantity * i.system.value / AD2E.coinValues.gp * 100) / 100
       })).sort((x, y) => order.indexOf(x.denomination) - order.indexOf(y.denomination) || x.name.localeCompare(y.name)),
       gp: Math.round(e.coinValue / AD2E.coinValues.gp * 100) / 100, count: e.coinCount, weight: e.coinWeight
@@ -519,7 +525,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       key, label: i18n(label),
       rows: gearItems.filter(i => i.system.category === key).map(i => ({
         id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
-        summary: equipmentSummary(i.system),
+        summary: equipmentSummary(i.system), inside: insideText(inv, i), contained: inContainer(inv, i),
         total: i.system.weight && i.system.quantity > 1 ? Math.round(i.system.weight * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
     })).filter(g => g.rows.length);
@@ -527,11 +533,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const catOrder = Object.keys(AD2E.magicCategories);
     const magic = (actor.items?.filter(i => i.type === "magic") ?? []).map(i => ({
       id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried, summary: magicSummary(i),
+      inside: insideText(inv, i), contained: inContainer(inv, i),
       category: i.system.category, usable: i.system.usesCharges ? i.system.charges.value > 0 : (!i.system.consumable || i.system.quantity > 0)
     })).sort((x, y) => catOrder.indexOf(x.category) - catOrder.indexOf(y.category) || x.name.localeCompare(y.name));
     const jewelleryItems = actor.items?.filter(i => i.type === "jewellery") ?? [];
     const treasure = {
       list: jewelleryItems.map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
+        inside: insideText(inv, i), contained: inContainer(inv, i),
         summary: jewellerySummary(i), total: i.system.totalValue })).sort((x, y) => x.name.localeCompare(y.name)),
       gp: Math.round(jewelleryItems.reduce((n, i) => n + (i.system.totalValue ?? 0), 0) * 100) / 100
     };
@@ -547,7 +555,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const combatRows = rows.filter(r => r.equipped && !r.dropped).map(r => ({ ...r, combat: true }));
     const combatNote = game.i18n.localize(rows.length ? "AD2E.Weapon.EquipHint" : "AD2E.Weapon.NoneYet");
     const combatArmor = armor.filter(x => x.equipped).map(x => ({ ...x, combat: true }));
-    return { rows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value };
+    return { rows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value,
+      containers: containerContext(inv) };
   }
 
   /** Display data for the Proficiencies tab. */
@@ -576,12 +585,24 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     };
   }
 
+  /** An item dropped on a container goes into it (module/sheets/containers-ui.mjs); otherwise _dropItemDefault. */
+  async _onDropItem(event, item) {
+    const onContainer = await dropOnContainer(this, event, item, () => this._dropItemDefault(event, item));
+    return onContainer === undefined ? this._dropItemDefault(event, item) : onContainer;
+  }
+
+  /** Item rows (`draggable`, `data-item-id`) drag the owned item (module/sheets/containers-ui.mjs). */
+  async _onDragStart(event) {
+    if (dragItemRow(this, event)) return;
+    return super._onDragStart(event);
+  }
+
   /**
    * Race, class and kit items: one of each per character. A race or class is refused if the
    * race does not allow the class. A dropped class replaces the current class (and drops a kit
    * that does not fit it); a kit must be open to the current class.
    */
-  async _onDropItem(event, item) {
+  async _dropItemDefault(event, item) {
     if (this.actor.isOwner && item.type === "proficiency" && item.parent !== this.actor) {
       const dupe = this.actor.items.find(i => i.type === "proficiency" && i.system.identifier === item.system.identifier
         && i.system.kind === item.system.kind);
@@ -818,6 +839,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onLayOnHands() {
     return this.actor.layOnHands();
+  }
+
+  /** Containers: take an item out (it is then carried loose). */
+  static onTakeOut(event, target) {
+    return this.actor.items.get(target.dataset.itemId)?.update({ "system.container": "" });
   }
 
   /** Carried equipment counts toward encumbrance. */

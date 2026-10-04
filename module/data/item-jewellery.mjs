@@ -20,6 +20,7 @@ export default class JewelleryData extends foundry.abstract.TypeDataModel {
       quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, nullable: false }),
       weight: new NumberField({ min: 0, nullable: true, initial: null }),
       carried: new BooleanField({ initial: true }),
+      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };

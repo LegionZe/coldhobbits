@@ -1322,5 +1322,25 @@
     "HeatSettingHint": "Armor in Fiery Zakhara (Arabian Adventures): armour better than AC 7 gives -1 per class to attack rolls and to proficiency and ability checks (only the armour's own rating; magical bonuses, daraqs and bucklers do not count).",
     "HeatNote": "heat {n}",
     "Heat": "Heat (armour)"
+  },
+  "AD2E.Container": {
+    "Containers": "Containers",
+    "Hint": "Drag an item row onto a container to put it in, or choose the container on the item's sheet. Contents count toward the load while the container is carried (PHB Table 50 gives each container's capacity).",
+    "NoneYet": "No containers. Backpacks, sacks, pouches, baskets, chests and saddle bags (PHB Table 50) hold gear.",
+    "Empty": "Empty.",
+    "Holds": "Contents",
+    "In": "in {name}",
+    "InContainer": "In container",
+    "None": "— (not in a container)",
+    "TakeOut": "Take out of the container",
+    "Over": "Over capacity",
+    "NotCarried": "not carried: contents do not count",
+    "Weightless": "Contents add no weight",
+    "WeightlessHint": "The container's contents do not add to the weight carried (Bag of Holding, Portable Hole).",
+    "CarriedHint": "In a container: carried while the container is carried.",
+    "CannotHold": "{name} cannot go into that container (it would be inside itself).",
+    "Clash": "A bag of holding and a portable hole inside one another: see Portable Hole (Magic Container).",
+    "Capacity": "Container: holds (lb)",
+    "Volume": "Container: volume"
   }
 }

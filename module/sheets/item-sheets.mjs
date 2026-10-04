@@ -1,4 +1,5 @@
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
+import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -22,6 +23,13 @@ class AD2EItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.minimums = system.min ? AD2E.abilities.map(key => ({
       key, label: game.i18n.localize(`AD2E.Ability.${key}`), value: system.min[key] ?? ""
     })) : [];
+    // Container (module/containers.mjs): an owned physical item can be put into one of its actor's containers.
+    const actor = this.document.parent;
+    if (actor?.items && PHYSICAL_TYPES.includes(this.document.type)) {
+      context.containerOptions = [{ id: "", name: game.i18n.localize("AD2E.Container.None"), selected: !system.container },
+        ...containerChoices(this.document, actor.items).map(c => ({ ...c, selected: c.id === system.container }))];
+      if (context.containerOptions.length < 2) context.containerOptions = null;
+    }
     return context;
   }
 }
