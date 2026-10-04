@@ -1,3 +1,4 @@
+import { rollEncounterReaction } from "../reaction.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
@@ -34,7 +35,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       hpHeal: MonsterSheet.onHpHeal,
       recoverTemp: MonsterSheet.onRecoverTemp,
       rollSurprise: MonsterSheet.onRollSurprise,
-      rollUnarmed: MonsterSheet.onRollUnarmed
+      rollUnarmed: MonsterSheet.onRollUnarmed,
+      rollReaction: MonsterSheet.onRollReaction
     }
   };
 
@@ -149,6 +151,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRecoverTemp() { return this.actor.recoverTemporary(); }
 
   static onRollSurprise() { return this.actor.rollSurprise(); }
+  static onRollReaction() { return rollEncounterReaction(this.actor); }
 
   static onUseMagicItem(event, target) {
     return this.actor.useMagicItem(target.dataset.itemId);

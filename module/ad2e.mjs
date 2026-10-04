@@ -1,3 +1,4 @@
+import { rollEncounterReaction } from "./reaction.mjs";
 import { AD2E } from "./config.mjs";
 import CharacterData from "./data/character.mjs";
 import MonsterData from "./data/monster.mjs";
@@ -50,7 +51,8 @@ Hooks.once("init", () => {
   game.ad2e = {
     importMonsters: () => new MonsterImporter().render({ force: true }),
     importSpells: () => new SpellImporter().render({ force: true }),
-    awardExperience: () => new AwardXp().render({ force: true })
+    awardExperience: () => new AwardXp().render({ force: true }),
+    rollReaction: creature => rollEncounterReaction(creature)
   };
 
   game.settings.register("ad2e", "encumbrance", {
