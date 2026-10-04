@@ -298,7 +298,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.combatFeatureTab = { ...context.featureTab, combat: true };
     context.movement = this._movementContext(sys);
     const enc = sys.encumbrance.info;
-    context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`;
+    context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`
+      + (context.movement.mounted ? ` · ${game.i18n.format("AD2E.Move.MountedShort", { rate: context.movement.mounted.rate })}` : "");
     context.weaponTab = this._weaponTabContext(sys);
     const st = sys.hpState ?? {};
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
@@ -381,8 +382,27 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       jogHint: fmt("AD2E.Move.JogHint", { rounds: sys.abilities.con.total }),
       canJump,
       jump: { runningBroad: `2d6+${sys.level}`, runningHigh: `1d3+${half}`, standingBroad: `1d6+${half}`, standingHigh: "3" },
-      jumpHint: game.i18n.localize(canJump ? "AD2E.Move.JumpHint" : "AD2E.Move.NoJump")
+      jumpHint: game.i18n.localize(canJump ? "AD2E.Move.JumpHint" : "AD2E.Move.NoJump"),
+      mounted: this._mountedContext()
     };
+  }
+
+  /**
+   * Riding (module/animals.mjs): the mount's movement with this rider's weight in its load; rounds as on foot (tens of
+   * yards outdoors) and overland "a number of miles per day equal to their movement rate", pushed to double (Movement
+   * (DMG), Mounted Overland Movement).
+   */
+  _mountedContext() {
+    try {
+      const row = animalsInfo(this.document).rows.find(r => r.riding && !r.missing);
+      if (!row) return null;
+      return { name: row.name, rate: row.rate, round: row.rate * 10, day: row.rate, pushed: row.rate * 2,
+        band: row.band ? game.i18n.localize(`AD2E.Monster.Load.${row.band}`) : "", over: row.band === "over",
+        hint: game.i18n.format("AD2E.Move.MountedHint", { name: row.name, weight: row.weight, full: row.full ?? "—" }) };
+    } catch (err) {
+      console.error("ad2e | mounted movement", err);
+      return null;
+    }
   }
 
   /** Display data for the Class Abilities tab: skills table, class ability buttons, class features, kit. */
