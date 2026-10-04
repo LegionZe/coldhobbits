@@ -1,0 +1,35 @@
+{
+  "_id": "y2o5Wi7vBpCxHWAP",
+  "_key": "!items!y2o5Wi7vBpCxHWAP",
+  "name": "Weapon group: Firearms: Snaplocks and Flintlocks (tight)",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "group-firearms-snaplocks-and-flintlocks",
+    "kind": "group",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Group_Proficiencies_(POSP)",
+    "notes": "",
+    "spGroup": "firearms.snaplocks-and-flintlocks",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "qXNe0tw0o57H94nq",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

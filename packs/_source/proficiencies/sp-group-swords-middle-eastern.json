@@ -1,0 +1,35 @@
+{
+  "_id": "hl0aawz6IFnCccSi",
+  "_key": "!items!hl0aawz6IFnCccSi",
+  "name": "Weapon group: Swords: Middle Eastern (tight)",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "group-swords-middle-eastern",
+    "kind": "group",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Group_Proficiencies_(POSP)",
+    "notes": "",
+    "spGroup": "swords.middle-eastern",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "qXNe0tw0o57H94nq",
+  "sort": 3300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

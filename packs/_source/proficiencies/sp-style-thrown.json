@@ -1,0 +1,35 @@
+{
+  "_id": "IfaCIYwE4WbgOqiO",
+  "_key": "!items!IfaCIYwE4WbgOqiO",
+  "name": "Fighting style: Thrown Weapon/Sling",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "style-thrown",
+    "kind": "style",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Fighting_Style_Specialization_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "thrown",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "8Co6jyXTh1rM7IlZ",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

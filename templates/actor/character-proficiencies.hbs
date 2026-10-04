@@ -4,7 +4,7 @@
   <div class="ad2e-prof-summary">
     <span class="{{#if pt.weapon.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Prof.WeaponSlots"}}: <strong>{{pt.weapon.used}} / {{pt.weapon.available}}</strong></span>
     <span class="{{#if pt.nonweapon.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Prof.NonweaponSlots"}}: <strong>{{pt.nonweapon.used}} / {{pt.nonweapon.available}}</strong></span>
-    <span>{{localize "AD2E.Prof.Penalty"}}: <strong>{{pt.penalty}}</strong></span>
+    <span>{{localize "AD2E.Prof.Penalty"}}: <strong>{{#if pt.sp}}{{pt.spPenalty}}{{else}}{{pt.penalty}}{{/if}}</strong></span>
     <span>{{localize "AD2E.Prof.Groups"}}: {{pt.groups}}</span>
   </div>
   {{#if pt.specRule}}<p class="ad2e-note">{{localize "AD2E.Prof.KitSpecialization"}}: {{pt.specRule}}</p>{{/if}}
@@ -18,11 +18,23 @@
       <img src="{{r.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
         <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
-        <span class="ad2e-weapon-meta">{{r.meta}}</span>
+        <span class="ad2e-weapon-meta">{{r.meta}}{{#if r.covered}} · {{localize "AD2E.SP.Covered"}}{{/if}}</span>
+        {{#if r.invalidText}}<span class="ad2e-unmet">{{r.invalidText}}</span>{{/if}}
       </div>
       <label class="ad2e-spec {{#if r.specInvalid}}ad2e-unmet{{/if}}" data-tooltip="{{#if r.specInvalid}}{{localize 'AD2E.Weapon.SpecInvalid'}}{{else}}{{localize 'AD2E.Weapon.Specialize'}}{{/if}}">
         <input type="checkbox" data-action="toggleSpecialized" data-item-id="{{r.id}}" {{checked r.specialized}} {{#unless @root.editable}}disabled{{/unless}}>
         {{localize "AD2E.Weapon.Specialized"}}</label>
+      {{#if pt.sp}}
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.SP.ChoiceHint'}}">
+        <input type="checkbox" data-action="toggleProfFlag" data-field="choice" data-item-id="{{r.id}}" {{checked r.choice}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.SP.Choice"}}</label>
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.SP.ExpertiseHint'}}">
+        <input type="checkbox" data-action="toggleProfFlag" data-field="expertise" data-item-id="{{r.id}}" {{checked r.expertise}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.SP.Expertise"}}</label>
+      <label class="ad2e-spec {{#if r.masteryInvalid}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.SP.MasteryHint'}}">
+        <input type="checkbox" data-action="toggleProfFlag" data-field="mastery" data-item-id="{{r.id}}" {{checked r.mastery}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.SP.Mastery"}}</label>
+      {{/if}}
       <div class="ad2e-weapon-uses">
         {{#each r.uses as |u|}}
         <span class="ad2e-weapon-use">
@@ -34,12 +46,36 @@
         {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Weapon.NoWeaponData"}}</span>
         {{/each}}
       </div>
-      <span class="ad2e-prof-cost" data-tooltip="{{localize 'AD2E.Prof.SlotsUsed'}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{#if r.cost}} +{{r.cost}}{{/if}}{{else}}{{r.cost}}{{/if}}</span>
+      <span class="ad2e-prof-cost" data-tooltip="{{r.costHint}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{#if r.cost}} +{{r.cost}}{{/if}}{{else}}{{r.cost}}{{/if}}</span>
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Prof.NoneYet"}}</p>
     {{/each}}
   </fieldset>
+
+  {{#if pt.spRows.length}}
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.SP.Legend"}}</legend>
+    {{#unless pt.sp}}<p class="ad2e-unmet">{{localize "AD2E.SP.Off"}}</p>{{/unless}}
+    {{#each pt.spRows as |r|}}
+    <div class="ad2e-prof-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+        <span class="ad2e-weapon-meta">{{r.kind}} · {{r.effect}}</span>
+        {{#if r.invalidText}}<span class="ad2e-unmet">{{r.invalidText}}</span>{{/if}}
+      </div>
+      {{#if r.improvable}}
+      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.SP.ImprovedHint'}}">
+        <input type="checkbox" data-action="toggleProfFlag" data-field="improved" data-item-id="{{r.id}}" {{checked r.improved}} {{#unless @root.editable}}disabled{{/unless}}>
+        {{localize "AD2E.SP.Improved"}}</label>
+      {{/if}}
+      <span class="ad2e-prof-cost" data-tooltip="{{r.costHint}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{else}}{{r.cost}}{{/if}}</span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{/each}}
+  </fieldset>
+  {{/if}}
 
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Prof.Nonweapon"}}</legend>

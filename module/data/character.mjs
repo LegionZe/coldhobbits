@@ -2,6 +2,7 @@ import { hpState } from "../health.mjs";
 import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
+import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } from "../sp-weapons.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -228,6 +229,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     this.proficiencies = this.#computeProficiencies();
     this.weapons = this.#computeWeapons();
+    this.#applyStyleAc();
     this.spells = this.#computeSpells();
     this.classAbilities.info = this.#computeClassAbilities();
 
@@ -392,6 +394,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const itemWeight = gear.reduce((n, i) => n + weightOf(i), 0);
     const magicArmor = gear.filter(i => i.type === "armor" && i.system.equipped && i.system.bonus > 0)
       .reduce((n, i) => n + weightOf(i), 0);
+    // Skills & Powers armour proficiency: worn armour of that type counts half toward the load ("the armor retains its
+    // full weight for all other purposes", Armor Proficiency (POSP)): `total` keeps the full weight.
+    const armorProfs = spWeaponsOn() ? new Set(items.filter(i => i.type === "proficiency" && i.system.kind === "armor" && i.system.armorType)
+      .map(i => i.system.armorType)) : new Set();
+    const armorRelief = gear.filter(i => i.type === "armor" && i.system.equipped && !(i.system.bonus > 0) && armorProfs.has(i.system.identifier))
+      .reduce((n, i) => n + weightOf(i) * (1 - SP.armor.factor), 0);
     const coinItems = items.filter(i => i.type === "coin");
     const coinCount = coinItems.reduce((n, i) => n + i.system.quantity, 0)
       + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
@@ -402,7 +410,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       + AD2E.coins.reduce((n, c) => n + (this.currency?.[c] ?? 0), 0);
     const coinWeight = Math.round(coinsCarried / AD2E.coinsPerPound * 10) / 10;
     const total = Math.round((itemWeight + coinWeight + this.encumbrance.other + AD2E.clothingWeight) * 10) / 10;
-    const effective = Math.round((total - magicArmor) * 10) / 10;
+    const effective = Math.round((total - magicArmor - armorRelief) * 10) / 10;
     const key = strengthKey(this.abilities.str.total, this.abilities.str.exceptional);
     const row47 = lookup(AD2E.encumbranceTable, key);
     const row48 = lookup(AD2E.movementTable.rows, key);
@@ -426,7 +434,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       else if (rate * 3 <= base) Object.assign(penalty, { hit: -2, ac: 1 });
       else if (rate * 2 <= base) Object.assign(penalty, { hit: -1, ac: 0 });
     }
-    return { rule, total, effective, magicArmor, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinsCarried, coinWeight, inventory: inv, coinValue, maxCarried: row47.maxCarried, limits: row47.limits,
+    return { rule, total, effective, magicArmor, armorRelief: Math.round(armorRelief * 10) / 10, itemWeight: Math.round(itemWeight * 10) / 10, coinCount, coinsCarried, coinWeight, inventory: inv, coinValue, maxCarried: row47.maxCarried, limits: row47.limits,
       category: rule === "none" ? null : AD2E.encumbranceCategories[category], overMax, base, rate, penalty };
   }
 
@@ -435,6 +443,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * bonus slots; nonweapon slots also add the Intelligence "number of languages" (Table 4). Owned
    * proficiency items use slots unless granted by a kit (`grantedBy`); a nonweapon proficiency from a
    * group outside the class's Table 38 groups costs one additional slot.
+   * Skills & Powers (world setting "spWeapons"): costs, validity and the group, style, armour and shield kinds come from
+   * module/sp-weapons.mjs `spCost`; `sp` holds what the valid purchases give (known weapons and groups, Table 50
+   * penalties, styles, armour types, shield types). Without the setting those kinds cost nothing and do nothing.
    */
   #computeProficiencies() {
     const rules = AD2E.proficiencySlots[this.classGroup];
@@ -446,18 +457,52 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // the kit's class, "forbidden" closes it; `free` weapons are specialized at no slot cost even for other classes.
     const kitSpec = kit?.specialization ?? { mode: "", free: [] };
     const free = new Set(kitSpec.free ?? []);
+    // Skills & Powers weapon rules (world setting, module/sp-weapons.mjs): every class may specialize (Table 53).
+    const sp = spWeaponsOn();
     const canSpecialize = kitSpec.mode === "forbidden" ? false
-      : AD2E.specialization.classes.includes(classId) || ["allowed", "required"].includes(kitSpec.mode);
+      : sp || AD2E.specialization.classes.includes(classId) || ["allowed", "required"].includes(kitSpec.mode);
     const specializedCount = items.filter(i => i.system.kind === "weapon" && i.system.specialized && !free.has(i.system.identifier)).length;
+    // Skills & Powers: valid group proficiencies (warriors only) make their weapons proficient (no slot for the weapon).
+    const groupKeys = sp && this.classGroup === "warrior"
+      ? items.filter(i => i.system.kind === "group" && SP.groups[i.system.spGroup]).map(i => i.system.spGroup) : [];
+    const covered = id => groupKeys.some(k => SP.groups[k].ids.includes(id));
+    const styleItems = items.filter(i => i.system.kind === "style").sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0) || String(a.id).localeCompare(String(b.id)));
+    const shieldAllowed = AD2E.classTables?.classArmor?.[classId]?.shield !== "none";
     const entries = items.map(item => {
       const p = item.system;
       const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
-      // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
       const isFree = p.kind === "weapon" && free.has(p.identifier);
-      const specCost = (p.kind === "weapon" && p.specialized && !isFree) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
-      const cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
       const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) + this.kitMods.total("proficiency", p.identifier) : null;
-      const entry = { item, cost, crossGroup, target };
+      const entry = { item, cost: 0, crossGroup, target, invalid: [], parts: [], spOff: false };
+      if (sp && p.kind !== "nonweapon") {
+        const res = spCost(p, { group: this.classGroup, classId, level: this.level, covered: p.kind === "weapon" && covered(p.identifier),
+          free: isFree, forbidden: kitSpec.mode === "forbidden", extraSpec: p.specialized && !isFree && specializedCount > 1,
+          styleIndex: styleItems.indexOf(item), shieldAllowed });
+        Object.assign(entry, { cost: res.slots, invalid: res.invalid, parts: res.parts });
+        if (p.kind === "weapon") {
+          entry.covered = covered(p.identifier);
+          entry.specialized = p.specialized || isFree;
+          entry.specFree = isFree;
+          entry.specValid = res.specValid;
+          entry.specInvalid = p.specialized && !isFree && !res.specValid;
+          entry.mastery = res.masteryValid;
+          entry.masteryValid = res.masteryValid;
+          entry.masteryInvalid = !!p.mastery && !res.masteryValid;
+          entry.choice = !!p.choice;
+          entry.expertise = !!p.expertise;
+          entry.attack = this.#weaponAttack(p.weapon, { specialized: res.specValid, expertise: entry.expertise,
+            mastery: res.masteryValid, choice: entry.choice, sp: true });
+        }
+        return entry;
+      }
+      if (!["weapon", "nonweapon"].includes(p.kind)) {
+        // Skills & Powers kinds without the world setting: no cost, no effect.
+        entry.spOff = true;
+        return entry;
+      }
+      // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
+      const specCost = (p.kind === "weapon" && p.specialized && !isFree) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
+      entry.cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
       if (p.kind === "weapon") {
         // A kit's free specialization applies on its own (no tick box needed).
         entry.specialized = p.specialized || isFree;
@@ -470,21 +515,39 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }
       return entry;
     });
-    const used = kind => entries.filter(e => e.item.system.kind === kind).reduce((n, e) => n + e.cost, 0);
+    const weaponKinds = AD2E.weaponSlotKinds;
+    const used = kinds => entries.filter(e => kinds.includes(e.item.system.kind)).reduce((n, e) => n + e.cost, 0);
     const available = {
       weapon: rules.weaponInitial + Math.floor(this.level / rules.weaponRate) + (kit?.bonusSlots.weapon ?? 0),
       nonweapon: rules.nonweaponInitial + Math.floor(this.level / rules.nonweaponRate)
         + (this.abilityData.int.languages ?? 0) + (kit?.bonusSlots.nonweapon ?? 0)
     };
+    // Skills & Powers effects of the valid purchases.
+    const valid = kind => sp ? entries.filter(e => e.item.system.kind === kind && !e.invalid.length) : [];
+    const styles = new Map(valid("style").map(e => [e.item.system.style, e.item.system]));
+    const spInfo = sp ? {
+      known: { weapons: entries.filter(e => e.item.system.kind === "weapon").map(e => e.item.system.identifier), groups: groupKeys },
+      penalty: nonproficiency(this.classGroup),
+      styles: {
+        oneHanded: styles.has("one-handed"), oneHandedImproved: !!styles.get("one-handed")?.improved,
+        weaponShield: styles.has("weapon-shield"), twoHanded: styles.has("two-handed"),
+        twoWeapon: styles.has("two-weapon"), twoWeaponImproved: !!styles.get("two-weapon")?.improved,
+        missile: styles.has("missile"), horseArchery: styles.has("horse-archery"), thrown: styles.has("thrown"),
+        special: styles.has("special")
+      },
+      armor: valid("armor").map(e => e.item.system.armorType),
+      shields: valid("shield").map(e => e.item.system.shieldType)
+    } : null;
     return {
       groups,
       canSpecialize,
+      sp: spInfo,
       specRule: { mode: kitSpec.mode ?? "", free: [...free],
         missing: kitSpec.mode === "required" && specializedCount === 0 },
-      penalty: rules.penalty,
+      penalty: sp ? spInfo.penalty.nonproficient : rules.penalty,
       entries,
-      weapon: { available: available.weapon, used: used("weapon") },
-      nonweapon: { available: available.nonweapon, used: used("nonweapon") }
+      weapon: { available: available.weapon, used: used(weaponKinds) },
+      nonweapon: { available: available.nonweapon, used: used(["nonweapon"]) }
     };
   }
 
@@ -495,8 +558,17 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * crossbows: none); rate of fire from Table 45, or Table 35 for non-bow specialists (bow specialists gain no
    * extra attacks); bow/crossbow specialists gain the point-blank range (+2 to hit); a thrown melee weapon keeps
    * the specialization +1 hit / +2 damage. Damage never below 1.
+   * `skill`: true/false (specialized), or Skills & Powers { specialized, expertise, mastery, choice, sp }: weapon of
+   * choice +1 hit; expertise: the specialist attacks per round; mastery: melee +3 hit / +3 damage, missile +2 hit (and
+   * at point blank +3 hit / +3 damage); missile specialization +1 hit at all ranges and +2 damage at point blank
+   * (Weapon Specialization and Mastery (POSP)).
    */
-  #weaponAttack(w, specialized, extra = { hit: 0, dmg: 0 }) {
+  #weaponAttack(w, skill, extra = { hit: 0, dmg: 0 }) {
+    const s = typeof skill === "object" && skill ? skill : { specialized: !!skill };
+    const specialized = !!s.specialized;
+    const extraAttacks = specialized || !!s.expertise;
+    const mastery = !!(s.sp && s.mastery && specialized);
+    const choiceHit = s.sp && s.choice ? SP.choiceHit : 0;
     const { dmg, missile: dexMissile, encumbranceHit } = this.mods;
     // Encumbrance attack penalty (Encumbrance (PHB)) applies to every attack roll.
     const kitHit = this.kitMods?.total("attack") ?? 0;
@@ -507,11 +579,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
     if (w.melee) {
-      const table = specialized ? AD2E.specialistAttacks.melee
+      const table = extraAttacks ? AD2E.specialistAttacks.melee
         : (this.classGroup === "warrior" ? AD2E.warriorAttacks : null);
       out.melee = {
-        hit: hit + (specialized ? spec.meleeHit : 0) + extra.hit,
-        dmg: dmg + kitDmg + (specialized ? spec.meleeDamage : 0) + extra.dmg,
+        hit: hit + (mastery ? SP.masteryBonus.meleeHit : (specialized ? spec.meleeHit : 0)) + choiceHit + extra.hit,
+        dmg: dmg + kitDmg + (mastery ? SP.masteryBonus.meleeDamage : (specialized ? spec.meleeDamage : 0)) + extra.dmg,
         rate: table ? formatRate(attackRate(table, this.level)) : "1",
         rateRaw: table ? attackRate(table, this.level) : [1, 1]
       };
@@ -535,16 +607,22 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         const exceptionalUser = a.total > 18 || (a.total === 18 && a.exceptional > 0);
         if (exceptionalBow && !exceptionalUser) bowNote = this.abilityData.str.bendBars ?? 0;
       }
-      const column = specialized && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
+      const column = extraAttacks && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
       // A thrown melee weapon keeps the melee specialization bonus: "+1 bonus to all his attack rolls with that
       // weapon and a +2 bonus to all damage rolls" (Weapon Specialization (PHB) rev 158222); "When using his
       // special weapon, the character gets a +1 to attack rolls and +2 to damage" (Weapon Proficiency Slots (CFH)).
       const thrownSpec = specialized && w.melee;
+      // Skills & Powers: "+1 attack bonus at all range categories"; mastery "+2 at all ranges beyond point blank".
+      const specHit = mastery ? SP.masteryBonus.missileHit : (thrownSpec ? spec.meleeHit : (s.sp && specialized ? SP.missileSpec.hit : 0));
+      const pointBlank = specialized && w.family !== "other";
       out.missile = {
-        hit: missile + strHit + (thrownSpec ? spec.meleeHit : 0) + extra.hit,
+        hit: missile + strHit + specHit + choiceHit + extra.hit,
         dmg: strDmg + kitDmg + (thrownSpec ? spec.meleeDamage : 0) + extra.dmg,
         rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
-        pointBlank: specialized && w.family !== "other",
+        pointBlank,
+        // Point blank extras (Skills & Powers): specialists +2 damage; masters +3 hit / +3 damage in place of the +2.
+        pointBlankHit: pointBlank && mastery ? SP.masteryBonus.pointBlankHit - SP.masteryBonus.missileHit : 0,
+        pointBlankDmg: pointBlank && s.sp ? (mastery ? SP.masteryBonus.pointBlankDamage : SP.missileSpec.pointBlankDamage) : 0,
         bowStrength: bowRow ? extra.bowStrength : "",
         bowBendBars: bowNote,
         range: w.range
@@ -567,18 +645,44 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const oneHanded = i => !!i.system.weapon?.melee && !needsTwoHands(i.system.weapon, size);
     // Two weapons in hand (warriors and rogues): one more attack per round with the second weapon.
     const inHand = items.filter(i => i.system.equipped && !i.system.dropped && oneHanded(i));
-    const twoReady = canFightTwoWeapons(this.classGroup) && inHand.length >= 2;
+    // Skills & Powers: the two weapon style lets any class fight with two weapons.
+    const twoReady = (canFightTwoWeapons(this.classGroup) || !!p.sp?.styles.twoWeapon) && inHand.length >= 2;
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
       const specialized = !!prof?.specValid;
-      const penalty = prof ? 0 : p.penalty;
-      const attack = this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg,
+      // Skills & Powers: proficient through a group proficiency; familiar weapons take the Table 50 familiarity penalty.
+      const status = p.sp ? weaponFamiliarity(w.proficiency, p.sp.known) : (prof ? "proficient" : null);
+      const penalty = status === "proficient" ? 0 : (status === "familiar" ? p.sp.penalty.familiar : p.penalty);
+      const skill = p.sp ? { specialized, expertise: !!prof?.expertise, mastery: !!prof?.masteryValid, choice: !!prof?.choice, sp: true }
+        : specialized;
+      const attack = this.#weaponAttack(w.weapon, skill, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg,
         bowStrength: w.bowStrength ?? "" });
       if (twoReady && attack.melee && inHand.includes(item)) attack.melee.rateTwo = formatRate(twoWeaponRate(attack.melee.rateRaw));
-      return { item, proficient: !!prof, proficiency: prof?.item ?? null, specialized, penalty,
+      return { item, proficient: status === "proficient", familiar: status === "familiar", proficiency: prof?.item ?? null,
+        specialized, mastery: !!prof?.masteryValid, choice: !!prof?.choice, expertise: !!prof?.expertise, penalty,
         twoHanded: !!w.weapon?.melee && !oneHanded(item), attack };
     });
+  }
+
+  /**
+   * Skills & Powers fighting style AC (module/sp-weapons.mjs styleAc): one-handed weapon style (one one-handed weapon in
+   * hand, nothing in the other) and weapon and shield style (a shield and a melee weapon). Front AC only: both are
+   * melee techniques of a character facing the attacker.
+   */
+  #applyStyleAc() {
+    const styles = this.proficiencies.sp?.styles;
+    this.armor.styleAc = 0;
+    this.armor.styleNotes = [];
+    if (!styles) return;
+    const held = this.weapons.filter(w => w.item.system.equipped && !w.item.system.dropped);
+    const res = styleAc({ oneHanded: styles.oneHanded, improved: styles.oneHandedImproved, weaponShield: styles.weaponShield },
+      { weapons: held.length, oneHandedWeapons: held.filter(w => w.item.system.weapon?.melee && !w.twoHanded).length,
+        shield: !!this.armor.shield });
+    this.armor.styleAc = res.ac;
+    this.armor.styleNotes = res.notes;
+    this.armor.front -= res.ac;
+    this.ac.total = this.armor.front;
   }
 
   /**

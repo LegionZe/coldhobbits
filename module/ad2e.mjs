@@ -26,6 +26,7 @@ import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
 import { registerAqRules } from "./aq-rules.mjs";
+import { registerSpWeapons } from "./sp-weapons.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
@@ -93,6 +94,7 @@ Hooks.once("init", () => {
   });
 
   registerAqRules();
+  registerSpWeapons();
   CONFIG.Actor.documentClass = AD2EActor;
   CONFIG.ChatMessage.documentClass = AD2EChatMessage;
   // Sheet partials shared by tabs (registered by name, as dnd5e's preloadHandlebarsTemplates).

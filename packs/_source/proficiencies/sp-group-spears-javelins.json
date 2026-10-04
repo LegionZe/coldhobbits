@@ -1,0 +1,35 @@
+{
+  "_id": "SRbHDMBR5LNPzQ0X",
+  "_key": "!items!SRbHDMBR5LNPzQ0X",
+  "name": "Weapon group: Spears & Javelins (broad)",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "group-spears-javelins",
+    "kind": "group",
+    "slots": 3,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Group_Proficiencies_(POSP)",
+    "notes": "",
+    "spGroup": "spears-javelins",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "qXNe0tw0o57H94nq",
+  "sort": 2500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

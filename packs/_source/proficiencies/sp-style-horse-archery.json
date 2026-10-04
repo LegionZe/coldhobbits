@@ -1,0 +1,35 @@
+{
+  "_id": "Erp5hGnJFJda25QI",
+  "_key": "!items!Erp5hGnJFJda25QI",
+  "name": "Fighting style: Horse Archer",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "style-horse-archery",
+    "kind": "style",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Fighting_Style_Specialization_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "horse-archery",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "8Co6jyXTh1rM7IlZ",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "wxic9k4yCtXvJZAR",
+  "_key": "!items!wxic9k4yCtXvJZAR",
+  "name": "Armor proficiency: Brigandine",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "armor-brigandine",
+    "kind": "armor",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "brigandine",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "k3GEl9IKRbS8jPex",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

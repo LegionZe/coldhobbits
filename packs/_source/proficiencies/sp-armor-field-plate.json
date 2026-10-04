@@ -1,0 +1,35 @@
+{
+  "_id": "wOLDxYlL9dTJ5Wfw",
+  "_key": "!items!wOLDxYlL9dTJ5Wfw",
+  "name": "Armor proficiency: Field plate",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "armor-field-plate",
+    "kind": "armor",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "field-plate",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "k3GEl9IKRbS8jPex",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

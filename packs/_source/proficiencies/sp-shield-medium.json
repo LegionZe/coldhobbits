@@ -1,0 +1,35 @@
+{
+  "_id": "7qPszJuXovVi8D9a",
+  "_key": "!items!7qPszJuXovVi8D9a",
+  "name": "Shield proficiency: Medium",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "shield-medium",
+    "kind": "shield",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Shield_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": "medium"
+  },
+  "effects": [],
+  "folder": "Ic8aR8N3jsOKH7pH",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

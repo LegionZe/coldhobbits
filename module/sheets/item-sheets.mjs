@@ -1,3 +1,4 @@
+import { SP } from "../sp-weapons.mjs";
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
 import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { HOLY_ITEM } from "../importers/spell-components.mjs";
@@ -135,6 +136,13 @@ export class ProficiencySheet extends AD2EItemSheet {
     context.groupList = [...this.document.system.groups];
     context.isWeapon = this.document.system.kind === "weapon";
     if (context.isWeapon) context.weapon = weaponStats(this.document.system.weapon);
+    // Skills & Powers kinds (module/sp-weapons.mjs).
+    const kind = this.document.system.kind;
+    context.spKind = { group: kind === "group", style: kind === "style", armor: kind === "armor", shield: kind === "shield" };
+    context.spGroups = Object.fromEntries(Object.entries(SP.groups).map(([k, g]) =>
+      [k, g.broad ? `${SP.groups[g.broad].label}: ${g.label} (${g.kind})` : `${g.label} (${g.kind})`]));
+    context.spStyles = Object.fromEntries(Object.entries(SP.styles).map(([k, v]) => [k, v.label]));
+    context.spShields = Object.fromEntries(Object.keys(SP.shields).map(k => [k, `AD2E.SP.Shield.${k}`]));
     return context;
   }
 }

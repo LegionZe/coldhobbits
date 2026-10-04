@@ -1,0 +1,35 @@
+{
+  "_id": "wbBUeKRiQ1uvRnBQ",
+  "_key": "!items!wbBUeKRiQ1uvRnBQ",
+  "name": "Armor proficiency: Lamellar",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "armor-lamellar",
+    "kind": "armor",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "lamellar",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "k3GEl9IKRbS8jPex",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

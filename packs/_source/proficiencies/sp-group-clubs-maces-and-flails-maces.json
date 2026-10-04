@@ -1,0 +1,35 @@
+{
+  "_id": "hBsRcSzvlBmNTsKP",
+  "_key": "!items!hBsRcSzvlBmNTsKP",
+  "name": "Weapon group: Clubs, Maces, and Flails: Maces (tight)",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "group-clubs-maces-and-flails-maces",
+    "kind": "group",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Group_Proficiencies_(POSP)",
+    "notes": "",
+    "spGroup": "clubs-maces-and-flails.maces",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "qXNe0tw0o57H94nq",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

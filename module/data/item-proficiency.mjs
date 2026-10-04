@@ -10,6 +10,10 @@ const { BooleanField, NumberField, SchemaField, StringField, SetField } = foundr
  * `grantedBy`: on an owned copy, the identifier of the kit that granted it as a bonus (costs no slots).
  * `weapon` (weapon proficiencies): PHB weapon data, see weapon-fields.mjs.
  * `specialized`: on an owned copy, weapon specialization (Weapon Specialization (PHB); fighters only).
+ * Skills & Powers (world setting "spWeapons", module/sp-weapons.mjs): weapon proficiencies also take `choice` (weapon of
+ * choice), `expertise` and `mastery`; kinds "group" (`spGroup`: Table 49 group key), "style" (`style`: Table 52 key,
+ * `improved`: the one-handed +2 AC / two weapons of equal size option), "armor" (`armorType`: body armour identifier)
+ * and "shield" (`shieldType`: Table 51 shield type) use weapon proficiency slots.
  */
 export default class ProficiencyData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -27,6 +31,14 @@ export default class ProficiencyData extends foundry.abstract.TypeDataModel {
       }),
       weapon: weaponField(),
       specialized: new BooleanField({ initial: false }),
+      choice: new BooleanField({ initial: false }),
+      expertise: new BooleanField({ initial: false }),
+      mastery: new BooleanField({ initial: false }),
+      spGroup: new StringField({ initial: "" }),
+      style: new StringField({ initial: "" }),
+      improved: new BooleanField({ initial: false }),
+      armorType: new StringField({ initial: "" }),
+      shieldType: new StringField({ initial: "" }),
       source: new StringField({ initial: "" }),
       grantedBy: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),

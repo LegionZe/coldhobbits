@@ -1,0 +1,35 @@
+{
+  "_id": "Dg0JSuxdyV2FFc3E",
+  "_key": "!items!Dg0JSuxdyV2FFc3E",
+  "name": "Shield proficiency: Buckler",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "shield-buckler",
+    "kind": "shield",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Shield_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": "buckler"
+  },
+  "effects": [],
+  "folder": "Ic8aR8N3jsOKH7pH",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

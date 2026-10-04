@@ -1,0 +1,35 @@
+{
+  "_id": "1tT3MZKN5IASpOCf",
+  "_key": "!items!1tT3MZKN5IASpOCf",
+  "name": "Shield proficiency: Body",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "shield-body",
+    "kind": "shield",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Shield_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": "body"
+  },
+  "effects": [],
+  "folder": "Ic8aR8N3jsOKH7pH",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,35 @@
+{
+  "_id": "2TLfRY9HX4WBmw8m",
+  "_key": "!items!2TLfRY9HX4WBmw8m",
+  "name": "Armor proficiency: Hide",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "armor-hide",
+    "kind": "armor",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Armor_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "hide",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "k3GEl9IKRbS8jPex",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

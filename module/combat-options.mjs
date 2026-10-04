@@ -53,10 +53,12 @@ export function canFightTwoWeapons(group) {
 
 /**
  * Two-weapon attack penalty for `hand` ("main" | "off"); `armorAc` = the equipped body armour's base AC (null: none).
+ * With the two weapon style specialization the reduced penalties replace these.
  * The Reaction Adjustment can at best raise the penalty to 0.
  */
-export function twoWeaponPenalty(hand, { reaction = 0, ranger = false, armorAc = null } = {}) {
-  const base = T.twoWeapon[hand];
+export function twoWeaponPenalty(hand, { reaction = 0, ranger = false, armorAc = null, style = null } = {}) {
+  // `style`: two weapon style specialization penalties { main, off } (Skills & Powers, module/sp-weapons.mjs).
+  const base = style ? style[hand] : T.twoWeapon[hand];
   if (typeof base !== "number") return 0;
   if (ranger && (armorAc === null || armorAc >= T.twoWeapon.rangerMaxArmorAc)) return 0;
   return Math.min(base + reaction, 0);
@@ -64,12 +66,16 @@ export function twoWeaponPenalty(hand, { reaction = 0, ranger = false, armorAc =
 
 /**
  * Whether `off` may be the second weapon beside `main` ({ proficiency, size, weight }): smaller in size and weight;
- * a dagger is always allowed. Unknown weight is not compared.
+ * a dagger is always allowed. Unknown weight is not compared. `equalSize`: also a weapon of the same size.
  */
-export function secondWeaponAllowed(main, off) {
+export function secondWeaponAllowed(main, off, { equalSize = false } = {}) {
   if (off.proficiency === T.twoWeapon.smallAlways) return true;
   const order = T.overbear.sizes;
-  const smaller = order.indexOf(off.size) >= 0 && order.indexOf(off.size) < order.indexOf(main.size);
+  const o = order.indexOf(off.size);
+  const m = order.indexOf(main.size);
+  // Skills & Powers two weapon style, improved: "two weapons of equal size, so long as each ... can be wielded in one hand".
+  if (equalSize && o >= 0 && o === m) return true;
+  const smaller = o >= 0 && o < m;
   const lighter = off.weight === null || off.weight === undefined || main.weight === null || main.weight === undefined
     || off.weight < main.weight;
   return smaller && lighter;

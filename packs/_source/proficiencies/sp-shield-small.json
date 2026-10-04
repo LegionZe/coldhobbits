@@ -1,0 +1,35 @@
+{
+  "_id": "4Lj4mZGfMDTnAbs0",
+  "_key": "!items!4Lj4mZGfMDTnAbs0",
+  "name": "Shield proficiency: Small",
+  "type": "proficiency",
+  "img": "icons/svg/shield.svg",
+  "system": {
+    "identifier": "shield-small",
+    "kind": "shield",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Shield_Proficiency_(POSP)",
+    "notes": "",
+    "spGroup": "",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": "small"
+  },
+  "effects": [],
+  "folder": "Ic8aR8N3jsOKH7pH",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

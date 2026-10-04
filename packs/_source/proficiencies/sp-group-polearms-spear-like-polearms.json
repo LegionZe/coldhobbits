@@ -1,0 +1,35 @@
+{
+  "_id": "DV3JYQuTLov8XpbG",
+  "_key": "!items!DV3JYQuTLov8XpbG",
+  "name": "Weapon group: Polearms: Spear-like polearms (tight)",
+  "type": "proficiency",
+  "img": "icons/svg/combat.svg",
+  "system": {
+    "identifier": "group-polearms-spear-like-polearms",
+    "kind": "group",
+    "slots": 2,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Group_Proficiencies_(POSP)",
+    "notes": "",
+    "spGroup": "polearms.spear-like-polearms",
+    "style": "",
+    "improved": false,
+    "armorType": "",
+    "shieldType": ""
+  },
+  "effects": [],
+  "folder": "qXNe0tw0o57H94nq",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

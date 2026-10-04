@@ -1462,5 +1462,84 @@
     "WeaponUses": "Attack uses {province} (+1 per damage die)",
     "DieBonusNote": "{province} +{n}",
     "Warded": "{name} (elemental mage): {from} damage becomes {to} (-2 per die of its own province)."
+  },
+  "AD2E.SP": {
+    "Setting": "Skills & Powers weapon rules",
+    "SettingHint": "Player's Option: Skills & Powers chapter 7: weapon group, fighting style, armour and shield proficiencies, weapon of choice, expertise, specialization for every class (Table 53) and mastery (Table 54), Table 50 non-proficiency and familiarity penalties. Character point costs are paid with weapon proficiency slots (CP / 2 for warriors, / 3 for others, rounded up, per purchase). Reloads the world.",
+    "Legend": "Skills & Powers",
+    "Off": "The Skills & Powers weapon rules are off (world setting): these proficiencies use no slots and give no benefit.",
+    "Kind": {
+      "group": "Weapon group",
+      "style": "Fighting style",
+      "armor": "Armor proficiency",
+      "shield": "Shield proficiency"
+    },
+    "Shield": {
+      "buckler": "Buckler",
+      "small": "Small",
+      "medium": "Medium",
+      "body": "Body"
+    },
+    "ArmorType": "Armor (identifier)",
+    "Choice": "Choice",
+    "ChoiceHint": "Weapon of choice: +1 to attack rolls with this weapon (Weapon Specialization and Mastery (POSP)).",
+    "Expertise": "Expertise",
+    "ExpertiseHint": "Weapon expertise: extra attacks as a weapon specialist, no attack or damage bonus.",
+    "Mastery": "Mastery",
+    "MasteryHint": "Weapon mastery (Table 54): needs specialization and the minimum level; melee +3 attack / +3 damage, missile +2 attack (+3 / +3 at point blank).",
+    "WeaponNote": "Skills & Powers options (used only with the world setting).",
+    "Improved": "Improved",
+    "ImprovedHint": "One-handed weapon style: AC bonus +2 instead of +1; two weapon style: two weapons of equal size (2 more character points).",
+    "Covered": "proficient through a group (no slot for the weapon)",
+    "Familiar": "Familiar weapon {penalty}",
+    "PenaltySummary": "{non} (familiar {fam})",
+    "PartCp": "{part}: {cp} CP = {slots} slot(s)",
+    "PartSlots": "{part}: {slots} slot(s)",
+    "Part": {
+      "proficiency": "Proficiency",
+      "choice": "Weapon of choice",
+      "expertise": "Expertise",
+      "specialization": "Specialization",
+      "mastery": "Mastery",
+      "group": "Group proficiency",
+      "style": "Style specialization",
+      "improved": "Improvement",
+      "armor": "Armor proficiency",
+      "shield": "Shield proficiency"
+    },
+    "Invalid": {
+      "specForbidden": "The kit forbids specialization.",
+      "specLevel": "Below the minimum level for specialization (Table 53).",
+      "specOne": "Only one weapon can be specialized.",
+      "masteryClass": "This class cannot gain weapon mastery (Table 54).",
+      "masteryLevel": "Below the minimum level for mastery (Table 54).",
+      "masteryNeedsSpec": "Mastery needs a valid specialization in this weapon.",
+      "groupClass": "Group proficiencies are for warriors only.",
+      "styleOne": "Priests, rogues and wizards can specialize in one style only.",
+      "shieldClass": "This class cannot use a shield.",
+      "unknown": "No group, style, armour or shield type set."
+    },
+    "Effect": {
+      "group": "Proficient with: {weapons}",
+      "armor": "Worn {armor} counts half toward encumbrance",
+      "shield": "Target's AC +{ac} (+{missile} vs missiles) against {n} attack(s) per round (tick box in the attacker's dialog)",
+      "style": {
+        "one-handed": "AC +1 (+2 improved) with one one-handed weapon and nothing in the other hand",
+        "weapon-shield": "AC +1 with a shield and a weapon, or +1 attack that round (attack dialog)",
+        "two-handed": "Speed factor -3 for weapons wielded in two hands; +1 damage with a one-handed weapon used two-handed",
+        "two-weapon": "Two-weapon penalties 0 / -2 (improved: weapons of equal size)",
+        "missile": "Move half and make all missile attacks, or full and half the attacks; AC +1 vs missiles while shooting (not automated)",
+        "horse-archery": "Penalties for shooting from the saddle reduced by 2 (not automated)",
+        "thrown": "As the missile style for thrown weapons and slings (not automated)",
+        "special": "Benefit set by the DM (not automated)"
+      }
+    },
+    "ShieldTarget": "{name}: {type} shield proficiency (guards {n} attack(s) per round)",
+    "ShieldShort": "Shield proficiency",
+    "WeaponShieldAttack": "Weapon and shield style: +{n} attack (no +1 AC this round)",
+    "WeaponShieldNote": "Weapon and shield style +{n}",
+    "TwoWeaponStyle": "Two weapon style",
+    "PointBlankDamage": "Point blank +{n} damage",
+    "TwoHandedDamage": "Two-handed style +{n}"
   }
 }
