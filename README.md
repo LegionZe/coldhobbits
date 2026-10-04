@@ -84,6 +84,20 @@ initiative 1d10, lowest acts first.
   miscellaneous equipment (219 items, cost and weight as listed; "*" items weigh 1/10 lb, "**" none). Containers carry
   their Table 50 capacity and animals their Table 49 carrying capacity. Carried items count toward encumbrance (weight x
   quantity); animals, transport, services, lodging and tack start as not carried.
+- Items inside containers: any weapon, ammunition, armour, equipment, magical item, gem/jewellery or coin item can be put
+  into a container on the same actor (drag its row onto the container in the Containers list, or choose "In container"
+  on the item's sheet; "Take out" removes it). Containers are the Table 50 items (backpack, baskets, belt pouches, chests,
+  sacks, saddle bags; "Aside from knowing the weight limits, your character needs to have ways to hold all his gear",
+  Encumbrance Tables (PHB)) and magical items with a capacity. Contents count toward the load while the container is
+  carried and not at all when it is left behind (for example a sack not carried, or saddle bags on a mount count toward
+  the mount's load); each container shows its contents' weight against its Table 50 capacity and is marked when over.
+  Magical containers (generated, checked by regex against each page): Bag of Holding and Portable Hole contents add no
+  weight ("the bag always weighs a fixed amount", Bag of Holding (Magic Bag); "does not accumulate weight", Portable
+  Hole (Magic Container)); a bag of holding's weight and limits are rolled on its page's table, so the GM enters them on
+  the item. Heward's Handy Haversack holds 20 + 20 + 80 lb; its page compares only the side pouches to a bag of holding,
+  so its contents count. A bag of holding and a portable hole placed inside one another are flagged (Portable Hole
+  (Magic Container)). Putting a weapon, armour or worn magical item into a container stops using it; equipping takes it
+  out. A container dragged to another actor does not take its contents along.
 - Monster / NPC actors (type `monster`) for monsters, hirelings, mounts and pets (tabs: Combat, Specials, Ecology,
   Inventory, Notes; a summary line with AC, THAC0, HD, movement, attacks, damage, morale, no. appearing, treasure, XP): Monstrous Manual stat block, Hit Dice
   as written (3, 3+3, 1-1, 1/2, 2-8 hp) with HP rolls, THAC0 from DMG Table 39, saving throws by Hit Dice (DMG; half for
@@ -331,7 +345,7 @@ initiative 1d10, lowest acts first.
 - Wizards: familiars (Find Familiar (Wizard Spell): https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell)).
 - Spells: components when casting (verbal/somatic/material are already stored on spell items; material components as
   inventory, Casting Spells (PHB): https://adnd2e.fandom.com/wiki/Casting_Spells_(PHB)).
-- Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
+- Equipment and treasure: mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit
   bonuses to learning spells.

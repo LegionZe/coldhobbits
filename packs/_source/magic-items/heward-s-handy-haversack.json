@@ -11,6 +11,12 @@
     "weight": null,
     "carried": true,
     "equipped": false,
+    "capacity": {
+      "weight": 120,
+      "volume": "8 cu. ft. + 2 pouches of 2 cu. ft.",
+      "weightless": false
+    },
+    "container": "",
     "charges": {
       "value": 0,
       "max": null,

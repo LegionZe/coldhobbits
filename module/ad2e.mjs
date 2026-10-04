@@ -89,7 +89,8 @@ Hooks.once("init", () => {
   foundry.applications.handlebars.loadTemplates({
     "ad2e.weapon-list": "systems/ad2e/templates/actor/parts/weapon-list.hbs",
     "ad2e.armor-list": "systems/ad2e/templates/actor/parts/armor-list.hbs",
-    "ad2e.class-abilities": "systems/ad2e/templates/actor/parts/class-abilities.hbs"
+    "ad2e.class-abilities": "systems/ad2e/templates/actor/parts/class-abilities.hbs",
+    "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs"
   });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;

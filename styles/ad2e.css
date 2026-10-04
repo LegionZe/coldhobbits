@@ -100,6 +100,12 @@
 .ad2e-coin-value { white-space: nowrap; font-size: 0.85em; }
 .ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
 .ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }
+/* Containers (templates/actor/parts/container-list.hbs): contents indented under their container. */
+.ad2e-container { margin-bottom: 0.3rem; }
+.ad2e-container-row { grid-template-columns: 24px 1fr; }
+.ad2e-content-row { grid-template-columns: 20px 1fr auto auto; margin-left: 1.5rem; font-size: 0.9em; }
+.ad2e-content-empty { margin-left: 1.5rem; }
+.ad2e-prof-row.draggable { cursor: grab; }
 
 /* Monster / NPC sheet: the same window/tab layout as the character sheet (from its rendered HTML), then the
    elements authored in templates/actor/monster-*.hbs. */

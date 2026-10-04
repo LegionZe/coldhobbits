@@ -18,19 +18,20 @@
     {{#if e.thresholds}}<p class="ad2e-note">{{e.thresholds}}</p>{{/if}}
   </fieldset>
   {{/with}}
+  {{> "ad2e.container-list" containers=wt.containers}}
   <fieldset class="ad2e-prof-list ad2e-gear">
     <legend>{{localize "AD2E.Gear.Gear"}}</legend>
     {{#each wt.gear as |g|}}
     <h4 class="ad2e-gear-heading">{{g.label}}</h4>
     {{#each g.rows as |r|}}
-    <div class="ad2e-prof-row ad2e-gear-row">
+    <div class="ad2e-prof-row ad2e-gear-row draggable" data-item-id="{{r.id}}">
       <img src="{{r.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if r.url}}<a class="ad2e-item-link" href="{{r.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
-        <span class="ad2e-weapon-meta">{{r.summary}}{{#if r.total}} · {{localize "AD2E.Gear.Total"}} {{r.total}} lb{{/if}}</span>
+        <span class="ad2e-weapon-meta">{{r.summary}}{{#if r.total}} · {{localize "AD2E.Gear.Total"}} {{r.total}} lb{{/if}}{{#if r.inside}} · {{r.inside}}{{/if}}</span>
       </div>
-      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
-        <input type="checkbox" data-action="toggleCarried" data-item-id="{{r.id}}" {{checked r.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+      <label class="ad2e-spec" data-tooltip="{{#if r.contained}}{{localize 'AD2E.Container.CarriedHint'}}{{else}}{{localize 'AD2E.Gear.CarriedHint'}}{{/if}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{r.id}}" {{checked r.carried}} {{#if r.contained}}disabled{{else}}{{#unless @root.editable}}disabled{{/unless}}{{/if}}>
         {{localize "AD2E.Gear.Carried"}}</label>
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
         {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
@@ -46,9 +47,9 @@
   <fieldset class="ad2e-prof-list ad2e-coins">
     <legend>{{localize "AD2E.Coin.Coins"}}</legend>
     {{#each wt.coins.list as |c|}}
-    <div class="ad2e-prof-row ad2e-coin-row">
+    <div class="ad2e-prof-row ad2e-coin-row draggable" data-item-id="{{c.id}}">
       <img src="{{c.img}}" alt="" width="24" height="24">
-      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if c.url}}<a class="ad2e-item-link" href="{{c.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
+      <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{c.id}}">{{c.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if c.url}}<a class="ad2e-item-link" href="{{c.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}{{#if c.inside}} <span class="ad2e-weapon-meta">{{c.inside}}</span>{{/if}}</span>
       <input type="number" data-coin-quantity data-item-id="{{c.id}}" value="{{c.quantity}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}} data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
       <span class="ad2e-coin-value">{{c.value}} gp</span>
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{c.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
@@ -60,14 +61,14 @@
   <fieldset class="ad2e-prof-list ad2e-magic">
     <legend>{{localize "AD2E.Magic.Items"}}</legend>
     {{#each wt.magic as |m|}}
-    <div class="ad2e-prof-row ad2e-gear-row">
+    <div class="ad2e-prof-row ad2e-gear-row draggable" data-item-id="{{m.id}}">
       <img src="{{m.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{m.id}}">{{m.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{m.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if m.url}}<a class="ad2e-item-link" href="{{m.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
-        <span class="ad2e-weapon-meta">{{m.summary}}</span>
+        <span class="ad2e-weapon-meta">{{m.summary}}{{#if m.inside}} · {{m.inside}}{{/if}}</span>
       </div>
-      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
-        <input type="checkbox" data-action="toggleCarried" data-item-id="{{m.id}}" {{checked m.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+      <label class="ad2e-spec" data-tooltip="{{#if m.contained}}{{localize 'AD2E.Container.CarriedHint'}}{{else}}{{localize 'AD2E.Gear.CarriedHint'}}{{/if}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{m.id}}" {{checked m.carried}} {{#if m.contained}}disabled{{else}}{{#unless @root.editable}}disabled{{/unless}}{{/if}}>
         {{localize "AD2E.Gear.Carried"}}</label>
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
         {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{m.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
@@ -83,14 +84,14 @@
   <fieldset class="ad2e-prof-list ad2e-treasure">
     <legend>{{localize "AD2E.Treasure.Treasure"}}</legend>
     {{#each wt.treasure.list as |t|}}
-    <div class="ad2e-prof-row ad2e-gear-row">
+    <div class="ad2e-prof-row ad2e-gear-row draggable" data-item-id="{{t.id}}">
       <img src="{{t.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{t.id}}">{{t.name}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{t.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if t.url}}<a class="ad2e-item-link" href="{{t.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
-        <span class="ad2e-weapon-meta">{{t.summary}}{{#if t.total}} · {{localize "AD2E.Gear.Total"}} {{t.total}} gp{{/if}}</span>
+        <span class="ad2e-weapon-meta">{{t.summary}}{{#if t.total}} · {{localize "AD2E.Gear.Total"}} {{t.total}} gp{{/if}}{{#if t.inside}} · {{t.inside}}{{/if}}</span>
       </div>
-      <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Gear.CarriedHint'}}">
-        <input type="checkbox" data-action="toggleCarried" data-item-id="{{t.id}}" {{checked t.carried}} {{#unless @root.editable}}disabled{{/unless}}>
+      <label class="ad2e-spec" data-tooltip="{{#if t.contained}}{{localize 'AD2E.Container.CarriedHint'}}{{else}}{{localize 'AD2E.Gear.CarriedHint'}}{{/if}}">
+        <input type="checkbox" data-action="toggleCarried" data-item-id="{{t.id}}" {{checked t.carried}} {{#if t.contained}}disabled{{else}}{{#unless @root.editable}}disabled{{/unless}}{{/if}}>
         {{localize "AD2E.Gear.Carried"}}</label>
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
         {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{t.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
@@ -110,11 +111,11 @@
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Ammo.Ammunition"}}</legend>
     {{#each wt.ammo as |a|}}
-    <div class="ad2e-prof-row ad2e-ammo-row">
+    <div class="ad2e-prof-row ad2e-ammo-row draggable" data-item-id="{{a.id}}">
       <img src="{{a.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{a.id}}">{{a.name}}{{#if a.bonus}} {{a.bonus}}{{/if}}</a><a class="ad2e-item-link" data-action="openItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.Open'}}"><i class="fa-solid fa-pen-to-square"></i></a>{{#if a.url}}<a class="ad2e-item-link" href="{{a.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a>{{/if}}</span>
-        <span class="ad2e-weapon-meta">{{localize "AD2E.Weapon.Damage"}} {{a.damage}} · {{localize "AD2E.Ammo.Launchers"}}: {{a.launchers}}</span>
+        <span class="ad2e-weapon-meta">{{localize "AD2E.Weapon.Damage"}} {{a.damage}} · {{localize "AD2E.Ammo.Launchers"}}: {{a.launchers}}{{#if a.inside}} · {{a.inside}}{{/if}}</span>
       </div>
       <span class="ad2e-qty {{#if a.empty}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
         {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{a.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}

@@ -9,6 +9,9 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
     description is copied). Charges when found: wands 1d20+80 ("Wands (DMG)"), rods 1d10+40 ("Rods (DMG)"), staves
     1d6+19 ("Staves (DMG)"); the item stores the formula and its maximum, and its sheet rolls the charges. Only items
     whose own page mentions charges get them (e.g. the Staff-Mace and the Rod of Cancellation do not).
+    Magical containers (MAGIC_CONTAINERS, each checked by regex against its page): Bag of Holding (contents add no
+    weight; size rolled, set by the GM), Heward's Handy Haversack (20 + 20 + 80 lb), Portable Hole (contents add no
+    weight).
     Magical armour and weapons (Tables 105-108) are armour and weapon items with a magical bonus, not included here.
   * Gems: "Treasure Tables (DMG)" stone lists (Ornamental, Semi-Precious, Fancy to Precious, Gems and Jewels) with
     their Table 85 class; a listed value range (e.g. 100-500 gp) is kept in the notes. Descriptions are not copied.
@@ -27,6 +30,17 @@ TABLES = {89: "potion", 90: "scroll", 91: "ring", 92: "rod", 93: "staff", 94: "w
 CHARGES = {"wand": ("1d20+80", 100, "Wands (DMG)", r"typically contains 1d20\+80 charges"),
            "rod": ("1d10+40", 50, "Rods (DMG)", r"normally contains 41 to 50 \(1d10\+40\) charges"),
            "staff": ("1d6+19", 25, "Staves (DMG)", r"typically has 1d6\+19 charges")}
+# Magical containers (module/containers.mjs): stowage capacity and whether the contents add weight, each checked by
+# regex against the item's own page. A bag of holding's size is rolled (its page's table), so the GM sets it.
+MAGIC_CONTAINERS = {
+    "Bag of Holding (Magic Bag)": ({"weight": None, "volume": "", "weightless": True},
+                                   [r"the bag always weighs a fixed amount"]),
+    "Heward's Handy Haversack (Magic Bag)": ({"weight": 120, "volume": "8 cu. ft. + 2 pouches of 2 cu. ft.", "weightless": False},
+                                             [r"two cubic feet in volume or 20 pounds in weight",
+                                              r"eight cubic feet or 80 pounds"]),
+    "Portable Hole (Magic Container)": ({"weight": None, "volume": "6 ft. across, 10 ft. deep", "weightless": True},
+                                        [r"does not accumulate weight", r"6 feet in diameter", r"10 feet deep"]),
+}
 GROUPS = {"Priest", "Wizard", "Rogue", "Warrior", "Druid", "Paladin", "Bard", "Thief", "Fighter", "Ranger", "Cleric"}
 ICONS = {"book": "icons/svg/book.svg", "scroll": "icons/svg/book.svg"}
 GEM_SECTIONS = {"Ornamental Stones": 10, "Semi-Precious Stones": 50, "Fancy to Precious": None, "Gems and Jewels": None}
@@ -98,6 +112,7 @@ if __name__ == "__main__":
             formula, mx = charge_rules.get(cat, ("", None))
             system = {"identifier": classdata.slug(item_name(page)), "category": cat, "quantity": 1, "weight": None,
                       "carried": True, "equipped": False,
+                      "capacity": {"weight": None, "volume": "", "weightless": False}, "container": "",
                       "charges": {"value": mx or 0, "max": mx, "formula": formula},
                       "usableBy": ", ".join(groups), "identified": True, "xpValue": xp, "gpValue": None,
                       "url": classdata.url(page), "notes": ""}
@@ -111,6 +126,13 @@ if __name__ == "__main__":
         if not has[page_of(d)]:
             d["system"]["charges"] = {"value": 0, "max": None, "formula": ""}
             no_charges.append(d["name"])
+    by_page = {page_of(d): d for _, d in docs}
+    for page, (capacity, patterns) in MAGIC_CONTAINERS.items():
+        assert page in by_page, f"{page}: not in the DMG tables"
+        w, revs[page], _ = classdata.page(page)
+        for pattern in patterns:
+            assert re.search(pattern, w), f"{page}: {pattern!r} not found"
+        by_page[page]["system"]["capacity"] = capacity
     tw, revs["Treasure Tables (DMG)"], _ = classdata.page("Treasure Tables (DMG)")
     gems = []
     for section, default in GEM_SECTIONS.items():

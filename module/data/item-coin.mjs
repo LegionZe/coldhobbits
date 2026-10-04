@@ -13,6 +13,7 @@ export default class CoinData extends foundry.abstract.TypeDataModel {
       denomination: new StringField({ required: true, initial: "gp", choices: AD2E.coinDenominations }),
       value: new NumberField({ required: true, min: 0, initial: 100, nullable: false }),
       quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, nullable: false }),
+      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })

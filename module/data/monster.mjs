@@ -1,5 +1,6 @@
 import { AD2E, creatureHitDice, lookup } from "../config.mjs";
 import { hpState } from "../health.mjs";
+import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -86,11 +87,12 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
 
     // Load carried (items + coins + other cargo, e.g. a rider) against PHB Table 49: full movement, 1/2, 1/4;
     // "up to a maximum of twice their normal load" (Encumbrance (PHB)) - beyond the 1/4 column it cannot move.
-    const weightOf = i => (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
-    const carried = items.filter(i => ["weapon", "ammunition", "armor"].includes(i.type)
-      || (["equipment", "magic", "jewellery"].includes(i.type) && i.system.carried));
-    const coins = items.filter(i => i.type === "coin").reduce((n, i) => n + i.system.quantity, 0);
-    const weight = Math.round((carried.reduce((n, i) => n + weightOf(i), 0) + coins / AD2E.coinsPerPound
+    // Items in a container (e.g. saddle bags) follow the container (module/containers.mjs).
+    const weightOf = i => i.type === "coin" ? i.system.quantity / AD2E.coinsPerPound
+      : (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1);
+    const carriedLoose = i => ["equipment", "magic", "jewellery"].includes(i.type) ? i.system.carried : true;
+    const inv = inventory(items, { weightOf, carriedLoose });
+    const weight = Math.round((items.filter(i => PHYSICAL_TYPES.includes(i.type) && inv.counts(i)).reduce((n, i) => n + weightOf(i), 0)
       + (this.load.other ?? 0)) * 10) / 10;
     const l = this.load;
     let rate = this.movement.base;
@@ -101,7 +103,7 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       else if (l.quarter !== null && weight <= l.quarter) { band = "quarter"; rate = Math.floor(rate / 4); }
       else { band = "over"; rate = 0; }
     }
-    this.encumbrance = { weight, band, rate };
+    this.encumbrance = { weight, band, rate, inventory: inv };
   }
 
   getRollData() {

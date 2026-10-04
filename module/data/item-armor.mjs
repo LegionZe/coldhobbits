@@ -1,4 +1,5 @@
 import { AD2E } from "../config.mjs";
+import { containerPreUpdate } from "../containers.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -27,9 +28,16 @@ export default class ArmorData extends foundry.abstract.TypeDataModel {
       equipped: new BooleanField({ initial: false }),
       cost: new StringField({ initial: "" }),
       weight: new NumberField({ min: 0, nullable: true, initial: null }),
+      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
+  }
+
+  /** Equipping takes the item out of its container; putting it into one stops using it (module/containers.mjs). */
+  async _preUpdate(changes, options, user) {
+    if ((await super._preUpdate(changes, options, user)) === false) return false;
+    containerPreUpdate(changes, "armor", this);
   }
 }

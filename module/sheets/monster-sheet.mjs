@@ -2,6 +2,7 @@ import { rollEncounterReaction } from "../reaction.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
+import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheetV2 } = foundry.applications.sheets;
@@ -36,7 +37,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       recoverTemp: MonsterSheet.onRecoverTemp,
       rollSurprise: MonsterSheet.onRollSurprise,
       rollUnarmed: MonsterSheet.onRollUnarmed,
-      rollReaction: MonsterSheet.onRollReaction
+      rollReaction: MonsterSheet.onRollReaction,
+      takeOut: MonsterSheet.onTakeOut
     }
   };
 
@@ -88,15 +90,18 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
     const items = actor.items ?? [];
+    const inv = sys.encumbrance.inventory;
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
-      hit: i.system.bonus.hit, summary: i.system.weapon.damage.filter(d => d.sm || d.l)
+      hit: i.system.bonus.hit, inside: insideText(inv, i), summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
-      equipped: i.system.equipped, summary: armorSummary(i.system) }));
+      equipped: i.system.equipped, summary: armorSummary(i.system), inside: insideText(inv, i) }));
     context.gear = items.filter(i => ["equipment", "ammunition", "coin", "magic", "jewellery"].includes(i.type)).map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       quantity: i.system.quantity, isEquipment: ["equipment", "magic", "jewellery"].includes(i.type), isMagic: i.type === "magic", carried: i.system.carried,
+      inside: insideText(inv, i), contained: inContainer(inv, i),
       summary: i.type === "equipment" ? equipmentSummary(i.system) : i.type === "magic" ? magicSummary(i)
         : i.type === "jewellery" ? jewellerySummary(i) : "" })).sort((a, b) => a.name.localeCompare(b.name));
+    context.containers = containerContext(inv);
     const enc = sys.encumbrance;
     context.load = { ...sys.load, weight: enc.weight, rate: enc.rate, hasLoad: sys.load.full !== null,
       bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
@@ -110,6 +115,24 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.sourceLabel = game.i18n.localize(/completecompendium\.com/.test(sys.url) ? "AD2E.Monster.CompleteCompendium" : "AD2E.Monster.SourcePage");
     context.hasAttacks = context.naturalAttacks.length + context.weapons.length > 0;
     return context;
+  }
+
+  /** Inputs inside draggable item rows do not start a drag. */
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    guardDraggableInputs(this.element);
+  }
+
+  /** An item dropped on a container goes into it (module/sheets/containers-ui.mjs). */
+  async _onDropItem(event, item) {
+    const onContainer = await dropOnContainer(this, event, item, () => super._onDropItem(event, item));
+    return onContainer === undefined ? super._onDropItem(event, item) : onContainer;
+  }
+
+  /** Item rows (`draggable`, `data-item-id`) drag the owned item. */
+  async _onDragStart(event) {
+    if (dragItemRow(this, event)) return;
+    return super._onDragStart(event);
   }
 
   /** Natural attacks are edited as system.attacks.<n>.<field>; the form sends an object, the schema wants an array. */
@@ -137,6 +160,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     return this.document.update({ "system.attacks": attacks });
   }
   static onOpenItem(event, target) { return this.document.items.get(target.dataset.itemId)?.sheet.render({ force: true }); }
+  static onTakeOut(event, target) { return this.document.items.get(target.dataset.itemId)?.update({ "system.container": "" }); }
   static onDeleteItem(event, target) { return this.document.items.get(target.dataset.itemId)?.delete(); }
   static onToggleEquipped(event, target) {
     return this.document.items.get(target.dataset.itemId)?.update({ "system.equipped": target.checked });
