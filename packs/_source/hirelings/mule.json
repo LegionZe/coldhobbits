@@ -6,7 +6,7 @@
   "img": "icons/svg/pawprint.svg",
   "system": {
     "identifier": "mule",
-    "role": "mount",
+    "role": "pack",
     "climate": "Any non-mountainous",
     "frequency": "Common",
     "organization": "Herd",

@@ -88,6 +88,13 @@ MOUNTS = [
     ("camel-war", "Camel, war", "Camel", "War", "Camel", []),
     ("elephant", "Elephant", "Elephant", "'''Elephant''' (African)", "Elephant, war", []),
 ]
+# Pack and draft animals (PHB Table 49 loads, actor role "pack"): (key, name, page, column or None for a page with one
+# creature whose infobox name is the page title, PHB animal item, tack). The ox uses the Herd Mammal (MM) Cattle column; the mule is ridden or packed.
+PACK = [
+    ("ox", "Ox", "Herd Mammal", "Cattle", "Ox", []),
+    ("dog-war", "Dog, war", "War Dog", None, "Dog, war", []),
+]
+PACK_ROLE = {"mule"}
 
 
 def table(wiki, caption):
@@ -163,18 +170,21 @@ if __name__ == "__main__":
         d = human(classdata.slug(prof), prof, column, "Employing Hirelings (DMG)", [], f"{weekly} per week, {monthly} per month", "", revs)
         d["folder"] = fid["civilians"]
         docs.append(d)
-    for key, name, page, column, animal, tack in MOUNTS:
-        block, revs[page] = monsters.column_block(page, column)
+    for key, name, page, column, animal, tack in MOUNTS + PACK:
+        block, revs[page] = monsters.column_block(page, column) if column else monsters.infobox_block(page, page)
         src = monsters.load_source("equipment", animal)["system"]
-        d = monsters.actor(f"hire.{key}", name, "mount", block, page, ANIMAL, damage_attacks(block), items=tack, load=dict(src["load"]))
+        assert src["load"]["full"] is not None or key == "pony", f"{animal}: no Table 49 load"
+        role = "pack" if (key in PACK_ROLE or any(key == p[0] for p in PACK)) else "mount"
+        d = monsters.actor(f"hire.{key}", name, role, block, page, ANIMAL, damage_attacks(block), items=tack, load=dict(src["load"]))
         d["system"]["identifier"] = key
         d["system"]["damageText"] = re.sub(r"/;\s*", "/", d["system"]["damageText"])  # a line break inside "2-16/2-16/{{br}}2-12"
         d["system"]["cost"] = src.get("cost") or ""
-        d["system"]["notes"] = f"<p>Statistics: {page}, {column.replace(chr(39) * 3, '')} column. Load and price: PHB {animal}.</p>"
+        d["system"]["notes"] = (f"<p>Statistics: {page}, {column.replace(chr(39) * 3, '')} column. " if column else f"<p>Statistics: {page}. ") \
+            + f"Load and price: PHB {animal}.</p>"
         d["folder"] = fid["mounts"]
         docs.append(d)
     for i, d in enumerate(docs):
         d["sort"] = i * 100
     classdata.write_docs("packs/_source/hirelings", folders + docs)
-    print(f"wrote packs/_source/hirelings: {len(SOLDIERS)} soldiers, {len(CIVILIANS)} civilians, {len(MOUNTS)} mounts; "
+    print(f"wrote packs/_source/hirelings: {len(SOLDIERS)} soldiers, {len(CIVILIANS)} civilians, {len(MOUNTS)} mounts, {len(PACK)} pack animals; "
           f"skipped {SKIP_SOLDIERS}; revisions {revs}")

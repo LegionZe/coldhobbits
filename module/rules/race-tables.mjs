@@ -11,3 +11,6 @@ export const CON_SAVE_BONUS = [{"min": 4, "max": 6, "bonus": 1}, {"min": 7, "max
  * humans and half-elves are man-sized (M); hill dwarves are "S to M", M is used.
  */
 export const RACE_SIZE = {"human": "M", "half-elf": "M", "elf": "M", "dwarf": "M", "gnome": "S", "halfling": "S"};
+
+/** PHB Table 10: Average Height and Weight, weight in pounds: base (male/female) + modifier dice (same revision as Table 9). */
+export const RACE_WEIGHT = {"dwarf": {"male": 130, "female": 105, "dice": "4d10"}, "elf": {"male": 90, "female": 70, "dice": "3d10"}, "gnome": {"male": 72, "female": 68, "dice": "5d4"}, "half-elf": {"male": 110, "female": 85, "dice": "3d12"}, "halfling": {"male": 52, "female": 48, "dice": "5d4"}, "human": {"male": 140, "female": 100, "dice": "6d10"}};

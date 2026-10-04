@@ -1,0 +1,66 @@
+{
+  "_id": "Nsf1pyqaCXZsz2hP",
+  "_key": "!actors!Nsf1pyqaCXZsz2hP",
+  "name": "Dog, war",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "dog-war",
+    "role": "pack",
+    "climate": "Any",
+    "frequency": "Uncommon",
+    "organization": "Solitary",
+    "activity": "Any",
+    "diet": "Omnivorous",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "Variable",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "2+2",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "2d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "2-8(2d4)",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "M (4'-6' long)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 65,
+    "load": {
+      "full": 15,
+      "half": 20,
+      "quarter": 30
+    },
+    "url": "https://adnd2e.fandom.com/wiki/War_Dog",
+    "notes": "<p>Statistics: War Dog. Load and price: PHB Dog, war.</p>",
+    "cost": "20 gp"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

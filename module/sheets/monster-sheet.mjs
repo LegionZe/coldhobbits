@@ -104,11 +104,15 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.containers = containerContext(inv);
     const enc = sys.encumbrance;
     context.load = { ...sys.load, weight: enc.weight, rate: enc.rate, hasLoad: sys.load.full !== null,
-      bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over" };
+      bandLabel: enc.band ? i18n(`AD2E.Monster.Load.${enc.band}`) : "", over: enc.band === "over",
+      // A character riding this animal (module/animals.mjs): its body weight and gear are part of the load.
+      riderText: enc.rider ? game.i18n.format(enc.rider.missingBody ? "AD2E.Animal.RiderOnMountNoBody" : "AD2E.Animal.RiderOnMount",
+        { name: enc.rider.name, body: enc.rider.body ?? 0, gear: enc.rider.gear, own: enc.own }) : "",
+      riderMissingBody: !!enc.rider?.missingBody };
     context.hd = sys.hd;
     // Header link to the stat block's source page (completecompendium.com for imported monsters).
     // Wage (hirelings) or price (mounts); shown for those roles or whenever one is set.
-    context.showCost = ["hireling", "mount"].includes(sys.role) || !!sys.cost;
+    context.showCost = ["hireling", "mount", "pack"].includes(sys.role) || !!sys.cost;
     context.dead = sys.hpState?.state === "dead";
     context.knockedOut = !!sys.hpState?.knockedOut;
     context.temporary = temporaryHp(sys.hp);

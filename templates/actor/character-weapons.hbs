@@ -18,6 +18,29 @@
     {{#if e.thresholds}}<p class="ad2e-note">{{e.thresholds}}</p>{{/if}}
   </fieldset>
   {{/with}}
+  {{#with wt.animals as |an|}}
+  <fieldset class="ad2e-prof-list ad2e-animals">
+    <legend>{{localize "AD2E.Animal.Title"}}</legend>
+    <div class="ad2e-prof-summary">
+      <label data-tooltip="{{localize 'AD2E.Animal.BodyWeightHint'}}">{{localize "AD2E.Animal.BodyWeight"}} <input type="number" name="system.bodyWeight" value="{{an.bodyWeight}}" min="0" step="any" {{#unless @root.editable}}disabled{{/unless}}></label>
+      {{#if @root.editable}}{{#if an.canRoll}}<button type="button" data-action="rollBodyWeight" data-tooltip="{{localize 'AD2E.Animal.RollHint'}}">{{localize "AD2E.Animal.RollBodyWeight"}}</button>{{/if}}{{/if}}
+      <span class="{{#if an.missingBody}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Animal.RiderHint'}}">{{localize "AD2E.Animal.RiderWeight"}}: <strong>{{an.riderTotal}} lb</strong> ({{an.riderText}})</span>
+    </div>
+    {{#each an.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
+        <span class="ad2e-weapon-meta {{#if r.over}}ad2e-unmet{{/if}}">{{r.meta}}</span>
+        {{#if r.otherRiderText}}<span class="ad2e-weapon-meta">{{r.otherRiderText}}</span>{{/if}}
+      </div>
+      {{#if r.missing}}<span></span>{{else}}<label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Animal.RidingHint'}}"><input type="checkbox" data-action="toggleRiding" data-uuid="{{r.uuid}}" {{checked r.riding}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Animal.Riding"}}</label>{{/if}}
+      {{#if @root.editable}}<a data-action="removeAnimal" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Animal.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Animal.DropHint"}}</p>
+    {{/each}}
+  </fieldset>
+  {{/with}}
   {{> "ad2e.container-list" containers=wt.containers}}
   <fieldset class="ad2e-prof-list ad2e-gear">
     <legend>{{localize "AD2E.Gear.Gear"}}</legend>

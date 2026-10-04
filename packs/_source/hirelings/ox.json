@@ -1,0 +1,66 @@
+{
+  "_id": "SbVzZoyvqOBkviup",
+  "_key": "!actors!SbVzZoyvqOBkviup",
+  "name": "Ox",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "ox",
+    "role": "pack",
+    "climate": "Any land",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "20-200",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "1-4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-4",
+    "specialAttacks": "Stampede",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (8' long)",
+    "morale": {
+      "value": 4,
+      "text": "Unreliable (4)"
+    },
+    "xp": 15,
+    "load": {
+      "full": 220,
+      "half": 330,
+      "quarter": 440
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Herd_Mammal",
+    "notes": "<p>Statistics: Herd Mammal, Cattle column. Load and price: PHB Ox.</p>",
+    "cost": "15 gp"
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
