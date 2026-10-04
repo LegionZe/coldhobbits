@@ -254,6 +254,10 @@
     "BonusNonweaponSlots": "Bonus nonweapon slots"
   },
   "AD2E.Weapon": {
+    "BowStrength": "Bow made for Strength",
+    "BowStandard": "Standard bow (penalties only)",
+    "BowStrengthHint": "A bow made for a Strength gives the user's Strength attack and damage bonuses up to that Strength; penalties always apply. Bows for exceptional Strength (18/01 or more) cost three to five times the normal price (Weapons, PHB).",
+    "BowBendBars": "bow made for Strength {rating}: roll bend bars/lift gates ({chance}%) to string or use it",
     "AutoDamage": "rolled on the hit",
     "AutoDamageSetting": "Roll damage automatically on a hit",
     "AutoDamageHint": "When a weapon or monster attack hits, roll its damage at once with the attack's choices (ammunition, backstab, non-lethal, armed defender) and the first target's size (Large or bigger: the large damage). Unconditional kit modifiers apply; for situational ones or a modifier use the Damage button instead.",

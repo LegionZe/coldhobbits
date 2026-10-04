@@ -150,6 +150,17 @@ export class WeaponSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     const sys = this.document.system;
     context.weapon = weaponStats(sys.weapon);
+    // Bows only: the Strength the bow is made for (Strength 3-25 and the 18/xx bands of PHB Table 1).
+    context.isBow = sys.weapon?.family === "bow";
+    if (context.isBow) {
+      const scores = Array.from({ length: 23 }, (_, i) => String(i + 3));
+      const bands = ["18/50", "18/75", "18/90", "18/99", "18/00"];
+      const bandLabel = { "18/50": "18/01-50", "18/75": "18/51-75", "18/90": "18/76-90", "18/99": "18/91-99" };
+      // An array keeps the order (an object would put the number-like keys first).
+      context.bowStrengthOptions = [["", game.i18n.localize("AD2E.Weapon.BowStandard")],
+        ...[...scores.slice(0, 16), ...bands, ...scores.slice(16)].map(k => [k, bandLabel[k] ?? k])]
+        .map(([value, label]) => ({ value, label, selected: value === (sys.bowStrength ?? "") }));
+    }
     // On an actor: the linked weapon proficiency, if owned.
     const actor = this.document.parent;
     const entry = actor?.system?.weapons?.find(e => e.item.id === this.document.id);
