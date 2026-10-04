@@ -114,7 +114,11 @@ initiative 1d10, lowest acts first.
   "Spells (examples)" has 12 PHB spells; GMs import more with Configure Settings > "Import spells" (or
   `game.ad2e.importSpells()`): choose a source book from the AD&D 2e wiki, filter by class and level, import (statistics
   and links only) into the world compendium "Imported Spells" (created on the first import), filed into folders by
-  class and spell level, e.g. Wizard Spells / Level 3; re-import updates spells from the same page.
+  class and spell level, e.g. Wizard Spells / Level 3; re-import updates spells from the same page. "Update existing
+  spells" (importer button, or `game.ad2e.updateSpells()`, GM) re-reads the wiki page of every spell in the world (Items
+  directory, characters' spells, Imported Spells compendium; page from the import flag or the spell's wiki link) and
+  refreshes its statistics and component links, keeping name, memorization, learned status and notes; spells without a
+  wiki page are left alone.
 - Spell components: the "Spell Components (POSM)" compendium holds POSM Table 16 (381 components in its 7 groups, with
   acquisition FS/TM/SO/Auto, scarcity, cost, perishable and "in a wizard's laboratory"; generated from "Spell Components
   (POSM)"). Spells with an M component link them, matched automatically at import from the page's component sentences
