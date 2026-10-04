@@ -246,6 +246,9 @@
     "BonusNonweaponSlots": "Bonus nonweapon slots"
   },
   "AD2E.Weapon": {
+    "AutoDamage": "rolled on the hit",
+    "AutoDamageSetting": "Roll damage automatically on a hit",
+    "AutoDamageHint": "When a weapon or monster attack hits, roll its damage at once with the attack's choices (ammunition, backstab, non-lethal, armed defender) and the first target's size (Large or bigger: the large damage). Unconditional kit modifiers apply; for situational ones or a modifier use the Damage button instead.",
     "melee": "Melee",
     "missile": "Missile",
     "Attack": "Attack",

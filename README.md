@@ -168,6 +168,11 @@ initiative 1d10, lowest acts first.
   ("The Surprise Roll (PHB)"), with the Dexterity reaction adjustment ("Dexterity (PHB)"), kit surprise modifiers, the
   DMG Table 57 situations ("Surprise (DMG)"; tick boxes, camouflage -1 to -3, +1 per 10 members of the other group) and
   a manual modifier. Table from `python3 tools/build-encounter-tables.py`.
+- Automatic damage (client setting "Roll damage automatically on a hit", on by default): when a weapon or monster
+  attack hits, its damage is rolled at once with the attack's choices (the ammunition fired, backstab multiplier,
+  non-lethal, the +4 against an unarmed attacker) and the first target's size (Large or bigger: the large damage
+  column). Unconditional kit modifiers apply; for situational kit modifiers, another damage option (e.g. the bastard
+  sword two-handed) or a modifier, turn the setting off or use the Damage button.
 - Combat modifiers (PHB Table 51, "PHB Table 51"): every attack dialog (weapons, monster attacks, unarmed, the generic
   attack) has tick boxes for attacker on higher ground +1, defender invisible -4, defender off-balance +2, defender
   sleeping or held (automatic hit: "the attack automatically hits and causes normal damage"), defender stunned or

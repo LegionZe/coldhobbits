@@ -405,7 +405,7 @@ export default class AD2EActor extends Actor {
       await item.update({ "system.quantity": left });
       spent = ` — ${game.i18n.format("AD2E.Ammo.Left", { name: item.name, n: left })}`;
     }
-    return roll.toMessage({
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
         + `vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
@@ -414,6 +414,25 @@ export default class AD2EActor extends Actor {
         + (notes.length ? ` [${notes.join("; ")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
+    // A hit rolls its damage at once (client setting "autoDamage"), with the attack's choices: the ammunition fired,
+    // backstab, non-lethal, the armed-defender bonus, and the first target's size.
+    if (hit && AD2EActor.#autoDamageOn()) {
+      await this.rollWeaponDamage(itemId, use, { size: AD2EActor.#targetSizeKey(targets), backstab: !!a.backstab,
+        nonlethal: !!a.nonlethal, vsUnarmed: !!input.vsUnarmed });
+    }
+    return message;
+  }
+
+  /** Client setting "autoDamage" (default on): roll damage automatically when an attack hits. */
+  static #autoDamageOn() {
+    try { return game.settings.get("ad2e", "autoDamage") === true; } catch { return false; }
+  }
+
+  /** Damage column for the first target: "l" for a Large or bigger creature, otherwise "sm" (also with no target). */
+  static #targetSizeKey(targets) {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    const actor = targets?.length ? resolve?.(targets[0].uuid, { strict: false })?.actor : null;
+    return actor && ["L", "H", "G"].includes(AD2EActor.#sizeOf(actor)) ? "l" : "sm";
   }
 
   /** Thieves: the Table 30 backstab multiplier at their level; null for other classes. */
@@ -478,7 +497,7 @@ export default class AD2EActor extends Actor {
    * Weapon damage: the chosen damage option's dice (or owned ammunition's) vs. small/medium or large targets
    * + the use's damage adjustment (+ the ammunition's magical bonus); "a successful attack roll can never cause less than 1 point of damage" (Strength (PHB)).
    */
-  async rollWeaponDamage(itemId, use = "melee") {
+  async rollWeaponDamage(itemId, use = "melee", preset = null) {
     const item = this.items.get(itemId);
     const attack = this.#weaponEntry(itemId)?.attack?.[use];
     if (!item || !attack) return;
@@ -505,7 +524,11 @@ export default class AD2EActor extends Actor {
       + `<input type="checkbox" name="backstab"></div>` : "";
     const nonlethalField = use === "melee" && nonlethalAllowed(item.system.weapon)
       ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${i18n("AD2E.Nonlethal.Half")})</label><input type="checkbox" name="nonlethal"></div>` : "";
-    const input = await DialogV2.prompt({
+    // `preset` (automatic damage after a hit): no dialog; the first damage option (the ammunition just fired), the
+    // given target size and options, the unconditional kit modifiers only.
+    const input = preset ? { option: 0, size: preset.size ?? "sm", mod: 0, backstab: !!(preset.backstab && mult),
+      nonlethal: !!(preset.nonlethal && use === "melee" && nonlethalAllowed(item.system.weapon)), kitText: "",
+      manual: { mod: 0, note: "" }, vsUnarmed: !!(preset.vsUnarmed && use === "melee"), auto: true } : await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
@@ -546,6 +569,7 @@ export default class AD2EActor extends Actor {
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}${AD2EActor.#targetText(targets)}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
+        + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
           : (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : ""))
@@ -775,16 +799,21 @@ export default class AD2EActor extends Actor {
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     input.t51 ??= { sum: 0, auto: false, text: "" };
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum, mod: input.mod }).evaluate();
-    return roll.toMessage({
+    const hit = input.t51.auto || roll.total >= needed;
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
-        + i18n(input.t51.auto || roll.total >= needed ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
+        + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "") + modifierText(input.mod, input.note)
     });
+    if (hit && AD2EActor.#autoDamageOn()) {
+      await this.rollMonsterDamage(key, { size: AD2EActor.#targetSizeKey(targets), vsUnarmed: !!input.vsUnarmed });
+    }
+    return message;
   }
 
-  async rollMonsterDamage(key) {
+  async rollMonsterDamage(key, preset = null) {
     const attack = this.monsterAttacks().find(a => a.key === key);
     if (!attack || !attack.damage.length) return;
     const i18n = k => game.i18n.localize(k);
@@ -794,7 +823,8 @@ export default class AD2EActor extends Actor {
     // A weapon: choose the damage option and the target size; any attack: a situational modifier.
     const options = attack.damage;
     const weapon = !formula;
-    const input = await DialogV2.prompt({
+    const input = preset ? { option: 0, size: preset.size ?? "sm", vsUnarmed: !!(preset.vsUnarmed && attack.melee), mod: 0, note: "",
+      auto: true } : await DialogV2.prompt({
       window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: (weapon && options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
@@ -821,6 +851,7 @@ export default class AD2EActor extends Actor {
       flags: { ad2e: { damage: total, targets } },
       flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
+        + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + modifierText(input.mod, input.note)
     });
   }
