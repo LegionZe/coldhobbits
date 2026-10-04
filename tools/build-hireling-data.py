@@ -11,10 +11,16 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
   * Mounts: "Horse" (Draft, Heavy, Medium, Light, Riding, Pony, Mule columns), "Camel" (Desert, War), "Elephant"
     (Elephant (African) column, used for the PHB's labor and war elephants); load, cost from the PHB animal items
     (packs/_source/equipment, PHB Table 50 load).
+  * Familiars (Find Familiar (Wizard Spell)): the d20 table (creature, sensory powers) and the spell's figures (hit points
+    2-4 + 1 per caster level, AC 7, +1 to surprise, 1 hp lost per day apart, system shock and -1 Constitution when it
+    dies; each checked by regex) are written to module/rules/familiar-tables.mjs; actors with role "familiar" (folder
+    Familiars) take their other statistics from the creature's page (FAMILIARS; the toad has no stat block for a normal
+    toad, so it carries the spell's figures only).
 Human stat blocks give no attacks: hirelings attack with their weapon items. Armoured hirelings: equipped armour sets
 their AC (base 10). Run from the repo root after build-monster-data.py:  python3 tools/build-hireling-data.py
 """
 import importlib.util
+import json
 import re
 
 _spec = importlib.util.spec_from_file_location("monsters", "tools/build-monster-data.py")
@@ -96,6 +102,38 @@ PACK = [
 ]
 PACK_ROLE = {"mule"}
 
+# Familiars (Find Familiar (Wizard Spell) d20 table): table name -> (key, page, infobox entry name or None).
+FAMILIAR_PAGE = "Find Familiar (Wizard Spell)"
+FAMILIARS = {"Cat, black": ("cat-black", "Small Cat (MM)", "Domestic"), "Crow": ("crow", "Raven", "Ordinary"),
+             "Hawk": ("hawk", "Hawk", "Large"), "Owl": ("owl", "Owl", "Common"), "Toad": ("toad", None, None),
+             "Weasel": ("weasel", "Weasel", "Wild")}
+# The spell's figures, each with the text it must match on the page.
+FAMILIAR_RULES = [("hp", {"dice": "1d3+1", "perLevel": 1}, r"Normal familiars have 2-4 hit points plus 1 hit point per caster level"),
+                  ("ac", 7, r"an Armor Class of 7"),
+                  ("surprise", 1, r"\+1 bonus to all surprise die rolls"),
+                  ("separatedLoss", 1, r"If separated from the caster, the familiar loses 1 hit point each day"),
+                  ("conLoss", 1, r"must successfully roll an immediate system shock check or die. Even if he survives this check, the wizard loses 1 point from his Constitution"),
+                  ("range", "1 mile", r"mental commands at a distance of up to 1 mile"),
+                  ("onceYear", True, r"can be attempted but once per year"),
+                  ("castingTime", "2d12", r"castingTime = 2d12 hours"),
+                  ("cost", "1,000 gp", r"adds 1,000 gp worth of incense and herbs")]
+
+
+def familiar_table(wiki):
+    """d20 rows of the spell's table: [{min, max, name, senses}] (name "" = no familiar)."""
+    t = wiki[wiki.index("{|", wiki.index("D20 Roll")-200):]
+    t = t[:t.index("|}")]
+    rows = []
+    for chunk in re.split(r"\n\|-", t)[1:]:
+        c = [x.strip() for x in chunk.strip().split("\n") if x.startswith("|")]
+        c = [x.lstrip("|").strip() for x in c]
+        if len(c) < 3:
+            continue
+        lo, _, hi = c[0].partition("-")
+        rows.append({"min": int(lo), "max": int(hi or lo), "name": "" if c[1] in ("-", "—") else c[1], "senses": c[2]})
+    assert rows[0]["min"] == 1 and rows[-1]["max"] == 20 and all(a["max"] + 1 == b["min"] for a, b in zip(rows, rows[1:])), rows
+    return rows
+
 
 def table(wiki, caption):
     i = wiki.index(caption)
@@ -157,8 +195,8 @@ if __name__ == "__main__":
         raise SystemExit("Soldier descriptions no longer match (update SOLDIERS):\n  " + "\n  ".join(problems))
 
     folders = [actor_folder("soldiers", "Soldiers (DMG Table 64)", 0), actor_folder("civilians", "Hirelings (DMG Table 65)", 1000),
-               actor_folder("mounts", "Mounts (Monstrous Manual)", 2000)]
-    fid = {k: f["_id"] for k, f in zip(("soldiers", "civilians", "mounts"), folders)}
+               actor_folder("mounts", "Mounts (Monstrous Manual)", 2000), actor_folder("familiars", "Familiars (Find Familiar)", 3000)]
+    fid = {k: f["_id"] for k, f in zip(("soldiers", "civilians", "mounts", "familiars"), folders)}
     docs = []
     for title, (items, _, note) in SOLDIERS.items():
         key = classdata.slug(title)
@@ -183,8 +221,48 @@ if __name__ == "__main__":
             + f"Load and price: PHB {animal}.</p>"
         d["folder"] = fid["mounts"]
         docs.append(d)
+    # Familiars: the spell's table and figures, and one actor per creature.
+    fw, revs[FAMILIAR_PAGE], _ = classdata.page(FAMILIAR_PAGE)
+    rules = {}
+    for key, value, pattern in FAMILIAR_RULES:
+        assert re.search(pattern, fw), f"{FAMILIAR_PAGE}: {pattern!r} not found"
+        rules[key] = value
+    frows = familiar_table(fw)
+    assert {r["name"] for r in frows if r["name"]} == set(FAMILIARS), frows
+    for r in frows:
+        r["key"] = FAMILIARS[r["name"]][0] if r["name"] else ""
+    for name, (key, page, entry) in FAMILIARS.items():
+        if page:
+            block, revs[page] = monsters.infobox_block(page, entry)
+            source = page
+        else:
+            # No stat block: only the spell's figures; morale 10 is the actor default, movement and Hit Dice blank.
+            block = {"ac": "7", "movement": "0", "hitDice": "", "morale": "10", "xp": "0"}
+            source = FAMILIAR_PAGE
+        block["ac"] = str(rules["ac"])  # "an Armor Class of 7 (due to size, speed, etc.)"
+        senses = next(r["senses"] for r in frows if r["name"] == name)
+        d = monsters.actor(f"hire.familiar-{key}", name, "familiar", block, source, ANIMAL, damage_attacks(block) if page else [])
+        d["system"]["identifier"] = f"familiar-{key}"
+        if not page:
+            d["system"]["movement"]["text"] = ""
+            d["system"]["morale"]["text"] = ""
+        d["system"]["hp"] = {"value": 3, "max": 3}
+        d["system"]["notes"] = (f"<p>Familiar (Find Familiar (Wizard Spell)): {senses}. Hit points 2-4 + 1 per caster level, AC 7. "
+                                + (f"Other statistics: {page}, {entry}.</p>" if page else
+                                   "No Monstrous Manual stat block for a normal toad: movement, Hit Dice and attacks are left to the DM.</p>"))
+        d["folder"] = fid["familiars"]
+        docs.append(d)
+    open("module/rules/familiar-tables.mjs", "w").write("\n".join([
+        "/**",
+        " * GENERATED by tools/build-hireling-data.py - do not edit by hand.",
+        f" * Find Familiar (Wizard Spell): {classdata.url(FAMILIAR_PAGE)} (revision {revs[FAMILIAR_PAGE]}).",
+        " * rows: the d20 table (key \"\" = no familiar); rules: hit points, AC, surprise bonus, daily loss when apart,",
+        " * Constitution loss on its death, command range, once per year, casting time, material cost.",
+        " */",
+        "export const FAMILIAR_TABLES = " + json.dumps({"rows": frows, "rules": rules}, ensure_ascii=False) + ";", ""]))
+
     for i, d in enumerate(docs):
         d["sort"] = i * 100
     classdata.write_docs("packs/_source/hirelings", folders + docs)
-    print(f"wrote packs/_source/hirelings: {len(SOLDIERS)} soldiers, {len(CIVILIANS)} civilians, {len(MOUNTS)} mounts, {len(PACK)} pack animals; "
+    print(f"wrote packs/_source/hirelings: {len(SOLDIERS)} soldiers, {len(CIVILIANS)} civilians, {len(MOUNTS)} mounts, {len(PACK)} pack animals, {len(FAMILIARS)} familiars; "
           f"skipped {SKIP_SOLDIERS}; revisions {revs}")

@@ -151,6 +151,18 @@ initiative 1d10, lowest acts first.
   desert and war camel, elephant) and 3 pack/draft animals (role "Pack / draft animal": mule, ox from the Herd Mammal
   Cattle column, war dog) from the Monstrous Manual with PHB Table 49 load and price. Wage or price shows in the sheet
   header.
+- Familiars (Find Familiar (Wizard Spell), https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell); the d20 table and
+  the spell's figures are generated into module/rules/familiar-tables.mjs and checked by regex): a Familiar section on
+  a wizard's Bio tab. The GM's "Find Familiar" button rolls the casting time (2d12 hours) and the d20 table, whispered
+  to the GMs ("The DM secretly determines all results"), notes the 1,000 gp of incense and herbs and warns when the last
+  attempt was less than a year of world time ago ("it can be attempted but once per year"). A familiar that comes is
+  created from the Hirelings & Mounts compendium (folder Familiars: black cat, crow, hawk, owl, toad, weasel; other
+  statistics from their Monstrous Manual / Compendium pages, the toad from the spell only) with "2-4 hit points plus 1
+  hit point per caster level, and an Armor Class of 7", owned like the wizard, and linked (one at a time; a familiar
+  actor can also be dropped on the sheet). While it lives and is within the 1 mile link the wizard gets "+1 bonus to
+  all surprise die rolls"; ticked Separated, it loses 1 hit point per day of world time (applied by the GM's client).
+  When it dies, a button rolls the wizard's system shock ("or die") and removes 1 point of Constitution. Its sensory
+  powers are shown; saving throws in physical contact (the wizard's) are left to the GM.
 - Mounts and pack animals on a character: drop a mount, pack animal or pet actor on the character sheet (other actors
   become henchmen; one dropped from a compendium is first imported into the world, since a compendium entry cannot
   carry a load; a compendium link saved by 0.0.75 shows an Import button that replaces it with a world copy); the Equipment tab lists each with its load, PHB Table 49 band and movement. Tick "Riding" for the
@@ -352,7 +364,6 @@ initiative 1d10, lowest acts first.
 
 ## Planned
 - Characters: skills (Skills & Powers).
-- Wizards: familiars (Find Familiar (Wizard Spell): https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell)).
 - Spells: components when casting (verbal/somatic/material are already stored on spell items; material components as
   inventory, Casting Spells (PHB): https://adnd2e.fandom.com/wiki/Casting_Spells_(PHB)).
 - Equipment and treasure: a treasure generator (DMG Tables 84-88);

@@ -2,6 +2,7 @@ import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { promptMorale } from "../henchmen.mjs";
+import { familiarSurpriseBonus } from "../familiars.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -1088,6 +1089,8 @@ export default class AD2EActor extends Actor {
     const T = AD2E.encounterTables;
     const dex = this.type === "character" ? (this.system.abilityData?.dex?.reaction ?? 0) : 0;
     const kitAuto = this.type === "character" ? (this.system.kitMods?.total("surprise") ?? 0) : 0;
+    // A living familiar within reach: "+1 bonus to all surprise die rolls" (Find Familiar (Wizard Spell)).
+    const familiar = familiarSurpriseBonus(this);
     const kitOptions = this.#kitOptions("surprise");
     const sign = v => `${v > 0 ? "+" : ""}${v}`;
     const groups = ["other", "party", "conditions"].map(g => {
@@ -1099,7 +1102,8 @@ export default class AD2EActor extends Actor {
         : `<div class="form-group"><label>${esc(m.label)}</label><select name="t57-${m.key}"><option value="0">—</option>${m.values.map(v => `<option value="${v}">${sign(v)}</option>`).join("")}</select></div>`).join("");
       return `<fieldset><legend>${i18n(`AD2E.Surprise.Group.${g}`)}</legend><div class="ad2e-check-grid">${boxes}</div>${other}</fieldset>`;
     }).join("");
-    const fixed = [dex ? `${i18n("AD2E.Surprise.Dex")} ${dex > 0 ? "+" : ""}${dex}` : "", kitAuto ? `${i18n("AD2E.Surprise.Kit")} ${kitAuto > 0 ? "+" : ""}${kitAuto}` : ""].filter(Boolean).join(" · ");
+    const fixed = [dex ? `${i18n("AD2E.Surprise.Dex")} ${dex > 0 ? "+" : ""}${dex}` : "", kitAuto ? `${i18n("AD2E.Surprise.Kit")} ${kitAuto > 0 ? "+" : ""}${kitAuto}` : "",
+      familiar ? `${i18n("AD2E.Familiar.Surprise")} +${familiar}` : ""].filter(Boolean).join(" · ");
     const input = await DialogV2.prompt({
       // Class "ad2e": opaque background (module/opaque-windows.mjs). The situations scroll inside their own box so the
       // dialog stays within the screen and the Roll button visible.
@@ -1127,9 +1131,9 @@ export default class AD2EActor extends Actor {
       rejectClose: false
     });
     if (!input) return;
-    const roll = await new Roll("1d10 + @dex + @kit + @table + @mod", { dex, kit: kitAuto + input.kit, table: input.table, mod: input.mod }).evaluate();
+    const roll = await new Roll("1d10 + @dex + @kit + @familiar + @table + @mod", { dex, kit: kitAuto + input.kit, familiar, table: input.table, mod: input.mod }).evaluate();
     const surprised = roll.total <= T.surprisedOn;
-    const parts = [...input.picked, input.kitText].filter(Boolean).join("; ");
+    const parts = [...input.picked, input.kitText, familiar ? `${i18n("AD2E.Familiar.Surprise")} +${familiar}` : ""].filter(Boolean).join("; ");
     return roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${i18n("AD2E.Surprise.Title")} (${game.i18n.format("AD2E.Surprise.On", { n: T.surprisedOn })}${parts ? `; ${parts}` : ""})`
         + `${modifierText(input.mod, input.note)}: ${i18n(surprised ? "AD2E.Surprise.Surprised" : "AD2E.Surprise.NotSurprised")}` });
