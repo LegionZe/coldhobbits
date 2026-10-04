@@ -120,7 +120,8 @@ initiative 1d10, lowest acts first.
   refreshes its statistics and component links, keeping name, memorization, learned status and notes; spells without a
   wiki page are left alone.
 - Elemental mage (Al-Qadim kit; Elemental Mage (Character Kit), https://adnd2e.fandom.com/wiki/Elemental_Mage_(Character_Kit)):
-  choose the province (flame, sand, sea, wind) on the Class tab. "+1 to each damage die inflicted with an attack using
+  choose the province (flame, sand, sea, wind) on the Class tab (shown whenever the kit is on the character, found by
+  identifier or name). "+1 to each damage die inflicted with an attack using
   that element (magical or otherwise)": spell damage of a spell in that province, and weapon damage with the "Attack
   uses <province>" tick box. "if the mage suffers an attack using the specialty element, a -2 penalty is applied to
   each damage die (with a minimum of no damage inflicted)": damage messages from such attacks carry their dice, and

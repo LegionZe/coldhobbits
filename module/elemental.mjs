@@ -13,19 +13,29 @@ export const PROVINCES = ["flame", "sand", "sea", "wind"];
 export const DIE_BONUS = 1;
 export const DIE_WARD = 2;
 
-/** The province of an elemental mage (kit taken and fitting, province chosen), otherwise null. */
-export function elementOf(actor) {
+/** Whether a kit item is the elemental mage kit (by identifier, or by name: world copies may carry another identifier). */
+export function isElementalKit(kit) {
+  if (!kit) return false;
+  const id = kit.system?.identifier ?? "";
+  return id === ELEMENTAL_KIT || /^elemental mage\b/i.test(kit.name ?? "");
+}
+
+/** The character's kit item if it is the elemental mage kit (whether or not it fits the class), otherwise null. */
+function elementalKit(actor) {
   if (actor?.type !== "character") return null;
-  const sys = actor.system;
-  const kit = sys.classInfo?.kitFits ? sys.classInfo.kitItem : null;
-  if (kit?.system?.identifier !== ELEMENTAL_KIT) return null;
-  return PROVINCES.includes(sys.element) ? sys.element : null;
+  const kit = actor.system?.classInfo?.kitItem ?? [...(actor.items ?? [])].find(i => i.type === "kit");
+  return isElementalKit(kit) ? kit : null;
+}
+
+/** The province of an elemental mage (kit taken, province chosen), otherwise null. */
+export function elementOf(actor) {
+  if (!elementalKit(actor)) return null;
+  return PROVINCES.includes(actor.system.element) ? actor.system.element : null;
 }
 
 /** Whether a character has the elemental mage kit (the province may not be chosen yet). */
 export function isElementalMage(actor) {
-  const sys = actor?.system;
-  return actor?.type === "character" && !!sys?.classInfo?.kitFits && sys.classInfo.kitItem?.system?.identifier === ELEMENTAL_KIT;
+  return !!elementalKit(actor);
 }
 
 /** The attacker's bonus per damage die for an attack in these provinces (0 if not its province). */
