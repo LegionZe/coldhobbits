@@ -239,9 +239,18 @@ initiative 1d10, lowest acts first.
   Al-Qadim kits (33): Arabian Adventures (eligible classes from its Table 3: Character Kit Summary) and The Complete
   Sha'ir's Handbook (wizard kits, for mages), in an "Al-Qadim" folder under each group. Ability minimums (Hakima, Kahin,
   Clockwork Mage) are set; race, sex and alignment restrictions are flagged with a link to the kit page; bonus
-  proficiencies are added as for the other kits. Kahin uses the druid experience table (noted on the kit; the system
-  still uses the cleric table). Kit special abilities (sha'ir genie summoning, elemental provinces) are not automated.
+  proficiencies are added as for the other kits. Kahin uses the druid experience table (kit field `xpTable`, see
+  Al-Qadim rules). Kit special abilities (sha'ir genie summoning, elemental provinces) are not automated.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-Kit recommended proficiencies, kit weapon specialization exceptions, specially made Strength bows, armour sizes, class armour restrictions, items inside containers, mount encumbrance, skills (Skills & Powers), items (weapons/armor/spells), NPC/monster sheet.
+- Combat: the two-weapon extra attack in the attack rate shown and a one-handed check for the main weapon; monster
+  unarmed attacks and the +4 for an armed defender; initiative for scrolls, side/group initiative and casting while
+  hasted; encounter reaction rolls; conditions with rule modifiers.
+- Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
+  specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
+  learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
+- Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
+  monster pictures bundled with the system.
+- Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit
+  bonuses to learning spells.
