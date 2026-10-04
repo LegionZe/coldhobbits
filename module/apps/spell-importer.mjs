@@ -20,10 +20,27 @@ async function listAll(params, key) {
   return out;
 }
 
+/** World compendium the importer writes to (created on the first import). */
+export const SPELL_PACK = { name: "ad2e-imported-spells", label: "AD2E.SpellImporter.PackLabel" };
+/** System compendium of spell components (POSM Table 16) and the PHB equipment holding the holy item. */
+const COMPONENT_PACK = "ad2e.components";
+
+/**
+ * Component catalog for linking ([{ identifier, name }], module/importers/spell-components.mjs): the Spell Components
+ * compendium's items, loaded once per session.
+ */
+let componentCatalog = null;
+async function components() {
+  if (componentCatalog) return componentCatalog;
+  const index = await game.packs.get(COMPONENT_PACK)?.getIndex({ fields: ["system.identifier"] });
+  componentCatalog = [...(index ?? [])].map(e => ({ identifier: e.system?.identifier ?? "", name: e.name })).filter(c => c.identifier);
+  return componentCatalog;
+}
+
 /**
  * GM tool: import spells from the AD&D 2e wiki (https://adnd2e.fandom.com/) by source book, then filter by class
- * and level, as world spell Items (game statistics and a link to the page; no description). Re-importing updates
- * items imported from the same page.
+ * and level, into a world compendium ("Imported Spells") as spell Items (game statistics, a link to the page and links
+ * to their material components; no description). Re-importing updates spells imported from the same page.
  */
 export default class SpellImporter extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
@@ -121,7 +138,7 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
           cont = r.continue ?? null;
         } while (cont);
         for (const [title, p] of Object.entries(pages)) {
-          const data = wiki.spellItemData(title, p.wiki, p.categories);
+          const data = wiki.spellItemData(title, p.wiki, p.categories, await components());
           if (!data) { skipped.push(title); continue; }
           data.flags.ad2e.wiki.revid = p.revid;
           const id = title;
@@ -158,17 +175,26 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
     this.render();
   }
 
+  /** The world compendium for imported spells, created if missing. */
+  static async #pack() {
+    const id = `world.${SPELL_PACK.name}`;
+    const existing = game.packs.get(id);
+    if (existing) return existing;
+    const { CompendiumCollection } = foundry.documents.collections;
+    return CompendiumCollection.createCompendium({ name: SPELL_PACK.name, label: game.i18n.localize(SPELL_PACK.label), type: "Item" });
+  }
+
   /**
-   * Item folder "<Class> Spells" / "Level <n>" (cantrips and orisons: "Cantrips / orisons") for a spell, created if
+   * Folder "<Class> Spells" / "Level <n>" (cantrips and orisons: "Cantrips / orisons") in the compendium, created if
    * missing; `cache` avoids creating the same folder twice in one import.
    */
-  static async #folderFor(kind, level, cache) {
+  static async #folderFor(pack, kind, level, cache) {
     const i18n = k => game.i18n.localize(k);
     const find = async (name, parent) => {
       const key = `${parent?.id ?? ""}/${name}`;
       if (cache.has(key)) return cache.get(key);
-      const folder = game.folders.find(f => f.type === "Item" && f.name === name && (f.folder?.id ?? null) === (parent?.id ?? null))
-        ?? await Folder.create({ name, type: "Item", folder: parent?.id ?? null, sorting: "a" });
+      const folder = pack.folders.find(f => f.name === name && (f.folder?.id ?? null) === (parent?.id ?? null))
+        ?? await Folder.create({ name, type: "Item", folder: parent?.id ?? null, sorting: "a" }, { pack: pack.collection });
       cache.set(key, folder);
       return folder;
     };
@@ -177,30 +203,34 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
   }
 
   /**
-   * Import the selected spells that match the current filters, filed by class and spell level (e.g. "Wizard Spells" /
-   * "Level 3"); spells imported before from the same page are updated (memorization kept) and moved to that folder.
+   * Import the selected spells that match the current filters into the Imported Spells compendium, filed by class and
+   * spell level (e.g. "Wizard Spells" / "Level 3"); spells imported before from the same page are updated (their
+   * component links included) and moved to that folder.
    */
   static async #onImport() {
     const s = this.state;
     const chosen = this.#shown().filter(e => s.selected.has(e.id));
     if (!chosen.length) return;
+    const pack = await SpellImporter.#pack();
+    if (pack.locked) return ui.notifications.warn(game.i18n.format("AD2E.SpellImporter.Locked", { pack: pack.title }));
+    const index = await pack.getIndex({ fields: ["flags.ad2e.wiki.title", "type"] });
     const cache = new Map();
     const create = [];
     const update = [];
     for (const e of chosen) {
       const data = foundry.utils.deepClone(e.data);
-      const folder = s.folder ? await SpellImporter.#folderFor(data.system.kind, data.system.level, cache) : null;
-      const existing = game.items.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
+      const folder = s.folder ? await SpellImporter.#folderFor(pack, data.system.kind, data.system.level, cache) : null;
+      const existing = index.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
       if (existing) {
         const { prepared, cast, ...system } = data.system;
-        update.push({ _id: existing.id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
+        update.push({ _id: existing._id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
       } else {
         if (folder) data.folder = folder.id;
         create.push(data);
       }
     }
-    if (create.length) await Item.createDocuments(create);
-    if (update.length) await Item.updateDocuments(update);
-    ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Done", { created: create.length, updated: update.length }));
+    if (create.length) await Item.createDocuments(create, { pack: pack.collection });
+    if (update.length) await Item.updateDocuments(update, { pack: pack.collection });
+    ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Done", { created: create.length, updated: update.length, pack: pack.title }));
   }
 }

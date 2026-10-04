@@ -21,6 +21,11 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
       carried: new BooleanField({ initial: true }),
       capacity: new SchemaField({ weight: optional(), volume: new StringField({ initial: "" }) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional() }),
+      // Spell components (category "component", POSM Table 16): group, acquisition (FS / TM / SO / Auto), scarcity,
+      // found in a wizard's laboratory, perishable.
+      component: new SchemaField({ group: new StringField({ initial: "" }), acquisition: new StringField({ initial: "" }),
+        scarcity: new StringField({ initial: "" }), laboratory: new BooleanField({ initial: false }),
+        perishable: new BooleanField({ initial: false }) }),
       container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),

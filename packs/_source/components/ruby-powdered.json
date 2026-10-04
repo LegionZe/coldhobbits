@@ -1,0 +1,42 @@
+{
+  "_id": "avMQMh6VQHZs0Lou",
+  "_key": "!items!avMQMh6VQHZs0Lou",
+  "name": "Ruby, powdered",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "ruby-powdered",
+    "category": "component",
+    "cost": "60 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Minerals",
+      "acquisition": "SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "xCim8tvoKxw6bJ9O",
+  "sort": 1530,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

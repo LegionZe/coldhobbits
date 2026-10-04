@@ -18,6 +18,26 @@
       "somatic": true,
       "material": true
     },
+    "materials": [
+      {
+        "identifier": "fur",
+        "name": "Fur",
+        "consumed": true,
+        "label": ""
+      },
+      {
+        "identifier": "amber",
+        "name": "Amber",
+        "consumed": true,
+        "label": ""
+      },
+      {
+        "identifier": "rod-glass",
+        "name": "Rod, glass",
+        "consumed": true,
+        "label": ""
+      }
+    ],
     "range": "40 yds.+ 10 yds./level",
     "area": "Special",
     "castingTime": "3",

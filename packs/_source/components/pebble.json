@@ -1,0 +1,42 @@
+{
+  "_id": "kFszVq2SEOrAs2Ib",
+  "_key": "!items!kFszVq2SEOrAs2Ib",
+  "name": "Pebble",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pebble",
+    "category": "component",
+    "cost": "",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Common/Household Materials",
+      "acquisition": "Auto",
+      "scarcity": "Common",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "3D1aBHB0Np29falT",
+  "sort": 2210,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

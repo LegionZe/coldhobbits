@@ -113,8 +113,20 @@ initiative 1d10, lowest acts first.
   Dropping a spell warns about another class's spells, opposition schools and the paladin/ranger spheres.
   "Spells (examples)" has 12 PHB spells; GMs import more with Configure Settings > "Import spells" (or
   `game.ad2e.importSpells()`): choose a source book from the AD&D 2e wiki, filter by class and level, import (statistics
-  and links only; filed into folders by class and spell level, e.g. Wizard Spells / Level 3; re-import keeps
-  memorization and moves spells into those folders).
+  and links only) into the world compendium "Imported Spells" (created on the first import), filed into folders by
+  class and spell level, e.g. Wizard Spells / Level 3; re-import updates spells from the same page.
+- Spell components: the "Spell Components (POSM)" compendium holds POSM Table 16 (381 components in its 7 groups, with
+  acquisition FS/TM/SO/Auto, scarcity, cost, perishable and "in a wizard's laboratory"; generated from "Spell Components
+  (POSM)"). Spells with an M component link them, matched automatically at import from the page's component sentences
+  (only the links are stored, never the text): Table 16 names ("Bell, tiny" also as "tiny bell", plurals, longest match
+  first), holy symbols and holy/unholy water to the PHB holy item. Matching is imperfect (in the PHB 214 of 311 spells
+  with M get links; items Table 16 leaves out, such as Identify's 100 gp pearl, are not found): check and fix the links
+  on the spell sheet (Consumed tick box, remove, add from the component list). Consumed by default: "Whatever the
+  component, it is automatically destroyed or lost when the spell is cast, unless the spell description specifically
+  notes otherwise" (Casting Spells (PHB)); a component named in a sentence calling it reusable or not consumed is
+  kept, and holy symbols are never consumed. World setting "Track material components" (off by default; optional per
+  Material Spell Components (POSM)): Cast checks the caster's equipment for each linked component, removes one of each
+  consumed one, and for missing ones warns and asks to cast anyway; the chat card lists what was used or missing.
 - Class abilities (Class Abilities tab): thief skills from PHB Tables 26-29 (base, race, Dexterity, armour) plus a kit
   adjustment (entered on the kit item) and discretionary points (60 at 1st level, +30 per level; at most 30 on one skill
   at 1st level and 15 per level after; 95% maximum); bard abilities (Table 33, 20 points + 15 per level); ranger hide in
@@ -364,8 +376,6 @@ initiative 1d10, lowest acts first.
 
 ## Planned
 - Characters: skills (Skills & Powers).
-- Spells: components when casting (verbal/somatic/material are already stored on spell items; material components as
-  inventory, Casting Spells (PHB): https://adnd2e.fandom.com/wiki/Casting_Spells_(PHB)).
 - Equipment and treasure: a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit

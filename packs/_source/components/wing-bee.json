@@ -1,0 +1,42 @@
+{
+  "_id": "v2fMKkRsOIrpUHuv",
+  "_key": "!items!v2fMKkRsOIrpUHuv",
+  "name": "Wing, bee",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "wing-bee",
+    "category": "component",
+    "cost": "3 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Animal Specimens",
+      "acquisition": "FS, TM",
+      "scarcity": "Uncommon",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FHUQeRnluiR9rVaG",
+  "sort": 3110,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

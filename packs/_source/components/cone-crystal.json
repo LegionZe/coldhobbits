@@ -1,0 +1,42 @@
+{
+  "_id": "7H3NnYtH8drbxxpu",
+  "_key": "!items!7H3NnYtH8drbxxpu",
+  "name": "Cone, crystal",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "cone-crystal",
+    "category": "component",
+    "cost": "7 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Models and Miniatures",
+      "acquisition": "SO, TM",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "0AxCkgKsByIj81OT",
+  "sort": 140,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

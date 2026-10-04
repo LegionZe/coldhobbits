@@ -20,6 +20,10 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
         somatic: new BooleanField({ initial: true }),
         material: new BooleanField({ initial: false })
       }),
+      // Material components linked to component items by identifier (module/importers/spell-components.mjs; fixed on the
+      // spell sheet): consumed = used up by casting, label = what the link stands for (e.g. "holy symbol").
+      materials: new ArrayField(new SchemaField({ identifier: text(), name: text(), consumed: new BooleanField({ initial: true }),
+        label: text() })),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
       sources: new ArrayField(new StringField()),
       // Wizard spells: understood and in the spell book (module/learn-spells.mjs); a failed roll records the level

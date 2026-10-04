@@ -181,7 +181,7 @@ AD2E.coinsPerPound = COINS_PER_POUND;
 /** Equipment item categories (PHB Table 44 lists). */
 AD2E.equipmentCategories = { gear: "AD2E.Gear.gear", clothing: "AD2E.Gear.clothing", provisions: "AD2E.Gear.provisions",
   lodging: "AD2E.Gear.lodging", tack: "AD2E.Gear.tack", animal: "AD2E.Gear.animal", transport: "AD2E.Gear.transport",
-  service: "AD2E.Gear.service" };
+  service: "AD2E.Gear.service", component: "AD2E.Gear.component" };
 
 /** "2 gp · 2 lb each · holds 50 lb (3'×2'×1')" / animal "carries 180 / 270 / 360 lb" for an equipment item. */
 export function equipmentSummary(sys) {
@@ -191,6 +191,12 @@ export function equipmentSummary(sys) {
   if (sys.capacity.weight !== null) {
     parts.push(game.i18n.format("AD2E.Gear.Holds", { lb: sys.capacity.weight })
       + (sys.capacity.volume ? ` (${sys.capacity.volume})` : ""));
+  }
+  // Spell components (POSM Table 16): scarcity, acquisition, perishable, in a wizard's laboratory.
+  const c = sys.component;
+  if (sys.category === "component" && c) {
+    parts.push([c.scarcity, c.acquisition, c.perishable ? i18n("AD2E.Gear.Perishable") : "", c.laboratory ? i18n("AD2E.Gear.Laboratory") : ""]
+      .filter(Boolean).join(", "));
   }
   if (sys.load.full !== null) {
     parts.push(game.i18n.format("AD2E.Gear.Carries", { full: sys.load.full, half: sys.load.half, quarter: sys.load.quarter }));

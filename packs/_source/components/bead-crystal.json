@@ -1,0 +1,42 @@
+{
+  "_id": "OkPA0uGoB81JD63b",
+  "_key": "!items!OkPA0uGoB81JD63b",
+  "name": "Bead, crystal",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "bead-crystal",
+    "category": "component",
+    "cost": "6 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Refined/Finished Items",
+      "acquisition": "TM",
+      "scarcity": "Uncommon",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "vQcKIzCNKCwqEfKJ",
+  "sort": 720,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

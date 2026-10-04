@@ -1,0 +1,42 @@
+{
+  "_id": "EUgDPmAz88ELf1lp",
+  "_key": "!items!EUgDPmAz88ELf1lp",
+  "name": "Plate mail, piece",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "plate-mail-piece",
+    "category": "component",
+    "cost": "5 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Models and Miniatures",
+      "acquisition": "SO, TM",
+      "scarcity": "Uncommon",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "0AxCkgKsByIj81OT",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

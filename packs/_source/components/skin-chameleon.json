@@ -1,0 +1,42 @@
+{
+  "_id": "D4fx66Ec5HSKkGjL",
+  "_key": "!items!D4fx66Ec5HSKkGjL",
+  "name": "Skin, chameleon",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "skin-chameleon",
+    "category": "component",
+    "cost": "2 gp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Animal Specimens",
+      "acquisition": "FS, SO",
+      "scarcity": "Rare",
+      "laboratory": false,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FHUQeRnluiR9rVaG",
+  "sort": 2960,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

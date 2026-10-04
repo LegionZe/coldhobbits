@@ -1,0 +1,42 @@
+{
+  "_id": "OTdXgwpVee5XlV4i",
+  "_key": "!items!OTdXgwpVee5XlV4i",
+  "name": "Dust, coal",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "dust-coal",
+    "category": "component",
+    "cost": "1 cp",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "component": {
+      "group": "Minerals",
+      "acquisition": "FS, TM",
+      "scarcity": "Common",
+      "laboratory": true,
+      "perishable": false
+    },
+    "source": "Player's Option: Spells & Magic, Table 16",
+    "url": "https://adnd2e.fandom.com/wiki/Spell_Components_(POSM)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "xCim8tvoKxw6bJ9O",
+  "sort": 1270,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
