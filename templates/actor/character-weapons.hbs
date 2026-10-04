@@ -26,6 +26,7 @@
       {{#if @root.editable}}{{#if an.canRoll}}<button type="button" data-action="rollBodyWeight" data-tooltip="{{localize 'AD2E.Animal.RollHint'}}">{{localize "AD2E.Animal.RollBodyWeight"}}</button>{{/if}}{{/if}}
       <span class="{{#if an.missingBody}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Animal.RiderHint'}}">{{localize "AD2E.Animal.RiderWeight"}}: <strong>{{an.riderTotal}} lb</strong> ({{an.riderText}})</span>
     </div>
+    {{#if an.error}}<p class="ad2e-note ad2e-unmet">{{an.error}}</p>{{/if}}
     {{#each an.rows as |r|}}
     <div class="ad2e-prof-row ad2e-armor-row">
       <img src="{{r.img}}" alt="" width="24" height="24">

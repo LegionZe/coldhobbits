@@ -152,7 +152,8 @@ initiative 1d10, lowest acts first.
   Cattle column, war dog) from the Monstrous Manual with PHB Table 49 load and price. Wage or price shows in the sheet
   header.
 - Mounts and pack animals on a character: drop a mount, pack animal or pet actor on the character sheet (other actors
-  become henchmen); the Equipment tab lists each with its load, PHB Table 49 band and movement. Tick "Riding" for the
+  become henchmen; one dropped from a compendium is first imported into the world, since a compendium entry cannot
+  carry a load); the Equipment tab lists each with its load, PHB Table 49 band and movement. Tick "Riding" for the
   animal the character rides (one at a time): its load then includes the rider, "When calculating a mount's load, be
   sure to include the weight of the rider!" (Encumbrance (PHB)), i.e. the character's body weight plus everything the
   character carries (encumbrance load, clothing included). Body weight is entered on the Equipment tab or rolled on PHB
