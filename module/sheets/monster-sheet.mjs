@@ -33,7 +33,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       hpDamage: MonsterSheet.onHpDamage,
       hpHeal: MonsterSheet.onHpHeal,
       recoverTemp: MonsterSheet.onRecoverTemp,
-      rollSurprise: MonsterSheet.onRollSurprise
+      rollSurprise: MonsterSheet.onRollSurprise,
+      rollUnarmed: MonsterSheet.onRollUnarmed
     }
   };
 
@@ -121,6 +122,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   static onRollSave(event, target) { return this.document.rollSave(target.dataset.save); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
+  static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }
   static onRollMorale() { return this.document.rollMorale(); }
   static onRollHp() { return this.document.rollMonsterHitPoints(); }

@@ -179,6 +179,15 @@ initiative 1d10, lowest acts first.
   penalty; a maintained hold does 1 more point each round; overbearing adds 4 per size category, -2 per defender leg
   beyond two and +1 per extra attacker. Blades (slashing weapons) have a non-lethal option: -4 to hit, half damage.
   Punching and non-lethal damage apply as temporary damage (below). Tables from `python3 tools/build-combat-tables.py`.
+- Monsters punch, wrestle and overbear from the Unarmed row of their Attacks table (same rules, no Strength or kit
+  modifiers; overbearing sizes default to the monster's and the target's size). The dialog notes that "unintelligent
+  creatures ... never try to grapple, punch, or pull down an opponent" and that natural weapons stay usable (Nonlethal
+  Combat and Creatures (PHB)).
+- Armed defender ("an armed defender is automatically allowed to strike with his weapon before the unarmed attack is
+  made ... the defender gains a +4 bonus to his attack and damage rolls", Attacking Without Killing (PHB)): an unarmed
+  attack against a target the user can see holding a melee weapon (characters: equipped; monsters: not dropped) notes
+  in chat that the defender strikes first with +4; character and monster melee attack and damage dialogs have a
+  tick box "Against an unarmed attacker closing in" that adds +4.
 - Temporary damage ("Attacking Without Killing", PHB/DMG): punching damage applied from chat is recorded separately and
   75% of it returns when the combat encounter ends (25% lasting, rounded down); the temporary half of non-lethal weapon
   damage returns one turn (10 minutes of game time) after the encounter ends. A character or monster at 0 or fewer hit
@@ -254,7 +263,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Combat: monster unarmed attacks and the +4 for an armed defender; initiative for scrolls, side/group initiative and casting while
+- Combat: initiative for scrolls, side/group initiative and casting while
   hasted; encounter reaction rolls; conditions with rule modifiers.
 - Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;

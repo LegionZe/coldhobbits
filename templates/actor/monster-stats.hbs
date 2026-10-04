@@ -61,6 +61,15 @@
           </td>
         </tr>
         {{/each}}
+        <tr>
+          <td><i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i> {{localize "AD2E.Unarmed.Title"}}</td>
+          <td class="ad2e-weapon-meta" colspan="2">{{localize "AD2E.Unarmed.Meta"}}</td>
+          <td class="ad2e-monster-buttons">
+            <button type="button" data-action="rollUnarmed" data-form="punch">{{localize "AD2E.Unarmed.punch"}}</button>
+            <button type="button" data-action="rollUnarmed" data-form="wrestle">{{localize "AD2E.Unarmed.wrestle"}}</button>
+            <button type="button" data-action="rollUnarmed" data-form="overbear">{{localize "AD2E.Unarmed.overbear"}}</button>
+          </td>
+        </tr>
       </tbody>
     </table>
     {{#unless hasAttacks}}<p class="ad2e-placeholder">{{localize "AD2E.Monster.NoAttacks"}}</p>{{/unless}}
