@@ -24,13 +24,6 @@ _spec = importlib.util.spec_from_file_location("classdata", "tools/build-class-d
 classdata = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(classdata)
 
-# Damage formulas for example spells (@level = casting level), each checked against its page; other spells' formulas
-# are entered by the GM on the spell sheet.
-EXAMPLE_DAMAGE = {
-    "Fireball (Wizard Spell)": ("(min(@level, 10))d6", r"1d6 points of damage for each level of experience of the spellcaster \(up to a maximum of 10d6\)"),
-    "Lightning Bolt (Wizard Spell)": ("(min(@level, 10))d6", r"1d6 points of damage per level of the spellcaster \(maximum damage per level of 10d6\)"),
-}
-
 EXAMPLES = ["Magic Missile (Wizard Spell)", "Sleep (Wizard Spell)", "Detect Magic (Wizard Spell)", "Web (Wizard Spell)",
             "Fireball (Wizard Spell)", "Lightning Bolt (Wizard Spell)",
             "Cure Light Wounds (Priest Spell)", "Bless (Priest Spell)", "Command (Priest Spell)",
@@ -106,13 +99,9 @@ if __name__ == "__main__":
         os.unlink(f.name)
     items = json.loads(out)
     assert len(items) == len(EXAMPLES), [x["title"] for x in raw]
-    wiki_of = {x["title"]: x["wiki"] for x in raw}
-    for it in items:
-        title = it["flags"]["ad2e"]["wiki"]["title"]
-        if title in EXAMPLE_DAMAGE:
-            formula, pattern = EXAMPLE_DAMAGE[title]
-            assert re.search(pattern, wiki_of[title]), f"{title}: damage text changed"
-            it["system"]["damage"] = formula
+    # Damage formulas come from module/importers/spell-damage.mjs (checked against each page by the parser).
+    dmg = {it["name"]: it["system"]["damage"] for it in items}
+    assert dmg["Fireball"] and dmg["Lightning Bolt"] and dmg["Magic Missile"], dmg
     # Folders by class, then spell level (the same layout the spell importer uses in the world).
     tops = {k: classdata.folder_doc(f"spells.{k}", label, sort=i * 1000)
             for i, (k, label) in enumerate([("wizard", "Wizard Spells"), ("priest", "Priest Spells")])}

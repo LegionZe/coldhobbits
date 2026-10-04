@@ -214,7 +214,7 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
     if (!chosen.length) return;
     const pack = await SpellImporter.#pack();
     if (pack.locked) return ui.notifications.warn(game.i18n.format("AD2E.SpellImporter.Locked", { pack: pack.title }));
-    const index = await pack.getIndex({ fields: ["flags.ad2e.wiki.title", "type"] });
+    const index = await pack.getIndex({ fields: ["flags.ad2e.wiki.title", "type", "system.damage"] });
     const cache = new Map();
     const create = [];
     const update = [];
@@ -223,7 +223,9 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
       const folder = s.folder ? await SpellImporter.#folderFor(pack, data.system.kind, data.system.level, cache) : null;
       const existing = index.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
       if (existing) {
-        const { prepared, cast, damage, ...system } = data.system; // the GM's damage formula stays
+        const { prepared, cast, damage, ...system } = data.system;
+        // A damage formula the GM entered stays; a blank one takes the known formula (module/importers/spell-damage.mjs).
+        if (damage && !existing.system?.damage) system.damage = damage;
         update.push({ _id: existing._id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
       } else {
         if (folder) data.folder = folder.id;
@@ -249,7 +251,7 @@ export function spellPageTitle(item) {
  * GM tool (game.ad2e.updateSpells(), and the importer's "Update existing spells" button): re-read the wiki page of every
  * spell in the world - world Items, spells on actors, and the Imported Spells compendium - and refresh its statistics and
  * material component links. What belongs to the character stays: memorized and cast counts, learned / failed level,
- * notes, the damage formula and the name (a renamed spell keeps its name). Spells without a wiki page are left alone.
+ * notes, a damage formula already set and the name (a renamed spell keeps its name). Spells without a wiki page are left alone.
  * Resolves { updated, skipped, failed }.
  */
 export async function updateExistingSpells() {
@@ -312,7 +314,8 @@ export async function updateExistingSpells() {
       const { prepared, cast, learned, learnFailedLevel, notes, damage, ...system } = data.system;
       const flags = { ad2e: { wiki: { title, revid: p.revid } } };
       for (const t of byTitle.get(title)) {
-        const change = { _id: t.doc.id, system, flags };
+        // A blank damage formula takes the known one; one the GM entered stays.
+        const change = { _id: t.doc.id, system: damage && !t.doc.system?.damage ? { ...system, damage } : system, flags };
         if (t.where === null) worldUpdates.push(change);
         else if (t.where === pack) packUpdates.push(change);
         else {

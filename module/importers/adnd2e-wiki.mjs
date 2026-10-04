@@ -8,6 +8,7 @@
  * Only the infobox (game mechanics) and a link to the page are imported; spell descriptions are not.
  */
 import { matchComponents } from "./spell-components.mjs";
+import { damageFormula } from "./spell-damage.mjs";
 import { SPELL_PROVINCES } from "../rules/province-tables.mjs";
 
 /** School element tags ("Invocation/Evocation (Fire)") as Al-Qadim provinces. */
@@ -121,7 +122,7 @@ export function spellItemData(title, wiki, categories = [], components = null) {
       components: { verbal: flag(box.verbal), somatic: flag(box.somatic), material: flag(box.material) },
       // Links to component items (module/importers/spell-components.mjs) when a component catalog is given.
       materials: components && flag(box.material) ? matchComponents(wiki, components) : [],
-      provinces: provincesOf(title, box), damage: "",
+      provinces: provincesOf(title, box), damage: damageFormula(title, wiki),
       range: first(box.range), area: first(box.aoe), castingTime: first(box.castingTime),
       duration: first(box.duration), save: first(box.save),
       sources: booksOf(categories), url: pageUrl(title), prepared: 0, cast: 0, notes: ""
