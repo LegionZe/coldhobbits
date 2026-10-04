@@ -197,6 +197,13 @@ initiative 1d10, lowest acts first.
   modifiers (unconditional ones automatically, conditional ones as tick boxes) are subtracted, so a bonus makes the
   reaction friendlier; a manual modifier covers the creature's description and morale modifiers. The result is shown
   to the GM only. Table from `python3 tools/build-encounter-tables.py`.
+- Bows made for Strength: a bow item has "Bow made for Strength" (standard, 3-25 and the 18/xx bands). A standard bow
+  applies Strength penalties only; a bow made for a Strength gives the user's Strength attack and damage bonuses up to
+  that Strength, penalties always ("bows must be specially made to gain the bonus", Strength (PHB); "the attack roll and
+  damage Strength modifiers apply only if the character has a properly prepared bow", Missile Weapons in Combat (PHB)).
+  A bow for exceptional Strength (18/01 or more) used by a character without it adds a chat note to roll bend
+  bars/lift gates to string or use it (Weapons (PHB)). Thrown weapons no longer count encumbrance, heat and kit attack
+  modifiers twice.
 - Two weapons ("Attacking with Two Weapons (PHB)"): warriors and rogues get a "Two weapons" choice in the melee
   attack dialog ("Both weapons" rolls the weapon clicked as the main weapon and the chosen weapon in the other hand as
   the second, one chat message each; a backstab applies to the main weapon only): main weapon -2, second weapon -4, improved by the Dexterity reaction adjustment to at most 0; rangers
@@ -298,7 +305,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: specially made Strength bows; armour sizes; class armour restrictions; henchmen;
+- Characters: armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.

@@ -384,6 +384,10 @@ export default class AD2EActor extends Actor {
     if (vsUnarmed) notes.push(game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed }));
     const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
     if (t51.text) notes.push(t51.text);
+    // A bow made for exceptional Strength, used without it: bend bars/lift gates roll to string or use it (Weapons (PHB)).
+    if (use === "missile" && attack.bowBendBars !== null && attack.bowBendBars !== undefined) {
+      notes.push(game.i18n.format("AD2E.Weapon.BowBendBars", { rating: attack.bowStrength, chance: attack.bowBendBars }));
+    }
     const rangeMod = input.range ? AD2E.rangeModifiers[input.range] : 0;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the

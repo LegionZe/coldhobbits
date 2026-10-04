@@ -9,6 +9,16 @@ const { BooleanField, SchemaField, NumberField, StringField, HTMLField } = found
 const int = (initial, min = null, max = null) =>
   new NumberField({ required: true, integer: true, initial, min, max, nullable: false });
 
+/** Strength table row for a bow's rating ("17", "18/50", "18/00", "19"); null for a standard bow or an unknown rating. */
+export function bowStrengthRow(rating) {
+  const m = String(rating ?? "").trim().match(/^(\d+)(?:\/(\d+))?$/);
+  if (!m) return null;
+  const T = AD2E.abilityTables;
+  const score = Number(m[1]);
+  if (score === 18 && m[2] !== undefined) return lookup(T.strExceptional, Number(m[2]) === 0 ? 100 : Number(m[2])) ?? null;
+  return lookup(T.str, score) ?? null;
+}
+
 export default class CharacterData extends foundry.abstract.TypeDataModel {
   static LOCALIZATION_PREFIXES = ["AD2E.Character"];
 
@@ -436,8 +446,24 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       };
     }
     if (w.missile) {
-      const strHit = { full: hit, penalty: Math.min(hit, 0) }[w.strength] ?? 0;
-      const strDmg = { full: dmg, damage: dmg, penalty: Math.min(dmg, 0) }[w.strength] ?? 0;
+      // Strength alone (encumbrance, heat and kit modifiers are already in `missile`).
+      const strOnly = this.mods.hit;
+      let strHit = { full: strOnly, penalty: Math.min(strOnly, 0) }[w.strength] ?? 0;
+      let strDmg = { full: dmg, damage: dmg, penalty: Math.min(dmg, 0) }[w.strength] ?? 0;
+      // A bow made for a Strength gives the user's Strength bonuses up to that rating; penalties always apply
+      // ("bows must be specially made to gain the bonus", Strength (PHB); "the attack roll and damage Strength
+      // modifiers apply only if the character has a properly prepared bow", Missile Weapons in Combat (PHB)).
+      let bowNote = null;
+      const bowRow = w.strength === "penalty" ? bowStrengthRow(extra.bowStrength) : null;
+      if (bowRow) {
+        strHit = strOnly < 0 ? strOnly : Math.min(strOnly, bowRow.hit);
+        strDmg = dmg < 0 ? dmg : Math.min(dmg, bowRow.dmg);
+        // Exceptional-Strength bows: a bend bars/lift gates roll to string or use one without exceptional Strength.
+        const exceptionalBow = /\//.test(extra.bowStrength) || Number(extra.bowStrength) > 18;
+        const a = this.abilities.str;
+        const exceptionalUser = a.total > 18 || (a.total === 18 && a.exceptional > 0);
+        if (exceptionalBow && !exceptionalUser) bowNote = this.abilityData.str.bendBars ?? 0;
+      }
       const column = specialized && w.family !== "bow" ? AD2E.specialistAttacks[w.missileColumn] : null;
       // A thrown melee weapon keeps the melee specialization bonus: "+1 bonus to all his attack rolls with that
       // weapon and a +2 bonus to all damage rolls" (Weapon Specialization (PHB) rev 158222); "When using his
@@ -448,6 +474,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         dmg: strDmg + kitDmg + (thrownSpec ? spec.meleeDamage : 0) + extra.dmg,
         rate: column ? formatRate(attackRate(column, this.level)) : (w.range.rof || "1"),
         pointBlank: specialized && w.family !== "other",
+        bowStrength: bowRow ? extra.bowStrength : "",
+        bowBendBars: bowNote,
         range: w.range
       };
     }
@@ -474,7 +502,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
       const specialized = !!prof?.specValid;
       const penalty = prof ? 0 : p.penalty;
-      const attack = this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg });
+      const attack = this.#weaponAttack(w.weapon, specialized, { hit: w.bonus.hit + penalty, dmg: w.bonus.dmg,
+        bowStrength: w.bowStrength ?? "" });
       if (twoReady && attack.melee && inHand.includes(item)) attack.melee.rateTwo = formatRate(twoWeaponRate(attack.melee.rateRaw));
       return { item, proficient: !!prof, proficiency: prof?.item ?? null, specialized, penalty,
         twoHanded: !!w.weapon?.melee && !oneHanded(item), attack };

@@ -20,6 +20,9 @@ export default class WeaponData extends foundry.abstract.TypeDataModel {
       quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, nullable: false }),
       equipped: new BooleanField({ initial: false }),
       dropped: new BooleanField({ initial: false }),
+      // Bows: the Strength the bow is made for ("17", "18/50", "19"; blank = a standard bow: Strength penalties only).
+      // "bows must be specially made to gain the bonus" (Strength (PHB)).
+      bowStrength: new StringField({ required: true, blank: true, initial: "" }),
       bonus: new SchemaField({
         hit: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
