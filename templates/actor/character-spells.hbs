@@ -6,15 +6,32 @@
     {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Spell.NoCaster"}}</span>{{/if}}
     {{#if @root.editable}}<button type="button" data-action="restSpells" data-tooltip="{{localize 'AD2E.Spell.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Spell.Rest"}}</button>{{/if}}
   </div>
+  {{#if st.gen}}
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Shair.Legend"}}</legend>
+    <div class="ad2e-prof-summary">
+      <label>{{localize "AD2E.Shair.GenKind"}}
+        <select name="system.gen.kind" {{#unless @root.editable}}disabled{{/unless}}>{{selectOptions st.gen.kinds selected=st.gen.kind blank="—" localize=true}}</select></label>
+      <label data-tooltip="{{localize 'AD2E.Shair.ReplacementsHint'}}">{{localize "AD2E.Shair.Replacements"}}
+        <input type="number" name="system.gen.replacements" value="{{st.gen.replacements}}" min="0" {{#unless @root.editable}}disabled{{/unless}}></label>
+      <span>{{st.gen.status}}</span>
+      {{#if st.gen.isGM}}{{#if st.gen.busy}}<button type="button" data-action="genReturnNow" data-tooltip="{{localize 'AD2E.Shair.ReturnNowHint'}}">{{localize "AD2E.Shair.ReturnNow"}}</button>{{/if}}{{/if}}
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Shair.Note"}}</p>
+  </fieldset>
+  {{else}}
   <p class="ad2e-note">{{localize "AD2E.Spell.DragHint"}}</p>
+  {{/if}}
   {{#each st.levels as |l|}}
   <fieldset class="ad2e-prof-list ad2e-spell-level">
     <legend>{{l.label}}</legend>
+    {{#unless st.shair}}
     <div class="ad2e-prof-summary">
       <span class="{{#if l.over}}ad2e-unmet{{/if}}">{{localize "AD2E.Spell.Memorized"}}: <strong>{{l.prepared}} / {{l.slots}}</strong>{{#if l.slotText}} <span class="ad2e-note">({{l.slotText}})</span>{{/if}}</span>
       <span>{{localize "AD2E.Spell.Remaining2"}}: <strong>{{l.remaining}}</strong></span>
       {{#if l.maxKnown}}<span data-tooltip="{{localize 'AD2E.Spell.KnownHint'}}">{{localize "AD2E.Spell.Known"}}: <strong>{{l.known}} / {{l.maxKnown}}</strong></span>{{/if}}
     </div>
+    {{/unless}}
     {{#each l.rows as |r|}}
     <div class="ad2e-prof-row ad2e-spell-row {{#unless r.usable}}ad2e-spell-unusable{{/unless}}">
       <img src="{{r.img}}" alt="" width="24" height="24">
@@ -24,11 +41,15 @@
         {{#if r.unlearned}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Learn.NotLearned"}} · {{r.learnText}}</span>{{/if}}
       </div>
       {{#if r.unlearned}}<button type="button" data-action="learnSpell" data-item-id="{{r.id}}" {{#if r.learnBlocked}}disabled{{/if}}>{{localize "AD2E.Learn.Learn"}}</button>{{/if}}
+      {{#if r.request}}
+      <button type="button" data-action="requestSpell" data-item-id="{{r.id}}" data-tooltip="{{r.request.hint}}" {{#if st.gen.busy}}disabled{{/if}}>{{localize "AD2E.Shair.Request"}} {{r.request.chance}}%</button>
+      {{else}}
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Spell.MemorizedHint'}}">
         {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
         {{r.remaining}}/{{r.prepared}}
         {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
       </span>
+      {{/if}}
       <button type="button" data-action="castSpell" data-item-id="{{r.id}}" {{#unless r.remaining}}disabled{{/unless}}>{{localize "AD2E.Spell.Cast"}}</button>
       {{#if r.damage}}<button type="button" data-action="rollSpellDamage" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Spell.DamageHint'}}"><i class="fa-solid fa-burst"></i></button>{{/if}}
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}

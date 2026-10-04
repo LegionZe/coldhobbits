@@ -10,6 +10,7 @@ import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, 
 import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
+import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -190,6 +191,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
       restSpells: CharacterSheet.onRestSpells,
+      requestSpell: CharacterSheet.onRequestSpell,
+      genReturnNow: CharacterSheet.onGenReturnNow,
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
       layOnHands: CharacterSheet.onLayOnHands,
@@ -483,6 +486,27 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const sp = sys.spells;
     const i18n = k => game.i18n.localize(k);
     const ordinal = n => game.i18n.format("AD2E.Spell.LevelN", { n });
+    const shair = !!sp.shair && isShair(this.document);
+    const gen = sys.gen ?? {};
+    const now = game.time?.worldTime ?? 0;
+    // Sha'ir: each owned spell can be requested from the gen (chance and search unit shown; module/shair.mjs).
+    const request = i => {
+      const st = spellStanding(i);
+      const repeats = repeatsOf(gen.attempts, spellTitle(i) ?? i.name, now);
+      const c = requestChance({ shairLevel: sys.level, spellLevel: st.level, ...st, repeats });
+      const unit = searchUnit({ shairLevel: sys.level, spellLevel: st.level, ...st });
+      return { chance: c.chance, hint: game.i18n.format("AD2E.Shair.RowHint", { chance: c.chance, unit: i18n(`AD2E.Shair.Unit.${unit}`),
+        standing: i18n(st.priest ? "AD2E.Shair.Priest" : (st.native ? (st.general ? "AD2E.Shair.Common" : "AD2E.Shair.Native") : "AD2E.Shair.Foreign")) }) };
+    };
+    const f = gen.fetch ?? {};
+    const genPanel = shair ? {
+      kinds: Object.fromEntries(GEN_KINDS.map(k => [k, `AD2E.Shair.Kind.${k}`])), kind: gen.kind ?? "", replacements: gen.replacements ?? 0,
+      busy: !!f.spellId, isGM: !!game.user?.isGM,
+      status: !f.spellId ? i18n("AD2E.Shair.Idle")
+        : (f.ready ? game.i18n.format("AD2E.Shair.Ready", { spell: f.name, min: Math.max(Math.ceil(((f.expiresAt ?? now) - now) / 60), 0) })
+          : game.i18n.format("AD2E.Shair.Searching", { spell: f.name, n: f.count, unit: i18n(`AD2E.Shair.Unit.${f.unit || "round"}`),
+            min: Math.max(Math.ceil(((f.returnsAt ?? now) - now) / 60), 0) }))
+    } : null;
     const levels = sp.levels.map(l => ({
       ...l,
       label: l.level === 0 ? i18n("AD2E.Spell.Cantrips") : ordinal(l.level),
@@ -492,13 +516,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         const s = i.system;
         const comps = ["verbal", "somatic", "material"].filter(c => s.components[c]).map(c => c[0].toUpperCase()).join("");
         // Wizard spells not yet understood: the chance to learn and why a roll is not possible now.
-        const unlearned = s.kind === "wizard" && s.learned === false;
+        const unlearned = !shair && s.kind === "wizard" && s.learned === false;
         const lc = unlearned ? learnChance(this.document, i) : null;
         return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared,
-          remaining: Math.max(s.prepared - s.cast, 0), usable: s.kind === sp.kind, unlearned,
+          remaining: Math.max(s.prepared - s.cast, 0), usable: shair || s.kind === sp.kind, unlearned,
           learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
             : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
           learnBlocked: !!lc?.blocked, damage: !!s.damage,
+          ...(shair ? { request: request(i), fetched: gen.fetch?.spellId === i.id && gen.fetch?.ready } : {}),
           meta: [(s.kind === "priest" ? s.spheres : s.schools).join("/"), comps,
             `${i18n("AD2E.Spell.CT")} ${s.castingTime}`, `${i18n("AD2E.Spell.R")} ${s.range}`,
             `${i18n("AD2E.Spell.D")} ${s.duration}`, `${i18n("AD2E.Spell.AoE")} ${s.area}`, `${i18n("AD2E.Spell.Save")} ${s.save}`]
@@ -506,7 +531,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }).sort((a, b) => a.name.localeCompare(b.name))
     }));
     return { kind: sp.kind ? i18n(`AD2E.Spell.${sp.kind}`) : null, castingLevel: sp.castingLevel, levels,
-      hasSlots: sp.levels.some(l => l.slots > 0) };
+      hasSlots: sp.levels.some(l => l.slots > 0), shair, gen: genPanel };
   }
 
   /** Display data for the Weapons tab: owned weapon items and their proficiency status. */
@@ -728,7 +753,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       if (stack) return stack.update({ "system.quantity": stack.system.quantity + item.system.quantity });
     }
     // Spells: notices only (the spell is still added) for spells this class cannot use.
-    if (this.actor.isOwner && item.type === "spell" && item.parent !== this.actor) {
+    // A sha'ir's spells are only the ones its gen may be asked for (module/shair.mjs): no class checks, nothing to learn.
+    if (this.actor.isOwner && item.type === "spell" && item.parent !== this.actor && !isShair(this.actor)) {
       const sp = this.actor.system.spells;
       const cls = this.actor.system.classInfo.classItem?.system;
       const warn = key => ui.notifications.warn(game.i18n.format(key, { name: item.name, class: this.actor.system.classInfo.classItem?.name ?? "—" }));
@@ -879,6 +905,15 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static onCastSpell(event, target) {
     return this.actor.castSpell(target.dataset.itemId);
+  }
+
+  static onRequestSpell(event, target) {
+    return requestSpell(this.actor, target.dataset.itemId);
+  }
+
+  /** GM: the gen comes back now (without waiting for world time). */
+  static onGenReturnNow() {
+    if (game.user.isGM) return genReturns(this.actor);
   }
 
   static onRestSpells() {

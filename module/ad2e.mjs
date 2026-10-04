@@ -27,6 +27,7 @@ import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
 import { registerAqRules } from "./aq-rules.mjs";
 import { registerSpWeapons } from "./sp-weapons.mjs";
+import { registerShairHooks } from "./shair.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
@@ -69,6 +70,7 @@ Hooks.once("init", () => {
   registerHealth();
   registerAnimalHooks();
   registerFamiliarHooks();
+  registerShairHooks();
   // Material components used up when casting (module/components.mjs); optional (Material Spell Components (POSM)).
   game.settings.register("ad2e", "trackComponents", {
     name: "AD2E.Components.Setting", hint: "AD2E.Components.SettingHint", scope: "world", config: true, type: Boolean,
@@ -95,6 +97,9 @@ Hooks.once("init", () => {
 
   registerAqRules();
   registerSpWeapons();
+  // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
+  // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).
+  CONFIG.time.roundTime = 60;
   CONFIG.Actor.documentClass = AD2EActor;
   CONFIG.ChatMessage.documentClass = AD2EChatMessage;
   // Sheet partials shared by tabs (registered by name, as dnd5e's preloadHandlebarsTemplates).

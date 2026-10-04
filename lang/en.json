@@ -1541,5 +1541,69 @@
     "TwoWeaponStyle": "Two weapon style",
     "PointBlankDamage": "Point blank +{n} damage",
     "TwoHandedDamage": "Two-handed style +{n}"
+  },
+  "AD2E.Shair": {
+    "Legend": "Gen (sha'ir)",
+    "GenKind": "Gen",
+    "Kind": {
+      "air": "Air (djinnling)",
+      "fire": "Fire (efreetikin)",
+      "water": "Water (maridan)",
+      "earth": "Earth (daolani)"
+    },
+    "Replacements": "Replacement gens",
+    "ReplacementsHint": "Gens summoned after the first: each adds one round, turn or hour to every search (Requesting a Spell (AA)).",
+    "Note": "Sha'irs do not memorize spells. Spells listed here are the ones the sha'ir knows exist; Request sends the gen for one. The gen returns when world time reaches the end of its search, and a spell it brings must be cast within three turns.",
+    "Idle": "Gen ready for a request.",
+    "Searching": "Gen searching for {spell}: {n} {unit} (about {min} min of world time left).",
+    "Ready": "{spell} brought: cast it within about {min} min of world time.",
+    "ReturnNow": "Gen returns now",
+    "ReturnNowHint": "GM: end the gen's search now instead of waiting for world time.",
+    "Request": "Request",
+    "RowHint": "{standing}; chance {chance}%; search in {unit}",
+    "Priest": "Priest spell",
+    "Common": "Common knowledge (Appendix A, 1st-2nd level)",
+    "Native": "Native (Appendix A)",
+    "Foreign": "Not in Appendix A",
+    "Unit": {
+      "round": "rounds",
+      "turn": "turns",
+      "hour": "hours"
+    },
+    "Part": {
+      "base": "base",
+      "shairLevel": "sha'ir level",
+      "spellLevel": "spell level",
+      "general": "common knowledge",
+      "foreign": "priest or foreign",
+      "repeat": "repeated today"
+    },
+    "NoGen": "Choose the gen's kind on the Spells tab first.",
+    "Busy": "The gen is still busy with {name}.",
+    "RequestTitle": "Request {name} from the gen",
+    "RequestText": "Chance of success {chance}% ({parts}); a roll of 90 or more always fails.",
+    "SearchText": "Search time: {die} + {level} + {extra} {unit}.",
+    "PriestWarning": "Priest spell: {chance}% chance that a god notices the gen; if so, retribution comes when the spell is cast.",
+    "Modifier": "DM modifier (%)",
+    "Failure": "Chance that sha'ir abilities fail (%)",
+    "Send": "Send the gen",
+    "Departs": "{name}'s gen leaves to find {spell}: it will be gone {n} {unit}.",
+    "CheckFlavor": "Gen's search for {spell} (needs {chance} or less, 90+ fails)",
+    "AbilityFailed": "sha'ir ability failed: {roll} ≤ {chance}",
+    "Delayed": "00: delayed {n} more {unit}",
+    "Noticed": "a god noticed: {roll} ≤ {chance}",
+    "NotNoticed": "not noticed: {roll} > {chance}",
+    "Found": "the gen will find it",
+    "NotFound": "the gen will return empty-handed",
+    "ReturnsWith": "The gen returns with {spell}. It must be cast within {n} turns.",
+    "ReturnsEmpty": "The gen returns without {spell}, apologizing.",
+    "Expired": "{spell} was not cast in time and is lost.",
+    "Retribution": "{name} casts {spell}, which a god noticed: divine retribution ({band}). See Requesting a Spell (AA), The Perils of Priest Spells.",
+    "Band": {
+      "1-2": "1st-2nd level: attract evil eye, no saving throw",
+      "3-4": "3rd-4th level: the next opponent +1 attack and damage this encounter",
+      "5-6": "5th-6th level: a messenger monster arrives in 1d6 rounds",
+      "7": "7th level: the caster is taken before the god"
+    }
   }
 }
