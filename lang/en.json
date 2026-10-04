@@ -561,6 +561,12 @@
   "AD2E.Sheet.Magic": "AD&D 2e Magical Item",
   "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
   "AD2E.Spell": {
+    "Provinces": "Elemental provinces",
+    "ProvincesHint": "Al-Qadim provinces of the spell: flame, sand, sea, wind (Wizard Spells by Province (AA); set at import). Comma separated.",
+    "DamageFormula": "Damage formula",
+    "DamageFormulaHint": "Optional, entered by the GM: a roll formula, @level = casting level, e.g. (min(@level, 10))d6. A damage button then appears on the Spells tab.",
+    "DamageHint": "Roll this spell's damage (its damage formula; elemental mage +1 per die in its province)",
+    "BadDamage": "{name}: the damage formula \"{formula}\" could not be rolled.",
     "Materials": "Material components",
     "MaterialsHint": "Linked to items in the Spell Components compendium (matched automatically at import: check them against the spell's page). Consumed components are used up when the spell is cast (Casting Spells (PHB)); holy symbols are not.",
     "Consumed": "Consumed",
@@ -1443,5 +1449,18 @@
     "MissingText": "{actor} does not carry: {list}. Cast the spell anyway?",
     "Used": "Components used: {list}.",
     "CastWithout": "Cast without: {list}."
+  },
+  "AD2E.Elemental": {
+    "Province": {
+      "flame": "Flame",
+      "sand": "Sand",
+      "sea": "Sea",
+      "wind": "Wind"
+    },
+    "ProvinceLabel": "Elemental province",
+    "ProvinceHint": "Elemental Mage (Character Kit): one of the four provinces. +1 to each damage die of an attack using it; -2 to each damage die of an attack using it against the mage (at least 0).",
+    "WeaponUses": "Attack uses {province} (+1 per damage die)",
+    "DieBonusNote": "{province} +{n}",
+    "Warded": "{name} (elemental mage): {from} damage becomes {to} (-2 per die of its own province)."
   }
 }

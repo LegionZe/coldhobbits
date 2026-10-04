@@ -21,6 +21,8 @@
       "material": true
     },
     "materials": [],
+    "provinces": [],
+    "damage": "",
     "range": "120 yds.",
     "area": "1 to 4 persons in a 20-ft. cube",
     "castingTime": "5",

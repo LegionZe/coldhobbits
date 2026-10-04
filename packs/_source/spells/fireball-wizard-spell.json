@@ -32,6 +32,10 @@
         "label": ""
       }
     ],
+    "provinces": [
+      "flame"
+    ],
+    "damage": "(min(@level, 10))d6",
     "range": "10 yds. + 10 yds./level",
     "area": "20-ft. radius",
     "castingTime": "3",

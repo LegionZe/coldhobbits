@@ -291,6 +291,7 @@ export class SpellSheet extends AD2EItemSheet {
     context.schoolsText = sys.schools.join(", ");
     context.spheresText = sys.spheres.join(", ");
     context.sourcesText = sys.sources.join(", ");
+    context.provincesText = (sys.provinces ?? []).join(", ");
     // Material component links (module/importers/spell-components.mjs).
     context.materials = (sys.materials ?? []).map((m, index) => ({ ...m, index }));
     context.materialChoices = sys.components.material ? await SpellSheet.catalog() : [];
@@ -299,7 +300,11 @@ export class SpellSheet extends AD2EItemSheet {
 
   /** Schools, spheres and sources are edited as comma-separated text. */
   _processFormData(event, form, formData) {
-    return parseClassesText(super._processFormData(event, form, formData), ["schools", "spheres", "sources"]);
+    const data = parseClassesText(super._processFormData(event, form, formData), ["schools", "spheres", "sources", "provinces"]);
+    // Provinces: only flame, sand, sea, wind (module/elemental.mjs).
+    const p = foundry.utils.getProperty(data, "system.provinces");
+    if (p) foundry.utils.setProperty(data, "system.provinces", [...p].map(x => String(x).toLowerCase()).filter(x => ["flame", "sand", "sea", "wind"].includes(x)));
+    return data;
   }
 }
 

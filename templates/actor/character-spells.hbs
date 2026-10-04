@@ -30,6 +30,7 @@
         {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
       </span>
       <button type="button" data-action="castSpell" data-item-id="{{r.id}}" {{#unless r.remaining}}disabled{{/unless}}>{{localize "AD2E.Spell.Cast"}}</button>
+      {{#if r.damage}}<button type="button" data-action="rollSpellDamage" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Spell.DamageHint'}}"><i class="fa-solid fa-burst"></i></button>{{/if}}
       {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoneAtLevel"}}</p>

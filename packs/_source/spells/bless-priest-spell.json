@@ -28,6 +28,8 @@
         "label": "holy water"
       }
     ],
+    "provinces": [],
+    "damage": "",
     "range": "60 yds.",
     "area": "50-ft. cube",
     "castingTime": "1 rd.",

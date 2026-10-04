@@ -78,6 +78,8 @@
         {{#if ct.kitSpecialization}}<dt>{{localize "AD2E.Prof.Specialization"}}</dt><dd>{{ct.kitSpecialization}}</dd>{{/if}}
         {{#if ct.kitRaceLimits}}<dt>{{localize "AD2E.Race.KitRaceLimits"}}</dt><dd>{{ct.kitRaceLimits}}{{#if ct.kit.raceOnly}} ({{localize "AD2E.Race.RaceOnly"}}){{/if}}</dd>{{/if}}
       </dl>
+      {{#if ct.elementChoice}}<label data-tooltip="{{localize 'AD2E.Elemental.ProvinceHint'}}">{{localize "AD2E.Elemental.ProvinceLabel"}}
+        <select name="system.element" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.elementChoice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
       {{#if ct.kit.otherRequirements}}<p class="ad2e-note">{{localize "AD2E.Class.OtherRequirements"}}</p>{{/if}}
       {{else}}

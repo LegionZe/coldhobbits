@@ -38,6 +38,8 @@
         "label": ""
       }
     ],
+    "provinces": [],
+    "damage": "(min(@level, 10))d6",
     "range": "40 yds.+ 10 yds./level",
     "area": "Special",
     "castingTime": "3",

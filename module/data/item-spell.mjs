@@ -24,6 +24,10 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       // spell sheet): consumed = used up by casting, label = what the link stands for (e.g. "holy symbol").
       materials: new ArrayField(new SchemaField({ identifier: text(), name: text(), consumed: new BooleanField({ initial: true }),
         label: text() })),
+      // Elemental provinces (flame, sand, sea, wind; Al-Qadim, module/rules/province-tables.mjs) and a damage formula
+      // entered by the GM (@level = casting level; e.g. "(min(@level, 10))d6"), rolled from the Spells tab.
+      provinces: new ArrayField(new StringField()),
+      damage: text(),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
       sources: new ArrayField(new StringField()),
       // Wizard spells: understood and in the spell book (module/learn-spells.mjs); a failed roll records the level

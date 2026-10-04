@@ -28,6 +28,8 @@
         "label": ""
       }
     ],
+    "provinces": [],
+    "damage": "",
     "range": "10 yds./level",
     "area": "Special",
     "castingTime": "5",

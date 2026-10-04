@@ -4,6 +4,7 @@ import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { promptMorale } from "../henchmen.mjs";
 import { familiarSurpriseBonus } from "../familiars.mjs";
 import { useComponents } from "../components.mjs";
+import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -529,6 +530,10 @@ export default class AD2EActor extends Actor {
     const targets = this.#damageTargets(itemId);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
+    // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
+    const element = elementOf(this);
+    const elementField = element ? `<div class="form-group"><label>${game.i18n.format("AD2E.Elemental.WeaponUses",
+      { province: i18n(`AD2E.Elemental.Province.${element}`) })}</label><input type="checkbox" name="elementAttack"></div>` : "";
     const nonlethalField = use === "melee" && nonlethalAllowed(item.system.weapon)
       ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${i18n("AD2E.Nonlethal.Half")})</label><input type="checkbox" name="nonlethal"></div>` : "";
     // `preset` (automatic damage after a hit): no dialog; the first damage option (the ammunition just fired), the
@@ -541,6 +546,7 @@ export default class AD2EActor extends Actor {
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
         + backstabField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
+        + elementField
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -551,7 +557,7 @@ export default class AD2EActor extends Actor {
           const m = readModifier(button.form);
           return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
             backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m,
-            vsUnarmed: !!f.vsUnarmed?.checked };
+            vsUnarmed: !!f.vsUnarmed?.checked, elementAttack: !!f.elementAttack?.checked };
         }
       },
       rejectClose: false
@@ -563,7 +569,9 @@ export default class AD2EActor extends Actor {
     // weapon bonuses are added" (Thief Skill Explanations (PHB)).
     const formula = input.backstab && mult ? `(${dice}) * ${mult} + @adj + @mod` : `${dice} + @adj + @mod`;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
-    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed, mod: input.mod }).evaluate();
+    // Elemental mage, attack using its province: +1 per damage die (the dice in the weapon's damage).
+    const elementDice = input.elementAttack && element ? [...String(dice).matchAll(/(\d*)d\d+/g)].reduce((n, m) => n + Number(m[1] || 1), 0) : 0;
+    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed + elementDice, mod: input.mod }).evaluate();
     const full = Math.max(roll.total, 1);
     // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
     // temporary (rounded down).
@@ -571,11 +579,14 @@ export default class AD2EActor extends Actor {
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
-      flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets } },
+      flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets,
+        // the dice of an elemental attack, for an elemental mage target of the same province (not with backstab)
+        ...(elementDice && !(input.backstab && mult) ? { element: elementFlag(roll, [element], 1, total - roll.total) } : {}) } },
       flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}${AD2EActor.#targetText(targets)}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
+        + (elementDice ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${element}`), n: elementDice })}]` : "")
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
@@ -923,6 +934,43 @@ export default class AD2EActor extends Actor {
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
+  }
+
+  /**
+   * Spell damage (the spell's damage formula, entered by the GM; @level = casting level) with a situational modifier.
+   * An elemental mage casting a spell of its province adds +1 per damage die (module/elemental.mjs); the message
+   * carries the dice for elemental mages hit by it, and the targeted tokens.
+   */
+  async rollSpellDamage(itemId) {
+    const spell = this.items.get(itemId);
+    const sys = spell?.system;
+    if (!spell || spell.type !== "spell" || !sys.damage) return;
+    const input = await promptModifier(`${spell.name}: ${game.i18n.localize("AD2E.Weapon.Damage")}`);
+    if (!input) return;
+    const level = this.system.spells?.castingLevel ?? this.system.level ?? 1;
+    let roll;
+    try {
+      roll = await new Roll(`${sys.damage} + @mod`, { level, mod: input.mod }).evaluate();
+    } catch (err) {
+      ui.notifications.error(game.i18n.format("AD2E.Spell.BadDamage", { name: spell.name, formula: sys.damage }));
+      return;
+    }
+    const per = dieBonus(this, sys.provinces ?? []);
+    const bonus = per * diceCount(roll);
+    const total = Math.max(roll.total + bonus, 0);
+    const targets = AD2EActor.#targetsNow();
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const i18n = k => game.i18n.localize(k);
+    const provinces = sys.provinces ?? [];
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this }),
+      flags: { ad2e: { damage: total, targets, ...(provinces.length ? { element: elementFlag(roll, provinces, per, bonus) } : {}) } },
+      flavor: `${esc(spell.name)} ${i18n("AD2E.Weapon.Damage")} (${i18n("AD2E.Spell.CastingLevel")} ${level}`
+        + `${provinces.length ? `; ${provinces.map(p => i18n(`AD2E.Elemental.Province.${p}`)).join(", ")}` : ""})`
+        + (targets.length ? ` vs ${esc(targets.map(t => t.name).join(", "))}` : "")
+        + modifierText(input.mod, input.note)
+        + (bonus ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${elementOf(this)}`), n: bonus })}]: ${total}` : "")
+    });
   }
 
   /**
