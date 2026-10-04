@@ -188,6 +188,11 @@ initiative 1d10, lowest acts first.
   "Award experience" (GM, or `game.ad2e.awardExperience()`) divides a group award equally among the chosen characters
   ("Experience Point Awards (DMG)"): XP of monsters picked from the current combat (defeated ones preselected) plus
   other XP. Each share gets the class prime-requisite bonus (10%); characters who can advance a level are named in chat.
+- Colour-coded sidebar tabs (client setting "Colour-coded sidebar tabs", on by default): the Combat, Scenes, Actors,
+  Items, Journal and Compendium tab icons use the Okabe-Ito colour-blind-friendly palette (Okabe & Ito 2008, "Color
+  Universal Design", https://jfly.uni-koeln.de/color/; Wong 2011, Nature Methods 8:441): combat vermillion, actors
+  orange, scenes bluish green, items sky blue, journal yellow, compendium reddish purple; the open one is underlined in
+  its colour. Other tabs (including those added by modules) are unchanged.
 - Opaque windows: Foundry's dark theme gives windows a 90% opaque background and hides what is behind with a blur,
   which is off in low-performance mode, so text behind a sheet showed through. AD&D 2e sheets and windows now use the
   same colour fully opaque (client setting "Opaque sheet backgrounds", on by default).

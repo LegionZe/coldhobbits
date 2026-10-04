@@ -1024,6 +1024,10 @@
     "ExceptionalChat": "Exceptional Strength: 18/{value}",
     "DiceLeft": "Add every die to an ability."
   },
+  "AD2E.TabColours": {
+    "Setting": "Colour-coded sidebar tabs",
+    "SettingHint": "Colours the Combat, Scenes, Actors, Items, Journal and Compendium tab icons with a colour-blind-friendly palette (Okabe-Ito) and underlines the open one. Other tabs are unchanged."
+  },
   "AD2E.Opaque": {
     "Setting": "Opaque sheet backgrounds",
     "SettingHint": "Give AD&D 2e sheets and windows a solid background. Foundry's windows are slightly transparent and rely on a blur that is turned off in low-performance mode, which lets text behind a window show through."
