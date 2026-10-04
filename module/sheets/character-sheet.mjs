@@ -3,6 +3,7 @@ import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
+import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -178,6 +179,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       raiseDead: CharacterSheet.onRaiseDead,
       rollSurprise: CharacterSheet.onRollSurprise,
       rollUnarmed: CharacterSheet.onRollUnarmed,
+      openHenchman: CharacterSheet.onOpenHenchman,
+      removeHenchman: CharacterSheet.onRemoveHenchman,
+      henchmanMorale: CharacterSheet.onHenchmanMorale,
       awardXp: CharacterSheet.onAwardXp
     }
   };
@@ -272,6 +276,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
+    context.henchmen = this._henchmenContext();
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
     // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
@@ -719,6 +724,39 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRecoverTemp() { return this.actor.recoverTemporary(); }
 
   static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
+
+  /** Henchmen section (Bio tab): Charisma limits (PHB Table 6), the list, and level / lifetime-limit warnings. */
+  _henchmenContext() {
+    const info = henchmenInfo(this.actor);
+    const sign = n => `${n >= 0 ? "+" : ""}${n}`;
+    return { ...info, loyaltyText: sign(info.loyalty),
+      rows: info.list.map(h => ({ ...h, detail: h.level !== null ? game.i18n.format("AD2E.Henchmen.Level", { level: h.level })
+        : (h.hitDice ? game.i18n.format("AD2E.Henchmen.HitDice", { hd: h.hitDice }) : (h.actor ? "" : game.i18n.localize("AD2E.Henchmen.Missing"))) })) };
+  }
+
+  /** An actor dropped on the sheet becomes a henchman (Henchmen (PHB)); not the character itself, not twice. */
+  async _onDropActor(event, actor) {
+    if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
+    const list = this.actor.system.henchmen?.actors ?? [];
+    if (list.includes(actor.uuid)) return null;
+    await this.actor.update({ "system.henchmen.actors": [...list, actor.uuid] });
+    return actor;
+  }
+
+  static async onOpenHenchman(event, target) {
+    const actor = (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(target.dataset.uuid, { strict: false });
+    return actor?.sheet?.render({ force: true });
+  }
+
+  static async onRemoveHenchman(event, target) {
+    const list = (this.actor.system.henchmen?.actors ?? []).filter(u => u !== target.dataset.uuid);
+    return this.actor.update({ "system.henchmen.actors": list });
+  }
+
+  static async onHenchmanMorale(event, target) {
+    const actor = (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(target.dataset.uuid, { strict: false }) ?? null;
+    return rollHenchmanMorale(this.actor, actor);
+  }
 
   static onAwardXp() { return this.actor.awardExperience(); }
 

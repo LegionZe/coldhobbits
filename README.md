@@ -190,6 +190,13 @@ initiative 1d10, lowest acts first.
   prone +4, defender surprised +1 and rear attack +2 (missile range stays a separate field). The first target's token
   status icons tick them: Prone or Stunned +4; Asleep, Paralyzed, Restrained or Unconscious automatic hit; Invisible
   -4 (core status ids, checked on core 14.368). Table from `python3 tools/build-combat-tables.py`.
+- Henchmen ("Henchmen (PHB)", "Henchmen (DMG)", Charisma (PHB) Table 6): drag an actor onto a character sheet to make it
+  a henchman (Bio tab). The section shows the Charisma maximum as a lifetime count (current henchmen plus a "Lost"
+  number: "This is a lifetime limit, not just a maximum possible at any given time"), the Loyalty Base and the henchman
+  morale (DMG Table 49: 15, plus the Loyalty Base). A character henchman of equal or higher level is flagged ("Should he
+  ever equal or surpass the PC's level, the henchman leaves forever"). Morale button: 2d10 at or under the rating, with
+  the DMG Table 50 situations as tick boxes; monster sheets' Morale uses the same tick boxes. Tables from
+  `python3 tools/build-encounter-tables.py`.
 - Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
   `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
   characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,
@@ -313,8 +320,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Characters: henchmen;
-  learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
+- Characters: learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).
 - Equipment and treasure: items inside containers; mount encumbrance; a treasure generator (DMG Tables 84-88);
   monster pictures bundled with the system.
 - Al-Qadim: sha'ir spells through the gen familiar; the bard barber's 10 points; elemental mage damage per die; kit

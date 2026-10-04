@@ -4,7 +4,7 @@ import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from 
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
-const { BooleanField, SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
+const { ArrayField, BooleanField, SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
 
 const int = (initial, min = null, max = null) =>
   new NumberField({ required: true, integer: true, initial, min, max, nullable: false });
@@ -110,6 +110,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         speciesEnemy: new StringField({ initial: "" }),
         layOnHandsUsed: new BooleanField({ initial: false })
       }),
+      // Henchmen (module/henchmen.mjs): actor UUIDs, and former henchmen counted toward the Charisma lifetime limit.
+      henchmen: new SchemaField({ actors: new ArrayField(new StringField()), lost: int(0, 0) }),
       biography: new HTMLField()
     };
   }
