@@ -629,6 +629,11 @@
     "Skipped": "{n} page(s) without a usable spell infobox were skipped.",
     "Done": "Spells imported into {pack}: {created} created, {updated} updated.",
     "PackLabel": "Imported Spells",
+    "Update": "Update existing spells",
+    "UpdateHint": "Re-read the wiki page of every spell in the world (Items directory, characters' spells, Imported Spells compendium) and refresh its statistics and material component links. Memorization, learned status, notes and names stay.",
+    "Updating": "Updating {n} spells from {pages} wiki pages...",
+    "Updated": "Spells updated: {updated}; without a wiki page: {skipped}; page not found or not a spell: {failed}.",
+    "GmOnly": "Only a GM can update spells.",
     "Locked": "The compendium {pack} is locked: unlock it to import spells.",
     "ClassFolder": "{kind} Spells"
   },

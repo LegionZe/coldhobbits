@@ -52,7 +52,8 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
       loadBook: SpellImporter.#onLoadBook,
       selectAll: SpellImporter.#onSelectAll,
       selectNone: SpellImporter.#onSelectNone,
-      importSelected: SpellImporter.#onImport
+      importSelected: SpellImporter.#onImport,
+      updateExisting: () => updateExistingSpells()
     }
   };
 
@@ -233,4 +234,99 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
     if (update.length) await Item.updateDocuments(update, { pack: pack.collection });
     ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Done", { created: create.length, updated: update.length, pack: pack.title }));
   }
+}
+
+/** Wiki page title of a spell: its import flag, or the last part of its wiki link. */
+export function spellPageTitle(item) {
+  const flagged = item?.flags?.ad2e?.wiki?.title;
+  if (flagged) return flagged;
+  const url = item?.system?.url ?? "";
+  if (!url.startsWith(`${wiki.WIKI}/wiki/`)) return null;
+  try { return decodeURIComponent(url.slice(`${wiki.WIKI}/wiki/`.length)).replace(/_/g, " "); } catch { return null; }
+}
+
+/**
+ * GM tool (game.ad2e.updateSpells(), and the importer's "Update existing spells" button): re-read the wiki page of every
+ * spell in the world - world Items, spells on actors, and the Imported Spells compendium - and refresh its statistics and
+ * material component links. What belongs to the character stays: memorized and cast counts, learned / failed level,
+ * notes and the name (a renamed spell keeps its name). Spells without a wiki page are left alone.
+ * Resolves { updated, skipped, failed }.
+ */
+export async function updateExistingSpells() {
+  const i18n = k => game.i18n.localize(k);
+  if (!game.user.isGM) {
+    ui.notifications.warn(i18n("AD2E.SpellImporter.GmOnly"));
+    return null;
+  }
+  // Every spell document: [{ doc, title, parent: "world" | actor | pack }].
+  const targets = [];
+  for (const item of game.items ?? []) if (item.type === "spell") targets.push({ doc: item, where: null });
+  for (const actor of game.actors ?? []) for (const item of actor.items ?? []) if (item.type === "spell") targets.push({ doc: item, where: actor });
+  const pack = game.packs.get(`world.${SPELL_PACK.name}`);
+  if (pack && !pack.locked) for (const item of await pack.getDocuments()) if (item.type === "spell") targets.push({ doc: item, where: pack });
+  const byTitle = new Map();
+  let skipped = 0;
+  for (const t of targets) {
+    const title = spellPageTitle(t.doc);
+    if (!title) { skipped++; continue; }
+    if (!byTitle.has(title)) byTitle.set(title, []);
+    byTitle.get(title).push(t);
+  }
+  const titles = [...byTitle.keys()];
+  const catalog = await components();
+  const note = ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Updating", { n: targets.length - skipped, pages: titles.length }));
+  let updated = 0;
+  let failed = 0;
+  const actorUpdates = new Map();
+  const worldUpdates = [];
+  const packUpdates = [];
+  for (let i = 0; i < titles.length; i += 50) {
+    const batch = titles.slice(i, i + 50);
+    const pages = {};
+    let cont = {};
+    try {
+      do {
+        const r = await getJson({ action: "query", prop: "revisions|categories", rvprop: "content|ids", rvslots: "main",
+          cllimit: 500, redirects: 1, titles: batch.join("|"), ...cont });
+        const alias = Object.fromEntries([...(r.query?.normalized ?? []), ...(r.query?.redirects ?? [])].map(x => [x.from, x.to]));
+        for (const p of Object.values(r.query?.pages ?? {})) {
+          const prev = pages[p.title] ?? { categories: [] };
+          pages[p.title] = { wiki: p.revisions?.[0]?.slots?.main?.["*"] ?? prev.wiki, revid: p.revisions?.[0]?.revid ?? prev.revid,
+            categories: [...prev.categories, ...(p.categories ?? []).map(c => c.title.replace(/^Category:/, ""))] };
+        }
+        for (const t of batch) {
+          let target = t;
+          for (let n = 0; n < 3 && alias[target]; n++) target = alias[target];
+          if (target !== t && pages[target]) pages[t] = pages[target];
+        }
+        cont = r.continue ?? null;
+      } while (cont);
+    } catch (err) {
+      ui.notifications.error(game.i18n.format("AD2E.Importer.FetchFailed", { error: err.message }));
+      return { updated, skipped, failed: failed + titles.length - i };
+    }
+    for (const title of batch) {
+      const p = pages[title];
+      const data = p?.wiki ? wiki.spellItemData(title, p.wiki, p.categories, catalog) : null;
+      if (!data) { failed += byTitle.get(title).length; continue; }
+      const { prepared, cast, learned, learnFailedLevel, notes, ...system } = data.system;
+      const flags = { ad2e: { wiki: { title, revid: p.revid } } };
+      for (const t of byTitle.get(title)) {
+        const change = { _id: t.doc.id, system, flags };
+        if (t.where === null) worldUpdates.push(change);
+        else if (t.where === pack) packUpdates.push(change);
+        else {
+          if (!actorUpdates.has(t.where)) actorUpdates.set(t.where, []);
+          actorUpdates.get(t.where).push(change);
+        }
+        updated++;
+      }
+    }
+  }
+  if (worldUpdates.length) await Item.updateDocuments(worldUpdates);
+  if (packUpdates.length) await Item.updateDocuments(packUpdates, { pack: pack.collection });
+  for (const [actor, changes] of actorUpdates) await actor.updateEmbeddedDocuments("Item", changes);
+  ui.notifications.remove?.(note);
+  ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Updated", { updated, skipped, failed }));
+  return { updated, skipped, failed };
 }

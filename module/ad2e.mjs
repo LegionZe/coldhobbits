@@ -20,7 +20,7 @@ import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
-import SpellImporter from "./apps/spell-importer.mjs";
+import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -53,6 +53,7 @@ Hooks.once("init", () => {
   game.ad2e = {
     importMonsters: () => new MonsterImporter().render({ force: true }),
     importSpells: () => new SpellImporter().render({ force: true }),
+    updateSpells: () => updateExistingSpells(),
     awardExperience: () => new AwardXp().render({ force: true }),
     rollReaction: creature => rollEncounterReaction(creature)
   };
