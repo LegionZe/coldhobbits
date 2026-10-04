@@ -97,6 +97,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
 - Initiative: `module/initiative.mjs` (Tables 55/56 from combat-tables.mjs: weapon speed, casting time, items, size;
   automatic action = last attack's weapon (`actor._ad2eLastWeapon`, set in rollWeaponAttack) or fastest in hand);
   `AD2ECombatant#getInitiativeRoll` (Roll All, as dnd5e's Combatant5e) and the `AD2ECombat#rollInitiative` dialog.
+  World setting `initiativeMode` (individual | group | standard): side = token disposition, one 1d10 per side and round
+  stored in combat flag `ad2e.sides.r<round>` (GM rolls it); scrolls ask for the spell's casting time; casting drops Hasted.
 - Ability score generation: `module/ability-methods.mjs` (pure rules for PHB Methods II-VI) and
   `module/apps/ability-roller.mjs` (dialog from the Abilities panel; writes `system.abilities.<key>.value`).
 - Monster importer: `module/importers/complete-compendium.mjs` (pure parsing: /catalog/ HTML, page-data JSON) and

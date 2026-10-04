@@ -149,8 +149,14 @@ initiative 1d10, lowest acts first.
   magical item (potion +4, ring +3, rod +1, staff +2, wand +3, other +3), breath weapon +1, innate ability +3, or a
   monster's natural weapons by size (Table 56); plus the Table 55 situations (hasted, slowed, higher ground, ...) and a
   modifier with reason. Roll All / Roll NPCs add each combatant's automatic action: the weapon of its last attack if
-  still in hand, else its fastest weapon in hand; a monster without weapons, its natural weapons (size). Scrolls are
-  not listed (their modifier is the spell's casting time: enter it as the modifier). Tables from
+  still in hand, else its fastest weapon in hand; a monster without weapons, its natural weapons (size). Reading a
+  scroll asks for the casting time of its spell (Table 56: "Casting time of spell"). A combatant that casts gets no
+  benefit from "Hasted" that round ("Since she is casting a spell, she gains no benefit from the haste spell").
+  World setting "Initiative method": Individual (each combatant rolls; optional rule, the default), Group ("one
+  initiative die roll is still made for each side", each combatant adds its own action modifiers; optional rule) or
+  Standard ("roll 1d10 for each side in the battle"; the side acts on its roll, situations and a modifier still apply).
+  Sides are token dispositions (friendly, neutral, hostile); the GM's first roll for a side in a round rolls its 1d10
+  and posts it to chat, and a player rolling before that is asked to wait. Tables from
   `python3 tools/build-combat-tables.py`.
 - Targets: attack and damage rolls record the tokens the rolling user has targeted (shown as "→ name" in chat); a damage
   roll made with no target uses the targets of the same actor's last attack with that weapon. The attack dialog's
@@ -263,8 +269,7 @@ initiative 1d10, lowest acts first.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Combat: initiative for scrolls, side/group initiative and casting while
-  hasted; encounter reaction rolls; conditions with rule modifiers.
+- Combat: encounter reaction rolls; conditions with rule modifiers.
 - Characters: ability scores by Method I; thief skill values below 0; kit recommended proficiencies; kit weapon
   specialization exceptions; specially made Strength bows; armour sizes; class armour restrictions; henchmen;
   learning spells (chance to learn, maximum spells per level); skills (Skills & Powers).

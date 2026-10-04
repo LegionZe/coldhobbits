@@ -1,7 +1,7 @@
 /**
  * Initiative modifiers ("Initiative (PHB)"; tables generated in module/rules/combat-tables.mjs):
  *  - Table 55 standard modifiers (hasted, slowed, higher ground, ...), ticked in the initiative dialog.
- *  - Table 56 optional modifiers, from the combatant's action: a weapon's speed factor ("each bonus point conferred by
+ *  - Table 56 optional modifiers, from the combatant's action (a scroll: the casting time of its spell): a weapon's speed factor ("each bonus point conferred by
  *    a magical weapon reduces the speed factor ... the lesser one is used ... no weapon can have a speed factor of less
  *    than 0"), a spell's casting time (a number without units; with units, "a spell requiring one round to cast takes
  *    effect at the end of the current round"), a breath weapon, an innate spell ability, a magical item by type, or a
@@ -79,6 +79,10 @@ export function initiativeActions(actor) {
     out.push({ key: `spell.${s.id}`, label: fmt(ct.endOfRound ? "AD2E.Init.Action.spellRound" : "AD2E.Init.Action.spell",
       { name: s.name, n: ct.value, time: s.system.castingTime }), value: ct.value, short: s.name,
       note: ct.endOfRound ? i18n("AD2E.Init.EndOfRound") : "" });
+  }
+  // A scroll takes the casting time of the spell read from it (Table 56); the dialog asks for it.
+  for (const m of actor?.items?.filter?.(i => i.type === "magic" && i.system.category === "scroll") ?? []) {
+    out.push({ key: `scroll.${m.id}`, label: fmt("AD2E.Init.Action.scroll", { name: m.name }), value: 0, short: m.name, scroll: true });
   }
   for (const m of actor?.items?.filter?.(i => i.type === "magic" && i.system.category !== "scroll") ?? []) {
     const kind = MAGIC_TYPE[m.system.category] ?? "misc";

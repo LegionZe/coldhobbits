@@ -987,12 +987,24 @@
       "spellRound": "Cast {name} ({time}: end of the round)",
       "magic": "Use {name} (+{n})",
       "breath": "Breath weapon (+{n})",
-      "innate": "Innate spell ability (+{n})"
+      "innate": "Innate spell ability (+{n})",
+      "scroll": "Read {name} (casting time of the spell)"
     },
     "Natural": "natural weapons",
     "Breath": "breath weapon",
     "Innate": "innate ability",
-    "EndOfRound": "takes effect at the end of the round"
+    "EndOfRound": "takes effect at the end of the round",
+    "ModeSetting": "Initiative method",
+    "ModeHint": "Individual (optional rule): each combatant rolls 1d10. Group (optional rule): one 1d10 per side each round, each combatant adds its own action modifiers (Table 56). Standard: one 1d10 per side each round, the whole side acts on it. Sides are token dispositions (friendly, neutral, hostile); the GM makes the side rolls (Initiative, PHB).",
+    "Mode": { "individual": "Individual (each combatant rolls)", "group": "Group (one roll per side + each combatant's modifiers)", "standard": "Standard (one roll per side)" },
+    "ModeNote": { "group": "Group initiative: the side's roll replaces the 1d10.", "standard": "Standard initiative: the whole side acts on its roll; only situations and a modifier apply." },
+    "Side": { "1": "Friendly", "0": "Neutral", "-1": "Hostile" },
+    "SideRoll": "side roll",
+    "SideChat": "Side initiative, {side} (round {round})",
+    "SideNote": "{side} side",
+    "SideGmFirst": "The GM rolls initiative for this side first (group or standard initiative).",
+    "ScrollTime": "Casting time of the spell on the scroll",
+    "HasteCasting": "no haste benefit while casting"
   },
   "AD2E.AbilityRoll": {
     "Title": "Roll ability scores",

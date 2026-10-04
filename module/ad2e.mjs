@@ -64,6 +64,13 @@ Hooks.once("init", () => {
   game.settings.register("ad2e", "initiativePrompt", {
     name: "AD2E.Init.Setting", hint: "AD2E.Init.SettingHint", scope: "world", config: true, type: Boolean, default: true
   });
+  // Initiative method (Initiative (PHB)): one roll per side (standard procedure, or group with individual modifiers) or
+  // one roll per combatant (individual, optional rule).
+  game.settings.register("ad2e", "initiativeMode", {
+    name: "AD2E.Init.ModeSetting", hint: "AD2E.Init.ModeHint", scope: "world", config: true, type: String,
+    choices: { individual: "AD2E.Init.Mode.individual", group: "AD2E.Init.Mode.group", standard: "AD2E.Init.Mode.standard" },
+    default: "individual"
+  });
 
   registerAqRules();
   CONFIG.Actor.documentClass = AD2EActor;
