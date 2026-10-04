@@ -18,7 +18,8 @@ python3 tools/build-aq-equipment-data.py  # Al-Qadim Equipment (AA): price lists
 python3 tools/build-sp-weapon-data.py     # Skills & Powers weapon rules (POSP Tables 48-54); group/style/armour/shield proficiencies
 python3 tools/build-treasure-tables.py     # DMG Tables 85, 87, 88 (gem classes, art values, magical item categories)
 python3 tools/build-magic-item-data.py     # Magical Items (DMG Tables 89-104) and Gems (DMG) compendiums
-python3 tools/build-province-tables.py   # Al-Qadim wizard spell provinces (Wizard Spells by Province (AA))
+python3 tools/build-province-tables.py   # Al-Qadim wizard spell provinces and native spells (Appendix A (AA))
+python3 tools/build-shair-tables.py      # sha'ir gen spell fetching (Requesting a Spell (AA))
 python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17, 32); example spells (node parser)
 python3 tools/build-monster-data.py      # Table 39 creature THAC0; prototype monster, mount, hireling actors
 python3 tools/build-hireling-data.py      # Hirelings & Mounts: DMG Tables 64/65 hirelings, MM horses/camels/elephant

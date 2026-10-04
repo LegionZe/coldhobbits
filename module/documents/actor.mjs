@@ -6,6 +6,7 @@ import { familiarSurpriseBonus } from "../familiars.mjs";
 import { useComponents } from "../components.mjs";
 import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
 import { shieldType, SP } from "../sp-weapons.mjs";
+import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -971,7 +972,12 @@ export default class AD2EActor extends Actor {
     const comp = await useComponents(this, spell);
     if (!comp.cast) return;
     const left = sys.prepared - sys.cast - 1;
-    await spell.update({ "system.cast": sys.cast + 1 });
+    // Sha'ir: the spell the gen brought is used up and the gen is free again (module/shair.mjs).
+    const fetched = isShair(this) && this.system.gen?.fetch?.spellId === spell.id;
+    if (fetched) {
+      await retributionNotice(this, spell);
+      await clearFetched(this);
+    } else await spell.update({ "system.cast": sys.cast + 1 });
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const comps = ["verbal", "somatic", "material"].filter(c => sys.components[c]).map(c => c[0].toUpperCase()).join(", ");

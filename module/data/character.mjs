@@ -3,6 +3,7 @@ import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } from "../sp-weapons.mjs";
+import { isShairKit } from "../shair.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -125,6 +126,20 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       familiar: new SchemaField({ uuid: new StringField({ required: true, blank: true, initial: "" }),
         near: new BooleanField({ initial: true }), separated: new BooleanField({ initial: false }),
         deathResolved: new BooleanField({ initial: false }), lastAttempt: new NumberField({ nullable: true, initial: null }) }),
+      // Sha'ir gen (module/shair.mjs): kind (air, fire, water, earth), replacement gens so far, the current search, and the
+      // requests of the last 24 hours (repeat penalty).
+      gen: new SchemaField({
+        kind: new StringField({ initial: "" }),
+        replacements: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
+        fetch: new SchemaField({
+          spellId: new StringField({ initial: "" }), name: new StringField({ initial: "" }), unit: new StringField({ initial: "" }),
+          count: new NumberField({ integer: true, initial: 0 }), returnsAt: new NumberField({ nullable: true, initial: null }),
+          success: new BooleanField({ initial: false }), noticed: new BooleanField({ initial: false }),
+          ready: new BooleanField({ initial: false }), expiresAt: new NumberField({ nullable: true, initial: null }),
+          level: new NumberField({ integer: true, initial: 0 })
+        }),
+        attempts: new ArrayField(new SchemaField({ key: new StringField({ initial: "" }), at: new NumberField({ initial: 0 }) }))
+      }),
       biography: new HTMLField()
     };
   }
@@ -697,6 +712,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const cls = this.classInfo.classItem?.system;
     const table = AD2E.casterTables[cls?.identifier] ?? null;
     const kind = table ? AD2E.casterKinds[table] : null;
+    // Sha'ir: no memorized spells; the gen fetches each one (module/shair.mjs).
+    const shair = kind === "wizard" && isShairKit(this.classInfo.kitItem);
     const rows = table ? AD2E.spellProgression[table] : null;
     const levels = rows ? Object.keys(rows).map(Number) : [];
     const rowLevel = levels.length ? Math.min(this.level, Math.max(...levels)) : null;
@@ -719,6 +736,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         if (wis < need) { base[l - 1] = 0; bonus[l - 1] = 0; }
       }
     }
+    if (shair) { base.fill(0); bonus.fill(0); school.fill(0); }
     const owned = (this.parent?.items?.filter(i => i.type === "spell") ?? []);
     const maxKnown = this.abilityData.int.maxSpells;
     const byLevel = new Map();
@@ -730,14 +748,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     }
     const out = [...byLevel.entries()].sort((a, b) => a[0] - b[0]).map(([level, spells]) => {
       // Spells found but not (yet) understood are not known and cannot be memorized (module/learn-spells.mjs).
-      const usable = spells.filter(i => i.system.kind === kind && i.system.learned !== false);
+      const usable = shair ? spells : spells.filter(i => i.system.kind === kind && i.system.learned !== false);
       const slots = level >= 1 ? (base[level - 1] ?? 0) + (bonus[level - 1] ?? 0) + (school[level - 1] ?? 0) : 0;
       const prepared = usable.reduce((n, i) => n + i.system.prepared, 0);
       const remaining = usable.reduce((n, i) => n + Math.max(i.system.prepared - i.system.cast, 0), 0);
       return { level, spells, slots, base: base[level - 1] ?? 0, bonus: bonus[level - 1] ?? 0, school: school[level - 1] ?? 0,
-        prepared, remaining, known: usable.length, maxKnown: kind === "wizard" ? maxKnown : null, over: prepared > slots };
+        prepared, remaining, known: usable.length, maxKnown: kind === "wizard" && !shair ? maxKnown : null, over: !shair && prepared > slots };
     }).filter(l => l.slots > 0 || l.spells.length);
-    return { table, kind, castingLevel: row?.casting ?? null, levels: out };
+    return { table, kind, shair, castingLevel: row?.casting ?? null, levels: out };
   }
 
   /**
