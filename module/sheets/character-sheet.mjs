@@ -5,6 +5,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
+import { isElementalMage, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
 import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
@@ -169,6 +170,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleCarried: CharacterSheet.onToggleCarried,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
+      rollSpellDamage: CharacterSheet.onRollSpellDamage,
       restSpells: CharacterSheet.onRestSpells,
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
@@ -343,6 +345,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       overLevelLimit: !!info.levelLimit && sys.level > info.levelLimit,
       classItem: info.classItem,
       kitItem: info.kitItem,
+      // Elemental mage kit: the chosen province (module/elemental.mjs).
+      elementChoice: isElementalMage(this.document) ? [["", "—"], ...PROVINCES.map(p => [p, game.i18n.localize(`AD2E.Elemental.Province.${p}`)])]
+        .map(([value, label]) => ({ value, label, selected: value === (sys.element ?? "") })) : null,
       kitFits: info.kitFits,
       cls,
       kit: info.kitItem?.system ?? null,
@@ -475,7 +480,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           remaining: Math.max(s.prepared - s.cast, 0), usable: s.kind === sp.kind, unlearned,
           learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
             : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
-          learnBlocked: !!lc?.blocked,
+          learnBlocked: !!lc?.blocked, damage: !!s.damage,
           meta: [(s.kind === "priest" ? s.spheres : s.schools).join("/"), comps,
             `${i18n("AD2E.Spell.CT")} ${s.castingTime}`, `${i18n("AD2E.Spell.R")} ${s.range}`,
             `${i18n("AD2E.Spell.D")} ${s.duration}`, `${i18n("AD2E.Spell.AoE")} ${s.area}`, `${i18n("AD2E.Spell.Save")} ${s.save}`]
@@ -823,6 +828,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onLearnSpell(event, target) {
     const spell = this.actor.items.get(target.dataset.itemId);
     return spell ? rollLearnSpell(this.actor, spell) : null;
+  }
+
+  static onRollSpellDamage(event, target) {
+    return this.actor.rollSpellDamage(target.dataset.itemId);
   }
 
   static onCastSpell(event, target) {

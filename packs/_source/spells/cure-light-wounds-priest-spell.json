@@ -21,6 +21,8 @@
       "material": false
     },
     "materials": [],
+    "provinces": [],
+    "damage": "",
     "range": "Touch",
     "area": "Creature touched",
     "castingTime": "5",

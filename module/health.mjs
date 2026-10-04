@@ -14,6 +14,7 @@
  *    temporary damage is unconscious, not dead or dying.
  */
 import { COMBAT_TABLES } from "./rules/combat-tables.mjs";
+import { wardedDamage } from "./elemental.mjs";
 
 export const DEATH_LIMIT = -10;
 /** One turn = 10 rounds of one minute (PHB, "Time"), in seconds of world time. */
@@ -170,13 +171,19 @@ export async function applyFromMessage(message, scope, heal = false) {
     return;
   }
   const amount = message.getFlag("ad2e", "damage");
+  const element = message.getFlag("ad2e", "element");
   for (const actor of actors) {
     if (!actor.isOwner) {
       ui.notifications.warn(game.i18n.format("AD2E.Health.NotOwner", { name: actor.name }));
       continue;
     }
+    // An elemental mage hit by its own province: -2 per damage die, at least 0 (module/elemental.mjs).
+    const warded = heal ? null : wardedDamage(actor, element);
+    if (warded !== null && warded !== amount) {
+      ui.notifications.info(game.i18n.format("AD2E.Elemental.Warded", { name: actor.name, from: amount, to: warded }));
+    }
     if (heal) await actor.applyHealing(amount);
-    else await actor.applyDamage(amount, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
+    else await actor.applyDamage(warded ?? amount, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
       temp: message.getFlag("ad2e", "temp") ?? 0 });
   }
 }

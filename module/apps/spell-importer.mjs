@@ -223,7 +223,7 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
       const folder = s.folder ? await SpellImporter.#folderFor(pack, data.system.kind, data.system.level, cache) : null;
       const existing = index.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
       if (existing) {
-        const { prepared, cast, ...system } = data.system;
+        const { prepared, cast, damage, ...system } = data.system; // the GM's damage formula stays
         update.push({ _id: existing._id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
       } else {
         if (folder) data.folder = folder.id;
@@ -249,7 +249,7 @@ export function spellPageTitle(item) {
  * GM tool (game.ad2e.updateSpells(), and the importer's "Update existing spells" button): re-read the wiki page of every
  * spell in the world - world Items, spells on actors, and the Imported Spells compendium - and refresh its statistics and
  * material component links. What belongs to the character stays: memorized and cast counts, learned / failed level,
- * notes and the name (a renamed spell keeps its name). Spells without a wiki page are left alone.
+ * notes, the damage formula and the name (a renamed spell keeps its name). Spells without a wiki page are left alone.
  * Resolves { updated, skipped, failed }.
  */
 export async function updateExistingSpells() {
@@ -309,7 +309,7 @@ export async function updateExistingSpells() {
       const p = pages[title];
       const data = p?.wiki ? wiki.spellItemData(title, p.wiki, p.categories, catalog) : null;
       if (!data) { failed += byTitle.get(title).length; continue; }
-      const { prepared, cast, learned, learnFailedLevel, notes, ...system } = data.system;
+      const { prepared, cast, learned, learnFailedLevel, notes, damage, ...system } = data.system;
       const flags = { ad2e: { wiki: { title, revid: p.revid } } };
       for (const t of byTitle.get(title)) {
         const change = { _id: t.doc.id, system, flags };

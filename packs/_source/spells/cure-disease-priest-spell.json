@@ -21,6 +21,8 @@
       "material": false
     },
     "materials": [],
+    "provinces": [],
+    "damage": "",
     "range": "Touch",
     "area": "1 creature",
     "castingTime": "1 rd.",

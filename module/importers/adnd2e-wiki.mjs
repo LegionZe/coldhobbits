@@ -8,6 +8,22 @@
  * Only the infobox (game mechanics) and a link to the page are imported; spell descriptions are not.
  */
 import { matchComponents } from "./spell-components.mjs";
+import { SPELL_PROVINCES } from "../rules/province-tables.mjs";
+
+/** School element tags ("Invocation/Evocation (Fire)") as Al-Qadim provinces. */
+const ELEMENT_PROVINCE = { fire: "flame", water: "sea", air: "wind", earth: "sand" };
+
+/** Elemental provinces of a spell: Wizard Spells by Province (AA), and element tags in its school or sphere box. */
+export function provincesOf(title, box = {}) {
+  const out = new Set(SPELL_PROVINCES[title] ?? []);
+  for (const v of [box.school, box.sphere]) {
+    for (const m of String(v ?? "").matchAll(/\(([A-Za-z]+)\)/g)) {
+      const p = ELEMENT_PROVINCE[m[1].toLowerCase()];
+      if (p) out.add(p);
+    }
+  }
+  return [...out];
+}
 export const WIKI = "https://adnd2e.fandom.com";
 export const API = `${WIKI}/api.php`;
 export const BOOK_PREFIX = "Spells from ";
@@ -105,6 +121,7 @@ export function spellItemData(title, wiki, categories = [], components = null) {
       components: { verbal: flag(box.verbal), somatic: flag(box.somatic), material: flag(box.material) },
       // Links to component items (module/importers/spell-components.mjs) when a component catalog is given.
       materials: components && flag(box.material) ? matchComponents(wiki, components) : [],
+      provinces: provincesOf(title, box), damage: "",
       range: first(box.range), area: first(box.aoe), castingTime: first(box.castingTime),
       duration: first(box.duration), save: first(box.save),
       sources: booksOf(categories), url: pageUrl(title), prepared: 0, cast: 0, notes: ""

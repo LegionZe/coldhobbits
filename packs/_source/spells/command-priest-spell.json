@@ -22,6 +22,8 @@
       "material": false
     },
     "materials": [],
+    "provinces": [],
+    "damage": "",
     "range": "30 yds.",
     "area": "1 creature",
     "castingTime": "1",
