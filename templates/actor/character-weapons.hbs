@@ -35,7 +35,7 @@
         <span class="ad2e-weapon-meta {{#if r.over}}ad2e-unmet{{/if}}">{{r.meta}}</span>
         {{#if r.otherRiderText}}<span class="ad2e-weapon-meta">{{r.otherRiderText}}</span>{{/if}}
       </div>
-      {{#if r.missing}}<span></span>{{else}}<label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Animal.RidingHint'}}"><input type="checkbox" data-action="toggleRiding" data-uuid="{{r.uuid}}" {{checked r.riding}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Animal.Riding"}}</label>{{/if}}
+      {{#if r.missing}}{{#if r.compendium}}{{#if @root.editable}}<button type="button" data-action="importAnimal" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Animal.ImportHint'}}">{{localize "AD2E.Animal.Import"}}</button>{{else}}<span></span>{{/if}}{{else}}<span></span>{{/if}}{{else}}<label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Animal.RidingHint'}}"><input type="checkbox" data-action="toggleRiding" data-uuid="{{r.uuid}}" {{checked r.riding}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Animal.Riding"}}</label>{{/if}}
       {{#if @root.editable}}<a data-action="removeAnimal" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Animal.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Animal.DropHint"}}</p>
