@@ -21,6 +21,9 @@ export default class ArmorData extends foundry.abstract.TypeDataModel {
         attacks: new NumberField({ integer: true, min: 1, nullable: true, initial: null })
       }),
       bonus: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+      // Size the armour was made for ("" = made for its wearer). "the armor of a giant is of little use to anyone";
+      // small armour weighs half, large 50% more (Armor (PHB)). blank must be explicit with choices.
+      size: new StringField({ initial: "", blank: true, choices: ["S", "M", "L"] }),
       equipped: new BooleanField({ initial: false }),
       cost: new StringField({ initial: "" }),
       weight: new NumberField({ min: 0, nullable: true, initial: null }),

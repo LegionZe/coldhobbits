@@ -328,6 +328,18 @@
   "AD2E.Sheet.Ammunition": "AD&D 2e Ammunition",
   "AD2E.Sheet.Armor": "AD&D 2e Armour",
   "AD2E.Armor": {
+    "Size": "Made for size",
+    "SizeWearer": "Its wearer",
+    "SizeHint": "Armour made for another size does not fit (no Armor Class). Small armour weighs half the listed weight, large 50% more; blank = made for its wearer, weighed by the wearer's size (Armor, PHB).",
+    "SizeLabel": "made for size {size}",
+    "Misfit": "does not fit this character (no Armor Class)",
+    "Restrict": {
+      "noArmor": "not allowed for this class (wizards wear no armour)",
+      "noShield": "this class cannot use a shield",
+      "notAllowed": "not allowed for this class",
+      "tooHeavy": "too heavy for this class (chain mail or lighter)",
+      "woodenShield": "wooden shields only"
+    },
     "Armour": "Armour",
     "body": "Body armour",
     "shield": "Shield",

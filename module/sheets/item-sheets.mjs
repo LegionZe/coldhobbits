@@ -201,6 +201,9 @@ export class ArmorSheet extends AD2EItemSheet {
     context.isBody = sys.kind === "body";
     context.isShield = sys.kind === "shield";
     context.summary = armorSummary(sys);
+    // Armour size (Armor (PHB)): an ordered option list (blank = made for its wearer).
+    context.sizeOptions = [["", "AD2E.Armor.SizeWearer"], ["S", "AD2E.Unarmed.Size.S"], ["M", "AD2E.Unarmed.Size.M"], ["L", "AD2E.Unarmed.Size.L"]]
+      .map(([value, label]) => ({ value, label: game.i18n.localize(label), selected: value === (sys.size ?? "") }));
     return context;
   }
 }
