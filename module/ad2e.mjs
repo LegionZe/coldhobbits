@@ -28,6 +28,7 @@ import AD2EChatMessage from "./documents/chat-message.mjs";
 import { registerAqRules } from "./aq-rules.mjs";
 import { registerSpWeapons } from "./sp-weapons.mjs";
 import { registerShairHooks } from "./shair.mjs";
+import { registerGenHooks } from "./gens.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
@@ -71,6 +72,7 @@ Hooks.once("init", () => {
   registerAnimalHooks();
   registerFamiliarHooks();
   registerShairHooks();
+  registerGenHooks();
   // Material components used up when casting (module/components.mjs); optional (Material Spell Components (POSM)).
   game.settings.register("ad2e", "trackComponents", {
     name: "AD2E.Components.Setting", hint: "AD2E.Components.SettingHint", scope: "world", config: true, type: Boolean,

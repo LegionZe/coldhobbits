@@ -17,6 +17,21 @@
       <span>{{st.gen.status}}</span>
       {{#if st.gen.isGM}}{{#if st.gen.busy}}<button type="button" data-action="genReturnNow" data-tooltip="{{localize 'AD2E.Shair.ReturnNowHint'}}">{{localize "AD2E.Shair.ReturnNow"}}</button>{{/if}}{{/if}}
     </div>
+    {{#if st.gen.actor}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{st.gen.actor.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{st.gen.actor.uuid}}">{{st.gen.actor.name}}</a></span>
+        <span class="ad2e-weapon-meta {{#if st.gen.actor.dead}}ad2e-unmet{{/if}}">{{st.gen.actor.meta}}{{#if st.gen.actor.dead}} · {{localize "AD2E.Gen.Dead"}}{{/if}}</span>
+      </div>
+      {{#if @root.editable}}<a data-action="dismissGen" data-tooltip="{{localize 'AD2E.Gen.Dismiss'}}"><i class="fa-solid fa-person-walking-arrow-right"></i></a>{{else}}<span></span>{{/if}}
+    </div>
+    {{else}}{{#if st.gen.missing}}<p class="ad2e-placeholder ad2e-unmet">{{localize "AD2E.Gen.Missing"}}</p>{{/if}}{{/if}}
+    <div class="ad2e-prof-summary">
+      <label data-tooltip="{{localize 'AD2E.Gen.NearHint'}}"><input type="checkbox" name="system.gen.near" {{checked st.gen.near}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Gen.Near"}}</label>
+      {{#if @root.editable}}{{#if st.gen.canSummon}}<button type="button" data-action="summonGen">{{localize "AD2E.Gen.Summon"}}</button>{{/if}}{{/if}}
+      {{#if st.gen.needsDeath}}<button type="button" data-action="genDeath" class="ad2e-unmet">{{localize "AD2E.Gen.DeathButton"}}</button>{{/if}}
+    </div>
     <p class="ad2e-note">{{localize "AD2E.Shair.Note"}}</p>
   </fieldset>
   {{else}}

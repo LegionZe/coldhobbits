@@ -1616,5 +1616,35 @@
       "5-6": "5th-6th level: a messenger monster arrives in 1d6 rounds",
       "7": "7th level: the caster is taken before the god"
     }
+  },
+  "AD2E.Gen": {
+    "ActorName": "{kind} gen of {name}",
+    "Attack": "Hands or claws",
+    "ProduceFlame": "Produces flame at will",
+    "WardText": "Protected against {province}: attacks -2 to hit, saving throws +2, damage -2 per die (at least 1 per die)",
+    "HasOne": "{name} already serves this sha'ir.",
+    "SummonTitle": "Summon a gen",
+    "SummonText": "{name} fasts and communes with the elemental planes for {time} hours, uninterrupted (no proficiency check needed). Summon the gen now?",
+    "Summoned": "{name} summons and binds a gen: {gen} ({hours} hours; loyalty {loyalty}).",
+    "DismissTitle": "Dismiss the gen",
+    "DismissText": "Dismiss {gen}? The sha'ir loses no hit points, but the next gen's loyalty is 1 lower. The actor stays in the world for the GM to remove.",
+    "Dismiss": "Dismiss the gen",
+    "Summon": "Summon gen",
+    "Missing": "The linked gen actor no longer exists.",
+    "Dead": "dead",
+    "Meta": "HP {hp}/{max} · HD {hd} · THAC0 {thac0} · AC {ac} · loyalty {loyalty}",
+    "Near": "Within 10 ft",
+    "NearHint": "The sha'ir has the gen's protection against its element only while the gen is within 10 feet.",
+    "DeathButton": "Gen died: halve hit points",
+    "DeathTitle": "Death of the gen",
+    "DeathHalved": "{name}'s hit points drop by half ({from} to {to}).",
+    "DeathSaved": "Saving throw vs. death magic (needs {needs}): saved, 1 hit point left.",
+    "DeathFailed": "Saving throw vs. death magic (needs {needs}): failed, the sha'ir dies.",
+    "Died": "{gen} has died. Resolve it on {name}'s sheet (Spells tab: Gen died).",
+    "Warded": "{name} (gen protection): {from} damage becomes {to} (-2 per die of the gen's element, at least 1 per die).",
+    "AttackWard": "Attack uses {province}: {name}'s gen protection",
+    "WardShort": "Gen protection",
+    "SaveWard": "Against {province}: gen protection (+{n})",
+    "SaveWardShort": "gen protection +{n}"
   }
 }

@@ -15,6 +15,7 @@
  */
 import { COMBAT_TABLES } from "./rules/combat-tables.mjs";
 import { wardedDamage } from "./elemental.mjs";
+import { genWardedDamage } from "./gens.mjs";
 
 export const DEATH_LIMIT = -10;
 /** One turn = 10 rounds of one minute (PHB, "Time"), in seconds of world time. */
@@ -181,9 +182,12 @@ export async function applyFromMessage(message, scope, heal = false) {
       continue;
     }
     // An elemental mage hit by its own province: -2 per damage die, at least 0 (module/elemental.mjs).
-    const warded = heal ? null : wardedDamage(actor, element);
+    // A gen, or a sha'ir with its gen within 10 feet, hit by the gen's element: -2 per die, at least 1 (module/gens.mjs).
+    const mage = heal ? null : wardedDamage(actor, element);
+    const gen = heal || mage !== null ? null : genWardedDamage(actor, element);
+    const warded = mage ?? gen;
     if (warded !== null && warded !== amount) {
-      ui.notifications.info(game.i18n.format("AD2E.Elemental.Warded", { name: actor.name, from: amount, to: warded }));
+      ui.notifications.info(game.i18n.format(gen !== null ? "AD2E.Gen.Warded" : "AD2E.Elemental.Warded", { name: actor.name, from: amount, to: warded }));
     }
     if (heal) await actor.applyHealing(amount);
     else await actor.applyDamage(warded ?? amount, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
