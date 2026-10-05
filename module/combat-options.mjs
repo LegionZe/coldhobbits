@@ -156,3 +156,18 @@ export function mountedFireIssues({ weapon, specialized = false, proficiencies =
   out.push(M.once.includes(weapon) ? "once" : "weapon");
   return out;
 }
+
+/**
+ * Melee from horseback (Fighting from Horseback, Unusual Combat Situations (DMG)): a rider has +1 to hit a creature
+ * smaller than the mount, but not another rider; a combatant on foot has -1 against a rider (not against the mount).
+ * @param {{mountSize: string|null, targetSize: string, targetRiding: boolean}} p  mountSize null = attacker on foot
+ * @returns {{key: "smaller"|"vsRider"|null, value: number}}
+ */
+export function mountedMeleeModifier({ mountSize = null, targetSize = "M", targetRiding = false } = {}) {
+  const sizes = T.overbear.sizes;
+  if (mountSize) {
+    return !targetRiding && sizes.indexOf(targetSize) < sizes.indexOf(mountSize) ? { key: "smaller", value: T.mounted.smaller }
+      : { key: null, value: 0 };
+  }
+  return targetRiding ? { key: "vsRider", value: T.mounted.vsRider } : { key: null, value: 0 };
+}

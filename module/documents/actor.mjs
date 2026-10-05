@@ -16,7 +16,7 @@ export function spellDamageLabel(d, i = 0) {
   const round = d.perRound ? ` (${game.i18n.localize("AD2E.Spell.PerRound")})` : "";
   return `${d.label || `${kind} ${i + 1}`}${round}: ${d.formula}`;
 }
-import { canFightTwoWeapons, COMBAT_TABLES, halveRate, mountedFireIssues, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
+import { canFightTwoWeapons, COMBAT_TABLES, halveRate, mountedFireIssues, mountedMeleeModifier, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -315,9 +315,8 @@ export default class AD2EActor extends Actor {
     const missileStyle = use === "missile" && styles && styles[missileStyleOf(item)] ? missileStyleOf(item) : null;
     const riding = use === "missile" && this.type === "character" && !!this.system.animals?.riding;
     // Any attack from the back of an untrained mount: -2 (DMG), ticked by default for such a mount.
-    const mount = this.type === "character" && this.system.animals?.riding
-      ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(this.system.animals.riding, { strict: false }) ?? null : null;
-    if (mount?.system) {
+    const mount = this.#ridingMount();
+    if (mount) {
       moveField += `<div class="form-group"><label>${game.i18n.format("AD2E.Mounted.Untrained", { name: mount.name, n: COMBAT_TABLES.mounted.untrained })}</label>`
         + `<input type="checkbox" name="untrainedMount"${mountTrained(mount) ? "" : " checked"}></div>`;
     }
@@ -360,7 +359,7 @@ export default class AD2EActor extends Actor {
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + moveField + backstabField + twoField + nonlethalField
-        + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
+        + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField
         + AD2EActor.#combatModFields(targets, use === "missile")
         + modifierFields()
@@ -376,7 +375,7 @@ export default class AD2EActor extends Actor {
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
             mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
-            untrainedMount: !!f.untrainedMount?.checked };
+            untrainedMount: !!f.untrainedMount?.checked, mountedMelee: use === "melee" ? AD2EActor.#mountedMeleePicked(f) : null };
         }
       },
       rejectClose: false
@@ -472,6 +471,8 @@ export default class AD2EActor extends Actor {
     }
     const untrained = input.untrainedMount ? COMBAT_TABLES.mounted.untrained : 0;
     if (untrained) notes.push(`${i18n("AD2E.Mounted.UntrainedShort")} ${untrained}`);
+    const mountedMelee = input.mountedMelee?.value ?? 0;
+    if (input.mountedMelee?.text) notes.push(input.mountedMelee.text);
     const styleHit = input.styleAttack && !a.hand ? SP.weaponShield.hit : 0;
     if (styleHit) notes.push(game.i18n.format("AD2E.SP.WeaponShieldNote", { n: styleHit }));
     // Skills & Powers mastery at point blank: +3 in place of the +2 at other ranges.
@@ -481,7 +482,7 @@ export default class AD2EActor extends Actor {
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained;
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     const hit = t51.auto || roll.total >= needed;
@@ -943,6 +944,44 @@ export default class AD2EActor extends Actor {
       + `<input type="checkbox" name="vsUnarmed"></div>`;
   }
 
+  /** The mount a character is riding (`system.animals.riding`), or null; monsters do not ride. */
+  #ridingMount() {
+    if (this.type !== "character" || !this.system.animals?.riding) return null;
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    const mount = resolve?.(this.system.animals.riding, { strict: false }) ?? null;
+    return mount?.system ? mount : null;
+  }
+
+  /**
+   * Melee dialog field from horseback (Fighting from Horseback, Unusual Combat Situations (DMG)): a rider's +1 against
+   * a creature smaller than the mount (not a rider), or the -1 of a combatant on foot against a rider. Ticked by default
+   * from the first target (its size; a character riding a mount).
+   */
+  #mountedMeleeField(targets) {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    const target = targets?.length ? resolve?.(targets[0].uuid, { strict: false })?.actor ?? null : null;
+    const mount = this.#ridingMount();
+    const targetRiding = !!(target && #ridingMount in target && target.#ridingMount());
+    const m = target ? mountedMeleeModifier({ mountSize: mount ? AD2EActor.#sizeOf(mount) : null, targetSize: AD2EActor.#sizeOf(target), targetRiding })
+      : { key: null };
+    const M = COMBAT_TABLES.mounted;
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    if (mount) {
+      return `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Mounted.Smaller", { name: mount.name, n: `+${M.smaller}` }))}</label>`
+        + `<input type="checkbox" name="mountedSmaller"${m.key === "smaller" ? " checked" : ""}></div>`;
+    }
+    return `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Mounted.VsRider", { n: M.vsRider }))}</label>`
+      + `<input type="checkbox" name="vsRider"${m.key === "vsRider" ? " checked" : ""}></div>`;
+  }
+
+  /** The ticked mounted melee modifier: { value, text }. */
+  static #mountedMeleePicked(f) {
+    const M = COMBAT_TABLES.mounted;
+    if (f.mountedSmaller?.checked) return { value: M.smaller, text: `${game.i18n.localize("AD2E.Mounted.SmallerShort")} +${M.smaller}` };
+    if (f.vsRider?.checked) return { value: M.vsRider, text: `${game.i18n.localize("AD2E.Mounted.VsRiderShort")} ${M.vsRider}` };
+    return { value: 0, text: "" };
+  }
+
   /**
    * Monster attacks: the stat block's natural attacks (`system.attacks`, index "a<n>") and owned weapon items
    * (index "w<itemId>", damage options from the weapon list plus its magical bonus). Hit if d20 + bonus + modifier
@@ -968,12 +1007,13 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
-        + (attack.melee ? AD2EActor.#armedDefenderField() : "")
+        + (attack.melee ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + AD2EActor.#combatModFields(targets, !attack.melee, attack.element)
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked,
-        t51: AD2EActor.#combatModPicked(button.form), ...readModifier(button.form) }) },
+        t51: AD2EActor.#combatModPicked(button.form), mountedMelee: attack.melee ? AD2EActor.#mountedMeleePicked(button.form.elements) : null,
+        ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
@@ -981,14 +1021,16 @@ export default class AD2EActor extends Actor {
     const needed = thac0 - input.ac;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     input.t51 ??= { sum: 0, auto: false, text: "" };
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum, mod: input.mod }).evaluate();
+    const mountedMelee = input.mountedMelee?.value ?? 0;
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
-        + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "") + modifierText(input.mod, input.note)
+        + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "")
+        + (input.mountedMelee?.text ? ` [${input.mountedMelee.text}]` : "") + modifierText(input.mod, input.note)
     });
     if (hit && AD2EActor.#autoDamageOn()) {
       await this.rollMonsterDamage(key, { size: AD2EActor.#targetSizeKey(targets), vsUnarmed: !!input.vsUnarmed });
