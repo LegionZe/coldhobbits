@@ -1,0 +1,53 @@
+{
+  "_id": "6pTQbhGHt6sZrdqY",
+  "_key": "!items!6pTQbhGHt6sZrdqY",
+  "name": "Claymore",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "claymore",
+    "proficiency": "claymore",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "2d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "25 gp (The Renaissance)",
+    "weight": 8.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

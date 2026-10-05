@@ -1,0 +1,54 @@
+{
+  "_id": "dpFMzFhx3fbzJ0wS",
+  "_key": "!items!dpFMzFhx3fbzJ0wS",
+  "name": "Pellet bow",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "pellet-bow",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "40",
+        "medium": "80",
+        "long": "120"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

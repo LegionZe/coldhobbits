@@ -1,0 +1,53 @@
+{
+  "_id": "5fXKREaAeunU7978",
+  "_key": "!items!5fXKREaAeunU7978",
+  "name": "Lajatang",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "lajatang",
+    "proficiency": "lajatang",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "7 gp (Oriental)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

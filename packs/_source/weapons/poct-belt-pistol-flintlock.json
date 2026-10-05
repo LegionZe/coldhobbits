@@ -1,0 +1,53 @@
+{
+  "_id": "wDE9GRmECoMjWeKh",
+  "_key": "!items!wDE9GRmECoMjWeKh",
+  "name": "Belt pistol (flintlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "belt-pistol-flintlock",
+    "proficiency": "belt-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "30 gp (Firearms)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+); misfires on a natural 1"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

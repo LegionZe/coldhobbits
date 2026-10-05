@@ -1,0 +1,54 @@
+{
+  "_id": "3nz9lmeemiThEesj",
+  "_key": "!items!3nz9lmeemiThEesj",
+  "name": "Horse pistol",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horse-pistol",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "25",
+        "medium": "50",
+        "long": "75"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

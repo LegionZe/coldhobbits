@@ -1,0 +1,54 @@
+{
+  "_id": "xs0QBWZmIilqx5kM",
+  "_key": "!items!xs0QBWZmIilqx5kM",
+  "name": "Musket",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "musket",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d12",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "75",
+        "medium": "150",
+        "long": "400"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

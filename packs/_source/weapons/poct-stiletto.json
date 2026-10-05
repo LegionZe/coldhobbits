@@ -1,0 +1,53 @@
+{
+  "_id": "xDddf4LfeRmEdtq3",
+  "_key": "!items!xDddf4LfeRmEdtq3",
+  "name": "Stiletto",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "stiletto",
+    "proficiency": "stiletto",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "thrownDagger",
+      "strength": "full"
+    },
+    "cost": "8 sp (Hundred Years' War, The Renaissance)",
+    "weight": 0.5,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

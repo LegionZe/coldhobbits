@@ -1,0 +1,59 @@
+{
+  "_id": "rSlUi4eUNtdWKjqS",
+  "_key": "!items!rSlUi4eUNtdWKjqS",
+  "name": "Katana",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "katana",
+    "proficiency": "katana",
+    "weapon": {
+      "size": "M",
+      "type": "S/P",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "One-handed",
+          "sm": "1d10",
+          "l": "1d12",
+          "speed": null
+        },
+        {
+          "label": "Two-handed",
+          "sm": "2d6",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "100 gp (Oriental)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

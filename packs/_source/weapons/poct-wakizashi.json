@@ -1,0 +1,53 @@
+{
+  "_id": "KEW58dYgIdrQD6W3",
+  "_key": "!items!KEW58dYgIdrQD6W3",
+  "name": "Wakizashi",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "wakizashi",
+    "proficiency": "wakizashi",
+    "weapon": {
+      "size": "M",
+      "type": "S/P",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "50 gp (Oriental)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 5100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

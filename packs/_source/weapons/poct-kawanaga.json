@@ -1,0 +1,53 @@
+{
+  "_id": "AEmpKExabGiAAsbP",
+  "_key": "!items!AEmpKExabGiAAsbP",
+  "name": "Kawanaga",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "kawanaga",
+    "proficiency": "kawanaga",
+    "weapon": {
+      "size": "S",
+      "type": "P/B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "1 gp (Oriental)",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

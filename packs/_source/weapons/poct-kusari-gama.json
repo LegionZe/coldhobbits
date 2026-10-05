@@ -1,0 +1,53 @@
+{
+  "_id": "J99Jp6aeMasJGHdp",
+  "_key": "!items!J99Jp6aeMasJGHdp",
+  "name": "Kusari-gama",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "kusari-gama",
+    "proficiency": "kusari-gama",
+    "weapon": {
+      "size": "M",
+      "type": "P/S/B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "4 gp (Oriental)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

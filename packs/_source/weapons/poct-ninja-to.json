@@ -1,0 +1,53 @@
+{
+  "_id": "s4sWi5QwpjS9rtfU",
+  "_key": "!items!s4sWi5QwpjS9rtfU",
+  "name": "Ninja-to",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "ninja-to",
+    "proficiency": "ninja-to",
+    "weapon": {
+      "size": "M",
+      "type": "S/P",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "20 gp (Oriental)",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

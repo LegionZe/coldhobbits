@@ -1,0 +1,53 @@
+{
+  "_id": "4CHdRaWfPOduS4Mj",
+  "_key": "!items!4CHdRaWfPOduS4Mj",
+  "name": "Hand gunne (hand match)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hand-gunne-hand-match",
+    "proficiency": "hand-gunne",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 18,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8+2",
+          "l": "2d6+2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/4",
+        "short": "40",
+        "medium": "120",
+        "long": "170"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "125 gp (Firearms)",
+    "weight": 20.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "misfires on 5 or less (10 wet); range penalties doubled"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

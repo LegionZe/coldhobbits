@@ -1,0 +1,53 @@
+{
+  "_id": "PAMYcBvNBk8PfPmo",
+  "_key": "!items!PAMYcBvNBk8PfPmo",
+  "name": "War club",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "war-club",
+    "proficiency": "war-club",
+    "weapon": {
+      "size": "M",
+      "type": "B/S",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "1d4+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "cost": "2 gp (Stone Age or Savage Cultures)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 5200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "bPVWjDkxRAAKrCiy",
+  "_key": "!items!bPVWjDkxRAAKrCiy",
+  "name": "Pellet bow",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "pellet-bow",
+    "proficiency": "pellet-bow",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "40",
+        "medium": "80",
+        "long": "120"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
+    "cost": "25 gp (Dark Ages, The Crusades, Hundred Years' War, The Renaissance, Middle Eastern, Oriental)",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

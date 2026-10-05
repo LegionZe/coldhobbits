@@ -1,0 +1,53 @@
+{
+  "_id": "mTGn2YtQun83y5LI",
+  "_key": "!items!mTGn2YtQun83y5LI",
+  "name": "Horse pistol (snaplock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horse-pistol-snaplock",
+    "proficiency": "horse-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "20 gp (Firearms)",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+); misfires on 2 or less"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1701,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

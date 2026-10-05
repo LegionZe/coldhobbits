@@ -1,0 +1,53 @@
+{
+  "_id": "U1NSzq8Z3sZgpMHX",
+  "_key": "!items!U1NSzq8Z3sZgpMHX",
+  "name": "Horse pistol (flintlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "horse-pistol-flintlock",
+    "proficiency": "horse-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "25",
+        "medium": "50",
+        "long": "75"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "40 gp (Firearms)",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+); misfires on a natural 1"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,53 @@
+{
+  "_id": "r6UTZLHnmY5YTKD5",
+  "_key": "!items!r6UTZLHnmY5YTKD5",
+  "name": "Chain",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "chain",
+    "proficiency": "chain",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4+1",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 sp (Middle Eastern, Oriental)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size; martial arts attacks"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

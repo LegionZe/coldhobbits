@@ -1,0 +1,53 @@
+{
+  "_id": "h1qXxJlYLFQj9hv1",
+  "_key": "!items!h1qXxJlYLFQj9hv1",
+  "name": "Two-handed axe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "two-handed-axe",
+    "proficiency": "two-handed-axe",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "2d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "15 gp (The Bronze Age and Ancient Cultures, Dark Ages)",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 5000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

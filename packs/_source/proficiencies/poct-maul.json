@@ -1,0 +1,54 @@
+{
+  "_id": "Ns3AVIhuD5QavlCd",
+  "_key": "!items!Ns3AVIhuD5QavlCd",
+  "name": "Maul",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "maul",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

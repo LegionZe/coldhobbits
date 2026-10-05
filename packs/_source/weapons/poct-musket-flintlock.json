@@ -1,0 +1,53 @@
+{
+  "_id": "Dc1qNKeFh760HiqA",
+  "_key": "!items!Dc1qNKeFh760HiqA",
+  "name": "Musket (flintlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "musket-flintlock",
+    "proficiency": "musket",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d12",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "75",
+        "medium": "150",
+        "long": "400"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "90 gp (Firearms)",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+); misfires on a natural 1"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

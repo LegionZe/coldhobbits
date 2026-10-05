@@ -1,0 +1,53 @@
+{
+  "_id": "gvWI7K0sPcPOGDkl",
+  "_key": "!items!gvWI7K0sPcPOGDkl",
+  "name": "Rapier",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "rapier",
+    "proficiency": "rapier",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "15 gp (The Renaissance)",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

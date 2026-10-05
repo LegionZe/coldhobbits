@@ -1,0 +1,53 @@
+{
+  "_id": "Qi3U8EwkKCVEorLG",
+  "_key": "!items!Qi3U8EwkKCVEorLG",
+  "name": "Great club",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "great-club",
+    "proficiency": "great-club",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d6+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "2 gp (Tools/Common)",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

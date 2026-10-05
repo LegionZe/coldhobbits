@@ -1,0 +1,53 @@
+{
+  "_id": "hrbrNkCFCBe8G7O7",
+  "_key": "!items!hrbrNkCFCBe8G7O7",
+  "name": "Caliver (matchlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "caliver-matchlock",
+    "proficiency": "caliver",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "40",
+        "medium": "80",
+        "long": "240"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "40 gp (Firearms)",
+    "weight": 11.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+); misfires on 3 or less (6 wet)"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

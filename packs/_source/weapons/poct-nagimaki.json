@@ -1,0 +1,53 @@
+{
+  "_id": "eN7B4cDga4Anw1On",
+  "_key": "!items!eN7B4cDga4Anw1On",
+  "name": "Nagimaki",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "nagimaki",
+    "proficiency": "nagimaki",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "6 gp (Oriental)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "double damage in a mounted charge"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

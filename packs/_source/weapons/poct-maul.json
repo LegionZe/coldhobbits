@@ -1,0 +1,53 @@
+{
+  "_id": "nhA41etB9R86FUbs",
+  "_key": "!items!nhA41etB9R86FUbs",
+  "name": "Maul",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "maul",
+    "proficiency": "maul",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "4 gp (Hundred Years' War, The Renaissance)",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
