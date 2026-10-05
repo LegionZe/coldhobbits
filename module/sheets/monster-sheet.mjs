@@ -29,6 +29,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollHp: MonsterSheet.onRollHp,
       addAttack: MonsterSheet.onAddAttack,
       removeAttack: MonsterSheet.onRemoveAttack,
+      applyElementGuess: MonsterSheet.onApplyElementGuess,
       openItem: MonsterSheet.onOpenItem,
       deleteItem: MonsterSheet.onDeleteItem,
       toggleEquipped: MonsterSheet.onToggleEquipped,
@@ -99,13 +100,18 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     ];
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
+    // Importer suggestion (complete-compendium.mjs guessElement): shown while a natural attack has no element.
+    const guess = actor.getFlag?.("ad2e", "elementGuess") ?? null;
+    context.elementGuess = guess?.element && sys.attacks.some(a => !a.element)
+      ? game.i18n.format("AD2E.Monster.ElementGuess", { province: i18n(`AD2E.Elemental.Province.${guess.element}`), word: guess.word, from: i18n(`AD2E.Monster.ElementGuessFrom.${guess.from}`) }) : "";
     // Elemental province of a natural attack (module/elemental.mjs).
     context.attackElements = { flame: "AD2E.Elemental.Province.flame", sand: "AD2E.Elemental.Province.sand",
       sea: "AD2E.Elemental.Province.sea", wind: "AD2E.Elemental.Province.wind" };
     const items = actor.items ?? [];
     const inv = sys.encumbrance.inventory;
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
-      hit: i.system.bonus.hit, inside: insideText(inv, i), summary: i.system.weapon.damage.filter(d => d.sm || d.l)
+      hit: i.system.bonus.hit, inside: insideText(inv, i),
+      element: i.system.element ? i18n(`AD2E.Elemental.Province.${i.system.element}`) : "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       equipped: i.system.equipped, summary: armorSummary(i.system), inside: insideText(inv, i) }));
@@ -172,6 +178,12 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollHp() { return this.document.rollMonsterHitPoints(); }
   static onAddAttack() {
     return this.document.update({ "system.attacks": [...this.document.system.attacks, { name: "Attack", damage: "1d6", bonus: 0, element: "" }] });
+  }
+  /** The importer's element suggestion (flags.ad2e.elementGuess) for every natural attack without an element. */
+  static onApplyElementGuess() {
+    const guess = this.document.getFlag?.("ad2e", "elementGuess")?.element;
+    if (!guess) return;
+    return this.document.update({ "system.attacks": this.document.system.attacks.map(a => ({ ...a, element: a.element || guess })) });
   }
   static onRemoveAttack(event, target) {
     const attacks = [...this.document.system.attacks];

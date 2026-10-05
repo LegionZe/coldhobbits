@@ -106,6 +106,36 @@ export function damageFormula(token) {
 }
 
 /**
+ * Elemental province named in a text (Al-Qadim provinces: flame, sand, sea, wind): words for fire, earth/sand, water
+ * and air; cold and ice count as sea (Appendix A: Wizard Spells by Province (AA) puts Cone of Cold, Ice Storm and Wall of
+ * Ice in the sea province). Lightning names no province (Lightning Bolt is universal). Returns { element, word } or null.
+ */
+const ELEMENT_WORDS = [
+  ["flame", /\b(fire|fiery|flames?|flaming|burn(?:s|ing)?|heat|magma|lava)\b/i],
+  ["sea", /\b(water|sea|waves?|drown(?:s|ing)?|cold|ice|icy|frost)\b/i],
+  ["wind", /\b(air|winds?|whirlwind|gusts?)\b/i],
+  ["sand", /\b(earth|sand)\b/i]
+];
+export function elementIn(text) {
+  for (const [element, re] of ELEMENT_WORDS) {
+    const m = String(text ?? "").match(re);
+    if (m) return { element, word: m[1].toLowerCase() };
+  }
+  return null;
+}
+
+/**
+ * A creature-level element suggestion for its natural attacks (not applied; the monster sheet offers it): from the
+ * name ("Elemental, Fire"), else from the special attacks ("Breath weapon (fire)"). { element, word, from } or null.
+ */
+export function guessElement(name, specialAttacks) {
+  const n = elementIn(name);
+  if (n) return { ...n, from: "name" };
+  const s = elementIn(specialAttacks);
+  return s ? { ...s, from: "special" } : null;
+}
+
+/**
  * Natural attacks from "Damage/Attack": "1-2/1-2" -> two attacks; "1d3/1d3 or by weapon"; "1-8 (weapon)"; "1";
  * the first " or " alternative that contains damage ("Special or 1-2"). "By weapon" gives none (add weapon items).
  */
@@ -114,7 +144,9 @@ export function parseAttacks(text) {
   for (const alt of cleanText(text).split(/\s+or\s+/i)) {
     const attacks = alt.split("/").map((tok, i) => {
       const damage = /^\s*\d+\s*$/.test(tok) ? tok.trim() : damageFormula(tok);
-      return damage ? { name: /weapon/i.test(tok) ? "Weapon" : `${label} ${i + 1}`, damage, bonus: 0 } : null;
+      // An attack whose own text names an element ("2d8 (fire)") takes it.
+      const element = damage ? elementIn(tok)?.element ?? "" : "";
+      return damage ? { name: /weapon/i.test(tok) ? "Weapon" : `${label} ${i + 1}`, damage, bonus: 0, ...(element ? { element } : {}) } : null;
     }).filter(Boolean);
     if (attacks.length) return attacks;
   }
@@ -159,6 +191,7 @@ export function monsterActorData({ key, title, sources, images }, { name, block 
       url: monsterPageUrl(key), notes: ""
     },
     prototypeToken: { name: name || title, disposition: -1, actorLink: false, texture: { src: img } },
-    flags: { ad2e: { completeCompendium: { key, variant: name, sources } } }
+    flags: { ad2e: { completeCompendium: { key, variant: name, sources },
+      ...(guessElement(name || title, get("Special Attacks")) ? { elementGuess: guessElement(name || title, get("Special Attacks")) } : {}) } }
   };
 }

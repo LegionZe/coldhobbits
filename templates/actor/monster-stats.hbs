@@ -35,6 +35,7 @@
   <fieldset>
     <legend>{{localize "AD2E.Monster.Attacks"}}</legend>
     {{#if system.damageText}}<p class="ad2e-note">{{localize "AD2E.Monster.Field.damageText"}}: {{system.damageText}}</p>{{/if}}
+    {{#if elementGuess}}<p class="ad2e-note">{{elementGuess}}{{#if editable}} <button type="button" data-action="applyElementGuess">{{localize "AD2E.Monster.ElementGuessApply"}}</button>{{/if}}</p>{{/if}}
     <table class="ad2e-monster-attacks">
       <thead><tr><th>{{localize "AD2E.Monster.AttackName"}}</th><th>{{localize "AD2E.Weapon.Damage"}}</th><th>{{localize "AD2E.Monster.AttackBonus"}}</th><th data-tooltip="{{localize 'AD2E.Monster.ElementHint'}}">{{localize "AD2E.Monster.Element"}}</th><th></th></tr></thead>
       <tbody>
@@ -56,7 +57,7 @@
           <td><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{w.id}}">{{w.name}}</a></td>
           <td class="ad2e-weapon-meta">{{w.summary}}</td>
           <td class="ad2e-num">{{w.hit}}</td>
-          <td></td>
+          <td data-tooltip="{{localize 'AD2E.Weapon.ElementHint'}}">{{w.element}}</td>
           <td class="ad2e-monster-buttons">
             <button type="button" data-action="rollAttack" data-key="{{w.key}}">{{localize "AD2E.Weapon.Attack"}}</button>
             <button type="button" data-action="rollDamage" data-key="{{w.key}}">{{localize "AD2E.Weapon.Damage"}}</button>
