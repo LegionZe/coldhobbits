@@ -137,6 +137,24 @@ export function spCost(p, ctx) {
   return { slots: parts.reduce((n, x) => n + x.slots, 0), parts, invalid, specValid, masteryValid };
 }
 
+/**
+ * Which fighting style covers a missile attack with this weapon: "thrown" (thrown weapons and slings: "Thrown
+ * Weapon/Sling", Table 52) or "missile" (bows, crossbows and other launchers).
+ */
+export function missileStyleOf(item) {
+  const w = item?.system?.weapon ?? {};
+  return w.melee || w.strength === "full" || /sling/i.test(item?.system?.proficiency ?? item?.system?.identifier ?? "") ? "thrown" : "missile";
+}
+
+/**
+ * Mounted missile fire modifier: DMG Table 53 by the mount's movement this round (still, half, threeQuarters, full);
+ * horse archery style: no penalty up to half speed, -2 faster (Fighting Style Specialization (POSP)).
+ */
+export function mountedMissileModifier(key, rows, horseArcher = false) {
+  if (horseArcher) return ["still", "half"].includes(key) ? SP.horseArchery.upToHalf : SP.horseArchery.faster;
+  return rows.find(r => r.key === key)?.value ?? 0;
+}
+
 /** Table 51 row for a shield item identifier, or null. */
 export function shieldType(identifier) {
   return Object.entries(SP.shields).find(([, r]) => r.items.includes(identifier))?.[0] ?? null;

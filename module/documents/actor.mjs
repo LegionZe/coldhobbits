@@ -5,7 +5,7 @@ import { promptMorale } from "../henchmen.mjs";
 import { familiarSurpriseBonus } from "../familiars.mjs";
 import { useComponents } from "../components.mjs";
 import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
-import { shieldType, SP } from "../sp-weapons.mjs";
+import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
@@ -308,6 +308,21 @@ export default class AD2EActor extends Actor {
       rangeField = `<div class="form-group"><label>${i18n("AD2E.Weapon.Range")}</label><select name="range">${
         opts.map(([k, l]) => `<option value="${k}"${k === "short" ? " selected" : ""}>${l}</option>`).join("")}</select></div>`;
     }
+    // Missile fire on the move (characters): the mount's movement (DMG Table 53; horse archery style, POSP) and, for a
+    // missile or thrown style specialist, the shooter's own movement (all attacks after half a move, half after a full move).
+    let moveField = "";
+    const styles = this.type === "character" ? this.system.proficiencies?.sp?.styles ?? null : null;
+    const missileStyle = use === "missile" && styles && styles[missileStyleOf(item)] ? missileStyleOf(item) : null;
+    const riding = use === "missile" && this.type === "character" && !!this.system.animals?.riding;
+    if (riding) {
+      moveField += `<div class="form-group"><label>${i18n("AD2E.Mounted.MountMove")}${styles?.horseArchery ? ` (${i18n("AD2E.Mounted.HorseArcher")})` : ""}</label><select name="mountMove">${
+        COMBAT_TABLES.mountedMissile.map(r => `<option value="${r.key}">${i18n(`AD2E.Mounted.Move.${r.key}`)} (${
+          mountedMissileModifier(r.key, COMBAT_TABLES.mountedMissile, !!styles?.horseArchery)})</option>`).join("")}</select></div>`;
+    }
+    if (missileStyle) {
+      moveField += `<div class="form-group"><label>${game.i18n.format("AD2E.SP.OwnMove", { style: i18n(`AD2E.SP.StyleName.${missileStyle}`) })}</label><select name="ownMove">`
+        + ["none", "half", "full"].map(k => `<option value="${k}">${i18n(`AD2E.SP.OwnMoveOption.${k}`)}</option>`).join("") + "</select></div>";
+    }
     const backstab = use === "melee" ? this.#backstabMultiplier() : null;
     const kitOptions = this.#kitOptions("attack");
     const targets = AD2EActor.#targetsNow();
@@ -337,7 +352,7 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
-        + ammoField + rangeField + backstabField + twoField + nonlethalField
+        + ammoField + rangeField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
         + styleField
         + AD2EActor.#combatModFields(targets, use === "missile")
@@ -352,7 +367,8 @@ export default class AD2EActor extends Actor {
           return { ac: Number(f.ac.value) || 0, t51: AD2EActor.#combatModPicked(button.form), mod: m.mod + kit.sum, range: f.range?.value ?? null,
             ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
-            vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked };
+            vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
+            mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle };
         }
       },
       rejectClose: false
@@ -422,6 +438,16 @@ export default class AD2EActor extends Actor {
     if (use === "missile" && attack.bowBendBars !== null && attack.bowBendBars !== undefined) {
       notes.push(game.i18n.format("AD2E.Weapon.BowBendBars", { rating: attack.bowStrength, chance: attack.bowBendBars }));
     }
+    // Mounted missile fire (DMG Table 53 / horse archery) and the missile style's movement note.
+    const mountMod = use === "missile" && input.mountMove ? mountedMissileModifier(input.mountMove, COMBAT_TABLES.mountedMissile,
+      !!this.system.proficiencies?.sp?.styles?.horseArchery) : 0;
+    if (use === "missile" && input.mountMove) {
+      notes.push(`${i18n(`AD2E.Mounted.Move.${input.mountMove}`)} ${mountMod >= 0 ? "+" : ""}${mountMod}`
+        + (input.mountMove !== "still" ? `; ${i18n("AD2E.Mounted.RateNote")}` : ""));
+    }
+    if (use === "missile" && input.missileStyle && input.ownMove && input.ownMove !== "none") {
+      notes.push(i18n(`AD2E.SP.OwnMoveNote.${input.ownMove}`));
+    }
     const styleHit = input.styleAttack && !a.hand ? SP.weaponShield.hit : 0;
     if (styleHit) notes.push(game.i18n.format("AD2E.SP.WeaponShieldNote", { n: styleHit }));
     // Skills & Powers mastery at point blank: +3 in place of the +2 at other ranges.
@@ -431,7 +457,7 @@ export default class AD2EActor extends Actor {
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit;
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     const hit = t51.auto || roll.total >= needed;
@@ -456,6 +482,8 @@ export default class AD2EActor extends Actor {
         + (notes.length ? ` [${notes.join("; ")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
+    // A missile or thrown style specialist shooting this round: +1 AC against missiles (attackers' dialogs, below).
+    if (use === "missile" && input.missileStyle) await this.#markShotThisRound();
     // A hit rolls its damage at once (client setting "autoDamage"), with the attack's choices: the ammunition fired,
     // backstab, non-lethal, the armed-defender bonus, and the first target's size.
     if (hit && AD2EActor.#autoDamageOn()) {
@@ -813,7 +841,7 @@ export default class AD2EActor extends Actor {
         const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
         return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
           + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
-      }).join("") + shieldField + AD2EActor.#genWardField(targets) + "</div></fieldset>";
+      }).join("") + shieldField + AD2EActor.#genWardField(targets) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>";
   }
 
   /**
@@ -821,6 +849,30 @@ export default class AD2EActor extends Actor {
    * it carries; module/sp-weapons.mjs): { name, type, ac (Table 51 bonus; the body shield's missile value against
    * missiles), attackers }, or null. Only for a target the user may observe (as #targetAc).
    */
+  /** Record on this actor's combatant that it shot with its missile style this round (combatant flag ad2e.shot = round). */
+  async #markShotThisRound() {
+    const combat = game.combat;
+    const c = combat?.combatants?.find?.(x => x.actor?.id === this.id);
+    if (!c?.isOwner) return;
+    try { await c.setFlag("ad2e", "shot", combat.round); } catch { /* no permission */ }
+  }
+
+  /**
+   * Tick box against missiles when the first target is a missile or thrown style specialist who shot this round
+   * (Fighting Style Specialization (POSP): +1 AC); ticked when its combatant shot in the current round.
+   */
+  static #missileStyleField(targets) {
+    const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
+    const styles = actor?.type === "character" ? actor.system.proficiencies?.sp?.styles : null;
+    if (!styles?.missile && !styles?.thrown) return "";
+    const combat = game.combat;
+    const shot = !!combat && combat.combatants?.find?.(x => x.actor?.id === actor.id)?.getFlag?.("ad2e", "shot") === combat.round;
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const v = -SP.missileStyle.acVsMissiles;
+    return `<label><input type="checkbox" name="missileStyleAc" value="${v}"${shot ? " checked" : ""}> ${esc(game.i18n.format("AD2E.SP.TargetShooting",
+      { name: targets[0].name ?? actor.name }))} (${v})</label>`;
+  }
+
   /** Tick box when the first target is protected by a gen against an element (module/gens.mjs): -2 to hit. */
   static #genWardField(targets) {
     const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
@@ -850,10 +902,13 @@ export default class AD2EActor extends Actor {
     const text = rows.map(m => m.value === "auto" ? `${label(m)}: ${game.i18n.localize("AD2E.Combat51.Auto")}`
       : `${label(m)} ${m.value > 0 ? "+" : ""}${m.value}`);
     if (shieldBox?.checked) text.push(`${game.i18n.localize("AD2E.SP.ShieldShort")} ${shield}`);
+    const msBox = form?.elements?.missileStyleAc;
+    const ms = msBox?.checked ? Number(msBox.value) || 0 : 0;
+    if (msBox?.checked) text.push(`${game.i18n.localize("AD2E.SP.TargetShootingShort")} ${ms}`);
     const genBox = form?.elements?.genWard;
     const gen = genBox?.checked ? Number(genBox.value) || 0 : 0;
     if (genBox?.checked) text.push(`${game.i18n.localize("AD2E.Gen.WardShort")} ${gen}`);
-    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen, auto: rows.some(m => m.value === "auto"),
+    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen + ms, auto: rows.some(m => m.value === "auto"),
       text: text.join("; ") };
   }
 

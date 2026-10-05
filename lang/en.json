@@ -1539,9 +1539,9 @@
         "weapon-shield": "AC +1 with a shield and a weapon, or +1 attack that round (attack dialog)",
         "two-handed": "Speed factor -3 for weapons wielded in two hands; +1 damage with a one-handed weapon used two-handed",
         "two-weapon": "Two-weapon penalties 0 / -2 (improved: weapons of equal size)",
-        "missile": "Move half and make all missile attacks, or full and half the attacks; AC +1 vs missiles while shooting (not automated)",
-        "horse-archery": "Penalties for shooting from the saddle reduced by 2 (not automated)",
-        "thrown": "As the missile style for thrown weapons and slings (not automated)",
+        "missile": "Move half and make all missile attacks, or full and half the attacks (attack dialog); AC +1 vs missiles in a round it shoots (attackers' dialogs)",
+        "horse-archery": "Shooting from the saddle: no penalty up to half the mount's speed, -2 faster (attack dialog when riding)",
+        "thrown": "As the missile style, for thrown weapons and slings",
         "special": "Benefit set by the DM (not automated)"
       }
     },
@@ -1551,7 +1551,13 @@
     "WeaponShieldNote": "Weapon and shield style +{n}",
     "TwoWeaponStyle": "Two weapon style",
     "PointBlankDamage": "Point blank +{n} damage",
-    "TwoHandedDamage": "Two-handed style +{n}"
+    "TwoHandedDamage": "Two-handed style +{n}",
+    "OwnMove": "Your movement this round ({style} style)",
+    "StyleName": {"missile": "missile", "thrown": "thrown weapon"},
+    "OwnMoveOption": {"none": "None", "half": "Up to half your movement (all attacks)", "full": "More than half (half the attacks)"},
+    "OwnMoveNote": {"half": "moved up to half: all attacks (missile style)", "full": "moved more than half: half the attacks (missile style)"},
+    "TargetShooting": "{name} shoots this round (missile style, AC +1 vs missiles)",
+    "TargetShootingShort": "Missile style AC"
   },
   "AD2E.Shair": {
     "Legend": "Gen (sha'ir)",
@@ -1646,5 +1652,16 @@
     "WardShort": "Gen protection",
     "SaveWard": "Against {province}: gen protection (+{n})",
     "SaveWardShort": "gen protection +{n}"
+  },
+  "AD2E.Mounted": {
+    "MountMove": "Mount's movement this round",
+    "HorseArcher": "horse archery style",
+    "Move": {
+      "still": "Not moving",
+      "half": "Less than 1/2 normal rate",
+      "threeQuarters": "1/2 to 3/4 normal rate",
+      "full": "More than 3/4 normal rate"
+    },
+    "RateNote": "rate of fire reduced by one while the mount moves (DMG)"
   }
 }
