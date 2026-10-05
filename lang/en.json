@@ -1681,5 +1681,32 @@
       "autoYes": "Default (trained: war mount)",
       "autoNo": "Default (untrained)"
     }
+  },
+  "AD2E.Push": {
+    "Button": "Push",
+    "Hint": "Push the animal to double or triple its daily movement: saving throw vs. death (Movement (DMG)).",
+    "Title": "Push {name}",
+    "Pace": "Pace today",
+    "Double": "Double movement (save {mod})",
+    "Triple": "Triple movement (save {mod})",
+    "Note": "Saving throw vs. death: needs {target}. Double: -1 per previous day at double speed ({previous}), ponies, donkeys and mules +2 ({hardy}). Triple: -3.",
+    "FlavorDouble": "{name} pushed to double movement (save vs. death, needs {target})",
+    "FlavorTriple": "{name} pushed to triple movement (save vs. death, needs {target})",
+    "Successive": "successive days {n}",
+    "DoubleSaved": "unaffected",
+    "Lame": "lame or spent: no more travel today; normal speed only until rested at least one day",
+    "Spent": "spent: must be rested, not ridden, for {days} days",
+    "Dies": "collapses from exhaustion and dies",
+    "Streak": "pushed today (day {n} at double speed)",
+    "State": {
+      "lame": "Lame: normal speed only, rest needed ({hours} h)",
+      "spent": "Spent: rest, not ridden ({hours} h)",
+      "dead": "Died from exhaustion"
+    },
+    "Blocked": {
+      "lame": "{name} is lame or spent and cannot be pushed until rested.",
+      "spent": "{name} is spent and must be rested, not ridden.",
+      "dead": "{name} has died."
+    }
   }
 }

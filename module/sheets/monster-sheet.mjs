@@ -1,5 +1,6 @@
 import { rollEncounterReaction } from "../reaction.mjs";
 import { mountTrained } from "../combat-options.mjs";
+import { pushMount, pushText } from "../animals.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
@@ -21,6 +22,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     form: { submitOnChange: true },
     actions: {
       rollSave: MonsterSheet.onRollSave,
+      pushMount: MonsterSheet.onPushMount,
       rollAttack: MonsterSheet.onRollAttack,
       rollDamage: MonsterSheet.onRollDamage,
       rollMorale: MonsterSheet.onRollMorale,
@@ -73,6 +75,9 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.roles = AD2E.monsterRoles;
     // Mounts: trained for combat (riders of untrained mounts -2 to hit, Unusual Combat Situations (DMG)).
     context.isMount = this.document.system.role === "mount";
+    // Pushing a mount or pack animal (module/animals.mjs): the button and its current state.
+    context.canPush = ["mount", "pack"].includes(this.document.system.role);
+    context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
     context.trainedAuto = game.i18n.localize(mountTrained(this.document) ? "AD2E.Mounted.Trained.autoYes" : "AD2E.Mounted.Trained.autoNo");
     context.saveGroups = AD2E.classGroups;
@@ -158,6 +163,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   }
 
   static onRollSave(event, target) { return this.document.rollSave(target.dataset.save); }
+
+  static onPushMount() { return pushMount(this.document); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }

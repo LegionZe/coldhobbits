@@ -7,7 +7,7 @@ import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
-import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
+import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dismissGen, genDeath, genInfo, summonGen } from "../gens.mjs";
@@ -678,7 +678,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         over: x.band === "over",
         meta: [x.role ? i18n(`AD2E.Monster.Role.${x.role}`) : null,
           `${i18n("AD2E.Enc.Load")} ${x.full !== null ? `${x.weight} / ${x.full} lb` : `${x.weight} lb`}${x.band ? ` (${i18n(`AD2E.Monster.Load.${x.band}`)})` : ""}`,
-          `${i18n("AD2E.Move.Movement")} ${x.rate} / ${x.base}`, x.riding ? game.i18n.format("AD2E.Animal.WithRider", { lb: r.total }) : null]
+          `${i18n("AD2E.Move.Movement")} ${x.rate} / ${x.base}`, x.riding ? game.i18n.format("AD2E.Animal.WithRider", { lb: r.total }) : null,
+          x.actor ? pushText(x.actor) || null : null]
           .filter(Boolean).join(" · "),
         otherRiderText: x.otherRider ? game.i18n.format("AD2E.Animal.RiddenBy", { name: x.otherRider }) : ""
       })
