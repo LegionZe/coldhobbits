@@ -45,6 +45,31 @@ RULES = {
     "replacementDelay": (REQUEST, r"time to recover spells increases by one increment \(round, turn, or hour, depending on the spell\) with each "
                                   r"replacement", 1),
     "commonLevels": (FAMILIAR, r"All 1st- and 2nd-level wizard spells shown in Appendix A are considered common knowledge", 2),
+    # The gen (Requesting a Spell (AA), section Gens; Summoning a Familiar (AA)).
+    "genStats": (REQUEST, r"all gens stand between 8 and 12 inches tall, are of Low intelligence, AC 5, and have a movement rate of 9\. Each has a "
+                          r"number of hit points equaling half its master's current maximum, Hit Dice equaling half its master's level, and the "
+                          r"THAC0 of a monster that's half their master's level in Hit Dice\. Gens inflict 1d6 points of damage, and are of small size",
+                 {"ac": 5, "move": 9, "intelligence": "Low", "size": "S", "damage": "1d6"}),
+    "genKinds": (REQUEST, r"Air gens.*?can fly at MV 12 \(maneuverability class B\).*?Fire gens.*?can produce flame at will.*?Water gens.*?"
+                          r"can swim at MV 12, and can breathe underwater.*?Earth gens.*?can inflict double damage \(2d6 points\)",
+                 {"air": {"move": "Fl 12 (B)", "province": "wind"}, "fire": {"move": "", "province": "flame"},
+                  "water": {"move": "Sw 12", "province": "sea"}, "earth": {"move": "", "province": "sand", "damage": "2d6"}}),
+    "genWard": (REQUEST, r"All attacks of the proper element are at -2 to hit, all saving throws against that element are at \+2, and all damage "
+                         r"from that form of attack are at -2 per die \(minimum damage of 1 point per die\)\. This magical protection applies to "
+                         r"the gen at all times\. The sha'ir enjoys these benefits when the gen is within 10 feet",
+                {"hit": -2, "save": 2, "perDie": -2, "minPerDie": 1, "feet": 10}),
+    "genSaves": (REQUEST, r"An elemental familiar makes saving throws at twice the current level of its master", 2),
+    "genDeath": (REQUEST, r"The sha'ir's hit points drop by half\. If this loss reduces a sha'ir to 0 or fewer hit points, the wizard must make a "
+                          r"saving throw vs\. death magic\. Success means that the sha'ir remains alive, with 1 hit point, while failure indicates death",
+                 {"factor": 0.5, "save": "par", "survive": 1}),
+    "genLoyalty": (REQUEST, r"The first gen summoned is of fanatical morale and loyalty \(18\).*?For each successive gen, the loyalty drops 1 point, "
+                            r"to a minimum of 5", {"first": 18, "perReplacement": -1, "min": 5}),
+    "genAlignment": (REQUEST, r"Gens attached to characters of similar alignment or tendencies gain a \+1 bonus to rolls for loyalty \(but not morale\)", 1),
+    "genTendencies": (REQUEST, r"Djinnlings are usually aloof and moralistic\. They tend toward good and lawful behavior.*?Fire gens are usually malicious "
+                               r"and judgmental\. They tend toward evil and lawful behavior.*?Maridans are usually capricious and playful\. They tend "
+                               r"toward good and chaotic behavior.*?Earth gen are usually tactless and direct\. They tend toward evil and chaos",
+                      {"air": "lg", "fire": "le", "water": "cg", "earth": "ce"}),
+    "genSummon": (FAMILIAR, r"The act of summoning and binding a gen lasts [l1]d20 hours", "1d20"),
     "raceFailure": (KIT, r"for races such as dwarves.who have an inherent nonmagical nature.sha'ir abilities fail 20 percent of the time",
                     {"dwarf": 20}),
 }

@@ -10,6 +10,7 @@ import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, 
 import { animalsInfo, isAnimal, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
+import { dismissGen, genDeath, genInfo, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -192,6 +193,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
       restSpells: CharacterSheet.onRestSpells,
       requestSpell: CharacterSheet.onRequestSpell,
+      summonGen: CharacterSheet.onSummonGen,
+      dismissGen: CharacterSheet.onDismissGen,
+      genDeath: CharacterSheet.onGenDeath,
       genReturnNow: CharacterSheet.onGenReturnNow,
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
@@ -499,7 +503,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         standing: i18n(st.priest ? "AD2E.Shair.Priest" : (st.native ? (st.general ? "AD2E.Shair.Common" : "AD2E.Shair.Native") : "AD2E.Shair.Foreign")) }) };
     };
     const f = gen.fetch ?? {};
+    const gi = shair ? genInfo(this.document) : null;
+    const ga = gi?.actor?.system;
     const genPanel = shair ? {
+      actor: gi.actor ? { uuid: gi.uuid, name: gi.actor.name, img: gi.actor.img, dead: gi.dead,
+        meta: game.i18n.format("AD2E.Gen.Meta", { hp: ga.hp.value, max: ga.hp.max, hd: ga.hitDice, thac0: ga.thac0?.value ?? "—",
+          ac: ga.ac?.value ?? ga.ac?.base, loyalty: ga.morale?.value ?? "—" }) } : null,
+      missing: !!gi.missing, near: gi.near, needsDeath: !!gi.actor && gi.dead && !gi.deathResolved,
+      canSummon: !gi.actor || gi.dead,
       kinds: Object.fromEntries(GEN_KINDS.map(k => [k, `AD2E.Shair.Kind.${k}`])), kind: gen.kind ?? "", replacements: gen.replacements ?? 0,
       busy: !!f.spellId, isGM: !!game.user?.isGM,
       status: !f.spellId ? i18n("AD2E.Shair.Idle")
@@ -906,6 +917,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onCastSpell(event, target) {
     return this.actor.castSpell(target.dataset.itemId);
   }
+
+  static onSummonGen() { return summonGen(this.actor); }
+
+  static onDismissGen() { return dismissGen(this.actor); }
+
+  static onGenDeath() { return genDeath(this.actor); }
 
   static onRequestSpell(event, target) {
     return requestSpell(this.actor, target.dataset.itemId);

@@ -7,6 +7,8 @@ import { useComponents } from "../components.mjs";
 import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
 import { shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
+import { genWardProvince } from "../gens.mjs";
+import { SHAIR } from "../rules/shair-tables.mjs";
 
 /** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
 export function spellDamageLabel(d, i = 0) {
@@ -52,14 +54,14 @@ export default class AD2EActor extends Actor {
   }
 
   /** Dialog with a situational modifier (and reason) and the conditional kit modifiers; null when cancelled. */
-  async #promptRoll(title, options, unit = "") {
+  async #promptRoll(title, options, unit = "", extra = "") {
     return DialogV2.prompt({
       window: { title },
-      content: modifierFields({ unit, autofocus: true }) + this.#kitFields(options, unit),
+      content: extra + modifierFields({ unit, autofocus: !extra }) + this.#kitFields(options, unit),
       ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => {
         const kit = AD2EActor.#kitPicked(button.form, options);
         const { mod, note } = readModifier(button.form);
-        return { mod, note, kit: kit.sum, kitText: kit.text };
+        return { mod, note, kit: kit.sum, kitText: kit.text, genWard: !!button.form.elements.genWard?.checked };
       } },
       rejectClose: false
     });
@@ -227,9 +229,16 @@ export default class AD2EActor extends Actor {
 
   /** Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. */
   async rollSave(key) {
-    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key));
+    // Gen protection (module/gens.mjs): +2 to saving throws against the gen's element.
+    const province = genWardProvince(this);
+    const genField = province ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Gen.SaveWard",
+      { province: game.i18n.localize(`AD2E.Elemental.Province.${province}`), n: SHAIR.genWard.save })) ?? ""}</label>`
+      + `<input type="checkbox" name="genWard"></div>` : "";
+    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "", genField);
     if (!input) return;
-    const mod = input.mod + input.kit;
+    const genBonus = input.genWard && province ? SHAIR.genWard.save : 0;
+    if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
+    const mod = input.mod + input.kit + genBonus;
     const target = this.system.saves[key].value;
     const bonus = this.system.saves[key].bonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
@@ -804,7 +813,7 @@ export default class AD2EActor extends Actor {
         const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
         return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
           + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
-      }).join("") + shieldField + "</div></fieldset>";
+      }).join("") + shieldField + AD2EActor.#genWardField(targets) + "</div></fieldset>";
   }
 
   /**
@@ -812,6 +821,16 @@ export default class AD2EActor extends Actor {
    * it carries; module/sp-weapons.mjs): { name, type, ac (Table 51 bonus; the body shield's missile value against
    * missiles), attackers }, or null. Only for a target the user may observe (as #targetAc).
    */
+  /** Tick box when the first target is protected by a gen against an element (module/gens.mjs): -2 to hit. */
+  static #genWardField(targets) {
+    const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
+    const province = actor ? genWardProvince(actor) : null;
+    if (!province) return "";
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    return `<label><input type="checkbox" name="genWard" value="${SHAIR.genWard.hit}"> ${esc(game.i18n.format("AD2E.Gen.AttackWard",
+      { name: targets[0].name ?? actor.name, province: game.i18n.localize(`AD2E.Elemental.Province.${province}`) }))} (${SHAIR.genWard.hit})</label>`;
+  }
+
   static #targetShieldProficiency(targets, missile = false) {
     const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
     if (!actor || actor.type !== "character" || !(actor.isOwner || actor.testUserPermission?.(game.user, "OBSERVER"))) return null;
@@ -831,7 +850,10 @@ export default class AD2EActor extends Actor {
     const text = rows.map(m => m.value === "auto" ? `${label(m)}: ${game.i18n.localize("AD2E.Combat51.Auto")}`
       : `${label(m)} ${m.value > 0 ? "+" : ""}${m.value}`);
     if (shieldBox?.checked) text.push(`${game.i18n.localize("AD2E.SP.ShieldShort")} ${shield}`);
-    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield, auto: rows.some(m => m.value === "auto"),
+    const genBox = form?.elements?.genWard;
+    const gen = genBox?.checked ? Number(genBox.value) || 0 : 0;
+    if (genBox?.checked) text.push(`${game.i18n.localize("AD2E.Gen.WardShort")} ${gen}`);
+    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen, auto: rows.some(m => m.value === "auto"),
       text: text.join("; ") };
   }
 

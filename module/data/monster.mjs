@@ -31,6 +31,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
         punch: int(0, 0), temp: int(0, 0), tempUntil: new NumberField({ nullable: true, initial: null }) }),
       thac0: new SchemaField({ override: new NumberField({ integer: true, nullable: true, initial: null }) }),
       saveGroup: new StringField({ initial: "warrior", choices: Object.keys(AD2E.classGroups) }),
+      // Saving throw level when not the Hit Dice (a sha'ir's gen: twice its master's level, module/gens.mjs).
+      saveLevel: new NumberField({ integer: true, min: 0, nullable: true, initial: null }),
       attacks: new ArrayField(new SchemaField({
         name: new StringField({ initial: "Attack" }),
         damage: new StringField({ initial: "1d6" }),
@@ -70,7 +72,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
     const nonIntelligent = /non|\(0\)/i.test(this.intelligence);
     this.saves = {};
     for (const key of AD2E.saves) {
-      const level = (nonIntelligent && key !== "par") ? Math.ceil(hd.saveLevel / 2) : hd.saveLevel;
+      const base = this.saveLevel ?? hd.saveLevel;
+      const level = (nonIntelligent && key !== "par") ? Math.ceil(base / 2) : base;
       this.saves[key] = { level, value: lookup(AD2E.saveTable[this.saveGroup], level)[key], bonus: 0 };
     }
 

@@ -130,6 +130,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // requests of the last 24 hours (repeat penalty).
       gen: new SchemaField({
         kind: new StringField({ initial: "" }),
+        // The gen actor (module/gens.mjs), whether it is within 10 feet (protection), and whether its death was resolved.
+        uuid: new StringField({ initial: "" }), near: new BooleanField({ initial: true }),
+        deathResolved: new BooleanField({ initial: false }),
         replacements: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         fetch: new SchemaField({
           spellId: new StringField({ initial: "" }), name: new StringField({ initial: "" }), unit: new StringField({ initial: "" }),
