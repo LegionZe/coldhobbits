@@ -1608,7 +1608,8 @@
     "Unit": {
       "round": "rounds",
       "turn": "turns",
-      "hour": "hours"
+      "hour": "hours",
+      "day": "days"
     },
     "Part": {
       "base": "base",
@@ -1674,7 +1675,32 @@
     "AttackWard": "Attack uses {province}: {name}'s gen protection",
     "WardShort": "Gen protection",
     "SaveWard": "Against {province}: gen protection (+{n})",
-    "SaveWardShort": "gen protection +{n}"
+    "SaveWardShort": "gen protection +{n}",
+    "CharmText": "Charmed: turns against its master only if a morale check fails",
+    "RelinkTitle": "Reforge the link",
+    "RelinkText": "{name} summons and binds {gen} again ({time} hours): the link is restored with the same gen, no replacement.",
+    "Relinked": "{name} binds {gen} again ({hours} hours): the link is restored.",
+    "Relink": "Summon the same gen",
+    "Broken": { "dispel": "The link between {name} and {gen} is broken (dispel magic): no protection or spells until the gen is summoned again.", "masterDeath": "{name} has died: {gen} is freed and returns to its elemental plane. If {name} is raised, the same gen can be summoned and bound again." },
+    "LinkBroken": "Link broken: summon the same gen to restore it.",
+    "BreakButton": "Link broken",
+    "BreakHint": "Dispel magic (or a similar spell) broke the link: the sha'ir is not harmed and can summon this same gen again.",
+    "Raised": "{gen} is brought back to life: loyalty {loyalty} (a permanent 1-point penalty in morale and loyalty).",
+    "RaiseButton": "Gen brought back to life",
+    "RaiseHint": "A gen that has died and is brought back to life loses 1 point of morale and loyalty for good.",
+    "AwayTitle": "The gen goes away",
+    "AwayText": "Why is the gen away from its master? It gives no protection while away.",
+    "AwayButton": "Gen away",
+    "AwayHint": "Forced beyond 100 yards or threatened more than 10 feet away (back in 1d6 turns), following its master to another plane (1d6 days; elemental plane 1d6 rounds), or an errand (until recalled).",
+    "Away": { "forced": "forced beyond 100 yards", "threatened": "threatened, hiding on its plane", "plane": "following to another plane", "elemental": "following to an elemental plane", "errand": "spying, an errand or a message" },
+    "AwayFor": "{gen} is away ({reason}): back in {n} {unit}.",
+    "AwayErrand": "{gen} is away on an errand until recalled.",
+    "AwayLeft": "Away ({reason}): back in {min} min.",
+    "AwayUntilRecalled": "Away ({reason}) until recalled.",
+    "Sense": "The sha'ir senses that it is alive.",
+    "BackButton": "Gen is back",
+    "Back": "{gen} is back with {name}.",
+    "NotHere": "The gen is away from its master and cannot be sent for a spell."
   },
   "AD2E.Mounted": {
     "MountMove": "Mount's movement this round",

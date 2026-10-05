@@ -10,7 +10,7 @@ import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, 
 import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
-import { dismissGen, genDeath, genInfo, summonGen } from "../gens.mjs";
+import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -201,6 +201,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       summonGen: CharacterSheet.onSummonGen,
       dismissGen: CharacterSheet.onDismissGen,
       genDeath: CharacterSheet.onGenDeath,
+      raiseGen: CharacterSheet.onRaiseGen,
+      genAway: CharacterSheet.onGenAway,
+      genBack: CharacterSheet.onGenBack,
+      breakGenLink: CharacterSheet.onBreakGenLink,
       genReturnNow: CharacterSheet.onGenReturnNow,
       rollClassSkill: CharacterSheet.onRollClassSkill,
       rollTurnUndead: CharacterSheet.onRollTurnUndead,
@@ -521,7 +525,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         meta: game.i18n.format("AD2E.Gen.Meta", { hp: ga.hp.value, max: ga.hp.max, hd: ga.hitDice, thac0: ga.thac0?.value ?? "—",
           ac: ga.ac?.value ?? ga.ac?.base, loyalty: ga.morale?.value ?? "—" }) } : null,
       missing: !!gi.missing, near: gi.near, needsDeath: !!gi.actor && gi.dead && !gi.deathResolved,
-      canSummon: !gi.actor || gi.dead,
+      canSummon: !gi.actor || gi.dead || gi.broken,
+      relink: !!gi.actor && !gi.dead && gi.broken, canRaise: !!gi.actor && gi.dead,
+      linked: !!gi.actor && !gi.dead && !gi.broken, away: gi.away, linkStatus: genStatusText(this.document),
       kinds: Object.fromEntries(GEN_KINDS.map(k => [k, `AD2E.Shair.Kind.${k}`])), kind: gen.kind ?? "", replacements: gen.replacements ?? 0,
       busy: !!f.spellId, isGM: !!game.user?.isGM,
       status: !f.spellId ? i18n("AD2E.Shair.Idle")
@@ -935,6 +941,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onDismissGen() { return dismissGen(this.actor); }
 
   static onGenDeath() { return genDeath(this.actor); }
+  static onRaiseGen() { return raiseGen(this.actor); }
+  static onGenBack() { return genBack(this.actor); }
+  static onBreakGenLink() { return breakGenLink(this.actor, "dispel"); }
+  /** Send the gen away: forced away, threatened, master on another plane or an elemental plane, an errand. */
+  static async onGenAway() {
+    const i18n = k => game.i18n.localize(k);
+    const reason = await foundry.applications.api.DialogV2.wait({ window: { title: i18n("AD2E.Gen.AwayTitle") },
+      content: `<p>${i18n("AD2E.Gen.AwayText")}</p>`,
+      buttons: ["forced", "threatened", "plane", "elemental", "errand"].map(k => ({ action: k, label: i18n(`AD2E.Gen.Away.${k}`) })), rejectClose: false });
+    if (reason) return sendGenAway(this.actor, reason);
+  }
 
   static onRequestSpell(event, target) {
     return requestSpell(this.actor, target.dataset.itemId);

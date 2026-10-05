@@ -89,7 +89,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   province-tables.mjs (Appendix A). `CONFIG.time.roundTime = 60` (a round is one minute, The Combat Round (PHB)).
   The gen actor: `module/gens.mjs` (monster role "familiar", identifier `gen-<kind>`, linked by `system.gen.uuid`;
   `summonGen` / `dismissGen` / `genDeath` (sheet buttons), `syncGen` on master updates (active GM), loyalty in
-  `morale.value`, monster `saveLevel` override = twice the master's level; `genWardProvince` / `genWardedDamage` (used by
+  `morale.value`, monster `saveLevel` override = twice the master's level; gen details (`raiseGen` -1 loyalty, `breakGenLink`
+  dispel / master's death (updateActor, active GM) then `summonGen` relinks the same gen, `sendGenAway` / `genBack` with
+  `system.gen.awayReason` / `awayUntil` (updateWorldTime), `genStatusText`; rules `genRaised`/`genRelink`/`genAway`/... in
+  build-shair-tables.py); `genWardProvince` / `genWardedDamage` (used by
   health.mjs applyFromMessage) and tick boxes in attack and save dialogs for the gen's element; `system.gen.near`).
   Monster natural attacks have `element` ("" | flame | sand | sea | wind, select on the monster sheet): rollMonsterDamage
   adds `flags.ad2e.element` (dice for elemental mages and gens) and the gen's -2 tick box is pre-ticked for a matching attack.

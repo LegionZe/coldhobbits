@@ -135,6 +135,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         // The gen actor (module/gens.mjs), whether it is within 10 feet (protection), and whether its death was resolved.
         uuid: new StringField({ initial: "" }), near: new BooleanField({ initial: true }),
         deathResolved: new BooleanField({ initial: false }),
+        // Link broken (dispel magic, the master's death): summoning the same gen restores it (module/gens.mjs).
+        broken: new BooleanField({ initial: false }),
+        // Away from its master (forced away, threatened, following to another plane, an errand) until world time `awayUntil`
+        // (null with a reason: until recalled).
+        awayReason: new StringField({ initial: "" }), awayUntil: new NumberField({ nullable: true, initial: null }),
+        raised: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         replacements: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
         fetch: new SchemaField({
           spellId: new StringField({ initial: "" }), name: new StringField({ initial: "" }), unit: new StringField({ initial: "" }),

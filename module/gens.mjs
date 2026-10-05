@@ -15,6 +15,14 @@
  *    10 feet (`system.gen.near`).
  *  - Death: the sha'ir's hit points drop by half; at 0 or fewer, a saving throw vs. death magic: success leaves 1 hit
  *    point, failure is death (a button on the sha'ir's sheet, as for familiars).
+ *  - Brought back to life: "a permanent 1-point penalty in morale and loyalty" (`raiseGen`).
+ *  - Link broken by dispel magic or the master's death (the gen returns to its plane; the active GM marks it when the
+ *    master dies): summoning that same gen restores the link, no replacement (`breakGenLink`, `summonGen`).
+ *  - Away (`sendGenAway`): forced beyond 100 yards or threatened more than 10 feet away: back in 1d6 turns; following
+ *    its master to another plane: 1d6 days (1d6 rounds to an elemental plane); an errand: until recalled. While away
+ *    or unlinked it gives no protection; the sheet notes that the sha'ir senses it is alive. The active GM returns it
+ *    when world time passes `awayUntil`.
+ *  - Charmed: it turns against its master only if a morale check fails (noted on the gen).
  * The Monstrous Compendium entry (MC13) gives the fire gen MV 18; Arabian Adventures (used here) "move normally".
  */
 import { SHAIR } from "./rules/shair-tables.mjs";
@@ -61,7 +69,7 @@ export function genActorData(master, kind, replacements = 0) {
       attacks: [{ name: game.i18n.localize("AD2E.Gen.Attack"), damage: k.damage ?? S.damage, bonus: 0 }],
       morale: { value: loyalty, text: String(loyalty) }, numberAppearing: "1",
       specialAttacks: kind === "fire" ? game.i18n.localize("AD2E.Gen.ProduceFlame") : "",
-      specialDefenses: game.i18n.format("AD2E.Gen.WardText", { province: game.i18n.localize(`AD2E.Elemental.Province.${genProvince(kind)}`) }),
+      specialDefenses: `${game.i18n.format("AD2E.Gen.WardText", { province: game.i18n.localize(`AD2E.Elemental.Province.${genProvince(kind)}`) })}. ${game.i18n.localize("AD2E.Gen.CharmText")}`,
       url: "https://adnd2e.fandom.com/wiki/Requesting_a_Spell_(AA)"
     }
   };
@@ -83,7 +91,8 @@ export function genInfo(character) {
   const actor = resolve(g.uuid);
   const usable = !!actor?.system;
   return { uuid: g.uuid ?? "", actor: usable ? actor : null, missing: !!g.uuid && !usable, dead: usable && genDead(actor),
-    kind: genKindOf(actor) ?? g.kind ?? "", near: g.near !== false, deathResolved: !!g.deathResolved };
+    kind: genKindOf(actor) ?? g.kind ?? "", near: g.near !== false, deathResolved: !!g.deathResolved, broken: !!g.broken,
+    away: !!g.awayReason, awayReason: g.awayReason ?? "", awayUntil: g.awayUntil ?? null };
 }
 
 /** The province an actor is protected against by a gen (the gen itself; a sha'ir with a living gen within 10 ft), or null. */
@@ -92,7 +101,7 @@ export function genWardProvince(actor) {
   if (own) return genDead(actor) ? null : genProvince(own);
   if (actor?.type !== "character" || !actor.system?.gen?.uuid) return null;
   const info = genInfo(actor);
-  return info.actor && !info.dead && info.near ? genProvince(info.kind) : null;
+  return info.actor && !info.dead && info.near && !info.broken && !info.away ? genProvince(info.kind) : null;
 }
 
 /** Damage a gen-protected actor takes from a damage message's element flag (-2 per die, at least 1 per die), or null. */
@@ -112,6 +121,8 @@ export async function summonGen(character) {
   const kind = character.system.gen?.kind;
   if (!GEN_KINDS.includes(kind)) return ui.notifications.warn(i18n("AD2E.Shair.NoGen"));
   const current = genInfo(character);
+  // A broken link (dispel magic, the master raised from death): summoning the same gen reforges it.
+  if (current.actor && !current.dead && current.broken) return relinkGen(character, current);
   if (current.actor && !current.dead) return ui.notifications.warn(game.i18n.format("AD2E.Gen.HasOne", { name: current.actor.name }));
   const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: i18n("AD2E.Gen.SummonTitle") },
     content: `<p>${esc(game.i18n.format("AD2E.Gen.SummonText", { name: character.name, time: SHAIR.genSummon }))}</p>`, rejectClose: false });
@@ -125,6 +136,80 @@ export async function summonGen(character) {
   await time.toMessage({ speaker: ChatMessage.getSpeaker({ actor: character }), flavor: esc(game.i18n.format("AD2E.Gen.Summoned",
     { name: character.name, gen: actor.name, hours: time.total, loyalty: actor.system.morale.value })) });
   return actor;
+}
+
+/** Reforge a broken link with the same gen: 1d20 hours of summoning and binding, no replacement. */
+async function relinkGen(character, current) {
+  const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Gen.RelinkTitle") },
+    content: `<p>${esc(game.i18n.format("AD2E.Gen.RelinkText", { name: character.name, gen: current.actor.name, time: SHAIR.genSummon }))}</p>`, rejectClose: false });
+  if (!ok) return null;
+  const time = await new Roll(SHAIR.genSummon).evaluate();
+  await character.update({ "system.gen.broken": false, "system.gen.awayReason": "", "system.gen.awayUntil": null, "system.gen.near": true });
+  await time.toMessage({ speaker: ChatMessage.getSpeaker({ actor: character }), flavor: esc(game.i18n.format("AD2E.Gen.Relinked",
+    { name: character.name, gen: current.actor.name, hours: time.total })) });
+  return current.actor;
+}
+
+/** Break the link (dispel magic, or the master's death): no protection, no spells; the same gen can be summoned again. */
+export async function breakGenLink(character, reason = "dispel") {
+  const info = genInfo(character);
+  if (!info.actor || info.broken) return;
+  await character.update({ "system.gen.broken": true, "system.gen.awayReason": "", "system.gen.awayUntil": null });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: character }),
+    content: `<p>${esc(game.i18n.format(`AD2E.Gen.Broken.${reason}`, { name: character.name, gen: info.actor.name }))}</p>` });
+}
+
+/** A dead gen brought back to life: full hit points, loyalty (morale) 1 lower for good. */
+export async function raiseGen(character) {
+  const info = genInfo(character);
+  if (!info.actor || !info.dead) return;
+  const g = info.actor.system;
+  const loyalty = Math.max((g.morale?.value ?? 10) + SHAIR.genRaised, 2);
+  await info.actor.update({ "system.hp.value": g.hp.max, "system.hp.dead": false, "system.morale.value": loyalty, "system.morale.text": String(loyalty) });
+  await character.update({ "system.gen.raised": (character.system.gen.raised ?? 0) + 1, "system.gen.deathResolved": false });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: character }),
+    content: `<p>${esc(game.i18n.format("AD2E.Gen.Raised", { gen: info.actor.name, loyalty }))}</p>` });
+}
+
+/**
+ * The gen goes away (GM or owner): `reason` forced | threatened | plane | elemental (rolled time) | errand (until
+ * recalled). Returns the seconds away (null: until recalled).
+ */
+export async function sendGenAway(character, reason) {
+  const info = genInfo(character);
+  const rule = SHAIR.genAway[reason];
+  if (!info.actor || info.dead || info.broken || rule === undefined || reason === "yards") return null;
+  let seconds = null;
+  let text = game.i18n.format("AD2E.Gen.AwayErrand", { gen: info.actor.name });
+  if (rule) {
+    const roll = await new Roll(rule[0]).evaluate();
+    seconds = roll.total * SHAIR.unitSeconds[rule[1]];
+    text = game.i18n.format("AD2E.Gen.AwayFor", { gen: info.actor.name, n: roll.total, unit: game.i18n.localize(`AD2E.Shair.Unit.${rule[1]}`),
+      reason: game.i18n.localize(`AD2E.Gen.Away.${reason}`) });
+  }
+  await character.update({ "system.gen.awayReason": reason, "system.gen.awayUntil": seconds === null ? null : game.time.worldTime + seconds });
+  await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: character }), content: `<p>${esc(text)}</p>` });
+  return seconds;
+}
+
+/** The gen is back with its master. */
+export async function genBack(character) {
+  const info = genInfo(character);
+  if (!info.away) return;
+  await character.update({ "system.gen.awayReason": "", "system.gen.awayUntil": null });
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: character }),
+    content: `<p>${esc(game.i18n.format("AD2E.Gen.Back", { gen: info.actor?.name ?? "—", name: character.name }))}</p>` });
+}
+
+/** Status text for the sheet: away (with the sha'ir's sense that it lives) or link broken; "" otherwise. */
+export function genStatusText(character, now = game.time?.worldTime ?? 0) {
+  const info = genInfo(character);
+  if (!info.actor) return "";
+  if (info.broken) return game.i18n.localize("AD2E.Gen.LinkBroken");
+  if (!info.away) return "";
+  const left = info.awayUntil === null ? null : Math.max(Math.ceil((info.awayUntil - now) / 60), 0);
+  return game.i18n.format(left === null ? "AD2E.Gen.AwayUntilRecalled" : "AD2E.Gen.AwayLeft", {
+    reason: game.i18n.localize(`AD2E.Gen.Away.${info.awayReason}`), min: left }) + (info.dead ? "" : ` ${game.i18n.localize("AD2E.Gen.Sense")}`);
 }
 
 /** Dismiss the gen (no loss of hit points; the next gen's loyalty is lower). The actor stays for the GM to remove. */
@@ -180,8 +265,22 @@ export async function syncGen(character) {
 }
 
 export function registerGenHooks() {
+  // Gens away come back as world time passes (active GM).
+  Hooks.on("updateWorldTime", async worldTime => {
+    if (!game.users?.activeGM?.isSelf) return;
+    for (const actor of game.actors ?? []) {
+      const g = actor.type === "character" ? actor.system.gen : null;
+      if (g?.awayReason && g.awayUntil !== null && g.awayUntil !== undefined && worldTime >= g.awayUntil) await genBack(actor);
+    }
+  });
   Hooks.on("updateActor", async (actor, changes) => {
     if (!game.users?.activeGM?.isSelf) return;
+    // The master died: the gen is freed and returns to its plane (the link is broken; summoning it again after the
+    // master is raised restores it).
+    if (actor.type === "character" && actor.system.gen?.uuid && !actor.system.gen.broken && actor.system.hpState?.state === "dead"
+      && (foundry.utils.hasProperty(changes, "system.hp.value") || foundry.utils.hasProperty(changes, "system.hp.dead"))) {
+      await breakGenLink(actor, "masterDeath");
+    }
     // The master changed: level or maximum hit points.
     if (actor.type === "character" && actor.system.gen?.uuid
       && (foundry.utils.hasProperty(changes, "system.level") || foundry.utils.hasProperty(changes, "system.hp.max")
