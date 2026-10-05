@@ -1712,5 +1712,9 @@
       "spent": "{name} is spent and must be rested, not ridden.",
       "dead": "{name} has died."
     }
+  },
+  "AD2E.Riders": {
+    "Setting": "Riders move with their mounts",
+    "SettingHint": "A character riding an animal (Ride on the character sheet) and that animal's token move together on the canvas: moving either token moves the other along the same path. Only tokens that touch when the move starts."
   }
 }

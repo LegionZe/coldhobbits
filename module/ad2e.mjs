@@ -18,6 +18,7 @@ import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
 import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
+import { registerTokenRiders } from "./token-riders.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
@@ -70,6 +71,7 @@ Hooks.once("init", () => {
   registerSidebarColours();
   registerHealth();
   registerAnimalHooks();
+  registerTokenRiders();
   registerFamiliarHooks();
   registerShairHooks();
   registerGenHooks();
