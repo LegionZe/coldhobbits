@@ -1,4 +1,5 @@
 import { damageButtons } from "../health.mjs";
+import { treasureButtons } from "../treasure.mjs";
 
 /**
  * Chat messages: damage rolls get buttons to apply the damage (module/health.mjs). The buttons are added to the
@@ -9,6 +10,7 @@ export default class AD2EChatMessage extends ChatMessage {
   async renderHTML(options = {}) {
     const html = await super.renderHTML(options);
     damageButtons(this, html);
+    treasureButtons(this, html);
     return html;
   }
 }

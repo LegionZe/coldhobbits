@@ -1,3 +1,5 @@
+import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
+
 const { NumberField, SchemaField, StringField, SetField } = foundry.data.fields;
 
 const text = () => new StringField({ required: true, blank: true, nullable: true, initial: null });
@@ -24,9 +26,15 @@ export default class AmmunitionData extends foundry.abstract.TypeDataModel {
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
       }),
       container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
+      // Unidentified magical ammunition (module/identify.mjs).
+      ...identifyFields(),
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
+  }
+
+  prepareDerivedData() {
+    applyIdentification(this, baseName(this.parent?._source?.name ?? this.parent?.name), { url: "", notes: "" });
   }
 }

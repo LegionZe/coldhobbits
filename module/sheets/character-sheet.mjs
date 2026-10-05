@@ -60,6 +60,9 @@ export function formatKitModifier(m, { resolved = false } = {}) {
 export function magicSummary(item) {
   const s = item.system;
   const table = AD2E.treasureTables.magicCategories.find(c => c.key === s.category)?.table;
+  // An unidentified item (module/identify.mjs): players see only its category, weight and "unidentified".
+  if (s.hidden) return [game.i18n.localize(`AD2E.Magic.Category.${s.category}`), s.weight ? `${s.weight} lb` : null,
+    game.i18n.localize("AD2E.Magic.Unidentified")].filter(Boolean).join(" · ");
   return [`${game.i18n.localize(`AD2E.Magic.Category.${s.category}`)}${table ? ` (DMG ${table})` : ""}`,
     s.charges.max !== null ? game.i18n.format("AD2E.Magic.ChargesOf", { value: s.charges.value, max: s.charges.max }) : null,
     s.weight ? `${s.weight} lb` : null, s.usableBy || null, s.identified ? null : game.i18n.localize("AD2E.Magic.Unidentified")]
@@ -132,7 +135,9 @@ function weaponDisplay(e) {
     const a = e.attack[u];
     const label = u === "melee" ? "AD2E.Weapon.Attack" : (w.melee ? "AD2E.Weapon.Throw" : "AD2E.Weapon.Fire");
     // With a second weapon in hand: the rate including the extra attack, e.g. "3/2 (5/2)".
-    return { use: u, label: game.i18n.localize(label), hit: signed(a.hit), dmg: signed(a.dmg),
+    // An unidentified weapon (module/identify.mjs): players see the totals without its magical bonus.
+    const hidden = e.item.system.hidden ? e.item.system.bonus ?? { hit: 0, dmg: 0 } : { hit: 0, dmg: 0 };
+    return { use: u, label: game.i18n.localize(label), hit: signed(a.hit - hidden.hit), dmg: signed(a.dmg - hidden.dmg),
       rate: a.rateTwo ? `${a.rate} (${a.rateTwo})` : a.rate,
       rateHint: a.rateTwo ? game.i18n.format("AD2E.TwoWeapons.RateHint", { rate: a.rate, two: a.rateTwo }) : game.i18n.localize("AD2E.Weapon.Rate"),
       pointBlank: !!a.pointBlank, damageHint: damage };
@@ -565,7 +570,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           .filter(Boolean).join(", ")
         : game.i18n.format(e.familiar ? "AD2E.SP.Familiar" : "AD2E.Weapon.NotProficient", { penalty: e.penalty }),
       proficient: e.proficient, specialized: e.specialized, profId: e.proficiency?.id ?? null,
-      bonus: magicBonus(e.item.system.bonus),
+      bonus: e.item.system.hidden ? "" : magicBonus(e.item.system.bonus),
       ammo: (actor.ammunitionFor?.(e.item) ?? []).map(a => `${a.name} ×${a.system.quantity}`).join(", "),
       launcher: !!actor.ammunitionFor?.(e.item)
     })).sort((a, b) => a.name.localeCompare(b.name));
@@ -575,7 +580,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       id: a.id, name: a.name, img: a.img, url: a.system.url, quantity: a.system.quantity, empty: a.system.quantity < 1, inside: insideText(inv, a),
       launchers: [...a.system.launchers].map(label).join(", "),
       damage: `${a.system.damage.sm ?? "—"} / ${a.system.damage.l ?? "—"}`,
-      bonus: magicBonus(a.system.bonus)
+      bonus: a.system.hidden ? "" : magicBonus(a.system.bonus)
     })).sort((a, b) => a.name.localeCompare(b.name));
     const a = sys.armor;
     const armor = (actor.items?.filter(i => i.type === "armor") ?? []).map(i => ({

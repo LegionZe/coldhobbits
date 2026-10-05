@@ -1006,6 +1006,7 @@
     "GpValue": "gp value",
     "Worn": "Worn / wielded",
     "Identified": "Identified",
+    "UnidentifiedName": "Unidentified item ({category})",
     "SheetHint": "Magical armour and weapons are armour and weapon items with a magical bonus. Charges: each use spends one (wands are found with 1d20+80). Potions, scrolls and dusts are used up from the quantity. Effects on rolls: add them in the roll dialog's modifier; on Armour Class: the character's Other AC adjustment.",
     "ChargesOf": "{value}/{max} charges",
     "Unidentified": "unidentified",
@@ -1736,5 +1737,34 @@
   "AD2E.Riders": {
     "Setting": "Riders move with their mounts",
     "SettingHint": "A character riding an animal (Ride on the character sheet) and that animal's token move together on the canvas: moving either token moves the other along the same path. Only tokens that touch when the move starts."
+  },
+  "AD2E.Identify": {
+    "Hint": "Unticked: players see only the unidentified name; the source link, notes, values, charges and magical bonus are hidden from them (the bonus still applies). GM only.",
+    "Name": "Unidentified name",
+    "NameHint": "Shown to everyone while unidentified (blank: a generic name, e.g. \"Unidentified item (Rings)\" or the weapon's base name)."
+  },
+  "AD2E.Treasure": {
+    "Button": "Treasure",
+    "ButtonHint": "Roll this creature's treasure types (DMG Table 84) and post the result to the GM.",
+    "Title": "Roll treasure",
+    "Letters": "Treasure types",
+    "LettersHint": "Letters A-Z from DMG Table 84; \"Q x5\" rolls Q five times.",
+    "FromBlock": "Stat block: {text}",
+    "PlatinumOrElectrum": "Platinum or electrum",
+    "PE": { "pp": "Platinum", "ep": "Electrum", "random": "Either (50/50 each time)" },
+    "NoLetters": "No treasure type letters (A-Z) given.",
+    "GmOnly": "Only the GM rolls treasure.",
+    "CardTitle": "Treasure: {letters}",
+    "Coins": "Coins",
+    "Gems": "Gems",
+    "Art": "Objects of art",
+    "ArtObject": "Object of art",
+    "Magic": "Magical items",
+    "NotAdded": "not added: the GM decides",
+    "Total": "Coins, gems and art: {gp} gp.",
+    "AddSelected": "Add to the selected token's actor",
+    "SelectToken": "Select the token of the actor that receives the treasure.",
+    "Added": "Added to {name}; magical items are unidentified.",
+    "Variation": { "up": "higher value", "down": "lower value", "double": "double value", "above": "above base value", "below": "below base value", "half": "half value" }
   }
 }

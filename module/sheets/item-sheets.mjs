@@ -1,5 +1,6 @@
 import { SP } from "../sp-weapons.mjs";
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
+import { identifyContext } from "../identify.mjs";
 import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { HOLY_ITEM } from "../importers/spell-components.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
@@ -21,6 +22,8 @@ class AD2EItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     const system = this.document.system;
     context.item = this.document;
     context.system = system;
+    // Unidentified magical items (module/identify.mjs): the GM edits the source name, players see the unidentified one.
+    Object.assign(context, identifyContext(this.document));
     // Ability minimums (class, kit, race); proficiencies have none.
     context.minimums = system.min ? AD2E.abilities.map(key => ({
       key, label: game.i18n.localize(`AD2E.Ability.${key}`), value: system.min[key] ?? ""

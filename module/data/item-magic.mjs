@@ -1,5 +1,6 @@
 import { AD2E } from "../config.mjs";
 import { containerPreUpdate } from "../containers.mjs";
+import { applyIdentification, identifyFields } from "../identify.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -31,7 +32,7 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
         formula: new StringField({ initial: "" }) // charges when found, e.g. "1d20+80" (wands)
       }),
       usableBy: new StringField({ initial: "" }),
-      identified: new BooleanField({ initial: true }),
+      ...identifyFields(),
       xpValue: optional(true),
       gpValue: optional(true),
       container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
@@ -44,6 +45,12 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
   async _preUpdate(changes, options, user) {
     if ((await super._preUpdate(changes, options, user)) === false) return false;
     containerPreUpdate(changes, "magic", this);
+  }
+
+  /** Unidentified: a generic name; for players no link, notes, values or usable-by (module/identify.mjs). */
+  prepareDerivedData() {
+    applyIdentification(this, game.i18n?.format?.("AD2E.Magic.UnidentifiedName", {
+      category: game.i18n.localize(`AD2E.Magic.Category.${this.category}`) }) ?? "", { url: "", notes: "", xpValue: null, gpValue: null, usableBy: "" });
   }
 
   /** Spent on use: a charge if the item has charges, otherwise one from the quantity for consumable categories. */
