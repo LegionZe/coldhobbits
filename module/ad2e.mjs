@@ -19,6 +19,7 @@ import { registerSidebarColours } from "./sidebar-colours.mjs";
 import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
 import { registerTokenRiders } from "./token-riders.mjs";
+import { rollTreasureDialog } from "./treasure.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter from "./apps/monster-importer.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
@@ -59,7 +60,8 @@ Hooks.once("init", () => {
     importSpells: () => new SpellImporter().render({ force: true }),
     updateSpells: () => updateExistingSpells(),
     awardExperience: () => new AwardXp().render({ force: true }),
-    rollReaction: creature => rollEncounterReaction(creature)
+    rollReaction: creature => rollEncounterReaction(creature),
+    rollTreasure: actor => rollTreasureDialog(actor ?? null)
   };
 
   game.settings.register("ad2e", "encumbrance", {

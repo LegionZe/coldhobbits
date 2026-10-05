@@ -1,13 +1,13 @@
 <section class="ad2e-item-sheet">
   <header class="ad2e-item-header">
     <img src="{{item.img}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}} alt="" width="48" height="48">
-    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+    {{#if hidden}}<input class="ad2e-name" type="text" value="{{item.name}}" disabled>{{else}}<input class="ad2e-name" type="text" name="name" value="{{sourceName}}">{{/if}}
     {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
   </header>
   <div class="ad2e-item-fields">
     {{#if containerOptions}}<label>{{localize "AD2E.Container.InContainer"}}
       <select name="system.container">{{#each containerOptions as |o|}}<option value="{{o.id}}" {{#if o.selected}}selected{{/if}}>{{o.name}}</option>{{/each}}</select></label>{{/if}}
-    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    {{#unless hidden}}<label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>{{/unless}}
     <label>{{localize "AD2E.Armor.Kind"}}
       <select name="system.kind">{{selectOptions kinds selected=system.kind localize=true}}</select></label>
     {{#if isBody}}<label>{{localize "AD2E.Armor.AC"}} <input type="number" name="system.ac" value="{{system.ac}}" min="-10" max="10"></label>{{/if}}
@@ -16,15 +16,19 @@
     <label>{{localize "AD2E.Armor.ShieldMissile"}} <input type="number" name="system.shield.missile" value="{{system.shield.missile}}" min="0"></label>
     <label>{{localize "AD2E.Armor.ShieldAttacks"}} <input type="number" name="system.shield.attacks" value="{{system.shield.attacks}}" min="1" placeholder="{{localize 'AD2E.Armor.AnyFrontal'}}"></label>
     {{/if}}
+    {{#unless hidden}}
     <label>{{localize "AD2E.Armor.Bonus"}} <input type="number" name="system.bonus" value="{{system.bonus}}"></label>
+    {{/unless}}
     <label data-tooltip="{{localize 'AD2E.Armor.SizeHint'}}">{{localize "AD2E.Armor.Size"}} <select name="system.size">{{#each sizeOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label class="ad2e-check"><input type="checkbox" name="system.equipped" {{checked system.equipped}}> {{localize "AD2E.Armor.Equipped"}}</label>
     <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
     <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
     <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
-    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    {{#unless hidden}}<label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>{{/unless}}
+    {{#if isGM}}<label class="ad2e-check" data-tooltip="{{localize 'AD2E.Identify.Hint'}}"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
+    <label data-tooltip="{{localize 'AD2E.Identify.NameHint'}}">{{localize "AD2E.Identify.Name"}} <input type="text" name="system.unidentifiedName" value="{{system.unidentifiedName}}"></label>{{else}}{{#unless system.identified}}<p class="ad2e-note">{{localize "AD2E.Magic.Unidentified"}}</p>{{/unless}}{{/if}}
   </div>
   <p class="ad2e-note">{{summary}}</p>
-  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
-    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+  {{#unless hidden}}<label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>{{/unless}}
 </section>

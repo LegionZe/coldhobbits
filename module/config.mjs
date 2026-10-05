@@ -154,12 +154,14 @@ AD2E.armorKinds = { body: "AD2E.Armor.body", shield: "AD2E.Armor.shield", helmet
 /** "AC 5" / "Shield +1 (+2 vs. missiles), 1 attack/round" / "Helmet" for an armour item (localized). */
 export function armorSummary(sys) {
   const i18n = k => game.i18n.localize(k);
-  const magic = sys.bonus ? ` (${sys.bonus > 0 ? "+" : ""}${sys.bonus})` : "";
+  // An unidentified item's magical bonus is not shown to players (module/identify.mjs).
+  const bonus = sys.hidden ? 0 : sys.bonus;
+  const magic = bonus ? ` (${bonus > 0 ? "+" : ""}${bonus})` : "";
   if (sys.kind === "body") return `${i18n("AD2E.Armor.AC")} ${sys.ac ?? "—"}${magic}`;
   if (sys.kind === "shield") {
     const s = sys.shield;
-    return `${i18n("AD2E.Armor.shield")} +${s.melee + sys.bonus}`
-      + (s.missile !== s.melee ? ` (+${s.missile + sys.bonus} ${i18n("AD2E.Armor.VsMissiles")})` : "")
+    return `${i18n("AD2E.Armor.shield")} +${s.melee + bonus}`
+      + (s.missile !== s.melee ? ` (+${s.missile + bonus} ${i18n("AD2E.Armor.VsMissiles")})` : "")
       + `, ${s.attacks ? game.i18n.format("AD2E.Armor.AttacksPerRound", { n: s.attacks }) : i18n("AD2E.Armor.AnyFrontal")}`;
   }
   return i18n("AD2E.Armor.helmet") + (magic ? ` ${magic}` : "");

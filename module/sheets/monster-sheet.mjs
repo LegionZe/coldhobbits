@@ -1,4 +1,5 @@
 import { rollEncounterReaction } from "../reaction.mjs";
+import { rollTreasureDialog } from "../treasure.mjs";
 import { mountTrained } from "../combat-options.mjs";
 import { pushMount, pushText } from "../animals.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
@@ -42,6 +43,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollSurprise: MonsterSheet.onRollSurprise,
       rollUnarmed: MonsterSheet.onRollUnarmed,
       rollReaction: MonsterSheet.onRollReaction,
+      rollTreasure: MonsterSheet.onRollTreasure,
       takeOut: MonsterSheet.onTakeOut
     }
   };
@@ -100,6 +102,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     ];
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
+    context.isGM = !!game.user?.isGM;
     // Importer suggestion (complete-compendium.mjs guessElement): shown while a natural attack has no element.
     const guess = actor.getFlag?.("ad2e", "elementGuess") ?? null;
     context.elementGuess = guess?.element && sys.attacks.some(a => !a.element)
@@ -110,7 +113,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const items = actor.items ?? [];
     const inv = sys.encumbrance.inventory;
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
-      hit: i.system.bonus.hit, inside: insideText(inv, i),
+      hit: i.system.hidden ? "" : i.system.bonus.hit, inside: insideText(inv, i),
       element: i.system.element ? i18n(`AD2E.Elemental.Province.${i.system.element}`) : "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
@@ -175,6 +178,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }
   static onRollMorale() { return this.document.rollMorale(); }
+  /** GM: roll the stat block's treasure types (module/treasure.mjs). */
+  static onRollTreasure() { return rollTreasureDialog(this.document); }
   static onRollHp() { return this.document.rollMonsterHitPoints(); }
   static onAddAttack() {
     return this.document.update({ "system.attacks": [...this.document.system.attacks, { name: "Attack", damage: "1d6", bonus: 0, element: "" }] });

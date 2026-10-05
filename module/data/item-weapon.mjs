@@ -1,5 +1,6 @@
 import { weaponField } from "./weapon-fields.mjs";
 import { containerPreUpdate } from "../containers.mjs";
+import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -30,11 +31,17 @@ export default class WeaponData extends foundry.abstract.TypeDataModel {
         hit: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
       }),
-      container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
+      container: new StringField({ required: true, blank: true, initial: "" }),
+      // Unidentified magical weapon/armour (module/identify.mjs): shown by its unidentified (or base) name.
+      ...identifyFields(), // id of the container item it is in (module/containers.mjs)
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
+  }
+
+  prepareDerivedData() {
+    applyIdentification(this, baseName(this.parent?._source?.name ?? this.parent?.name), { url: "", notes: "" });
   }
 
   /** Equipping takes the item out of its container; putting it into one stops using it (module/containers.mjs). */

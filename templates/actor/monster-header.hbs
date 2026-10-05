@@ -18,6 +18,7 @@
       {{#if editable}}<button type="button" data-action="rollHp" data-tooltip="{{hd.formula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Monster.RollHp"}}</button>{{/if}}
       {{#if showCost}}<label>{{localize "AD2E.Monster.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>{{/if}}
       <button type="button" data-action="rollMorale" data-tooltip="{{localize 'AD2E.Monster.MoraleHint'}}"><i class="fa-solid fa-person-running"></i> {{localize "AD2E.Monster.Morale"}}</button>
+      {{#if isGM}}<button type="button" data-action="rollTreasure" data-tooltip="{{localize 'AD2E.Treasure.ButtonHint'}}"><i class="fa-solid fa-sack-dollar"></i> {{localize "AD2E.Treasure.Button"}}</button>{{/if}}
       {{#if system.url}}<a class="ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{system.url}}"><i class="fa-solid fa-book-open"></i> {{sourceLabel}}</a>{{/if}}
     </div>
   </div>

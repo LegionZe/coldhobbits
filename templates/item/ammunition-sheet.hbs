@@ -1,7 +1,7 @@
 <section class="ad2e-item-sheet">
   <header class="ad2e-item-header">
     <img src="{{item.img}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}} alt="" width="48" height="48">
-    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+    {{#if hidden}}<input class="ad2e-name" type="text" value="{{item.name}}" disabled>{{else}}<input class="ad2e-name" type="text" name="name" value="{{sourceName}}">{{/if}}
     {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
   </header>
   <div class="ad2e-item-fields">
@@ -15,10 +15,12 @@
     <label>{{localize "AD2E.Weapon.Type"}} <input type="text" name="system.type" value="{{system.type}}"></label>
     <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
     <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
-    <label>{{localize "AD2E.Weapon.MagicHit"}} <input type="number" name="system.bonus.hit" value="{{system.bonus.hit}}"></label>
-    <label>{{localize "AD2E.Weapon.MagicDmg"}} <input type="number" name="system.bonus.dmg" value="{{system.bonus.dmg}}"></label>
+    {{#unless hidden}}<label>{{localize "AD2E.Weapon.MagicHit"}} <input type="number" name="system.bonus.hit" value="{{system.bonus.hit}}"></label>{{/unless}}
+    {{#unless hidden}}<label>{{localize "AD2E.Weapon.MagicDmg"}} <input type="number" name="system.bonus.dmg" value="{{system.bonus.dmg}}"></label>{{/unless}}
     <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
-    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    {{#unless hidden}}<label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>{{/unless}}
+    {{#if isGM}}<label class="ad2e-check" data-tooltip="{{localize 'AD2E.Identify.Hint'}}"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
+    <label data-tooltip="{{localize 'AD2E.Identify.NameHint'}}">{{localize "AD2E.Identify.Name"}} <input type="text" name="system.unidentifiedName" value="{{system.unidentifiedName}}"></label>{{else}}{{#unless system.identified}}<p class="ad2e-note">{{localize "AD2E.Magic.Unidentified"}}</p>{{/unless}}{{/if}}
   </div>
   <p class="ad2e-note">{{localize "AD2E.Ammo.LaunchersHint"}}</p>
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}

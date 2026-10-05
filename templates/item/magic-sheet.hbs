@@ -1,17 +1,18 @@
 <section class="ad2e-item-sheet">
   <header class="ad2e-item-header">
     <img src="{{item.img}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}} alt="" width="48" height="48">
-    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+    {{#if hidden}}<input class="ad2e-name" type="text" value="{{item.name}}" disabled>{{else}}<input class="ad2e-name" type="text" name="name" value="{{sourceName}}">{{/if}}
     {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
   </header>
   <div class="ad2e-item-fields">
     {{#if containerOptions}}<label>{{localize "AD2E.Container.InContainer"}}
       <select name="system.container">{{#each containerOptions as |o|}}<option value="{{o.id}}" {{#if o.selected}}selected{{/if}}>{{o.name}}</option>{{/each}}</select></label>{{/if}}
-    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    {{#unless hidden}}<label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>{{/unless}}
     <label>{{localize "AD2E.Magic.Category.label"}}
       <select name="system.category">{{selectOptions categories selected=system.category localize=true}}</select></label>
     <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Gear.WeightEach"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>
+    {{#unless hidden}}
     <label>{{localize "AD2E.Magic.Charges"}} <input type="number" name="system.charges.value" value="{{system.charges.value}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Magic.MaxCharges"}} <input type="number" name="system.charges.max" value="{{system.charges.max}}" min="0" step="1" placeholder="—"></label>
     <label>{{localize "AD2E.Magic.ChargesFormula"}} <input type="text" name="system.charges.formula" value="{{system.charges.formula}}" placeholder="1d20+80">
@@ -19,15 +20,17 @@
     <label>{{localize "AD2E.Magic.UsableBy"}} <input type="text" name="system.usableBy" value="{{system.usableBy}}" placeholder="{{localize 'AD2E.Magic.UsableByHint'}}"></label>
     <label>{{localize "AD2E.Magic.XpValue"}} <input type="number" name="system.xpValue" value="{{system.xpValue}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Magic.GpValue"}} <input type="number" name="system.gpValue" value="{{system.gpValue}}" min="0" step="1"></label>
+    {{/unless}}
     <label class="ad2e-check"><input type="checkbox" name="system.carried" {{checked system.carried}}> {{localize "AD2E.Gear.Carried"}}</label>
     <label class="ad2e-check"><input type="checkbox" name="system.equipped" {{checked system.equipped}}> {{localize "AD2E.Magic.Worn"}}</label>
     <label>{{localize "AD2E.Container.Capacity"}} <input type="number" name="system.capacity.weight" value="{{system.capacity.weight}}" min="0"></label>
     <label>{{localize "AD2E.Container.Volume"}} <input type="text" name="system.capacity.volume" value="{{system.capacity.volume}}"></label>
     <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Container.WeightlessHint'}}"><input type="checkbox" name="system.capacity.weightless" {{checked system.capacity.weightless}}> {{localize "AD2E.Container.Weightless"}}</label>
-    <label class="ad2e-check"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
-    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+    {{#if isGM}}<label class="ad2e-check" data-tooltip="{{localize 'AD2E.Identify.Hint'}}"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
+    <label data-tooltip="{{localize 'AD2E.Identify.NameHint'}}">{{localize "AD2E.Identify.Name"}} <input type="text" name="system.unidentifiedName" value="{{system.unidentifiedName}}"></label>{{else}}{{#unless system.identified}}<p class="ad2e-note">{{localize "AD2E.Magic.Unidentified"}}</p>{{/unless}}{{/if}}
+    {{#unless hidden}}<label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>{{/unless}}
   </div>
   <p class="ad2e-note">{{categoryTable}} {{localize "AD2E.Magic.SheetHint"}}</p>
-  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
-    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+  {{#unless hidden}}<label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>{{/unless}}
 </section>
