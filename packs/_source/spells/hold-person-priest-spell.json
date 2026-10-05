@@ -20,7 +20,14 @@
       "somatic": true,
       "material": true
     },
-    "materials": [],
+    "materials": [
+      {
+        "identifier": "iron-piece",
+        "name": "Iron, piece",
+        "consumed": true,
+        "label": ""
+      }
+    ],
     "provinces": [],
     "damage": [],
     "range": "120 yds.",
