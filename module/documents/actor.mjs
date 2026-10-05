@@ -7,6 +7,13 @@ import { useComponents } from "../components.mjs";
 import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
 import { shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
+
+/** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
+export function spellDamageLabel(d, i = 0) {
+  const kind = game.i18n.localize(d.kind === "healing" ? "AD2E.Spell.Healing" : "AD2E.Weapon.Damage");
+  const round = d.perRound ? ` (${game.i18n.localize("AD2E.Spell.PerRound")})` : "";
+  return `${d.label || `${kind} ${i + 1}`}${round}: ${d.formula}`;
+}
 import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
@@ -998,41 +1005,52 @@ export default class AD2EActor extends Actor {
   }
 
   /**
-   * Spell damage (the spell's damage formula, entered by the GM; @level = casting level) with a situational modifier.
-   * An elemental mage casting a spell of its province adds +1 per damage die (module/elemental.mjs); the message
-   * carries the dice for elemental mages hit by it, and the targeted tokens.
+   * Spell damage or healing: one of the spell's options (read from its page at import, module/importers/spell-damage.mjs;
+   * @level = casting level), chosen in the dialog when there are several, with a situational modifier. An elemental mage
+   * casting a spell of its province adds +1 per damage die (module/elemental.mjs); the message carries the dice for
+   * elemental mages hit by it, and the targeted tokens. Healing messages are applied as healing (module/health.mjs).
    */
   async rollSpellDamage(itemId) {
     const spell = this.items.get(itemId);
     const sys = spell?.system;
-    if (!spell || spell.type !== "spell" || !sys.damage) return;
-    const input = await promptModifier(`${spell.name}: ${game.i18n.localize("AD2E.Weapon.Damage")}`);
+    const options = (sys?.damage ?? []).filter(d => d.formula);
+    if (!spell || spell.type !== "spell" || !options.length) return;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const pick = options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Spell.DamageOption")}</label><select name="option">${
+      options.map((d, i) => `<option value="${i}">${esc(spellDamageLabel(d, i))}</option>`).join("")}</select></div>` : "";
+    const input = await promptModifier(`${spell.name}: ${i18n(options.length === 1 && options[0].kind === "healing" ? "AD2E.Spell.Healing" : "AD2E.Weapon.Damage")}`,
+      { extra: pick, read: form => ({ option: Number(form.elements.option?.value ?? 0) }) });
     if (!input) return;
+    const option = options[input.option] ?? options[0];
+    const healing = option.kind === "healing";
     const level = this.system.spells?.castingLevel ?? this.system.level ?? 1;
     let roll;
     try {
-      roll = await new Roll(`${sys.damage} + @mod`, { level, mod: input.mod }).evaluate();
+      roll = await new Roll(`${option.formula} + @mod`, { level, mod: input.mod }).evaluate();
     } catch (err) {
-      ui.notifications.error(game.i18n.format("AD2E.Spell.BadDamage", { name: spell.name, formula: sys.damage }));
+      ui.notifications.error(game.i18n.format("AD2E.Spell.BadDamage", { name: spell.name, formula: option.formula }));
       return;
     }
-    const per = dieBonus(this, sys.provinces ?? []);
+    const provinces = healing ? [] : (sys.provinces ?? []);
+    const per = healing ? 0 : dieBonus(this, provinces);
     const bonus = per * diceCount(roll);
     const total = Math.max(roll.total + bonus, 0);
     const targets = AD2EActor.#targetsNow();
-    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
-    const i18n = k => game.i18n.localize(k);
-    const provinces = sys.provinces ?? [];
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flags: { ad2e: { damage: total, targets, ...(provinces.length ? { element: elementFlag(roll, provinces, per, bonus) } : {}) } },
-      flavor: `${esc(spell.name)} ${i18n("AD2E.Weapon.Damage")} (${i18n("AD2E.Spell.CastingLevel")} ${level}`
+      flags: { ad2e: { damage: total, targets, ...(healing ? { healing: true } : {}),
+        ...(provinces.length ? { element: elementFlag(roll, provinces, per, bonus) } : {}) } },
+      flavor: `${esc(spell.name)} ${i18n(healing ? "AD2E.Spell.Healing" : "AD2E.Weapon.Damage")}`
+        + `${options.length > 1 ? ` — ${esc(spellDamageLabel(option, options.indexOf(option)))}` : (option.perRound ? ` (${i18n("AD2E.Spell.PerRound")})` : "")}`
+        + ` (${i18n("AD2E.Spell.CastingLevel")} ${level}`
         + `${provinces.length ? `; ${provinces.map(p => i18n(`AD2E.Elemental.Province.${p}`)).join(", ")}` : ""})`
         + (targets.length ? ` vs ${esc(targets.map(t => t.name).join(", "))}` : "")
         + modifierText(input.mod, input.note)
         + (bonus ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${elementOf(this)}`), n: bonus })}]: ${total}` : "")
     });
   }
+
 
   /**
    * Rest: every memorized spell can be cast again (memorization itself is kept; change it on the Spells tab) and

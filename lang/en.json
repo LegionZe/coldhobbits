@@ -563,9 +563,17 @@
   "AD2E.Spell": {
     "Provinces": "Elemental provinces",
     "ProvincesHint": "Al-Qadim provinces of the spell: flame, sand, sea, wind (Wizard Spells by Province (AA); set at import). Comma separated.",
-    "DamageFormula": "Damage formula",
-    "DamageFormulaHint": "Optional, entered by the GM: a roll formula, @level = casting level, e.g. (min(@level, 10))d6. A damage button then appears on the Spells tab.",
-    "DamageHint": "Roll this spell's damage (its damage formula; elemental mage +1 per die in its province)",
+    "DamageFormula": "Damage and healing",
+    "DamageFormulaHint": "Read from the spell's page at import (check them): roll formulas, @level = casting level, e.g. (min(@level, 10))d6. A button on the Spells tab rolls them.",
+    "DamageHint": "Roll this spell's damage or healing (elemental mage +1 per die in its province)",
+    "DamageOption": "Roll",
+    "Healing": "Healing",
+    "PerRound": "per round",
+    "DamageLabel": "Label",
+    "DamageKind": "Kind",
+    "AddDamage": "Add a formula",
+    "RemoveDamage": "Remove this formula",
+    "NoDamage": "No damage or healing formulas.",
     "BadDamage": "{name}: the damage formula \"{formula}\" could not be rolled.",
     "Materials": "Material components",
     "MaterialsHint": "Linked to items in the Spell Components compendium (matched automatically at import: check them against the spell's page). Consumed components are used up when the spell is cast (Casting Spells (PHB)); holy symbols are not.",
@@ -1160,6 +1168,7 @@
     "KnockedOut": "knocked out: temporary damage",
     "ApplyDamageRollTargets": "Apply damage to the targets of the roll",
     "ApplyDamageMyTargets": "Apply damage to my targeted tokens",
+    "ApplyHealingRollTargets": "Apply as healing to the targets of the roll",
     "ApplyHealingMyTargets": "Apply as healing to my targeted tokens",
     "NotOwner": "No permission to change {name}'s hit points; ask the GM to apply it.",
     "Button": {
@@ -1167,7 +1176,9 @@
       "roll": "Apply to",
       "mine": "My targets",
       "selected": "Selected",
-      "heal": "Heal selected"
+      "heal": "Heal selected",
+      "healRoll": "Heal",
+      "healMine": "Heal my targets"
     },
     "NoTargets": {
       "roll": "The roll had no targeted tokens.",

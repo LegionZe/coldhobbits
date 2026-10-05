@@ -15,7 +15,6 @@
     <label class="ad2e-check"><input type="checkbox" name="system.components.somatic" {{checked system.components.somatic}}> {{localize "AD2E.Spell.Somatic"}}</label>
     <label class="ad2e-check"><input type="checkbox" name="system.components.material" {{checked system.components.material}}> {{localize "AD2E.Spell.Material"}}</label>
     <label data-tooltip="{{localize 'AD2E.Spell.ProvincesHint'}}">{{localize "AD2E.Spell.Provinces"}} <input type="text" name="provincesText" value="{{provincesText}}"></label>
-    <label data-tooltip="{{localize 'AD2E.Spell.DamageFormulaHint'}}">{{localize "AD2E.Spell.DamageFormula"}} <input type="text" name="system.damage" value="{{system.damage}}"></label>
     <label>{{localize "AD2E.Spell.Range"}} <input type="text" name="system.range" value="{{system.range}}"></label>
     <label>{{localize "AD2E.Spell.Area"}} <input type="text" name="system.area" value="{{system.area}}"></label>
     <label>{{localize "AD2E.Spell.CastingTime"}} <input type="text" name="system.castingTime" value="{{system.castingTime}}"></label>
@@ -24,6 +23,21 @@
     <label>{{localize "AD2E.Spell.Sources"}} <input type="text" name="sourcesText" value="{{sourcesText}}"></label>
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
   </div>
+  <fieldset class="ad2e-spell-damage">
+    <legend>{{localize "AD2E.Spell.DamageFormula"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Spell.DamageFormulaHint"}}</p>
+    {{#each damageRows as |d|}}
+    <div class="ad2e-prof-row ad2e-content-row">
+      <input type="text" name="dmg.{{d.index}}.label" value="{{d.label}}" placeholder="{{localize 'AD2E.Spell.DamageLabel'}}">
+      <input type="text" name="dmg.{{d.index}}.formula" value="{{d.formula}}">
+      <select name="dmg.{{d.index}}.kind">{{selectOptions @root.damageKinds selected=d.kind localize=true}}</select>
+      <label class="ad2e-check"><input type="checkbox" name="dmg.{{d.index}}.perRound" {{checked d.perRound}}> {{localize "AD2E.Spell.PerRound"}}</label>
+      {{#if @root.editable}}<a data-action="removeDamage" data-index="{{d.index}}" data-tooltip="{{localize 'AD2E.Spell.RemoveDamage'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoDamage"}}</p>
+    {{/each}}
+    {{#if @root.editable}}<div class="ad2e-prof-summary"><button type="button" data-action="addDamage">{{localize "AD2E.Spell.AddDamage"}}</button></div>{{/if}}
+  </fieldset>
   {{#if system.components.material}}
   <fieldset class="ad2e-materials">
     <legend>{{localize "AD2E.Spell.Materials"}}</legend>

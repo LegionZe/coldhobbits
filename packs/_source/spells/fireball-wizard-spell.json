@@ -35,7 +35,14 @@
     "provinces": [
       "flame"
     ],
-    "damage": "(min(@level, 10))d6",
+    "damage": [
+      {
+        "label": "",
+        "formula": "(min(@level, 10))d6",
+        "kind": "damage",
+        "perRound": false
+      }
+    ],
     "range": "10 yds. + 10 yds./level",
     "area": "20-ft. radius",
     "castingTime": "3",

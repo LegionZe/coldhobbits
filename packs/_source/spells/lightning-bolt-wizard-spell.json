@@ -39,7 +39,14 @@
       }
     ],
     "provinces": [],
-    "damage": "(min(@level, 10))d6",
+    "damage": [
+      {
+        "label": "",
+        "formula": "(min(@level, 10))d6",
+        "kind": "damage",
+        "perRound": false
+      }
+    ],
     "range": "40 yds.+ 10 yds./level",
     "area": "Special",
     "castingTime": "3",

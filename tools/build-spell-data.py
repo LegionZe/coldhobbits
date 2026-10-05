@@ -99,9 +99,10 @@ if __name__ == "__main__":
         os.unlink(f.name)
     items = json.loads(out)
     assert len(items) == len(EXAMPLES), [x["title"] for x in raw]
-    # Damage formulas come from module/importers/spell-damage.mjs (checked against each page by the parser).
-    dmg = {it["name"]: it["system"]["damage"] for it in items}
-    assert dmg["Fireball"] and dmg["Lightning Bolt"] and dmg["Magic Missile"], dmg
+    # Damage and healing options are read from each page by module/importers/spell-damage.mjs (no per-spell data).
+    dmg = {it["name"]: [d["formula"] for d in it["system"]["damage"]] for it in items}
+    assert dmg["Fireball"] == ["(min(@level, 10))d6"] and dmg["Lightning Bolt"] == ["(min(@level, 10))d6"], dmg
+    assert dmg["Magic Missile"] == ["1d4 + 1"] and dmg["Cure Light Wounds"] == ["1d8", "1d8"], dmg
     # Folders by class, then spell level (the same layout the spell importer uses in the world).
     tops = {k: classdata.folder_doc(f"spells.{k}", label, sort=i * 1000)
             for i, (k, label) in enumerate([("wizard", "Wizard Spells"), ("priest", "Priest Spells")])}
