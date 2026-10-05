@@ -370,7 +370,7 @@ export default class AD2EActor extends Actor {
         + ammoField + rangeField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField
-        + AD2EActor.#combatModFields(targets, use === "missile")
+        + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -629,7 +629,7 @@ export default class AD2EActor extends Actor {
     // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
     const element = elementOf(this);
     const elementField = element ? `<div class="form-group"><label>${game.i18n.format("AD2E.Elemental.WeaponUses",
-      { province: i18n(`AD2E.Elemental.Province.${element}`) })}</label><input type="checkbox" name="elementAttack"></div>` : "";
+      { province: i18n(`AD2E.Elemental.Province.${element}`) })}</label><input type="checkbox" name="elementAttack"${item.system.element === element ? " checked" : ""}></div>` : "";
     const nonlethalField = use === "melee" && nonlethalAllowed(item.system.weapon)
       ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${i18n("AD2E.Nonlethal.Half")})</label><input type="checkbox" name="nonlethal"></div>` : "";
     // Skills & Powers point blank damage (specialists +2, masters +3).
@@ -672,6 +672,8 @@ export default class AD2EActor extends Actor {
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     // Elemental mage, attack using its province: +1 per damage die (the dice in the weapon's damage).
     const elementDice = input.elementAttack && element ? [...String(dice).matchAll(/(\d*)d\d+/g)].reduce((n, m) => n + Number(m[1] || 1), 0) : 0;
+    // A weapon of an elemental province (its `element`): its dice reach elemental mages and gens of that province.
+    const weaponElement = PROVINCES.includes(item.system.element) ? item.system.element : "";
     const pointBlank = input.pointBlank ? pbDmg : 0;
     // Skills & Powers two-handed weapon style: "+1 bonus to all damage rolls" with a one-handed weapon used in two hands
     // (a use labelled two-handed, e.g. the bastard sword, of a weapon the character can hold in one hand).
@@ -689,8 +691,9 @@ export default class AD2EActor extends Actor {
       // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
       flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets,
         // the dice of an elemental attack, for an elemental mage target of the same province (not with backstab)
-        ...(elementDice && !(input.backstab && mult) ? { element: elementFlag(roll, [element], 1, total - roll.total) } : {}) } },
-      flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")} `
+        ...(elementDice && !(input.backstab && mult) ? { element: elementFlag(roll, [element], 1, total - roll.total) }
+          : (weaponElement && !(input.backstab && mult) ? { element: elementFlag(roll, [weaponElement], 0, total - roll.total) } : {})) } },
+      flavor: `${item.name}${option.label ? ` (${option.label})` : ""} ${i18n("AD2E.Weapon.Damage")}${weaponElement ? ` (${i18n(`AD2E.Elemental.Province.${weaponElement}`)})` : ""} `
         + `vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}${AD2EActor.#targetText(targets)}`
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
@@ -1001,7 +1004,7 @@ export default class AD2EActor extends Actor {
     const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
       damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "" }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
-      melee: !!i.system.weapon?.melee,
+      melee: !!i.system.weapon?.melee, element: PROVINCES.includes(i.system.element) ? i.system.element : "",
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
       dmgBonus: i.system.bonus.dmg }));
     return [...natural, ...weapons];

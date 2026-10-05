@@ -180,6 +180,8 @@ export class WeaponSheet extends AD2EItemSheet {
         ...[...scores.slice(0, 16), ...bands, ...scores.slice(16)].map(k => [k, bandLabel[k] ?? k])]
         .map(([value, label]) => ({ value, label, selected: value === (sys.bowStrength ?? "") }));
     }
+    context.elementOptions = ["", "flame", "sand", "sea", "wind"].map(value => ({ value, selected: value === (sys.element ?? ""),
+      label: value ? game.i18n.localize(`AD2E.Elemental.Province.${value}`) : "—" }));
     // On an actor: the linked weapon proficiency, if owned.
     const actor = this.document.parent;
     const entry = actor?.system?.weapons?.find(e => e.item.id === this.document.id);

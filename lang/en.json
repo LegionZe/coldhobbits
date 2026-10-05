@@ -256,6 +256,7 @@
   "AD2E.Weapon": {
     "BowStrength": "Bow made for Strength",
     "BowStandard": "Standard bow (penalties only)",
+    "ElementHint": "Elemental province of attacks with this weapon (Al-Qadim): its damage dice reach elemental mages and gens of that province, and an elemental mage of that province adds +1 per die.",
     "BowStrengthHint": "A bow made for a Strength gives the user's Strength attack and damage bonuses up to that Strength; penalties always apply. Bows for exceptional Strength (18/01 or more) cost three to five times the normal price (Weapons, PHB).",
     "BowBendBars": "bow made for Strength {rating}: roll bend bars/lift gates ({chance}%) to string or use it",
     "AutoDamage": "rolled on the hit",
@@ -499,6 +500,9 @@
     "AttackBonus": "To hit",
     "Element": "Element",
     "ElementHint": "Elemental province of the attack (e.g. a fire breath: flame). Its damage dice reach elemental mages and gens of that province (-2 per die).",
+    "ElementGuess": "Suggested element: {province} (\"{word}\" in the {from}); not applied.",
+    "ElementGuessApply": "Apply to attacks without one",
+    "ElementGuessFrom": { "name": "name", "special": "special attacks" },
     "InventoryHint": "Drag weapons, armour, equipment and coins here. Equipped armour sets AC; weapons add attacks; carried weight counts toward a mount's load.",
     "Load": {
       "label": "Load (mounts: PHB Table 49)",

@@ -15,6 +15,7 @@
     <label>{{localize "AD2E.Weapon.MagicHit"}} <input type="number" name="system.bonus.hit" value="{{system.bonus.hit}}"></label>
     <label>{{localize "AD2E.Weapon.MagicDmg"}} <input type="number" name="system.bonus.dmg" value="{{system.bonus.dmg}}"></label>
     {{#if isBow}}<label data-tooltip="{{localize 'AD2E.Weapon.BowStrengthHint'}}">{{localize "AD2E.Weapon.BowStrength"}} <select name="system.bowStrength">{{#each bowStrengthOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    <label data-tooltip="{{localize 'AD2E.Weapon.ElementHint'}}">{{localize "AD2E.Monster.Element"}} <select name="system.element">{{#each elementOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
   </div>
