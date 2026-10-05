@@ -21,6 +21,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
     return {
       identifier: text(),
       role: new StringField({ required: true, initial: "monster", choices: AD2E.monsterRoles }),
+      // Mounts: trained for combat ("" = by default war mounts, "yes", "no"; module/combat-options.mjs mountTrained).
+      combatTrained: new StringField({ initial: "" }),
       climate: text(), frequency: text(), organization: text(), activity: text(), diet: text(),
       intelligence: text(), treasure: text(), alignment: text(), numberAppearing: text(),
       ac: new SchemaField({ base: int(10, -10), text: text() }),

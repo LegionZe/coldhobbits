@@ -102,3 +102,57 @@ export function overbearModifier({ attacker = "M", defender = "M", legs = 2, att
 export function nonlethalAllowed(weapon) {
   return !!weapon?.melee && /S/.test(String(weapon.type ?? ""));
 }
+
+/* ---------------------------------------- Mounted combat (Unusual Combat Situations (DMG)) */
+
+/** Rates of fire from fastest to slowest, as [attacks, rounds]: the ladder the mounted reduction steps down. */
+export const RATE_LADDER = [[5, 1], [9, 2], [4, 1], [7, 2], [3, 1], [5, 2], [2, 1], [3, 2], [1, 1], [1, 2]];
+
+/** "2", "3/2", "1/2" -> [attacks, rounds]; null when not a rate. */
+export function parseRate(text) {
+  const m = String(text ?? "").trim().match(/^(\d+)\s*(?:\/\s*(\d+))?$/);
+  return m ? [Number(m[1]), Number(m[2] ?? 1)] : null;
+}
+
+/**
+ * Rate of fire from a moving mount: "reduced by one" (owner's ruling: one step down RATE_LADDER, at least 1/2).
+ * A rate between two steps drops to the next slower one.
+ */
+export function stepDownRate(rate) {
+  const v = rate[0] / rate[1];
+  const i = RATE_LADDER.findIndex(r => r[0] / r[1] < v - 1e-9);
+  return i < 0 ? RATE_LADDER.at(-1) : (RATE_LADDER[i][0] / RATE_LADDER[i][1] === v ? RATE_LADDER[Math.min(i + 1, RATE_LADDER.length - 1)] : RATE_LADDER[i]);
+}
+
+/** Half as many attacks (missile style after a full move): [a, b] -> [a, 2b], reduced. */
+export function halveRate([a, b]) {
+  return a % 2 === 0 ? [a / 2, b] : [a, b * 2];
+}
+
+/**
+ * Whether a mount is trained for combat: its `combatTrained` choice ("yes" / "no"), or by default a war mount
+ * (identifier with "war", e.g. horse-heavy war ... camel-war; owner's ruling) - "Mounts trained for combat (a heavy
+ * warhorse, for example) present few problems" (Unusual Combat Situations (DMG)).
+ */
+export function mountTrained(mount) {
+  const choice = mount?.system?.combatTrained ?? "";
+  if (choice === "yes") return true;
+  if (choice === "no") return false;
+  const id = String(mount?.system?.identifier ?? "");
+  return /(^|-)war(-|$)/.test(id) || /^horse-(heavy|medium|light)$/.test(id);
+}
+
+/**
+ * Problems with firing from a moving mount (DMG): no riding proficiency ("possible only if the rider is proficient in
+ * horsemanship"); a weapon other than short bow, composite short bow, light crossbow (long bows only for specialists;
+ * a heavy crossbow can be fired once, not reloaded). Returns keys: "noRiding", "weapon", "specialistOnly", "once".
+ */
+export function mountedFireIssues({ weapon, specialized = false, proficiencies = [] }) {
+  const M = T.mounted;
+  const out = [];
+  if (!proficiencies.some(p => M.proficiencies.includes(p))) out.push("noRiding");
+  if (M.weapons.includes(weapon)) return out;
+  if (M.specialist.includes(weapon)) { if (!specialized) out.push("specialistOnly"); return out; }
+  out.push(M.once.includes(weapon) ? "once" : "weapon");
+  return out;
+}

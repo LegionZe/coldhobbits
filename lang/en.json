@@ -1664,6 +1664,22 @@
       "threeQuarters": "1/2 to 3/4 normal rate",
       "full": "More than 3/4 normal rate"
     },
-    "RateNote": "rate of fire reduced by one while the mount moves (DMG)"
+    "Untrained": "Fighting from an untrained mount ({name}) ({n})",
+    "UntrainedShort": "Untrained mount",
+    "Rate": "rate of fire {from} becomes {to}",
+    "Issue": {
+      "noRiding": "DMG: missile fire from a moving mount needs the riding proficiency",
+      "weapon": "DMG: only short bows, composite short bows and light crossbows can be fired from a moving mount",
+      "specialistOnly": "DMG: long bows from a moving mount only for specialists",
+      "once": "DMG: a heavy crossbow can be fired once from a mount, not reloaded"
+    },
+    "TrainedLabel": "Combat trained",
+    "TrainedHint": "Riders of a mount not trained for combat have -2 to hit (Unusual Combat Situations (DMG)). By default only war mounts are trained.",
+    "Trained": {
+      "yes": "Trained",
+      "no": "Untrained",
+      "autoYes": "Default (trained: war mount)",
+      "autoNo": "Default (untrained)"
+    }
   }
 }
