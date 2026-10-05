@@ -33,6 +33,28 @@ export function elementOf(actor) {
   return PROVINCES.includes(actor.system.element) ? actor.system.element : null;
 }
 
+/** The character's kit identifier ("" without a kit). */
+function kitId(actor) {
+  if (actor?.type !== "character") return "";
+  const kit = actor.system?.classInfo?.kitItem ?? [...(actor.items ?? [])].find(i => i.type === "kit");
+  return kit?.system?.identifier ?? "";
+}
+
+/** Whether a character has the sorcerer kit (Al-Qadim; Sorcerer (Character Kit): two chosen provinces). */
+export function isSorcerer(actor) {
+  return kitId(actor) === "sorcerer";
+}
+
+/**
+ * The elemental provinces a character has chosen: the elemental mage's one (`element`), a sorcerer's two (`element`,
+ * `element2`); valid, distinct choices only. Empty for other characters.
+ */
+export function chosenProvinces(actor) {
+  if (isElementalMage(actor)) return elementOf(actor) ? [elementOf(actor)] : [];
+  if (!isSorcerer(actor)) return [];
+  return [...new Set([actor.system.element, actor.system.element2].filter(p => PROVINCES.includes(p)))];
+}
+
 /** Whether a character has the elemental mage kit (the province may not be chosen yet). */
 export function isElementalMage(actor) {
   return !!elementalKit(actor);

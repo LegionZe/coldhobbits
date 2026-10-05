@@ -78,7 +78,8 @@
     },
     "skillPoints": {
       "first": null,
-      "perLevel": null
+      "perLevel": null,
+      "bardFirst": null
     },
     "recommendedProficiencies": [
       "artistic-ability",

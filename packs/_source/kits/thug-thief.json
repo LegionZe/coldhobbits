@@ -61,7 +61,8 @@
     },
     "skillPoints": {
       "first": 40,
-      "perLevel": 30
+      "perLevel": 30,
+      "bardFirst": null
     },
     "recommendedProficiencies": [
       "alertness",

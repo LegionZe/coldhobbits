@@ -121,6 +121,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       bodyWeight: new NumberField({ min: 0, nullable: true, initial: null }),
       // Elemental mage kit (Al-Qadim): the chosen province (module/elemental.mjs).
       element: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
+      // Sorcerer kit (Al-Qadim): the second chosen province (the first is `element`).
+      element2: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
       // Familiar (module/familiars.mjs): its actor UUID, within the 1 mile link (surprise bonus), separated (loses 1 hp a
       // day), its death resolved (system shock rolled), world time of the last Find Familiar attempt.
       familiar: new SchemaField({ uuid: new StringField({ required: true, blank: true, initial: "" }),
@@ -817,7 +819,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }
       if (def.points) {
         const kitPoints = id === "thief" ? kit?.skillPoints : null;
-        const first = kitPoints?.first ?? def.points[0];
+        // Bards: a kit's 1st-level points only (Barber: 10; "additional percentage points are gained as usual").
+        const first = (id === "bard" ? kit?.skillPoints?.bardFirst : kitPoints?.first) ?? def.points[0];
         const per = kitPoints?.perLevel ?? def.points[1];
         const used = def.skills.reduce((n, k) => n + (points[k] ?? 0), 0);
         out.budget = { total: first + per * (this.level - 1), used };
