@@ -116,7 +116,11 @@ FAMILIAR_RULES = [("hp", {"dice": "1d3+1", "perLevel": 1}, r"Normal familiars ha
                   ("range", "1 mile", r"mental commands at a distance of up to 1 mile"),
                   ("onceYear", True, r"can be attempted but once per year"),
                   ("castingTime", "2d12", r"castingTime = 2d12 hours"),
-                  ("cost", "1,000 gp", r"adds 1,000 gp worth of incense and herbs")]
+                  ("cost", "1,000 gp", r"adds 1,000 gp worth of incense and herbs"),
+                  ("contact", {"saved": 0, "failed": 0.5},
+                   r"When the familiar is in physical contact with its wizard, it gains the wizard's saving throws against special attacks\. "
+                   r"If a special attack would normally cause damage, the familiar suffers no damage if the saving throw is successful and "
+                   r"half damage if the saving throw is failed")]
 
 
 def familiar_table(wiki):
