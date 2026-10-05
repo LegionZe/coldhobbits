@@ -1666,6 +1666,10 @@
     },
     "Untrained": "Fighting from an untrained mount ({name}) ({n})",
     "UntrainedShort": "Untrained mount",
+    "Smaller": "Mounted on {name}: target smaller than the mount, not a rider ({n})",
+    "SmallerShort": "Mounted vs smaller creature",
+    "VsRider": "On foot against a mounted rider, not the mount ({n})",
+    "VsRiderShort": "On foot vs rider",
     "Rate": "rate of fire {from} becomes {to}",
     "Issue": {
       "noRiding": "DMG: missile fire from a moving mount needs the riding proficiency",

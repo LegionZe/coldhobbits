@@ -163,10 +163,15 @@ if __name__ == "__main__":
     need(uw, r"Heavy crossbows can be fired once, but cannot be reloaded by a mounted man", "mounted heavy crossbow")
     need(uw, r"Those fighting from the back of untrained creatures suffer a -2 on their chance to hit", "untrained mount")
     need(uw, r"Mounts trained for combat \(a heavy warhorse, for example\) present few problems", "trained mounts")
+    need(uw, r"In mounted fighting, a character gets a \+1 bonus to his chance to hit creatures smaller than his mount\. Thus, a man on "
+             r"horseback gains a \+1 bonus to his attack rolls against all medium-sized creatures such as other men, but would not gain this "
+             r"bonus against another rider or a giant", "mounted +1")
+    need(uw, r"Those on foot who fight against a mounted rider, have a -1 penalty; this not applied to attacks against the mount", "vs rider -1")
     # Riding proficiencies that count as horsemanship (PHB land-based and airborne riding; Al-Qadim horse and camel).
     mounted_rules = {"proficiencies": ["riding-land-based", "riding-airborne", "riding-horse-specialization", "riding-camel-specialization"],
                      "weapons": ["short-bow", "composite-short-bow", "light-crossbow"], "specialist": ["long-bow", "composite-long-bow"],
-                     "once": ["heavy-crossbow"], "untrained": -2}
+                     "once": ["heavy-crossbow"], "untrained": -2,
+                     "smaller": 1, "vsRider": -1}
     initiative = {"standard": t55, "breath": int(t56["Breath weapon"]), "innate": int(t56["Innate spell ability"]),
                   "size": size56, "items": items56}
     data = {
