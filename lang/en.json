@@ -970,6 +970,7 @@
     "SheetHint": "Generated from the kit page by tools/build-kit-mechanics.py; modifiers without a condition apply automatically while the kit fits the character's class.",
     "NoModifiers": "No numeric modifiers are stated on the kit page.",
     "SkillPoints": "Thief skill points: {first} at 1st level, {per} per level after",
+    "BardPoints": "Bard ability points: {first} at 1st level, the usual points per level after",
     "ScalingLevel": "+{step} per level after level {from}"
   },
   "AD2E.Magic": {
@@ -1262,6 +1263,7 @@
     "Base": "Intelligence",
     "OwnSchool": "own school",
     "OtherSchool": "other school",
+    "KitProvince": "{kit}: chosen province",
     "Learn": "Learn",
     "Roll": "Roll to learn",
     "AddKnown": "Add as known (no roll)",
@@ -1280,7 +1282,10 @@
       "opposition": "{name}: a specialist cannot learn spells of an opposition school",
       "level": "{name}: above the highest spell level this Intelligence allows",
       "full": "{name}: the maximum number of spells of this level is already known",
-      "failed": "{name}: failed at level {level}; another try after the next level"
+      "failed": "{name}: failed at level {level}; another try after the next level",
+      "province": "{name}: an elemental province this kit cannot learn",
+      "noProvince": "{name}: choose the kit's elemental province(s) on the Class tab first",
+      "kitLevel": "{name}: above the highest spell level this kit can learn"
     }
   },
   "AD2E.Henchmen": {
@@ -1480,6 +1485,8 @@
       "wind": "Wind"
     },
     "ProvinceLabel": "Elemental province",
+    "SorcererLabel": "Elemental provinces (two)",
+    "SorcererHint": "Sorcerer (Character Kit): two of the four provinces. +20% to learn their spells; spells of the other two cannot be learned.",
     "ProvinceHint": "Elemental Mage (Character Kit): one of the four provinces. +1 to each damage die of an attack using it; -2 to each damage die of an attack using it against the mage (at least 0).",
     "WeaponUses": "Attack uses {province} (+1 per damage die)",
     "DieBonusNote": "{province} +{n}",

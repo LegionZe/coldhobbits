@@ -7,8 +7,13 @@
  *    spells of each level;
  *  - "If the wizard fails the roll, they cannot check that spell again until they advance to the next level"
  *    (`learnFailedLevel` on the spell item); a learned spell is kept (`learned`).
+ *  - Al-Qadim kits (KIT_LEARN in module/rules/province-tables.mjs): a bonus for spells of the chosen provinces
+ *    (elemental mage +40%, sorcerer +20%), no spells of other elemental provinces (universal ones are learned normally;
+ *    barbering bards: universal only), a highest spell level (mageweaver 6th, mystic of Nog 5th).
  */
 import { schoolStems } from "./config.mjs";
+import { chosenProvinces } from "./elemental.mjs";
+import { KIT_LEARN } from "./rules/province-tables.mjs";
 
 export const SPECIALIST_LEARN = 15;
 
@@ -33,6 +38,23 @@ export function learnChance(actor, spell) {
     const mod = stems.some(st => own.includes(st)) ? SPECIALIST_LEARN : -SPECIALIST_LEARN;
     chance += mod;
     parts.push(`${game.i18n.localize(mod > 0 ? "AD2E.Learn.OwnSchool" : "AD2E.Learn.OtherSchool")} ${mod > 0 ? "+" : ""}${mod}%`);
+  }
+  const kitRule = KIT_LEARN[sys.classInfo?.kitItem?.system?.identifier ?? ""] ?? null;
+  const ruleApplies = kitRule && (!kitRule.classes || kitRule.classes.includes(cls?.identifier ?? sys.classInfo?.classId ?? ""));
+  if (ruleApplies) {
+    const provinces = s.provinces ?? [];
+    const kitName = sys.classInfo.kitItem.name;
+    if (kitRule.provinces !== undefined && provinces.length) {
+      const chosen = chosenProvinces(actor);
+      if (kitRule.provinces === 0) blocked ??= "province";
+      else if (!chosen.length) blocked ??= "noProvince";
+      else if (!provinces.some(p => chosen.includes(p))) blocked ??= "province";
+      else if (kitRule.bonus) {
+        chance += kitRule.bonus;
+        parts.push(`${game.i18n.format("AD2E.Learn.KitProvince", { kit: kitName })} +${kitRule.bonus}%`);
+      }
+    }
+    if (kitRule.maxLevel && s.level > kitRule.maxLevel) blocked ??= "kitLevel";
   }
   if ((int.maxSpellLevel ?? 0) < s.level) blocked ??= "level";
   if (maxPerLevelOn()) {

@@ -5,7 +5,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
-import { isElementalMage, PROVINCES } from "../elemental.mjs";
+import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
 import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
@@ -371,8 +371,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       classItem: info.classItem,
       kitItem: info.kitItem,
       // Elemental mage kit: the chosen province (module/elemental.mjs).
-      elementChoice: isElementalMage(this.document) ? [["", "—"], ...PROVINCES.map(p => [p, game.i18n.localize(`AD2E.Elemental.Province.${p}`)])]
+      // Sorcerer kit: two provinces (`element`, `element2`).
+      elementChoice: isElementalMage(this.document) || isSorcerer(this.document) ? [["", "—"], ...PROVINCES.map(p => [p, game.i18n.localize(`AD2E.Elemental.Province.${p}`)])]
         .map(([value, label]) => ({ value, label, selected: value === (sys.element ?? "") })) : null,
+      element2Choice: isSorcerer(this.document) ? [["", "—"], ...PROVINCES.map(p => [p, game.i18n.localize(`AD2E.Elemental.Province.${p}`)])]
+        .map(([value, label]) => ({ value, label, selected: value === (sys.element2 ?? "") })) : null,
+      sorcerer: isSorcerer(this.document),
       kitFits: info.kitFits,
       cls,
       kit: info.kitItem?.system ?? null,
@@ -453,8 +457,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const kitMods = (sys.kitMods?.list ?? []).map(m => ({
       text: formatKitModifier(m, { resolved: m.active }), status: m.status, statusLabel: i18n(`AD2E.Kit.Status.${m.status}`)
     }));
-    const kitPoints = kitItem?.system.skillPoints?.first !== null && kitItem?.system.skillPoints?.first !== undefined
-      ? fmt("AD2E.Kit.SkillPoints", { first: kitItem.system.skillPoints.first, per: kitItem.system.skillPoints.perLevel ?? 30 }) : "";
+    const kp = kitItem?.system.skillPoints ?? {};
+    const has = v => v !== null && v !== undefined;
+    const kitPoints = info.classId === "bard" ? (has(kp.bardFirst) ? fmt("AD2E.Kit.BardPoints", { first: kp.bardFirst }) : "")
+      : (info.classId === "thief" && has(kp.first) ? fmt("AD2E.Kit.SkillPoints", { first: kp.first, per: kp.perLevel ?? 30 }) : "");
     return {
       classItem: sys.classInfo.classItem,
       hasSkills: info.skills.length > 0,

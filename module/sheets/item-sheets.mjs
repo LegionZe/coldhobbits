@@ -92,8 +92,10 @@ export class KitSheet extends AD2EItemSheet {
       value: this.document.system.skillAdjust?.[key] ?? 0 }));
     context.kitModifiers = (this.document.system.modifiers ?? []).map(m => formatKitModifier(m));
     const pts = this.document.system.skillPoints;
-    context.kitPoints = pts?.first !== null && pts?.first !== undefined
-      ? game.i18n.format("AD2E.Kit.SkillPoints", { first: pts.first, per: pts.perLevel ?? 30 }) : "";
+    context.kitPoints = [pts?.first !== null && pts?.first !== undefined
+      ? game.i18n.format("AD2E.Kit.SkillPoints", { first: pts.first, per: pts.perLevel ?? 30 }) : "",
+    pts?.bardFirst !== null && pts?.bardFirst !== undefined ? game.i18n.format("AD2E.Kit.BardPoints", { first: pts.bardFirst }) : ""]
+      .filter(Boolean).join(" ");
     return context;
   }
 

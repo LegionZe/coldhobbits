@@ -431,8 +431,10 @@ KIT_SKILLS = {
 
 # Thief skill discretionary points: [at 1st level, per level after] (default Thief (PHB): 60, 30).
 KIT_POINTS = {
-    # Barber: "only 40 percentage points are available to thieves using this kit" (per level: the class default).
-    "barber": ([40, None], r"only 40 percentage points are available to thieves using this kit"),
+    # Barber: "only 40 percentage points are available to thieves using this kit, and only 10 points to bards who are
+    # barbers" (per level: the class default). Third value: bards' points at 1st level.
+    "barber": ([40, None, 10], r"only 40 percentage points are available to thieves using this kit, and only 10 points to bards who are barbers"
+                               r".*?additional percentage points are gained as usual for advancement in level"),
     "assassin-thief": ([40, 20], r"They start with only 40 discretionary points to allocate at 1st level, and with each level gained they receive only 20 points"),
     "thug-thief": ([40, 30], r"has only 40 points to distribute initially among his thief skills"),
 }
@@ -507,7 +509,8 @@ if __name__ == "__main__":
         doc["system"]["specialization"] = spec
         doc["system"]["modifiers"] = mods
         doc["system"]["skillAdjust"] = adjust
-        doc["system"]["skillPoints"] = {"first": points[0], "perLevel": points[1]} if points else {"first": None, "perLevel": None}
+        doc["system"]["skillPoints"] = ({"first": points[0], "perLevel": points[1], "bardFirst": points[2] if len(points) > 2 else None}
+                                        if points else {"first": None, "perLevel": None, "bardFirst": None})
         counts["modifiers"] += len(mods)
         counts["skills"] += ident in KIT_SKILLS
         counts["points"] += ident in KIT_POINTS

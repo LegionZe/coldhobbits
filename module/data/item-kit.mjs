@@ -51,7 +51,9 @@ export default class KitData extends foundry.abstract.TypeDataModel {
         [k, new NumberField({ required: true, integer: true, initial: 0, nullable: false })]))),
       skillPoints: new SchemaField({
         first: new NumberField({ integer: true, min: 0, nullable: true, initial: null }),
-        perLevel: new NumberField({ integer: true, min: 0, nullable: true, initial: null })
+        perLevel: new NumberField({ integer: true, min: 0, nullable: true, initial: null }),
+        // Bards' discretionary points at 1st level (Barber (Character Kit): 10); later levels: the class default.
+        bardFirst: new NumberField({ integer: true, min: 0, nullable: true, initial: null })
       }),
       modifiers: new ArrayField(new SchemaField({
         target: new StringField({ required: true, initial: "attack", choices: AD2E.kitTargets }),

@@ -67,7 +67,8 @@
     },
     "skillPoints": {
       "first": 40,
-      "perLevel": null
+      "perLevel": null,
+      "bardFirst": 10
     },
     "recommendedProficiencies": [
       "debate",
