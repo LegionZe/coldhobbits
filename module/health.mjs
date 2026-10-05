@@ -16,6 +16,7 @@
 import { COMBAT_TABLES } from "./rules/combat-tables.mjs";
 import { wardedDamage } from "./elemental.mjs";
 import { genWardedDamage } from "./gens.mjs";
+import { familiarContactDamage } from "./familiars.mjs";
 
 export const DEATH_LIMIT = -10;
 /** One turn = 10 rounds of one minute (PHB, "Time"), in seconds of world time. */
@@ -189,8 +190,14 @@ export async function applyFromMessage(message, scope, heal = false) {
     if (warded !== null && warded !== amount) {
       ui.notifications.info(game.i18n.format(gen !== null ? "AD2E.Gen.Warded" : "AD2E.Elemental.Warded", { name: actor.name, from: amount, to: warded }));
     }
-    if (heal) await actor.applyHealing(amount);
-    else await actor.applyDamage(warded ?? amount, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
+    if (heal) {
+      await actor.applyHealing(amount);
+      continue;
+    }
+    // A familiar touching its wizard: no damage from a special attack it saved against, half if it failed (Find Familiar).
+    const dealt = await familiarContactDamage(actor, warded ?? amount);
+    if (dealt === null) continue;
+    await actor.applyDamage(dealt, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
       temp: message.getFlag("ad2e", "temp") ?? 0 });
   }
 }

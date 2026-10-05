@@ -10,8 +10,13 @@
  *    as world time passes) "and dies if reduced to 0 hit points".
  *  - "If the familiar dies, the wizard must successfully roll an immediate system shock check or die. Even if he
  *    survives this check, the wizard loses 1 point from his Constitution": a button on the wizard's sheet.
+ *  - "When the familiar is in physical contact with its wizard, it gains the wizard's saving throws against special
+ *    attacks": a tick box in the familiar's save dialog (ticked when their tokens touch on the scene); damage from a
+ *    special attack is none on a successful save, half on a failed one (asked when damage is applied to a familiar in
+ *    contact). Not for gens (Al-Qadim elemental familiars save at twice their master's level, module/gens.mjs).
  */
 import { FAMILIAR_TABLES } from "./rules/familiar-tables.mjs";
+import { tokensTouch } from "./token-riders.mjs";
 
 export const FAMILIAR = FAMILIAR_TABLES;
 const PACK = "ad2e.hirelings";
@@ -155,4 +160,58 @@ export function registerFamiliarHooks() {
         content: `<p>${esc(game.i18n.format(hp > 0 ? "AD2E.Familiar.Pines" : "AD2E.Familiar.PinedAway", { name: fam.name, days, hp }))}</p>` });
     }
   });
+}
+
+/** Uuids that name an actor: its own and, for a token's synthetic actor, its world actor's. */
+function actorUuids(actor) {
+  const out = new Set();
+  if (actor?.uuid) out.add(actor.uuid);
+  const base = actor?.token?.actorId ?? (actor?.isToken ? null : actor?.id);
+  if (base) out.add(`Actor.${base}`);
+  return out;
+}
+
+/** The wizard whose Find Familiar familiar this actor is (world characters), or null; never for a gen. */
+export function familiarMaster(actor, actors = game.actors) {
+  if (!isFamiliar(actor) || String(actor.system?.identifier ?? "").startsWith("gen-")) return null;
+  const mine = actorUuids(actor);
+  return [...(actors ?? [])].find(a => a?.type === "character" && mine.has(a.system?.familiar?.uuid)) ?? null;
+}
+
+/** Whether a familiar's token and its master's token touch on a scene (default: the viewed scene). */
+export function familiarContact(familiar, master, scene = globalThis.canvas?.scene) {
+  if (!familiar || !master || !scene?.tokens) return false;
+  const tokens = [...scene.tokens];
+  const fam = actorUuids(familiar);
+  const mas = actorUuids(master);
+  const of = set => tokens.filter(t => set.has(t.actor?.uuid) || set.has(`Actor.${t.actorId}`));
+  const size = scene.grid?.size ?? 100;
+  return of(fam).some(f => of(mas).some(m => tokensTouch(f, m, size)));
+}
+
+/** Damage from a special attack to a familiar in contact with its master: { saved: factor, failed: factor }. */
+export const CONTACT_DAMAGE = FAMILIAR.rules.contact;
+
+/**
+ * A familiar in contact with its master hit by damage: ask whether it came from a special attack (saved: no damage,
+ * failed: half). Returns the damage to apply, or null when the dialog is closed.
+ */
+export async function familiarContactDamage(familiar, amount) {
+  const master = familiarMaster(familiar);
+  if (!master || !familiarContact(familiar, master)) return amount;
+  const i18n = k => game.i18n.localize(k);
+  const half = Math.floor(amount * CONTACT_DAMAGE.failed);
+  const none = Math.floor(amount * CONTACT_DAMAGE.saved);
+  const choice = await foundry.applications.api.DialogV2.wait({
+    window: { title: game.i18n.format("AD2E.Familiar.ContactTitle", { name: familiar.name }) },
+    content: `<p>${esc(game.i18n.format("AD2E.Familiar.ContactText", { name: familiar.name, master: master.name }))}</p>`,
+    buttons: [
+      { action: "normal", label: game.i18n.format("AD2E.Familiar.ContactNormal", { n: amount }), default: true },
+      { action: "saved", label: game.i18n.format("AD2E.Familiar.ContactSaved", { n: none }) },
+      { action: "failed", label: game.i18n.format("AD2E.Familiar.ContactFailed", { n: half }) }
+    ],
+    rejectClose: false
+  });
+  if (!choice) return null;
+  return choice === "saved" ? none : choice === "failed" ? half : amount;
 }

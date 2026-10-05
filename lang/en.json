@@ -1452,7 +1452,16 @@
     "Dies": "fails the system shock check and dies;",
     "ConLoss": "Constitution {from} to {to}.",
     "Pines": "{name} is apart from its master: -{days} hit point(s), now {hp}.",
-    "PinedAway": "{name} is apart from its master and dies (0 hit points)."
+    "PinedAway": "{name} is apart from its master and dies (0 hit points).",
+    "MasterSave": "In physical contact with {name}: {name}'s saving throw against a special attack ({n}+)",
+    "MasterSaveShort": "{name}'s saving throw (contact)",
+    "SpecialNone": "no damage from the special attack",
+    "SpecialHalf": "half damage from the special attack",
+    "ContactTitle": "Damage to {name}",
+    "ContactText": "{name} is in physical contact with {master}. Against a special attack it uses {master}'s saving throw: no damage if it saved, half if it failed.",
+    "ContactNormal": "Not a special attack ({n})",
+    "ContactSaved": "Special attack, saved ({n})",
+    "ContactFailed": "Special attack, failed save ({n})"
   },
   "AD2E.Components": {
     "Setting": "Track material components",

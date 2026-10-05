@@ -2,7 +2,7 @@ import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { promptMorale } from "../henchmen.mjs";
-import { familiarSurpriseBonus } from "../familiars.mjs";
+import { familiarContact, familiarMaster, familiarSurpriseBonus } from "../familiars.mjs";
 import { useComponents } from "../components.mjs";
 import { dieBonus, diceCount, elementFlag, elementOf, PROVINCES } from "../elemental.mjs";
 import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-weapons.mjs";
@@ -61,7 +61,8 @@ export default class AD2EActor extends Actor {
       ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => {
         const kit = AD2EActor.#kitPicked(button.form, options);
         const { mod, note } = readModifier(button.form);
-        return { mod, note, kit: kit.sum, kitText: kit.text, genWard: !!button.form.elements.genWard?.checked };
+        return { mod, note, kit: kit.sum, kitText: kit.text, genWard: !!button.form.elements.genWard?.checked,
+          masterSave: !!button.form.elements.masterSave?.checked };
       } },
       rejectClose: false
     });
@@ -234,19 +235,27 @@ export default class AD2EActor extends Actor {
     const genField = province ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Gen.SaveWard",
       { province: game.i18n.localize(`AD2E.Elemental.Province.${province}`), n: SHAIR.genWard.save })) ?? ""}</label>`
       + `<input type="checkbox" name="genWard"></div>` : "";
-    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "", genField);
+    // A familiar touching its wizard: the wizard's saving throw against special attacks (Find Familiar (Wizard Spell)).
+    const master = familiarMaster(this);
+    const masterSave = master?.system?.saves?.[key] ?? null;
+    const masterField = masterSave ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Familiar.MasterSave",
+      { name: master.name, n: masterSave.value })) ?? ""}</label><input type="checkbox" name="masterSave"${familiarContact(this, master) ? " checked" : ""}></div>` : "";
+    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "", genField + masterField);
     if (!input) return;
     const genBonus = input.genWard && province ? SHAIR.genWard.save : 0;
     if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
+    const useMaster = !!(input.masterSave && masterSave);
+    if (useMaster) input.kitText = [input.kitText, game.i18n.format("AD2E.Familiar.MasterSaveShort", { name: master.name })].filter(Boolean).join("; ");
     const mod = input.mod + input.kit + genBonus;
-    const target = this.system.saves[key].value;
-    const bonus = this.system.saves[key].bonus;
+    const target = useMaster ? masterSave.value : this.system.saves[key].value;
+    const bonus = useMaster ? (masterSave.bonus ?? 0) : this.system.saves[key].bonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
+        + (useMaster ? ` (${game.i18n.localize(success ? "AD2E.Familiar.SpecialNone" : "AD2E.Familiar.SpecialHalf")})` : "")
     });
   }
 
