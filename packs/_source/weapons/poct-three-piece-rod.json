@@ -1,0 +1,53 @@
+{
+  "_id": "AO53h2hp4KzQzJOO",
+  "_key": "!items!AO53h2hp4KzQzJOO",
+  "name": "Three-piece rod",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "three-piece-rod",
+    "proficiency": "three-piece-rod",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "2 gp (Oriental)",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size; martial arts attacks"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 4800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

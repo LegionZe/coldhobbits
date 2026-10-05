@@ -6,6 +6,7 @@ python3 tools/build-level-tables.py
 python3 tools/build-class-data.py        # classes, kits (+ folders)
 python3 tools/build-class-ability-tables.py  # thief/bard/ranger skills, backstab, turning undead (Tables 18, 26-30, 33, 61)
 python3 tools/build-proficiency-data.py  # proficiencies; adds proficiency fields to the kit sources
+python3 tools/build-poct-weapon-data.py # Combat & Tactics weapons and proficiencies for the Table 49 names (POCT)
 python3 tools/build-kit-mechanics.py      # kit modifiers, skill adjustments, skill points (curated, checked against kit pages)
 python3 tools/build-encounter-tables.py  # DMG Table 57 surprise modifiers
 python3 tools/build-combat-tables.py    # two weapons, PHB Tables 57/58 (unarmed combat)

@@ -1,0 +1,53 @@
+{
+  "_id": "lzKBS6xMlSLuCoUn",
+  "_key": "!items!lzKBS6xMlSLuCoUn",
+  "name": "Naginata",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "naginata",
+    "proficiency": "naginata",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d10",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "8 gp (Oriental)",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "double damage in a mounted charge"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

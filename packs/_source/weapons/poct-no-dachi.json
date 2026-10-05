@@ -1,0 +1,53 @@
+{
+  "_id": "tFM7qJBOzkgIEeVH",
+  "_key": "!items!tFM7qJBOzkgIEeVH",
+  "name": "No-dachi",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "no-dachi",
+    "proficiency": "no-dachi",
+    "weapon": {
+      "size": "L",
+      "type": "S/P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d20",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "45 gp (Oriental)",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

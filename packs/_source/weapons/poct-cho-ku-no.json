@@ -1,0 +1,53 @@
+{
+  "_id": "WDDc9bi8FhSmvsg4",
+  "_key": "!items!WDDc9bi8FhSmvsg4",
+  "name": "Cho-ku-no",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "cho-ku-no",
+    "proficiency": "cho-ku-no",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "1d8+1",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "50",
+        "medium": "100",
+        "long": "150"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
+    "cost": "50 gp (Oriental)",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

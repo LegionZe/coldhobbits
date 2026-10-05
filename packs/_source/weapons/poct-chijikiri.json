@@ -1,0 +1,53 @@
+{
+  "_id": "0qMIb2SJ3DCymWLA",
+  "_key": "!items!0qMIb2SJ3DCymWLA",
+  "name": "Chijikiri",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "chijikiri",
+    "proficiency": "chijikiri",
+    "weapon": {
+      "size": "M",
+      "type": "P/B",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "6 gp (Oriental)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

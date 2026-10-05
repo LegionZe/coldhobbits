@@ -1,0 +1,53 @@
+{
+  "_id": "0AQSylaDiTAzbW75",
+  "_key": "!items!0AQSylaDiTAzbW75",
+  "name": "Sabre",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sabre",
+    "proficiency": "sabre",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "1d8+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "30 gp (Dark Ages, The Crusades); 17 gp (Hundred Years' War, The Renaissance, Middle Eastern, Oriental)",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

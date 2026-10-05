@@ -1,0 +1,54 @@
+{
+  "_id": "w3NFY1BDTWr0kMPo",
+  "_key": "!items!w3NFY1BDTWr0kMPo",
+  "name": "Cho-ku-no",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "cho-ku-no",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "1d8+1",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "50",
+        "medium": "100",
+        "long": "150"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

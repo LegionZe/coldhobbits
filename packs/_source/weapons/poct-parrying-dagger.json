@@ -1,0 +1,53 @@
+{
+  "_id": "L0agkeTerwX3U0VQ",
+  "_key": "!items!L0agkeTerwX3U0VQ",
+  "name": "Parrying dagger",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "parrying-dagger",
+    "proficiency": "parrying-dagger",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d3",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp (The Renaissance)",
+    "weight": 1.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 3400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

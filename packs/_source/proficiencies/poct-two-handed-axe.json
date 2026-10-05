@@ -1,0 +1,54 @@
+{
+  "_id": "NLr8r0RcSJTJNakh",
+  "_key": "!items!NLr8r0RcSJTJNakh",
+  "name": "Two-handed axe",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "two-handed-axe",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "2d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 5000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

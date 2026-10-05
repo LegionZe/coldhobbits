@@ -1,0 +1,54 @@
+{
+  "_id": "pcIEFgTbMPmdVBiX",
+  "_key": "!items!pcIEFgTbMPmdVBiX",
+  "name": "Hatchet",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hatchet",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "S",
+      "type": "S",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d4",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

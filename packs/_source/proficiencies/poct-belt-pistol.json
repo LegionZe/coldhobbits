@@ -1,0 +1,54 @@
+{
+  "_id": "n7UzGGxy4hMGbYPm",
+  "_key": "!items!n7UzGGxy4hMGbYPm",
+  "name": "Belt pistol",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "belt-pistol",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

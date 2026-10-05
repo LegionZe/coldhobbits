@@ -1,0 +1,54 @@
+{
+  "_id": "OGC9kLbafxVM6uws",
+  "_key": "!items!OGC9kLbafxVM6uws",
+  "name": "Long spear",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "long-spear",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d6",
+          "l": "3d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

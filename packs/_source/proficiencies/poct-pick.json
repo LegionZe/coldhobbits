@@ -1,0 +1,54 @@
+{
+  "_id": "88CAljRKo0oYM57D",
+  "_key": "!items!88CAljRKo0oYM57D",
+  "name": "Pick",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "pick",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d6+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 3600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

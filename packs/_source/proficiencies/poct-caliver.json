@@ -1,0 +1,54 @@
+{
+  "_id": "78hDGn1omOnyx7Ic",
+  "_key": "!items!78hDGn1omOnyx7Ic",
+  "name": "Caliver",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "caliver",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "40",
+        "medium": "80",
+        "long": "240"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

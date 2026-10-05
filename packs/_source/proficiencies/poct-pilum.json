@@ -1,0 +1,54 @@
+{
+  "_id": "u8YbDeuhSBuUOpqA",
+  "_key": "!items!u8YbDeuhSBuUOpqA",
+  "name": "Pilum",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "pilum",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": true,
+      "range": {
+        "rof": "1",
+        "short": "15",
+        "medium": "30",
+        "long": "45"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 3700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

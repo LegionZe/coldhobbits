@@ -1,0 +1,53 @@
+{
+  "_id": "QpHgJ2uFQKTdo3Ug",
+  "_key": "!items!QpHgJ2uFQKTdo3Ug",
+  "name": "Long spear",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "long-spear",
+    "proficiency": "long-spear",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d6",
+          "l": "3d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "5 gp (The Bronze Age and Ancient Cultures, Roman, Dark Ages, The Crusades, Middle Eastern, Oriental)",
+    "weight": 8.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "double damage set vs. a charge; two hands regardless of size"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

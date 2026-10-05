@@ -1,0 +1,53 @@
+{
+  "_id": "EWm19lelm2DKonXj",
+  "_key": "!items!EWm19lelm2DKonXj",
+  "name": "Belt pistol (wheellock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "belt-pistol-wheellock",
+    "proficiency": "belt-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "15",
+        "medium": "30",
+        "long": "45"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none"
+    },
+    "cost": "25 gp (Firearms)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": "knockdown 7+: roll another damage die (repeat on 7+)"
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 102,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

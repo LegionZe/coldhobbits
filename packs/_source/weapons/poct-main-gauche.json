@@ -1,0 +1,53 @@
+{
+  "_id": "RSoj5gz7PYYngIiY",
+  "_key": "!items!RSoj5gz7PYYngIiY",
+  "name": "Main-gauche",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "main-gauche",
+    "proficiency": "main-gauche",
+    "weapon": {
+      "size": "S",
+      "type": "P/S",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "3 gp (The Renaissance)",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

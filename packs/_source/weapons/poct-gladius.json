@@ -1,0 +1,53 @@
+{
+  "_id": "DRvmjkfGicfIvnSc",
+  "_key": "!items!DRvmjkfGicfIvnSc",
+  "name": "Gladius",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "gladius",
+    "proficiency": "gladius",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "cost": "10 gp (Roman)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

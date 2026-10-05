@@ -1,0 +1,54 @@
+{
+  "_id": "Nv2ngnyqq5szZzTr",
+  "_key": "!items!Nv2ngnyqq5szZzTr",
+  "name": "Kau sin ke",
+  "type": "proficiency",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "kau-sin-ke",
+    "kind": "weapon",
+    "slots": 1,
+    "ability": null,
+    "modifier": null,
+    "groups": [],
+    "sp": {
+      "ability": "",
+      "rating": null,
+      "cost": null
+    },
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full"
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "FIaRTdn72joCvdmE",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
