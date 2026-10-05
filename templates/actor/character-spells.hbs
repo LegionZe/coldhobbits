@@ -29,7 +29,11 @@
     {{else}}{{#if st.gen.missing}}<p class="ad2e-placeholder ad2e-unmet">{{localize "AD2E.Gen.Missing"}}</p>{{/if}}{{/if}}
     <div class="ad2e-prof-summary">
       <label data-tooltip="{{localize 'AD2E.Gen.NearHint'}}"><input type="checkbox" name="system.gen.near" {{checked st.gen.near}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Gen.Near"}}</label>
-      {{#if @root.editable}}{{#if st.gen.canSummon}}<button type="button" data-action="summonGen">{{localize "AD2E.Gen.Summon"}}</button>{{/if}}{{/if}}
+      {{#if @root.editable}}{{#if st.gen.canSummon}}<button type="button" data-action="summonGen">{{#if st.gen.relink}}{{localize "AD2E.Gen.Relink"}}{{else}}{{localize "AD2E.Gen.Summon"}}{{/if}}</button>{{/if}}
+      {{#if st.gen.linked}}{{#if st.gen.away}}<button type="button" data-action="genBack">{{localize "AD2E.Gen.BackButton"}}</button>{{else}}<button type="button" data-action="genAway" data-tooltip="{{localize 'AD2E.Gen.AwayHint'}}">{{localize "AD2E.Gen.AwayButton"}}</button>{{/if}}
+      <button type="button" data-action="breakGenLink" data-tooltip="{{localize 'AD2E.Gen.BreakHint'}}">{{localize "AD2E.Gen.BreakButton"}}</button>{{/if}}
+      {{#if st.gen.canRaise}}<button type="button" data-action="raiseGen" data-tooltip="{{localize 'AD2E.Gen.RaiseHint'}}">{{localize "AD2E.Gen.RaiseButton"}}</button>{{/if}}{{/if}}
+      {{#if st.gen.linkStatus}}<span class="ad2e-note">{{st.gen.linkStatus}}</span>{{/if}}
       {{#if st.gen.needsDeath}}<button type="button" data-action="genDeath" class="ad2e-unmet">{{localize "AD2E.Gen.DeathButton"}}</button>{{/if}}
     </div>
     <p class="ad2e-note">{{localize "AD2E.Shair.Note"}}</p>

@@ -69,12 +69,28 @@ RULES = {
                                r"and judgmental\. They tend toward evil and lawful behavior.*?Maridans are usually capricious and playful\. They tend "
                                r"toward good and chaotic behavior.*?Earth gen are usually tactless and direct\. They tend toward evil and chaos",
                       {"air": "lg", "fire": "le", "water": "cg", "earth": "ce"}),
+    # Gen details (Requesting a Spell (AA), section Gens).
+    "genRaised": (REQUEST, r"A gen that has died and is later brought back to life suffers a permanent 1-point penalty in morale and loyalty", -1),
+    "genRelink": (REQUEST, r"A successful dispel magic or similar spell also can break the link\. The latter does not harm the sha'ir, who can reforge "
+                           r"the link with that particular gen by summoning it again", True),
+    "genMasterDeath": (REQUEST, r"The death of the caster also frees the gen of its obligations, and the elemental familiar immediately returns to its "
+                                r"native elemental plane\. If the sha'ir is raised, he or she can regain the same gen by the act of summoning and binding "
+                                r"the familiar", True),
+    "genAway": (REQUEST, r"all must stay within 100 yards of their masters while on the Prime Material Plane\. If a gen is forced to move beyond that "
+                         r"radius.*?attempting to return to its master in 1d6 turns\. If the master moves to another plane, the gen follows in 1d6 days "
+                         r"\(1d6 rounds for elemental planes\)\. Gens can spy, perform errands, and carry messages for their masters in other planes"
+                         r".*?If threatened while on the Prime Material Plane and more than 10 feet from its master, the elemental familiar will pop "
+                         r"back into its home plane to hide, returning to its master \(if possible\) in 1d6 turns",
+                {"forced": ["1d6", "turn"], "threatened": ["1d6", "turn"], "plane": ["1d6", "day"], "elemental": ["1d6", "round"], "errand": None,
+                 "yards": 100}),
+    "genSense": (REQUEST, r"the sha'ir knows the gen has been delayed, and can sense that it's still alive", True),
+    "genCharm": (REQUEST, r"A gen can be ensnared by charm or similar spells, but it won't turn against its master unless a morale check is failed", True),
     "genSummon": (FAMILIAR, r"The act of summoning and binding a gen lasts [l1]d20 hours", "1d20"),
     "raceFailure": (KIT, r"for races such as dwarves.who have an inherent nonmagical nature.sha'ir abilities fail 20 percent of the time",
                     {"dwarf": 20}),
 }
 # Seconds per unit: "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)).
-UNIT_SECONDS = {"round": 60, "turn": 600, "hour": 3600}
+UNIT_SECONDS = {"round": 60, "turn": 600, "hour": 3600, "day": 86400}
 
 
 def chance(r, shair_level, spell_level, general=False, foreign=False, repeats=0):

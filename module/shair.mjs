@@ -112,6 +112,9 @@ export async function requestSpell(actor, itemId) {
   const gen = actor.system.gen;
   if (!GEN_KINDS.includes(gen.kind)) return ui.notifications.warn(i18n("AD2E.Shair.NoGen"));
   if (gen.fetch?.spellId) return ui.notifications.warn(fmt("AD2E.Shair.Busy", { name: gen.fetch.name }));
+  // A gen away or unlinked cannot be sent for a spell (module/gens.mjs).
+  if (gen.broken) return ui.notifications.warn(i18n("AD2E.Gen.LinkBroken"));
+  if (gen.awayReason) return ui.notifications.warn(i18n("AD2E.Gen.NotHere"));
   const now = game.time.worldTime;
   const st = spellStanding(item);
   const key = spellTitle(item) ?? item.name;
