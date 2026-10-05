@@ -56,6 +56,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   Pushing a mount (Movement (DMG)): `MOUNT_PUSH` in movement-tables.mjs (build-movement-tables.py `build_push`, regex-checked);
   `pushMount` (monster sheet button, roles mount/pack), `pushStatus`, `pushModifier`, `pushText` in animals.mjs; monster
   `system.push` { lastDay, streak, status: "" | lame | spent | dead, until (world time) }.
+  Tokens: `module/token-riders.mjs` (world setting `tokenRiders`): on the `moveToken` hook either token of a rider and its
+  mount moves the other along `movement.passed.waypoints` (offset kept; only if they touch at `movement.origin`; the
+  mover moves it if allowed, else the active GM; follower moves carry option `ad2e.ride`).
 - Familiars: `module/familiars.mjs` (`findFamiliar` GM roll, `familiarDeath`, `familiarSurpriseBonus` used by
   rollSurprise, updateWorldTime hook for the daily loss when separated); character `system.familiar` { uuid, near,
   separated, deathResolved, lastAttempt }; monster role "familiar". `module/rules/familiar-tables.mjs` and the Familiars
