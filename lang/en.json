@@ -497,6 +497,8 @@
     "AddAttack": "Add attack",
     "DamageHint": "Damage roll, e.g. 1d8 or 2d4+1",
     "AttackBonus": "To hit",
+    "Element": "Element",
+    "ElementHint": "Elemental province of the attack (e.g. a fire breath: flame). Its damage dice reach elemental mages and gens of that province (-2 per die).",
     "InventoryHint": "Drag weapons, armour, equipment and coins here. Equipped armour sets AC; weapons add attacks; carried weight counts toward a mount's load.",
     "Load": {
       "label": "Load (mounts: PHB Table 49)",

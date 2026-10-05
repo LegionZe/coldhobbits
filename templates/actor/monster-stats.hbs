@@ -36,13 +36,14 @@
     <legend>{{localize "AD2E.Monster.Attacks"}}</legend>
     {{#if system.damageText}}<p class="ad2e-note">{{localize "AD2E.Monster.Field.damageText"}}: {{system.damageText}}</p>{{/if}}
     <table class="ad2e-monster-attacks">
-      <thead><tr><th>{{localize "AD2E.Monster.AttackName"}}</th><th>{{localize "AD2E.Weapon.Damage"}}</th><th>{{localize "AD2E.Monster.AttackBonus"}}</th><th></th></tr></thead>
+      <thead><tr><th>{{localize "AD2E.Monster.AttackName"}}</th><th>{{localize "AD2E.Weapon.Damage"}}</th><th>{{localize "AD2E.Monster.AttackBonus"}}</th><th data-tooltip="{{localize 'AD2E.Monster.ElementHint'}}">{{localize "AD2E.Monster.Element"}}</th><th></th></tr></thead>
       <tbody>
         {{#each naturalAttacks as |a|}}
         <tr>
           <td><input type="text" name="system.attacks.{{a.index}}.name" value="{{a.name}}"></td>
           <td><input type="text" name="system.attacks.{{a.index}}.damage" value="{{a.damage}}" data-tooltip="{{localize 'AD2E.Monster.DamageHint'}}"></td>
           <td><input type="number" name="system.attacks.{{a.index}}.bonus" value="{{a.bonus}}"></td>
+          <td><select name="system.attacks.{{a.index}}.element">{{selectOptions @root.attackElements selected=a.element blank="—" localize=true}}</select></td>
           <td class="ad2e-monster-buttons">
             <button type="button" data-action="rollAttack" data-key="{{a.key}}">{{localize "AD2E.Weapon.Attack"}}</button>
             <button type="button" data-action="rollDamage" data-key="{{a.key}}">{{localize "AD2E.Weapon.Damage"}}</button>
@@ -55,6 +56,7 @@
           <td><a class="ad2e-prof-name" data-action="openItem" data-item-id="{{w.id}}">{{w.name}}</a></td>
           <td class="ad2e-weapon-meta">{{w.summary}}</td>
           <td class="ad2e-num">{{w.hit}}</td>
+          <td></td>
           <td class="ad2e-monster-buttons">
             <button type="button" data-action="rollAttack" data-key="{{w.key}}">{{localize "AD2E.Weapon.Attack"}}</button>
             <button type="button" data-action="rollDamage" data-key="{{w.key}}">{{localize "AD2E.Weapon.Damage"}}</button>
@@ -63,7 +65,7 @@
         {{/each}}
         <tr>
           <td><i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i> {{localize "AD2E.Unarmed.Title"}}</td>
-          <td class="ad2e-weapon-meta" colspan="2">{{localize "AD2E.Unarmed.Meta"}}</td>
+          <td class="ad2e-weapon-meta" colspan="3">{{localize "AD2E.Unarmed.Meta"}}</td>
           <td class="ad2e-monster-buttons">
             <button type="button" data-action="rollUnarmed" data-form="punch">{{localize "AD2E.Unarmed.punch"}}</button>
             <button type="button" data-action="rollUnarmed" data-form="wrestle">{{localize "AD2E.Unarmed.wrestle"}}</button>

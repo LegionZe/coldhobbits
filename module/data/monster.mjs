@@ -36,7 +36,10 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       attacks: new ArrayField(new SchemaField({
         name: new StringField({ initial: "Attack" }),
         damage: new StringField({ initial: "1d6" }),
-        bonus: int(0)
+        bonus: int(0),
+        // Elemental province of the attack ("" | flame | sand | sea | wind): its damage dice reach elemental mages and gens
+        // (module/elemental.mjs, module/gens.mjs), e.g. a fire breath or a salamander's touch.
+        element: new StringField({ initial: "" })
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),

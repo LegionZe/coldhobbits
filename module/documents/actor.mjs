@@ -4,7 +4,7 @@ import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
 import { promptMorale } from "../henchmen.mjs";
 import { familiarSurpriseBonus } from "../familiars.mjs";
 import { useComponents } from "../components.mjs";
-import { dieBonus, diceCount, elementFlag, elementOf } from "../elemental.mjs";
+import { dieBonus, diceCount, elementFlag, elementOf, PROVINCES } from "../elemental.mjs";
 import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
@@ -822,7 +822,7 @@ export default class AD2EActor extends Actor {
    * target has (e.g. Prone, Stunned: +4; Asleep, Paralyzed, Restrained, Unconscious: automatic hit; Invisible: -4) are
    * ticked, with the condition named.
    */
-  static #combatModFields(targets, missile = false) {
+  static #combatModFields(targets, missile = false, element = "") {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     // Skills & Powers shield proficiency of the first target (Table 51): a tick box, not ticked (the defender guards
     // against a limited number of attacks per round and names them; the GM decides).
@@ -841,7 +841,7 @@ export default class AD2EActor extends Actor {
         const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
         return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
           + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
-      }).join("") + shieldField + AD2EActor.#genWardField(targets) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>";
+      }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>";
   }
 
   /**
@@ -874,12 +874,13 @@ export default class AD2EActor extends Actor {
   }
 
   /** Tick box when the first target is protected by a gen against an element (module/gens.mjs): -2 to hit. */
-  static #genWardField(targets) {
+  static #genWardField(targets, element = "") {
     const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
     const province = actor ? genWardProvince(actor) : null;
     if (!province) return "";
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
-    return `<label><input type="checkbox" name="genWard" value="${SHAIR.genWard.hit}"> ${esc(game.i18n.format("AD2E.Gen.AttackWard",
+    // Ticked when the attack is of the gen's element (a monster attack with that province).
+    return `<label><input type="checkbox" name="genWard" value="${SHAIR.genWard.hit}"${element && element === province ? " checked" : ""}> ${esc(game.i18n.format("AD2E.Gen.AttackWard",
       { name: targets[0].name ?? actor.name, province: game.i18n.localize(`AD2E.Elemental.Province.${province}`) }))} (${SHAIR.genWard.hit})</label>`;
   }
 
@@ -926,7 +927,7 @@ export default class AD2EActor extends Actor {
   monsterAttacks() {
     if (this.type !== "monster") return [];
     const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
-      damage: [{ label: "", formula: a.damage }], dmgBonus: 0 }));
+      damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "" }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
       melee: !!i.system.weapon?.melee,
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
@@ -944,7 +945,7 @@ export default class AD2EActor extends Actor {
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
         + (attack.melee ? AD2EActor.#armedDefenderField() : "")
-        + AD2EActor.#combatModFields(targets, !attack.melee)
+        + AD2EActor.#combatModFields(targets, !attack.melee, attack.element)
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked,
@@ -1004,10 +1005,13 @@ export default class AD2EActor extends Actor {
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus + vsUnarmed, mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
+    // An elemental attack: its dice for elemental mages and gens of that province (module/elemental.mjs, module/gens.mjs).
+    const element = attack.element ? { element: elementFlag(roll, [attack.element], 0, total - roll.total) } : {};
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flags: { ad2e: { damage: total, targets } },
-      flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
+      flags: { ad2e: { damage: total, targets, ...element } },
+      flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${attack.element ? ` (${i18n(`AD2E.Elemental.Province.${attack.element}`)})` : ""}`
+        + `${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + modifierText(input.mod, input.note)
