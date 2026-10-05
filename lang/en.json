@@ -1792,5 +1792,16 @@
     "SelectToken": "Select the token of the actor that receives the treasure.",
     "Added": "Added to {name}; magical items are unidentified.",
     "Variation": { "up": "higher value", "down": "lower value", "double": "double value", "above": "above base value", "below": "below base value", "half": "half value" }
+  },
+  "AD2E.Firearm": {
+    "NoPowder": "{name}: no gunpowder or smokepowder (one per shot).",
+    "NoMatch": "{name}: a matchlock or hand match weapon needs a slow match.",
+    "Wet": "Wet conditions (misfire on {wet} or less instead of {dry})",
+    "Misfire": "misfire (natural {n}, misfires on {at} or less)",
+    "RangeDoubled": "hand match: range penalty doubled",
+    "setCharge": "Set to receive a charge (double damage)",
+    "mountedCharge": "Mounted charge (double damage)",
+    "ChargeDouble": "double damage (charge)",
+    "Knockdown": "knockdown {rolls}: +{n}"
   }
 }

@@ -29,7 +29,18 @@
       },
       "family": "other",
       "missileColumn": "otherMissile",
-      "strength": "none"
+      "strength": "none",
+      "rules": [
+        "rangeDouble"
+      ],
+      "misfire": {
+        "dry": 5,
+        "wet": 10
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": true,
+      "match": true
     },
     "cost": "125 gp (Firearms)",
     "weight": 20.0,

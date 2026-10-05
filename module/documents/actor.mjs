@@ -265,7 +265,8 @@ export default class AD2EActor extends Actor {
    */
   ammunitionFor(item) {
     const w = item.system.weapon;
-    if (!w?.missile || w.melee || !w.damage.some(d => d.label)) return null;
+    // Firearms (`weapon.ammo`) need ammunition although their damage is their own (Combat & Tactics).
+    if (!w?.missile || w.melee || (!w.damage.some(d => d.label) && !w.ammo)) return null;
     return this.items.filter(i => i.type === "ammunition" && i.system.launchers.has(item.system.identifier));
   }
 
@@ -303,6 +304,20 @@ export default class AD2EActor extends Actor {
       ammoField = `<div class="form-group"><label>${i18n("AD2E.Ammo.Ammunition")}</label><select name="ammo">${
         loaded.map(a => `<option value="${a.id}"${a.id === last ? " selected" : ""}>${a.name} (${a.system.quantity})</option>`).join("")}</select></div>`;
     }
+    // Firearms (Combat & Tactics): one gunpowder or smokepowder per shot (owner's ruling), a slow match carried for
+    // matchlocks and hand match weapons; footnote misfires can be worse in wet conditions.
+    const wpn = item.system.weapon ?? {};
+    let powder = null;
+    if (use === "missile" && wpn.powder) {
+      const have = id => this.items.find(i => i.system?.identifier === id && (i.system.quantity ?? 0) > 0);
+      powder = have("gunpowder") ?? have("smokepowder") ?? null;
+      if (!powder) return ui.notifications.warn(game.i18n.format("AD2E.Firearm.NoPowder", { name: item.name }));
+      if (wpn.match && !this.items.some(i => i.system?.identifier === "slow-match" && (i.system.quantity ?? 0) > 0)) {
+        return ui.notifications.warn(game.i18n.format("AD2E.Firearm.NoMatch", { name: item.name }));
+      }
+    }
+    const wetField = use === "missile" && wpn.misfire?.wet ? `<div class="form-group"><label>${game.i18n.format("AD2E.Firearm.Wet",
+      { dry: wpn.misfire.dry, wet: wpn.misfire.wet })}</label><input type="checkbox" name="wet"></div>` : "";
     if (this.#isThrownItem(item, use) && item.system.quantity < 1) {
       ui.notifications.warn(game.i18n.format("AD2E.Ammo.NoneLeft", { name: item.name }));
       return;
@@ -367,7 +382,7 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
-        + ammoField + rangeField + moveField + backstabField + twoField + nonlethalField
+        + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField
         + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
@@ -380,7 +395,7 @@ export default class AD2EActor extends Actor {
           const kit = AD2EActor.#kitPicked(button.form, kitOptions);
           const m = readModifier(button.form);
           return { ac: Number(f.ac.value) || 0, t51: AD2EActor.#combatModPicked(button.form), mod: m.mod + kit.sum, range: f.range?.value ?? null,
-            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
+            ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m, wet: !!f.wet?.checked,
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
             mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
@@ -403,7 +418,7 @@ export default class AD2EActor extends Actor {
         noBackstab: input.backstab });
     }
     const messages = [];
-    for (const a of attacks) messages.push(await this.#weaponAttackMessage(a, { use, input, targets, ammo, ammoList }));
+    for (const a of attacks) messages.push(await this.#weaponAttackMessage(a, { use, input, targets, ammo, ammoList, powder }));
     return attacks.length > 1 ? messages : messages[0];
   }
 
@@ -411,7 +426,7 @@ export default class AD2EActor extends Actor {
    * One weapon attack roll and its chat message (rollWeaponAttack): `a` = { item, entry, attack, hand ("main" | "off" |
    * ""), main (the other weapon: checked as the main weapon when `hand` is "off"), nonlethal, backstab }.
    */
-  async #weaponAttackMessage(a, { use, input, targets, ammo, ammoList }) {
+  async #weaponAttackMessage(a, { use, input, targets, ammo, ammoList, powder = null }) {
     const { item, entry, attack } = a;
     const itemId = item.id;
     const i18n = key => game.i18n.localize(key);
@@ -486,7 +501,11 @@ export default class AD2EActor extends Actor {
     if (styleHit) notes.push(game.i18n.format("AD2E.SP.WeaponShieldNote", { n: styleHit }));
     // Skills & Powers mastery at point blank: +3 in place of the +2 at other ranges.
     const pbHit = input.range === "pointBlank" ? (attack.pointBlankHit ?? 0) : 0;
-    const rangeMod = (input.range ? AD2E.rangeModifiers[input.range] : 0) + pbHit;
+    // Hand match firearms: "All range penalties ... are doubled" (Combat & Tactics footnote 5).
+    const rangeBase = input.range ? AD2E.rangeModifiers[input.range] : 0;
+    const rangeDouble = rangeBase < 0 && (item.system.weapon?.rules ?? []).includes("rangeDouble");
+    if (rangeDouble) notes.push(game.i18n.localize("AD2E.Firearm.RangeDoubled"));
+    const rangeMod = (rangeDouble ? rangeBase * 2 : rangeBase) + pbHit;
     const needed = this.system.thac0.value - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
@@ -494,18 +513,28 @@ export default class AD2EActor extends Actor {
       + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
-    const hit = t51.auto || roll.total >= needed;
+    // A misfire (Combat & Tactics footnotes 3, 5, 7, 9): a natural roll at or below the weapon's number (wet if ticked).
+    const mf = use === "missile" ? item.system.weapon?.misfire ?? {} : {};
+    const misfireAt = input.wet && mf.wet ? mf.wet : mf.dry;
+    const natural = roll.dice?.[0]?.total ?? null;
+    const misfire = !!misfireAt && natural !== null && natural <= misfireAt;
+    if (misfire) notes.push(game.i18n.format("AD2E.Firearm.Misfire", { n: natural, at: misfireAt }));
+    const hit = !misfire && (t51.auto || roll.total >= needed);
     // Use up the piece fired or thrown.
     let spent = "";
+    if (powder) {
+      await powder.update({ "system.quantity": Math.max(powder.system.quantity - 1, 0) });
+      spent += ` — ${game.i18n.format("AD2E.Ammo.Left", { name: powder.name, n: Math.max(powder.system.quantity, 0) })}`;
+    }
     if (ammo) {
       const left = Math.max(ammo.system.quantity - 1, 0);
       await ammo.update({ "system.quantity": left });
       AD2EActor.#lastAmmo.set(`${this.id}.${itemId}`, ammo.id);
-      spent = ` — ${game.i18n.format("AD2E.Ammo.Left", { name: ammo.name, n: left })}`;
+      spent += ` — ${game.i18n.format("AD2E.Ammo.Left", { name: ammo.name, n: left })}`;
     } else if (this.#isThrownItem(item, use)) {
       const left = Math.max(item.system.quantity - 1, 0);
       await item.update({ "system.quantity": left });
-      spent = ` — ${game.i18n.format("AD2E.Ammo.Left", { name: item.name, n: left })}`;
+      spent += ` — ${game.i18n.format("AD2E.Ammo.Left", { name: item.name, n: left })}`;
     }
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -609,8 +638,10 @@ export default class AD2EActor extends Actor {
     const owned = use === "missile" ? (this.ammunitionFor(item) ?? []) : [];
     const last = AD2EActor.#lastAmmo.get(`${this.id}.${itemId}`);
     owned.sort((a, b) => (b.id === last) - (a.id === last));
+    // Ammunition without damage of its own (firearm bullets) uses the weapon's damage.
+    const own = (item.system.weapon.damage ?? []).find(d => d.sm || d.l) ?? {};
     const options = owned.length
-      ? owned.map(a => ({ label: a.name, sm: a.system.damage.sm, l: a.system.damage.l, dmg: a.system.bonus.dmg }))
+      ? owned.map(a => ({ label: a.name, sm: a.system.damage.sm ?? own.sm, l: a.system.damage.l ?? own.l, dmg: a.system.bonus.dmg }))
       : (item.system.weapon.damage ?? []).filter(d => d.sm || d.l);
     if (!options.length) {
       ui.notifications.warn(game.i18n.format("AD2E.Weapon.NoDamage", { name: item.name }));
@@ -622,6 +653,10 @@ export default class AD2EActor extends Actor {
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>`
       : "";
     const mult = use === "melee" ? this.#backstabMultiplier() : null;
+    // Combat & Tactics footnotes c and m: double damage set vs. a charge / in a mounted charge.
+    const rules = item.system.weapon?.rules ?? [];
+    const chargeFields = use === "melee" ? ["setCharge", "mountedCharge"].filter(k => rules.includes(k)).map(k => `<div class="form-group">`
+      + `<label>${i18n(`AD2E.Firearm.${k}`)}</label><input type="checkbox" name="${k}"></div>`).join("") : "";
     const kitOptions = this.#kitOptions("damage");
     const targets = this.#damageTargets(itemId);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
@@ -645,7 +680,7 @@ export default class AD2EActor extends Actor {
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
-        + backstabField + nonlethalField + pbField
+        + backstabField + nonlethalField + pbField + chargeFields
         + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
         + elementField
         + modifierFields()
@@ -658,7 +693,8 @@ export default class AD2EActor extends Actor {
           const m = readModifier(button.form);
           return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
             backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m,
-            vsUnarmed: !!f.vsUnarmed?.checked, elementAttack: !!f.elementAttack?.checked, pointBlank: !!f.pointBlank?.checked };
+            vsUnarmed: !!f.vsUnarmed?.checked, elementAttack: !!f.elementAttack?.checked, pointBlank: !!f.pointBlank?.checked,
+            charge: !!f.setCharge?.checked || !!f.mountedCharge?.checked };
         }
       },
       rejectClose: false
@@ -668,7 +704,8 @@ export default class AD2EActor extends Actor {
     const dice = option[input.size] ?? option.sm ?? option.l;
     // Backstab: "The weapon's standard damage is multiplied by the value given in Table 30. Then Strength and magical
     // weapon bonuses are added" (Thief Skill Explanations (PHB)).
-    const formula = input.backstab && mult ? `(${dice}) * ${mult} + @adj + @mod` : `${dice} + @adj + @mod`;
+    const times = (input.backstab && mult ? mult : 1) * (input.charge ? 2 : 1);
+    const formula = times > 1 ? `(${dice}) * ${times} + @adj + @mod` : `${dice} + @adj + @mod`;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     // Elemental mage, attack using its province: +1 per damage die (the dice in the weapon's damage).
     const elementDice = input.elementAttack && element ? [...String(dice).matchAll(/(\d*)d\d+/g)].reduce((n, m) => n + Number(m[1] || 1), 0) : 0;
@@ -682,7 +719,21 @@ export default class AD2EActor extends Actor {
       ? SP.twoHanded.damage : 0;
     const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed + elementDice + pointBlank + twoHandStyle,
       mod: input.mod }).evaluate();
-    const full = Math.max(roll.total, 1);
+    // Combat & Tactics footnote k: "If the knockdown roll ... is a 7 or higher, roll an additional damage die and add it
+    // ... Roll another knockdown die, and if the result is another 7 or higher, repeat the damage."
+    let knock = 0;
+    const knockRolls = [];
+    const kDie = item.system.weapon?.knockdownDie;
+    const dmgDie = String(dice).match(/d(\d+)/)?.[1];
+    if (rules.includes("knockdown") && kDie && dmgDie) {
+      for (let i = 0; i < 20; i++) {
+        const kd = await new Roll(`1${kDie}`).evaluate();
+        knockRolls.push(kd.total);
+        if (kd.total < 7) break;
+        knock += (await new Roll(`1d${dmgDie}`).evaluate()).total;
+      }
+    }
+    const full = Math.max(roll.total + knock, 1);
     // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
     // temporary (rounded down).
     const total = input.nonlethal ? Math.max(Math.floor(full * COMBAT_TABLES.nonlethal.damage), 1) : full;
@@ -699,11 +750,13 @@ export default class AD2EActor extends Actor {
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (pointBlank ? ` [${game.i18n.format("AD2E.SP.PointBlankDamage", { n: pointBlank })}]` : "")
         + (twoHandStyle ? ` [${game.i18n.format("AD2E.SP.TwoHandedDamage", { n: twoHandStyle })}]` : "")
+        + (input.charge ? ` [${i18n("AD2E.Firearm.ChargeDouble")}]` : "")
+        + (knockRolls.length ? ` [${game.i18n.format("AD2E.Firearm.Knockdown", { rolls: knockRolls.join(", "), n: knock })}]` : "")
         + (elementDice ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${element}`), n: elementDice })}]` : "")
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
-          : (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : ""))
+          : (total > roll.total ? `: ${total}${roll.total + knock < 1 ? ` (${i18n("AD2E.Weapon.Minimum")})` : ""}` : ""))
     });
   }
 

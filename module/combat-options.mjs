@@ -32,6 +32,8 @@ export function characterSize(raceId) {
  */
 export function needsTwoHands(weapon, size = "M", use = null) {
   if (/^two-handed$/i.test(String(use?.label ?? ""))) return true;
+  // Combat & Tactics footnote h: "require two hands to wield regardless of the wielder's size".
+  if ([...(weapon?.rules ?? [])].includes("twoHands")) return true;
   const order = T.overbear.sizes;
   const w = order.indexOf(weapon?.size);
   const c = order.indexOf(size);

@@ -29,7 +29,16 @@
       },
       "family": "other",
       "missileColumn": "",
-      "strength": "full"
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
     },
     "cost": "3 gp (Stone Age or Savage Cultures); 3 sp (Tools/Common, The Bronze Age and Ancient Cultures)",
     "weight": 4.0,

@@ -7,7 +7,8 @@
   "system": {
     "identifier": "light-quarrel",
     "launchers": [
-      "light-crossbow"
+      "light-crossbow",
+      "cho-ku-no"
     ],
     "size": "S",
     "type": "P",
