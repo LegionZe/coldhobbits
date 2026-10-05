@@ -101,11 +101,52 @@ PACK = [
     ("dog-war", "Dog, war", "War Dog", None, "Dog, war", []),
 ]
 PACK_ROLE = {"mule"}
+# Yak (owner's choice): the Yak page's own table row "Bull (wild ox)" (Monstrous Compendium Annual Volume Two, Mammal,
+# Herd II: "This category indudes wild aurochs, oxen, and yaks"); load from the PHB Table 49 Yak row (no Table 44 price);
+# the DMG travel rule as a note. Each text is regex-checked.
+YAK = {"page": "Yak", "row": "Bull (wild ox)",
+       "category": r"'{3}Bull:'{3} This category in(?:clu|du)des wild aurochs, oxen, and yaks",
+       "size": (r"A typical bull is semi-intelligent and large", {"intelligence": "Semi-", "size": "L"}),
+       "rule": ("Movement (DMG)", r"Their sure footing allows them to reduce all mountain movement rates by one",
+                "Sure-footed: mountain movement rates reduced by one; unaffected by cold, prone to heat exhaustion in warm "
+                "climates (Movement (DMG)).")}
+# PHB Table 49 columns -> stat block fields for an article table ("! Name ! #AP ! AC ...").
+ARTICLE_COLUMNS = {"#AP": "numberAppearing", "AC": "ac", "Mv": "movement", "HD": "hitDice", "#AT": "attacks", "Dmg": "damage",
+                   "ML": "morale", "SA": "specialAttacks", "XP": "xp"}
+
+
+def article_row_block(title, name):
+    """Stat block from a page's article table (one row per creature: Name, #AP, AC, Mv, HD, THAC0, #AT, Dmg, ML, SA, XP)."""
+    wiki, rev, _ = classdata.page(title)
+    t = wiki[wiki.index('{| class="article-table"'):]
+    chunks = re.split(r"\n\|-", t)
+    head = [h.strip() for h in re.findall(r"^!\s*(.+)$", chunks[0], re.M)]
+    for chunk in chunks[1:]:
+        cells = [l[1:].strip() for l in chunk.strip().split("\n") if l.startswith("|") and not l.startswith(("|}", "|-"))]
+        if cells and cells[0] == name:
+            row = dict(zip(head, cells))
+            return {ARTICLE_COLUMNS[k]: v for k, v in row.items() if k in ARTICLE_COLUMNS}, rev
+    raise AssertionError(f"{title}: no row {name}")
+
+
+def table49_load(name):
+    """PHB Table 49 load for an animal row: {full, half, quarter} (upper limits in lb)."""
+    wiki, rev, _ = classdata.page("Encumbrance Tables (PHB)")
+    t = wiki[wiki.index("Table 49: Carrying Capacities of Animals"):]
+    t = t[t.index("{|"):t.index("|}")]
+    for chunk in re.split(r"\n\|-", t)[1:]:
+        cells = [l[1:].strip() for l in chunk.strip().split("\n") if l.startswith("|") and not l.startswith(("|+", "|}"))]
+        if len(cells) == 4 and cells[0] == name:
+            full, half, quarter = (int(re.search(r"([\d,]+) lbs", c).group(1).replace(",", "")) for c in cells[1:])
+            return {"full": full, "half": half, "quarter": quarter}, rev
+    raise AssertionError(f"Table 49: no {name}")
 
 # Familiars (Find Familiar (Wizard Spell) d20 table): table name -> (key, page, infobox entry name or None).
 FAMILIAR_PAGE = "Find Familiar (Wizard Spell)"
 FAMILIARS = {"Cat, black": ("cat-black", "Small Cat (MM)", "Domestic"), "Crow": ("crow", "Raven", "Ordinary"),
-             "Hawk": ("hawk", "Hawk", "Large"), "Owl": ("owl", "Owl", "Common"), "Toad": ("toad", None, None),
+             "Hawk": ("hawk", "Hawk", "Large"), "Owl": ("owl", "Owl", "Common"),
+             # Toad (owner's choice): no core stat block exists; Amphibian (Poisonous) (Dragon Magazine #237), Neotropical Toad.
+             "Toad": ("toad", "Amphibian (Poisonous)", "Neotropical Toad"),
              "Weasel": ("weasel", "Weasel", "Wild")}
 # The spell's figures, each with the text it must match on the page.
 FAMILIAR_RULES = [("hp", {"dice": "1d3+1", "perLevel": 1}, r"Normal familiars have 2-4 hit points plus 1 hit point per caster level"),
@@ -225,6 +266,25 @@ if __name__ == "__main__":
             + f"Load and price: PHB {animal}.</p>"
         d["folder"] = fid["mounts"]
         docs.append(d)
+    # Yak (pack animal).
+    ywiki, revs[YAK["page"]], _ = classdata.page(YAK["page"])
+    assert re.search(YAK["category"], ywiki), "Yak: the Bull row no longer covers yaks"
+    assert re.search(YAK["size"][0], ywiki), "Yak: size/intelligence text changed"
+    block, _ = article_row_block(YAK["page"], YAK["row"])
+    assert block["hitDice"] == "4" and block["damage"] == "1d6/1d6", block
+    block.update(YAK["size"][1])
+    rule_page, rule_pattern, rule_note = YAK["rule"]
+    rwiki, revs[rule_page], _ = classdata.page(rule_page)
+    assert re.search(rule_pattern, rwiki), f"{rule_page}: yak rule changed"
+    load, revs["Encumbrance Tables (PHB)"] = table49_load("Yak")
+    yak_attacks = [{"name": f"Attack {i + 1}", "damage": f, "bonus": 0} for i, f in enumerate(re.findall(r"\d+d\d+", block["damage"]))]
+    d = monsters.actor("hire.yak", "Yak", "pack", block, YAK["page"], ANIMAL, yak_attacks, load=load)
+    d["system"]["identifier"] = "yak"
+    d["system"]["cost"] = ""
+    d["system"]["notes"] = (f"<p>{rule_note}</p><p>Statistics: {YAK['page']}, {YAK['row']} row (the category includes yaks). "
+                            "Load: PHB Table 49; no price in PHB Table 44.</p>")
+    d["folder"] = fid["mounts"]
+    docs.append(d)
     # Familiars: the spell's table and figures, and one actor per creature.
     fw, revs[FAMILIAR_PAGE], _ = classdata.page(FAMILIAR_PAGE)
     rules = {}

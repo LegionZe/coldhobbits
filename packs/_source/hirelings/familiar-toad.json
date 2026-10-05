@@ -7,46 +7,46 @@
   "system": {
     "identifier": "familiar-toad",
     "role": "familiar",
-    "climate": "",
-    "frequency": "",
-    "organization": "",
-    "activity": "",
-    "diet": "",
-    "intelligence": "",
-    "treasure": "",
-    "alignment": "",
-    "numberAppearing": "",
+    "climate": "Temperate/Tropical Forests",
+    "frequency": "Common",
+    "organization": "Solitary",
+    "activity": "Any",
+    "diet": "Omnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-2",
     "ac": {
       "base": 7,
       "text": "7"
     },
     "movement": {
-      "base": 0,
-      "text": ""
+      "base": 3,
+      "text": "3, hop 3"
     },
-    "hitDice": "",
+    "hitDice": "1",
     "thac0": {
       "override": null
     },
     "attacks": [],
-    "attacksText": "",
-    "damageText": "",
-    "specialAttacks": "",
-    "specialDefenses": "",
-    "magicResistance": "",
-    "size": "",
+    "attacksText": "1",
+    "damageText": "Nil",
+    "specialAttacks": "Poison",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "T-S (3-9” long)",
     "morale": {
-      "value": 10,
-      "text": ""
+      "value": 8,
+      "text": "Average (8)"
     },
-    "xp": 0,
+    "xp": 120,
     "load": {
       "full": null,
       "half": null,
       "quarter": null
     },
-    "url": "https://adnd2e.fandom.com/wiki/Find_Familiar_(Wizard_Spell)",
-    "notes": "<p>Familiar (Find Familiar (Wizard Spell)): Wide-angle vision. Hit points 2-4 + 1 per caster level, AC 7. No Monstrous Manual stat block for a normal toad: movement, Hit Dice and attacks are left to the DM.</p>",
+    "url": "https://adnd2e.fandom.com/wiki/Amphibian_(Poisonous)",
+    "notes": "<p>Familiar (Find Familiar (Wizard Spell)): Wide-angle vision. Hit points 2-4 + 1 per caster level, AC 7. Other statistics: Amphibian (Poisonous), Neotropical Toad.</p>",
     "hp": {
       "value": 3,
       "max": 3
@@ -55,7 +55,7 @@
   "items": [],
   "effects": [],
   "folder": "JEMQLLRHjKFKuxjW",
-  "sort": 4200,
+  "sort": 4300,
   "ownership": {
     "default": 0
   },

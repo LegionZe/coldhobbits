@@ -1,0 +1,71 @@
+{
+  "_id": "p0J9jhneYyJUBcYm",
+  "_key": "!actors!p0J9jhneYyJUBcYm",
+  "name": "Yak",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "yak",
+    "role": "pack",
+    "climate": "",
+    "frequency": "",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "Semi-",
+    "treasure": "",
+    "alignment": "",
+    "numberAppearing": "1-20",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1d6/1d6",
+    "specialAttacks": "Charge",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "L",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 175,
+    "load": {
+      "full": 220,
+      "half": 330,
+      "quarter": 440
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Yak",
+    "notes": "<p>Sure-footed: mountain movement rates reduced by one; unaffected by cold, prone to heat exhaustion in warm climates (Movement (DMG)).</p><p>Statistics: Yak, Bull (wild ox) row (the category includes yaks). Load: PHB Table 49; no price in PHB Table 44.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "RqmbCOFh7QZ2QNh1",
+  "sort": 3800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
