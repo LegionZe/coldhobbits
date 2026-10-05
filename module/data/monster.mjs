@@ -23,6 +23,11 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       role: new StringField({ required: true, initial: "monster", choices: AD2E.monsterRoles }),
       // Mounts: trained for combat ("" = by default war mounts, "yes", "no"; module/combat-options.mjs mountTrained).
       combatTrained: new StringField({ initial: "" }),
+      // Pushing (module/animals.mjs pushMount): last day pushed (world day), consecutive days at double speed, and a
+      // lame / spent / dead status until a world time.
+      push: new SchemaField({ lastDay: new NumberField({ integer: true, nullable: true, initial: null }),
+        streak: new NumberField({ integer: true, min: 0, initial: 0 }), status: new StringField({ initial: "" }),
+        until: new NumberField({ nullable: true, initial: null }) }),
       climate: text(), frequency: text(), organization: text(), activity: text(), diet: text(),
       intelligence: text(), treasure: text(), alignment: text(), numberAppearing: text(),
       ac: new SchemaField({ base: int(10, -10), text: text() }),

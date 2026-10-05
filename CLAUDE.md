@@ -53,6 +53,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   character `system.animals.riding` (UUID); hooks re-prepare a rider's animals on actor/item changes and on ready).
   Monster derived `encumbrance` = { own, rider, weight, band, rate }. PHB Table 10 weights are `RACE_WEIGHT` in
   race-tables.mjs (build-race-data.py). Pack animals (role "pack") are `PACK` in build-hireling-data.py.
+  Pushing a mount (Movement (DMG)): `MOUNT_PUSH` in movement-tables.mjs (build-movement-tables.py `build_push`, regex-checked);
+  `pushMount` (monster sheet button, roles mount/pack), `pushStatus`, `pushModifier`, `pushText` in animals.mjs; monster
+  `system.push` { lastDay, streak, status: "" | lame | spent | dead, until (world time) }.
 - Familiars: `module/familiars.mjs` (`findFamiliar` GM roll, `familiarDeath`, `familiarSurpriseBonus` used by
   rollSurprise, updateWorldTime hook for the daily loss when separated); character `system.familiar` { uuid, near,
   separated, deathResolved, lastAttempt }; monster role "familiar". `module/rules/familiar-tables.mjs` and the Familiars

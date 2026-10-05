@@ -16,5 +16,8 @@ export const BASE_MOVEMENT = {"human": 12, "dwarf": 6, "elf": 12, "half-elf": 12
 /** Table 42 (https://adnd2e.fandom.com/wiki/Money_and_Equipment_(PHB) rev 283165): coin value in copper pieces. */
 export const COIN_VALUES = {"cp": 1, "sp": 10, "ep": 50, "gp": 100, "pp": 500};
 
+/** Pushing a mount (https://adnd2e.fandom.com/wiki/Movement_(DMG) rev 262233): save vs. death (par) at double/triple speed. */
+export const MOUNT_PUSH = {"save": "par", "double": {"factor": 2, "mod": 0, "perDay": -1, "lameRestDays": 1}, "triple": {"factor": 3, "mod": -3, "rest": "1d3"}, "hardy": {"identifiers": ["pony", "mule", "donkey"], "double": 2}};
+
 /** Coins per pound, any metal (https://adnd2e.fandom.com/wiki/Treasure_Tables_(DMG) rev 158183). */
 export const COINS_PER_POUND = 50;
