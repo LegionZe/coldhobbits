@@ -1,0 +1,45 @@
+{
+  "_id": "wBqS40nhCQ66O0oh",
+  "_key": "!items!wBqS40nhCQ66O0oh",
+  "name": "Bullet",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "bullet",
+    "launchers": [
+      "belt-pistol-flintlock",
+      "belt-pistol-snaplock",
+      "belt-pistol-wheellock",
+      "caliver-matchlock",
+      "horse-pistol-flintlock",
+      "horse-pistol-snaplock",
+      "horse-pistol-wheellock",
+      "musket-flintlock",
+      "musket-matchlock",
+      "musket-snaplock"
+    ],
+    "size": null,
+    "type": "P",
+    "damage": {
+      "sm": null,
+      "l": null
+    },
+    "cost": "1sp/10 (Firearms)",
+    "weight": null,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Player's Option: Combat & Tactics",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Groups_(POCT)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "ee9HN90cluPY2GQq",
+  "sort": 90001,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

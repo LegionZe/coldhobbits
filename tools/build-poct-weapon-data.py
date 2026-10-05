@@ -14,6 +14,14 @@ one weapon item per master-list row in `TARGETS` (firearms: one per lock type, o
 farming tool, owner's ruling). Grip rows (one-handed / two-handed) become damage options; a launcher's single ammunition
 row gives its damage (no ammunition items: none are generated). Footnotes kept as notes: two hands regardless of size,
 knockdown/explosion dice, set vs. charge, mounted charge, misfire numbers. No weapon descriptions are copied.
+Footnotes as rules (`weapon.rules`, `weapon.misfire`, `weapon.knockdownDie`; each footnote text regex-checked in `FOOTNOTES`):
+two hands (h), double damage set vs. a charge (c) or in a mounted charge (m), knockdown extra damage dice (k, the
+knockdown column's die), misfires (3, 5, 7, 9; dry/wet), hand match range penalties doubled (5).
+Ammunition (prices from Equipment Groups (POCT)): Pellet (pellet bow), Bullet (every firearm but the handgunne, which
+"propels a heavy iron arrow"), Gunpowder, Smokepowder, Slow match. Firearms use one bullet and one gunpowder or
+smokepowder per shot (owner's ruling: the source gives no amount); matchlocks and hand match weapons need a slow match
+carried (`weapon.match`, regex-checked in Weapon Descriptions (POCT)). The cho-ku-no fires light quarrels ("light
+quarrel" launchers gain it).
 Run after build-proficiency-data.py (which rewrites both folders) and before build-sp-weapon-data.py.
 """
 import glob
@@ -58,6 +66,42 @@ NOTE = {"h": "two hands regardless of size", "k": "knockdown 7+: roll another da
         "c": "double damage set vs. a charge", "m": "double damage in a mounted charge", "s": "martial arts attacks",
         "b": "bone/stone: may break on maximum damage", "3": "misfires on a natural 1", "5": "misfires on 5 or less (10 wet); range penalties doubled",
         "7": "misfires on 3 or less (6 wet)", "9": "misfires on 2 or less"}
+
+
+# Footnotes (Master Weapon List (POCT)) -> weapon rules, each with the footnote text it must match.
+FOOTNOTES = {
+    "h": ({"rules": ["twoHands"]}, r"These weapons require two hands to wield regardless of the wielder's size"),
+    "c": ({"rules": ["setCharge"]}, r"These weapons inflict double damage if firmly set to receive a charge"),
+    "m": ({"rules": ["mountedCharge"]}, r"These weapons inflict double damage when wielded in a mounted charge"),
+    "k": ({"rules": ["knockdown"]}, r"If the knockdown roll for these weapons is a 7 or higher, roll an additional damage die and add it to the original "
+                                   r"damage\. Roll another knockdown die, and if the result is another 7 or higher, repeat the damage"),
+    "s": ({"rules": ["martialArts"]}, r"These weapons can be used to perform special martial arts attacks"),
+    "3": ({"misfire": {"dry": 1, "wet": None}}, r"Flintlock firearms misfire on a natural attack roll of 1"),
+    "5": ({"rules": ["rangeDouble"], "misfire": {"dry": 5, "wet": 10}}, r"All range penalties for hand match firearms are doubled.*?Hand match "
+                                                                       r"firearms misfire on a natural attack roll of 5 or less \(10 or less in wet conditions\)"),
+    "7": ({"misfire": {"dry": 3, "wet": 6}}, r"Matchlock firearms misfire on a natural attack roll of 3 or less \(6 or less in wet conditions\)"),
+    "9": ({"misfire": {"dry": 2, "wet": None}}, r"Snaplock firearms misfire on a natural attack roll of 2 or less"),
+}
+DESCRIPTIONS = "Weapon Descriptions (POCT)"
+MATCH_RULES = [r"the user touches a burning slow match to a hole in the barrel", r"providing a clamp to hold the slow match",
+               r"The handgunne doesn't even fire a bullet, but propels a heavy iron arrow"]
+# Ammunition and powder (Equipment Groups (POCT) price keys).
+SUPPLIES = [("pellet", "Pellet", "ammunition", "crossbow, pellet"), ("bullet", "Bullet", "ammunition", "combined weapons, bullet"),
+            ("gunpowder", "Gunpowder", "equipment", "combined weapons, gunpowder"), ("smokepowder", "Smokepowder", "equipment", "combined weapons, smokepowder"),
+            ("slow-match", "Slow match", "equipment", "combined weapons, slow match")]
+
+
+def apply_footnotes(w, notes, knockdown_die):
+    w["rules"], w["misfire"], w["knockdownDie"] = [], {"dry": None, "wet": None}, ""
+    for n in notes:
+        if n in FOOTNOTES:
+            spec = FOOTNOTES[n][0]
+            w["rules"] += [r for r in spec.get("rules", []) if r not in w["rules"]]
+            if "misfire" in spec:
+                w["misfire"] = dict(spec["misfire"])
+    if "knockdown" in w["rules"]:
+        w["knockdownDie"] = knockdown_die
+    return w
 
 
 def slug(s):
@@ -195,6 +239,13 @@ def weapon_data(name, row, rows):
 if __name__ == "__main__":
     wiki, rev, _ = classdata.page(LIST)
     pwiki, prev, _ = classdata.page(PRICES)
+    flat = re.sub(r"\s+", " ", re.sub(r"<sup>(.*?)</sup>", r"\1", wiki))
+    for key, (_, pattern) in FOOTNOTES.items():
+        assert re.search(pattern, flat), f"footnote {key} changed: {pattern}"
+    dwiki, drev, _ = classdata.page(DESCRIPTIONS)
+    dflat = re.sub(r"\s+", " ", dwiki.replace("\'\'", ""))
+    for pattern in MATCH_RULES:
+        assert re.search(pattern, dflat), f"{DESCRIPTIONS}: {pattern}"
     rows = master_rows(wiki)
     price = prices(pwiki)
     for t, names in TARGETS.items():
@@ -217,6 +268,15 @@ if __name__ == "__main__":
         for k, row_name in enumerate(names):
             row = rows[row_name]
             w, notes, lock = weapon_data(row_name, row, rows)
+            apply_footnotes(w, notes, clean(row["cells"][9]) if len(row["cells"]) > 9 else "")
+            # Firearms: bullets (not the handgunne's iron arrow) and powder each shot; a slow match for matchlocks and hand match.
+            w["ammo"] = bool(lock) and lock != "Hand Match"
+            w["powder"] = bool(lock)
+            w["match"] = lock in ("Matchlock", "Hand Match")
+            if t == "Pellet bow":
+                w["damage"][0]["label"] = "Pellet"  # damage from the Pellet ammunition item
+            if t == "Cho-ku-no":
+                w["damage"][0]["label"] = "Light quarrel"
             if t in CROSSBOWS:
                 w["missileColumn"], w["strength"] = T35[t], "none"
             elif w["missile"]:
@@ -243,6 +303,37 @@ if __name__ == "__main__":
             "notes": ""}, n * 100)
         doc["folder"] = prof_folder["_id"]
         profs.append(doc)
+    # Ammunition and powder.
+    firearms = [d["system"]["identifier"] for d in items if d["system"]["weapon"].get("ammo")]
+    assert len(firearms) == 10 and "hand-gunne-hand-match" not in firearms, firearms
+    pellet = rows["Crossbow, Pellet bow, Pellet"]["cells"]
+    for k, (ident, name, typ, key) in enumerate(SUPPLIES):
+        cost = price.get(key)
+        assert cost, f"{name}: no price"
+        if typ == "ammunition":
+            system = {"identifier": ident, "launchers": ["pellet-bow"] if ident == "pellet" else firearms, "size": "S" if ident == "pellet" else None,
+                      "type": clean(pellet[2]) if ident == "pellet" else "P",
+                      "damage": {"sm": clean(pellet[7]), "l": clean(pellet[8])} if ident == "pellet" else {"sm": None, "l": None},
+                      "cost": cost_text(cost), "weight": weight(pellet[0]) if ident == "pellet" else None, "quantity": 1,
+                      "bonus": {"hit": 0, "dmg": 0}, "source": SOURCE, "url": classdata.url(PRICES), "notes": ""}
+            img = "icons/svg/target.svg"
+        else:
+            system = {"identifier": ident, "category": "gear", "cost": cost_text(cost), "weight": None, "quantity": 1, "carried": True,
+                      "capacity": {"weight": None, "volume": ""}, "load": {"full": None, "half": None, "quarter": None},
+                      "source": SOURCE, "url": classdata.url(PRICES), "notes": "Firearms: one gunpowder or smokepowder per shot (owner's ruling)."
+                      if ident != "slow-match" else "Needed (carried) to fire matchlocks and hand match weapons."}
+            img = "icons/svg/item-bag.svg"
+        doc = classdata.item_doc(typ, f"poct-{ident}", name, img, system, 90000 + k)
+        doc["folder"] = weap_folder["_id"]
+        items.append(doc)
+    # The cho-ku-no fires light quarrels.
+    lq_path = "packs/_source/weapons/light-quarrel.json"
+    lq = json.load(open(lq_path))
+    if "cho-ku-no" not in lq["system"]["launchers"]:
+        lq["system"]["launchers"].append("cho-ku-no")
+        with open(lq_path, "w") as f:
+            json.dump(lq, f, indent=2, ensure_ascii=False)
+            f.write("\n")
     for folder, docs, fd in (("packs/_source/proficiencies", profs, prof_folder), ("packs/_source/weapons", items, weap_folder)):
         for f in glob.glob(f"{folder}/poct-*.json"):
             os.remove(f)

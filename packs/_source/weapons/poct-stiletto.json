@@ -29,7 +29,16 @@
       },
       "family": "other",
       "missileColumn": "thrownDagger",
-      "strength": "full"
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
     },
     "cost": "8 sp (Hundred Years' War, The Renaissance)",
     "weight": 0.5,

@@ -38,7 +38,18 @@
       },
       "family": "other",
       "missileColumn": "otherMissile",
-      "strength": "none"
+      "strength": "none",
+      "rules": [
+        "rangeDouble"
+      ],
+      "misfire": {
+        "dry": 5,
+        "wet": 10
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": true,
+      "match": true
     },
     "source": "Player's Option: Combat & Tactics",
     "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",

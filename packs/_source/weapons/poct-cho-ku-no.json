@@ -13,7 +13,7 @@
       "speed": 6,
       "damage": [
         {
-          "label": "",
+          "label": "Light quarrel",
           "sm": "1d6+1",
           "l": "1d8+1",
           "speed": null
@@ -29,7 +29,18 @@
       },
       "family": "crossbow",
       "missileColumn": "lightCrossbow",
-      "strength": "none"
+      "strength": "none",
+      "rules": [
+        "twoHands"
+      ],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
     },
     "cost": "50 gp (Oriental)",
     "weight": 12.0,

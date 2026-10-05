@@ -29,7 +29,16 @@
       },
       "family": "other",
       "missileColumn": "",
-      "strength": "full"
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
     },
     "cost": "3 gp (Oriental)",
     "weight": 4.0,
