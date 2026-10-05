@@ -89,6 +89,9 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     ];
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
     context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
+    // Elemental province of a natural attack (module/elemental.mjs).
+    context.attackElements = { flame: "AD2E.Elemental.Province.flame", sand: "AD2E.Elemental.Province.sand",
+      sea: "AD2E.Elemental.Province.sea", wind: "AD2E.Elemental.Province.wind" };
     const items = actor.items ?? [];
     const inv = sys.encumbrance.inventory;
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
@@ -156,7 +159,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollMorale() { return this.document.rollMorale(); }
   static onRollHp() { return this.document.rollMonsterHitPoints(); }
   static onAddAttack() {
-    return this.document.update({ "system.attacks": [...this.document.system.attacks, { name: "Attack", damage: "1d6", bonus: 0 }] });
+    return this.document.update({ "system.attacks": [...this.document.system.attacks, { name: "Attack", damage: "1d6", bonus: 0, element: "" }] });
   }
   static onRemoveAttack(event, target) {
     const attacks = [...this.document.system.attacks];
