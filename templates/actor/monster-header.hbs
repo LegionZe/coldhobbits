@@ -4,6 +4,7 @@
     <input class="ad2e-name" type="text" name="name" value="{{actor.name}}">
     <div class="ad2e-monster-line">
       <label>{{localize "AD2E.Monster.Role.label"}} <select name="system.role">{{selectOptions roles selected=system.role localize=true}}</select></label>
+      {{#if isMount}}<label data-tooltip="{{localize 'AD2E.Mounted.TrainedHint'}}">{{localize "AD2E.Mounted.TrainedLabel"}} <select name="system.combatTrained">{{selectOptions trainedChoices selected=system.combatTrained blank=trainedAuto localize=true}}</select></label>{{/if}}
       <label>HP <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></label>
       {{#if dead}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.dead"}}</strong>{{/if}}
       {{#if knockedOut}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.unconscious"}}</strong>{{/if}}

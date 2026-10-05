@@ -16,7 +16,7 @@ export function spellDamageLabel(d, i = 0) {
   const round = d.perRound ? ` (${game.i18n.localize("AD2E.Spell.PerRound")})` : "";
   return `${d.label || `${kind} ${i + 1}`}${round}: ${d.formula}`;
 }
-import { canFightTwoWeapons, COMBAT_TABLES, needsTwoHands, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
+import { canFightTwoWeapons, COMBAT_TABLES, halveRate, mountedFireIssues, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -314,6 +314,13 @@ export default class AD2EActor extends Actor {
     const styles = this.type === "character" ? this.system.proficiencies?.sp?.styles ?? null : null;
     const missileStyle = use === "missile" && styles && styles[missileStyleOf(item)] ? missileStyleOf(item) : null;
     const riding = use === "missile" && this.type === "character" && !!this.system.animals?.riding;
+    // Any attack from the back of an untrained mount: -2 (DMG), ticked by default for such a mount.
+    const mount = this.type === "character" && this.system.animals?.riding
+      ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(this.system.animals.riding, { strict: false }) ?? null : null;
+    if (mount?.system) {
+      moveField += `<div class="form-group"><label>${game.i18n.format("AD2E.Mounted.Untrained", { name: mount.name, n: COMBAT_TABLES.mounted.untrained })}</label>`
+        + `<input type="checkbox" name="untrainedMount"${mountTrained(mount) ? "" : " checked"}></div>`;
+    }
     if (riding) {
       moveField += `<div class="form-group"><label>${i18n("AD2E.Mounted.MountMove")}${styles?.horseArchery ? ` (${i18n("AD2E.Mounted.HorseArcher")})` : ""}</label><select name="mountMove">${
         COMBAT_TABLES.mountedMissile.map(r => `<option value="${r.key}">${i18n(`AD2E.Mounted.Move.${r.key}`)} (${
@@ -368,7 +375,8 @@ export default class AD2EActor extends Actor {
             ammo: f.ammo?.value ?? null, backstab: !!f.backstab?.checked, kitText: kit.text, manual: m,
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
-            mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle };
+            mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
+            untrainedMount: !!f.untrainedMount?.checked };
         }
       },
       rejectClose: false
@@ -441,13 +449,29 @@ export default class AD2EActor extends Actor {
     // Mounted missile fire (DMG Table 53 / horse archery) and the missile style's movement note.
     const mountMod = use === "missile" && input.mountMove ? mountedMissileModifier(input.mountMove, COMBAT_TABLES.mountedMissile,
       !!this.system.proficiencies?.sp?.styles?.horseArchery) : 0;
+    // Rate of fire: one step down from a moving mount (owner's ruling), half after a full move with the missile style.
+    let rate = use === "missile" ? parseRate(attack.rate) : null;
+    const rateFrom = rate;
     if (use === "missile" && input.mountMove) {
-      notes.push(`${i18n(`AD2E.Mounted.Move.${input.mountMove}`)} ${mountMod >= 0 ? "+" : ""}${mountMod}`
-        + (input.mountMove !== "still" ? `; ${i18n("AD2E.Mounted.RateNote")}` : ""));
+      notes.push(`${i18n(`AD2E.Mounted.Move.${input.mountMove}`)} ${mountMod >= 0 ? "+" : ""}${mountMod}`);
+      if (input.mountMove !== "still") {
+        if (rate) rate = stepDownRate(rate);
+        // DMG: horsemanship needed; only short bows, composite short bows and light crossbows (long bows: specialists;
+        // a heavy crossbow once, not reloaded).
+        const issues = mountedFireIssues({ weapon: item.system.proficiency ?? item.system.identifier, specialized: !!entry.specialized,
+          proficiencies: this.items.filter(i => i.type === "proficiency").map(i => i.system.identifier) });
+        for (const k of issues) notes.push(`⚠ ${i18n(`AD2E.Mounted.Issue.${k}`)}`);
+      }
     }
     if (use === "missile" && input.missileStyle && input.ownMove && input.ownMove !== "none") {
       notes.push(i18n(`AD2E.SP.OwnMoveNote.${input.ownMove}`));
+      if (input.ownMove === "full" && rate) rate = halveRate(rate);
     }
+    if (rate && rateFrom && (rate[0] !== rateFrom[0] || rate[1] !== rateFrom[1])) {
+      notes.push(game.i18n.format("AD2E.Mounted.Rate", { from: attack.rate, to: rate[1] === 1 ? `${rate[0]}` : `${rate[0]}/${rate[1]}` }));
+    }
+    const untrained = input.untrainedMount ? COMBAT_TABLES.mounted.untrained : 0;
+    if (untrained) notes.push(`${i18n("AD2E.Mounted.UntrainedShort")} ${untrained}`);
     const styleHit = input.styleAttack && !a.hand ? SP.weaponShield.hit : 0;
     if (styleHit) notes.push(game.i18n.format("AD2E.SP.WeaponShieldNote", { n: styleHit }));
     // Skills & Powers mastery at point blank: +3 in place of the +2 at other ranges.
@@ -457,7 +481,7 @@ export default class AD2EActor extends Actor {
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod;
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     const hit = t51.auto || roll.total >= needed;

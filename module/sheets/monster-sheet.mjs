@@ -1,4 +1,5 @@
 import { rollEncounterReaction } from "../reaction.mjs";
+import { mountTrained } from "../combat-options.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
@@ -70,6 +71,10 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.actor = actor;
     context.system = sys;
     context.roles = AD2E.monsterRoles;
+    // Mounts: trained for combat (riders of untrained mounts -2 to hit, Unusual Combat Situations (DMG)).
+    context.isMount = this.document.system.role === "mount";
+    context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
+    context.trainedAuto = game.i18n.localize(mountTrained(this.document) ? "AD2E.Mounted.Trained.autoYes" : "AD2E.Mounted.Trained.autoNo");
     context.saveGroups = AD2E.classGroups;
     context.ecology = ECOLOGY_FIELDS.map(key => ({ key, label: i18n(`AD2E.Monster.Field.${key}`), value: sys[key],
       type: key === "xp" ? "number" : "text" }));
