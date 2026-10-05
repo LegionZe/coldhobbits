@@ -101,6 +101,18 @@ RULES = {
                   r"If a character spends 2 additional character points on this specialization, however, he can learn to use two weapons of "
                   r"equal size",
                   {"extraCp": 1, "exempt": ["ranger"], "main": 0, "off": -2, "improvedCp": 2}),
+    "missileStyle": ("Fighting Style Specialization (POSP)",
+                     r"He can move up to half his normal movement rate and still make all of his allowed missile attacks during a turn\. Or he "
+                     r"can move his full movement rate and make half as many attacks.*?gains a \+1 bonus to his AC when attacked by missile "
+                     r"fire, but only if the specialist character is also using a missile weapon and attacking on that round",
+                     {"halfMoveAttacks": 1, "fullMoveAttacks": 0.5, "acVsMissiles": 1}),
+    "horseArchery": ("Fighting Style Specialization (POSP)",
+                     r"The normal penalties for shooting from the saddle are reduced by 2\. Thus, archers suffer no penalty if the horse is "
+                     r"moving at up to half its normal speed, and they suffer only a .2 penalty if the horse is moving faster",
+                     {"upToHalf": 0, "faster": -2}),
+    "thrownStyle": ("Fighting Style Specialization (POSP)",
+                    r"Thrown Weapon=*\s*A character who specializes in this fighting style gains the same bonuses as a character who specializes "
+                    r"in the missile fighting style", True),
     "armor": ("Armor Proficiency (POSP)",
               r"A character with the armor proficiency suffers only half the normal encumbrance load of his armor", {"factor": 0.5, "slots": 1}),
     "shieldSlots": ("Shield Proficiency (POSP)",
