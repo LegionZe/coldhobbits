@@ -27,7 +27,14 @@
       }
     ],
     "provinces": [],
-    "damage": "",
+    "damage": [
+      {
+        "label": "",
+        "formula": "2d4",
+        "kind": "damage",
+        "perRound": false
+      }
+    ],
     "range": "5 yds./level",
     "area": "Special",
     "castingTime": "2",

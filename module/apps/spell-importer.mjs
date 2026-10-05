@@ -224,8 +224,8 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
       const existing = index.find(i => i.type === "spell" && i.flags?.ad2e?.wiki?.title === e.id);
       if (existing) {
         const { prepared, cast, damage, ...system } = data.system;
-        // A damage formula the GM entered stays; a blank one takes the known formula (module/importers/spell-damage.mjs).
-        if (damage && !existing.system?.damage) system.damage = damage;
+        // Damage options the GM has stay; a spell without any takes those read from the page (module/importers/spell-damage.mjs).
+        if (damage?.length && !hasDamage(existing.system?.damage)) system.damage = damage;
         update.push({ _id: existing._id, name: data.name, system, flags: data.flags, ...(folder ? { folder: folder.id } : {}) });
       } else {
         if (folder) data.folder = folder.id;
@@ -239,6 +239,11 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
 }
 
 /** Wiki page title of a spell: its import flag, or the last part of its wiki link. */
+/** Whether a spell has damage options (a list; before 0.0.87 a formula string, still raw in compendium indexes). */
+export function hasDamage(damage) {
+  return Array.isArray(damage) ? damage.some(d => d?.formula) : !!String(damage ?? "").trim();
+}
+
 export function spellPageTitle(item) {
   const flagged = item?.flags?.ad2e?.wiki?.title;
   if (flagged) return flagged;
@@ -314,8 +319,8 @@ export async function updateExistingSpells() {
       const { prepared, cast, learned, learnFailedLevel, notes, damage, ...system } = data.system;
       const flags = { ad2e: { wiki: { title, revid: p.revid } } };
       for (const t of byTitle.get(title)) {
-        // A blank damage formula takes the known one; one the GM entered stays.
-        const change = { _id: t.doc.id, system: damage && !t.doc.system?.damage ? { ...system, damage } : system, flags };
+        // A spell without damage options takes those read from the page; options the GM has stay.
+        const change = { _id: t.doc.id, system: damage?.length && !hasDamage(t.doc.system?.damage) ? { ...system, damage } : system, flags };
         if (t.where === null) worldUpdates.push(change);
         else if (t.where === pack) packUpdates.push(change);
         else {

@@ -137,6 +137,7 @@ export function registerHealth() {
       entry("AD2E.Health.ApplyDamageRollTargets", "fa-solid fa-crosshairs", "roll", false),
       entry("AD2E.Health.ApplyDamageMyTargets", "fa-solid fa-bullseye", "mine", false),
       entry("AD2E.Health.ApplyDamage", "fa-solid fa-user-minus", "selected", false),
+      entry("AD2E.Health.ApplyHealingRollTargets", "fa-solid fa-hand-holding-heart", "roll", true),
       entry("AD2E.Health.ApplyHealingMyTargets", "fa-solid fa-hand-holding-medical", "mine", true),
       entry("AD2E.Health.ApplyHealing", "fa-solid fa-user-plus", "selected", true)
     );
@@ -154,6 +155,8 @@ export function damageTargets(message, scope, heal = false) {
   const amount = message?.getFlag?.("ad2e", "damage");
   if (!Number.isFinite(amount)) return [];
   if (heal && (message.getFlag("ad2e", "damageKind") ?? "normal") !== "normal") return [];
+  // A healing roll (a spell's healing option) is never applied as damage.
+  if (!heal && message.getFlag("ad2e", "healing")) return [];
   let actors = [];
   if (scope === "roll") {
     const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
@@ -200,7 +203,12 @@ export function damageButtons(message, html) {
   const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
   const rollTargets = message.getFlag("ad2e", "targets") ?? [];
   const normal = (message.getFlag("ad2e", "damageKind") ?? "normal") === "normal";
-  const buttons = [
+  // Healing (a spell's healing option): heal the targets of the roll, my targets or the selected tokens.
+  const buttons = message.getFlag("ad2e", "healing") ? [
+    rollTargets.length ? ["roll", true, "fa-hand-holding-heart", `${i18n("AD2E.Health.Button.healRoll")}: ${rollTargets.map(t => esc(t.name)).join(", ")}`] : null,
+    ["mine", true, "fa-hand-holding-medical", i18n("AD2E.Health.Button.healMine")],
+    ["selected", true, "fa-user-plus", i18n("AD2E.Health.Button.heal")]
+  ].filter(Boolean) : [
     rollTargets.length ? ["roll", false, "fa-crosshairs", `${i18n("AD2E.Health.Button.roll")}: ${rollTargets.map(t => esc(t.name)).join(", ")}`] : null,
     ["mine", false, "fa-bullseye", i18n("AD2E.Health.Button.mine")],
     ["selected", false, "fa-user-minus", i18n("AD2E.Health.Button.selected")],

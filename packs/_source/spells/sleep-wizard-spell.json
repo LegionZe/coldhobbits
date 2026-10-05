@@ -34,7 +34,7 @@
       }
     ],
     "provinces": [],
-    "damage": "",
+    "damage": [],
     "range": "30 yds.",
     "area": "Special",
     "castingTime": "1",

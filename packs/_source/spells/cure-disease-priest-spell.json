@@ -22,7 +22,7 @@
     },
     "materials": [],
     "provinces": [],
-    "damage": "",
+    "damage": [],
     "range": "Touch",
     "area": "1 creature",
     "castingTime": "1 rd.",

@@ -20,7 +20,14 @@
     },
     "materials": [],
     "provinces": [],
-    "damage": "(min(floor((@level + 1) / 2), 5))d4 + min(floor((@level + 1) / 2), 5)",
+    "damage": [
+      {
+        "label": "",
+        "formula": "1d4 + 1",
+        "kind": "damage",
+        "perRound": false
+      }
+    ],
     "range": "60 yds.+ 10 yds./level",
     "area": "1 - 5 targets",
     "castingTime": "1",

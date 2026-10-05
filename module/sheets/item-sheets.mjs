@@ -255,7 +255,19 @@ export class EquipmentSheet extends AD2EItemSheet {
 
 export class SpellSheet extends AD2EItemSheet {
   static DEFAULT_OPTIONS = { classes: ["spell"], actions: { toggleConsumed: SpellSheet.#onToggleConsumed,
-    removeMaterial: SpellSheet.#onRemoveMaterial, addMaterial: SpellSheet.#onAddMaterial } };
+    removeMaterial: SpellSheet.#onRemoveMaterial, addMaterial: SpellSheet.#onAddMaterial,
+    addDamage: SpellSheet.#onAddDamage, removeDamage: SpellSheet.#onRemoveDamage } };
+
+  /** Damage and healing options: rows of form fields `dmg.<n>.*` (see _processFormData); added and removed by actions. */
+  static #onAddDamage() {
+    const list = foundry.utils.deepClone(this.document.system.damage ?? []);
+    return this.document.update({ "system.damage": [...list, { label: "", formula: "", kind: "damage", perRound: false }] });
+  }
+
+  static #onRemoveDamage(event, target) {
+    const i = Number(target.dataset.index);
+    return this.document.update({ "system.damage": (this.document.system.damage ?? []).filter((_, n) => n !== i) });
+  }
 
   /** Component items to link: the Spell Components compendium (POSM Table 16) and the PHB holy item. */
   static #catalog = null;
@@ -303,12 +315,21 @@ export class SpellSheet extends AD2EItemSheet {
     // Material component links (module/importers/spell-components.mjs).
     context.materials = (sys.materials ?? []).map((m, index) => ({ ...m, index }));
     context.materialChoices = sys.components.material ? await SpellSheet.catalog() : [];
+    context.damageRows = (sys.damage ?? []).map((d, index) => ({ ...d, index }));
+    context.damageKinds = { damage: "AD2E.Weapon.Damage", healing: "AD2E.Spell.Healing" };
     return context;
   }
 
   /** Schools, spheres and sources are edited as comma-separated text. */
   _processFormData(event, form, formData) {
     const data = parseClassesText(super._processFormData(event, form, formData), ["schools", "spheres", "sources", "provinces"]);
+    // Damage rows (dmg.<n>.label/formula/kind/perRound) back into the list, in order.
+    if (data.dmg) {
+      const rows = Object.entries(data.dmg).sort((a, b) => Number(a[0]) - Number(b[0])).map(([, d]) => ({ label: String(d.label ?? "").trim(),
+        formula: String(d.formula ?? "").trim(), kind: d.kind === "healing" ? "healing" : "damage", perRound: !!d.perRound }));
+      delete data.dmg;
+      foundry.utils.setProperty(data, "system.damage", rows);
+    }
     // Provinces: only flame, sand, sea, wind (module/elemental.mjs).
     const p = foundry.utils.getProperty(data, "system.provinces");
     if (p) foundry.utils.setProperty(data, "system.provinces", [...p].map(x => String(x).toLowerCase()).filter(x => ["flame", "sand", "sea", "wind"].includes(x)));

@@ -22,7 +22,20 @@
     },
     "materials": [],
     "provinces": [],
-    "damage": "",
+    "damage": [
+      {
+        "label": "",
+        "formula": "1d8",
+        "kind": "healing",
+        "perRound": false
+      },
+      {
+        "label": "",
+        "formula": "1d8",
+        "kind": "damage",
+        "perRound": false
+      }
+    ],
     "range": "Touch",
     "area": "Creature touched",
     "castingTime": "5",

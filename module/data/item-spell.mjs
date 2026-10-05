@@ -7,6 +7,14 @@ const text = () => new StringField({ initial: "" });
  * On a character: `prepared` = times memorized for the day, `cast` = times cast since the last rest.
  */
 export default class SpellData extends foundry.abstract.TypeDataModel {
+  /** 0.0.86 and earlier: `damage` was one formula (a string). */
+  static migrateData(source) {
+    if (typeof source.damage === "string") {
+      source.damage = source.damage.trim() ? [{ label: "", formula: source.damage.trim(), kind: "damage", perRound: false }] : [];
+    }
+    return super.migrateData(source);
+  }
+
   static defineSchema() {
     return {
       identifier: text(),
@@ -24,10 +32,12 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       // spell sheet): consumed = used up by casting, label = what the link stands for (e.g. "holy symbol").
       materials: new ArrayField(new SchemaField({ identifier: text(), name: text(), consumed: new BooleanField({ initial: true }),
         label: text() })),
-      // Elemental provinces (flame, sand, sea, wind; Al-Qadim, module/rules/province-tables.mjs) and a damage formula
-      // entered by the GM (@level = casting level; e.g. "(min(@level, 10))d6"), rolled from the Spells tab.
+      // Elemental provinces (flame, sand, sea, wind; Al-Qadim, module/rules/province-tables.mjs) and damage or healing
+      // options (@level = casting level; e.g. "(min(@level, 10))d6"), read from the page at import
+      // (module/importers/spell-damage.mjs), edited on the spell sheet, rolled from the Spells tab.
       provinces: new ArrayField(new StringField()),
-      damage: text(),
+      damage: new ArrayField(new SchemaField({ label: text(), formula: text(), kind: new StringField({ initial: "damage" }),
+        perRound: new BooleanField({ initial: false }) })),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
       sources: new ArrayField(new StringField()),
       // Wizard spells: understood and in the spell book (module/learn-spells.mjs); a failed roll records the level

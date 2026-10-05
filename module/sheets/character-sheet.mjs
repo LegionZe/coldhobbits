@@ -522,7 +522,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           remaining: Math.max(s.prepared - s.cast, 0), usable: shair || s.kind === sp.kind, unlearned,
           learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
             : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
-          learnBlocked: !!lc?.blocked, damage: !!s.damage,
+          learnBlocked: !!lc?.blocked, damage: (s.damage ?? []).some(d => d.formula),
           ...(shair ? { request: request(i), fetched: gen.fetch?.spellId === i.id && gen.fetch?.ready } : {}),
           meta: [(s.kind === "priest" ? s.spheres : s.schools).join("/"), comps,
             `${i18n("AD2E.Spell.CT")} ${s.castingTime}`, `${i18n("AD2E.Spell.R")} ${s.range}`,
