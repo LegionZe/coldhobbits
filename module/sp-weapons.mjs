@@ -74,7 +74,8 @@ export function nonproficiency(group) {
  * @param {object} p      proficiency system data
  * @param {object} ctx    { group, classId, level, covered (weapon in a group proficiency), free (kit free
  *                          specialization), forbidden (kit forbids specialization), extraSpec (another weapon is
- *                          specialized), styleIndex (0-based order among owned styles), shieldAllowed }
+ *                          specialized), styleIndex (0-based order among owned styles), shieldAllowed, choiceFree
+ *                          (Weapon Master: no paid weapon of choice) }
  * @returns {{slots: number, parts: Array<{key: string, cp: number|null, slots: number}>, invalid: string[],
  *            specValid: boolean, masteryValid: boolean}}
  */
@@ -89,8 +90,10 @@ export function spCost(p, ctx) {
   let masteryValid = false;
   if (p.kind === "weapon") {
     if (!p.grantedBy && !ctx.covered) buy("proficiency", cps);
-    if (p.choice) buy("choice", SP.choiceCp[group]);
-    if (p.expertise) buy("expertise", SP.expertiseCp[group][p.choice ? 1 : 0]);
+    // Weapon Master: the kit's chosen weapon is the weapon of choice at no cost (owner's ruling); the tick is ignored.
+    const choice = !ctx.choiceFree && p.choice;
+    if (choice) buy("choice", SP.choiceCp[group]);
+    if (p.expertise) buy("expertise", SP.expertiseCp[group][choice ? 1 : 0]);
     if (p.specialized && !ctx.free) {
       const row = SP.specialization[specRow(classId, group)];
       buy("specialization", row.cp);
