@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.116)
+## Status (v0.0.117)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -524,6 +524,12 @@ Node only until confirmed.
   with the chosen weapon and -1 initiative, Swashbuckler +2 AC in armour no heavier than studded leather, Thug +1
   damage. Not automated: animal companions and mounts, Mystic meditation (a subability), Pugilist unarmed attacks
   counting as armed, Weapon Master's display, Barbarian reactions, social ranks (Table 40).
+- GM manual: the "AD&D 2e GM manual" button in the Settings sidebar tab (GM only), Configure Settings > "AD&D 2e GM
+  manual", or `game.ad2e.manual()`. Sections: getting started (first steps and this system's compendiums), GM tools
+  (buttons for the monster and spell importers and updates, experience awards, treasure, encounter reactions and
+  Configure Settings), every system setting with its current value and what it does (read from the registered
+  settings, so new settings appear on their own) and the setting menus, characters, combat, monsters and hirelings,
+  items and treasure, optional rules, and the `game.ad2e` macros. Procedures only; no rulebook text.
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
   adds it and brings the tab back.
@@ -536,4 +542,3 @@ Node only until confirmed.
   only; prime requisites 15+ in the first class and 17+ in the new one; at least 2nd level before switching; the new
   class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
   using the old class's abilities costs experience until the new class's level exceeds the old one.
-- A GM instruction manual for the system.

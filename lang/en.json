@@ -553,6 +553,29 @@
     "SourcePage": "Source page",
     "Cost": "Wage / price"
   },
+  "AD2E.Manual": {
+    "Title": "AD&D 2e GM manual",
+    "Open": "AD&D 2e GM manual",
+    "MenuHint": "How the system works: GM tools (monster and spell import and update, experience, treasure, reactions), every system setting with its current value and what it does, and how characters, combat, monsters, items and the optional rules are used.",
+    "Version": "System version",
+    "GmOnly": "These tools are for the GM.",
+    "On": "On",
+    "Off": "Off",
+    "ScopeWorld": "World (GM)",
+    "ScopeClient": "This user",
+    "Reload": "reloads",
+    "Section": {
+      "start": "Getting started",
+      "tools": "GM tools",
+      "settings": "Settings",
+      "characters": "Characters",
+      "combat": "Combat",
+      "monsters": "Monsters & hirelings",
+      "items": "Items & treasure",
+      "optional": "Optional rules",
+      "macros": "Macros"
+    }
+  },
   "AD2E.Importer": {
     "Title": "Monster importer (Complete Compendium)",
     "Open": "Import monsters",
