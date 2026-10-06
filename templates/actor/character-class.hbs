@@ -139,6 +139,7 @@
     {{#if ct.dual.isGM}}<div class="ad2e-buttons">
       <button type="button" data-action="clearDualPenalty" data-kind="encounter" {{#unless ct.dual.encounter}}disabled{{/unless}}>{{localize "AD2E.Dual.ClearEncounter"}}</button>
       <button type="button" data-action="clearDualPenalty" data-kind="all" {{#unless ct.dual.adventure}}disabled{{/unless}}>{{localize "AD2E.Dual.EndAdventure"}}</button>
+      <button type="button" data-action="undoDualClass" data-tooltip="{{localize 'AD2E.Dual.UndoHint'}}"><i class="fa-solid fa-rotate-left"></i> {{localize "AD2E.Dual.Undo"}}</button>
     </div>{{/if}}
   </fieldset>
   {{/if}}

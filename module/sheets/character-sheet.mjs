@@ -185,6 +185,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleSeverity: CharacterSheet.onToggleSeverity,
       rollProficiency: CharacterSheet.onRollProficiency,
       clearDualPenalty: CharacterSheet.#onClearDualPenalty,
+      undoDualClass: CharacterSheet.#onUndoDualClass,
       rollAttack: CharacterSheet.onRollAttack,
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
@@ -837,6 +838,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   /** An item dropped on a container goes into it (module/sheets/containers-ui.mjs); otherwise _dropItemDefault. */
   /** Dual-class: the GM clears the encounter penalty flag, or both ("end of adventure"); data-kind "encounter" | "all". */
+  static async #onUndoDualClass() {
+    if (!game.user?.isGM) return;
+    return this.actor.undoDualClass();
+  }
+
   static async #onClearDualPenalty(event, target) {
     if (!game.user?.isGM) return;
     const all = target.dataset.kind === "all";
@@ -1036,7 +1042,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           await this.actor.update({
             "system.dualClass.previous": [...prev.map(p => ({ ...p, prime: [...(p.prime ?? [])] })), {
               identifier: classItem.system.identifier, name: classItem.name, group: classItem.system.group,
-              level: this.actor.system.level, school: classItem.system.school ?? "", prime: [...(classItem.system.prime ?? [])] }],
+              level: this.actor.system.level, school: classItem.system.school ?? "", prime: [...(classItem.system.prime ?? [])],
+              xp: this.actor.system.xp ?? 0 }],
             "system.dualClass.penalty": { encounter: false, adventure: false },
             "system.level": 1, "system.xp": 0
           });

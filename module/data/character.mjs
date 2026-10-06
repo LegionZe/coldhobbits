@@ -155,12 +155,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         attempts: new ArrayField(new SchemaField({ key: new StringField({ initial: "" }), at: new NumberField({ initial: 0 }) }))
       }),
       // Dual-class characters (module/dual-class.mjs, world setting "dualClass"): the earlier classes (identifier, name,
-      // group, last level, specialist school, prime requisites) and the experience penalty flags for using their abilities.
+      // group, last level, specialist school, prime requisites, experience at the switch: null before 0.0.122) and the
+      // experience penalty flags for using their abilities.
       dualClass: new SchemaField({
         previous: new ArrayField(new SchemaField({
           identifier: new StringField({ initial: "" }), name: new StringField({ initial: "" }),
           group: new StringField({ initial: "warrior" }), level: int(1, 1, 30), school: new StringField({ initial: "" }),
-          prime: new ArrayField(new StringField())
+          prime: new ArrayField(new StringField()),
+          xp: new NumberField({ integer: true, min: 0, nullable: true, initial: null })
         })),
         penalty: new SchemaField({ encounter: new BooleanField({ initial: false }), adventure: new BooleanField({ initial: false }) })
       }),
