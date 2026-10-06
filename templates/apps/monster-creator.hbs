@@ -1,0 +1,43 @@
+<section class="ad2e-creator">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Monster.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Monster.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Monster.Role.label"}}</label><select data-field="role">{{#each roles as |r|}}<option value="{{r.key}}" {{#if r.selected}}selected{{/if}}>{{r.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Size"}}</label><select data-field="size">{{#each sizes as |z|}}<option value="{{z.key}}" {{#if z.selected}}selected{{/if}}>{{z.key}}: {{z.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Intelligence"}}</label><input type="number" data-field="intelligence" value="{{s.intelligence}}" min="0" step="1"><span class="ad2e-weapon-meta">{{intBand}}</span></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Alignment"}}</label><input type="text" data-field="alignment" value="{{s.alignment}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Appearing"}}</label><input type="text" data-field="numberAppearing" value="{{s.numberAppearing}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Treasure"}}</label><input type="text" data-field="treasure" value="{{s.treasure}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Climate"}}</label><input type="text" data-field="climate" value="{{s.climate}}"></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Monster.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.HitDice"}}</label><input type="text" data-field="hitDice" value="{{s.hitDice}}">{{#if p.invalid}}<span class="ad2e-unmet">{{localize "AD2E.Creator.Monster.BadHitDice"}}</span>{{/if}}</div>
+    <div class="form-group"><label>AC</label><input type="number" data-field="ac" value="{{s.ac}}" min="-10" max="10" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Move"}}</label><input type="number" data-field="move" value="{{s.move}}" min="0" step="1"><input type="text" data-field="moveText" value="{{s.moveText}}" placeholder="{{localize 'AD2E.Creator.Monster.MoveText'}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Morale"}}</label><input type="number" data-field="morale" value="{{s.morale}}" min="2" max="20" step="1"><span class="ad2e-weapon-meta">{{moraleBand}}</span></div>
+    {{#each attackRows as |a|}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Attack"}} {{a.n}}</label>
+      <input type="text" data-field="attack" data-index="{{a.i}}" data-part="name" value="{{a.name}}" placeholder="{{localize 'AD2E.Creator.Monster.AttackName'}}">
+      <input type="text" data-field="attack" data-index="{{a.i}}" data-part="damage" value="{{a.damage}}" placeholder="1d6"></div>
+    {{/each}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.SpecialAttacks"}}</label><input type="text" data-field="specialAttacks" value="{{s.specialAttacks}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.SpecialDefenses"}}</label><input type="text" data-field="specialDefenses" value="{{s.specialDefenses}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.MagicResistance"}}</label><input type="text" data-field="magicResistance" value="{{s.magicResistance}}"></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Monster.Step3"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Creator.Monster.XpHint"}}</p>
+    <div class="ad2e-check-grid">
+      {{#each mods as |m|}}<label><input type="checkbox" data-field="mod" data-key="{{m.key}}" {{#if m.checked}}checked{{/if}}> {{m.label}} (+{{m.hd}})</label>{{/each}}
+    </div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.XpOverride"}}</label><input type="number" data-field="xpOverride" value="{{s.xpOverride}}" min="0" step="1" placeholder="{{p.xpAuto}}"></div>
+  </fieldset>
+  <p><strong>THAC0 {{p.thac0}}</strong> · {{localize "AD2E.Creator.Monster.SaveLevel"}} {{p.saveLevel}} · {{localize "AD2E.Creator.Monster.HpRoll"}} {{p.formula}} ·
+    {{localize "AD2E.Creator.Monster.Xp"}} <strong>{{p.xp}}</strong>{{#if p.hdMods}} (+{{p.hdMods}} HD){{/if}}</p>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>

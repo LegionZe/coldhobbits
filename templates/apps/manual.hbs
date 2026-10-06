@@ -48,6 +48,11 @@
     <div><button type="button" data-action="tool" data-tool="awardXp"><i class="fa-solid fa-star"></i> Award experience</button>
       <p>Divides an experience award equally among the chosen characters; each share gets that character's prime requisite bonus. A single
       character's award is the "+" next to XP on the sheet.</p></div>
+    <div><button type="button" data-action="tool" data-tool="createMonster"><i class="fa-solid fa-dragon"></i> Create monster</button>
+      <p>A guided window for a new Monster / NPC actor: size, intelligence and morale with their Monstrous Manual bands,
+      Hit Dice, AC, movement and attacks. THAC0 and saving throws follow the Hit Dice; experience is DMG Table 31 for the
+      Hit Dice plus the Table 32 special abilities you tick (you may enter your own value). Hit points are rolled. The
+      actor goes into the world or an unlocked world compendium, and its sheet opens for anything else.</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -258,6 +263,7 @@
       <tr><td><code>game.ad2e.importSpells()</code></td><td>Spell importer.</td></tr>
       <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
+      <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>
