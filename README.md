@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.134)
+## Status (v0.0.135)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -500,6 +500,15 @@ Node only until confirmed.
   lasso tied to something solid, else opposed Strength), and the pull/trip by spurring with no attack roll. Defender
   numbers come from the first target (monsters: Dexterity = movement, Strength = 3.5 per size + Hit Dice with sizes
   T = 1 to G = 6, implementation choice) and can be edited.
+- Net (0.0.135; owner's request: the net is not a Table 49 weapon, added to build-poct-weapon-data.py `TARGETS` from its
+  Master Weapon List (POCT) row: no damage, range 2/3/4 squares = 10/15/20 yards, two hands; rules `COMBAT_TABLES.net`,
+  regex-checked against Weapon Descriptions (POCT)): attacking with a net opens its own dialog. Throw at AC 10 with the
+  target's Dexterity and magic only ("Only the target's Dexterity and magical adjustments to Armor Class count"; a
+  character target's Dexterity is filled in, magic is entered); a hit may trap weapon and shield. Loop the rope round
+  (same AC): the victim's Strength counts 4 less to break free. Pull/trip (normal AC, opposed Strength without the
+  lasso's +4). Once thrown the net is unfolded (item flag `ad2e.unfolded`): -4 to hit until "Fold the net" (2 rounds).
+  "Break free (net)" (character Combat tab, monster header): a Strength check, -4 if the rope was looped (monsters:
+  3.5 per size + Hit Dice). The net's hand-to-hand block and disarm are not modelled.
 - Combat & Tactics weapons (Master Weapon List (POCT), Equipment Groups (POCT); folders "Weapon Proficiencies (POCT)" and
   "Weapons (POCT)"): 53 weapon proficiencies and their items for the Skills & Powers weapon groups without a PHB item
   (every culture's price kept; firearms one item per lock type). Footnotes are rules: two hands regardless of size;

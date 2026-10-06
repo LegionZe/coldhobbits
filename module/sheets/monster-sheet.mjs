@@ -24,6 +24,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     actions: {
       rollSave: MonsterSheet.onRollSave,
       pushMount: MonsterSheet.onPushMount,
+      breakFreeNet: MonsterSheet.onBreakFreeNet,
       rollAttack: MonsterSheet.onRollAttack,
       rollDamage: MonsterSheet.onRollDamage,
       rollMorale: MonsterSheet.onRollMorale,
@@ -174,6 +175,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollSave(event, target) { return this.document.rollSave(target.dataset.save); }
 
   static onPushMount() { return pushMount(this.document); }
+  static onBreakFreeNet() { return this.document.breakFreeNet(); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }

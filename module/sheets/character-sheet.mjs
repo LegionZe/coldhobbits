@@ -244,6 +244,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       socialRank: CharacterSheet.#onSocialRank,
       meditate: CharacterSheet.#onMeditate,
       display: CharacterSheet.#onDisplay,
+      breakFreeNet: CharacterSheet.#onBreakFreeNet,
       bondSet: CharacterSheet.#onBondSet,
       bondClear: CharacterSheet.#onBondClear,
       endFeeblemind: CharacterSheet.#onEndFeeblemind,
@@ -1398,6 +1399,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static #onMeditate() {
     return meditate(this.actor);
+  }
+
+  static #onBreakFreeNet() {
+    return this.actor.breakFreeNet();
   }
 
   static #onDisplay() {

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate weapon proficiencies and weapon items for the Skills & Powers Table 49 weapons that have no PHB or Al-Qadim
-item (Player's Option: Combat & Tactics):
+item, and the net (owner's request) (Player's Option: Combat & Tactics):
 
   packs/_source/proficiencies/poct-*.json   folder "Weapon Proficiencies (POCT)"
   packs/_source/weapons/poct-*.json         folder "Weapons (POCT)"
@@ -56,6 +56,8 @@ TARGETS = {
     "Caliver": ["Matchlock, Caliver"], "Hand gunne": ["Hand Match, Handgunne"],
     "Horse pistol": ["Flintlock, Horse Pistol", "Snaplock, Horse Pistol", "Wheellock, Horse pistol"],
     "Musket": ["Flintlock, Musket", "Matchlock, Musket w/rest", "Snaplock, Musket"],
+    # Not a Table 49 weapon: added at the owner's request (rules in tools/build-combat-tables.py `net`).
+    "Net": ["Net"],
 }
 # Item names for rows whose master-list name is "Group, Weapon" (e.g. "Sword, Katana" -> "Katana").
 LOCKS = {"Flintlock": "flintlock", "Snaplock": "snaplock", "Wheellock": "wheellock", "Matchlock": "matchlock", "Hand Match": "hand match"}

@@ -644,6 +644,26 @@
     "BardKitNeeded": "Complete Bard's Handbook combination: the bard needs one of these kits: {kits} (True Bard also without a kit).",
     "ThiefArmor": "Multi-class: in armour not allowed to thieves only open locks and detect noise can be used (no armour adjustment)."
   },
+  "AD2E.Net": {
+    "Hint": "The net traps rather than wounds (Combat & Tactics). Throw: against AC 10 with only the target's Dexterity and magical protection; a hit may trap weapon and shield. Loop the rope: another attack at the same AC; the victim's Strength counts 4 less to break free. Pull/trip: normal attack, then opposed Strength. Once unfolded the net is thrown at -4 until folded again (2 rounds).",
+    "Mode": "Action",
+    "Modes": { "throw": "Throw (trap)", "wrap": "Loop the rope round (improve the capture)", "trip": "Pull/trip", "fold": "Fold the net" },
+    "Ac": "Target AC for the net (10, Dexterity and magic only)",
+    "TripAc": "Target AC for a pull/trip (normal)",
+    "Unfolded": "Net already unfolded ({n} to hit)",
+    "UnfoldedNote": "Unfolded net: {n} to hit.",
+    "AttackLine": "Attack: {roll} {adj} = {total} vs AC {ac} (needs {need}): {result}",
+    "Trapped": "The net may trap the defender's weapon and shield: break free only with a Strength check.",
+    "Wrapped": "The rope is looped round: the victim's Strength counts {n} to break free.",
+    "Folded": "{name} folds the net: {n} combat rounds.",
+    "BreakFree": "Break free (net)",
+    "BreakFreeHint": "Netted: break free with a Strength check (roll at or under). Tick the box if the netter looped the rope round.",
+    "Strength": "Strength (monster: 3.5 per size + Hit Dice)",
+    "WrappedBox": "Rope looped round ({n})",
+    "BreakFreeLine": "{name} tries to break free of the net: {roll} against {target}: {result}",
+    "Free": "free",
+    "StillTrapped": "still trapped"
+  },
   "AD2E.Lasso": {
     "Hint": "The lasso is used only with a called shot (Combat & Tactics). Legs: pull/trip with an opposed Strength check. Arms: an opposed attack roll traps one or both arms. Unhorse: pulls a rider from the saddle. Spur: the next round's pull/trip with the lasso tied to the saddle needs no attack roll. The defender's numbers come from the first target and can be changed.",
     "Mode": "Called shot",

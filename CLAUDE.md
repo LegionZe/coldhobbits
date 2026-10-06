@@ -201,7 +201,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `RESTORATION_AGE` on character `system.age` (recipient + caster chosen in the Restoration dialog).
 - Lasso: `module/lasso.mjs` (pure: `pullTripScore`, `opposedCheck`, `opposedAttack`, `armsTrapped`, `monsterScores`) and
   `AD2EActor#rollLasso` (rollWeaponAttack redirects identifier "lasso"); figures `COMBAT_TABLES.lasso` (build-combat-tables.py,
-  regex-checked against Weapon Descriptions / Attack Options (POCT)).
+  regex-checked against Weapon Descriptions / Attack Options (POCT)). Net (owner's request, `TARGETS` "Net" in
+  build-poct-weapon-data.py): `netAc`, `breakFreeScore`, `NET` in lasso.mjs, `AD2EActor#rollNet` (identifier "net"; item flag
+  `ad2e.unfolded`), `breakFreeNet` (character Combat tab, monster header).
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with

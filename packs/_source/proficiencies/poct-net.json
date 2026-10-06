@@ -1,11 +1,11 @@
 {
-  "_id": "1q1m2XyEo6PqhPRI",
-  "_key": "!items!1q1m2XyEo6PqhPRI",
-  "name": "Rapier",
+  "_id": "6yGt4cuI7yM6shYM",
+  "_key": "!items!6yGt4cuI7yM6shYM",
+  "name": "Net",
   "type": "proficiency",
   "img": "icons/svg/sword.svg",
   "system": {
-    "identifier": "rapier",
+    "identifier": "net",
     "kind": "weapon",
     "slots": 1,
     "ability": null,
@@ -18,28 +18,23 @@
     },
     "weapon": {
       "size": "M",
-      "type": "P",
-      "speed": 4,
-      "damage": [
-        {
-          "label": "",
-          "sm": "1d6",
-          "l": "1d8",
-          "speed": null
-        }
-      ],
+      "type": null,
+      "speed": 10,
+      "damage": [],
       "melee": true,
-      "missile": false,
+      "missile": true,
       "range": {
-        "rof": "",
-        "short": "",
-        "medium": "",
-        "long": ""
+        "rof": "1/2",
+        "short": "10",
+        "medium": "15",
+        "long": "20"
       },
       "family": "other",
-      "missileColumn": "",
+      "missileColumn": "otherMissile",
       "strength": "full",
-      "rules": [],
+      "rules": [
+        "twoHands"
+      ],
       "misfire": {
         "dry": null,
         "wet": null
@@ -55,7 +50,7 @@
   },
   "effects": [],
   "folder": "FIaRTdn72joCvdmE",
-  "sort": 4000,
+  "sort": 3200,
   "ownership": {
     "default": 0
   },

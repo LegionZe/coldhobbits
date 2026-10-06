@@ -6,6 +6,7 @@
       <label>{{localize "AD2E.Monster.Role.label"}} <select name="system.role">{{selectOptions roles selected=system.role localize=true}}</select></label>
       {{#if canPush}}{{#if editable}}<button type="button" data-action="pushMount" data-tooltip="{{localize 'AD2E.Push.Hint'}}"><i class="fa-solid fa-horse"></i> {{localize "AD2E.Push.Button"}}</button>{{/if}}{{#if pushText}}<span class="ad2e-unmet">{{pushText}}</span>{{/if}}{{/if}}
       {{#if isMount}}<label data-tooltip="{{localize 'AD2E.Mounted.TrainedHint'}}">{{localize "AD2E.Mounted.TrainedLabel"}} <select name="system.combatTrained">{{selectOptions trainedChoices selected=system.combatTrained blank=trainedAuto localize=true}}</select></label>{{/if}}
+      {{#if editable}}<button type="button" data-action="breakFreeNet" data-tooltip="{{localize 'AD2E.Net.BreakFreeHint'}}"><i class="fa-solid fa-border-all"></i> {{localize "AD2E.Net.BreakFree"}}</button>{{/if}}
       <label>HP <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></label>
       {{#if dead}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.dead"}}</strong>{{/if}}
       {{#if knockedOut}}<strong class="ad2e-unmet">{{localize "AD2E.Health.State.unconscious"}}</strong>{{/if}}
