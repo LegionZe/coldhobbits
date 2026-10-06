@@ -1,0 +1,54 @@
+<section class="ad2e-creator">
+  <div class="ad2e-creator-body">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Magic.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Magic.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.ModeLabel"}}</label><select data-field="mode">{{#each modes as |m|}}<option value="{{m.key}}" {{#if m.selected}}selected{{/if}}>{{m.label}}</option>{{/each}}</select></div>
+    {{#if isItem}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.StartFrom"}}</label><select data-field="source">
+      <option value="">{{localize "AD2E.Creator.Item.Blank"}}</option>
+      {{#each sourceOptions as |o|}}<option value="{{o.uuid}}" {{#if o.selected}}selected{{/if}}>{{o.name}} ({{o.origin}})</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    {{else}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.Base"}}</label><select data-field="base">
+      <option value="">—</option>
+      {{#each sourceOptions as |o|}}<option value="{{o.uuid}}" {{#if o.selected}}selected{{/if}}>{{o.name}} ({{o.origin}})</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.Bonus"}}</label><input type="number" data-field="bonus" value="{{s.bonus}}" min="-5" max="5" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}" placeholder="{{arms.item.name}}"></div>
+    {{/if}}
+    <div class="form-group"><label>{{localize "AD2E.Item.identifier"}}</label><input type="text" data-field="identifier" value="{{s.identifier}}" placeholder="{{ident}}"></div>
+  </fieldset>
+  {{#if isItem}}
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Magic.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Item.Category"}}</label><select data-field="category">{{#each categories as |c|}}<option value="{{c.key}}" {{#if c.selected}}selected{{/if}}>{{c.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Quantity"}}</label><input type="number" data-field="quantity" value="{{s.quantity}}" min="0" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Weight"}}</label><input type="number" data-field="weight" value="{{s.weight}}" min="0" step="any"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.ChargesFormula"}}</label><input type="text" data-field="chargesFormula" value="{{s.chargesFormula}}" placeholder="1d20+80"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.ChargesMax"}}</label><input type="number" data-field="chargesMax" value="{{s.chargesMax}}" min="0" step="1"></div>
+    {{#if s.chargesFormula}}<div class="form-group"><label>{{localize "AD2E.Creator.Magic.RollCharges"}}</label><input type="checkbox" data-field="rollCharges" {{#if s.rollCharges}}checked{{/if}}></div>{{/if}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.UsableBy"}}</label></div>
+    <div class="ad2e-check-grid">{{#each groups as |g|}}<label><input type="checkbox" data-field="group" data-key="{{g.key}}" {{#if g.checked}}checked{{/if}}> {{g.key}}</label>{{/each}}</div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.XpValue"}}</label><input type="number" data-field="xpValue" value="{{s.xpValue}}" min="0" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.GpValue"}}</label><input type="number" data-field="gpValue" value="{{s.gpValue}}" min="0" step="1"></div>
+    {{#if isContainer}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Item.CapacityWeight"}}</label><input type="number" data-field="capacityWeight" value="{{s.capacityWeight}}" min="0" step="any"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Item.CapacityVolume"}}</label><input type="text" data-field="capacityVolume" value="{{s.capacityVolume}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Magic.Weightless"}}</label><input type="checkbox" data-field="weightless" {{#if s.weightless}}checked{{/if}}></div>
+    {{/if}}
+  </fieldset>
+  {{/if}}
+  {{#if arms}}<p>{{localize "AD2E.Creator.Magic.ArmsSummary"}}: <strong>{{arms.item.name}}</strong>{{#if arms.xp}} · XP {{arms.xp}}{{/if}}{{#if arms.sword}} ({{localize "AD2E.Creator.Magic.Sword"}}){{/if}}</p>{{/if}}
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Magic.Step3"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Magic.Identified"}}</label><input type="checkbox" data-field="identified" {{#if s.identified}}checked{{/if}}></div>
+    <div class="form-group"><label>{{localize "AD2E.Identify.Name"}}</label><input type="text" data-field="unidentifiedName" value="{{s.unidentifiedName}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Item.notes"}}</label><textarea data-field="notes" rows="3">{{s.notes}}</textarea></div>
+  </fieldset>
+  {{#each issues as |i|}}<p class="ad2e-unmet">{{i}}</p>{{/each}}
+  </div>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>

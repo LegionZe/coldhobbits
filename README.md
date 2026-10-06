@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.4)
+## Status (v1.0.5)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -64,6 +64,14 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   chosen from the missile weapons that take ammunition; damage dice; magical bonuses). Starts from an item of that kind
   or blank; the cost must read as a number and a coin ("5 gp", "2 sp each"). The weightless container option is left to
   the magic item creator (only magical items store it).
+- Create magic item (GM manual > GM tools, or `game.ad2e.createMagicItem()`; 1.0.5): a magical item (DMG Table 88
+  category; charges when found for wands 1d20+80, rods 1d10+40, staves 1d6+19, the patterns checked again on Wands /
+  Rods / Staves (DMG) by build-creator-tables.py, rolled at creation if ticked; usable-by groups; XP and gp values; a
+  container's capacity and "weightless"), or magical arms: a copy of a weapon, armour or ammunition item with a bonus
+  (-5 to +5) named "<base> +N", its XP value from DMG Tables 105/107 (TREASURE_ROLLS.arms: armour +1 500 to +5 3,000;
+  swords +1 400 to +5 3,000, a sword being a weapon of the Skills & Powers "swords" group; other weapons +1 500, +2
+  1,000, +3 2,000; none listed beyond) written in the notes, as weapon and armour items have no XP field. Unidentified
+  unless ticked.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

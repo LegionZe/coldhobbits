@@ -220,8 +220,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   asserted), MM size/intelligence/morale bands. Weapon creator (`WeaponCreator`, `game.ad2e.createWeapon`, `createWeapon`):
   `fromItem` copies a weapon's statistics, `itemData` gives the weapon (+ proficiency with the same `weapon` data),
   `weaponIssues`, `slugify`. Item creator (`ItemCreator`, `game.ad2e.createItem`, `createItem`): kinds gear / container
-  (equipment) / armor / ammunition (`ITEM_KINDS`), `fromItem`, `itemData`, `itemIssues`, `costValid`. Owner's order for the
-  next creators: magic item, patron (employer NPC), spell, trap; then automatic encounter XP.
+  (equipment) / armor / ammunition (`ITEM_KINDS`), `fromItem`, `itemData`, `itemIssues`, `costValid`. Magic item creator (`MagicItemCreator`, `game.ad2e.createMagicItem`,
+  `createMagicItem`): modes item / arms; `chargesFor` (CREATOR_TABLES.magic.charges from build-magic-item-data.py `CHARGES`),
+  `armsXp` (TREASURE_ROLLS.arms), `isSword` (SP "swords" group), `armsData`, `itemData`. Owner's order for the next
+  creators: patron (employer NPC), spell, trap; then automatic encounter XP.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.
