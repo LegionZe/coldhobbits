@@ -1,0 +1,76 @@
+{
+  "_id": "OTyyZIozNZEUCmyi",
+  "_key": "!actors!OTyyZIozNZEUCmyi",
+  "name": "Pegasus",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-pegasus",
+    "role": "mount",
+    "climate": "Temperate and subtropical forests",
+    "frequency": "Very rare",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Average (8-10)",
+    "treasure": "Nil",
+    "alignment": "Chaotic good",
+    "numberAppearing": "1-10",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 24,
+      "text": "24, FI 48 (C,D mounted)"
+    },
+    "hitDice": "4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "1d3",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "",
+    "damageText": "1-8/1-8/1-3",
+    "specialAttacks": "Dive, rear kick",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (5 1⁄2' at the shoulder)",
+    "morale": {
+      "value": 11,
+      "text": "Steady (11)"
+    },
+    "xp": 175,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Pegasus",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Pegasus, Pegasus.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 7400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

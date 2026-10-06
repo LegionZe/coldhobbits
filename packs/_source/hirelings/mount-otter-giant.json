@@ -1,0 +1,66 @@
+{
+  "_id": "LFC9VgxV62atKiS7",
+  "_key": "!actors!LFC9VgxV62atKiS7",
+  "name": "Giant otter",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-otter-giant",
+    "role": "mount",
+    "climate": "",
+    "frequency": "",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "",
+    "alignment": "",
+    "numberAppearing": "2-5",
+    "ac": {
+      "base": 5,
+      "text": "5"
+    },
+    "movement": {
+      "base": 9,
+      "text": "9, Sw 18"
+    },
+    "hitDice": "5",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "2d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "2d4",
+    "specialAttacks": "Shoot quills",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (5-7)"
+    },
+    "xp": 175,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Giant_Mammal",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Giant Mammal, Otter, giant.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 9100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

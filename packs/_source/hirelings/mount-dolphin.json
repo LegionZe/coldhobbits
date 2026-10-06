@@ -1,0 +1,66 @@
+{
+  "_id": "oYsAbZJoLkFzr4DW",
+  "_key": "!actors!oYsAbZJoLkFzr4DW",
+  "name": "Dolphin",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-dolphin",
+    "role": "mount",
+    "climate": "Any saltwater",
+    "frequency": "Uncommon",
+    "organization": "School",
+    "activity": "Any",
+    "diet": "Carnivore",
+    "intelligence": "Very (11-12)",
+    "treasure": "Nil",
+    "alignment": "Lawful good",
+    "numberAppearing": "2-20",
+    "ac": {
+      "base": 5,
+      "text": "5"
+    },
+    "movement": {
+      "base": 30,
+      "text": "30"
+    },
+    "hitDice": "2+2",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "2d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "2-8",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Save as 4th-lvl fighter",
+    "magicResistance": "Nil",
+    "size": "M (5'-6' long)",
+    "morale": {
+      "value": 11,
+      "text": "Steady (11)"
+    },
+    "xp": 120,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Dolphin",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Dolphin, Dolphin.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

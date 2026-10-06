@@ -1,0 +1,66 @@
+{
+  "_id": "OO314g7IZdXXvQKX",
+  "_key": "!actors!OO314g7IZdXXvQKX",
+  "name": "Giant frog",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-frog-giant",
+    "role": "mount",
+    "climate": "Any fresh water",
+    "frequency": "Uncommon",
+    "organization": "Pack",
+    "activity": "Any",
+    "diet": "Carnivore",
+    "intelligence": "Non- (0)",
+    "treasure": "Nil",
+    "alignment": "Nil",
+    "numberAppearing": "5-40",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 3,
+      "text": "3, Sw 9"
+    },
+    "hitDice": "1-3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d3",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-3/1-6/2-8",
+    "specialAttacks": "Tongue and swallow whole",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "T-M (2-6' long)",
+    "morale": {
+      "value": 8,
+      "text": "Average (8)"
+    },
+    "xp": 120,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Frog",
+    "notes": "<p>Variable size: the actor uses the first variant's experience value (1 HD: 120; 2 HD: 175; 3 HD: 270); hit points and damage by the DM.</p><p>Mount (Rider (POSP), Table 43). Statistics: Frog, Giant.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

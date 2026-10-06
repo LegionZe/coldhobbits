@@ -1,0 +1,66 @@
+{
+  "_id": "oOxiUyLZ0jB4Lk3Z",
+  "_key": "!actors!oOxiUyLZ0jB4Lk3Z",
+  "name": "Squirrel",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "companion-squirrel",
+    "role": "pet",
+    "climate": "Varies",
+    "frequency": "Common",
+    "organization": "Animal (1)",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "",
+    "alignment": "",
+    "numberAppearing": "1-6",
+    "ac": {
+      "base": 8,
+      "text": "8"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "Nil",
+    "size": "",
+    "morale": {
+      "value": 9,
+      "text": "Unreliable to Average (2-9)"
+    },
+    "xp": 0,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Small_Mammal",
+    "notes": "<p>Animal companion (Animal Master (POSP), Table 42). Statistics: Small Mammal, Squirrel.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -12,6 +12,7 @@ import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, i
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
+import { bondInfo, bondKind, canBond, companionLost, mountDied, mountFled, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -237,6 +238,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       findFamiliar: CharacterSheet.onFindFamiliar,
       familiarDeath: CharacterSheet.onFamiliarDeath,
       removeFamiliar: CharacterSheet.onRemoveFamiliar,
+      bondRoll: CharacterSheet.#onBondRoll,
+      bondSet: CharacterSheet.#onBondSet,
+      bondClear: CharacterSheet.#onBondClear,
+      companionLost: CharacterSheet.#onCompanionLost,
+      mountDied: CharacterSheet.#onMountDied,
+      mountFled: CharacterSheet.#onMountFled,
       removeAnimal: CharacterSheet.onRemoveAnimal,
       rollBodyWeight: CharacterSheet.onRollBodyWeight
     }
@@ -364,6 +371,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.profTab = this._proficiencyTabContext(sys);
     context.henchmen = this._henchmenContext();
     context.familiar = this._familiarContext();
+    context.bond = this._bondContext();
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
     // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
@@ -432,6 +440,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           { kits: sys.multi.bard.kits.map(k => k.replace(/-/g, " ")).join(", ") }) : "",
         bardOk: !sys.multi.bard || sys.multi.bard.ok
       } : null,
+      // Cavalier and Noble (POSP) "must purchase a mount" (owner's ruling: a warning while no mount is owned).
+      mountNeeded: bondInfo(this.document).mountNeeded,
       kitSingleClass: sys.multi && info.kitItem && SINGLE_CLASS_KITS[info.kitItem.system.source]
         ? game.i18n.format("AD2E.Multi.KitSingleClass", { source: info.kitItem.system.source, page: SINGLE_CLASS_KITS[info.kitItem.system.source] }) : "",
       kitRacesBarred: (info.kitItem?.system.racesBarred ?? []).join(", "),
@@ -1274,8 +1284,15 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       const animal = actor.pack ? await CharacterSheet.#importToWorld(actor) : actor;
       if (!animal) return null;
       const animals = this.actor.system.animals?.actors ?? [];
-      if (animals.includes(animal.uuid)) return null;
-      await this.actor.update({ "system.animals.actors": [...animals, animal.uuid] });
+      if (!animals.includes(animal.uuid)) await this.actor.update({ "system.animals.actors": [...animals, animal.uuid] });
+      // Animal Master / Rider (module/companions.mjs): offer to bond a fitting animal when there is no bond yet.
+      const kind = bondKind(this.actor);
+      const fits = kind && animal.system?.role === (kind === "companion" ? "pet" : "mount") && !this.actor.system.bond?.[kind];
+      if (fits && !canBond(this.actor, animal, kind)) {
+        const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize(`AD2E.Bond.Title.${kind}`) },
+          content: `<p>${foundry.utils.escapeHTML(game.i18n.format(`AD2E.Bond.Ask.${kind}`, { name: animal.name }))}</p>`, rejectClose: false });
+        if (ok) await setBond(this.actor, animal, kind);
+      }
       return animal;
     }
     const list = this.actor.system.henchmen?.actors ?? [];
@@ -1326,6 +1343,69 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onFindFamiliar() { return findFamiliar(this.actor); }
 
   static onFamiliarDeath() { return familiarDeath(this.actor); }
+
+  /** Animal companion / bonded mount panel (module/companions.mjs). */
+  _bondContext() {
+    const info = bondInfo(this.document);
+    if (!info.kind) return null;
+    const i18n = k => game.i18n.localize(k);
+    const row = r => (r && !r.missing ? { ...r, meta: `${i18n("AD2E.Character.hp")} ${r.value}/${r.max}${r.dead ? ` · ${i18n("AD2E.Familiar.Dead")}` : ""}`
+      + (r.bearing ? ` · ${r.bearing.distance} ${r.bearing.units} ${r.bearing.direction}` : "") } : r);
+    // Animals in the list that could be bonded (role pet for a companion, mount for a mount), not already bonded.
+    const role = info.kind === "companion" ? "pet" : "mount";
+    const candidates = (this.document.system.animals?.actors ?? []).map(u => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(u, { strict: false }))
+      .filter(a => a?.system?.role === role && !canBond(this.document, a, info.kind)).map(a => ({ uuid: a.uuid, name: a.name }));
+    return { ...info, companion: row(info.companion), mount: row(info.mount), isGM: !!game.user?.isGM, candidates,
+      isCompanion: info.kind === "companion", isMount: info.kind === "mount",
+      current: info.kind ? (info.kind === "companion" ? row(info.companion) : row(info.mount)) : null,
+      barredText: info.barred.join(", "),
+      rule: info.kind ? i18n(info.kind === "companion" ? "AD2E.Bond.CompanionRule" : "AD2E.Bond.MountRule") : "" };
+  }
+
+  static #onBondRoll() {
+    if (!game.user?.isGM) return;
+    return rollBondCreature(this.actor, bondKind(this.actor));
+  }
+
+  static #onBondSet(event, target) {
+    const sel = target.closest("fieldset")?.querySelector("select[data-bond-candidate]");
+    const actor = sel?.value ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(sel.value, { strict: false }) : null;
+    return actor ? setBond(this.actor, actor, bondKind(this.actor)) : null;
+  }
+
+  static #onBondClear() {
+    const kind = bondKind(this.actor);
+    return kind ? this.actor.update({ [`system.bond.${kind}`]: "" }) : null;
+  }
+
+  static async #onCompanionLost(event, target) {
+    if (!game.user?.isGM) return;
+    const careless = target.dataset.careless === "true";
+    if (careless) {
+      const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Bond.LostCareless") },
+        content: `<p>${game.i18n.localize("AD2E.Bond.CarelessConfirm")}</p>`, rejectClose: false });
+      if (!ok) return;
+    }
+    return companionLost(this.actor, careless);
+  }
+
+  static async #onMountDied() {
+    if (!game.user?.isGM) return;
+    const choice = await foundry.applications.api.DialogV2.wait({ window: { title: game.i18n.localize("AD2E.Bond.MountDiedTitle") },
+      content: `<p>${game.i18n.localize("AD2E.Bond.MountDiedQuestion")}</p>`,
+      buttons: [{ action: "normal", label: game.i18n.localize("AD2E.Bond.NotNegligent"), default: true },
+        { action: "negligent", label: game.i18n.localize("AD2E.Bond.WasNegligent") }, { action: "cancel", label: game.i18n.localize("Cancel") }],
+      rejectClose: false });
+    if (!choice || choice === "cancel") return;
+    return mountDied(this.actor, choice === "negligent");
+  }
+
+  static async #onMountFled() {
+    if (!game.user?.isGM) return;
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Bond.FledTitle") },
+      content: `<p>${game.i18n.localize("AD2E.Bond.FledConfirm")}</p>`, rejectClose: false });
+    return ok ? mountFled(this.actor) : null;
+  }
 
   static onRemoveFamiliar() {
     return this.actor.update({ "system.familiar.uuid": "", "system.familiar.separated": false, "system.familiar.deathResolved": false });

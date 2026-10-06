@@ -1,0 +1,66 @@
+{
+  "_id": "KdRMu2F4vobvjQYe",
+  "_key": "!actors!KdRMu2F4vobvjQYe",
+  "name": "Huge bat",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-bat-huge",
+    "role": "mount",
+    "climate": "Warm caves",
+    "frequency": "Rare",
+    "organization": "Flock",
+    "activity": "Night",
+    "diet": "Omnivore",
+    "intelligence": "Low (5-7)",
+    "treasure": "C",
+    "alignment": "Neutral evil",
+    "numberAppearing": "1-8",
+    "ac": {
+      "base": 7,
+      "text": "7 (see below)"
+    },
+    "movement": {
+      "base": 3,
+      "text": "3, Fl 15 (C)"
+    },
+    "hitDice": "4-6",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "2d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "2d4",
+    "specialAttacks": "See below",
+    "specialDefenses": "See below",
+    "magicResistance": "Nil",
+    "size": "H (12-16')",
+    "morale": {
+      "value": 12,
+      "text": "Steady (11-12)"
+    },
+    "xp": 420,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Bat",
+    "notes": "<p>Variable size: the actor uses the first variant's experience value (420 (4 HD)650 (5 HD)975 (6 HD)); hit points and damage by the DM.</p><p>Mount (Rider (POSP), Table 43). Statistics: Bat, Huge.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 7200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

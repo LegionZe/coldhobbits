@@ -1,0 +1,66 @@
+{
+  "_id": "PDgSneIEsHV0m6jU",
+  "_key": "!actors!PDgSneIEsHV0m6jU",
+  "name": "Killer whale",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-whale-killer",
+    "role": "mount",
+    "climate": "Oceans",
+    "frequency": "Common",
+    "organization": "Pod",
+    "activity": "Any",
+    "diet": "Carnivore",
+    "intelligence": "Average (8-10)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "5-40",
+    "ac": {
+      "base": 4,
+      "text": "4"
+    },
+    "movement": {
+      "base": 30,
+      "text": "Sw 30"
+    },
+    "hitDice": "9 to 12",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "5d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "5-20",
+    "specialAttacks": "See below",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "H-G",
+    "morale": {
+      "value": 14,
+      "text": "Elite (14)"
+    },
+    "xp": 975,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Whale",
+    "notes": "<p>Variable size: the actor uses the first variant's experience value (9 HD: 975; 10 HD: 1,400; 11-12 HD: 2,000); hit points and damage by the DM.</p><p>Mount (Rider (POSP), Table 43). Statistics: Whale, Killer Whale (Orca).</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

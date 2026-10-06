@@ -1,0 +1,71 @@
+{
+  "_id": "Xh1UC3IlzMnFqGqn",
+  "_key": "!actors!Xh1UC3IlzMnFqGqn",
+  "name": "Stag",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-stag",
+    "role": "mount",
+    "climate": "Temperate/Forest, plain, hill, and mountain",
+    "frequency": "Common",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Nil",
+    "numberAppearing": "1-4",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 24,
+      "text": "24"
+    },
+    "hitDice": "3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d3",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d3",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1 or 2",
+    "damageText": "1-3/1-3 or 2-8",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "M (4-5' tall, excluding antlers)",
+    "morale": {
+      "value": 7,
+      "text": "Unsteady (7)"
+    },
+    "xp": 65,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Stag",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Stag, Wild Stag.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

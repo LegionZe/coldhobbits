@@ -1,0 +1,66 @@
+{
+  "_id": "zaQzlxwWNQ7dSh0S",
+  "_key": "!actors!zaQzlxwWNQ7dSh0S",
+  "name": "Otter",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "companion-otter",
+    "role": "pet",
+    "climate": "Varies",
+    "frequency": "Common",
+    "organization": "Animal (1)",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "",
+    "alignment": "",
+    "numberAppearing": "1-4",
+    "ac": {
+      "base": 5,
+      "text": "5"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12, Sw 18"
+    },
+    "hitDice": "1-1",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d2",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-2",
+    "specialAttacks": "",
+    "specialDefenses": "",
+    "magicResistance": "Nil",
+    "size": "",
+    "morale": {
+      "value": 9,
+      "text": "Unreliable to Average (2-9)"
+    },
+    "xp": 7,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Small_Mammal",
+    "notes": "<p>Animal companion (Animal Master (POSP), Table 42). Statistics: Small Mammal, Otter.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 5300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

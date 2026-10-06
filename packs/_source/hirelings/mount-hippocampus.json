@@ -1,0 +1,66 @@
+{
+  "_id": "6Ir157VyjXIa5Ugr",
+  "_key": "!actors!6Ir157VyjXIa5Ugr",
+  "name": "Hippocampus",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-hippocampus",
+    "role": "mount",
+    "climate": "Fresh or salt water depths",
+    "frequency": "Rare",
+    "organization": "Herd",
+    "activity": "Any",
+    "diet": "Herbivore",
+    "intelligence": "Average (8-10)",
+    "treasure": "Nil",
+    "alignment": "Chaotic good",
+    "numberAppearing": "2-8",
+    "ac": {
+      "base": 5,
+      "text": "5"
+    },
+    "movement": {
+      "base": 24,
+      "text": "Sw 24"
+    },
+    "hitDice": "4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "",
+    "damageText": "1-4",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "H (18' long)",
+    "morale": {
+      "value": 12,
+      "text": "Steady (11-12)"
+    },
+    "xp": 120,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Hippocampus",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Hippocampus, Hippocampus.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

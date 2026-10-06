@@ -1,0 +1,66 @@
+{
+  "_id": "74ydbVfoxUzqfnTt",
+  "_key": "!actors!74ydbVfoxUzqfnTt",
+  "name": "Giant ray",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-ray-manta",
+    "role": "mount",
+    "climate": "Shallow tropical waters",
+    "frequency": "Uncommon",
+    "organization": "Solitary",
+    "activity": "Day",
+    "diet": "Carnivore",
+    "intelligence": "Non- (0)",
+    "treasure": "J-N×10,Q×5,X",
+    "alignment": "Neutral",
+    "numberAppearing": "1",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 18,
+      "text": "Sw 18"
+    },
+    "hitDice": "8-11",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "3d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1 tail or 1 bite",
+    "damageText": "3-12 (bite) or 3-20 (sting)",
+    "specialAttacks": "See below",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "G (32-40' wingspan)",
+    "morale": {
+      "value": 13,
+      "text": "Elite (13)"
+    },
+    "xp": 3000,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Ray",
+    "notes": "<p>Variable size: the actor uses the first variant's experience value (8 HD: 3,000; 9 HD: 4,000; 10 HD: 5,000; 11 HD: 6,000); hit points and damage by the DM.</p><p>Mount (Rider (POSP), Table 43). Statistics: Ray, Manta.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 9200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

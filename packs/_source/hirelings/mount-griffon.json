@@ -1,0 +1,76 @@
+{
+  "_id": "kRxHZr3oR4hruJTL",
+  "_key": "!actors!kRxHZr3oR4hruJTL",
+  "name": "Griffon",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-griffon",
+    "role": "mount",
+    "climate": "Temperate or subtropical/Hills or mountains",
+    "frequency": "Uncommon",
+    "organization": "Pride",
+    "activity": "Day",
+    "diet": "Carnivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "(C, S)",
+    "alignment": "Neutral",
+    "numberAppearing": "2-12",
+    "ac": {
+      "base": 3,
+      "text": "3"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12, Fl 30 (C, D if mounted)"
+    },
+    "hitDice": "7",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d4",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d4",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "2d8",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "3",
+    "damageText": "1-4/1-4/2-16",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (about 9' long)",
+    "morale": {
+      "value": 12,
+      "text": "Steady (11-12)"
+    },
+    "xp": 650,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Griffon",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Griffon, Griffon.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
