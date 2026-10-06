@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.112)
+## Status (v0.0.113)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -429,6 +429,9 @@ Node only until confirmed.
   the site's address is used and a warning is shown; with the setting off, pictures are linked as before. Re-importing
   replaces only the default icon, an earlier picture from the site or a local copy, not one a GM chose (re-importing
   monsters imported before 0.0.112 replaces their site links with local copies).
+  "Update existing monsters" (importer button, or `game.ad2e.updateMonsters()`, GM only) re-reads the page of every
+  imported monster in the world and in unlocked world Actor compendiums and updates its stat block like a re-import;
+  names, current hit points, pictures a GM chose and attack elements a GM set stay. Unlinked tokens follow their actor.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by

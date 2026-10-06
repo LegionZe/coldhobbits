@@ -572,7 +572,12 @@
     "Loading": "Loading monster pages: {done} / {total}",
     "FetchFailed": "Could not reach the site: {error}",
     "SomeFailed": "{n} monster page(s) could not be loaded: {keys}",
-    "Done": "Monsters imported: {created} created, {updated} updated."
+    "Done": "Monsters imported: {created} created, {updated} updated.",
+    "Update": "Update existing monsters",
+    "UpdateHint": "Re-read the page of every imported monster in this world and in unlocked world compendiums and update its stat block (names, current hit points, pictures a GM chose and attack elements a GM set stay). Unlinked tokens follow their actor. Also game.ad2e.updateMonsters().",
+    "Updating": "Updating {n} monsters from {pages} pages...",
+    "Updated": "Monsters updated: {updated}; page or stat block not found: {failed}.",
+    "GmOnly": "Only a GM can update monsters."
   },
   "AD2E.Sheet.Spell": "AD&D 2e Spell",
   "AD2E.Sheet.Magic": "AD&D 2e Magical Item",

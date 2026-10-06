@@ -187,6 +187,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   downloads each picture once (the site sends `access-control-allow-origin: *` on images) and uploads it with
   `foundry.applications.apps.FilePicker.implementation.upload("data", worlds/<world>/ad2e-monsters, file, {}, { notify: false })`
   (`browse` lists the folder once, `createDirectory` when missing; file name `cc.localImageName`); on failure the site URL is used.
+  `updateExistingMonsters` (game.ad2e.updateMonsters, importer button): world actors + unlocked world Actor packs flagged
+  `completeCompendium`, one page fetch per key, `monsterUpdate` (shared with re-import; keeps hp, GM pictures, attack elements).
 - Spells: `module/importers/adnd2e-wiki.mjs` (shared infobox parser; MediaWiki API with `origin=*`) used by
   `module/apps/spell-importer.mjs` and by `tools/build-spell-data.py` (via `tools/spell-items.mjs`), which also GENERATES
   `module/rules/spell-tables.mjs` (Tables 21, 24, 17, 32) and the example spells in `packs/_source/spells`.
