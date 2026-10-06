@@ -24,6 +24,7 @@ import { canFightTwoWeapons, twoWeaponStyle, COMBAT_TABLES, halveRate, mountedFi
 
 const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
+import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
 
 export default class AD2EActor extends Actor {
@@ -556,7 +557,7 @@ export default class AD2EActor extends Actor {
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
     return roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this }),
+      speaker: ChatMessage.getSpeaker({ actor: this }), flags: { ad2e: { save: { key, success } } },
       flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (useMaster ? ` (${game.i18n.localize(success ? "AD2E.Familiar.SpecialNone" : "AD2E.Familiar.SpecialHalf")})` : "")
@@ -1506,6 +1507,12 @@ export default class AD2EActor extends Actor {
     if (sys.prepared - sys.cast < 1) {
       ui.notifications.warn(game.i18n.format("AD2E.Spell.NotMemorized", { name: spell.name }));
       return;
+    }
+    // Rider feebleminded after a negligent mount death (module/companions.mjs; owner's ruling: confirm to cast).
+    if (this.type === "character" && feeblemindActive(this)) {
+      const ok = await DialogV2.confirm({ window: { title: spell.name }, rejectClose: false,
+        content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.localize("AD2E.Bond.FeebleCast")) ?? ""}</p>` });
+      if (!ok) return;
     }
     // Wizard spells in armour (owner's ruling: warn and confirm): "the wearing of armor is restricted" for multi-class
     // wizards, with elves in elven chain as the exception (Multi-Class and Dual-Class Characters (PHB)); bards abide by

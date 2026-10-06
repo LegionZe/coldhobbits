@@ -180,7 +180,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   name, owner's choices; `COMPANION_RULES` regexes; `MOUNT_HOMELANDS` owner's subtables -> `homelands`, rollBondTable(kind, die, homeland); `infobox_entry`/`rows_block`/`html_column_block` parsers; roles pet/mount).
   `module/companions.mjs` (`bondKind`, `canBond`, `bondInfo` with `tokenBearing`/`compass`, `carelessXp`, `rollBondTable`, `oversizeCompanion` (warning above S, owner's ruling),
   GM `companionLost`/`mountDied`/`mountFled`, `registerCompanions` death notice); character `system.bond` { companion,
-  mount, barred, rapportLost }; Bio tab panel, drop prompt in `_onDropActor`; Cavalier/Noble `mountNeeded` on Race & Class.
+  mount, barred, rapportLost, feebleUntil } (negligent mount death + failed save: `applyFeeblemind`, status `FEEBLE_STATUS`
+  registered in init, `feeblemindActive` confirm in castSpell, `endFeeblemind` on updateWorldTime / GM button; rollSave
+  messages carry `flags.ad2e.save` { key, success }); Bio tab panel, drop prompt in `_onDropActor`; Cavalier/Noble `mountNeeded` on Race & Class.
 - S&P kit features: kit `special` (build-kit-mechanics.py `KIT_SPECIAL`, regex-checked) and `socialRanks` (`social_ranks`
   parses each POSP page's 2d6 table from the raw wikitext). `module/kit-features.mjs` (`kitSpecial`, `socialRankFor`,
   `barbarianReaction`, `pugilistCharisma`, `applyMeditation`/`meditationActive` (character `system.meditation` { ability,

@@ -218,7 +218,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // companion (lost carelessly), and the rider's lost rapport (a mount fled).
       bond: new SchemaField({
         companion: new StringField({ required: true, blank: true, initial: "" }), mount: new StringField({ required: true, blank: true, initial: "" }),
-        barred: new ArrayField(new StringField()), rapportLost: new BooleanField({ initial: false })
+        barred: new ArrayField(new StringField()), rapportLost: new BooleanField({ initial: false }),
+        // Rider: feebleminded after a failed save for a mount lost by negligence, until this world time (null = not).
+        feebleUntil: new NumberField({ required: false, nullable: true, initial: null })
       }),
       // Energy drain (module/level-drain.mjs): levels lost and not yet regained (key "main", "multi:<id>" or
       // "prev:<id>", the lost level, hit points lost, world time) and the 0-level state.
