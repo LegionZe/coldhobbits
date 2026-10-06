@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.3)
+## Status (v1.0.4)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -58,6 +58,12 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   specialist missile column, Strength use, two hands regardless of size, magical hit/damage bonuses, cost, weight and
   notes (the weapon sheet shows the statistics read-only). Checks: a use ticked, damage as dice, a missile range, a
   B/P/S type.
+- Create item (GM manual > GM tools, or `game.ad2e.createItem()`; 1.0.4): equipment (category), a container (capacity
+  in pounds or a volume; only items with a capacity are offered as a start), armour (body armour AC -10 to 10, a shield's
+  bonus vs. melee and missiles and attackers covered, a helmet; size made for; magical bonus) or ammunition (launchers
+  chosen from the missile weapons that take ammunition; damage dice; magical bonuses). Starts from an item of that kind
+  or blank; the cost must read as a number and a coin ("5 gp", "2 sp each"). The weightless container option is left to
+  the magic item creator (only magical items store it).
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

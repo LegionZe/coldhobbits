@@ -58,6 +58,11 @@
       one, and set its size, type, speed factor, damage (two rows, e.g. one- and two-handed), melee and missile use, rate
       of fire and range, Strength use, magical bonuses and notes; these statistics are read-only on the weapon sheet. It can
       create a matching weapon proficiency, or link an existing one so characters proficient with it use it.</p></div>
+    <div><button type="button" data-action="tool" data-tool="createItem"><i class="fa-solid fa-sack-dollar"></i> Create item</button>
+      <p>A guided window for equipment (with its category), a container (capacity in pounds or volume), armour (body armour
+      AC, a shield's bonus against melee and missiles and the attackers it covers, a helmet; the size it was made for and a
+      magical bonus) or ammunition (the weapons that fire it and its damage). Start from an existing item of that kind or a
+      blank one; the cost is checked ("5 gp", "2 sp each").</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -270,6 +275,7 @@
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
       <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>
+      <tr><td><code>game.ad2e.createItem()</code></td><td>Item creator (equipment, containers, armour, ammunition).</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>
