@@ -6,6 +6,7 @@ import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } f
 import { spProficienciesOn, spRating } from "../sp-proficiencies.mjs";
 import { isShairKit } from "../shair.mjs";
 import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
+import { combinationAllowed, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -163,6 +164,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         })),
         penalty: new SchemaField({ encounter: new BooleanField({ initial: false }), adventure: new BooleanField({ initial: false }) })
       }),
+      // Multi-class characters (module/multi-class.mjs, world setting "multiClass"): level and experience of each class
+      // other than the primary one (whose level and experience are `level` and `xp`).
+      multiClass: new SchemaField({
+        classes: new ArrayField(new SchemaField({
+          identifier: new StringField({ initial: "" }), level: int(1, 1, 30), xp: int(0, 0)
+        }))
+      }),
       biography: new HTMLField()
     };
   }
@@ -191,6 +199,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.classInfo = this.#computeClassInfo();
     if (this.classInfo.classItem) this.classGroup = this.classInfo.classItem.system.group;
     this.dual = this.#computeDual();
+    this.multi = this.#computeMulti();
     // Kit ability score bonuses (e.g. Pacifist priest Charisma +2, at most 18) count after the kit's requirements.
     for (const mod of this.#kitModifierList()) {
       if (mod.target !== "score" || !this.abilities[mod.key]) continue;
@@ -256,7 +265,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Dual-class: the better of the old and new tables once the restrictions are lifted (owner's ruling); while they
       // apply, a better old number is offered in the save dialog (using it costs experience).
       const old = dual ? dual.oldSaves[key] : null;
-      const best = dual && !dual.restricted ? better(saveRow[key], old) : saveRow[key];
+      let best = dual && !dual.restricted ? better(saveRow[key], old) : saveRow[key];
+      // Multi-class: "the best saving throw from his different classes".
+      for (const c of this.multi?.others ?? []) best = better(best, lookup(AD2E.saveTable[c.group], c.level)?.[key] ?? null);
       if (dual) dual.saveOptions[key] = dual.restricted && old !== null && old < saveRow[key] ? old : null;
       this.saves[key].value = this.saves[key].override ?? best;
       this.saves[key].bonus = (["rsw", "sp"].includes(key) ? raceCon : 0) + classSave + this.kitMods.total("save", key);
@@ -283,7 +294,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.thac0.computed = computed;
     const oldThac0 = dual?.oldThac0 ?? null;
     if (dual) dual.thac0Option = dual.restricted && oldThac0 !== null && oldThac0 < computed ? oldThac0 : null;
-    this.thac0.value = this.thac0.override ?? (dual && !dual.restricted ? better(computed, oldThac0) : computed);
+    // Multi-class: "the most favorable combat value".
+    const multiThac0 = (this.multi?.others ?? []).reduce((b, c) => better(b, thac0At(c.group, c.level)), null);
+    this.thac0.value = this.thac0.override ?? better(dual && !dual.restricted ? better(computed, oldThac0) : computed, multiThac0);
   }
 
   /**
@@ -303,27 +316,66 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
   }
 
   /**
+   * Multi-class state (null unless the world setting is on and the character has several class items): each class with
+   * its level, experience, next level, racial level limit and prime requisite bonus; `others` = the classes besides the
+   * primary one; `allowed` = the combination is one of the race's.
+   */
+  #computeMulti() {
+    if (!this.classInfo.multi) return null;
+    const stored = this.multiClass?.classes ?? [];
+    const race = this.raceInfo.race;
+    const raceId = this.raceInfo.raceItem?.system.identifier;
+    const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
+    const classes = this.classInfo.classItems.map(i => {
+      const id = i.system.identifier;
+      const primary = i === this.classInfo.classItem;
+      const entry = primary ? { level: this.level, xp: this.xp } : (stored.find(c => c.identifier === id) ?? { level: 1, xp: 0 });
+      const prime = [...(i.system.prime ?? [])];
+      // The kit's experience table and racial level limit apply to the kit's own class.
+      const kitHere = !!kit?.classes?.has(id);
+      const xpKey = (kitHere && kit.xpTable) || id;
+      const kitLimit = kitHere && raceId && kit.raceLimits && raceId in kit.raceLimits ? kit.raceLimits[raceId] : undefined;
+      return { item: i, identifier: id, name: i.name, group: i.system.group, school: i.system.school ?? "", primary,
+        level: entry.level, xp: entry.xp, xpNext: AD2E.xpTable[xpKey]?.[entry.level] ?? null,
+        levelLimit: kitLimit !== undefined ? kitLimit : (race?.levelLimits?.[id] ?? null),
+        hitDice: hitDiceAt(i.system.group, entry.level),
+        bonus: prime.length > 0 && prime.every(k => this.abilities[k].total >= 16) ? 10 : 0 };
+    });
+    for (const c of classes) c.atLimit = !!c.levelLimit && c.level >= c.levelLimit;
+    return { classes, others: classes.filter(c => !c.primary),
+      allowed: race ? combinationAllowed(race.multiClass, classes.map(c => c.identifier)) : true };
+  }
+
+  /**
    * Class and kit come from owned Items (types "class" and "kit"); the class item, when
    * present, also sets the class group. A kit only counts if it is open to the class.
    */
   #computeClassInfo() {
     const items = this.parent?.items;
-    const classItem = items?.find(i => i.type === "class") ?? null;
+    // Multi-class (world setting): every class item counts; the primary one (warrior first, module/multi-class.mjs) drives
+    // the single-class code paths, the others are added in #computeMulti.
+    const classItems = items?.filter(i => i.type === "class") ?? [];
+    const multi = multiClassOn() && classItems.length > 1;
+    const classItem = multi
+      ? primaryClass(classItems.map(i => ({ item: i, identifier: i.system.identifier, group: i.system.group }))).item
+      : (classItems[0] ?? null);
     const kitItem = items?.find(i => i.type === "kit") ?? null;
     const cls = classItem?.system ?? null;
     const race = this.raceInfo.race;
     const raceId = this.raceInfo.raceItem?.system.identifier;
-    const classViaRace = !race || !cls || race.classes.has(cls.identifier);
+    const classViaRace = !race || !cls || (multi ? classItems.every(i => race.classes.has(i.system.identifier)) : race.classes.has(cls.identifier));
     const classViaKit = !!(race && cls && race.kitClasses?.has(cls.identifier));
     const kitListsRace = !!(kitItem && raceId && kitItem.system.raceLimits && raceId in kitItem.system.raceLimits);
     // A kit fits if it is open to the class and, with a race: a race-only kit must list the race, and a
     // class the race only reaches through kits needs a kit that lists the race.
-    const kitFits = !!(cls && kitItem && kitItem.system.classes.has(cls.identifier)
+    // Multi-class: one kit, fitting any of the classes (owner's ruling).
+    const kitFits = !!(cls && kitItem && (multi ? classItems.some(i => kitItem.system.classes.has(i.system.identifier)) : kitItem.system.classes.has(cls.identifier))
       && !(raceId && (kitItem.system.racesBarred ?? []).includes(raceId))
       && (!race || ((!kitItem.system.raceOnly || kitListsRace) && (classViaRace || kitListsRace))));
     const kit = kitFits ? kitItem.system : null;
     const requirements = AD2E.abilities.map(key => {
-      const classMin = cls?.min[key] ?? null;
+      const mins = (multi ? classItems.map(i => i.system.min[key]) : [cls?.min[key]]).filter(v => v !== null && v !== undefined);
+      const classMin = mins.length ? Math.max(...mins) : null;
       const kitMin = kit ? (kit.min[key] ?? null) : null;
       // Skills & Powers kits (`minStacks`): the higher of the kit's and the class's minimum.
       const required = kit?.minStacks ? Math.max(kitMin ?? 0, classMin ?? 0) : (kitMin ?? classMin ?? 0);
@@ -331,7 +383,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       return { key, classMin, kitMin, required, score, met: score >= required };
     });
     const prime = cls ? [...cls.prime] : [];
-    const levelLimit = (kitFits && kitListsRace)
+    // A kit's racial level limit is for the kit's class (multi-class: only when that is the primary class).
+    const levelLimit = (kitFits && kitListsRace && (!multi || kitItem.system.classes.has(cls.identifier)))
       ? (kitItem.system.raceLimits[raceId] ?? null)
       : ((cls && race?.levelLimits?.[cls.identifier]) ?? null);
     return {
@@ -340,7 +393,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       kitFits,
       requirements,
       requirementsMet: requirements.every(r => r.met),
-      alignmentAllowed: cls ? cls.alignments.has(this.alignment) : true,
+      alignmentAllowed: multi ? classItems.every(i => i.system.alignments.has(this.alignment)) : (cls ? cls.alignments.has(this.alignment) : true),
+      classItems,
+      multi,
       classAllowedByRace: classViaRace || (classViaKit && kitFits && kitListsRace),
       needsRaceKit: !classViaRace && classViaKit && !(kitFits && kitListsRace),
       levelLimit,
@@ -534,15 +589,21 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const rules = AD2E.proficiencySlots[this.classGroup];
     const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
     const classId = this.classInfo.classItem?.system.identifier;
-    const groups = AD2E.proficiencyGroups[classId] ?? AD2E.defaultProficiencyGroups[this.classGroup];
+    const groupsOf = (id, group) => AD2E.proficiencyGroups[id] ?? AD2E.defaultProficiencyGroups[group] ?? [];
+    // Multi-class (implementation choice): the nonweapon groups of all the classes, since the character may "use the most
+    // beneficial line on Table 34" (Weapon Proficiencies (PHB)).
+    const groups = this.multi ? [...new Set(this.multi.classes.flatMap(c => groupsOf(c.identifier, c.group)))]
+      : groupsOf(classId, this.classGroup);
     const items = this.parent?.items?.filter(i => i.type === "proficiency") ?? [];
     // Kit exceptions (tools/build-kit-mechanics.py KIT_SPECIALIZATION): "allowed"/"required" open specialization to
     // the kit's class, "forbidden" closes it; `free` weapons are specialized at no slot cost even for other classes.
     const kitSpec = kit?.specialization ?? { mode: "", free: [] };
-    const free = new Set(kitSpec.free ?? []);
+    // "multi-class characters cannot use weapon specialization; it is available only to single-class fighters" (Weapon
+    // Specialization (PHB)): no free kit specializations either.
+    const free = new Set(this.multi ? [] : (kitSpec.free ?? []));
     // Skills & Powers weapon rules (world setting, module/sp-weapons.mjs): every class may specialize (Table 53).
     const sp = spWeaponsOn();
-    const canSpecialize = kitSpec.mode === "forbidden" ? false
+    const canSpecialize = (kitSpec.mode === "forbidden" || (this.multi && !sp)) ? false
       : sp || AD2E.specialization.classes.includes(classId) || ["allowed", "required"].includes(kitSpec.mode);
     const specializedCount = items.filter(i => i.system.kind === "weapon" && i.system.specialized && !free.has(i.system.identifier)).length;
     // Skills & Powers: valid group proficiencies (warriors only) make their weapons proficient (no slot for the weapon).
@@ -614,6 +675,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const slotsAt = (r, level) => ({ weapon: r.weaponInitial + Math.floor(level / r.weaponRate),
       nonweapon: r.nonweaponInitial + Math.floor(level / r.nonweaponRate) });
     const base = slotsAt(rules, this.level);
+    // Multi-class: "the largest number of proficiency slots of the different classes" at the start and new slots "at the
+    // fastest of the given rates" (module/multi-class.mjs multiSlots, each class at its own level).
+    if (this.multi) {
+      const rs = this.multi.classes.map(c => ({ r: AD2E.proficiencySlots[c.group], level: c.level })).filter(x => x.r);
+      base.weapon = multiSlots(rs.map(x => ({ initial: x.r.weaponInitial, rate: x.r.weaponRate, level: x.level })));
+      base.nonweapon = multiSlots(rs.map(x => ({ initial: x.r.nonweaponInitial, rate: x.r.nonweaponRate, level: x.level })));
+    }
     for (const p of this.dual?.previous ?? []) {
       const r = AD2E.proficiencySlots[p.group];
       if (!r) continue;
@@ -648,7 +716,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       spRatings: spProf,
       specRule: { mode: kitSpec.mode ?? "", free: [...free],
         missing: kitSpec.mode === "required" && specializedCount === 0 },
-      penalty: sp ? spInfo.penalty.nonproficient : rules.penalty,
+      // Multi-class: the smallest non-proficiency penalty of the classes (the most beneficial Table 34 line).
+      penalty: sp ? spInfo.penalty.nonproficient
+        : (this.multi ? Math.max(...this.multi.classes.map(c => AD2E.proficiencySlots[c.group]?.penalty ?? -Infinity)) : rules.penalty),
       entries,
       weapon: { available: available.weapon, used: used(weaponKinds) },
       nonweapon: { available: available.nonweapon, used: used(["nonweapon"]) }
@@ -798,18 +868,41 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * Paladins and rangers get no Wisdom bonus spells. Owned spell items are grouped by level with their memorized counts.
    */
   #computeSpells() {
-    const main = this.#spellsFor(this.classInfo.classItem?.system, this.level, { kitItem: this.classInfo.kitItem });
-    // Dual-class: an earlier class casting the other kind of spells keeps its slots at its last level (module/dual-class.mjs);
-    // its spell levels follow the current class's, marked `old` with their own casting level.
-    const prev = (this.dual?.previous ?? []).map(p => ({ p, info: AD2E.casterTables[p.identifier] ? AD2E.casterKinds[AD2E.casterTables[p.identifier]] : null }))
-      .find(x => x.info && x.info !== main.kind);
-    if (!prev) return main;
-    const old = this.#spellsFor({ identifier: prev.p.identifier, school: prev.p.school }, prev.p.level, { kindOnly: prev.info });
-    const mainLevels = main.kind ? main.levels.map(l => ({ ...l, kind: main.kind, spells: l.spells.filter(i => i.system.kind !== old.kind) }))
+    const kitItem = this.classInfo.kitItem;
+    const kitFor = id => (this.classInfo.kitFits && kitItem?.system.classes?.has(id) ? kitItem : null);
+    const kindOf = id => (AD2E.casterTables[id] ? AD2E.casterKinds[AD2E.casterTables[id]] : null);
+    const mainId = this.classInfo.classItem?.system.identifier;
+    const main = this.#spellsFor(this.classInfo.classItem?.system, this.level, { kitItem: this.multi ? kitFor(mainId) : kitItem });
+    // Another class casting another kind of spells keeps its own slots and casting level:
+    //  - dual-class: an earlier class at its last level, marked `old` (module/dual-class.mjs);
+    //  - multi-class: the other classes at their own levels (module/multi-class.mjs); a fighter/mage casts as a mage.
+    // Their spell levels follow the main class's. Of several classes casting the same kind, the higher level counts.
+    const extras = [];
+    const add = (x) => {
+      if (!x.kind || x.kind === main.kind) return;
+      const same = extras.findIndex(e => e.kind === x.kind);
+      if (same < 0) extras.push(x);
+      else if (x.level > extras[same].level) extras[same] = x;
+    };
+    for (const c of this.multi?.others ?? []) add({ identifier: c.identifier, school: c.school, level: c.level, name: c.name, kind: kindOf(c.identifier), old: false, kit: kitFor(c.identifier) });
+    for (const p of this.dual?.previous ?? []) add({ identifier: p.identifier, school: p.school, level: p.level, name: p.name, kind: kindOf(p.identifier), old: true, kit: null });
+    if (!extras.length) return main;
+    const others = extras.map(x => ({ x, s: this.#spellsFor({ identifier: x.identifier, school: x.school }, x.level, { kitItem: x.kit, kindOnly: x.kind }) }));
+    const otherKinds = others.map(o => o.s.kind);
+    const mainLevels = main.kind ? main.levels.map(l => ({ ...l, kind: main.kind, spells: l.spells.filter(i => !otherKinds.includes(i.system.kind)) }))
       .filter(l => l.slots > 0 || l.spells.length) : [];
-    const oldLevels = old.levels.map(l => ({ ...l, kind: old.kind, old: true, oldClass: prev.p.name, castingLevel: old.castingLevel }));
-    return { ...main, levels: [...mainLevels, ...oldLevels], available: true,
-      old: { kind: old.kind, table: old.table, castingLevel: old.castingLevel, className: prev.p.name } };
+    const extraLevels = others.flatMap(({ x, s }) => s.levels.map(l => ({ ...l, kind: s.kind, old: x.old, oldClass: x.name,
+      castingLevel: s.castingLevel })));
+    const old = others.find(o => o.x.old);
+    // `castingLevels`: casting level by spell kind; a class without spells of its own (a fighter/mage's fighter) leaves
+    // the kind, table and casting level to the other class.
+    const first = main.kind ? main : others[0].s;
+    const castingLevels = Object.fromEntries([...others.map(o => [o.s.kind, o.s.castingLevel]), ...(main.kind ? [[main.kind, main.castingLevel]] : [])]);
+    return { ...main, kind: first.kind, table: first.table, castingLevel: first.castingLevel, castingLevels,
+      shair: main.shair || others.some(o => o.s.shair),
+      levels: [...mainLevels, ...extraLevels], available: true,
+      old: old ? { kind: old.s.kind, table: old.s.table, castingLevel: old.s.castingLevel, className: old.x.name } : null,
+      extra: others.map(({ x, s }) => ({ kind: s.kind, table: s.table, castingLevel: s.castingLevel, className: x.name, old: x.old })) };
   }
 
   #spellsFor(cls, level, { kitItem = null, kindOnly = null } = {}) {
@@ -882,21 +975,41 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     out.old = {};
     // Dual-class: abilities of an earlier class that the current one lacks stay available at that class's last level
     // (marked `old`: using them while restricted costs experience, module/dual-class.mjs).
-    for (const p of this.dual?.previous ?? []) {
-      const prev = this.#classAbilitiesFor(p.identifier, p.level, null);
+    // Multi-class: the other classes' abilities at their own levels, with the kit if it is open to that class
+    // (module/multi-class.mjs).
+    const multi = !!this.multi;
+    const extras = [
+      ...(this.dual?.previous ?? []).map(p => ({ id: p.identifier, level: p.level, kit: null, old: p.name })),
+      ...(this.multi?.others ?? []).map(c => ({ id: c.identifier, level: c.level, kit: kit?.classes?.has(c.identifier) ? kit : null, old: null }))
+    ];
+    if (multi) out.armorLimited = out.armorBlocked && this.#multiThiefLimit(out);
+    for (const x of extras) {
+      const prev = this.#classAbilitiesFor(x.id, x.level, x.kit);
+      if (multi) prev.armorLimited = prev.armorBlocked && this.#multiThiefLimit(prev);
       if (!out.skills.length && prev.skills.length) {
         Object.assign(out, { skills: prev.skills, budget: prev.budget, perSkillMax: prev.perSkillMax, armorColumn: prev.armorColumn,
-          armorBlocked: prev.armorBlocked, skillClassId: prev.classId });
-        out.old.skills = p.name;
+          armorBlocked: prev.armorBlocked, armorLimited: prev.armorLimited, skillClassId: prev.classId });
+        if (x.old) out.old.skills = x.old;
       }
       for (const key of ["backstab", "turnLevel", "layOnHands", "cureDisease", "tracking"]) {
         if ((out[key] === null || out[key] === undefined) && prev[key] !== null && prev[key] !== undefined) {
           out[key] = prev[key];
-          out.old[key] = p.name;
+          if (x.old) out.old[key] = x.old;
         }
       }
     }
     return out;
+  }
+
+  /**
+   * Multi-class thieves (and bards) in armour not allowed to thieves: "cannot use any thieving abilities other than open
+   * locks or detect noise" (Multi-Class and Dual-Class Characters (PHB)). Table 29 has no column for such armour, so
+   * those two skills take no armour adjustment. Returns whether the limit applied.
+   */
+  #multiThiefLimit(info) {
+    if (!info.skills.length || info.armorColumn !== "heavy") return false;
+    for (const s of info.skills) s.available = ["ol", "dn"].includes(s.key) && !s.belowOne;
+    return true;
   }
 
   #classAbilitiesFor(id, level, kit) {

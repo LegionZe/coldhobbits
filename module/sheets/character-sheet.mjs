@@ -11,6 +11,7 @@ import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWe
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
+import { multiClassOn, multiEligibility, SINGLE_CLASS_KITS } from "../multi-class.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -400,6 +401,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         penaltyText: sys.dual.penalty.encounter || sys.dual.penalty.adventure ? game.i18n.localize("AD2E.Dual.PenaltyPending") : "",
         isGM: !!game.user?.isGM
       } : null,
+      // Multi-class (module/multi-class.mjs): each class with its level, experience and racial level limit.
+      multi: sys.multi ? {
+        rows: sys.multi.classes.map(c => ({ id: c.item.id, identifier: c.identifier, name: c.name, primary: c.primary,
+          group: game.i18n.localize(AD2E.classGroups?.[c.group] ?? c.group), level: c.level, xp: c.xp, xpNext: c.xpNext ?? "—",
+          hitDice: c.hitDice.bonus ? `${c.hitDice.dice}d${c.hitDice.die}+${c.hitDice.bonus}` : `${c.hitDice.dice}d${c.hitDice.die}`,
+          limit: c.levelLimit ?? game.i18n.localize("AD2E.Race.Unlimited"), atLimit: c.atLimit,
+          bonus: c.bonus ? `+${c.bonus}%` : "—", canLevel: c.xpNext !== null && c.xp >= c.xpNext && !c.atLimit })),
+        allowed: sys.multi.allowed
+      } : null,
+      kitSingleClass: sys.multi && info.kitItem && SINGLE_CLASS_KITS[info.kitItem.system.source]
+        ? game.i18n.format("AD2E.Multi.KitSingleClass", { source: info.kitItem.system.source, page: SINGLE_CLASS_KITS[info.kitItem.system.source] }) : "",
       kitRacesBarred: (info.kitItem?.system.racesBarred ?? []).join(", "),
       kitBonusProfs: formatKitProficiencies(info.kitItem?.system.bonusProficiencies),
       kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
@@ -522,6 +534,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       ranger: skillId === "ranger",
       trapNote: info.skills.some(sk => sk.key === "rt"),
       armorBlocked: info.armorBlocked,
+      armorLimited: !!info.armorLimited,
       backstab: info.backstab ? fmt("AD2E.Ability2.BackstabText", { mult: info.backstab }) : "",
       turnLevel: info.turnLevel ? fmt("AD2E.Ability2.TurnLevel", { level: info.turnLevel }) : "",
       layOnHands: info.layOnHands ? { text: fmt("AD2E.Ability2.LayOnHandsText", { hp: info.layOnHands.hp }), used: info.layOnHands.used } : null,
@@ -575,7 +588,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const levels = sp.levels.map(l => ({
       ...l,
       label: (l.level === 0 ? i18n("AD2E.Spell.Cantrips") : ordinal(l.level))
-        + (sp.old ? ` (${l.old ? game.i18n.format("AD2E.Dual.OldSpells", { class: l.oldClass, kind: i18n(`AD2E.Spell.${l.kind}`) })
+        + (sp.extra?.length ? ` (${l.oldClass ? game.i18n.format("AD2E.Dual.OldSpells", { class: l.oldClass, kind: i18n(`AD2E.Spell.${l.kind}`) })
           : i18n(`AD2E.Spell.${l.kind}`)})` : ""),
       slotText: !(l.bonus || l.school) ? "" : [l.base ? `${l.base}` : null, l.bonus ? `+${l.bonus} ${i18n("AD2E.Spell.WisdomBonus")}` : null,
         l.school ? `+${l.school} ${i18n("AD2E.Spell.SchoolBonus")}` : null].filter(Boolean).join(" "),
@@ -856,6 +869,42 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return choice === "dual" || choice === "replace" ? choice : null;
   }
 
+  /**
+   * Multi-class prompt when a class is dropped on a demihuman that has one (world setting on): "multi" (add the class;
+   * only when eligible, module/multi-class.mjs), "replace", or null (cancelled).
+   */
+  async #askMultiClass(classItems, next, raceItem) {
+    const sys = this.actor.system;
+    const scores = Object.fromEntries(AD2E.abilities.map(k => [k, sys.abilities[k].total]));
+    const stored = sys.multiClass?.classes ?? [];
+    const classes = classItems.map(i => {
+      const id = i.system.identifier;
+      const multi = sys.multi?.classes.find(c => c.identifier === id);
+      return multi ? { identifier: id, level: multi.level, xp: multi.xp }
+        : (stored.find(c => c.identifier === id) ?? { identifier: id, level: sys.level, xp: sys.xp });
+    });
+    const elig = multiEligibility({ combinations: raceItem?.system.multiClass, classes, next: next.system, alignment: sys.alignment, scores });
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
+    const names = classItems.map(i => i.name).join("/");
+    const fmt = { from: names, to: next.name, race: raceItem?.name ?? "—" };
+    const reasons = elig.reasons.map(r => `<li>${esc(game.i18n.format(`AD2E.Multi.Reason.${r}`, fmt))}</li>`).join("");
+    const combos = [...(raceItem?.system.multiClass ?? [])].map(c => c.split("/").map(id => id.charAt(0).toUpperCase() + id.slice(1)).join("/")).join(", ");
+    const buttons = [];
+    if (elig.ok) buttons.push({ action: "multi", label: game.i18n.format("AD2E.Multi.Become", fmt), default: true });
+    buttons.push({ action: "replace", label: game.i18n.format("AD2E.Dual.Replace", { from: names, to: next.name }) });
+    buttons.push({ action: "cancel", label: i18n("Cancel") });
+    const choice = await foundry.applications.api.DialogV2.wait({
+      window: { title: i18n("AD2E.Multi.Title") },
+      content: `<p>${esc(game.i18n.format("AD2E.Multi.Question", fmt))}</p>`
+        + (combos ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Multi.Combinations", { race: fmt.race, list: combos }))}</p>` : "")
+        + (elig.ok ? `<p class="ad2e-note">${esc(i18n("AD2E.Multi.Explain"))}</p>`
+          : `<p class="ad2e-unmet">${esc(i18n("AD2E.Multi.NotEligible"))}</p><ul>${reasons}</ul>`),
+      buttons, rejectClose: false
+    });
+    return choice === "multi" || choice === "replace" ? choice : null;
+  }
+
   async _onDropItem(event, item) {
     const onContainer = await dropOnContainer(this, event, item, () => this._dropItemDefault(event, item));
     return onContainer === undefined ? this._dropItemDefault(event, item) : onContainer;
@@ -892,7 +941,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       const sp = this.actor.system.spells;
       const cls = this.actor.system.classInfo.classItem?.system;
       const warn = key => ui.notifications.warn(game.i18n.format(key, { name: item.name, class: this.actor.system.classInfo.classItem?.name ?? "—" }));
-      if (!sp.kind || item.system.kind !== sp.kind) warn("AD2E.Spell.WrongKind");
+      // Dual- and multi-class characters may cast a second kind of spells (`spells.extra`).
+      const kinds = [sp.kind, ...(sp.extra ?? []).map(e => e.kind)].filter(Boolean);
+      if (!kinds.includes(item.system.kind)) warn("AD2E.Spell.WrongKind");
       else if (cls?.opposition && item.system.schools.some(sc => schoolStems(sc).some(st => schoolStems(cls.opposition).includes(st)))) {
         warn("AD2E.Spell.OppositionSchool");
       } else if (AD2E.limitedSpheres[sp.table]
@@ -900,7 +951,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         warn("AD2E.Spell.SphereNotAllowed");
       }
       // A wizard spell found by a wizard (or bard): roll to learn it (Intelligence (PHB)), or add it without a roll.
-      if (sp.kind === "wizard" && item.system.kind === "wizard") {
+      if (kinds.includes("wizard") && item.system.kind === "wizard") {
         const choice = await foundry.applications.api.DialogV2.wait({
           window: { title: game.i18n.format("AD2E.Learn.DropTitle", { name: item.name }) },
           content: `<p>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Learn.DropText", { chance: learnChance(this.actor, item).chance })) ?? ""}</p>`,
@@ -932,6 +983,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const current = this.actor.items;
     const raceItem = current.find(i => i.type === "race");
     const classItem = current.find(i => i.type === "class");
+    // Multi-class (world setting): every class item; a kit or race must suit them (the kit: any of them).
+    const classItems = multiClassOn() ? current.filter(i => i.type === "class") : (classItem ? [classItem] : []);
     const kitItem = current.find(i => i.type === "kit");
     const remove = [];
     const raceAllows = (race, classId) => race.system.classes.has(classId) || race.system.kitClasses?.has(classId);
@@ -944,19 +997,38 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       return race.system.classes.has(classId) || listed;
     };
     if (item.type === "race") {
-      if (classItem && !raceAllows(item, classItem.system.identifier)) {
-        ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: classItem.name, race: item.name }));
+      const barred = classItems.find(c => !raceAllows(item, c.system.identifier));
+      if (barred) {
+        ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: barred.name, race: item.name }));
         return null;
       }
       if (raceItem) remove.push(raceItem.id);
-      if (kitItem && classItem && !kitOkForRace(kitItem, item, classItem.system.identifier)) remove.push(kitItem.id);
+      if (kitItem && classItems.length && !classItems.some(c => kitOkForRace(kitItem, item, c.system.identifier))) remove.push(kitItem.id);
     } else if (item.type === "class") {
       if (raceItem && !raceAllows(raceItem, item.system.identifier)) {
         ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: item.name, race: raceItem.name }));
         return null;
       }
-      // Dual-class (world setting, module/dual-class.mjs): keep the current class as an earlier class instead of replacing it.
-      if (classItem && dualClassOn() && classItem.system.identifier !== item.system.identifier) {
+      // Multi-class (world setting, module/multi-class.mjs): a demihuman whose race has combinations may add the class.
+      if (classItem && multiClassOn() && [...(raceItem?.system.multiClass ?? [])].length
+        && !classItems.some(c => c.system.identifier === item.system.identifier)) {
+        const choice = await this.#askMultiClass(classItems, item, raceItem);
+        if (!choice) return null;
+        if (choice === "multi") {
+          // All classes start at 1st level with no experience (creation only): entries for every class but the primary
+          // one, whichever that turns out to be (module/multi-class.mjs primaryClass).
+          const ids = [...classItems.map(c => c.system.identifier), item.system.identifier];
+          await this.actor.update({ "system.multiClass.classes": ids.map(identifier => ({ identifier, level: 1, xp: 0 })),
+            "system.level": 1, "system.xp": 0 });
+          const created = await super._onDropItem(event, item);
+          await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<p>${foundry.utils.escapeHTML(
+            game.i18n.format("AD2E.Multi.Added", { name: this.actor.name, classes: [...classItems.map(c => c.name), item.name].join("/") }))}</p>` });
+          return created;
+        }
+        // Replacing: every current class goes.
+        for (const c of classItems) if (c !== classItem) remove.push(c.id);
+      } else if (classItem && dualClassOn() && classItem.system.identifier !== item.system.identifier) {
+        // Dual-class (world setting, module/dual-class.mjs): keep the current class as an earlier class instead of replacing it.
         const choice = await this.#askDualClass(classItem, item, raceItem);
         if (!choice) return null;
         if (choice === "dual") {
@@ -983,16 +1055,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         ui.notifications.warn(game.i18n.localize("AD2E.Class.NeedClassFirst"));
         return null;
       }
-      if (!item.system.classes.has(classItem.system.identifier)) {
+      // Multi-class: one kit, open to any of the classes (owner's ruling).
+      const kitClass = classItems.find(c => item.system.classes.has(c.system.identifier) && kitOkForRace(item, raceItem, c.system.identifier))
+        ?? classItems.find(c => item.system.classes.has(c.system.identifier));
+      if (!kitClass) {
         ui.notifications.warn(game.i18n.format("AD2E.Class.KitNotForClass",
-          { kit: item.name, class: classItem.name }));
+          { kit: item.name, class: classItems.map(c => c.name).join("/") }));
         return null;
       }
-      if (!kitOkForRace(item, raceItem, classItem.system.identifier)) {
+      if (!kitOkForRace(item, raceItem, kitClass.system.identifier)) {
         ui.notifications.warn(game.i18n.format("AD2E.Race.KitNotForRace", { kit: item.name, race: raceItem.name }));
         return null;
       }
       if (kitItem) remove.push(kitItem.id);
+      if (classItems.length > 1 && SINGLE_CLASS_KITS[item.system.source]) {
+        ui.notifications.warn(game.i18n.format("AD2E.Multi.KitSingleClass", { source: item.system.source, page: SINGLE_CLASS_KITS[item.system.source] }));
+      }
     }
     // A removed kit takes the bonus proficiencies it granted with it.
     for (const id of remove) {
@@ -1016,8 +1094,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return this.actor.rollFirstLevelHitPoints();
   }
 
-  static onLevelUp() {
-    return this.actor.levelUp();
+  static onLevelUp(event, target) {
+    return this.actor.levelUp(target?.dataset?.classId || null);
   }
 
   static onOpenItem(event, target) {

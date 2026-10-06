@@ -56,6 +56,12 @@
       "diviner": 15,
       "enchanter": 15
     },
+    "multiClass": [
+      "fighter/mage",
+      "fighter/mage/thief",
+      "fighter/thief",
+      "mage/thief"
+    ],
     "url": "https://adnd2e.fandom.com/wiki/Elf_(PHB)",
     "notes": ""
   },

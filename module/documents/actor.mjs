@@ -9,6 +9,7 @@ import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-we
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
 import { gainsHitPoints, penalizedAward } from "../dual-class.mjs";
+import { firstLevelHitPoints, levelHitPoints, multiAward, multiEntries } from "../multi-class.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
 
 /** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
@@ -100,16 +101,26 @@ export default class AD2EActor extends Actor {
    * while the group still gains dice, otherwise the fixed per-level bonus with no CON.
    * Posts the result to chat and returns the number gained.
    */
-  async rollHitPointsForLevel(level) {
-    const group = this.system.classGroup;
+  async rollHitPointsForLevel(level, { group = this.system.classGroup, classes = 1, className = "" } = {}) {
     const cur = hitDiceAt(group, level);
     const prev = level > 1 ? hitDiceAt(group, level - 1) : { dice: 0, bonus: 0 };
     const dice = cur.dice - prev.dice;
     const bonus = cur.bonus - prev.bonus;
     const speaker = ChatMessage.getSpeaker({ actor: this });
-    const flavor = game.i18n.format("AD2E.HP.RollFlavor", { level });
+    const flavor = game.i18n.format("AD2E.HP.RollFlavor", { level }) + (className ? ` (${className})` : "");
     // Kit hit points per level (e.g. Gallant +1 per level, in addition to Constitution).
     const kitHp = this.type === "character" ? (this.system.kitMods?.total("hp") ?? 0) : 0;
+    // Multi-class (module/multi-class.mjs): the new Hit Die divided by the number of classes (at least 1 per die), and the
+    // class's share of the Constitution bonus and of the fixed and kit bonuses.
+    if (classes > 1) {
+      const con = this.system.mods.conHp;
+      const roll = dice > 0 ? await new Roll(`${dice}d${cur.die}`).evaluate() : null;
+      const gained = levelHitPoints({ roll: roll?.total ?? 0, dice: Math.max(dice, 0), fixed: bonus + kitHp, con, classes });
+      const text = `${flavor}: ${game.i18n.format("AD2E.Multi.HpGained", { hp: gained, n: classes })}`;
+      if (roll) await roll.toMessage({ speaker, flavor: text });
+      else await ChatMessage.create({ speaker, content: `<p>${text}</p>` });
+      return gained;
+    }
     if (dice <= 0) {
       await ChatMessage.create({ speaker, content: `<p>${flavor}: ${game.i18n.format("AD2E.HP.Fixed", { hp: bonus + kitHp })}</p>` });
       return bonus + kitHp;
@@ -127,12 +138,25 @@ export default class AD2EActor extends Actor {
 
   /** Roll 1st-level hit points and set current and maximum HP to the result. */
   async rollFirstLevelHitPoints() {
+    // Multi-class: each class's Hit Dice rolled, the total divided by the number of dice (down), then Constitution.
+    const multi = this.type === "character" ? this.system.multi : null;
+    if (multi) {
+      const parts = multi.classes.map(c => { const hd = hitDiceAt(c.group, 1); return { c, formula: `${hd.dice}d${hd.die}` }; });
+      const roll = await new Roll(parts.map(p => p.formula).join(" + ")).evaluate();
+      const rolls = roll.dice.flatMap(d => d.results.map(r => r.result));
+      const hp = Math.max(firstLevelHitPoints(rolls, this.system.mods.conHp) + (this.system.kitMods?.total("hp") ?? 0), 1);
+      await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }),
+        flavor: `${game.i18n.format("AD2E.HP.RollFlavor", { level: 1 })} (${parts.map(p => `${p.c.name} ${p.formula}`).join(", ")}): `
+          + game.i18n.format("AD2E.Multi.FirstHp", { hp, n: rolls.length }) });
+      return this.update({ "system.hp.max": hp, "system.hp.value": hp });
+    }
     const hp = await this.rollHitPointsForLevel(1);
     return this.update({ "system.hp.max": hp, "system.hp.value": hp });
   }
 
   /** Advance one level and add the hit points gained to current and maximum HP. */
-  async levelUp() {
+  async levelUp(classId = null) {
+    if (this.type === "character" && this.system.multi) return this.#multiLevelUp(classId);
     const level = this.system.level + 1;
     const limit = this.system.classInfo.levelLimit;
     if (limit && level > limit) {
@@ -153,6 +177,34 @@ export default class AD2EActor extends Actor {
       "system.hp.max": this.system.hp.max + hp,
       "system.hp.value": this.system.hp.value + hp
     });
+  }
+
+  /**
+   * Multi-class level up: one class advances (asked when not given); it stops at its racial level limit (owner's
+   * ruling) and gains its Hit Die divided by the number of classes.
+   */
+  async #multiLevelUp(classId) {
+    const classes = this.system.multi.classes;
+    let id = classId;
+    if (!id) {
+      id = await foundry.applications.api.DialogV2.wait({
+        window: { title: `${this.name}: ${game.i18n.localize("AD2E.LevelUp")}` },
+        content: `<p>${game.i18n.localize("AD2E.Multi.WhichClass")}</p>`,
+        buttons: classes.map((c, i) => ({ action: c.identifier, label: `${c.name} ${c.level} → ${c.level + 1}`, default: i === 0 })),
+        rejectClose: false
+      });
+      if (!id) return null;
+    }
+    const c = classes.find(x => x.identifier === id);
+    if (!c) return null;
+    const level = c.level + 1;
+    if (c.levelLimit && level > c.levelLimit) {
+      ui.notifications.warn(`${c.name}: ${game.i18n.format("AD2E.Race.LevelLimitReached", { limit: c.levelLimit })}`);
+      return null;
+    }
+    const hp = await this.rollHitPointsForLevel(level, { group: c.group, classes: classes.length, className: c.name });
+    const update = c.primary ? { "system.level": level } : { "system.multiClass.classes": multiEntries(classes, id, { level }) };
+    return this.update({ ...update, "system.hp.max": this.system.hp.max + hp, "system.hp.value": this.system.hp.value + hp });
   }
 
   /**
@@ -1259,7 +1311,7 @@ export default class AD2EActor extends Actor {
       [i18n(sys.kind === "priest" ? "AD2E.Spell.Spheres" : "AD2E.Spell.Schools"), (sys.kind === "priest" ? sys.spheres : sys.schools).join(", ")],
       [i18n("AD2E.Spell.CastingTime"), sys.castingTime], [i18n("AD2E.Spell.Range"), sys.range],
       [i18n("AD2E.Spell.Area"), sys.area], [i18n("AD2E.Spell.Duration"), sys.duration], [i18n("AD2E.Spell.Save"), sys.save],
-      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), oldCaster?.castingLevel ?? this.system.spells?.castingLevel ?? this.system.level]
+      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), oldCaster?.castingLevel ?? this.system.spells?.castingLevels?.[sys.kind] ?? this.system.spells?.castingLevel ?? this.system.level]
     ].filter(([, v]) => v !== "" && v !== null && v !== undefined);
     const content = `<div class="ad2e-spell-card"><h3>${esc(spell.name)}${sys.reversible ? ` <em>(${i18n("AD2E.Spell.Reversible")})</em>` : ""}</h3>`
       + `<dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
@@ -1290,7 +1342,7 @@ export default class AD2EActor extends Actor {
     if (!input) return;
     const option = options[input.option] ?? options[0];
     const healing = option.kind === "healing";
-    const level = this.system.spells?.castingLevel ?? this.system.level ?? 1;
+    const level = this.system.spells?.castingLevels?.[spell.system.kind] ?? this.system.spells?.castingLevel ?? this.system.level ?? 1;
     let roll;
     try {
       roll = await new Roll(`${option.formula} + @mod`, { level, mod: input.mod }).evaluate();
@@ -1548,7 +1600,8 @@ export default class AD2EActor extends Actor {
   async awardExperience() {
     if (this.type !== "character") return;
     const i18n = k => game.i18n.localize(k);
-    const bonus = this.system.classInfo?.xpBonus ?? 0;
+    const multi = this.system.multi;
+    const bonus = multi ? 0 : (this.system.classInfo?.xpBonus ?? 0);
     // Dual-class (module/dual-class.mjs): the award is for an encounter or the adventure; the penalty flags apply.
     const dual = this.system.dual;
     const pen = this.system.dualClass?.penalty ?? {};
@@ -1561,13 +1614,24 @@ export default class AD2EActor extends Actor {
       content: `<div class="form-group"><label>${i18n("AD2E.Xp.Amount")}</label><input type="number" name="amount" value="0" min="0" step="1" autofocus></div>`
         + `<div class="form-group"><label>${i18n("AD2E.Roll.ModifierNote")}</label><input type="text" name="reason" placeholder="${i18n("AD2E.Xp.ReasonHint")}"></div>`
         + kindField
-        + (bonus ? `<p class="ad2e-note">${game.i18n.format("AD2E.Xp.BonusNote", { bonus })}</p>` : ""),
+        + (bonus ? `<p class="ad2e-note">${game.i18n.format("AD2E.Xp.BonusNote", { bonus })}</p>` : "")
+        + (multi ? `<p class="ad2e-note">${game.i18n.format("AD2E.Multi.AwardNote", { n: multi.classes.length })}</p>` : ""),
       ok: { label: i18n("AD2E.Xp.Award"), callback: (event, button) => ({
         amount: Math.max(Math.floor(Number(button.form.elements.amount.value) || 0), 0), reason: button.form.elements.reason.value.trim(),
         kind: button.form.elements.kind?.value ?? "adventure" }) },
       rejectClose: false
     });
     if (!input?.amount) return;
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    // Multi-class: divided equally between the classes, each share with its own prime requisite bonus (owner's ruling).
+    if (multi) {
+      const award = multiAward(multi.classes, input.amount);
+      await this.update(award.update);
+      const parts = award.rows.map(r => `${r.name} +${r.gain}${r.bonus ? ` (${game.i18n.format("AD2E.Xp.WithBonus", { bonus: r.bonus })})` : ""} → ${r.xp}`
+        + (r.canLevel ? ` <strong>${esc(game.i18n.localize("AD2E.Xp.CanLevel"))}</strong>` : ""));
+      return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Multi.Gained",
+        { name: this.name, gain: award.gain }))}${input.reason ? ` — ${esc(input.reason)}` : ""}</p><ul><li>${parts.join("</li><li>")}</li></ul>` });
+    }
     const full = Math.floor(input.amount * (100 + bonus) / 100);
     const penalized = dual ? penalizedAward(full, input.kind, pen) : { gain: full, rule: "", clear: {} };
     const gain = penalized.gain;
@@ -1576,7 +1640,6 @@ export default class AD2EActor extends Actor {
       ...Object.fromEntries(Object.entries(penalized.clear).map(([k, v]) => [`system.dualClass.penalty.${k}`, v])) });
     if (penalized.rule) input.reason = [input.reason, i18n(`AD2E.Dual.Award.${penalized.rule}`)].filter(Boolean).join("; ");
     const next = this.system.xpNext;
-    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Xp.Gained",
       { name: this.name, gain, xp }))}${bonus ? ` (${esc(game.i18n.format("AD2E.Xp.WithBonus", { bonus }))})` : ""}${input.reason ? ` — ${esc(input.reason)}` : ""}`
       + `${next !== null && next !== undefined && xp >= next ? ` <strong>${esc(i18n("AD2E.Xp.CanLevel"))}</strong>` : ""}</p>` });
