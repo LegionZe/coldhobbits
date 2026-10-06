@@ -26,7 +26,7 @@ import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } 
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
-import { MonsterCreator } from "./apps/creators.mjs";
+import { MonsterCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
@@ -75,6 +75,7 @@ Hooks.once("init", () => {
     updateSpells: () => updateExistingSpells(),
     awardExperience: () => new AwardXp().render({ force: true }),
     createMonster: () => new MonsterCreator().render({ force: true }),
+    createWeapon: () => new WeaponCreator().render({ force: true }),
     rollReaction: creature => rollEncounterReaction(creature),
     rollTreasure: actor => rollTreasureDialog(actor ?? null)
   };

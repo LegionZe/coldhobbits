@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.2)
+## Status (v1.0.3)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -51,6 +51,13 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   (DMG) rev 71130; the orc, rust monster and green slime examples are asserted by tools/build-creator-tables.py; the two
   spell rows are not cumulative), or a value typed in. Hit points are rolled; the actor is created in the world or an
   unlocked world compendium and its sheet opens. The window is 720 px high with a scrolling body (1.0.2).
+- Create weapon (GM manual > GM tools, or `game.ad2e.createWeapon()`; 1.0.3): a weapon item, optionally with a matching
+  weapon proficiency (refused if that identifier already exists) or linked to an existing one. Start from any weapon in
+  the Item compendiums or the Items directory, or a blank weapon; set size, type (B/P/S), speed factor, two damage rows
+  (small/medium and large; e.g. one- and two-handed), melee/missile, rate of fire and range (yards), family, the Table 35
+  specialist missile column, Strength use, two hands regardless of size, magical hit/damage bonuses, cost, weight and
+  notes (the weapon sheet shows the statistics read-only). Checks: a use ticked, damage as dice, a missile range, a
+  B/P/S type.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

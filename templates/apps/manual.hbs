@@ -53,6 +53,11 @@
       Hit Dice, AC, movement and attacks. THAC0 and saving throws follow the Hit Dice; experience is DMG Table 31 for the
       Hit Dice plus the Table 32 special abilities you tick (you may enter your own value). Hit points are rolled. The
       actor goes into the world or an unlocked world compendium, and its sheet opens for anything else.</p></div>
+    <div><button type="button" data-action="tool" data-tool="createWeapon"><i class="fa-solid fa-khanda"></i> Create weapon</button>
+      <p>A guided window for a new weapon item: start from any weapon in the compendiums or the Items directory, or a blank
+      one, and set its size, type, speed factor, damage (two rows, e.g. one- and two-handed), melee and missile use, rate
+      of fire and range, Strength use, magical bonuses and notes; these statistics are read-only on the weapon sheet. It can
+      create a matching weapon proficiency, or link an existing one so characters proficient with it use it.</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -264,6 +269,7 @@
       <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
+      <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>

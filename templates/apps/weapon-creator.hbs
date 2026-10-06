@@ -1,0 +1,55 @@
+<section class="ad2e-creator">
+  <div class="ad2e-creator-body">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Weapon.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Weapon.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.StartFrom"}}</label><select data-field="source">
+      <option value="">{{localize "AD2E.Creator.Weapon.Blank"}}</option>
+      {{#each sourceOptions as |o|}}<option value="{{o.uuid}}" {{#if o.selected}}selected{{/if}}>{{o.name}} ({{o.pack}})</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Item.identifier"}}</label><input type="text" data-field="identifier" value="{{s.identifier}}" placeholder="{{ident}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.NewProficiency"}}</label><input type="checkbox" data-field="newProficiency" {{#if s.newProficiency}}checked{{/if}}>
+      {{#if s.newProficiency}}{{#if profExists}}<span class="ad2e-unmet">{{localize "AD2E.Creator.Weapon.ProfExistsShort"}}</span>{{/if}}{{/if}}</div>
+    {{#unless s.newProficiency}}<div class="form-group"><label>{{localize "AD2E.Weapon.Proficiency"}}</label><select data-field="proficiency">
+      <option value="">—</option>{{#each profOptions as |p|}}<option value="{{p.identifier}}" {{#if p.selected}}selected{{/if}}>{{p.name}}</option>{{/each}}</select></div>{{/unless}}
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Cost"}}</label><input type="text" data-field="cost" value="{{s.cost}}" placeholder="5 gp"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Weight"}}</label><input type="number" data-field="weight" value="{{s.weight}}" min="0" step="any"></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Weapon.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Size"}}</label><select data-field="weapon.size">{{#each sizes as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Type"}}</label><input type="text" data-field="weapon.type" value="{{w.type}}" placeholder="S, P, B or P/S"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Speed"}}</label><input type="number" data-field="weapon.speed" value="{{w.speed}}" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.melee"}}</label><input type="checkbox" data-field="weapon.melee" {{#if w.melee}}checked{{/if}}>
+      <label>{{localize "AD2E.Weapon.missile"}}</label><input type="checkbox" data-field="weapon.missile" {{#if w.missile}}checked{{/if}}></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.TwoHands"}}</label><input type="checkbox" data-field="twoHands" {{#if s.twoHands}}checked{{/if}}></div>
+    {{#each damageRows as |d|}}
+    <div class="form-group"><label>{{localize "AD2E.Weapon.Damage"}} {{d.n}}</label>
+      <input type="text" data-field="damage" data-index="{{d.i}}" data-part="label" value="{{d.label}}" placeholder="{{localize 'AD2E.Creator.Weapon.DamageLabel'}}">
+      <input type="text" data-field="damage" data-index="{{d.i}}" data-part="sm" value="{{d.sm}}" placeholder="S-M 1d6">
+      <input type="text" data-field="damage" data-index="{{d.i}}" data-part="l" value="{{d.l}}" placeholder="L 1d8"></div>
+    {{/each}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.Strength.label"}}</label><select data-field="weapon.strength">{{#each strengths as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    {{#if w.missile}}
+    <div class="form-group"><label>{{localize "AD2E.Weapon.ROF"}}</label><input type="text" data-field="weapon.range.rof" value="{{w.range.rof}}" placeholder="1, 2, 3/2, 1/2"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.MissileRange"}}</label>
+      <input type="text" data-field="weapon.range.short" value="{{w.range.short}}" placeholder="10">
+      <input type="text" data-field="weapon.range.medium" value="{{w.range.medium}}" placeholder="20">
+      <input type="text" data-field="weapon.range.long" value="{{w.range.long}}" placeholder="30"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.Family.label"}}</label><select data-field="weapon.family">{{#each families as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.Column"}}</label><select data-field="weapon.missileColumn">{{#each columns as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    {{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Weapon.Step3"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.MagicHit"}}</label><input type="number" data-field="hit" value="{{s.hit}}" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Weapon.MagicDmg"}}</label><input type="number" data-field="dmg" value="{{s.dmg}}" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Item.notes"}}</label><textarea data-field="notes" rows="3">{{s.notes}}</textarea></div>
+  </fieldset>
+  {{#each issues as |i|}}<p class="ad2e-unmet">{{i}}</p>{{/each}}
+  </div>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>

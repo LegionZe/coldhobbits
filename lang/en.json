@@ -649,6 +649,33 @@
     "Destination": "Create in",
     "Create": "Create",
     "Created": "Created {name}.",
+    "NeedName": "Enter a name first.",
+    "Custom": "Custom (creator)",
+    "Weapon": {
+      "Title": "Create weapon",
+      "Hint": "Start from an existing weapon or a blank one and set its statistics (the weapon sheet shows them read-only). A new weapon proficiency with the same statistics can be created with it; otherwise link an existing proficiency.",
+      "Step1": "1. The weapon",
+      "Step2": "2. Statistics",
+      "Step3": "3. Magic and notes",
+      "StartFrom": "Start from",
+      "Blank": "— blank weapon —",
+      "NewProficiency": "Create a weapon proficiency for it",
+      "ProfExists": "A weapon proficiency with the identifier \"{id}\" already exists: untick the box and choose it, or change the identifier.",
+      "ProfExistsShort": "a proficiency with this identifier exists",
+      "TwoHands": "Two hands regardless of the wielder's size",
+      "DamageLabel": "label (e.g. Two-handed)",
+      "Column": "Specialist missile attacks (Table 35 column)",
+      "NoColumn": "— none —",
+      "Family": { "label": "Family", "other": "Other", "bow": "Bow", "crossbow": "Crossbow" },
+      "Strength": { "label": "Strength with missile use", "full": "Hit and damage", "damage": "Damage only", "penalty": "Penalties only", "none": "None" },
+      "Issue": {
+        "noUse": "Tick melee, missile or both.",
+        "noDamage": "Enter the damage (small/medium and large).",
+        "badDamage": "Damage must be dice such as 1d6, 2d4 or 1d6+1.",
+        "noRange": "A missile weapon needs short, medium and long range.",
+        "badType": "Type must be B, P, S or a combination such as P/S."
+      }
+    },
     "Monster": {
       "Title": "Create monster",
       "Hint": "Fill in the stat block; THAC0, saving throws and experience follow the Hit Dice and the special abilities ticked below. Anything else (natural weapons, items, notes) can be added on the sheet afterwards.",
