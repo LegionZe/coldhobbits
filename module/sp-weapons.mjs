@@ -10,7 +10,8 @@
  * Minimum levels and allowed classes (Tables 53, 54; groups for warriors only; one style for priests, rogues, wizards)
  * are enforced: an invalid purchase still uses its slots and gives no benefit (shown on the sheet).
  * Specialization row (Tables 53/54): fighter; ranger, paladin and other warrior classes = "Ranger/Paladin" (fighter
- * subclasses); priests, rogues, wizards by group. Multi-classed characters are not modelled (no multi-class support).
+ * subclasses); priests, rogues, wizards by group. Multi-class characters use their main class's row (the Tables 53/54
+ * multi-class row is not applied).
  */
 import { SP_WEAPONS } from "./rules/sp-weapon-tables.mjs";
 

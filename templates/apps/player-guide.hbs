@@ -25,7 +25,7 @@
     <li><strong>Proficiencies</strong>: weapon and nonweapon proficiencies and their checks; traits and disadvantages.</li>
     <li><strong>Spells</strong>: your spells by level, memorization and casting (only shown if your character has spells).</li>
     <li><strong>Abilities</strong>: the detailed ability tables, ability checks and tests such as bend bars.</li>
-    <li><strong>Biography</strong>: notes, henchmen and familiar.</li>
+    <li><strong>Biography</strong>: notes, age, henchmen, familiar, and an Animal Master's or Rider's bonded animal.</li>
   </ul>
   <p>Most things are added by dragging them from a compendium (the Compendium sidebar tab) onto the sheet. Every roll
   opens a dialog with a modifier and a reason for anything special your GM allows.</p>
@@ -51,6 +51,11 @@
     <li><strong>Body weight</strong> (needed when riding): enter it on the Equipment tab or roll it with "Roll (Table 10)".</li>
   </ol>
   <p>Each character has at most one kit.</p>
+  <h3>Skills &amp; Powers kits</h3>
+  <p>Roll your social rank on the Race &amp; Class tab. Weapon Masters specialize (or take expertise) in a melee weapon,
+  which becomes their chosen weapon on the Proficiencies tab (proficiencies of another weapon type are marked), and use
+  "Display" on the Combat tab when a fight starts; Mystics "Meditate" on the Race &amp; Class tab (the boost starts when
+  the meditation ends). Pugilists and Barbarians are handled in your GM's reaction rolls and in unarmed attacks.</p>
   <h3>Multi-classing</h3>
   <p>If your GM allows multi-class characters, a dwarf, elf, gnome, halfling or half-elf can have two or three classes in
   the combinations the race allows. Drag the first class, then drag the second onto the sheet and choose "Multi-class"
@@ -78,6 +83,9 @@
     proficiency (+1 each), open it and set "Extra slots".</li>
     <li><strong>Weapon proficiencies</strong> remove the non-proficiency penalty for that weapon. Fighters may tick
     "Specialized" on one weapon (it costs extra slots).</li>
+    <li><strong>Skills &amp; Powers weapon rules</strong> (if your GM uses them): weapon groups, fighting styles, armour
+    and shield proficiencies, weapon of choice (+1 to hit), expertise and mastery are tick boxes and items on this tab;
+    their character-point costs are paid in weapon slots, shown on each row.</li>
     <li><strong>Traits and disadvantages</strong> (if your GM allows them): drag them from "Traits &amp; Disadvantages".
     The traits you take must be paid for with the points of your disadvantages; the tab shows the balance.</li>
   </ul>
@@ -129,7 +137,10 @@
     <li><strong>Attacking</strong>: on the Combat tab, click a weapon's Attack button. The dialog offers range, two
     weapons, mounted combat and the situational modifiers; with automatic damage on, a hit rolls the damage too,
     otherwise click Damage.</li>
-    <li><strong>Unarmed</strong>: Punch, Wrestle and Overbear are on the Equipment tab.</li>
+    <li><strong>Unarmed</strong>: Punch, Wrestle and Overbear are in the weapon list (Combat and Equipment tabs).</li>
+    <li><strong>Lasso and net</strong>: attacking with either opens its own dialog (lasso: legs, arms, unhorse, or
+    spurring your mount; net: throw, loop the rope, pull/trip, fold); target the defender first. Caught in a net, use
+    "Break free (net)" on the Combat tab.</li>
     <li><strong>Initiative</strong>: when the GM starts combat, roll initiative from the combat tracker; you may be asked
     what you are doing this round (weapon, spell, item).</li>
     <li><strong>Saving throws and checks</strong>: saving throws on the Main tab; ability checks and tests on the
@@ -154,12 +165,12 @@
     <li>Fighting from horseback: the attack dialog offers the mounted options (untrained mount, attacking a smaller
     creature, shooting from a moving mount).</li>
     <li>Pushing a mount beyond its normal pace is the "Push" button on the mount's sheet.</li>
-    <li><strong>Skills &amp; Powers kits</strong>: roll your social rank on the Race &amp; Class tab. Weapon Masters
-    specialize (or take expertise) in a melee weapon, which becomes their chosen weapon on the Proficiencies tab, and use "Display" on the Combat tab when a fight starts; Mystics
-    "Meditate" on the Race &amp; Class tab.</li>
     <li><strong>Animal Master and Rider kits</strong>: your bonded companion or mount is on the Biography tab. Drag its
     actor onto your sheet and accept the bond; a Rider sees the mount's health and, when both tokens are on the map,
-    how far away it is and in which direction. Cavaliers and Nobles must own a mount (the Race &amp; Class tab reminds you).</li>
+    how far away it is and in which direction. A mount too big or too small for your race, or a companion that does not
+    suit your race or alignment, is marked for your GM to decide. If your mount dies through your negligence and you fail
+    the saving throw, you are feebleminded for some hours (shown on the Biography tab; casting asks first). Cavaliers and
+    Nobles must own a mount (the Race &amp; Class tab reminds you).</li>
   </ol>
   {{/if}}
 
@@ -171,11 +182,9 @@
     throws, THAC0, proficiency slots, spell slots and class abilities follow the new level.</li>
     <li>Thieves and bards spend their new skill points on the Class Abilities tab.</li>
     <li>Multi-class characters advance each class separately: use the class's Level Up button on the Race &amp; Class tab.</li>
-    <li>A lasso attack opens its own dialog (legs, arms, unhorse, or spurring your mount); target the defender first.
-    So does a net (throw, loop the rope, pull/trip, fold); caught in a net, use "Break free (net)" on the Combat tab.
-    Your age is on the Biography tab.</li>
     <li>Levels lost to energy drain (your GM applies them) are listed on the Main tab until you regain them with Level Up
-    or a restoration spell.</li>
+    or a restoration spell (which ages you two years). Memorized spells beyond your new slots are forgotten: your GM
+    chooses which with you.</li>
     <li>New proficiency slots can be filled from the "Proficiencies" compendium.</li>
   </ul>
   {{/if}}
