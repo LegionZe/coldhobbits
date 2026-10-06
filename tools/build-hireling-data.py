@@ -242,6 +242,18 @@ COMPANION_RULES = [
     ("cavalier", "Cavalier - POSP (Character Kit)", "cavalier-posp", r"a cavalier must purchase a mount as soon as he can afford one"),
     ("noble", "Noble - POSP (Character Kit)", "noble-posp", r"he must purchase a mount and tack"),
 ]
+# Homeland subtables for the Rider's mount (owner's choice; the kit asks for "the climate and terrain of the character's
+# homeland" and "the availability of the mount"): Table 43 entries only, one picked at random with equal chance; "any" =
+# Table 43 as printed.
+MOUNT_HOMELANDS = {
+    "settled": ["Horse/pony", "Mule", "Bull", "Camel", "Buffalo", "Stag"],
+    "desert": ["Camel", "Horse/pony", "Mule", "Giant lizard"],
+    "jungle": ["Elephant", "Buffalo", "Giant lizard", "Giant beetle", "Giant frog"],
+    "forest": ["Stag", "Giant badger", "Giant skunk", "Giant weasel", "Giant owl", "Pegasus"],
+    "mountains": ["Mule", "Giant goat", "Griffon", "Giant eagle", "Hippogriff", "Cave bear"],
+    "underground": ["Giant lizard", "Giant weasel", "Huge bat", "Giant beetle", "Cave bear"],
+    "coast": ["Sea horse", "Dolphin", "Sea lion", "Hippocampus", "Giant crab", "Giant otter", "Giant ray", "Killer whale"],
+}
 MOUNT_GROUPS = {"Natural Creatures": "natural", "Flying Creatures": "flying", "Giant Land Creatures": "land", "Underwater Creatures": "underwater"}
 ROW_COLUMNS = {"#AP": "numberAppearing", "#App.": "numberAppearing", "AC": "ac", "MV": "movement", "Mv": "movement", "HD": "hitDice",
                "THAC0": "thac0", "# AT": "attacks", "#AT": "attacks", "#Att": "attacks", "Dmg/AT": "damage", "Dmg/Att": "damage",
@@ -577,6 +589,11 @@ if __name__ == "__main__":
         docs.append(d)
         actor_ids[name] = [ident]
     pack_id = {d["system"]["identifier"]: d["_id"] for d in docs}
+    table43 = {r["name"] for g in mount_groups.values() for r in g}
+    for land, names in MOUNT_HOMELANDS.items():
+        assert set(names) <= table43, (land, set(names) - table43)
+    homelands = {land: [{"name": n, "actors": [{"identifier": i, "id": pack_id[i]} for i in actor_ids[n]]} for n in names]
+                 for land, names in MOUNT_HOMELANDS.items()}
     for r in companions + [r for g in mount_groups.values() for r in g]:
         r["actors"] = [{"identifier": i, "id": pack_id[i]} for i in actor_ids[r["name"]]]
     open("module/rules/companion-tables.mjs", "w").write("\n".join([
@@ -585,9 +602,9 @@ if __name__ == "__main__":
         f" * Animal Master (POSP) Table 42 and rules: {classdata.url(COMPANION_PAGE)} (revision {revs[COMPANION_PAGE]}).",
         f" * Rider (POSP) Table 43 and rules: {classdata.url(MOUNT_PAGE)} (revision {revs[MOUNT_PAGE]}).",
         " * Mount requirement: Cavalier (POSP), Noble (POSP). companions: d20 rows; mounts.groups: d6 -> group; mounts.<group>: d8",
-        " * rows; actors: identifiers in the Hirelings & Mounts compendium.",
+        " * rows; homelands: owner's subtables of Table 43 entries (equal chance); actors: identifiers in the Hirelings & Mounts compendium.",
         " */",
-        "export const COMPANION_TABLES = " + json.dumps({"companions": companions, "mounts": mount_groups,
+        "export const COMPANION_TABLES = " + json.dumps({"companions": companions, "mounts": mount_groups, "homelands": homelands,
                                                           "rules": comp_rules}, ensure_ascii=False) + ";", ""]))
 
     open("module/rules/familiar-tables.mjs", "w").write("\n".join([

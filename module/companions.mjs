@@ -106,8 +106,16 @@ export function carelessXp(xp, percent = COMPANIONS.rules.carelessLoss.xpPercent
   return Math.max(xp - Math.floor(xp * percent / 100), 0);
 }
 
-/** Roll a table row: companions (d20) or mounts (d6 group, d8 mount). `die(n)` is injectable. */
-export function rollBondTable(kind, die = n => Math.ceil(Math.random() * n)) {
+/**
+ * Roll a table row: companions (d20) or mounts (d6 group, d8 mount; or, with a homeland, one of that homeland's Table 43
+ * entries with equal chance, owner's choice). `die(n)` is injectable.
+ */
+export function rollBondTable(kind, die = n => Math.ceil(Math.random() * n), homeland = "any") {
+  if (kind === "mount" && homeland && homeland !== "any" && COMPANIONS.homelands?.[homeland]) {
+    const list = COMPANIONS.homelands[homeland];
+    const roll = die(list.length);
+    return { kind, homeland, rolls: [roll], row: list[roll - 1] };
+  }
   if (kind === "companion") {
     const roll = die(20);
     return { kind, rolls: [roll], row: COMPANIONS.companions.find(r => r.roll === roll) };
@@ -123,10 +131,11 @@ const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
 const speaker = actor => ChatMessage.getSpeaker({ actor });
 
 /** GM: roll Table 42 or 43 and post the result with links to the creatures in the compendium. */
-export async function rollBondCreature(character, kind) {
-  const r = rollBondTable(kind);
+export async function rollBondCreature(character, kind, homeland = "any") {
+  const r = rollBondTable(kind, undefined, homeland);
   const links = r.row.actors.map(a => `@UUID[Compendium.${PACK}.Actor.${a.id}]{${esc(r.row.name)}}`).join(" / ");
-  const group = r.group ? ` (${i18n(`AD2E.Bond.Group.${r.group}`)}, d6 ${r.rolls[0]})` : "";
+  const group = r.homeland ? ` (${i18n(`AD2E.Bond.Homeland.${r.homeland}`)}, d${COMPANIONS.homelands[r.homeland].length})`
+    : (r.group ? ` (${i18n(`AD2E.Bond.Group.${r.group}`)}, d6 ${r.rolls[0]})` : "");
   return ChatMessage.create({ speaker: speaker(character), whisper: ChatMessage.getWhisperRecipients?.("GM") ?? [],
     content: `<p><strong>${esc(i18n(kind === "companion" ? "AD2E.Bond.CompanionTable" : "AD2E.Bond.MountTable"))}</strong>${esc(group)}: `
       + `${r.rolls.at(-1)} — ${links}</p><p class="ad2e-note">${esc(i18n("AD2E.Bond.DragHint"))}</p>` });

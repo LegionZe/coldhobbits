@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.125)
+## Status (v0.0.126)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -618,7 +618,9 @@ Node only until confirmed.
   Animal Master or Rider: the bonded animal (dropping a pet or mount on the sheet offers the bond), its hit points and,
   for a Rider, the distance and direction of its token on the viewed scene ("Each will know the general state of
   health of the other, the direction the other is in, and the distance"); GM buttons roll the table (chat card with
-  links to the creatures), "Companion died" (no penalty), "Companion lost carelessly" (-10% of the current experience,
+  links to the creatures; for a mount the GM picks the rider's homeland: settled lands, desert, jungle, forest, hills and
+  mountains, underground, coast and sea pick one of their Table 43 entries with equal chance, "Any" rolls Table 43 as
+  printed; owner's choice, `MOUNT_HOMELANDS` in build-hireling-data.py), "Companion died" (no penalty), "Companion lost carelessly" (-10% of the current experience,
   every class of a multi-class character, and "he loses his affinity to that species": that species is refused), "Mount
   died" (2d6 damage to the rider; by negligence a save vs. spells is rolled and the card names the 2d6 hours of
   feeblemind on a failure, not applied) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
