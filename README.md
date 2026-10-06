@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.115)
+## Status (v0.0.116)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -456,6 +456,9 @@ Node only until confirmed.
   Clockwork Mage) are set; race, sex and alignment restrictions are flagged with a link to the kit page; bonus
   proficiencies are added as for the other kits. Kahin uses the druid experience table (kit field `xpTable`, see
   Al-Qadim rules). The sha'ir, elemental mage and sorcerer rules are listed separately.
+  Complete Wizard's Handbook kit minimums add to the class's (owner's ruling; the higher applies): "Generally, any kit
+  can be assigned to a specialist from any school" (Wizard Kits (CWH)), so a Witch diviner still needs the diviner's
+  Wisdom 16. The bard race kits (Gnome Professor, Halfling Whistler, Dwarven Chanter) keep replacing the bard's minimums.
 - Sha'ir (Al-Qadim; Requesting a Spell (AA), Summoning a Familiar (AA); rules in module/rules/shair-tables.mjs, each
   checked against its page and the three worked examples recomputed):
   the gen fetches each spell. The Spells tab gives the chance (50% + 5% per sha'ir level - 10% per spell level, +10%
