@@ -784,7 +784,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       return { level, spells, slots, base: base[level - 1] ?? 0, bonus: bonus[level - 1] ?? 0, school: school[level - 1] ?? 0,
         prepared, remaining, known: usable.length, maxKnown: kind === "wizard" && !shair ? maxKnown : null, over: !shair && prepared > slots };
     }).filter(l => l.slots > 0 || l.spells.length);
-    return { table, kind, shair, castingLevel: row?.casting ?? null, levels: out };
+    // Whether the character has spells: slots at its level, a sha'ir's gen, or owned spell items (the Spells tab).
+    return { table, kind, shair, castingLevel: row?.casting ?? null, levels: out, available: shair || out.length > 0 };
   }
 
   /**

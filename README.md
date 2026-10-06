@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.109)
+## Status (v0.0.110)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), and the optional Skills & Powers and Combat & Tactics weapon rules. The features
@@ -481,6 +481,9 @@ Node only until confirmed.
   0 / -2 ("suffering no penalty for the first hand, and only a –2 penalty for off-hand use"); Fast Healer heals 2 hit
   points a day of normal rest. The wiki has no description for Irritating Personality and Phobia: Spiders (they link
   to the tables page).
+- Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
+  fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
+  adds it and brings the tab back.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
@@ -491,5 +494,4 @@ Node only until confirmed.
   class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
   using the old class's abilities costs experience until the new class's level exceeds the old one.
 - Monster pictures bundled with the system.
-- Hide the Spells tab for classes and kits without spells.
 - A GM instruction manual for the system.

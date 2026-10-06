@@ -141,6 +141,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `foundry.utils.fromUuidSync(uuid, { strict: false })`.
   Buttons: `module/documents/chat-message.mjs` (CONFIG.ChatMessage.documentClass) overrides `renderHTML` like dnd5e's
   ChatMessage5e and calls `damageButtons` (GM only); buttons and context menu share `applyFromMessage`.
+- Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
+  `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with
   `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e); used by the Equipment, Class
   Abilities and Combat tabs. Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with

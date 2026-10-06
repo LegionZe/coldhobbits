@@ -273,6 +273,23 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   /** Give each tab part its own ApplicationTab entry (same pattern as dnd5e WelcomeScreen). */
+  /**
+   * The Spells tab only for characters with spells (`system.spells.available`: slots at their level, a sha'ir, or owned
+   * spell items); its part still renders, never active (ApplicationV2#_getTabsConfig / #_prepareTabs, Foundry v14 API).
+   */
+  _getTabsConfig(group) {
+    const config = super._getTabsConfig(group);
+    if (group !== "primary" || !config || this.document?.system?.spells?.available !== false) return config;
+    return { ...config, tabs: config.tabs.filter(t => t.id !== "spells") };
+  }
+
+  _prepareTabs(group) {
+    if (group === "primary" && this.tabGroups?.primary === "spells" && this.document?.system?.spells?.available === false) {
+      this.tabGroups.primary = "main";
+    }
+    return super._prepareTabs(group);
+  }
+
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
     if (context.tabs?.[partId]) context.tab = context.tabs[partId];
