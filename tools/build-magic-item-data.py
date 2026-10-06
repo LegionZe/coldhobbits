@@ -151,7 +151,7 @@ if __name__ == "__main__":
 
     # Folders: magical items by DMG table; gems by class.
     labels = {c["key"]: c["name"] for c in __import__("json").loads(
-        open("module/rules/treasure-tables.mjs").read().split("TREASURE_TABLES = ", 1)[1].rsplit(";", 1)[0])["magicCategories"]}
+        open("module/rules/treasure-tables.mjs").read().split("TREASURE_TABLES = ", 1)[1].split(";\n", 1)[0])["magicCategories"]}
     magic_docs = []
     for cat, table, folder in folders:
         folder["name"] = f"Table {table}: {labels[cat].replace('Miscellaneous Magic: ', '')}"

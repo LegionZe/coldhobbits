@@ -22,6 +22,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Barbarian/Berserker_Priest_(Character_Kit)",
     "notes": "",
@@ -36,6 +38,27 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "weather-sense",
+      "blind-fighting",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "survival",
+      "tracking",
+      "herbalism",
+      "agriculture"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -75,32 +98,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "direction-sense",
-      "fire-building",
-      "riding-land-based",
-      "weather-sense",
-      "blind-fighting",
-      "hunting",
-      "mountaineering",
-      "running",
-      "set-snares",
-      "survival",
-      "tracking",
-      "herbalism",
-      "agriculture"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",
-  "sort": 13000,
+  "sort": 18000,
   "ownership": {
     "default": 0
   },

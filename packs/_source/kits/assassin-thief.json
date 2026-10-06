@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Assassin_-_Thief_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "begging",
+      "information-gathering",
+      "herbalism",
+      "riding-land-based",
+      "observation",
+      "tracking",
+      "voice-mimicry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,25 +84,11 @@
       "first": 40,
       "perLevel": 20,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "begging",
-      "information-gathering",
-      "herbalism",
-      "riding-land-based",
-      "observation",
-      "tracking",
-      "voice-mimicry"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 9000,
+  "sort": 12000,
   "ownership": {
     "default": 0
   },

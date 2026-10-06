@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Seeker_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,25 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "ancient-history",
+      "artistic-ability",
+      "astrology",
+      "carpentry",
+      "cobbling",
+      "etiquette",
+      "languages-ancient",
+      "pottery",
+      "reading-writing",
+      "spellcraft",
+      "veterinary-healing",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,30 +95,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "agriculture",
-      "ancient-history",
-      "artistic-ability",
-      "astrology",
-      "carpentry",
-      "cobbling",
-      "etiquette",
-      "languages-ancient",
-      "pottery",
-      "reading-writing",
-      "spellcraft",
-      "veterinary-healing",
-      "weaving"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 108000,
+  "sort": 131000,
   "ownership": {
     "default": 0
   },

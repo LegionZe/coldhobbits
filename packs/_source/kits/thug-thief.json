@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Thug_-_Thief_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,16 @@
     "bonusSlots": {
       "weapon": 1,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "endurance",
+      "looting",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -63,21 +75,11 @@
       "first": 40,
       "perLevel": 30,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "endurance",
-      "looting",
-      "trailing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 122000,
+  "sort": 150000,
   "ownership": {
     "default": 0
   },

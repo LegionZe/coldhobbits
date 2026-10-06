@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Astrologer_-_Sha'ir_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,16 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "survival",
+      "navigation",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -80,21 +92,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "survival",
-      "navigation",
-      "spellcraft"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 10000,
+  "sort": 14000,
   "ownership": {
     "default": 0
   },

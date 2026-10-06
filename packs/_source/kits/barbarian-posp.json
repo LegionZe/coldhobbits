@@ -1,0 +1,89 @@
+{
+  "_id": "a99rE4JElW8l9vND",
+  "_key": "!items!a99rE4JElW8l9vND",
+  "name": "Barbarian (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "barbarian-posp",
+    "classes": [
+      "fighter",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "druid",
+      "thief"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 13,
+      "dex": null,
+      "con": 13,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Barbarian_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "animal-handling",
+      "animal-training",
+      "bowyer-fletcher",
+      "fire-building",
+      "fishing",
+      "riding-land-based",
+      "hunting",
+      "mountaineering",
+      "running",
+      "survival",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 17000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

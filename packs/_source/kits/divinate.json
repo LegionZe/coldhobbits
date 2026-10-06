@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Divinate_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,19 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "healing",
+      "languages-ancient",
+      "languages-modern",
+      "reading-writing",
+      "poetry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [],
     "skillAdjust": {
@@ -51,24 +66,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "etiquette",
-      "healing",
-      "languages-ancient",
-      "languages-modern",
-      "reading-writing",
-      "poetry"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 32000,
+  "sort": 40000,
   "ownership": {
     "default": 0
   },

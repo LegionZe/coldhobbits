@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Myrmidon_(Character_Kit)",
     "notes": "",
@@ -40,22 +42,6 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
-    },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
     },
     "recommendedProficiencies": [
       "animal-handling",
@@ -81,11 +67,27 @@
     "specialization": {
       "mode": "",
       "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 80000,
+  "sort": 93000,
   "ownership": {
     "default": 0
   },

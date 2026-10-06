@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Matrud_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,26 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "direction-sense",
+      "haggling",
+      "weather-sense",
+      "animal-lore",
+      "endurance",
+      "running",
+      "tracking",
+      "herbalism",
+      "awareness",
+      "begging",
+      "blind-fighting",
+      "bureaucracy",
+      "reading-lips"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,31 +90,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "debate",
-      "direction-sense",
-      "haggling",
-      "weather-sense",
-      "animal-lore",
-      "endurance",
-      "running",
-      "tracking",
-      "herbalism",
-      "awareness",
-      "begging",
-      "blind-fighting",
-      "bureaucracy",
-      "reading-lips"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "BVfipmiC4r0zp30k",
-  "sort": 71000,
+  "sort": 83000,
   "ownership": {
     "default": 0
   },

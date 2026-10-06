@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Wyrmslayer_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,23 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "direction-sense",
+      "endurance",
+      "healing",
+      "hunting",
+      "mountaineering",
+      "riding-airborne",
+      "riding-land-based",
+      "survival",
+      "tracking",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -96,28 +115,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "armorer",
-      "direction-sense",
-      "endurance",
-      "healing",
-      "hunting",
-      "mountaineering",
-      "riding-airborne",
-      "riding-land-based",
-      "survival",
-      "tracking",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 131000,
+  "sort": 161000,
   "ownership": {
     "default": 0
   },

@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Errant_(Character_Kit)",
     "notes": "",
@@ -35,22 +37,6 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
-    },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
     },
     "recommendedProficiencies": [
       "animal-handling",
@@ -70,11 +56,27 @@
       "free": [
         "jousting-lance"
       ]
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 38000,
+  "sort": 46000,
   "ownership": {
     "default": 0
   },

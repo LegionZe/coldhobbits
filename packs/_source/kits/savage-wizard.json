@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Savage_Wizard_(Character_Kit)",
     "notes": "",
@@ -37,6 +39,33 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "fire-building",
+      "fishing",
+      "riding-land-based",
+      "rope-use",
+      "swimming",
+      "animal-lore",
+      "bowyer-fletcher",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "tracking",
+      "healing",
+      "local-history",
+      "jumping",
+      "tightrope-walking",
+      "tumbling",
+      "herbalism",
+      "religion"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -65,38 +94,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "fire-building",
-      "fishing",
-      "riding-land-based",
-      "rope-use",
-      "swimming",
-      "animal-lore",
-      "bowyer-fletcher",
-      "hunting",
-      "mountaineering",
-      "running",
-      "set-snares",
-      "tracking",
-      "healing",
-      "local-history",
-      "jumping",
-      "tightrope-walking",
-      "tumbling",
-      "herbalism",
-      "religion"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",
-  "sort": 104000,
+  "sort": 125000,
   "ownership": {
     "default": 0
   },

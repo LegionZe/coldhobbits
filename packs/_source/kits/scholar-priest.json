@@ -22,6 +22,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Scholar_Priest_(Character_Kit)",
     "notes": "",
@@ -36,6 +38,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "ancient-history",
+      "astrology",
+      "languages-ancient",
+      "local-history"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -64,25 +80,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "etiquette",
-      "heraldry",
-      "languages-modern",
-      "ancient-history",
-      "astrology",
-      "languages-ancient",
-      "local-history"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",
-  "sort": 105000,
+  "sort": 127000,
   "ownership": {
     "default": 0
   },

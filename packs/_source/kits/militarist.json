@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Militarist_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,22 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blind-fighting",
+      "endurance",
+      "jousting",
+      "weaponsmithing",
+      "battle-axe",
+      "dagger-or-dirk",
+      "horseman-s-flail",
+      "horseman-s-mace",
+      "horseman-s-pick"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,27 +92,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "armorer",
-      "blind-fighting",
-      "endurance",
-      "jousting",
-      "weaponsmithing",
-      "battle-axe",
-      "dagger-or-dirk",
-      "horseman-s-flail",
-      "horseman-s-mace",
-      "horseman-s-pick"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 77000,
+  "sort": 90000,
   "ownership": {
     "default": 0
   },

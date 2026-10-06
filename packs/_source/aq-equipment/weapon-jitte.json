@@ -1,0 +1,62 @@
+{
+  "_id": "oDhC9OGiJ4VBFtYt",
+  "_key": "!items!oDhC9OGiJ4VBFtYt",
+  "name": "Jitte",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "jitte",
+    "proficiency": "jitte",
+    "weapon": {
+      "size": "S",
+      "type": "B",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d2",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "50 sp(Oriental)",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (5 sp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

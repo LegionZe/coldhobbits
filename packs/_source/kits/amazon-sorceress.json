@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Amazon_Sorceress_(Character_Kit)",
     "notes": "",
@@ -48,6 +50,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-lore",
+      "armorer",
+      "bowyer-fletcher",
+      "hunting",
+      "running",
+      "survival",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -98,25 +114,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-lore",
-      "armorer",
-      "bowyer-fletcher",
-      "hunting",
-      "running",
-      "survival",
-      "tracking"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",
-  "sort": 6000,
+  "sort": 8000,
   "ownership": {
     "default": 0
   },

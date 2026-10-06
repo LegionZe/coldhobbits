@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Smuggler_-_Thief_(Character_Kit)",
     "notes": "",
@@ -29,6 +31,28 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-noise",
+      "appraising",
+      "boating",
+      "direction-sense",
+      "disguise",
+      "fast-talking",
+      "forgery",
+      "information-gathering",
+      "navigation",
+      "observation",
+      "rope-use",
+      "seamanship",
+      "swimming"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -57,33 +81,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "animal-handling",
-      "animal-training",
-      "animal-noise",
-      "appraising",
-      "boating",
-      "direction-sense",
-      "disguise",
-      "fast-talking",
-      "forgery",
-      "information-gathering",
-      "navigation",
-      "observation",
-      "rope-use",
-      "seamanship",
-      "swimming"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 112000,
+  "sort": 136000,
   "ownership": {
     "default": 0
   },

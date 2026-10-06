@@ -1,0 +1,136 @@
+{
+  "_id": "eWQnYm1CGK7YL3yn",
+  "_key": "!items!eWQnYm1CGK7YL3yn",
+  "name": "Scholar (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "scholar-posp",
+    "classes": [
+      "paladin",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "cleric",
+      "druid",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": 13,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Scholar_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "reading-writing",
+      "heraldry",
+      "astrology",
+      "astronomy",
+      "herbalism",
+      "engineering",
+      "gem-cutting",
+      "religion",
+      "spellcraft",
+      "brewing",
+      "etiquette",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "ability",
+        "key": "int",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "if Intelligence was chosen (player's choice: Intelligence or Wisdom)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "ability",
+        "key": "wis",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "if Wisdom was chosen (player's choice: Intelligence or Wisdom)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "proficiency",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "proficiency based on the chosen ability (Intelligence or Wisdom)",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "initiative",
+        "key": "",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 126000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -27,6 +27,8 @@
       "halfling": 6
     },
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Herald_(Character_Kit)",
     "notes": "",
@@ -57,6 +59,15 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "languages-ancient",
+      "languages-modern",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -72,20 +83,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "languages-ancient",
-      "languages-modern",
-      "musical-instrument"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 59000,
+  "sort": 69000,
   "ownership": {
     "default": 0
   },

@@ -24,6 +24,8 @@
       "halfling": 9
     },
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Riddlemaster_(Character_Kit)",
     "notes": "",
@@ -53,6 +55,23 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "appraising",
+      "blind-fighting",
+      "direction-sense",
+      "gaming",
+      "heraldry",
+      "musical-instrument",
+      "navigation",
+      "reading-lips",
+      "singing",
+      "weather-sense",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -147,28 +166,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "appraising",
-      "blind-fighting",
-      "direction-sense",
-      "gaming",
-      "heraldry",
-      "musical-instrument",
-      "navigation",
-      "reading-lips",
-      "singing",
-      "weather-sense",
-      "ventriloquism"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 99000,
+  "sort": 118000,
   "ownership": {
     "default": 0
   },

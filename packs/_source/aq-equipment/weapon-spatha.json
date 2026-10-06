@@ -1,0 +1,62 @@
+{
+  "_id": "1kg2gF1TyyyzyR2h",
+  "_key": "!items!1kg2gF1TyyyzyR2h",
+  "name": "Spatha",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "spatha",
+    "proficiency": "spatha",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 5,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "150 gp(Roman)",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (15 gp (Roman))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 11600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

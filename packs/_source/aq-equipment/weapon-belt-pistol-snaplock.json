@@ -1,0 +1,64 @@
+{
+  "_id": "Epm5SebJfca8aXj0",
+  "_key": "!items!Epm5SebJfca8aXj0",
+  "name": "Belt pistol (snaplock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "belt-pistol-snaplock",
+    "proficiency": "belt-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "15",
+        "medium": "30",
+        "long": "45"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none",
+      "rules": [
+        "knockdown"
+      ],
+      "misfire": {
+        "dry": 2,
+        "wet": null
+      },
+      "knockdownDie": "d8",
+      "ammo": true,
+      "powder": true,
+      "match": false
+    },
+    "cost": "150 gp(Firearms)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (15 gp (Firearms))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

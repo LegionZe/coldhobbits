@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Mageweaver_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,18 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "seamstress-tailor",
+      "agriculture",
+      "herbalism",
+      "reading-writing",
+      "spellcraft",
+      "appraising"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [],
     "skillAdjust": {
@@ -51,23 +65,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "seamstress-tailor",
-      "agriculture",
-      "herbalism",
-      "reading-writing",
-      "spellcraft",
-      "appraising"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 69000,
+  "sort": 80000,
   "ownership": {
     "default": 0
   },

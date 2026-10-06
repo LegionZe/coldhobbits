@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Noble_Warrior_(Character_Kit)",
     "notes": "",
@@ -45,6 +47,21 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "dancing",
+      "blind-fighting",
+      "gaming",
+      "hunting",
+      "tracking",
+      "local-history",
+      "musical-instrument",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -73,26 +90,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-training",
-      "dancing",
-      "blind-fighting",
-      "gaming",
-      "hunting",
-      "tracking",
-      "local-history",
-      "musical-instrument",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 84000,
+  "sort": 99000,
   "ownership": {
     "default": 0
   },

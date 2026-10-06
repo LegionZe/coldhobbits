@@ -388,6 +388,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       levelLimit: info.levelLimit,
       needsRaceKit: info.needsRaceKit,
       kitRaceLimits: formatRaceLimits(info.kitItem?.system.raceLimits),
+      kitRacesBarred: (info.kitItem?.system.racesBarred ?? []).join(", "),
       kitBonusProfs: formatKitProficiencies(info.kitItem?.system.bonusProficiencies),
       kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
       kitRecommended: formatKitRecommended(info.kitItem?.system.recommendedProficiencies),
@@ -733,6 +734,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       url: e.item.system.url
     });
     const sortByName = (a, b) => a.name.localeCompare(b.name);
+    // Skills & Powers ratings (module/sp-proficiencies.mjs): "Wis 7 +3" with a breakdown; extra slots "+n".
+    const signed = n => (n >= 0 ? `+${n}` : `${n}`);
+    const nonweaponRow = e => {
+      const r = row(e);
+      if (e.extra) r.extra = game.i18n.format("AD2E.Prof.ExtraShort", { n: e.extra });
+      const s = e.spRating;
+      if (!s) return r;
+      return { ...r, ability: abilityAbbr(s.ability), modifier: `${s.unmodified} ${signed(s.abilityMod)}`, spRated: true,
+        checkHint: game.i18n.format(s.capped ? "AD2E.SPProf.HintCapped" : "AD2E.SPProf.Hint",
+          { base: s.base, extra: e.extra, unmodified: s.unmodified, ability: abilityAbbr(s.ability), mod: signed(s.abilityMod) }) };
+    };
     // Skills & Powers: cost breakdown (CP converted to slots) and reasons a purchase gives no benefit.
     const spText = e => ({
       costHint: e.parts?.length ? e.parts.map(x => x.cp === null
@@ -759,7 +771,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
         rows: p.entries.filter(e => e.item.system.kind === "weapon").map(weaponRow).sort(sortByName) },
       nonweapon: { ...p.nonweapon, over: p.nonweapon.used > p.nonweapon.available,
-        rows: p.entries.filter(e => e.item.system.kind === "nonweapon").map(row).sort(sortByName) },
+        rows: p.entries.filter(e => e.item.system.kind === "nonweapon").map(nonweaponRow).sort(sortByName) },
+      spRatings: !!p.spRatings,
       penalty: p.penalty,
       groups: p.groups.map(g => game.i18n.localize(AD2E.nonweaponGroups[g])).join(", "),
       specRule: formatKitSpecialization(p.specRule),
@@ -868,6 +881,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     // Can this kit be used by this race for this class? (race-only kits; classes reached only through a kit)
     const kitOkForRace = (kit, race, classId) => {
       if (!race) return true;
+      if ((kit.system.racesBarred ?? []).includes(race.system.identifier)) return false;
       const listed = race.system.identifier in (kit.system.raceLimits ?? {});
       if (kit.system.raceOnly && !listed) return false;
       return race.system.classes.has(classId) || listed;

@@ -1,0 +1,62 @@
+{
+  "_id": "oy34a2R9vRWaDT3v",
+  "_key": "!items!oy34a2R9vRWaDT3v",
+  "name": "Sword-axe",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "sword-axe",
+    "proficiency": "sword-axe",
+    "weapon": {
+      "size": "L",
+      "type": "S",
+      "speed": 10,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8+1",
+          "l": "1d12+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "200 gp(The Bronze Age and Ancient Cultures)",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (20 gp (The Bronze Age and Ancient Cultures))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 12100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

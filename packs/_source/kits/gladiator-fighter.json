@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Gladiator_-_Fighter_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,21 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "etiquette",
+      "riding-land-based",
+      "armorer",
+      "blind-fighting",
+      "endurance",
+      "gaming",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -56,26 +73,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "etiquette",
-      "riding-land-based",
-      "armorer",
-      "blind-fighting",
-      "endurance",
-      "gaming",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 52000,
+  "sort": 61000,
   "ownership": {
     "default": 0
   },

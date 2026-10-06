@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Mystic_of_Nog_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,21 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "dancing",
+      "swimming",
+      "endurance",
+      "survival",
+      "healing",
+      "ancient-history",
+      "spellcraft",
+      "jumping",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -69,26 +86,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "dancing",
-      "swimming",
-      "endurance",
-      "survival",
-      "healing",
-      "ancient-history",
-      "spellcraft",
-      "jumping",
-      "tumbling"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 83000,
+  "sort": 97000,
   "ownership": {
     "default": 0
   },

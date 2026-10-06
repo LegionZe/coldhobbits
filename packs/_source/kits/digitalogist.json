@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Digitalogist_(Character_Kit)",
     "notes": "",
@@ -42,6 +44,17 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "gaming",
+      "astrology",
+      "engineering",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -57,22 +70,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "gaming",
-      "astrology",
-      "engineering",
-      "reading-writing",
-      "spellcraft"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 31000,
+  "sort": 38000,
   "ownership": {
     "default": 0
   },

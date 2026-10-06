@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Scout_-_Thief_(Character_Kit)",
     "notes": "",
@@ -45,6 +47,31 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-lore",
+      "animal-noise",
+      "boating",
+      "fire-building",
+      "fishing",
+      "heraldry",
+      "herbalism",
+      "hunting",
+      "mountaineering",
+      "observation",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "survival",
+      "swimming",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -95,36 +122,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "animal-handling",
-      "animal-training",
-      "animal-lore",
-      "animal-noise",
-      "boating",
-      "fire-building",
-      "fishing",
-      "heraldry",
-      "herbalism",
-      "hunting",
-      "mountaineering",
-      "observation",
-      "riding-land-based",
-      "rope-use",
-      "set-snares",
-      "survival",
-      "swimming",
-      "weather-sense"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 106000,
+  "sort": 128000,
   "ownership": {
     "default": 0
   },

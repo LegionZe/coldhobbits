@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Moralist_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,23 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "cooking",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "weaving",
+      "ancient-history",
+      "bureaucracy",
+      "healing",
+      "languages-ancient",
+      "local-history",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,28 +87,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "cooking",
-      "etiquette",
-      "heraldry",
-      "languages-modern",
-      "weaving",
-      "ancient-history",
-      "bureaucracy",
-      "healing",
-      "languages-ancient",
-      "local-history",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "InEiVfQCHSnHco4F",
-  "sort": 78000,
+  "sort": 91000,
   "ownership": {
     "default": 0
   },

@@ -23,6 +23,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Askar_(Character_Kit)",
     "notes": "Bonus: one general proficiency of the player's choice.",
@@ -37,6 +39,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "awareness",
+      "armorer",
+      "gaming",
+      "weaponsmithing",
+      "local-history",
+      "musical-instrument",
+      "appraising",
+      "disguise"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -65,25 +81,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "awareness",
-      "armorer",
-      "gaming",
-      "weaponsmithing",
-      "local-history",
-      "musical-instrument",
-      "appraising",
-      "disguise"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "AKpnHCDNvBQdGgBS",
-  "sort": 8000,
+  "sort": 11000,
   "ownership": {
     "default": 0
   },

@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Wu_Jen_(Character_Kit)",
     "notes": "",
@@ -49,22 +51,6 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
-    },
     "recommendedProficiencies": [
       "riding-land-based",
       "cooking",
@@ -82,11 +68,27 @@
     "specialization": {
       "mode": "",
       "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",
-  "sort": 130000,
+  "sort": 160000,
   "ownership": {
     "default": 0
   },

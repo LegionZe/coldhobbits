@@ -22,6 +22,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Nobleman_Priest_(Character_Kit)",
     "notes": "",
@@ -46,6 +48,19 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "dancing",
+      "gaming",
+      "hunting",
+      "local-history",
+      "musical-instrument",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,24 +89,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-training",
-      "dancing",
-      "gaming",
-      "hunting",
-      "local-history",
-      "musical-instrument",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",
-  "sort": 85000,
+  "sort": 100000,
   "ownership": {
     "default": 0
   },

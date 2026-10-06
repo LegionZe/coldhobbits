@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Berserker_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,27 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "weather-sense",
+      "blind-fighting",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "survival",
+      "tracking",
+      "herbalism",
+      "jumping"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -107,32 +130,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "direction-sense",
-      "fire-building",
-      "riding-land-based",
-      "weather-sense",
-      "blind-fighting",
-      "hunting",
-      "mountaineering",
-      "running",
-      "set-snares",
-      "survival",
-      "tracking",
-      "herbalism",
-      "jumping"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 19000,
+  "sort": 25000,
   "ownership": {
     "default": 0
   },

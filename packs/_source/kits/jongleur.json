@@ -24,6 +24,8 @@
       "halfling": 12
     },
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Jongleur_(Character_Kit)",
     "notes": "",
@@ -54,6 +56,17 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "direction-sense",
+      "endurance",
+      "poetry",
+      "rope-use",
+      "running"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -69,22 +82,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "direction-sense",
-      "endurance",
-      "poetry",
-      "rope-use",
-      "running"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 65000,
+  "sort": 76000,
   "ownership": {
     "default": 0
   },

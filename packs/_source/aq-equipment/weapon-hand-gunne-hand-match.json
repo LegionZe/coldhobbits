@@ -1,0 +1,64 @@
+{
+  "_id": "vKieSX9bRmkDyIOh",
+  "_key": "!items!vKieSX9bRmkDyIOh",
+  "name": "Hand gunne (hand match)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "hand-gunne-hand-match",
+    "proficiency": "hand-gunne",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 18,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8+2",
+          "l": "2d6+2",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/4",
+        "short": "40",
+        "medium": "120",
+        "long": "170"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none",
+      "rules": [
+        "rangeDouble"
+      ],
+      "misfire": {
+        "dry": 5,
+        "wet": 10
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": true,
+      "match": true
+    },
+    "cost": "1,250 gp(Firearms)",
+    "weight": 20.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (125 gp (Firearms))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Merchant-Rogue_(Character_Kit)",
     "notes": "",
@@ -40,22 +42,6 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
-    },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
     },
     "recommendedProficiencies": [
       "animal-handling",
@@ -78,11 +64,27 @@
     "specialization": {
       "mode": "",
       "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "BVfipmiC4r0zp30k",
-  "sort": 75000,
+  "sort": 88000,
   "ownership": {
     "default": 0
   },

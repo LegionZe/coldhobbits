@@ -1,0 +1,36 @@
+{
+  "_id": "jw1FhAm0I4EkOIxd",
+  "_key": "!items!jw1FhAm0I4EkOIxd",
+  "name": "Pellet",
+  "type": "ammunition",
+  "img": "icons/svg/target.svg",
+  "system": {
+    "identifier": "pellet",
+    "launchers": [
+      "pellet-bow"
+    ],
+    "size": "S",
+    "type": "B",
+    "damage": {
+      "sm": "1d4",
+      "l": "1d4"
+    },
+    "cost": "50 cp(Dark Ages, The Crusades, Hundred Years' War, The Renaissance, Middle Eastern, Oriental)",
+    "weight": 0.1,
+    "quantity": 1,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (5 cp (Dark Ages, The Crusades, Hundred Years' War, The Renaissance, Middle Eastern, Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 9500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

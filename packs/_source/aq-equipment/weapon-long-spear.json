@@ -1,0 +1,65 @@
+{
+  "_id": "C93VLhVXeM6E7ZqD",
+  "_key": "!items!C93VLhVXeM6E7ZqD",
+  "name": "Long spear",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "long-spear",
+    "proficiency": "long-spear",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d6",
+          "l": "3d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [
+        "setCharge",
+        "twoHands"
+      ],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "50 gp(The Bronze Age and Ancient Cultures, Roman, Dark Ages, The Crusades, Middle Eastern, Oriental)",
+    "weight": 8.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (5 gp (The Bronze Age and Ancient Cultures, Roman, Dark Ages, The Crusades, Middle Eastern, Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 7400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

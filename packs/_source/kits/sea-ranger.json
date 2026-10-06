@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Sea_Ranger_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,24 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "cartography",
+      "direction-sense",
+      "distance-sense",
+      "endurance",
+      "fishing",
+      "navigation",
+      "riding-sea-based",
+      "rope-use",
+      "dagger-or-dirk",
+      "knife",
+      "harpoon",
+      "trident"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -80,29 +100,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "cartography",
-      "direction-sense",
-      "distance-sense",
-      "endurance",
-      "fishing",
-      "navigation",
-      "riding-sea-based",
-      "rope-use",
-      "dagger-or-dirk",
-      "knife",
-      "harpoon",
-      "trident"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 107000,
+  "sort": 130000,
   "ownership": {
     "default": 0
   },

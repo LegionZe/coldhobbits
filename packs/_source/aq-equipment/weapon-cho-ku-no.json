@@ -1,0 +1,64 @@
+{
+  "_id": "9zsqeuBotDAmVR3i",
+  "_key": "!items!9zsqeuBotDAmVR3i",
+  "name": "Cho-ku-no",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "cho-ku-no",
+    "proficiency": "cho-ku-no",
+    "weapon": {
+      "size": "M",
+      "type": "P",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "Light quarrel",
+          "sm": "1d6+1",
+          "l": "1d8+1",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "2/1",
+        "short": "50",
+        "medium": "100",
+        "long": "150"
+      },
+      "family": "crossbow",
+      "missileColumn": "lightCrossbow",
+      "strength": "none",
+      "rules": [
+        "twoHands"
+      ],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "500 gp(Oriental)",
+    "weight": 12.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (50 gp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Bandit_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,23 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "animal-handling",
+      "animal-training",
+      "animal-noise",
+      "fire-building",
+      "intimidation",
+      "looting",
+      "riding-land-based",
+      "rope-use",
+      "set-snares",
+      "swimming"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,28 +93,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "animal-handling",
-      "animal-training",
-      "animal-noise",
-      "fire-building",
-      "intimidation",
-      "looting",
-      "riding-land-based",
-      "rope-use",
-      "set-snares",
-      "swimming"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 11000,
+  "sort": 15000,
   "ownership": {
     "default": 0
   },

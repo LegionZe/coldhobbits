@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Amazon_-_Fighter_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-lore",
+      "armorer",
+      "bowyer-fletcher",
+      "hunting",
+      "running",
+      "survival",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -90,25 +106,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-lore",
-      "armorer",
-      "bowyer-fletcher",
-      "hunting",
-      "running",
-      "survival",
-      "tracking"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 4000,
+  "sort": 5000,
   "ownership": {
     "default": 0
   },

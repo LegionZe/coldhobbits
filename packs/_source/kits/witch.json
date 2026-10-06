@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Witch_(Character_Kit)",
     "notes": "Bonus: Spellcasting (no proficiency page on the source wiki)",
@@ -43,6 +45,23 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "brewing",
+      "cooking",
+      "languages-modern",
+      "weather-sense",
+      "ancient-history",
+      "astrology",
+      "languages-ancient",
+      "reading-writing",
+      "religion",
+      "healing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -93,28 +112,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "brewing",
-      "cooking",
-      "languages-modern",
-      "weather-sense",
-      "ancient-history",
-      "astrology",
-      "languages-ancient",
-      "reading-writing",
-      "religion",
-      "healing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",
-  "sort": 129000,
+  "sort": 159000,
   "ownership": {
     "default": 0
   },

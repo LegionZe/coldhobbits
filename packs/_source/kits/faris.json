@@ -23,6 +23,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Faris_(Character_Kit)",
     "notes": "",
@@ -37,6 +39,18 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "artistic-ability",
+      "etiquette",
+      "singing",
+      "ancient-history",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -65,23 +79,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "debate",
-      "artistic-ability",
-      "etiquette",
-      "singing",
-      "ancient-history",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "AKpnHCDNvBQdGgBS",
-  "sort": 43000,
+  "sort": 52000,
   "ownership": {
     "default": 0
   },

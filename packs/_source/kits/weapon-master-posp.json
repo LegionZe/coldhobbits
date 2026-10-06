@@ -1,0 +1,73 @@
+{
+  "_id": "6TxlwdvwVMfxIESY",
+  "_key": "!items!6TxlwdvwVMfxIESY",
+  "name": "Weapon Master (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "weapon-master-posp",
+    "classes": [
+      "fighter",
+      "cleric",
+      "druid",
+      "thief"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 13,
+      "dex": 13,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Weapon_Master_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "juggling",
+      "weaponsmithing",
+      "bowyer-fletcher",
+      "endurance"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 157000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

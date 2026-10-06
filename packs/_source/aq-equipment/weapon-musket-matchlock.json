@@ -1,0 +1,64 @@
+{
+  "_id": "fv27vMtr6SHeW1LY",
+  "_key": "!items!fv27vMtr6SHeW1LY",
+  "name": "Musket (matchlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "musket-matchlock",
+    "proficiency": "musket",
+    "weapon": {
+      "size": "L",
+      "type": "P",
+      "speed": 12,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d12",
+          "l": "1d12",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "60",
+        "medium": "120",
+        "long": "360"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none",
+      "rules": [
+        "knockdown"
+      ],
+      "misfire": {
+        "dry": 3,
+        "wet": 6
+      },
+      "knockdownDie": "d8",
+      "ammo": true,
+      "powder": true,
+      "match": true
+    },
+    "cost": "450 gp(Firearms)",
+    "weight": 20.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (45 gp (Firearms))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 8500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Forest_Runner_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,22 @@
     "bonusSlots": {
       "weapon": 1,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "blacksmithing",
+      "camouflage",
+      "disguise",
+      "endurance",
+      "leatherworking",
+      "persuasion",
+      "riding-land-based",
+      "rope-use",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -63,27 +81,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "blacksmithing",
-      "camouflage",
-      "disguise",
-      "endurance",
-      "leatherworking",
-      "persuasion",
-      "riding-land-based",
-      "rope-use",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 47000,
+  "sort": 56000,
   "ownership": {
     "default": 0
   },
