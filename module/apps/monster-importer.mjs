@@ -89,6 +89,95 @@ function storeLocally() {
   try { return game.settings.get("ad2e", "monsterImagesLocal") !== false; } catch { return true; }
 }
 
+/**
+ * The pictures of a page that exist (the variant's own, else the page's first one, else none); with the world setting,
+ * as local copies in the world folder.
+ */
+async function pageImages(page) {
+  const local = storeLocally();
+  const ok = [];
+  for (const img of page.images ?? []) {
+    const src = local ? await localImage(img.url) : ((await imageExists(img.url)) ? img.url : null);
+    if (src) ok.push({ ...img, url: src });
+  }
+  return ok;
+}
+
+/**
+ * Update for an actor imported before from the same page and variant: the stat block and flags; current hit points
+ * stay, and an attack keeps the element a GM set (same position and name, the page names none). Pictures: only the
+ * default icon, an earlier picture from the site or a local copy is replaced (a GM's choice stays).
+ */
+export function monsterUpdate(existing, data, { name = true } = {}) {
+  const { hp, ...system } = data.system;
+  const old = existing.system?.attacks ?? [];
+  system.attacks = (system.attacks ?? []).map((a, i) => (!a.element && old[i]?.element && old[i].name === a.name ? { ...a, element: old[i].element } : a));
+  const change = { _id: existing.id, system, flags: data.flags };
+  if (name) change.name = data.name;
+  const replaceable = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE)
+    || String(src).startsWith(`${imageDir()}/`);
+  if (data.img !== cc.DEFAULT_IMAGE && replaceable(existing.img)) change.img = data.img;
+  if (data.img !== cc.DEFAULT_IMAGE && replaceable(existing.prototypeToken?.texture?.src)) change["prototypeToken.texture.src"] = data.img;
+  return change;
+}
+
+/**
+ * GM tool (game.ad2e.updateMonsters(), and the importer's "Update existing monsters" button): re-read the page of every
+ * imported monster (actors flagged `flags.ad2e.completeCompendium`) in the world and in unlocked world Actor
+ * compendiums, and update its stat block as a re-import does (names, hit points, GM pictures and elements stay).
+ * Unlinked tokens follow their world actor. Returns { updated, failed }.
+ */
+export async function updateExistingMonsters() {
+  if (!game.user.isGM) {
+    ui.notifications.warn(game.i18n.localize("AD2E.Importer.GmOnly"));
+    return null;
+  }
+  const imported = a => a?.type === "monster" && a.flags?.ad2e?.completeCompendium?.key;
+  const targets = [];
+  for (const actor of game.actors ?? []) if (imported(actor)) targets.push({ doc: actor, pack: null });
+  for (const pack of game.packs ?? []) {
+    if (pack.documentName !== "Actor" || pack.metadata?.packageType !== "world" || pack.locked) continue;
+    for (const actor of await pack.getDocuments()) if (imported(actor)) targets.push({ doc: actor, pack });
+  }
+  const byKey = new Map();
+  for (const t of targets) {
+    const key = t.doc.flags.ad2e.completeCompendium.key;
+    if (!byKey.has(key)) byKey.set(key, []);
+    byKey.get(key).push(t);
+  }
+  const note = ui.notifications.info(game.i18n.format("AD2E.Importer.Updating", { n: targets.length, pages: byKey.size }));
+  const world = [];
+  const packs = new Map();
+  let failed = 0;
+  await pool([...byKey.keys()], 4, async key => {
+    let page;
+    try {
+      page = cc.parseMonsterPage(await get(cc.monsterDataUrl(key)));
+    } catch (err) {
+      console.warn(`ad2e | monster page ${key} could not be loaded`, err);
+      failed += byKey.get(key).length;
+      return;
+    }
+    const images = await pageImages(page);
+    for (const t of byKey.get(key)) {
+      const variant = page.variants.find(v => v.name === (t.doc.flags.ad2e.completeCompendium.variant ?? ""));
+      if (!variant) { failed++; continue; }
+      const change = monsterUpdate(t.doc, cc.monsterActorData({ ...page, images }, variant), { name: false });
+      if (!t.pack) world.push(change);
+      else {
+        if (!packs.has(t.pack)) packs.set(t.pack, []);
+        packs.get(t.pack).push(change);
+      }
+    }
+  });
+  if (world.length) await Actor.updateDocuments(world);
+  for (const [pack, changes] of packs) await Actor.updateDocuments(changes, { pack: pack.collection });
+  const updated = world.length + [...packs.values()].reduce((n, c) => n + c.length, 0);
+  ui.notifications.remove?.(note);
+  ui.notifications.info(game.i18n.format("AD2E.Importer.Updated", { updated, failed }));
+  return { updated, failed };
+}
+
 /** Run `fn` over `items` with at most `limit` requests at a time. */
 async function pool(items, limit, fn) {
   let next = 0;
@@ -116,7 +205,8 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
       loadBook: MonsterImporter.#onLoadBook,
       selectAll: MonsterImporter.#onSelectAll,
       selectNone: MonsterImporter.#onSelectNone,
-      importSelected: MonsterImporter.#onImport
+      importSelected: MonsterImporter.#onImport,
+      updateExisting: () => updateExistingMonsters()
     }
   };
 
@@ -258,15 +348,7 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
     // with the world setting, as local copies in the world folder.
     const pages = [...new Set(chosen.map(e => e.page))];
     const images = new Map();
-    const local = storeLocally();
-    await pool(pages, 4, async page => {
-      const ok = [];
-      for (const img of page.images ?? []) {
-        const src = local ? await localImage(img.url) : ((await imageExists(img.url)) ? img.url : null);
-        if (src) ok.push({ ...img, url: src });
-      }
-      images.set(page, ok);
-    });
+    await pool(pages, 4, async page => images.set(page, await pageImages(page)));
     const create = [];
     const update = [];
     for (const e of chosen) {
@@ -278,14 +360,7 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
         return f && f.key === e.page.key && f.variant === e.variant.name;
       });
       if (existing) {
-        const { hp, ...system } = data.system; // keep current hit points
-        const change = { _id: existing.id, name: data.name, system, flags: data.flags };
-        // Pictures: replace only the default icon, an earlier picture from the site or a local copy (keep ones a GM
-        // chose); re-importing replaces the site's address with the local copy.
-        const fromSite = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE)
-          || String(src).startsWith(`${imageDir()}/`);
-        if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.img)) change.img = data.img;
-        if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.prototypeToken?.texture?.src)) change["prototypeToken.texture.src"] = data.img;
+        const change = monsterUpdate(existing, data);
         update.push(change);
       } else {
         if (folder) data.folder = folder.id;

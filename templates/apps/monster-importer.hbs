@@ -5,6 +5,7 @@
     <label>{{localize "AD2E.Importer.Setting"}} <select name="setting">{{selectOptions settings selected=state.setting}}</select></label>
     <label>{{localize "AD2E.Importer.Book"}} <select name="book">{{selectOptions books selected=state.book}}</select></label>
     <button type="button" data-action="loadBook" {{#if state.busy}}disabled{{/if}}><i class="fa-solid fa-download"></i> {{localize "AD2E.Importer.Load"}}</button>
+    <button type="button" data-action="updateExisting" data-tooltip="{{localize 'AD2E.Importer.UpdateHint'}}"><i class="fa-solid fa-rotate"></i> {{localize "AD2E.Importer.Update"}}</button>
   </div>
   {{#if state.busy}}<p class="ad2e-note">{{state.busy}}</p>{{/if}}
   {{#if state.entries.length}}
