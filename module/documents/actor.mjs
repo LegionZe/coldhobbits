@@ -26,7 +26,7 @@ const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
 import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
-import { armsTrapped, LASSO, monsterScores, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
+import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -671,6 +671,8 @@ export default class AD2EActor extends Actor {
     const item = this.items.get(itemId);
     // The lasso is only used with called shots (Weapon Descriptions (POCT)): its own dialog.
     if (item?.system.identifier === "lasso" && this.type === "character") return this.rollLasso(itemId);
+    // The net traps rather than wounds (Weapon Descriptions (POCT)): its own dialog.
+    if (item?.system.identifier === "net" && this.type === "character") return this.rollNet(itemId);
     const entry = this.#weaponEntry(itemId);
     const attack = entry?.attack?.[use];
     if (!item || !attack) return;
@@ -1093,6 +1095,115 @@ export default class AD2EActor extends Actor {
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls,
       content: `<p><strong>${esc(item.name)}: ${esc(i18n(`AD2E.Lasso.Modes.${input.mode}`))}</strong>${esc(AD2EActor.#targetText(targets))}`
         + `${modifierText(input.mod, input.note)}</p><ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+  }
+
+  /**
+   * Net (module/lasso.mjs NET): throw (trap weapon and shield), loop the rope round (the victim's Strength -4 to break
+   * free), pull/trip, or fold it again (2 rounds). Thrown at 10 with the target's Dexterity and magic only; -4 once
+   * unfolded (item flag `ad2e.unfolded`).
+   */
+  async rollNet(itemId) {
+    const item = this.items.get(itemId);
+    const entry = this.#weaponEntry(itemId);
+    const attack = entry?.attack?.missile ?? entry?.attack?.melee;
+    if (!item || !attack) return null;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const targets = AD2EActor.#targetsNow();
+    const resolve = uuid => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(uuid, { strict: false }) ?? null;
+    const tdoc = targets[0] ? resolve(targets[0].uuid) : null;
+    const def = tdoc?.actor ?? (tdoc?.documentName === "Actor" ? tdoc : null);
+    const ds = def?.system ?? {};
+    const mon = def?.type === "monster" ? monsterScores(ds.size, ds.hitDice, ds.movement?.base) : null;
+    const dSize = def?.type === "monster" ? (String(ds.size ?? "").trim().charAt(0).toUpperCase() || "M") : (ds.sizeCategory ?? "M");
+    const unfolded = !!item.getFlag?.("ad2e", "unfolded");
+    const field = (label, html) => `<div class="form-group"><label>${esc(label)}</label>${html}</div>`;
+    const box = (name, label, checked = false) => `<div class="form-group"><label>${esc(label)}</label><input type="checkbox" name="${name}"${checked ? " checked" : ""}></div>`;
+    const content = `<p class="ad2e-note">${esc(i18n("AD2E.Net.Hint"))}</p>`
+      + field(i18n("AD2E.Net.Mode"), `<select name="mode">${["throw", "wrap", "trip", "fold"].map(m => `<option value="${m}">${esc(i18n(`AD2E.Net.Modes.${m}`))}</option>`).join("")}</select>`)
+      + field(i18n("AD2E.Net.Ac"), `<input type="number" name="netAc" value="${netAc(def?.type === "character" ? ds.abilityData?.dex?.ac : 0, 0)}">`)
+      + field(i18n("AD2E.Net.TripAc"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets, true)}">`)
+      + field(i18n("AD2E.Lasso.Range"), `<select name="range">${["short", "medium", "long"].map(r => `<option value="${r}">${esc(i18n(`AD2E.Weapon.${r[0].toUpperCase()}${r.slice(1)}`))}</option>`).join("")}</select>`)
+      + box("unfolded", game.i18n.format("AD2E.Net.Unfolded", { n: NET.unfolded }), unfolded)
+      + `<fieldset><legend>${esc(game.i18n.format("AD2E.Lasso.Defender", { name: def?.name ?? i18n("AD2E.Lasso.NoTarget") }))}</legend>`
+      + field(i18n("AD2E.Lasso.DefStr"), `<input type="number" name="dStr" value="${mon ? mon.str : (ds.abilities?.str?.total ?? 10)}">`)
+      + field(i18n("AD2E.Lasso.DefDex"), `<input type="number" name="dDex" value="${mon ? mon.dex : (ds.abilities?.dex?.total ?? 10)}">`)
+      + field(i18n("AD2E.Lasso.DefSize"), `<select name="dSize">${LASSO.sizes.map(s => `<option value="${s}"${s === dSize ? " selected" : ""}>${s}</option>`).join("")}</select>`)
+      + box("fourLegs", game.i18n.format("AD2E.Lasso.FourLegs", { n: LASSO.pullTrip.fourLegs }))
+      + box("unaware", game.i18n.format("AD2E.Lasso.Unaware", { n: LASSO.pullTrip.unaware }))
+      + box("stationary", game.i18n.format("AD2E.Lasso.Stationary", { n: LASSO.pullTrip.stationary })) + `</fieldset>`
+      + modifierFields();
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${item.name}` }, content,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const el = button.form.elements;
+        const num = n => Number(el[n]?.value) || 0;
+        return { mode: el.mode.value, netAc: num("netAc"), ac: num("ac"), range: el.range.value, unfolded: !!el.unfolded?.checked,
+          dStr: num("dStr"), dDex: num("dDex"), dSize: el.dSize.value, fourLegs: !!el.fourLegs?.checked, unaware: !!el.unaware?.checked,
+          stationary: !!el.stationary?.checked, ...readModifier(button.form) };
+      } },
+      rejectClose: false
+    });
+    if (!input) return null;
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    const title = `<p><strong>${esc(item.name)}: ${esc(i18n(`AD2E.Net.Modes.${input.mode}`))}</strong>${esc(AD2EActor.#targetText(targets))}${modifierText(input.mod, input.note)}</p>`;
+    if (input.mode === "fold") {
+      await item.setFlag?.("ad2e", "unfolded", false);
+      return ChatMessage.create({ speaker, content: title + `<p>${esc(game.i18n.format("AD2E.Net.Folded", { name: this.name, n: NET.foldRounds }))}</p>` });
+    }
+    const rolls = [];
+    const lines = [];
+    const d20 = async () => { const r = await new Roll("1d20").evaluate(); rolls.push(r); return r.total; };
+    const fmtAdj = n => `${n >= 0 ? "+" : ""}${n}`;
+    // Throws and loops are made at the Dexterity-and-magic AC and suffer the unfolded -4; a pull/trip uses the normal AC.
+    const thrown = input.mode !== "trip";
+    const ac = thrown ? input.netAc : input.ac;
+    const adj = attack.hit + (AD2E.rangeModifiers[input.range] ?? 0) + (input.unfolded && thrown ? NET.unfolded : 0) + input.mod;
+    const need = this.system.thac0.value - ac;
+    const r = await d20();
+    const hit = r + adj >= need;
+    lines.push(game.i18n.format("AD2E.Net.AttackLine", { roll: r, adj: fmtAdj(adj), total: r + adj, ac, need, result: i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") }));
+    if (input.unfolded && thrown) lines.push(game.i18n.format("AD2E.Net.UnfoldedNote", { n: NET.unfolded }));
+    if (hit && input.mode === "throw") lines.push(i18n("AD2E.Net.Trapped"));
+    if (hit && input.mode === "wrap") lines.push(game.i18n.format("AD2E.Net.Wrapped", { n: NET.improveStr }));
+    if (hit && input.mode === "trip") {
+      const pt = pullTripScore(this.system.abilities.str.total, { attackerSize: this.system.sizeCategory ?? "M", defenderSize: input.dSize, lasso: false,
+        fourLegs: input.fourLegs, unaware: input.unaware, stationary: input.stationary });
+      const dScore = Math.max(input.dStr, input.dDex);
+      lines.push(game.i18n.format("AD2E.Lasso.StrParts", { str: this.system.abilities.str.total, parts: pt.parts.map(([k, v]) => `${i18n(`AD2E.Lasso.Part.${k}`)} ${fmtAdj(v)}`).join(", ") || "—",
+        score: pt.score, def: dScore }));
+      const ar = await d20(), dr = await d20();
+      lines.push(game.i18n.format("AD2E.Lasso.StrLine", { a: pt.score, ar, d: dScore, dr }));
+      lines.push(i18n(`AD2E.Lasso.Trip.${opposedCheck(pt.score, ar, dScore, dr)}`));
+    }
+    // A throw unfolds the net (a pull/trip keeps hold of it).
+    if (input.mode !== "trip") await item.setFlag?.("ad2e", "unfolded", true);
+    return ChatMessage.create({ speaker, rolls, content: title + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+  }
+
+  /** Netted: "he can only break free by making a Strength check" (-4 if the rope was looped round). Characters and monsters. */
+  async breakFreeNet() {
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const str = this.type === "character" ? this.system.abilities.str.total
+      : monsterScores(this.system.size, this.system.hitDice, this.system.movement?.base).str;
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n("AD2E.Net.BreakFree")}` },
+      content: `<p class="ad2e-note">${esc(i18n("AD2E.Net.BreakFreeHint"))}</p>`
+        + `<div class="form-group"><label>${esc(i18n("AD2E.Net.Strength"))}</label><input type="number" name="str" value="${str}"></div>`
+        + `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Net.WrappedBox", { n: NET.improveStr }))}</label><input type="checkbox" name="wrapped"></div>`
+        + modifierFields(),
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({ str: Number(button.form.elements.str.value) || 0,
+        wrapped: !!button.form.elements.wrapped?.checked, ...readModifier(button.form) }) },
+      rejectClose: false
+    });
+    if (!input) return null;
+    const target = breakFreeScore(input.str, input.wrapped) + input.mod;
+    const roll = await new Roll("1d20").evaluate();
+    const ok = roll.total <= target;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls: [roll],
+      content: `<p>${esc(game.i18n.format("AD2E.Net.BreakFreeLine", { name: this.name, roll: roll.total, target,
+        result: i18n(ok ? "AD2E.Net.Free" : "AD2E.Net.StillTrapped") }))}${modifierText(input.mod, input.note)}</p>` });
   }
 
   /** Tokens the current user targets: [{ uuid, name }] (`game.user.targets`). */

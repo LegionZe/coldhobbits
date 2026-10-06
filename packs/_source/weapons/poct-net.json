@@ -1,36 +1,31 @@
 {
-  "_id": "PAMYcBvNBk8PfPmo",
-  "_key": "!items!PAMYcBvNBk8PfPmo",
-  "name": "War club",
+  "_id": "VvmbqTalrN2JcfnO",
+  "_key": "!items!VvmbqTalrN2JcfnO",
+  "name": "Net",
   "type": "weapon",
   "img": "icons/svg/sword.svg",
   "system": {
-    "identifier": "war-club",
-    "proficiency": "war-club",
+    "identifier": "net",
+    "proficiency": "net",
     "weapon": {
       "size": "M",
-      "type": "B/S",
-      "speed": 7,
-      "damage": [
-        {
-          "label": "",
-          "sm": "1d6+1",
-          "l": "1d4+1",
-          "speed": null
-        }
-      ],
+      "type": null,
+      "speed": 10,
+      "damage": [],
       "melee": true,
       "missile": true,
       "range": {
-        "rof": "1",
+        "rof": "1/2",
         "short": "10",
-        "medium": "20",
-        "long": "30"
+        "medium": "15",
+        "long": "20"
       },
       "family": "other",
       "missileColumn": "otherMissile",
       "strength": "full",
-      "rules": [],
+      "rules": [
+        "twoHands"
+      ],
       "misfire": {
         "dry": null,
         "wet": null
@@ -40,8 +35,8 @@
       "powder": false,
       "match": false
     },
-    "cost": "2 gp (Stone Age or Savage Cultures)",
-    "weight": 6.0,
+    "cost": "5 gp (Roman)",
+    "weight": 10.0,
     "quantity": 1,
     "equipped": false,
     "bonus": {
@@ -50,11 +45,11 @@
     },
     "source": "Player's Option: Combat & Tactics",
     "url": "https://adnd2e.fandom.com/wiki/Master_Weapon_List_(POCT)",
-    "notes": ""
+    "notes": "two hands regardless of size"
   },
   "effects": [],
   "folder": "ee9HN90cluPY2GQq",
-  "sort": 5400,
+  "sort": 3200,
   "ownership": {
     "default": 0
   },

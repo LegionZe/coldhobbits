@@ -68,3 +68,22 @@ export function opposedAttack(aNeed, aRoll, dNeed, dRoll) {
 export function armsTrapped(margin) {
   return margin >= LASSO.bothArms ? 2 : 1;
 }
+
+/**
+ * Net (Weapon Descriptions (POCT); COMBAT_TABLES.net): thrown at an AC where "Only the target's Dexterity and magical
+ * adjustments to Armor Class count"; a hit may trap weapon and shield; "break free by making a Strength check"; looping
+ * the rope round (another attack roll at the same AC) lowers that Strength by 4; once unfolded it is thrown at -4 until
+ * folded again (2 rounds). It can also pull/trip (Attack Options (POCT)), without the lasso's +4.
+ * Unfolded state: item flag `ad2e.unfolded` (set by a throw, cleared by folding).
+ */
+export const NET = COMBAT_TABLES.net;
+
+/** The AC a net is thrown against: 10 with the Dexterity adjustment (negative = better) and magical protection (pluses). */
+export function netAc(dexAc = 0, magic = 0) {
+  return NET.baseAc + (Number(dexAc) || 0) - (Number(magic) || 0);
+}
+
+/** The Strength a netted creature rolls under to break free: -4 once the rope is looped round. */
+export function breakFreeScore(str, wrapped = false) {
+  return str + (wrapped ? NET.improveStr : 0);
+}
