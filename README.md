@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.122)
+## Status (v0.0.123)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -547,8 +547,7 @@ Node only until confirmed.
   gives nothing and an adventure award half ("he earns no experience for that encounter and only half experience for
   the adventure"); awards clear the flags they apply, and the GM can clear them on the Race & Class tab (owner's
   rulings). Proficiency slots are the larger of the earlier class's at its last level and the new class's
-  (implementation choice; the PHB only keeps the old proficiencies). Level draining of dual-class characters is not
-  automated. "Undo dual-class" (GM, Race & Class tab) corrects a mistaken switch, although the PHB allows no return to an
+  (implementation choice; the PHB only keeps the old proficiencies). Level draining: see Energy drain below. "Undo dual-class" (GM, Race & Class tab) corrects a mistaken switch, although the PHB allows no return to an
   earlier class: the current class item is removed and the earlier class comes back from the Classes compendium at its
   last level with the experience recorded at the switch (recorded from 0.0.122; older switches get the minimum for that
   level); hit points and the kit are left as they are.
@@ -578,6 +577,21 @@ Node only until confirmed.
   those handbooks allow them only for single-class characters ("Warrior Kits and Multi-Class Characters (CFH)", "Thief
   Types and Multi-Class Characters (CTH)"); the GM decides. A kit's experience table and racial level limit apply to its
   own class. The Complete Bard's Handbook's kit-based multi-class bards are not implemented.
+- Energy drain (GM buttons "Energy drain" and "Restoration" on the Main tab; module/level-drain.mjs; Special Damage
+  (DMG) rev 238117, Multi-Class and Dual-Class Characters (PHB) rev 271818, Restoration (Priest Spell) rev 235764):
+  each level lost comes off the highest class ("Multi-class and dual-class characters lose their highest level first. If
+  both levels are equal, the one requiring the greater number of experience points is lost first"), costs that level's
+  Hit Dice roll plus Constitution (or its fixed hit points) from the maximum (multi-class: divided by the number of
+  classes, as when gained; a dual-class level that gave no hit points takes none, implementation choice), and sets that
+  class's experience "halfway between the minimum needed for his new (post-drain) level and the minimum needed for the
+  next level". Below 1st level the character is 0-level (no Level Up until a restoration or wish); drained again, the
+  chat card says the character is slain (hit points are not changed automatically). Wizard spells above the highest
+  level the character can now cast are marked not understood (roll to learn again). Drained levels are listed until
+  regained by Level Up; while any are pending a dual-class character's restrictions apply (the PHB's "Using abilities of
+  the other class then subjects him to the experience penalties"; the per-adventure class choice is not tracked).
+  Restoration brings back the most recent drained level with "exactly the number of experience points necessary" and
+  the hit points it cost, if within one day per level of the priest (the dialog asks the priest's level); the aging is
+  not tracked. Excess memorized spells are flagged on the Spells tab, not removed.
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
   adds it and brings the tab back.

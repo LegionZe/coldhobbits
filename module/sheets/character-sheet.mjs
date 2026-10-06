@@ -181,6 +181,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       openItem: CharacterSheet.onOpenItem,
       rollFirstLevelHp: CharacterSheet.onRollFirstLevelHp,
       levelUp: CharacterSheet.onLevelUp,
+      drainLevels: CharacterSheet.#onDrainLevels,
+      restoreLevel: CharacterSheet.#onRestoreLevel,
       deleteItem: CharacterSheet.onDeleteItem,
       toggleSeverity: CharacterSheet.onToggleSeverity,
       rollProficiency: CharacterSheet.onRollProficiency,
@@ -360,6 +362,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       + (context.movement.mounted ? ` · ${game.i18n.format("AD2E.Move.MountedShort", { rate: context.movement.mounted.rate })}` : "");
     context.weaponTab = this._weaponTabContext(sys);
     const st = sys.hpState ?? {};
+    // Energy drain (module/level-drain.mjs): GM buttons and the levels lost and not yet regained.
+    const drain = this.document.system.drainInfo;
+    context.drain = { isGM: !!game.user?.isGM, any: !!drain?.any, zero: !!drain?.zero,
+      pending: (drain?.pending ?? []).map(e => game.i18n.format("AD2E.Drain.PendingRow", { class: e.name, level: e.level })).join(", ") };
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
       bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
       knockedOut: st.knockedOut, temporary: temporaryHp(sys.hp),
@@ -396,7 +402,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       dual: sys.dual ? {
         previous: sys.dual.previous.map(p => game.i18n.format("AD2E.Dual.PreviousRow", { name: p.name, level: p.level })).join(", "),
         restricted: sys.dual.restricted,
-        status: game.i18n.format(sys.dual.restricted ? "AD2E.Dual.Restricted" : "AD2E.Dual.Unrestricted", { level: sys.dual.maxOld + 1 }),
+        status: game.i18n.format(sys.dual.drained ? "AD2E.Drain.DualRestricted" : (sys.dual.restricted ? "AD2E.Dual.Restricted" : "AD2E.Dual.Unrestricted"), { level: sys.dual.maxOld + 1 }),
         oldThac0: sys.dual.oldThac0, oldSaves: AD2E.saves.map(k => `${game.i18n.localize(`AD2E.Save.${k}`)} ${sys.dual.oldSaves[k] ?? "—"}`).join(", "),
         encounter: sys.dual.penalty.encounter, adventure: sys.dual.penalty.adventure,
         penaltyText: sys.dual.penalty.encounter || sys.dual.penalty.adventure ? game.i18n.localize("AD2E.Dual.PenaltyPending") : "",
@@ -838,6 +844,16 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   /** An item dropped on a container goes into it (module/sheets/containers-ui.mjs); otherwise _dropItemDefault. */
   /** Dual-class: the GM clears the encounter penalty flag, or both ("end of adventure"); data-kind "encounter" | "all". */
+  static async #onDrainLevels() {
+    if (!game.user?.isGM) return;
+    return this.actor.drainLevels();
+  }
+
+  static async #onRestoreLevel() {
+    if (!game.user?.isGM) return;
+    return this.actor.restoreLevel();
+  }
+
   static async #onUndoDualClass() {
     if (!game.user?.isGM) return;
     return this.actor.undoDualClass();

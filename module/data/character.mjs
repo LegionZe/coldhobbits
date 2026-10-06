@@ -7,6 +7,7 @@ import { spProficienciesOn, spRating } from "../sp-proficiencies.mjs";
 import { isShairKit } from "../shair.mjs";
 import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
 import { combinationAllowed, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
+import { pendingDrain } from "../level-drain.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -173,6 +174,15 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
           identifier: new StringField({ initial: "" }), level: int(1, 1, 30), xp: int(0, 0)
         }))
       }),
+      // Energy drain (module/level-drain.mjs): levels lost and not yet regained (key "main", "multi:<id>" or
+      // "prev:<id>", the lost level, hit points lost, world time) and the 0-level state.
+      drain: new SchemaField({
+        lost: new ArrayField(new SchemaField({
+          key: new StringField({ initial: "main" }), identifier: new StringField({ initial: "" }), name: new StringField({ initial: "" }),
+          level: int(2, 1, 30), hp: int(0, 0), at: new NumberField({ initial: 0 })
+        })),
+        zero: new BooleanField({ initial: false })
+      }),
       biography: new HTMLField()
     };
   }
@@ -200,8 +210,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Class next: the class item sets the group used below (warrior CON bonus, THAC0).
     this.classInfo = this.#computeClassInfo();
     if (this.classInfo.classItem) this.classGroup = this.classInfo.classItem.system.group;
-    this.dual = this.#computeDual();
     this.multi = this.#computeMulti();
+    this.drainInfo = this.#computeDrain();
+    this.dual = this.#computeDual();
     // Kit ability score bonuses (e.g. Pacifist priest Charisma +2, at most 18) count after the kit's requirements.
     for (const mod of this.#kitModifierList()) {
       if (mod.target !== "score" || !this.abilities[mod.key]) continue;
@@ -309,12 +320,31 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
   #computeDual() {
     const previous = this.dualClass?.previous ?? [];
     if (!previous.length || !dualClassOn()) return null;
-    const { maxOld, restricted } = dualRestriction(previous, this.level);
+    const rule = dualRestriction(previous, this.level);
+    const { maxOld } = rule;
+    // Drained levels not yet regained: "Using abilities of the other class then subjects him to the experience
+    // penalties" (Multi-Class and Dual-Class Characters (PHB)); module/level-drain.mjs.
+    const drained = (this.drainInfo?.pending ?? []).length > 0;
+    const restricted = rule.restricted || drained;
     const oldSaves = Object.fromEntries(AD2E.saves.map(k => [k, previous.reduce((best, p) =>
       better(best, lookup(AD2E.saveTable[p.group], p.level)?.[k] ?? null), null)]));
     const oldThac0 = previous.reduce((best, p) => better(best, thac0At(p.group, p.level)), null);
-    return { previous, maxOld, restricted, oldSaves, oldThac0, saveOptions: {}, thac0Option: null,
+    return { previous, maxOld, restricted, drained, oldSaves, oldThac0, saveOptions: {}, thac0Option: null,
       penalty: { encounter: !!this.dualClass.penalty?.encounter, adventure: !!this.dualClass.penalty?.adventure } };
+  }
+
+  /** Class levels by drain key (module/level-drain.mjs). */
+  drainLevels() {
+    const levels = { main: this.level };
+    for (const c of this.multi?.others ?? []) levels[`multi:${c.identifier}`] = c.level;
+    for (const p of this.dualClass?.previous ?? []) levels[`prev:${p.identifier}`] = p.level;
+    return levels;
+  }
+
+  /** Energy drain state: levels lost and not regained, and the 0-level state. */
+  #computeDrain() {
+    const pending = pendingDrain(this.drain?.lost ?? [], this.drainLevels());
+    return { pending, zero: !!this.drain?.zero, any: pending.length > 0 || !!this.drain?.zero };
   }
 
   /**
@@ -338,7 +368,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const xpKey = (kitHere && kit.xpTable) || id;
       const kitLimit = kitHere && raceId && kit.raceLimits && raceId in kit.raceLimits ? kit.raceLimits[raceId] : undefined;
       return { item: i, identifier: id, name: i.name, group: i.system.group, school: i.system.school ?? "", primary,
-        level: entry.level, xp: entry.xp, xpNext: AD2E.xpTable[xpKey]?.[entry.level] ?? null,
+        level: entry.level, xp: entry.xp, xpKey, xpNext: AD2E.xpTable[xpKey]?.[entry.level] ?? null,
         levelLimit: kitLimit !== undefined ? kitLimit : (race?.levelLimits?.[id] ?? null),
         hitDice: hitDiceAt(i.system.group, entry.level),
         bonus: prime.length > 0 && prime.every(k => this.abilities[k].total >= 16) ? 10 : 0 };
