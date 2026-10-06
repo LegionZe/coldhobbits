@@ -1,0 +1,41 @@
+{
+  "_id": "W595pXiqSjIDSMKc",
+  "_key": "!items!W595pXiqSjIDSMKc",
+  "name": "Internal Compass",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "internal-compass",
+    "kind": "trait",
+    "cost": 5,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "proficiency",
+        "key": "navigation",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Internal_Compass",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

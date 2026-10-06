@@ -1,0 +1,29 @@
+{
+  "_id": "1Xg8s3hfFIAvkCtu",
+  "_key": "!items!1Xg8s3hfFIAvkCtu",
+  "name": "Lucky",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "lucky",
+    "kind": "trait",
+    "cost": 6,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Lucky",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 2200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

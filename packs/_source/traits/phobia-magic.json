@@ -1,0 +1,29 @@
+{
+  "_id": "cSI4mc3CBfM9vSoS",
+  "_key": "!items!cSI4mc3CBfM9vSoS",
+  "name": "Phobia: Magic",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-magic",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 8,
+      "severe": 14
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Magic",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

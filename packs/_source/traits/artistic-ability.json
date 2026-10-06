@@ -1,0 +1,29 @@
+{
+  "_id": "Y8zJsMPvO6x8bhWc",
+  "_key": "!items!Y8zJsMPvO6x8bhWc",
+  "name": "Artistic Ability",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "artistic-ability",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Artistic_Ability",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

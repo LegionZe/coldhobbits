@@ -384,3 +384,22 @@ export class JewellerySheet extends AD2EItemSheet {
     return context;
   }
 }
+
+export class TraitSheet extends AD2EItemSheet {
+  static DEFAULT_OPTIONS = { classes: ["trait"] };
+  static PARTS = { body: { template: "systems/ad2e/templates/item/trait-sheet.hbs", scrollable: [""] } };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const sys = this.document.system;
+    const i18n = k => game.i18n.localize(k);
+    context.isTrait = sys.kind === "trait";
+    context.kindOptions = ["trait", "disadvantage"].map(value => ({ value, label: i18n(`AD2E.Trait.KindLabel.${value}`), selected: value === sys.kind }));
+    context.severityOptions = ["moderate", "severe"].map(value => ({ value, label: i18n(`AD2E.Trait.${value === "moderate" ? "Moderate" : "Severe"}`),
+      selected: value === sys.severity }));
+    context.raceText = (sys.race ?? []).map(r => game.i18n.format(context.isTrait ? "AD2E.Trait.RaceCost" : "AD2E.Trait.RacePoints",
+      { race: r.race, n: Math.abs(r.delta) })).join(" ");
+    context.modifiers = (sys.modifiers ?? []).map(m => formatKitModifier(m));
+    return context;
+  }
+}

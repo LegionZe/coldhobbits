@@ -1,0 +1,29 @@
+{
+  "_id": "rx4i2rm24bLk8SP2",
+  "_key": "!items!rx4i2rm24bLk8SP2",
+  "name": "Colorblind",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "colorblind",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 3,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Colorblind",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

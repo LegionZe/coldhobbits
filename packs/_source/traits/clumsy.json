@@ -1,0 +1,29 @@
+{
+  "_id": "P3bRBrvEpkXdOE3w",
+  "_key": "!items!P3bRBrvEpkXdOE3w",
+  "name": "Clumsy",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "clumsy",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 4,
+      "severe": 8
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Clumsy",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

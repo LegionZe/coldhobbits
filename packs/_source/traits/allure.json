@@ -1,0 +1,46 @@
+{
+  "_id": "gTgjn239gHA8iwBn",
+  "_key": "!items!gTgjn239gHA8iwBn",
+  "name": "Allure",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "allure",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "elf",
+        "delta": -1
+      }
+    ],
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": 3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "romantic attention (up to +3, the DM's call)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Allure",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

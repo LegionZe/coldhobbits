@@ -1,0 +1,41 @@
+{
+  "_id": "oejv2uFQAF5BZn3Y",
+  "_key": "!items!oejv2uFQAF5BZn3Y",
+  "name": "Music/Singing",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "music-singing",
+    "kind": "trait",
+    "cost": 5,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "proficiency",
+        "key": "singing",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Music/Singing",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 2300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

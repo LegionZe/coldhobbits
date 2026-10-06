@@ -1,0 +1,29 @@
+{
+  "_id": "aLhEh28X5kYaQy7f",
+  "_key": "!items!aLhEh28X5kYaQy7f",
+  "name": "Allergies",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "allergies",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 3,
+      "severe": 8
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Allergies",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

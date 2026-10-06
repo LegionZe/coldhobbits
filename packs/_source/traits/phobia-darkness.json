@@ -1,0 +1,29 @@
+{
+  "_id": "B3u7KFJY8FFUhPYC",
+  "_key": "!items!B3u7KFJY8FFUhPYC",
+  "name": "Phobia: Darkness",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-darkness",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 5,
+      "severe": 11
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Darkness",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

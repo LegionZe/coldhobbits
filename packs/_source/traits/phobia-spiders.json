@@ -1,0 +1,29 @@
+{
+  "_id": "eAmNxpJXBNiphwc3",
+  "_key": "!items!eAmNxpJXBNiphwc3",
+  "name": "Phobia: Spiders",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-spiders",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 5,
+      "severe": 10
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_(POSP)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

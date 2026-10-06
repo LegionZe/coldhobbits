@@ -147,7 +147,8 @@
     "equipment": "Equipment",
     "spell": "Spell",
     "magic": "Magical item",
-    "jewellery": "Gem / jewellery"
+    "jewellery": "Gem / jewellery",
+    "trait": "Trait / disadvantage"
   },
   "AD2E.Sheet.Class": "AD&D 2e Class",
   "AD2E.Sheet.Kit": "AD&D 2e Class Kit",
@@ -566,6 +567,7 @@
   "AD2E.Sheet.Spell": "AD&D 2e Spell",
   "AD2E.Sheet.Magic": "AD&D 2e Magical Item",
   "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
+  "AD2E.Sheet.Trait": "AD&D 2e Trait or Disadvantage",
   "AD2E.Spell": {
     "Provinces": "Elemental provinces",
     "ProvincesHint": "Al-Qadim provinces of the spell: flame, sand, sea, wind (Wizard Spells by Province (AA); set at import). Comma separated.",
@@ -1803,5 +1805,24 @@
     "mountedCharge": "Mounted charge (double damage)",
     "ChargeDouble": "double damage (charge)",
     "Knockdown": "knockdown {rolls}: +{n}"
+  },
+  "AD2E.Trait": {
+    "Section": "Traits & disadvantages",
+    "SectionHint": "Player's Option: Skills & Powers Tables 46 and 47. Without character points, traits are balanced by disadvantages: the traits' cost may not exceed the disadvantages' points. Drag them from the Traits & Disadvantages (POSP) compendium.",
+    "Balance": "Traits {cost} / disadvantages {points}",
+    "Over": "traits exceed the disadvantages taken",
+    "DropHint": "Drag traits and disadvantages here from the Traits & Disadvantages (POSP) compendium.",
+    "Kind": "Kind",
+    "KindLabel": { "trait": "Trait", "disadvantage": "Disadvantage" },
+    "Cost": "Cost (character points)",
+    "Points": "Points (balance traits)",
+    "Moderate": "Moderate",
+    "Severe": "Severe",
+    "Severity": "Taken as",
+    "RaceCost": "Race {race}: costs {n} less.",
+    "RacePoints": "Race {race}: gives {n} more.",
+    "Effects": "Applied in rolls (tick boxes when conditional):",
+    "SheetHint": "Traits are balanced by disadvantages on the character sheet (no character points, owner's ruling). Ambidexterity (two-weapon penalties 0 / -2) and Fast Healer (2 hit points a day of normal rest) are applied by the system; other effects are listed above or left to the GM (see the description).",
+    "AmbidexterityNote": "ambidextrous"
   }
 }

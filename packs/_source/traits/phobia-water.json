@@ -1,0 +1,29 @@
+{
+  "_id": "lyXHUKZnUpwnLSVH",
+  "_key": "!items!lyXHUKZnUpwnLSVH",
+  "name": "Phobia: Water",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-water",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 6,
+      "severe": 12
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Water",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 2200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

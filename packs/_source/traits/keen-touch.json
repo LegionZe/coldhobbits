@@ -1,0 +1,46 @@
+{
+  "_id": "Qr0SCyMS3LudsXK0",
+  "_key": "!items!Qr0SCyMS3LudsXK0",
+  "name": "Keen Touch",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "keen-touch",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "gnome",
+        "delta": -1
+      }
+    ],
+    "modifiers": [
+      {
+        "target": "skill",
+        "key": "pp,ol",
+        "value": 5,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "a thief",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Keen_Touch_Sense",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

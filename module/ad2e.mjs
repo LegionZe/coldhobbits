@@ -13,6 +13,7 @@ import CoinData from "./data/item-coin.mjs";
 import EquipmentData from "./data/item-equipment.mjs";
 import MagicItemData from "./data/item-magic.mjs";
 import JewelleryData from "./data/item-jewellery.mjs";
+import TraitData from "./data/item-trait.mjs";
 import { migrateCurrency, migrateKitMechanics } from "./migrations.mjs";
 import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
@@ -34,7 +35,7 @@ import { registerGenHooks } from "./gens.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
 import CharacterSheet from "./sheets/character-sheet.mjs";
 import MonsterSheet from "./sheets/monster-sheet.mjs";
-import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet, EquipmentSheet, SpellSheet, MagicItemSheet, JewellerySheet } from "./sheets/item-sheets.mjs";
+import { ClassSheet, KitSheet, ProficiencySheet, RaceSheet, WeaponSheet, AmmunitionSheet, ArmorSheet, CoinSheet, EquipmentSheet, SpellSheet, MagicItemSheet, JewellerySheet, TraitSheet } from "./sheets/item-sheets.mjs";
 
 Hooks.once("init", () => {
   console.log("AD2E | Initializing AD&D 2e system");
@@ -129,6 +130,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.spell = SpellData;
   CONFIG.Item.dataModels.magic = MagicItemData;
   CONFIG.Item.dataModels.jewellery = JewelleryData;
+  CONFIG.Item.dataModels.trait = TraitData;
 
   CONFIG.Combat.documentClass = AD2ECombat;
   CONFIG.Combatant.documentClass = AD2ECombatant;
@@ -154,6 +156,7 @@ Hooks.once("init", () => {
   DocumentSheetConfig.registerSheet(Item, "ad2e", SpellSheet, { types: ["spell"], makeDefault: true, label: "AD2E.Sheet.Spell" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", MagicItemSheet, { types: ["magic"], makeDefault: true, label: "AD2E.Sheet.Magic" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", JewellerySheet, { types: ["jewellery"], makeDefault: true, label: "AD2E.Sheet.Jewellery" });
+  DocumentSheetConfig.registerSheet(Item, "ad2e", TraitSheet, { types: ["trait"], makeDefault: true, label: "AD2E.Sheet.Trait" });
 });
 
 // 0.0.20 stored coins as numbers on the character; convert them to coin items once (GM only).

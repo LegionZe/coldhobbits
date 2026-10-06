@@ -2,7 +2,7 @@ import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
-import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty } from "../combat-options.mjs";
+import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty, twoWeaponStyle } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
@@ -180,6 +180,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollFirstLevelHp: CharacterSheet.onRollFirstLevelHp,
       levelUp: CharacterSheet.onLevelUp,
       deleteItem: CharacterSheet.onDeleteItem,
+      toggleSeverity: CharacterSheet.onToggleSeverity,
       rollProficiency: CharacterSheet.onRollProficiency,
       rollAttack: CharacterSheet.onRollAttack,
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
@@ -464,7 +465,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       .map(k => `${i18n(`AD2E.Skill.${k}`)} ${signed(kitItem.system.skillAdjust[k])}%`).join(", ") : "";
     // Kit modifiers at the character's level: applied automatically, situational (roll dialogs), or for the DM.
     const kitMods = (sys.kitMods?.list ?? []).map(m => ({
-      text: formatKitModifier(m, { resolved: m.active }), status: m.status, statusLabel: i18n(`AD2E.Kit.Status.${m.status}`)
+      text: (m.origin ? `${m.origin}: ` : "") + formatKitModifier(m, { resolved: m.active }), status: m.status, statusLabel: i18n(`AD2E.Kit.Status.${m.status}`)
     }));
     const kp = kitItem?.system.skillPoints ?? {};
     const has = v => v !== null && v !== undefined;
@@ -656,7 +657,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const sign = n => `${n > 0 ? "+" : ""}${n}`;
     const twoStyle = !!sys.proficiencies?.sp?.styles?.twoWeapon;
     const twoOpts = { reaction: sys.abilityData?.dex?.reaction ?? 0, ranger: twoWeaponExempt(sys),
-      armorAc: sys.armor?.body?.system.ac ?? null, style: twoStyle ? { main: SP.twoWeapon.main, off: SP.twoWeapon.off } : null };
+      armorAc: sys.armor?.body?.system.ac ?? null, style: twoWeaponStyle(sys, twoStyle ? { main: SP.twoWeapon.main, off: SP.twoWeapon.off } : null) };
     const unarmed = { hit: sign(sys.mods?.meleeAttack ?? 0),
       twoWeapons: canFightTwoWeapons(sys.classGroup) || twoStyle ? game.i18n.format("AD2E.TwoWeapons.Summary",
         { main: sign(twoWeaponPenalty("main", twoOpts)), off: sign(twoWeaponPenalty("off", twoOpts)) }) : "" };
@@ -746,7 +747,24 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       groups: p.groups.map(g => game.i18n.localize(AD2E.nonweaponGroups[g])).join(", "),
       specRule: formatKitSpecialization(p.specRule),
       specMissing: !!p.specRule?.missing,
-      recommended: formatKitRecommended(sys.classInfo.kitFits ? sys.classInfo.kitItem?.system.recommendedProficiencies : null)
+      recommended: formatKitRecommended(sys.classInfo.kitFits ? sys.classInfo.kitItem?.system.recommendedProficiencies : null),
+      traits: this._traitContext(sys)
+    };
+  }
+
+  /** Traits and disadvantages (Skills & Powers; balanced by disadvantages, owner's ruling). */
+  _traitContext(sys) {
+    const t = sys.traits ?? { rows: [], cost: 0, points: 0, over: false };
+    const i18n = k => game.i18n.localize(k);
+    const row = r => ({ id: r.item.id, name: r.item.name, img: r.item.img, url: r.item.system.url, value: r.value,
+      severe: r.item.system.severity === "severe", canSevere: r.kind === "disadvantage" && r.item.system.points?.severe !== null
+        && r.item.system.points?.severe !== undefined,
+      effects: (r.item.system.modifiers ?? []).map(m => formatKitModifier(m)).join("; ") });
+    return {
+      traits: t.rows.filter(r => r.kind === "trait").map(row).sort((a, b) => a.name.localeCompare(b.name)),
+      disadvantages: t.rows.filter(r => r.kind === "disadvantage").map(row).sort((a, b) => a.name.localeCompare(b.name)),
+      balance: game.i18n.format("AD2E.Trait.Balance", { cost: t.cost, points: t.points }), over: t.over,
+      severeLabel: i18n("AD2E.Trait.Severe"), moderateLabel: i18n("AD2E.Trait.Moderate")
     };
   }
 
@@ -941,6 +959,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onDismissGen() { return dismissGen(this.actor); }
 
   static onGenDeath() { return genDeath(this.actor); }
+  /** A disadvantage taken as moderate or severe (its points). */
+  static onToggleSeverity(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (item?.type === "trait") return item.update({ "system.severity": item.system.severity === "severe" ? "moderate" : "severe" });
+  }
   static onRaiseGen() { return raiseGen(this.actor); }
   static onGenBack() { return genBack(this.actor); }
   static onBreakGenLink() { return breakGenLink(this.actor, "dispel"); }

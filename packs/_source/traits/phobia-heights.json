@@ -1,0 +1,29 @@
+{
+  "_id": "5kTx5hOqn2Pc22nv",
+  "_key": "!items!5kTx5hOqn2Pc22nv",
+  "name": "Phobia: Heights",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-heights",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 5,
+      "severe": 10
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Heights",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

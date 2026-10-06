@@ -1,0 +1,46 @@
+{
+  "_id": "U4aFv2GTgumzlLXb",
+  "_key": "!items!U4aFv2GTgumzlLXb",
+  "name": "Keen Taste",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "keen-taste",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "halfling",
+        "delta": -1
+      }
+    ],
+    "modifiers": [
+      {
+        "target": "ability",
+        "key": "wis",
+        "value": 3,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "tasting (Wisdom check)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Keen_Taste_Sense",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

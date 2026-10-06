@@ -1,0 +1,41 @@
+{
+  "_id": "q8V8uGhhEe0Xit4d",
+  "_key": "!items!q8V8uGhhEe0Xit4d",
+  "name": "Impersonation",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "impersonation",
+    "kind": "trait",
+    "cost": 5,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "proficiency",
+        "key": "disguise",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Impersonation",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

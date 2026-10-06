@@ -11,7 +11,7 @@ globalThis.game = { i18n: { localize: k => k, format: k => k } };
 const { AD2E } = await import(`${R}/module/config.mjs`);
 globalThis.CONFIG = { AD2E };
 const models = { kit: "item-kit", jewellery: "item-jewellery", magic: "item-magic", class: "item-class", race: "item-race", proficiency: "item-proficiency",
-  weapon: "item-weapon", ammunition: "item-ammunition", armor: "item-armor", coin: "item-coin", equipment: "item-equipment", spell: "item-spell", monster: "monster" };
+  weapon: "item-weapon", ammunition: "item-ammunition", armor: "item-armor", coin: "item-coin", equipment: "item-equipment", spell: "item-spell", trait: "item-trait", monster: "monster" };
 const schemas = {};
 for (const [t, f] of Object.entries(models)) schemas[t] = (await import(`${R}/module/data/${f}.mjs`)).default.defineSchema();
 const problems = [];

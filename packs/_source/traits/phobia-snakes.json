@@ -1,0 +1,29 @@
+{
+  "_id": "Vs4vvdrBRlxd57PY",
+  "_key": "!items!Vs4vvdrBRlxd57PY",
+  "name": "Phobia: Snakes",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-snakes",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 5,
+      "severe": 10
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Snakes",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

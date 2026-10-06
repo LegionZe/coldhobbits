@@ -1,0 +1,41 @@
+{
+  "_id": "e1RqxNek8cVVJ48P",
+  "_key": "!items!e1RqxNek8cVVJ48P",
+  "name": "Inherent Immunity/Cold",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "inherent-immunity-cold",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "save",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "against physical cold (not a wight's chill)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Inherent_Immunity/Cold",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

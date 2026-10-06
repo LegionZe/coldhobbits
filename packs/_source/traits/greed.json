@@ -1,0 +1,34 @@
+{
+  "_id": "zKIheIjqgOCuXxGW",
+  "_key": "!items!zKIheIjqgOCuXxGW",
+  "name": "Greed",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "greed",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 7,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "dwarf",
+        "delta": 1
+      }
+    ],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Greed",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

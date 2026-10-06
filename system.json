@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "0.0.107",
+  "version": "0.0.108",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -53,7 +53,8 @@
       "equipment": {},
       "spell": {},
       "magic": {},
-      "jewellery": {}
+      "jewellery": {},
+      "trait": {}
     }
   },
   "primaryTokenAttribute": "hp",
@@ -184,6 +185,17 @@
       }
     },
     {
+      "name": "traits",
+      "label": "Traits & Disadvantages (POSP)",
+      "system": "ad2e",
+      "path": "packs/traits",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "name": "monsters",
       "label": "Monsters & NPCs (prototypes)",
       "system": "ad2e",
@@ -234,6 +246,7 @@
         "aq-equipment",
         "magic-items",
         "gems",
+        "traits",
         "monsters",
         "hirelings",
         "spells"

@@ -1,0 +1,57 @@
+{
+  "_id": "sZPUlU0kSyp36kdH",
+  "_key": "!items!sZPUlU0kSyp36kdH",
+  "name": "Keen Hearing",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "keen-hearing",
+    "kind": "trait",
+    "cost": 5,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "halfling",
+        "delta": -1
+      }
+    ],
+    "modifiers": [
+      {
+        "target": "surprise",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "hearing can help avoid surprise",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "skill",
+        "key": "dn",
+        "value": 10,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "a thief",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Keen_Hearing",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
