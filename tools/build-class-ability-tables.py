@@ -63,7 +63,7 @@ CLASS_ARMOR_TEXT = {
 
 # Class weapon limits (owner's ruling: a warning for every character; multi-class: a priest's limits always apply,
 # otherwise the most permissive class's). Weapons are weapon proficiency identifiers (weapon item `proficiency`);
-# "type" = Table 45 damage type, B alone for the standard cleric (owner's ruling). Lasso has no item in the packs.
+# "type" = Table 45 damage type, B alone for the standard cleric (owner's ruling).
 WIZARD_WEAPONS = ["dagger-or-dirk", "quarterstaff", "dart", "knife", "sling"]
 CLASS_WEAPONS = {
     **{w: {"ids": WIZARD_WEAPONS} for w in WIZARDS},
@@ -72,7 +72,7 @@ CLASS_WEAPONS = {
     "thief": {"ids": ["club", "dagger-or-dirk", "dart", "hand-crossbow", "knife", "lasso", "short-bow", "sling",
                       "broad-sword", "long-sword", "short-sword", "quarterstaff"]},
 }
-NO_WEAPON_ITEM = {"lasso"}
+NO_WEAPON_ITEM = set()  # every listed weapon has an item (the lasso comes from Combat & Tactics since 0.0.128)
 CLASS_WEAPON_TEXT = {
     "wizard": ("Wizard (PHB)", r"a wizard can use a dagger or a staff.*?Other weapons allowed are darts, knives, and slings"),
     "cleric": ("Cleric (PHB)", r"allowed to use only blunt, bludgeoning weapons"),

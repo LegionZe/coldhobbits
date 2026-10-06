@@ -1,34 +1,27 @@
 {
-  "_id": "TQOQbPnPnBLAcEFR",
-  "_key": "!items!TQOQbPnPnBLAcEFR",
-  "name": "Mace-axe",
+  "_id": "CX8gKwZYXHJPhSri",
+  "_key": "!items!CX8gKwZYXHJPhSri",
+  "name": "Lasso",
   "type": "weapon",
   "img": "icons/svg/sword.svg",
   "system": {
-    "identifier": "mace-axe",
-    "proficiency": "mace-axe",
+    "identifier": "lasso",
+    "proficiency": "lasso",
     "weapon": {
       "size": "L",
-      "type": "B/S",
-      "speed": 8,
-      "damage": [
-        {
-          "label": "",
-          "sm": "2d4",
-          "l": "1d6+1",
-          "speed": null
-        }
-      ],
-      "melee": true,
-      "missile": false,
+      "type": null,
+      "speed": 10,
+      "damage": [],
+      "melee": false,
+      "missile": true,
       "range": {
-        "rof": "",
-        "short": "",
-        "medium": "",
-        "long": ""
+        "rof": "1/2",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
       },
       "family": "other",
-      "missileColumn": "",
+      "missileColumn": "otherMissile",
       "strength": "full",
       "rules": [],
       "misfire": {
@@ -40,8 +33,8 @@
       "powder": false,
       "match": false
     },
-    "cost": "12 gp (The Bronze Age and Ancient Cultures)",
-    "weight": 9.0,
+    "cost": "5 sp (Stone Age or Savage Cultures, Tools/Common)",
+    "weight": 3.0,
     "quantity": 1,
     "equipped": false,
     "bonus": {
@@ -54,7 +47,7 @@
   },
   "effects": [],
   "folder": "ee9HN90cluPY2GQq",
-  "sort": 2600,
+  "sort": 2400,
   "ownership": {
     "default": 0
   },

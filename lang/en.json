@@ -262,6 +262,8 @@
     "BonusNonweaponSlots": "Bonus nonweapon slots"
   },
   "AD2E.Weapon": {
+    "AllowedWeapons": "Allowed weapons",
+    "AllowedWeaponsHint": "Weapon proficiency names or identifiers, comma separated (e.g. a specialty priest's weapons). When set, they replace the class's weapon list for the warning; a kit's list applies to its class.",
     "Restrict": {
       "notAllowed": "Not a weapon allowed to the class (warning only)",
       "notBludgeoning": "Clerics may use only bludgeoning (type B) weapons (warning only)"

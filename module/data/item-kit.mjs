@@ -71,6 +71,8 @@ export default class KitData extends foundry.abstract.TypeDataModel {
         max: new NumberField({ integer: true, nullable: true, initial: null })
       })),
       url: new StringField({ initial: "" }),
+      // Weapons allowed to the kit's class (weapon proficiency names or identifiers; replaces the class's list, owner's ruling).
+      allowedWeapons: new ArrayField(new StringField()),
       notes: new StringField({ initial: "" })
     };
   }
