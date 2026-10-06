@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.129)
+## Status (v0.0.130)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -536,8 +536,9 @@ Node only until confirmed.
     and 14 or more +2.
   - Weapon Master (rev 271714): a "Display" button on the Combat tab during combat; the opposing side's initiative in
     rounds 1 and 2 gets +2 (worse), pre-ticked in their initiative dialog for those who did not see it (owner's ruling);
-    weapon proficiencies whose type (B/P/S) shares nothing with the weapon of choice are marked (owner's ruling: a
-    warning; the weapon-of-choice box is shown for weapon masters without the Skills & Powers weapon rules).
+    weapon proficiencies whose type (B/P/S) shares nothing with the chosen weapon are marked (owner's ruling: a
+    warning). Owner's ruling: the chosen weapon is the melee weapon with specialization (else expertise) the kit
+    requires, at no extra cost; the Skills & Powers weapon of choice (+1, character points) stays a separate purchase.
   - Mystic (rev 271680): "Meditate" on the Race & Class tab: +2 to one ability (owner's ruling: the ability, as
     subabilities are not used), or +20% to an 18/xx Strength (capped at 18/00, implementation choice), from the end of
     the meditation for one-third of its time (world time), one boost at a time.

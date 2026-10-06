@@ -14,6 +14,7 @@
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Prof.Weapon"}}</legend>
     {{#if pt.weaponMaster}}<p class="ad2e-unmet">{{pt.weaponMaster}}</p>{{/if}}
+    {{#if pt.chosenWeapon}}<p class="ad2e-note">{{pt.chosenWeapon}}</p>{{/if}}
     {{#each pt.weapon.rows as |r|}}
     <div class="ad2e-prof-row ad2e-prof-row-weapon">
       <img src="{{r.img}}" alt="" width="24" height="24">
