@@ -62,6 +62,14 @@
       "fighter/thief",
       "mage/thief"
     ],
+    "multiClassKits": {
+      "bard/mage": [
+        "elven-minstrel"
+      ],
+      "bard/thief": [
+        "gypsy-bard"
+      ]
+    },
     "url": "https://adnd2e.fandom.com/wiki/Elf_(PHB)",
     "notes": ""
   },

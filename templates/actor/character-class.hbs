@@ -109,6 +109,7 @@
   <fieldset class="ad2e-multi-class">
     <legend>{{localize "AD2E.Multi.Legend"}}</legend>
     {{#unless ct.multi.allowed}}<p class="ad2e-unmet">{{localize "AD2E.Multi.NotCombination"}}</p>{{/unless}}
+    {{#if ct.multi.bardKits}}<p class="{{#if ct.multi.bardOk}}ad2e-note{{else}}ad2e-unmet{{/if}}">{{ct.multi.bardKits}}</p>{{/if}}
     <table>
       <thead><tr><th>{{localize "AD2E.Character.className"}}</th><th>{{localize "AD2E.Character.level"}}</th><th>XP</th><th>{{localize "AD2E.HP.NextLevel"}}</th>
         <th>{{localize "AD2E.HP.HitDice"}}</th><th>{{localize "AD2E.Race.LevelLimit"}}</th><th>{{localize "AD2E.Class.XpBonus"}}</th><th></th></tr></thead>
@@ -116,7 +117,10 @@
         {{#each ct.multi.rows as |r|}}
         <tr>
           <th><a data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>{{#if r.primary}} <span class="ad2e-note" data-tooltip="{{localize 'AD2E.Multi.PrimaryHint'}}">({{localize "AD2E.Multi.Primary"}})</span>{{/if}}</th>
-          <td>{{r.level}}</td><td>{{r.xp}}</td><td>{{r.xpNext}}</td><td>{{r.hitDice}}</td>
+          {{#if r.primary}}<td>{{r.level}}</td><td>{{r.xp}}</td>
+          {{else}}<td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="level" value="{{r.level}}" min="1" max="30" step="1" {{#unless @root.editable}}disabled{{/unless}}></td>
+          <td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="xp" value="{{r.xp}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></td>{{/if}}
+          <td>{{r.xpNext}}</td><td>{{r.hitDice}}</td>
           <td class="{{#if r.atLimit}}ad2e-unmet{{/if}}">{{r.limit}}</td><td>{{r.bonus}}</td>
           <td>{{#if @root.editable}}<button type="button" data-action="levelUp" data-class-id="{{r.identifier}}" {{#if r.atLimit}}disabled{{/if}}>{{#if r.canLevel}}<i class="fa-solid fa-arrow-up"></i> {{/if}}{{localize "AD2E.HP.LevelUp"}}</button>
             {{#unless r.primary}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/unless}}{{/if}}</td>

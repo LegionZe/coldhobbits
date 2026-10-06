@@ -75,6 +75,34 @@
       "fighter/thief",
       "thief/mage"
     ],
+    "multiClassKits": {
+      "bard/fighter": [
+        "true-bard",
+        "blade",
+        "gallant",
+        "skald"
+      ],
+      "bard/ranger": [
+        "true-bard",
+        "meistersinger"
+      ],
+      "bard/mage": [
+        "loremaster",
+        "riddlemaster"
+      ],
+      "bard/cleric": [
+        "true-bard"
+      ],
+      "bard/druid": [
+        "meistersinger"
+      ],
+      "bard/thief": [
+        "true-bard",
+        "gypsy-bard",
+        "jongleur",
+        "thespian"
+      ]
+    },
     "url": "https://adnd2e.fandom.com/wiki/Half-Elf_(PHB)",
     "notes": ""
   },

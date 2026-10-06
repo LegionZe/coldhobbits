@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.123)
+## Status (v0.0.124)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -310,6 +310,13 @@ Node only until confirmed.
   studded leather or elven chain; bards up to and including chain mail and no shield; druids padded, hide or leather,
   wooden shields only (material is not recorded: shown as a note). Table in `module/rules/class-tables.mjs`
   (`classArmor`, from `python3 tools/build-class-ability-tables.py`, each rule checked against its class page).
+- Class weapon limits (owner's ruling: a warning on the weapon row and in the attack dialog, the roll is not blocked):
+  standard clerics "only blunt, bludgeoning weapons" (Table 45 type B alone, owner's ruling: P/B and B/S weapons such as
+  the lucern hammer are excluded); druids "club, sickle, dart, spear, dagger, scimitar, sling, and staff"; thieves "club,
+  dagger, dart, hand crossbow, knife, lasso, short bow, sling, broad sword, long sword, short sword, and staff"; wizards
+  dagger, staff, darts, knives and slings (Cleric, Druid, Thief, Wizard (PHB); `classWeapons` in class-tables.mjs, each
+  rule regex-checked, every weapon a proficiency identifier; the lasso has no item). Weapons without a proficiency
+  (improvised) are not checked. Specialty priests' weapons are not defined (GM).
 - Bows made for Strength: a bow item has "Bow made for Strength" (standard, 3-25 and the 18/xx bands). A standard bow
   applies Strength penalties only; a bow made for a Strength gives the user's Strength attack and damage bonuses up to
   that Strength, penalties always ("bows must be specially made to gain the bonus", Strength (PHB); "the attack roll and
@@ -571,12 +578,20 @@ Node only until confirmed.
   beneficial line on Table 34", Weapon Proficiencies (PHB)); no weapon specialization ("multi-class characters cannot
   use weapon specialization", Weapon Specialization (PHB)). Every class's abilities apply at its own level (thief
   skills and backstab, turning, spells with each class's slots and casting level); a multi-class thief in armour not
-  allowed to thieves can use only open locks and detect noise (no Table 29 adjustment for such armour). Priest weapon
-  and wizard armour restrictions are not enforced (the sheet shows no warning for them). Kits: one kit, open to any of
+  allowed to thieves can use only open locks and detect noise (no Table 29 adjustment for such armour). Weapons: "a
+  multi-classed priest must abide by the weapon restrictions of his mythos", otherwise the most permissive class's list
+  applies (warriors and bards any weapon). Armour: a limit is shown only when every class has it (implementation
+  choice); casting a wizard spell in armour asks to confirm ("the wearing of armor is restricted"; an elf in elven chain
+  casts freely; owner's ruling: warn and confirm), which also covers bards ("the prohibition of armor", Bard (PHB)). Kits: one kit, open to any of
   the classes (owner's ruling); kits from the Complete Fighter's and Complete Thief's Handbooks show a warning, since
   those handbooks allow them only for single-class characters ("Warrior Kits and Multi-Class Characters (CFH)", "Thief
   Types and Multi-Class Characters (CTH)"); the GM decides. A kit's experience table and racial level limit apply to its
-  own class. The Complete Bard's Handbook's kit-based multi-class bards are not implemented.
+  own class. Complete Bard's Handbook multi-class bards ("Multi-Classed Bards Dual-Classed Bards (CBH)", rev 144948;
+  race field `multiClassKits` from build-race-data.py, regex-checked, per-race counts asserted): another class plus the
+  bard with one of the listed kits (dwarf fighter/bard as Chanter or Skald, half-elf fighter/bard as True Bard, Blade,
+  Gallant or Skald, ...); "True" also allows no kit ("If the kits are not used in your campaign, only those combinations
+  that include the True Bard can be used"). The Race & Class tab says which kits the combination needs. The levels and
+  experience of the classes other than the main one can be edited in the class table.
 - Energy drain (GM buttons "Energy drain" and "Restoration" on the Main tab; module/level-drain.mjs; Special Damage
   (DMG) rev 238117, Multi-Class and Dual-Class Characters (PHB) rev 271818, Restoration (Priest Spell) rev 235764):
   each level lost comes off the highest class ("Multi-class and dual-class characters lose their highest level first. If

@@ -171,7 +171,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   of the others join the dual-class extras (not `old`; `spells.extra`, `spells.castingLevels` by kind); `#multiThiefLimit`
   (`info.armorLimited`). Actor `levelUp(classId)` (asks when null), `rollFirstLevelHitPoints`, awards split per class.
   Sheet `#askMultiClass` on class drop (creation only); Race & Class tab class rows. Owner's rulings: one kit fitting any
-  class (warning for CFH/CTH kits), level limits and prime requisite bonus per class.
+  class (warning for CFH/CTH kits), level limits and prime requisite bonus per class. CBH bards: race `multiClassKits`
+  ({ "bard/fighter": [kit ids] }, build-race-data.py `bard_multi_class`), `bardKitRule`/`bardKitFits`, `multi.bard`.
+  Non-main class level/XP inputs (`.ad2e-multi-field`, no name) write the array via `multiEntries`. Multi-class armour
+  limits only when every class has them; wizard casting in armour confirms (`armorBlocksWizardCasting`, also bards).
 - Energy drain: `module/level-drain.mjs` (pure: `drainTarget` highest level then most XP, `drainedXp` halfway, `pendingDrain`,
   `restorationInTime`; `minimumXp` from dual-class.mjs). Character `system.drain` { lost [{ key "main" | "multi:<id>" |
   "prev:<id>", identifier, name, level, hp, at }], zero }, `drainLevels()` keys, derived `drainInfo` { pending, zero, any }
@@ -243,6 +246,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `CharacterData#computeClassAbilities` (a skill below 1% after adjustments is `belowOne` and not usable, Thief (PHB)).
   class-tables.mjs also holds `classArmor` (CLASS_ARMOR in the generator, asserted against Wizard/Thief/Bard/Druid (PHB));
   `armorRestriction`, `armorFits`, `armorWeightFactor` in character.mjs; armour item `size` ("" = made for its wearer).
+  `classWeapons` (CLASS_WEAPONS, regex-checked; cleric `type` B alone, others proficiency ids) -> `weaponRestriction(classes, item)`
+  (warning on weapon rows and in the attack dialog, owner's ruling; multi-class: priest limits always, else most permissive).
 - Kit mechanics: `tools/build-kit-mechanics.py` (run after build-proficiency-data.py) writes `modifiers`, `skillAdjust`
   and `skillPoints` ({ first, perLevel, bardFirst }: barber bards 10) into the kit sources from the curated `KIT_MODIFIERS` / `KIT_SKILLS` / `KIT_POINTS`; each entry has
   a `match` regex that must occur in the current kit page (the script fails otherwise). Conditions are paraphrased.

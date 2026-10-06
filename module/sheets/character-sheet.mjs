@@ -11,7 +11,7 @@ import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWe
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
-import { multiClassOn, multiEligibility, SINGLE_CLASS_KITS } from "../multi-class.mjs";
+import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -276,6 +276,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         coin?.update({ "system.quantity": n });
       });
     }
+    // Multi-class: level and experience of the classes other than the main one (no form name: the whole array is
+    // written at once, module/multi-class.mjs multiEntries).
+    for (const input of this.element?.querySelectorAll?.("input.ad2e-multi-field") ?? []) {
+      input.addEventListener("change", event => {
+        const el = event.currentTarget;
+        const classes = this.actor.system.multi?.classes;
+        if (!classes) return;
+        const field = el.dataset.field;
+        const n = Math.max(Math.floor(Number(el.value) || 0), field === "level" ? 1 : 0);
+        this.actor.update({ "system.multiClass.classes": multiEntries(classes, el.dataset.classId, { [field]: field === "level" ? Math.min(n, 30) : n }) });
+      });
+    }
   }
 
   /** Give each tab part its own ApplicationTab entry (same pattern as dnd5e WelcomeScreen). */
@@ -415,7 +427,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           hitDice: c.hitDice.bonus ? `${c.hitDice.dice}d${c.hitDice.die}+${c.hitDice.bonus}` : `${c.hitDice.dice}d${c.hitDice.die}`,
           limit: c.levelLimit ?? game.i18n.localize("AD2E.Race.Unlimited"), atLimit: c.atLimit,
           bonus: c.bonus ? `+${c.bonus}%` : "—", canLevel: c.xpNext !== null && c.xp >= c.xpNext && !c.atLimit })),
-        allowed: sys.multi.allowed
+        allowed: sys.multi.allowed,
+        bardKits: sys.multi.bard ? game.i18n.format(sys.multi.bard.ok ? "AD2E.Multi.BardKitOk" : "AD2E.Multi.BardKitNeeded",
+          { kits: sys.multi.bard.kits.map(k => k.replace(/-/g, " ")).join(", ") }) : "",
+        bardOk: !sys.multi.bard || sys.multi.bard.ok
       } : null,
       kitSingleClass: sys.multi && info.kitItem && SINGLE_CLASS_KITS[info.kitItem.system.source]
         ? game.i18n.format("AD2E.Multi.KitSingleClass", { source: info.kitItem.system.source, page: SINGLE_CLASS_KITS[info.kitItem.system.source] }) : "",
@@ -633,6 +648,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       inside: insideText(inv, e.item),
       id: e.item.id, name: e.item.name, img: e.item.img, url: e.item.system.url, quantity: e.item.system.quantity, ...weaponDisplay(e),
       equipped: !!e.item.system.equipped, dropped: !!e.item.system.dropped,
+      restriction: e.restriction ? game.i18n.localize(`AD2E.Weapon.Restrict.${e.restriction}`) : "",
       status: e.proficient
         ? [game.i18n.localize(e.mastery ? "AD2E.SP.Mastery" : (e.specialized ? "AD2E.Weapon.Specialized"
           : (e.expertise ? "AD2E.SP.Expertise" : "AD2E.Weapon.Proficient"))), e.choice ? game.i18n.localize("AD2E.SP.Choice") : ""]
@@ -905,13 +921,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       return multi ? { identifier: id, level: multi.level, xp: multi.xp }
         : (stored.find(c => c.identifier === id) ?? { identifier: id, level: sys.level, xp: sys.xp });
     });
-    const elig = multiEligibility({ combinations: raceItem?.system.multiClass, classes, next: next.system, alignment: sys.alignment, scores });
+    const elig = multiEligibility({ combinations: raceItem?.system.multiClass, kitCombos: raceItem?.system.multiClassKits, classes,
+      next: next.system, alignment: sys.alignment, scores });
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
     const names = classItems.map(i => i.name).join("/");
     const fmt = { from: names, to: next.name, race: raceItem?.name ?? "—" };
     const reasons = elig.reasons.map(r => `<li>${esc(game.i18n.format(`AD2E.Multi.Reason.${r}`, fmt))}</li>`).join("");
-    const combos = [...(raceItem?.system.multiClass ?? [])].map(c => c.split("/").map(id => id.charAt(0).toUpperCase() + id.slice(1)).join("/")).join(", ");
+    const cap = id => id.charAt(0).toUpperCase() + id.slice(1);
+    const kitName = id => cap(id.replace(/-/g, " "));
+    const combos = [...[...(raceItem?.system.multiClass ?? [])].map(c => c.split("/").map(cap).join("/")),
+      ...Object.entries(raceItem?.system.multiClassKits ?? {}).map(([c, kits]) => `${c.split("/").map(cap).join("/")} (${kits.map(kitName).join(" / ")})`)].join(", ");
     const buttons = [];
     if (elig.ok) buttons.push({ action: "multi", label: game.i18n.format("AD2E.Multi.Become", fmt), default: true });
     buttons.push({ action: "replace", label: game.i18n.format("AD2E.Dual.Replace", { from: names, to: next.name }) });
@@ -1032,7 +1052,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         return null;
       }
       // Multi-class (world setting, module/multi-class.mjs): a demihuman whose race has combinations may add the class.
-      if (classItem && multiClassOn() && [...(raceItem?.system.multiClass ?? [])].length
+      if (classItem && multiClassOn() && ([...(raceItem?.system.multiClass ?? [])].length || Object.keys(raceItem?.system.multiClassKits ?? {}).length)
         && !classItems.some(c => c.system.identifier === item.system.identifier)) {
         const choice = await this.#askMultiClass(classItems, item, raceItem);
         if (!choice) return null;

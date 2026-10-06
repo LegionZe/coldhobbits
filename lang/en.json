@@ -262,6 +262,10 @@
     "BonusNonweaponSlots": "Bonus nonweapon slots"
   },
   "AD2E.Weapon": {
+    "Restrict": {
+      "notAllowed": "Not a weapon allowed to the class (warning only)",
+      "notBludgeoning": "Clerics may use only bludgeoning (type B) weapons (warning only)"
+    },
     "BowStrength": "Bow made for Strength",
     "BowStandard": "Standard bow (penalties only)",
     "ElementHint": "Elemental province of attacks with this weapon (Al-Qadim): its damage dice reach elemental mages and gens of that province, and an elemental mage of that province adds +1 per die.",
@@ -633,6 +637,8 @@
     "AwardNote": "Divided equally between the {n} classes, each share with its class's prime requisite bonus.",
     "Gained": "{name} gains {gain} XP (multi-class)",
     "KitSingleClass": "{source}: its kits are for single-class characters only ({page}). The GM decides.",
+    "BardKitOk": "Complete Bard's Handbook combination: the bard's kit is one of {kits}.",
+    "BardKitNeeded": "Complete Bard's Handbook combination: the bard needs one of these kits: {kits} (True Bard also without a kit).",
     "ThiefArmor": "Multi-class: in armour not allowed to thieves only open locks and detect noise can be used (no armour adjustment)."
   },
   "AD2E.Drain": {
@@ -734,6 +740,7 @@
   "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
   "AD2E.Sheet.Trait": "AD&D 2e Trait or Disadvantage",
   "AD2E.Spell": {
+    "ArmorWarning": "Casting a wizard spell in armour ({armor}): multi-class wizards' and bards' spells are restricted in armour (elves in elven chain excepted). Cast anyway?",
     "Provinces": "Elemental provinces",
     "ProvincesHint": "Al-Qadim provinces of the spell: flame, sand, sea, wind (Wizard Spells by Province (AA); set at import). Comma separated.",
     "DamageFormula": "Damage and healing",

@@ -51,6 +51,11 @@
     "multiClass": [
       "fighter/thief"
     ],
+    "multiClassKits": {
+      "bard/thief": [
+        "jongleur"
+      ]
+    },
     "url": "https://adnd2e.fandom.com/wiki/Halfling_(PHB)",
     "notes": ""
   },

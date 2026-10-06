@@ -12,7 +12,7 @@ Sources (AD&D 2e fandom wiki, MediaWiki API):
     generated class documents in packs/_source/classes; run build-class-data.py first).
 Run from the repo root:  python3 tools/build-race-data.py
 """
-import glob, json, re, urllib.parse, urllib.request
+import glob, json, os, re, urllib.parse, urllib.request
 
 import importlib.util
 _spec = importlib.util.spec_from_file_location("classdata", "tools/build-class-data.py")
@@ -152,9 +152,48 @@ def multi_class_combinations():
     return out, rev
 
 
+# Complete Bard's Handbook multi-class bards ("Multi-Classed Bards Dual-Classed Bards (CBH)"): each combination is another
+# class and the bard with one of the listed kits ("True" = the True Bard: that kit or no kit, the only choice without kits).
+# Parsed from the page; kit names map to kit identifiers (checked against the kit sources); counts checked per race.
+BARD_MULTI_PAGE = "Multi-Classed Bards Dual-Classed Bards (CBH)"
+BARD_MULTI_COUNT = {"Dwarf": 1, "Elf": 2, "Gnome": 2, "Half-Elf": 6, "Halfling": 1}
+BARD_KITS = {"True": "true-bard", "Chanter": "dwarven-chanter", "Skald": "skald", "Minstrel": "elven-minstrel", "Gypsy": "gypsy-bard",
+             "Professor": "gnome-professor", "Jongleur": "jongleur", "Blade": "blade", "Gallant": "gallant",
+             "Meistersinger": "meistersinger", "Loremaster": "loremaster", "Riddlemaster": "riddlemaster", "Thespian": "thespian"}
+
+
+def bard_multi_class():
+    """Race name -> {combination ("bard/<class>" sorted): [bard kit identifiers]}."""
+    wiki, rev, _ = classdata.page(BARD_MULTI_PAGE)
+    assert re.search(r"If the kits are not used in your campaign, only those combinations that include the True Bard can be used", wiki), \
+        "CBH multi-class bards: True Bard rule changed"
+    assert re.search(r"multi-class options are not open to human characters", wiki), "CBH multi-class bards: human rule changed"
+    sec = wiki[wiki.index("'''Dwarf'''"):wiki.index("==Dual-Classed Bards==")]
+    kits = {json.load(open(f))["system"]["identifier"] for f in glob.glob("packs/_source/kits/*.json") if not os.path.basename(f).startswith("_folder")}
+    out, race = {}, None
+    for line in sec.splitlines():
+        line = line.strip()
+        m = re.match(r"'''([A-Za-z-]+)'''$", line)
+        if m:
+            race = m.group(1)
+            out[race] = {}
+            continue
+        m = re.match(r"([A-Za-z]+)/([A-Za-z* ]+)$", line)
+        if m and race:
+            cls = m.group(1).lower()
+            names = [n.strip() for n in m.group(2).split("*")]
+            ids = [BARD_KITS[n] for n in names]
+            assert all(i in kits for i in ids), (line, ids)
+            out[race]["/".join(sorted(["bard", cls]))] = ids
+    for race, n in BARD_MULTI_COUNT.items():
+        assert len(out.get(race, {})) == n, f"CBH multi-class bards: {race} has {len(out.get(race, {}))} combinations, expected {n}"
+    return out, rev
+
+
 def build():
     base_move, _ = movement.build_base_move()
     multi, multi_rev = multi_class_combinations()
+    bard_multi, bard_rev = bard_multi_class()
     wiki, rev, _ = classdata.page("Character Race Tables (PHB)")
     t7 = classdata.table_rows(wiki, "Table 7: Racial Ability Requirements")
     header = [link_text(h) for h in re.findall(r"!\s*scope=\"col\"\|\s*([^\n]+)", wiki[wiki.index("Table 7: Racial Ability Requirements"):])[1:7]]
@@ -201,9 +240,10 @@ def build():
                   "infravision": f["infravision"], "infravisionByLineage": f.get("infravisionByLineage", False),
                   "levelLimits": level_limits(name, classes),
                   "multiClass": sorted(multi.get(name, [])),
+                  "multiClassKits": bard_multi.get(name, {}),
                   "url": classdata.url(f["page"]), "notes": ""}
         docs.append(classdata.item_doc("race", key, name, "icons/svg/mystery-man.svg", system, i * 1000))
-        print(f"{name}: page rev {page_rev}, classes {classes}, via kit {kit_classes}, multi-class {sorted(multi.get(name, []))} (rev {multi_rev})")
+        print(f"{name}: page rev {page_rev}, classes {classes}, via kit {kit_classes}, multi-class {sorted(multi.get(name, []))} (rev {multi_rev}), bard {bard_multi.get(name, {})} (rev {bard_rev})")
     classdata.write_docs("packs/_source/races", docs)
 
     # Table 9: Constitution Saving Throw Bonuses (dwarf, gnome, halfling).

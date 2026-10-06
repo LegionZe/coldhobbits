@@ -23,6 +23,7 @@ import { canFightTwoWeapons, twoWeaponStyle, COMBAT_TABLES, halveRate, mountedFi
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
+import { armorBlocksWizardCasting } from "../data/character.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -681,9 +682,12 @@ export default class AD2EActor extends Actor {
     const nonlethalOk = use === "melee" && nonlethalAllowed(item.system.weapon);
     const nonlethalField = nonlethalOk ? `<div class="form-group"><label>${i18n("AD2E.Nonlethal.Weapon")} (${COMBAT_TABLES.nonlethal.hit})</label>`
       + `<input type="checkbox" name="nonlethal"></div>` : "";
+    // Class weapon limits (owner's ruling: a warning only; CharacterData weaponRestriction).
+    const restriction = this.type === "character" ? this.system.weapons?.find(e => e.item.id === item.id)?.restriction : "";
+    const restrictionNote = restriction ? `<p class="ad2e-unmet">${i18n(`AD2E.Weapon.Restrict.${restriction}`)}</p>` : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
-      content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
+      content: restrictionNote + `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField + this.#dualField(this.system.dual?.thac0Option)
@@ -1499,6 +1503,18 @@ export default class AD2EActor extends Actor {
     if (sys.prepared - sys.cast < 1) {
       ui.notifications.warn(game.i18n.format("AD2E.Spell.NotMemorized", { name: spell.name }));
       return;
+    }
+    // Wizard spells in armour (owner's ruling: warn and confirm): "the wearing of armor is restricted" for multi-class
+    // wizards, with elves in elven chain as the exception (Multi-Class and Dual-Class Characters (PHB)); bards abide by
+    // "the prohibition of armor" (Bard (PHB)); single-class wizards cannot wear armour at all (Wizard (PHB)).
+    if (this.type === "character" && sys.kind === "wizard") {
+      const worn = this.items.filter(i => i.type === "armor" && i.system.equipped);
+      if (worn.length && armorBlocksWizardCasting(worn, this.system.raceInfo?.raceItem?.system.identifier ?? "")) {
+        const ok = await DialogV2.confirm({ window: { title: spell.name },
+          content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Spell.ArmorWarning", { armor: worn.map(i => i.name).join(", ") })) ?? ""}</p>`,
+          rejectClose: false });
+        if (!ok) return;
+      }
     }
     // Material components (module/components.mjs; world setting "trackComponents"): missing ones ask to cast anyway.
     const comp = await useComponents(this, spell);
