@@ -38,6 +38,7 @@
       <div class="ad2e-weapon-main">
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{b.current.uuid}}">{{b.current.name}}</a></span>
         <span class="ad2e-weapon-meta {{#if b.current.dead}}ad2e-unmet{{/if}}">{{b.current.meta}}</span>
+        {{#if b.current.oversize}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Bond.OversizeShort"}}</span>{{/if}}
       </div>
       {{#if @root.editable}}<a data-action="bondClear" data-tooltip="{{localize 'AD2E.Bond.Clear'}}"><i class="fa-solid fa-link-slash"></i></a>{{else}}<span></span>{{/if}}
     </div>

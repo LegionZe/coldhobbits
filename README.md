@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.126)
+## Status (v0.0.127)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -624,7 +624,8 @@ Node only until confirmed.
   every class of a multi-class character, and "he loses his affinity to that species": that species is refused), "Mount
   died" (2d6 damage to the rider; by negligence a save vs. spells is rolled and the card names the 2d6 hours of
   feeblemind on a failure, not applied) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
-  animal dies. Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
+  animal dies. "All animal companions should be size S (small)": a companion of size M or larger is bonded with a
+  warning (owner's ruling; T, S or no size pass; every Table 42 creature passes). Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
   (owner's rulings: generated stat blocks, bond and GM buttons, warning).
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
