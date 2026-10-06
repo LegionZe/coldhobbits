@@ -6,7 +6,7 @@ import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } f
 import { spProficienciesOn, spRating } from "../sp-proficiencies.mjs";
 import { isShairKit } from "../shair.mjs";
 import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
-import { combinationAllowed, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
+import { bardKitFits, bardKitRule, combinationAllowed, comboKey, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
 import { pendingDrain } from "../level-drain.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
@@ -54,6 +54,35 @@ export function armorRestriction(classId, item) {
   }
   if (body?.maxAc !== undefined) return (sys.ac ?? 10) >= body.maxAc ? "" : "tooHeavy";
   return "";
+}
+
+/**
+ * Why a character's classes may not use a weapon item (AD2E.classTables.classWeapons; owner's ruling: a warning, the
+ * roll is not blocked), or "" if allowed: "notBludgeoning" (standard clerics, Table 45 type B only) or "notAllowed".
+ * Several classes (multi-class): "a multi-classed priest must abide by the weapon restrictions of his mythos"; otherwise
+ * the most permissive class decides (warriors and bards: any weapon). Weapons without a proficiency are not checked.
+ * @param {Array<{identifier: string, group: string}>} classes
+ */
+export function weaponRestriction(classes, item) {
+  const rules = AD2E.classTables?.classWeapons ?? {};
+  const sys = item?.system ?? {};
+  if (!sys.proficiency || !classes?.length) return "";
+  const allows = id => {
+    const rule = rules[id];
+    if (!rule) return true;
+    if (rule.type) return (sys.weapon?.type ?? "") === rule.type;
+    return (rule.ids ?? []).includes(sys.proficiency);
+  };
+  const reason = id => (rules[id]?.type ? "notBludgeoning" : "notAllowed");
+  const priests = classes.filter(c => c.group === "priest");
+  for (const p of priests) if (!allows(p.identifier)) return reason(p.identifier);
+  if (priests.length) return "";
+  return classes.some(c => allows(c.identifier)) ? "" : reason(classes[0].identifier);
+}
+
+/** Whether worn armour hinders casting wizard spells: any armour item, except elven chain worn by an elf. */
+export function armorBlocksWizardCasting(worn, raceId) {
+  return worn.some(i => !(raceId === "elf" && i.system.kind === "body" && /elven[- ]chain/i.test(`${i.system.identifier ?? ""} ${i.name ?? ""}`)));
 }
 
 /** Strength table row for a bow's rating ("17", "18/50", "18/00", "19"); null for a standard bow or an unknown rating. */
@@ -374,8 +403,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         bonus: prime.length > 0 && prime.every(k => this.abilities[k].total >= 16) ? 10 : 0 };
     });
     for (const c of classes) c.atLimit = !!c.levelLimit && c.level >= c.levelLimit;
-    return { classes, others: classes.filter(c => !c.primary),
-      allowed: race ? combinationAllowed(race.multiClass, classes.map(c => c.identifier)) : true };
+    const ids = classes.map(c => c.identifier);
+    // Complete Bard's Handbook combinations need one of their bard kits (module/multi-class.mjs bardKitRule).
+    const bard = race ? bardKitRule(race.multiClassKits, ids) : null;
+    const kitId = this.classInfo.kitItem?.system.identifier ?? "";
+    const bardOk = bardKitFits(bard, kitId);
+    return { classes, others: classes.filter(c => !c.primary), bard: bard ? { kits: bard.kits, ok: bardOk } : null,
+      allowed: race ? (combinationAllowed(race.multiClass, ids) || (!!bard && bardOk)) : true };
   }
 
   /**
@@ -395,7 +429,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const cls = classItem?.system ?? null;
     const race = this.raceInfo.race;
     const raceId = this.raceInfo.raceItem?.system.identifier;
-    const classViaRace = !race || !cls || (multi ? classItems.every(i => race.classes.has(i.system.identifier)) : race.classes.has(cls.identifier));
+    // Multi-class: every class open to the race, or the Complete Bard's Handbook combination (race multiClassKits).
+    const bardCombo = multi && !!race?.multiClassKits?.[comboKey(classItems.map(i => i.system.identifier))];
+    const classViaRace = !race || !cls || (multi ? (bardCombo || classItems.every(i => race.classes.has(i.system.identifier)))
+      : race.classes.has(cls.identifier));
     const classViaKit = !!(race && cls && race.kitClasses?.has(cls.identifier));
     const kitListsRace = !!(kitItem && raceId && kitItem.system.raceLimits && raceId in kitItem.system.raceLimits);
     // A kit fits if it is open to the class and, with a race: a race-only kit must list the race, and a
@@ -516,7 +553,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const equipped = worn.filter(i => !misfit.includes(i));
     // Class armour limits (Wizard, Thief, Bard, Druid (PHB); class-tables.mjs classArmor): shown, still counted.
     const classId = this.classInfo?.classItem?.system.identifier ?? null;
-    const restricted = worn.map(i => ({ item: i, reason: armorRestriction(classId, i) })).filter(r => r.reason);
+    // Multi-class (implementation choice): an armour is restricted only if every class restricts it; wizards' casting in
+    // armour (actor castSpell) and thieves' skills in armour (#multiThiefLimit) are handled separately.
+    const ids = this.classInfo?.multi ? this.classInfo.classItems.map(c => c.system.identifier) : [classId];
+    const restricted = worn.map(i => ({ item: i, reason: ids.map(id => armorRestriction(id, i)).every(Boolean) ? armorRestriction(ids[0], i) : "" }))
+      .filter(r => r.reason);
     const bodies = equipped.filter(i => i.system.kind === "body" && i.system.ac !== null)
       .sort((a, b) => (a.system.ac - a.system.bonus) - (b.system.ac - b.system.bonus));
     const shields = equipped.filter(i => i.system.kind === "shield")
@@ -853,6 +894,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const inHand = items.filter(i => i.system.equipped && !i.system.dropped && oneHanded(i));
     // Skills & Powers: the two weapon style lets any class fight with two weapons.
     const twoReady = (canFightTwoWeapons(this.classGroup) || !!p.sp?.styles.twoWeapon) && inHand.length >= 2;
+    // Class weapon limits (weaponRestriction): the current class, or every class of a multi-class character.
+    const weaponClasses = this.multi ? this.multi.classes : (this.classInfo.classItem
+      ? [{ identifier: this.classInfo.classItem.system.identifier, group: this.classInfo.classItem.system.group }] : []);
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;
@@ -867,7 +911,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       if (twoReady && attack.melee && inHand.includes(item)) attack.melee.rateTwo = formatRate(twoWeaponRate(attack.melee.rateRaw));
       return { item, proficient: status === "proficient", familiar: status === "familiar", proficiency: prof?.item ?? null,
         specialized, mastery: !!prof?.masteryValid, choice: !!prof?.choice, expertise: !!prof?.expertise, penalty,
-        twoHanded: !!w.weapon?.melee && !oneHanded(item), attack };
+        twoHanded: !!w.weapon?.melee && !oneHanded(item), attack, restriction: weaponRestriction(weaponClasses, item) };
     });
   }
 

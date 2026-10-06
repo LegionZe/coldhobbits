@@ -30,6 +30,8 @@ export default class RaceData extends foundry.abstract.TypeDataModel {
       infravisionByLineage: new BooleanField({ initial: false }),
       levelLimits: new ObjectField(),
       multiClass: new SetField(new StringField()),
+      // Complete Bard's Handbook multi-class bards: combination ("bard/fighter") -> allowed bard kit identifiers.
+      multiClassKits: new ObjectField(),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };

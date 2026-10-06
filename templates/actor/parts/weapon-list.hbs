@@ -12,6 +12,7 @@
     </div>
     {{#if r.profId}}<a class="ad2e-weapon-status" data-action="openItem" data-item-id="{{r.profId}}">{{r.status}}</a>
     {{else}}<span class="ad2e-weapon-status ad2e-unmet">{{r.status}}</span>{{/if}}
+    {{#if r.restriction}}<span class="ad2e-weapon-meta ad2e-unmet">{{r.restriction}}</span>{{/if}}
     <div class="ad2e-weapon-uses">
       {{#each r.uses as |u|}}
       <span class="ad2e-weapon-use">

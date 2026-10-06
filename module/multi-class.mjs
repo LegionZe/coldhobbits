@@ -30,6 +30,26 @@ export function multiClassOn() {
   try { return game.settings.get("ad2e", "multiClass") === true; } catch { return false; }
 }
 
+/** Sorted key of a set of class identifiers ("bard/fighter"). */
+export function comboKey(ids) {
+  return [...ids].sort().join("/");
+}
+
+/**
+ * Complete Bard's Handbook multi-class bards (race `multiClassKits`, tools/build-race-data.py): the bard kits a
+ * combination needs, or null when the classes are not such a combination. "true-bard" is also met by no kit ("If the
+ * kits are not used in your campaign, only those combinations that include the True Bard can be used").
+ */
+export function bardKitRule(kitCombos, ids) {
+  const kits = kitCombos?.[comboKey(ids)];
+  return kits ? { kits: [...kits] } : null;
+}
+
+export function bardKitFits(rule, kitId) {
+  if (!rule) return true;
+  return rule.kits.includes(kitId ?? "") || (!kitId && rule.kits.includes("true-bard"));
+}
+
 /** Whether a set of class identifiers is one of the race's combinations (order does not matter). */
 export function combinationAllowed(combinations, ids) {
   const key = [...ids].sort().join("/");
@@ -51,10 +71,11 @@ export function combinationStarted(combinations, ids) {
  * @param {Record<string, number>} o.scores  effective ability scores
  * @returns {{ ok: boolean, reasons: string[] }}  reasons: keys under AD2E.Multi.Reason
  */
-export function multiEligibility({ combinations, classes, next, alignment, scores }) {
+export function multiEligibility({ combinations, kitCombos = {}, classes, next, alignment, scores }) {
   const reasons = [];
   const ids = classes.map(c => c.identifier);
-  if (!combinations || ![...combinations].length) reasons.push("race");
+  combinations = [...(combinations ?? []), ...Object.keys(kitCombos ?? {})];
+  if (!combinations.length) reasons.push("race");
   else if (ids.includes(next.identifier)) reasons.push("same");
   else if (!combinationStarted(combinations, [...ids, next.identifier])) reasons.push("combination");
   if (classes.some(c => (c.level ?? 1) > 1 || (c.xp ?? 0) > 0)) reasons.push("creation");

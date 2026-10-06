@@ -52,6 +52,12 @@
       "fighter/cleric",
       "fighter/thief"
     ],
+    "multiClassKits": {
+      "bard/fighter": [
+        "dwarven-chanter",
+        "skald"
+      ]
+    },
     "url": "https://adnd2e.fandom.com/wiki/Dwarf_(PHB)",
     "notes": ""
   },

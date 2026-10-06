@@ -58,6 +58,15 @@
       "fighter/thief",
       "illusionist/thief"
     ],
+    "multiClassKits": {
+      "bard/illusionist": [
+        "gnome-professor"
+      ],
+      "bard/thief": [
+        "gnome-professor",
+        "jongleur"
+      ]
+    },
     "url": "https://adnd2e.fandom.com/wiki/Gnome_(PHB)",
     "notes": ""
   },
