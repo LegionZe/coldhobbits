@@ -12,7 +12,7 @@ import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, i
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
-import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, mountDied, mountFled, rollBondCreature, setBond } from "../companions.mjs";
+import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -1290,7 +1290,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       const fits = kind && animal.system?.role === (kind === "companion" ? "pet" : "mount") && !this.actor.system.bond?.[kind];
       if (fits && !canBond(this.actor, animal, kind)) {
         const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize(`AD2E.Bond.Title.${kind}`) },
-          content: `<p>${foundry.utils.escapeHTML(game.i18n.format(`AD2E.Bond.Ask.${kind}`, { name: animal.name }))}</p>`, rejectClose: false });
+          content: `<p>${foundry.utils.escapeHTML(game.i18n.format(`AD2E.Bond.Ask.${kind}`, { name: animal.name }))}</p>`
+            + (kind === "companion" && oversizeCompanion(animal) ? `<p class="ad2e-unmet">${foundry.utils.escapeHTML(game.i18n.format("AD2E.Bond.Oversize",
+              { name: animal.name, size: animal.system.size }))}</p>` : ""), rejectClose: false });
         if (ok) await setBond(this.actor, animal, kind);
       }
       return animal;

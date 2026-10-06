@@ -84,11 +84,21 @@ export function bondInfo(character) {
     return { uuid, actor, name: actor.name, img: actor.img, ...health(actor) };
   };
   const companion = row(bond.companion);
+  if (companion?.actor) companion.oversize = oversizeCompanion(companion.actor);
   const mount = row(bond.mount);
   if (mount?.actor) mount.bearing = tokenBearing(character, mount.actor);
   const ownsMount = (sys.animals?.actors ?? []).some(u => resolve(u)?.system?.role === "mount");
   return { kind, companion, mount, barred: [...(bond.barred ?? [])], rapportLost: !!bond.rapportLost,
     mountNeeded: needsMount(character) && !ownsMount };
+}
+
+/**
+ * "All animal companions should be size S (small)" (Animal Master (POSP)): true for a companion larger than S (owner's
+ * ruling: a warning only; T, S, or no size given pass). The size is the first letter of the stat block's size.
+ */
+export function oversizeCompanion(animal) {
+  const letter = String(animal?.system?.size ?? "").trim().charAt(0).toUpperCase();
+  return ["M", "L", "H", "G"].includes(letter);
 }
 
 /** Whether an animal may become the character's companion or mount, or the reason it may not. */
@@ -149,6 +159,7 @@ export async function setBond(character, animal, kind) {
     return false;
   }
   await character.update({ [`system.bond.${kind}`]: animal.uuid });
+  if (kind === "companion" && oversizeCompanion(animal)) ui.notifications.warn(i18n("AD2E.Bond.Oversize", { name: animal.name, size: animal.system.size }));
   return true;
 }
 

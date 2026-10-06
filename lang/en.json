@@ -697,6 +697,8 @@
       "land": "giant land creatures",
       "underwater": "underwater creatures"
     },
+    "Oversize": "{name} is size {size}: animal companions should be size S (small) (Animal Master). The GM decides.",
+    "OversizeShort": "Larger than size S: animal companions should be small (GM's decision).",
     "HomelandLabel": "Homeland",
     "HomelandHint": "The mount suits the climate and terrain of the rider's homeland, the race and what is available: a homeland list picks one of its creatures at random; Any rolls Table 43 as printed.",
     "Roll": "Roll",
