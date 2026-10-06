@@ -1,0 +1,29 @@
+{
+  "_id": "gwOCBQhnI3MNZSDM",
+  "_key": "!items!gwOCBQhnI3MNZSDM",
+  "name": "Bruise Easily",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "bruise-easily",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 8,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Bruise_Easily",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 200,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

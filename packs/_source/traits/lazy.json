@@ -1,0 +1,29 @@
+{
+  "_id": "VUMZCsKxUvzPrShf",
+  "_key": "!items!VUMZCsKxUvzPrShf",
+  "name": "Lazy",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "lazy",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 7,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Lazy",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

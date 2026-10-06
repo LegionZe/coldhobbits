@@ -1,0 +1,29 @@
+{
+  "_id": "H9sJ34vCu9UHDgr3",
+  "_key": "!items!H9sJ34vCu9UHDgr3",
+  "name": "Animal Empathy",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "animal-empathy",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Animal_Empathy",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

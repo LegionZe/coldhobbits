@@ -91,5 +91,31 @@
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Prof.NoneYet"}}</p>
     {{/each}}
   </fieldset>
+
+  {{#with pt.traits as |tr|}}
+  <fieldset class="ad2e-prof-list">
+    <legend data-tooltip="{{localize 'AD2E.Trait.SectionHint'}}">{{localize "AD2E.Trait.Section"}}</legend>
+    <p class="ad2e-prof-summary {{#if tr.over}}ad2e-unmet{{/if}}">{{tr.balance}}{{#if tr.over}} — {{localize "AD2E.Trait.Over"}}{{/if}}</p>
+    {{#each tr.traits as |r|}}
+    <div class="ad2e-prof-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+      <span class="ad2e-weapon-meta">{{r.effects}}</span>
+      <span class="ad2e-prof-cost" data-tooltip="{{localize 'AD2E.Trait.Cost'}}">{{r.value}}</span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{/each}}
+    {{#each tr.disadvantages as |r|}}
+    <div class="ad2e-prof-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
+      <span class="ad2e-weapon-meta">{{#if r.canSevere}}{{#if @root.editable}}<a data-action="toggleSeverity" data-item-id="{{r.id}}">{{#if r.severe}}{{../severeLabel}}{{else}}{{../moderateLabel}}{{/if}}</a>{{else}}{{#if r.severe}}{{../severeLabel}}{{else}}{{../moderateLabel}}{{/if}}{{/if}}{{/if}}{{#if r.effects}} {{r.effects}}{{/if}}</span>
+      <span class="ad2e-prof-cost" data-tooltip="{{localize 'AD2E.Trait.Points'}}">+{{r.value}}</span>
+      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{/each}}
+    {{#unless tr.traits.length}}{{#unless tr.disadvantages.length}}<p class="ad2e-placeholder">{{localize "AD2E.Trait.DropHint"}}</p>{{/unless}}{{/unless}}
+  </fieldset>
+  {{/with}}
   {{/with}}
 </section>

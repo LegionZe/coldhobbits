@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.107)
+## Status (v0.0.108)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), and the optional Skills & Powers and Combat & Tactics weapon rules. The features
@@ -469,13 +469,27 @@ Node only until confirmed.
   tick box) and doubled range penalties for hand match guns. Ammunition: Pellet (pellet bow), Bullet (firearms but the
   handgunne, which "propels a heavy iron arrow"), and the cho-ku-no fires light quarrels; each firearm shot uses one
   bullet and one gunpowder or smokepowder (owner's ruling), and matchlocks and hand match guns need a slow match carried.
+- Traits and disadvantages (Player's Option: Skills & Powers Tables 46 and 47; compendium "Traits & Disadvantages (POSP)",
+  `python3 tools/build-trait-data.py`; descriptions are linked, not copied): without character points (owner's ruling)
+  a character may take traits whose cost is at most the points of its disadvantages (moderate or severe); the
+  Proficiencies tab shows the balance and warns when the traits cost more. Racial adjustments from the descriptions
+  apply ("Elves can purchase this trait for 1 less character point"; "Dwarves receive 1 extra character point").
+  Effects with numbers apply in rolls like kit modifiers (tick boxes when conditional): Alertness +1 surprise, Keen
+  Eyesight +1 to hit with missiles at long range, Keen Hearing/Smell surprise and Detect Noise/Hunting, Keen Touch +5%
+  pick pockets and open locks, the inherent immunities' saving throw bonuses, Impersonation, Internal Compass and
+  Music/Singing proficiency bonuses, Allure and Tongue-tied reactions. Ambidexterity sets the two-weapon penalties to
+  0 / -2 ("suffering no penalty for the first hand, and only a –2 penalty for off-hand use"); Fast Healer heals 2 hit
+  points a day of normal rest. The wiki has no description for Irritating Personality and Phobia: Spiders (they link
+  to the tables page).
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Skills & Powers beyond weapons: character points, traits (ambidexterity), non-weapon skills, kits.
+- Skills & Powers beyond weapons: character points, non-weapon skills, kits.
   Subabilities are not planned; psionics not for the time being (owner's decisions).
 - Dual-class characters (Multi-Class and Dual-Class Characters (PHB), "Dual-Class Benefits and Restrictions"): humans
   only; prime requisites 15+ in the first class and 17+ in the new one; at least 2nd level before switching; the new
   class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
   using the old class's abilities costs experience until the new class's level exceeds the old one.
 - Monster pictures bundled with the system.
+- Hide the Spells tab for classes and kits without spells.
+- A GM instruction manual for the system.

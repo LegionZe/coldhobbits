@@ -59,9 +59,9 @@ export function temporaryHp(hp = {}) {
 }
 
 /** Natural healing for `days` of rest (Healing (PHB)): rest 1 per day; bed rest 3 per day + conBonus per full week. */
-export function naturalHealing(days, bedRest, conBonus = 0) {
+export function naturalHealing(days, bedRest, conBonus = 0, perDay = 1) {
   if (!(days > 0)) return 0;
-  return bedRest ? 3 * days + Math.floor(days / 7) * Math.max(conBonus, 0) : days;
+  return bedRest ? 3 * days + Math.floor(days / 7) * Math.max(conBonus, 0) : days * perDay;
 }
 
 /** Token status icons (core "unconscious" and "dead") follow the actor's hit point state. */

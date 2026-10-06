@@ -16,7 +16,7 @@ export function spellDamageLabel(d, i = 0) {
   const round = d.perRound ? ` (${game.i18n.localize("AD2E.Spell.PerRound")})` : "";
   return `${d.label || `${kind} ${i + 1}`}${round}: ${d.formula}`;
 }
-import { canFightTwoWeapons, COMBAT_TABLES, halveRate, mountedFireIssues, mountedMeleeModifier, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
+import { canFightTwoWeapons, twoWeaponStyle, COMBAT_TABLES, halveRate, mountedFireIssues, mountedMeleeModifier, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
 const { DialogV2 } = foundry.applications.api;
@@ -441,7 +441,8 @@ export default class AD2EActor extends Actor {
       const sys = this.system;
       twoAdj = twoWeaponPenalty(a.hand, { reaction: sys.abilityData?.dex?.reaction ?? 0,
         ranger: twoWeaponExempt(sys), armorAc: sys.armor?.body?.system.ac ?? null,
-        style: spStyles?.twoWeapon ? { main: SP.twoWeapon.main, off: SP.twoWeapon.off } : null });
+        style: twoWeaponStyle(sys, spStyles?.twoWeapon ? { main: SP.twoWeapon.main, off: SP.twoWeapon.off } : null) });
+      if (sys.traits?.ids?.includes("ambidexterity")) notes.push(i18n("AD2E.Trait.AmbidexterityNote"));
       if (spStyles?.twoWeapon) notes.push(i18n("AD2E.SP.TwoWeaponStyle"));
       notes.push(`${i18n(`AD2E.TwoWeapons.${a.hand}`)} ${twoAdj > 0 ? "+" : ""}${twoAdj}`);
       if (sys.armor?.shield) notes.push(i18n("AD2E.TwoWeapons.Shield"));
@@ -1661,7 +1662,8 @@ export default class AD2EActor extends Actor {
       return;
     }
     if (this.system.hp.feeble) await this.update({ "system.hp.feeble": false });
-    const n = naturalHealing(input.days, input.bed, this.system.mods?.conHp ?? 0);
+    // Fast Healer trait: "naturally heals at a rate of 2 hit points, not 1, per day" (normal rest; bed rest unchanged).
+    const n = naturalHealing(input.days, input.bed, this.system.mods?.conHp ?? 0, this.system.traits?.ids?.includes("fast-healer") ? 2 : 1);
     const room = this.system.hp.max - this.system.hp.value;
     if (n > 0 && room > 0) return this.applyHealing(n, { natural: true });
     return this.#hpMessage(game.i18n.format("AD2E.Health.Rested", { name: this.name, days: input.days }));

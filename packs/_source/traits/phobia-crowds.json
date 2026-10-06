@@ -1,0 +1,29 @@
+{
+  "_id": "XRxaaO1p0tSYPYKG",
+  "_key": "!items!XRxaaO1p0tSYPYKG",
+  "name": "Phobia: Crowds",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-crowds",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 4,
+      "severe": 10
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Crowds",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

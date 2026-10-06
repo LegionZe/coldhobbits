@@ -1,0 +1,29 @@
+{
+  "_id": "OyBvq8yIc87Fh4Lg",
+  "_key": "!items!OyBvq8yIc87Fh4Lg",
+  "name": "Doublejointed",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "doublejointed",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Double-jointed",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "z5TSC7Tgv96fREOc",
+  "_key": "!items!z5TSC7Tgv96fREOc",
+  "name": "Phobia: Monster (specific)",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-monster",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 4,
+      "severe": 9
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Monster",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

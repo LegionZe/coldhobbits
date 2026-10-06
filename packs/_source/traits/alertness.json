@@ -1,0 +1,41 @@
+{
+  "_id": "I1yUNXmn4q9WOgS9",
+  "_key": "!items!I1yUNXmn4q9WOgS9",
+  "name": "Alertness",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "alertness",
+    "kind": "trait",
+    "cost": 6,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "surprise",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Alertness",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

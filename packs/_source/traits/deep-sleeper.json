@@ -1,0 +1,29 @@
+{
+  "_id": "C0zgm54jpFKmT8Tm",
+  "_key": "!items!C0zgm54jpFKmT8Tm",
+  "name": "Deep Sleeper",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "deep-sleeper",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 7,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Deep_Sleeper",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,29 @@
+{
+  "_id": "sJUjUT5aHnQnUQym",
+  "_key": "!items!sJUjUT5aHnQnUQym",
+  "name": "Irritating Personality",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "irritating-personality",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 6,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_(POSP)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

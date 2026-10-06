@@ -1,0 +1,29 @@
+{
+  "_id": "wZk36Ltjt1t0Mr8t",
+  "_key": "!items!wZk36Ltjt1t0Mr8t",
+  "name": "Precise Memory",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "precise-memory",
+    "kind": "trait",
+    "cost": 4,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Precise_Memory",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 2600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

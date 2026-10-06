@@ -1,0 +1,29 @@
+{
+  "_id": "STBjMSKaEwTptiMn",
+  "_key": "!items!STBjMSKaEwTptiMn",
+  "name": "Light Sleeper",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "light-sleeper",
+    "kind": "trait",
+    "cost": 5,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Light_Sleeper",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 2100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

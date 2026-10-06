@@ -1,0 +1,29 @@
+{
+  "_id": "T9Mo7EQ49ByZuYsw",
+  "_key": "!items!T9Mo7EQ49ByZuYsw",
+  "name": "Fanaticism",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "fanaticism",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 8,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Fanaticism",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

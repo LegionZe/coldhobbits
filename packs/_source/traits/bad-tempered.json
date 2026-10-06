@@ -1,0 +1,34 @@
+{
+  "_id": "cFCjuv9uWw2AJQX6",
+  "_key": "!items!cFCjuv9uWw2AJQX6",
+  "name": "Bad Tempered",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "bad-tempered",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 6,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "dwarf",
+        "delta": 1
+      }
+    ],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Bad_Tempered",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

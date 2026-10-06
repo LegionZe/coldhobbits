@@ -1,0 +1,34 @@
+{
+  "_id": "qGU4ps4YMmRb05ht",
+  "_key": "!items!qGU4ps4YMmRb05ht",
+  "name": "Cowardice",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "cowardice",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 7,
+      "severe": 15
+    },
+    "severity": "moderate",
+    "race": [
+      {
+        "race": "halfling",
+        "delta": 1
+      }
+    ],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Cowardice",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

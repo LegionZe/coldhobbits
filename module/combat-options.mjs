@@ -67,6 +67,19 @@ export function twoWeaponPenalty(hand, { reaction = 0, ranger = false, armorAc =
 }
 
 /**
+ * Two-weapon penalties { main, off } for a character: the Skills & Powers two-weapon style's, the Ambidexterity
+ * trait's ("suffering no penalty for the first hand, and only a –2 penalty for off-hand use", Traits & Disadvantages
+ * Descriptions (POSP); text checked by tools/build-trait-data.py), the better of the two per hand; null: the PHB's.
+ */
+export const AMBIDEXTERITY = { main: 0, off: -2 };
+export function twoWeaponStyle(sys, spStyle = null) {
+  const ambi = !!sys?.traits?.ids?.includes?.("ambidexterity");
+  if (!ambi) return spStyle;
+  if (!spStyle) return { ...AMBIDEXTERITY };
+  return { main: Math.max(spStyle.main, AMBIDEXTERITY.main), off: Math.max(spStyle.off, AMBIDEXTERITY.off) };
+}
+
+/**
  * Whether `off` may be the second weapon beside `main` ({ proficiency, size, weight }): smaller in size and weight;
  * a dagger is always allowed. Unknown weight is not compared. `equalSize`: also a weapon of the same size.
  */

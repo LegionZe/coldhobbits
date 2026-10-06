@@ -1,0 +1,25 @@
+<section class="ad2e-item-sheet">
+  <header class="ad2e-item-header">
+    <img src="{{item.img}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}} alt="" width="48" height="48">
+    <input class="ad2e-name" type="text" name="name" value="{{item.name}}">
+    {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
+  </header>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>
+    <label>{{localize "AD2E.Trait.Kind"}} <select name="system.kind">{{#each kindOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    {{#if isTrait}}
+    <label>{{localize "AD2E.Trait.Cost"}} <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="1"></label>
+    {{else}}
+    <label>{{localize "AD2E.Trait.Moderate"}} <input type="number" name="system.points.moderate" value="{{system.points.moderate}}" min="0" step="1"></label>
+    <label>{{localize "AD2E.Trait.Severe"}} <input type="number" name="system.points.severe" value="{{system.points.severe}}" min="0" step="1" placeholder="—"></label>
+    {{#if system.points.severe}}<label>{{localize "AD2E.Trait.Severity"}} <select name="system.severity">{{#each severityOptions as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    {{/if}}
+    <label>{{localize "AD2E.Class.Source"}} <input type="text" name="system.source" value="{{system.source}}"></label>
+    <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
+  </div>
+  {{#if raceText}}<p class="ad2e-note">{{raceText}}</p>{{/if}}
+  {{#if modifiers.length}}<p class="ad2e-note">{{localize "AD2E.Trait.Effects"}}</p><ul class="ad2e-kit-mods">{{#each modifiers as |m|}}<li>{{m}}</li>{{/each}}</ul>{{/if}}
+  <p class="ad2e-note">{{localize "AD2E.Trait.SheetHint"}}</p>
+  <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
+    <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
+</section>

@@ -1,0 +1,29 @@
+{
+  "_id": "tAeWLCLa54Py68Sy",
+  "_key": "!items!tAeWLCLa54Py68Sy",
+  "name": "Unlucky",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "unlucky",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 8,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Unlucky",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 2400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

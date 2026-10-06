@@ -24,4 +24,5 @@ python3 tools/build-shair-tables.py      # sha'ir gen spell fetching (Requesting
 python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17, 32); example spells (node parser)
 python3 tools/build-monster-data.py      # Table 39 creature THAC0; prototype monster, mount, hireling actors
 python3 tools/build-hireling-data.py      # Hirelings & Mounts: DMG Tables 64/65 hirelings, MM horses/camels/elephant
+python3 tools/build-trait-data.py         # Traits & Disadvantages (POSP Tables 46, 47)
 rm -rf tools/__pycache__

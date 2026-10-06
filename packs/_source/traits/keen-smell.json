@@ -1,0 +1,52 @@
+{
+  "_id": "OA5Ir3y7wg0IgCil",
+  "_key": "!items!OA5Ir3y7wg0IgCil",
+  "name": "Keen Smell",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "keen-smell",
+    "kind": "trait",
+    "cost": 6,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [
+      {
+        "target": "surprise",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "smelling the other party",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "proficiency",
+        "key": "hunting",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Keen_Olfactory_Sense",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 1800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

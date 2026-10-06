@@ -214,6 +214,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     this.hpState = hpState(this.hp, { character: true });
     this.armor = this.#computeArmor(dex.ac);
+    this.traits = this.#computeTraits();
     this.kitMods = this.#computeKitModifiers();
     const kitAc = this.kitMods.total("ac") + (this.ac.misc ?? 0);
     for (const k of ["front", "missile", "rear"]) this.armor[k] -= kitAc;
@@ -330,7 +331,24 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   /** Modifiers of the kit, when the kit fits the class (an empty list otherwise). */
   #kitModifierList() {
-    return this.classInfo?.kitFits ? (this.classInfo.kitItem.system.modifiers ?? []) : [];
+    const kit = this.classInfo?.kitFits ? (this.classInfo.kitItem.system.modifiers ?? []) : [];
+    // Skills & Powers traits and disadvantages (module/data/item-trait.mjs): their effects in the same format.
+    const traits = (this.parent?.items?.filter?.(i => i.type === "trait") ?? [])
+      .flatMap(i => (i.system.modifiers ?? []).map(m => ({ ...m, origin: i.name })));
+    return [...kit, ...traits];
+  }
+
+  /**
+   * Traits and disadvantages (Player's Option: Skills & Powers Tables 46, 47; owner's ruling: no character points,
+   * traits balanced by disadvantages): { ids, rows, cost (traits), points (disadvantages), over }.
+   */
+  #computeTraits() {
+    const raceId = this.raceInfo?.raceItem?.system.identifier ?? "";
+    const items = this.parent?.items?.filter?.(i => i.type === "trait") ?? [];
+    const rows = items.map(i => ({ item: i, kind: i.system.kind, value: i.system.valueFor ? i.system.valueFor(raceId) : 0 }));
+    const cost = rows.filter(r => r.kind === "trait").reduce((n, r) => n + r.value, 0);
+    const points = rows.filter(r => r.kind === "disadvantage").reduce((n, r) => n + r.value, 0);
+    return { ids: items.map(i => i.system.identifier), rows, cost, points, over: cost > points };
   }
 
   /**

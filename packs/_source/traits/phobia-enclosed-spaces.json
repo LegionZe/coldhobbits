@@ -1,0 +1,29 @@
+{
+  "_id": "4awZEPY0M1LGduWN",
+  "_key": "!items!4awZEPY0M1LGduWN",
+  "name": "Phobia: Enclosed Spaces",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "phobia-enclosed-spaces",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 5,
+      "severe": 11
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Phobia:_Enclosed_Spaces",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 1500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

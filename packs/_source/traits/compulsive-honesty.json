@@ -1,0 +1,29 @@
+{
+  "_id": "ymEVR2AuW3te52zk",
+  "_key": "!items!ymEVR2AuW3te52zk",
+  "name": "Compulsive Honesty",
+  "type": "trait",
+  "img": "icons/svg/hazard.svg",
+  "system": {
+    "identifier": "compulsive-honesty",
+    "kind": "disadvantage",
+    "cost": null,
+    "points": {
+      "moderate": 8,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Compulsive_Honesty",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "908pGGlbAa3vtgQG",
+  "sort": 500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

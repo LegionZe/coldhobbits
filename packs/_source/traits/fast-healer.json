@@ -1,0 +1,29 @@
+{
+  "_id": "B20MLFOMwMzES8zn",
+  "_key": "!items!B20MLFOMwMzES8zn",
+  "name": "Fast Healer",
+  "type": "trait",
+  "img": "icons/svg/aura.svg",
+  "system": {
+    "identifier": "fast-healer",
+    "kind": "trait",
+    "cost": 6,
+    "points": {
+      "moderate": null,
+      "severe": null
+    },
+    "severity": "moderate",
+    "race": [],
+    "modifiers": [],
+    "source": "Player's Option: Skills & Powers",
+    "url": "https://adnd2e.fandom.com/wiki/Traits_%26_Disadvantages_Descriptions_(POSP)#Fast_Healer",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": "kDgPGJo51J4B4vIU",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
