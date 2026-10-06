@@ -188,7 +188,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `foundry.applications.apps.FilePicker.implementation.upload("data", worlds/<world>/ad2e-monsters, file, {}, { notify: false })`
   (`browse` lists the folder once, `createDirectory` when missing; file name `cc.localImageName`); on failure the site URL is used.
   `updateExistingMonsters` (game.ad2e.updateMonsters, importer button): world actors + unlocked world Actor packs flagged
-  `completeCompendium`, one page fetch per key, `monsterUpdate` (shared with re-import; keeps hp, GM pictures, attack elements).
+  `completeCompendium`, one page fetch per key, `monsterUpdate` (shared with re-import; keeps hp, GM pictures, attack elements),
+  `updatePlacedTokens` (scene tokens of updated world actors with a replaceable picture). GIFs fail as canvas textures on
+  core 14.368 ("Invalid Asset" from `foundry.canvas.loadTexture`, owner's diagnostic; PNG of the same picture loads):
+  `toCanvasImage` stores GIFs as WebP (PNG fallback) via createImageBitmap + OffscreenCanvas#convertToBlob.
 - Spells: `module/importers/adnd2e-wiki.mjs` (shared infobox parser; MediaWiki API with `origin=*`) used by
   `module/apps/spell-importer.mjs` and by `tools/build-spell-data.py` (via `tools/spell-items.mjs`), which also GENERATES
   `module/rules/spell-tables.mjs` (Tables 21, 24, 17, 32) and the example spells in `packs/_source/spells`.
