@@ -1,4 +1,4 @@
-import { AD2E, creatureHitDice } from "../config.mjs";
+import { AD2E, creatureHitDice, hitDiceAt, thac0At } from "../config.mjs";
 import { CREATOR_TABLES } from "../rules/creator-tables.mjs";
 import { TREASURE_ROLLS } from "../rules/treasure-tables.mjs";
 import { SP_WEAPONS } from "../rules/sp-weapon-tables.mjs";
@@ -664,5 +664,129 @@ export class MagicItemCreator extends HandlebarsApplicationMixin(ApplicationV2) 
     this.index = null;
     doc.sheet?.render(true);
     return doc;
+  }
+}
+
+/**
+ * Patron creator: an NPC who hires or sponsors the party, as a Monster / NPC actor with role "patron". Game information
+ * (race, class group and level, alignment) gives the numbers: a classed NPC rolls its class group's Hit Dice for the level
+ * (PHB Tables 14/20/23/25), uses its THAC0 (Table 53) and saves as that group at that level; a 0-level NPC has 1d6 hit
+ * points (implementation choice). Personality: DMG Table 70 chosen, or rolled as "1d20 for a major trait, percentile dice
+ * for characteristics" (Personality (DMG)), so the specific trait may come from another group,
+ * and appearance words from the same page. Wealth, what the patron wants and offers, and the reward are free text kept
+ * in the notes.
+ */
+export const PATRON = CREATOR_TABLES.patron;
+
+/** Table 70: the general trait for a d20 and the specific trait for a d100 (or the first of the general trait's five). */
+export function rollTraits(d20, d100 = null) {
+  const general = PATRON.traits.find(t => t.roll === d20) ?? PATRON.traits[0];
+  const specific = d100 === null ? null : PATRON.traits.flatMap(t => t.specific).find(x => x.roll === d100);
+  return { general: general.trait, specific: specific?.trait ?? "" };
+}
+
+/** Hit points formula, THAC0 and save level for an NPC of a class group and level (0 = no class). */
+export function npcNumbers(group, level) {
+  if (!group || !(level > 0)) return { formula: "1d6", thac0: 20, saveLevel: 0, hitDice: "1d6 hp", saveGroup: "warrior" };
+  const hd = hitDiceAt(group, level);
+  const formula = `${hd.dice}d${hd.die}${hd.bonus ? `+${hd.bonus}` : ""}`;
+  return { formula, thac0: thac0At(group, level), saveLevel: level, hitDice: String(level), saveGroup: group };
+}
+
+export class PatronCreator extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-patron-creator",
+    classes: ["ad2e", "creator"],
+    window: { title: "AD2E.Creator.Patron.Title", icon: "fa-solid fa-crown", resizable: true },
+    position: { width: 640, height: 720 },
+    actions: { create: PatronCreator.#onCreate, rollTraits: PatronCreator.#onRollTraits, rollLooks: PatronCreator.#onRollLooks }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/patron-creator.hbs", scrollable: [".ad2e-creator-body"] } };
+
+  state = { name: "", race: "Human", group: "", className: "", level: 0, alignment: "Neutral", ac: 10, move: 12, morale: 10,
+    occupation: "", wealth: "", wants: "", offers: "", reward: "", general: "", specific: "", notes: "", destination: "",
+    looks: Object.fromEntries(Object.keys(PATRON.looks).map(k => [k, ""])) };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const s = this.state;
+    const i18n = k => game.i18n.localize(k);
+    const n = npcNumbers(s.group, s.level);
+    const general = PATRON.traits.find(t => t.trait === s.general);
+    const packs = [...(game.packs ?? [])].filter(pk => pk.documentName === "Actor" && pk.metadata?.packageType === "world" && !pk.locked);
+    const moraleBand = bandFor(MONSTER.morale, s.morale);
+    return {
+      ...context, s, n, moraleBand: moraleBand?.label ?? "",
+      groups: ["", ...Object.keys(AD2E.classGroups)].map(g => ({ key: g, label: g ? i18n(AD2E.classGroups[g]) : i18n("AD2E.Creator.Patron.NoClass"), selected: g === s.group })),
+      generals: [{ key: "", label: "—" }, ...PATRON.traits.map(t => ({ key: t.trait, label: `${t.roll}. ${t.trait}` }))].map(o => ({ ...o, selected: o.key === s.general })),
+      // Any specific trait may go with any general one (the DMG's example: careless and cheerful); the general trait's own
+      // five are listed first.
+      specifics: [{ key: "", label: "—" }, ...[...(general?.specific ?? []), ...PATRON.traits.filter(t => t !== general).flatMap(t => t.specific)]
+        .map(x => ({ key: x.trait, label: `${String(x.roll % 100).padStart(2, "0")}. ${x.trait}` }))].map(o => ({ ...o, selected: o.key === s.specific })),
+      looks: Object.entries(PATRON.looks).map(([k, words]) => ({ key: k, label: i18n(`AD2E.Creator.Patron.Look.${k}`),
+        options: [{ key: "", label: "—" }, ...words.map(w => ({ key: w, label: w }))].map(o => ({ ...o, selected: o.key === s.looks[k] })) })),
+      destinations: [{ key: "", label: i18n("AD2E.Creator.World"), selected: !s.destination },
+        ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))]
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element.querySelectorAll("[data-field]")) input.addEventListener("change", ev => {
+      const t = ev.currentTarget;
+      const f = t.dataset.field;
+      const value = t.type === "number" ? (t.value === "" ? 0 : Number(t.value)) : t.value;
+      if (f === "look") this.state.looks[t.dataset.key] = value;
+      else this.state[f] = value;
+      this.render();
+    });
+  }
+
+  /** Table 70 rolled: "1d20 for a major trait, percentile dice for characteristics" (Personality (DMG)). */
+  static async #onRollTraits() {
+    const d20 = (await new Roll("1d20").evaluate()).total;
+    const d100 = (await new Roll("1d100").evaluate()).total;
+    Object.assign(this.state, rollTraits(d20, d100));
+    this.render();
+  }
+
+  static async #onRollLooks() {
+    for (const [k, words] of Object.entries(PATRON.looks)) {
+      const r = (await new Roll(`1d${words.length}`).evaluate()).total;
+      this.state.looks[k] = words[r - 1];
+    }
+    this.render();
+  }
+
+  /** Actor data (pure; hit points given). */
+  static actorData(s, hp) {
+    const n = npcNumbers(s.group, s.level);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const i18n = k => game.i18n.localize(k);
+    const line = (key, value) => (value ? `<p><strong>${esc(i18n(`AD2E.Creator.Patron.${key}`))}:</strong> ${esc(value)}</p>` : "");
+    const looks = Object.entries(s.looks).filter(([, v]) => v).map(([k, v]) => `${i18n(`AD2E.Creator.Patron.Look.${k}`).toLowerCase()} ${v}`).join(", ");
+    const game_ = [s.race, s.group ? `${s.className || i18n(AD2E.classGroups[s.group])} ${s.level}` : i18n("AD2E.Creator.Patron.NoClass"), s.alignment].filter(Boolean).join(", ");
+    const notes = line("GameInfo", game_) + line("Occupation", s.occupation) + line("Wealth", s.wealth)
+      + line("Personality", [s.general, s.specific].filter(Boolean).join(": ")) + line("Appearance", looks)
+      + line("Wants", s.wants) + line("Offers", s.offers) + line("Reward", s.reward) + (s.notes ? `<p>${esc(s.notes)}</p>` : "");
+    const moraleBand = bandFor(MONSTER.morale, s.morale);
+    return { name: s.name || i18n("AD2E.Creator.Patron.Unnamed"), type: "monster", system: {
+      role: "patron", size: "M", hitDice: n.hitDice, hp: { value: hp, max: hp }, ac: { base: s.ac, text: String(s.ac) },
+      movement: { base: s.move, text: String(s.move) }, alignment: s.alignment, intelligence: "", numberAppearing: "1",
+      thac0: { override: n.thac0 }, saveGroup: n.saveGroup, saveLevel: n.saveLevel,
+      morale: { value: s.morale, text: moraleBand ? `${moraleBand.label} (${s.morale})` : String(s.morale) },
+      attacks: [{ name: i18n("AD2E.Creator.Patron.Weapon"), damage: "1d6", bonus: 0, element: "" }], xp: 0, notes } };
+  }
+
+  static async #onCreate() {
+    const s = this.state;
+    if (!s.name) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.NeedName"));
+    const roll = await new Roll(npcNumbers(s.group, s.level).formula).evaluate();
+    const actor = await Actor.implementation.create(PatronCreator.actorData(s, Math.max(roll.total, 1)), s.destination ? { pack: s.destination } : {});
+    if (!actor) return null;
+    ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: actor.name }));
+    actor.sheet?.render(true);
+    return actor;
   }
 }

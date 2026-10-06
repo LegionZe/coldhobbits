@@ -1,0 +1,42 @@
+<section class="ad2e-creator">
+  <div class="ad2e-creator-body">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Patron.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Patron.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.race"}}</label><input type="text" data-field="race" value="{{s.race}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.ClassGroup"}}</label><select data-field="group">{{#each groups as |g|}}<option value="{{g.key}}" {{#if g.selected}}selected{{/if}}>{{g.label}}</option>{{/each}}</select></div>
+    {{#if s.group}}
+    <div class="form-group"><label>{{localize "AD2E.Character.className"}}</label><input type="text" data-field="className" value="{{s.className}}" placeholder="{{localize 'AD2E.Creator.Patron.ClassHint'}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.level"}}</label><input type="number" data-field="level" value="{{s.level}}" min="0" max="30" step="1"></div>
+    {{/if}}
+    <div class="form-group"><label>{{localize "AD2E.Character.alignment"}}</label><input type="text" data-field="alignment" value="{{s.alignment}}"></div>
+    <div class="form-group"><label>AC</label><input type="number" data-field="ac" value="{{s.ac}}" min="-10" max="10" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Monster.Morale"}}</label><input type="number" data-field="morale" value="{{s.morale}}" min="2" max="20" step="1"><span class="ad2e-weapon-meta">{{moraleBand}}</span></div>
+    <p>THAC0 {{n.thac0}} · {{localize "AD2E.Creator.Monster.SaveLevel"}} {{n.saveLevel}} · {{localize "AD2E.Creator.Monster.HpRoll"}} {{n.formula}}</p>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Patron.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Occupation"}}</label><input type="text" data-field="occupation" value="{{s.occupation}}" placeholder="{{localize 'AD2E.Creator.Patron.OccupationHint'}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Wealth"}}</label><input type="text" data-field="wealth" value="{{s.wealth}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Wants"}}</label><textarea data-field="wants" rows="2">{{s.wants}}</textarea></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Offers"}}</label><textarea data-field="offers" rows="2">{{s.offers}}</textarea></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Reward"}}</label><input type="text" data-field="reward" value="{{s.reward}}"></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Patron.Step3"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.General"}}</label><select data-field="general">{{#each generals as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Patron.Specific"}}</label><select data-field="specific">{{#each specifics as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <button type="button" data-action="rollTraits"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Creator.Patron.RollTraits"}}</button>
+    {{#each looks as |l|}}
+    <div class="form-group"><label>{{l.label}}</label><select data-field="look" data-key="{{l.key}}">{{#each l.options as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    {{/each}}
+    <button type="button" data-action="rollLooks"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Creator.Patron.RollLooks"}}</button>
+    <div class="form-group"><label>{{localize "AD2E.Item.notes"}}</label><textarea data-field="notes" rows="3">{{s.notes}}</textarea></div>
+  </fieldset>
+  </div>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>
