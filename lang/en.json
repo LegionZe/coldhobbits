@@ -553,6 +553,22 @@
     "SourcePage": "Source page",
     "Cost": "Wage / price"
   },
+  "AD2E.Guide": {
+    "Title": "AD&D 2e player guide",
+    "Open": "AD&D 2e player guide",
+    "MenuHint": "How to use the character sheet: creating a character, proficiencies, equipment and containers, spells, combat, mounts and riding, advancing, henchmen and familiars.",
+    "Section": {
+      "start": "Welcome",
+      "create": "Creating a character",
+      "proficiencies": "Proficiencies",
+      "equipment": "Equipment",
+      "spells": "Spells",
+      "combat": "Combat",
+      "riding": "Mounts & riding",
+      "advancing": "Advancing",
+      "more": "Henchmen & more"
+    }
+  },
   "AD2E.Manual": {
     "Title": "AD&D 2e GM manual",
     "Open": "AD&D 2e GM manual",

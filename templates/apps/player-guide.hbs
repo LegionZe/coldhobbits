@@ -1,0 +1,167 @@
+<section class="ad2e-manual-layout">
+  <nav class="ad2e-manual-nav">
+    {{#each sections as |s|}}
+    <button type="button" data-action="section" data-section="{{s.id}}" class="{{#if s.active}}active{{/if}}">{{s.label}}</button>
+    {{/each}}
+    <p class="ad2e-note">{{localize "AD2E.Manual.Version"}} {{version}}</p>
+  </nav>
+  <div class="ad2e-manual-body">
+
+  {{#if is.start}}
+  <h2>Welcome</h2>
+  <p>This guide explains how to use the AD&amp;D 2nd Edition character sheet in Foundry: creating a character, buying
+  proficiencies, carrying equipment, casting spells, fighting and riding. The rules themselves are in your books; item
+  sheets link to the matching page of the AD&amp;D 2e wiki (the book icon).</p>
+  <h3>The character sheet</h3>
+  <ul>
+    <li><strong>Main</strong>: ability scores, saving throws, hit points (Damage, Heal, Rest, Bind wounds), experience
+    and Level Up.</li>
+    <li><strong>Combat</strong>: hit points, THAC0, movement, the weapons in hand with Attack and Damage, armour and
+    Armour Class, and your class abilities.</li>
+    <li><strong>Equipment</strong>: everything you own: weapons, armour, gear, coins, containers, magical items, and the
+    animals you own or ride.</li>
+    <li><strong>Race &amp; Class</strong>: race, class and kit, with their requirements and level limits.</li>
+    <li><strong>Class Abilities</strong>: thief, bard and ranger skills, backstab, turning undead, paladin powers.</li>
+    <li><strong>Proficiencies</strong>: weapon and nonweapon proficiencies and their checks; traits and disadvantages.</li>
+    <li><strong>Spells</strong>: your spells by level, memorization and casting (only shown if your character has spells).</li>
+    <li><strong>Abilities</strong>: the detailed ability tables, ability checks and tests such as bend bars.</li>
+    <li><strong>Biography</strong>: notes, henchmen and familiar.</li>
+  </ul>
+  <p>Most things are added by dragging them from a compendium (the Compendium sidebar tab) onto the sheet. Every roll
+  opens a dialog with a modifier and a reason for anything special your GM allows.</p>
+  {{/if}}
+
+  {{#if is.create}}
+  <h2>Creating a character</h2>
+  <ol>
+    <li><strong>Create the actor</strong>: Actors sidebar &gt; Create Actor &gt; type Character (or your GM makes one for you).</li>
+    <li><strong>Ability scores</strong>: type the rolled scores on the Main tab, or click the dice next to "Abilities"
+    to roll with the method your GM chooses (Methods II-VI). Warriors with Strength 18 can roll exceptional Strength.</li>
+    <li><strong>Race</strong>: drag a race from "Races (PHB)". Its adjustments are added to your scores; the sheet warns
+    when a score is outside the race's limits.</li>
+    <li><strong>Class</strong>: drag a class from "Classes (PHB)". The Race &amp; Class tab shows whether your scores meet
+    its minimums, the alignments allowed, your prime requisite bonus and your race's level limit.</li>
+    <li><strong>Kit</strong> (optional, if your GM uses kits): drag a kit from "Class Kits". A kit that does not suit your
+    class or race is refused or marked. Its bonus proficiencies are added for free (you may be asked to choose one);
+    its bonuses and penalties are applied for you, or offered as tick boxes in the roll dialogs when they depend on the
+    situation.</li>
+    <li><strong>Alignment, name and picture</strong>: set them in the header; click the picture to change it.</li>
+    <li><strong>Hit points</strong>: "Roll 1st-Level HP" on the Main tab.</li>
+    <li><strong>Proficiencies, equipment and spells</strong>: see the following sections.</li>
+    <li><strong>Body weight</strong> (needed when riding): enter it on the Equipment tab or roll it with "Roll (Table 10)".</li>
+  </ol>
+  <p>Each character has one class and at most one kit; multi-class and dual-class characters are not supported.</p>
+  {{/if}}
+
+  {{#if is.proficiencies}}
+  <h2>Proficiencies</h2>
+  <ul>
+    <li>Drag weapon and nonweapon proficiencies from the "Proficiencies" compendium onto the sheet. The Proficiencies tab
+    shows the slots used and available; proficiencies outside your class's groups cost one slot more, and the count
+    turns red if you spend too many.</li>
+    <li><strong>Nonweapon checks</strong>: click the "≤ number" button to roll a d20 against it. To spend extra slots on a
+    proficiency (+1 each), open it and set "Extra slots".</li>
+    <li><strong>Weapon proficiencies</strong> remove the non-proficiency penalty for that weapon. Fighters may tick
+    "Specialized" on one weapon (it costs extra slots).</li>
+    <li><strong>Traits and disadvantages</strong> (if your GM allows them): drag them from "Traits &amp; Disadvantages".
+    The traits you take must be paid for with the points of your disadvantages; the tab shows the balance.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.equipment}}
+  <h2>Equipment, money and containers</h2>
+  <ul>
+    <li><strong>Buying gear</strong>: drag weapons, armour and equipment from "Weapons (PHB)", "Armour (PHB)" and
+    "Equipment (PHB)" onto the sheet. Change a quantity with the -/+ buttons. Coins are items too: drag the coin from
+    "Equipment (PHB)" and set the amount.</li>
+    <li><strong>Equipping</strong>: tick "Equipped" on a weapon to have it in hand, and on armour or a shield to wear
+    it; your Armour Class and attacks follow. On the Combat tab, "Stow" puts a weapon away and "Drop" drops it
+    ("Pick up" on the Equipment tab).</li>
+    <li><strong>Carried</strong>: untick "Carried" for things you leave behind (at the inn, on the horse); they stop
+    counting toward your encumbrance. The Equipment tab shows your load and movement.</li>
+    <li><strong>Containers</strong>: backpacks, sacks, pouches and chests hold other items. Drag an item's row onto the
+    container in the Containers list, or choose "In container" on the item's sheet; "Take out" removes it. Each
+    container shows its load against its capacity.</li>
+    <li><strong>Ammunition</strong>: arrows, bolts and sling stones are items; shooting asks which ammunition you use and
+    spends one.</li>
+    <li><strong>Magical items</strong>: "Use" spends a charge, a potion or a scroll and posts it to chat. Items you find
+    may be unidentified until your GM identifies them; their bonuses still work.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.spells}}
+  <h2>Spells</h2>
+  <ul>
+    <li><strong>Adding spells</strong>: drag a spell from "Spells (examples)" or from your GM's "Imported Spells"
+    compendium onto the sheet. Wizards and bards are asked to roll to learn it; a spell you fail to learn stays listed
+    with a Learn button for when you may try again.</li>
+    <li><strong>Memorizing</strong>: on the Spells tab, use -/+ to memorize spells in your slots for each spell level.</li>
+    <li><strong>Casting</strong>: "Cast" posts the spell to chat and uses one memorized casting. Spells that deal damage
+    or heal have a Damage button that rolls the dice listed for the spell (you choose the option if there are several).</li>
+    <li><strong>Resting</strong>: "Rest" restores your memorized spells after a night's rest.</li>
+    <li><strong>Components</strong>: if your GM tracks material components, casting uses up the ones the spell consumes
+    from your items (you are warned when one is missing).</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.combat}}
+  <h2>Combat</h2>
+  <ul>
+    <li><strong>Targets</strong>: target the enemy's token first (right-click it &gt; target, or the T key). The attack
+    dialog then knows its Armour Class, and the GM can apply your damage to it from the chat message.</li>
+    <li><strong>Attacking</strong>: on the Combat tab, click a weapon's Attack button. The dialog offers range, two
+    weapons, mounted combat and the situational modifiers; with automatic damage on, a hit rolls the damage too,
+    otherwise click Damage.</li>
+    <li><strong>Unarmed</strong>: Punch, Wrestle and Overbear are on the Equipment tab.</li>
+    <li><strong>Initiative</strong>: when the GM starts combat, roll initiative from the combat tracker; you may be asked
+    what you are doing this round (weapon, spell, item).</li>
+    <li><strong>Saving throws and checks</strong>: saving throws on the Main tab; ability checks and tests on the
+    Abilities tab; jumping from the jump distances at the bottom of the sheet; thief skills and turning undead on the Class Abilities tab.</li>
+    <li><strong>Surprise</strong>: the Surprise button on the Main or Combat tab, when your GM asks for it.</li>
+    <li><strong>Hit points</strong>: Damage and Heal on the Main tab; "Bind wounds" after a fight; "Rest" for natural
+    healing over days.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.riding}}
+  <h2>Mounts, pack animals and riding</h2>
+  <ol>
+    <li>Get the animal as an actor you own (your GM can give you one from "Hirelings &amp; Mounts").</li>
+    <li>Drag the animal's actor from the Actors sidebar onto your character sheet. It appears on the Equipment tab with
+    its load and movement.</li>
+    <li>Tick <strong>Riding</strong> next to the animal you ride (one at a time). Its load now includes you: your body
+    weight plus everything you carry, so set your body weight first.</li>
+    <li>Gear you put on the animal (saddle bags, packs) goes on the animal's own sheet, in its Inventory.</li>
+    <li>On the map, put your token next to your mount's token: when either moves, the other moves with it (if your GM
+    has this setting on).</li>
+    <li>Fighting from horseback: the attack dialog offers the mounted options (untrained mount, attacking a smaller
+    creature, shooting from a moving mount).</li>
+    <li>Pushing a mount beyond its normal pace is the "Push" button on the mount's sheet.</li>
+  </ol>
+  {{/if}}
+
+  {{#if is.advancing}}
+  <h2>Experience and advancing</h2>
+  <ul>
+    <li>Your GM awards experience; they are in the header (the + adds an award); hover over the field to see the amount needed for the next level.</li>
+    <li>When you have enough, click <strong>Level Up</strong> on the Main tab: it rolls the new hit points. Saving
+    throws, THAC0, proficiency slots, spell slots and class abilities follow the new level.</li>
+    <li>Thieves and bards spend their new skill points on the Class Abilities tab.</li>
+    <li>New proficiency slots can be filled from the "Proficiencies" compendium.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.more}}
+  <h2>Henchmen, familiars and more</h2>
+  <ul>
+    <li><strong>Henchmen</strong>: drag a character or NPC actor onto your sheet; it is listed on the Biography tab with
+    its morale and loyalty. (Animals dragged onto the sheet go to the Equipment tab instead.)</li>
+    <li><strong>Familiars</strong> (wizards): "Find Familiar" on the Biography tab; your GM rolls the result.</li>
+    <li><strong>Sha'ir</strong> (Al-Qadim): your gen is summoned from the sheet and fetches your spells.</li>
+    <li><strong>Notes</strong>: write anything else on the Biography tab.</li>
+    <li>Ask your GM for the "AD&amp;D 2e GM manual", which lists the world's settings (death rule, initiative method,
+    encumbrance and optional rules).</li>
+  </ul>
+  {{/if}}
+  </div>
+</section>
