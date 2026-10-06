@@ -35,7 +35,11 @@
       <div class="ad2e-buttons">
         <button type="button" data-action="rollFirstLevelHp">{{localize "AD2E.HP.RollFirst"}}</button>
         <button type="button" data-action="levelUp">{{localize "AD2E.HP.LevelUp"}}</button>
+        {{#if drain.isGM}}<button type="button" data-action="drainLevels" data-tooltip="{{localize 'AD2E.Drain.Hint'}}"><i class="fa-solid fa-skull"></i> {{localize "AD2E.Drain.Title"}}</button>
+        {{#if drain.any}}<button type="button" data-action="restoreLevel" data-tooltip="{{localize 'AD2E.Drain.RestoreHint'}}"><i class="fa-solid fa-sun"></i> {{localize "AD2E.Drain.Restore"}}</button>{{/if}}{{/if}}
       </div>
+      {{#if drain.zero}}<p class="ad2e-unmet">{{localize "AD2E.Drain.ZeroNote"}}</p>{{/if}}
+      {{#if drain.pending}}<p class="ad2e-note" data-tooltip="{{localize 'AD2E.Drain.PendingHint'}}">{{localize "AD2E.Drain.Pending"}}: {{drain.pending}}</p>{{/if}}
       {{/if}}
       <div class="ad2e-field"><span>{{localize "AD2E.Character.acBase"}}</span><input type="number" name="system.ac.base" value="{{system.ac.base}}"></div>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.acTotal"}}</span><strong data-tooltip="{{localize 'AD2E.Armor.Rear'}} {{system.armor.rear}} · {{localize 'AD2E.Armor.VsMissiles'}} {{system.armor.missile}}">{{system.ac.total}}</strong></div>

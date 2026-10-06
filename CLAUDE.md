@@ -172,6 +172,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   (`info.armorLimited`). Actor `levelUp(classId)` (asks when null), `rollFirstLevelHitPoints`, awards split per class.
   Sheet `#askMultiClass` on class drop (creation only); Race & Class tab class rows. Owner's rulings: one kit fitting any
   class (warning for CFH/CTH kits), level limits and prime requisite bonus per class.
+- Energy drain: `module/level-drain.mjs` (pure: `drainTarget` highest level then most XP, `drainedXp` halfway, `pendingDrain`,
+  `restorationInTime`; `minimumXp` from dual-class.mjs). Character `system.drain` { lost [{ key "main" | "multi:<id>" |
+  "prev:<id>", identifier, name, level, hp, at }], zero }, `drainLevels()` keys, derived `drainInfo` { pending, zero, any }
+  (computed after multi, before dual; dual `restricted`/`drained` while pending). Actor GM `drainLevels(n)` / `restoreLevel()`
+  (Main tab buttons), `#drainRegained` prunes on Level Up; 0-level blocks Level Up.
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with

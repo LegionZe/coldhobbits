@@ -10,6 +10,7 @@ import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
 import { gainsHitPoints, penalizedAward, undoDual } from "../dual-class.mjs";
 import { firstLevelHitPoints, levelHitPoints, multiAward, multiEntries } from "../multi-class.mjs";
+import { drainedXp, drainTarget, minimumXp, pendingDrain, restorationInTime } from "../level-drain.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
 
 /** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
@@ -156,6 +157,11 @@ export default class AD2EActor extends Actor {
 
   /** Advance one level and add the hit points gained to current and maximum HP. */
   async levelUp(classId = null) {
+    // A 0-level character (energy drain) "cannot regain levels" without a restoration or wish (module/level-drain.mjs).
+    if (this.type === "character" && this.system.drain?.zero) {
+      ui.notifications.warn(game.i18n.localize("AD2E.Drain.ZeroNoLevel"));
+      return null;
+    }
     if (this.type === "character" && this.system.multi) return this.#multiLevelUp(classId);
     const level = this.system.level + 1;
     const limit = this.system.classInfo.levelLimit;
@@ -169,14 +175,176 @@ export default class AD2EActor extends Actor {
     if (!gainsHitPoints(prev, level)) {
       await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
         content: `<p>${game.i18n.format("AD2E.Dual.NoHitPoints", { level, max: this.system.dual.maxOld })}</p>` });
-      return this.update({ "system.level": level });
+      return this.update({ "system.level": level, ...this.#drainRegained("main", level) });
     }
     const hp = await this.rollHitPointsForLevel(level);
     return this.update({
-      "system.level": level,
+      "system.level": level, ...this.#drainRegained("main", level),
       "system.hp.max": this.system.hp.max + hp,
       "system.hp.value": this.system.hp.value + hp
     });
+  }
+
+  /** Update that drops the drained levels a class has regained (module/level-drain.mjs). */
+  #drainRegained(key, level) {
+    if (this.type !== "character") return {};
+    const lost = this.system.drain?.lost ?? [];
+    if (!lost.length) return {};
+    const levels = { ...this.system.drainLevels(), [key]: level };
+    const pending = pendingDrain(lost, levels);
+    return pending.length === lost.length ? {} : { "system.drain.lost": pending };
+  }
+
+  /** The character's classes for energy drain: key, identifier, name, group, level, experience table and current XP. */
+  #drainClasses() {
+    const sys = this.system;
+    if (sys.multi) return sys.multi.classes.map(c => ({ key: c.primary ? "main" : `multi:${c.identifier}`, identifier: c.identifier,
+      name: c.name, group: c.group, level: c.level, table: AD2E.xpTable[c.xpKey] ?? [], xp: c.xp }));
+    const cls = sys.classInfo.classItem;
+    const list = [{ key: "main", identifier: cls?.system.identifier ?? "", name: cls?.name ?? "", group: sys.classGroup, level: sys.level,
+      table: AD2E.xpTable[sys.classInfo.xpTable] ?? [], xp: sys.xp }];
+    for (const p of sys.dual ? sys.dualClass.previous : []) list.push({ key: `prev:${p.identifier}`, identifier: p.identifier, name: p.name,
+      group: p.group, level: p.level, table: AD2E.xpTable[p.identifier] ?? [], xp: p.xp });
+    return list;
+  }
+
+  /** Hit points of one level of a class: its Hit Dice roll (at least 1 per die) plus Constitution, or its fixed bonus. */
+  async #levelHp(c, level, classes) {
+    const cur = hitDiceAt(c.group, level);
+    const prev = level > 1 ? hitDiceAt(c.group, level - 1) : { dice: 0, bonus: 0 };
+    const dice = Math.max(cur.dice - prev.dice, 0);
+    const fixed = cur.bonus - prev.bonus + (this.system.kitMods?.total("hp") ?? 0);
+    const roll = dice > 0 ? await new Roll(`${dice}d${cur.die}`).evaluate() : null;
+    return { roll, hp: levelHitPoints({ roll: roll?.total ?? 0, dice, fixed, con: this.system.mods.conHp, classes }) };
+  }
+
+  /**
+   * Energy drain (GM; module/level-drain.mjs): asks how many levels; each comes off the highest class (multi- and
+   * dual-class), costs that level's hit points from the maximum, and sets the class's experience halfway between the
+   * new level and the next. Below 1st level the character becomes 0-level; drained again, slain. Wizard spells above
+   * the new highest castable level are no longer understood.
+   */
+  async drainLevels(count = null) {
+    if (this.type !== "character" || !game.user?.isGM) return null;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    let n = count;
+    if (!n) {
+      const input = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `${this.name}: ${i18n("AD2E.Drain.Title")}` },
+        content: `<div class="form-group"><label>${i18n("AD2E.Drain.Levels")}</label><input type="number" name="levels" value="1" min="1" step="1" autofocus></div>`
+          + `<p class="ad2e-note">${i18n("AD2E.Drain.Explain")}</p>`,
+        ok: { label: i18n("AD2E.Drain.Apply"), callback: (event, button) => Math.max(Math.floor(Number(button.form.elements.levels.value) || 0), 0) },
+        rejectClose: false
+      });
+      n = input;
+    }
+    if (!n) return null;
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    const lines = [];
+    const rolls = [];
+    const lost = [...(this.system.drain?.lost ?? [])].map(e => ({ ...e }));
+    let classes = this.#drainClasses();
+    const dual = this.system.dual;
+    let hpLost = 0;
+    let zero = !!this.system.drain?.zero;
+    let slain = false;
+    for (let i = 0; i < n; i++) {
+      if (zero) { slain = true; break; }
+      const target = drainTarget(classes);
+      if (!target) { zero = true; lines.push(game.i18n.format("AD2E.Drain.Zero", { name: this.name })); continue; }
+      const level = target.level;
+      // A dual-class level that gave no hit points (not above the earlier classes) takes none away (implementation choice).
+      const noHp = target.key === "main" && dual && level <= dual.maxOld;
+      const { roll, hp } = noHp ? { roll: null, hp: 0 } : await this.#levelHp(target, level, this.system.multi ? classes.length : 1);
+      if (roll) rolls.push(roll);
+      hpLost += hp;
+      target.level = level - 1;
+      target.xp = drainedXp(target.table, level - 1);
+      lost.push({ key: target.key, identifier: target.identifier, name: target.name, level, hp, at: game.time?.worldTime ?? 0 });
+      lines.push(game.i18n.format("AD2E.Drain.Lost", { class: target.name, from: level, to: level - 1, hp, xp: target.xp }));
+    }
+    const update = { "system.drain.lost": lost, "system.drain.zero": zero };
+    for (const c of classes) {
+      if (c.key === "main") Object.assign(update, { "system.level": c.level, "system.xp": c.xp });
+    }
+    if (this.system.multi) update["system.multiClass.classes"] = classes.filter(c => c.key !== "main")
+      .map(c => ({ identifier: c.identifier, level: c.level, xp: c.xp }));
+    if (dual) update["system.dualClass.previous"] = this.system.dualClass.previous.map(p => {
+      const c = classes.find(x => x.key === `prev:${p.identifier}`);
+      return { ...p, prime: [...(p.prime ?? [])], level: c?.level ?? p.level, xp: c?.xp ?? p.xp ?? null };
+    });
+    const max = Math.max(this.system.hp.max - hpLost, 1);
+    Object.assign(update, { "system.hp.max": max, "system.hp.value": Math.min(this.system.hp.value, max) });
+    await this.update(update);
+    // Wizard spells above the highest level the character can now cast are no longer understood (roll again to relearn).
+    const sp = this.system.spells;
+    const wizardLevels = (sp?.levels ?? []).filter(l => (l.kind ?? sp.kind) === "wizard" && l.base > 0).map(l => l.level);
+    const hasWizard = sp?.kind === "wizard" || (sp?.extra ?? []).some(e => e.kind === "wizard");
+    if (hasWizard && !sp.shair) {
+      const maxLevel = wizardLevels.length ? Math.max(...wizardLevels) : 0;
+      const forget = this.items.filter(it => it.type === "spell" && it.system.kind === "wizard" && it.system.level > maxLevel && it.system.learned !== false);
+      if (forget.length) {
+        await this.updateEmbeddedDocuments("Item", forget.map(it => ({ _id: it.id, "system.learned": false, "system.learnFailedLevel": null,
+          "system.prepared": 0, "system.cast": 0 })));
+        lines.push(game.i18n.format("AD2E.Drain.Forgotten", { n: forget.length, level: maxLevel }));
+      }
+    }
+    if (slain) lines.push(game.i18n.format("AD2E.Drain.Slain", { name: this.name }));
+    lines.push(game.i18n.format("AD2E.Drain.HpMax", { lost: hpLost, max }));
+    return ChatMessage.create({ speaker, rolls, content: `<p><strong>${esc(game.i18n.format("AD2E.Drain.ChatTitle", { name: this.name, n }))}</strong></p>`
+      + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul><p class="ad2e-note">${esc(i18n("AD2E.Drain.SpellsNote"))}</p>` });
+  }
+
+  /**
+   * Restoration (GM; module/level-drain.mjs): the most recent drained level comes back with "exactly the number of
+   * experience points necessary" and the hit points it cost; a 0-level character resumes its career. The dialog shows
+   * the days since the drain against the caster's level (one day per level).
+   */
+  async restoreLevel() {
+    if (this.type !== "character" || !game.user?.isGM) return null;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const sys = this.system;
+    const pending = sys.drainInfo?.pending ?? [];
+    const entry = sys.drain?.zero ? null : pending.at(-1);
+    if (!entry && !sys.drain?.zero) {
+      ui.notifications.info(i18n("AD2E.Drain.NothingToRestore"));
+      return null;
+    }
+    const now = game.time?.worldTime ?? 0;
+    const input = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n("AD2E.Drain.Restore")}` },
+      content: `<p>${esc(entry ? game.i18n.format("AD2E.Drain.RestoreQuestion", { class: entry.name, level: entry.level, hp: entry.hp,
+        days: restorationInTime(entry.at, now, 0).days }) : i18n("AD2E.Drain.RestoreZero"))}</p>`
+        + `<div class="form-group"><label>${i18n("AD2E.Drain.CasterLevel")}</label><input type="number" name="caster" value="13" min="1" step="1"></div>`,
+      ok: { label: i18n("AD2E.Drain.Restore"), callback: (event, button) => ({ caster: Math.max(Math.floor(Number(button.form.elements.caster.value) || 1), 1) }) },
+      rejectClose: false
+    });
+    if (!input) return null;
+    if (!entry) {
+      await this.update({ "system.drain.zero": false });
+      return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Drain.ZeroRestored", { name: this.name }))}</p>` });
+    }
+    const timing = restorationInTime(entry.at, now, input.caster);
+    if (!timing.ok) {
+      ui.notifications.warn(game.i18n.format("AD2E.Drain.TooLate", { days: timing.days, limit: timing.limit }));
+      return null;
+    }
+    const classes = this.#drainClasses();
+    const c = classes.find(x => x.key === entry.key);
+    if (!c) return null;
+    const level = c.level + 1;
+    const xp = Math.max(minimumXp(c.table, level), 0);
+    const update = { "system.drain.lost": (sys.drain.lost ?? []).filter(e => e !== entry && !(e.key === entry.key && e.level === entry.level && e.at === entry.at)),
+      "system.hp.max": sys.hp.max + entry.hp, "system.hp.value": sys.hp.value + entry.hp };
+    if (entry.key === "main") Object.assign(update, { "system.level": level, "system.xp": xp });
+    else if (entry.key.startsWith("multi:")) update["system.multiClass.classes"] = multiEntries(sys.multi.classes, c.identifier, { level, xp });
+    else update["system.dualClass.previous"] = sys.dualClass.previous.map(p => ({ ...p, prime: [...(p.prime ?? [])],
+      ...(p.identifier === c.identifier ? { level, xp } : {}) }));
+    await this.update(update);
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Drain.Restored",
+      { name: this.name, class: c.name, level, xp, hp: entry.hp }))}</p>` });
   }
 
   /**
@@ -246,6 +414,7 @@ export default class AD2EActor extends Actor {
     }
     const hp = await this.rollHitPointsForLevel(level, { group: c.group, classes: classes.length, className: c.name });
     const update = c.primary ? { "system.level": level } : { "system.multiClass.classes": multiEntries(classes, id, { level }) };
+    Object.assign(update, this.#drainRegained(c.primary ? "main" : `multi:${id}`, level));
     return this.update({ ...update, "system.hp.max": this.system.hp.max + hp, "system.hp.value": this.system.hp.value + hp });
   }
 

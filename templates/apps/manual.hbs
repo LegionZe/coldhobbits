@@ -113,6 +113,14 @@
   the status and has buttons to clear the penalty, and "Undo dual-class" to correct a mistaken switch: the current class
   is removed and the earlier one comes back from the Classes compendium at its last level, with the experience it had at
   the switch (for switches made before 0.0.122, the minimum for that level). Hit points and the kit are not changed.</p>
+  <h3>Energy drain and restoration</h3>
+  <p>The Main tab of a character has two GM buttons. "Energy drain" asks how many levels are lost: each comes off the
+  highest class (multi- and dual-class characters), reduces maximum hit points by that level's roll, and sets that
+  class's experience halfway to the next level; wizard spells the character can no longer cast are marked not
+  understood. A character drained below 1st level becomes 0-level and cannot level up; a further drain is reported as
+  fatal. "Restoration" brings back the most recent drained level (with its hit points and the minimum experience for
+  the level) if cast in time: one day per level of the priest, which the dialog asks for. Drained levels are listed on
+  the Main tab until regained.</p>
   <h3>Multi-class characters</h3>
   <p>With the world setting "Multi-class characters" on, dropping another class on a demihuman asks whether to add it
   (multi-class) or replace the class. Adding is offered at creation only, for the race's combinations, with an allowed
