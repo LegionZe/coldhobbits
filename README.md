@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.1)
+## Status (v1.0.2)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -50,7 +50,7 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   Hit Die creature with +2 Hit Dice of special abilities becomes a 3 + 1 Hit Dice creature", Experience Point Awards
   (DMG) rev 71130; the orc, rust monster and green slime examples are asserted by tools/build-creator-tables.py; the two
   spell rows are not cumulative), or a value typed in. Hit points are rolled; the actor is created in the world or an
-  unlocked world compendium and its sheet opens.
+  unlocked world compendium and its sheet opens. The window is 720 px high with a scrolling body (1.0.2).
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

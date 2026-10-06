@@ -1,4 +1,5 @@
 <section class="ad2e-creator">
+  <div class="ad2e-creator-body">
   <p class="ad2e-note">{{localize "AD2E.Creator.Monster.Hint"}}</p>
   <fieldset>
     <legend>{{localize "AD2E.Creator.Monster.Step1"}}</legend>
@@ -36,6 +37,7 @@
   </fieldset>
   <p><strong>THAC0 {{p.thac0}}</strong> · {{localize "AD2E.Creator.Monster.SaveLevel"}} {{p.saveLevel}} · {{localize "AD2E.Creator.Monster.HpRoll"}} {{p.formula}} ·
     {{localize "AD2E.Creator.Monster.Xp"}} <strong>{{p.xp}}</strong>{{#if p.hdMods}} (+{{p.hdMods}} HD){{/if}}</p>
+  </div>
   <div class="ad2e-importer-controls ad2e-importer-actions">
     <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
     <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
