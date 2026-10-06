@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.5)
+## Status (v1.0.6)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -72,6 +72,14 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   swords +1 400 to +5 3,000, a sword being a weapon of the Skills & Powers "swords" group; other weapons +1 500, +2
   1,000, +3 2,000; none listed beyond) written in the notes, as weapon and armour items have no XP field. Unidentified
   unless ticked.
+- Create patron (GM manual > GM tools, or `game.ad2e.createPatron()`; 1.0.6): a Monster / NPC actor with the new role
+  "Patron". Race, class group and level (a classed NPC rolls its group's Hit Dice for the level, PHB Tables 14/20/23/25,
+  with THAC0 from Table 53 and saves as that group; a 0-level NPC has 1d6 hit points, implementation choice), alignment,
+  AC and morale (Monstrous Manual band). Occupation, wealth, what the patron wants and offers, and the reward are notes.
+  Personality: DMG Table 70 (rev 241274; 20 general and 100 specific traits, asserted) chosen or rolled as "1d20 for a
+  major trait, percentile dice for characteristics" (Personality (DMG) rev 71256, regex-checked), so the specific trait
+  may come from another group as in the DMG's example; appearance words (age, height, build, hair, speech, face) from the
+  same page, chosen or rolled.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

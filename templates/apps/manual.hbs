@@ -69,6 +69,11 @@
       magical arms: a copy of a weapon, armour or ammunition with a bonus (-5 to +5), named and valued from the DMG tables
       (armour +1 500 XP, swords +1 400 XP, other weapons +1 500 XP and so on; the value goes in the notes). Items are
       unidentified unless you tick Identified.</p></div>
+    <div><button type="button" data-action="tool" data-tool="createPatron"><i class="fa-solid fa-crown"></i> Create patron</button>
+      <p>An NPC who hires or sponsors the party, as a Monster / NPC actor with the role "Patron". Choose race, class group
+      and level (THAC0, saving throws and hit points follow; 0-level is possible), alignment, AC and morale; write what the
+      patron wants, offers and pays; choose or roll a personality from DMG Table 70 and appearance words from the DMG's NPC
+      section. Everything but the numbers goes into the actor's notes.</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -283,6 +288,7 @@
       <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>
       <tr><td><code>game.ad2e.createItem()</code></td><td>Item creator (equipment, containers, armour, ammunition).</td></tr>
       <tr><td><code>game.ad2e.createMagicItem()</code></td><td>Magic item creator.</td></tr>
+      <tr><td><code>game.ad2e.createPatron()</code></td><td>Patron creator.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>
