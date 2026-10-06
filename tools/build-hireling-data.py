@@ -239,6 +239,11 @@ COMPANION_RULES = [
     ("mountGroups", MOUNT_PAGE, [{"min": 1, "max": 3, "group": "natural"}, {"min": 4, "max": 4, "group": "flying"},
                                  {"min": 5, "max": 5, "group": "land"}, {"min": 6, "max": 6, "group": "underwater"}],
      r"Roll 1d6\. A result of 1.3 indicates the player should roll on the natural creatures table; 4, flying creatures; 5, giant land creatures, and; 6, underwater creatures"),
+    ("mountRace", MOUNT_PAGE, True, r"the character's race \(halflings would have a difficult time riding elephants, while half-ogres would be too big for a pony\)"),
+    ("companionRace", COMPANION_PAGE, True,
+     r"the character's race \(dwarves and gnomes might attract burrowing or underground creatures, while elves would attract forest creatures\)"),
+    # Owner's ruling: a warning when the creature's good/evil axis opposes the master's (neutral creatures fit everyone).
+    ("companionAlignment", COMPANION_PAGE, "goodEvil", r"companions are attracted only to animal masters of like demeanor"),
     ("cavalier", "Cavalier - POSP (Character Kit)", "cavalier-posp", r"a cavalier must purchase a mount as soon as he can afford one"),
     ("noble", "Noble - POSP (Character Kit)", "noble-posp", r"he must purchase a mount and tack"),
 ]
@@ -253,6 +258,20 @@ MOUNT_HOMELANDS = {
     "mountains": ["Mule", "Giant goat", "Griffon", "Giant eagle", "Hippogriff", "Cave bear"],
     "underground": ["Giant lizard", "Giant weasel", "Huge bat", "Giant beetle", "Cave bear"],
     "coast": ["Sea horse", "Dolphin", "Sea lion", "Hippocampus", "Giant crab", "Giant otter", "Giant ray", "Killer whale"],
+}
+# Fit to the character's race (owner's lists; warnings only). The kits name the factor: Rider "the character's race
+# (halflings would have a difficult time riding elephants, while half-ogres would be too big for a pony)"; Animal Master
+# "dwarves and gnomes might attract burrowing or underground creatures, while elves would attract forest creatures".
+# Table 43 / Table 42 names; races without an entry have no limits.
+MOUNT_RACE_FIT = {
+    "tooBig": {race: ["Elephant", "Cave bear", "Giant lizard", "Huge bat", "Hippocampus", "Killer whale", "Giant ray"]
+               for race in ("gnome", "halfling")},
+    "tooSmall": {race: ["Huge raven", "Giant badger", "Giant frog", "Giant skunk"] for race in ("human", "half-elf", "elf", "dwarf")},
+}
+COMPANION_RACES = {
+    "dwarf": ["Badger", "Woodchuck", "Brush rat", "Ferret", "Snake", "Skunk"],
+    "gnome": ["Badger", "Woodchuck", "Brush rat", "Ferret", "Snake", "Skunk"],
+    "elf": ["Owl", "Fox", "Squirrel", "Raccoon", "Hawk", "Falcon", "Wolf", "Badger", "Raven", "Skunk", "Opossum"],
 }
 MOUNT_GROUPS = {"Natural Creatures": "natural", "Flying Creatures": "flying", "Giant Land Creatures": "land", "Underwater Creatures": "underwater"}
 ROW_COLUMNS = {"#AP": "numberAppearing", "#App.": "numberAppearing", "AC": "ac", "MV": "movement", "Mv": "movement", "HD": "hitDice",
@@ -594,6 +613,14 @@ if __name__ == "__main__":
         assert set(names) <= table43, (land, set(names) - table43)
     homelands = {land: [{"name": n, "actors": [{"identifier": i, "id": pack_id[i]} for i in actor_ids[n]]} for n in names]
                  for land, names in MOUNT_HOMELANDS.items()}
+    ids_of = lambda names: sorted({i for n in names for i in actor_ids[n]})
+    for lists in MOUNT_RACE_FIT.values():
+        for names in lists.values():
+            assert set(names) <= table43, set(names) - table43
+    for names in COMPANION_RACES.values():
+        assert set(names) <= companion_names, set(names) - companion_names
+    race_fit = {"mount": {k: {race: ids_of(n) for race, n in v.items()} for k, v in MOUNT_RACE_FIT.items()},
+                "companion": {race: ids_of(n) for race, n in COMPANION_RACES.items()}}
     for r in companions + [r for g in mount_groups.values() for r in g]:
         r["actors"] = [{"identifier": i, "id": pack_id[i]} for i in actor_ids[r["name"]]]
     open("module/rules/companion-tables.mjs", "w").write("\n".join([
@@ -603,8 +630,9 @@ if __name__ == "__main__":
         f" * Rider (POSP) Table 43 and rules: {classdata.url(MOUNT_PAGE)} (revision {revs[MOUNT_PAGE]}).",
         " * Mount requirement: Cavalier (POSP), Noble (POSP). companions: d20 rows; mounts.groups: d6 -> group; mounts.<group>: d8",
         " * rows; homelands: owner's subtables of Table 43 entries (equal chance); actors: identifiers in the Hirelings & Mounts compendium.",
+        " * raceFit: owner's lists (actor identifiers): mount { tooBig, tooSmall } and companion affinity by race id.",
         " */",
-        "export const COMPANION_TABLES = " + json.dumps({"companions": companions, "mounts": mount_groups, "homelands": homelands,
+        "export const COMPANION_TABLES = " + json.dumps({"companions": companions, "mounts": mount_groups, "homelands": homelands, "raceFit": race_fit,
                                                           "rules": comp_rules}, ensure_ascii=False) + ";", ""]))
 
     open("module/rules/familiar-tables.mjs", "w").write("\n".join([

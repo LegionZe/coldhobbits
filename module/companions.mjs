@@ -14,6 +14,10 @@ import { familiarDead } from "./familiars.mjs";
  *    [Owner's rulings: a failed save sets `system.bond.feebleUntil` (world time) and the status FEEBLE_STATUS; casting asks
  *    to confirm while it lasts; the active GM ends it when world time passes, or the GM ends it early (sheet button).]
  *  - Cavalier and Noble "must purchase a mount": a warning while the character owns no mount.
+ *  - Fit to the character (`fitIssues`, warnings only; owner's lists in `COMPANIONS.raceFit`): the rider's race (mount too
+ *    big for gnomes/halflings, too small for medium races), the Animal Master's race affinity (dwarf/gnome burrowing or
+ *    underground, elf forest; other races any) and alignment ("attracted only to animal masters of like demeanor":
+ *    owner's ruling, only an opposed good/evil axis counts, neutral creatures fit everyone).
  * Character data: `system.bond` { companion, mount (actor UUIDs, also in `system.animals.actors`), barred (species:
  * actor identifiers), rapportLost, feebleUntil }. Owner's rulings: generated stat blocks, bond with GM buttons, mount warning.
  */
@@ -86,9 +90,15 @@ export function bondInfo(character) {
     return { uuid, actor, name: actor.name, img: actor.img, ...health(actor) };
   };
   const companion = row(bond.companion);
-  if (companion?.actor) companion.oversize = oversizeCompanion(companion.actor);
+  if (companion?.actor) {
+    companion.oversize = oversizeCompanion(companion.actor);
+    companion.fit = fitText(character, companion.actor, "companion");
+  }
   const mount = row(bond.mount);
-  if (mount?.actor) mount.bearing = tokenBearing(character, mount.actor);
+  if (mount?.actor) {
+    mount.bearing = tokenBearing(character, mount.actor);
+    mount.fit = fitText(character, mount.actor, "mount");
+  }
   const ownsMount = (sys.animals?.actors ?? []).some(u => resolve(u)?.system?.role === "mount");
   return { kind, companion, mount, barred: [...(bond.barred ?? [])], rapportLost: !!bond.rapportLost,
     mountNeeded: needsMount(character) && !ownsMount };
@@ -101,6 +111,43 @@ export function bondInfo(character) {
 export function oversizeCompanion(animal) {
   const letter = String(animal?.system?.size ?? "").trim().charAt(0).toUpperCase();
   return ["M", "L", "H", "G"].includes(letter);
+}
+
+/** Good/evil axis: 1 good, -1 evil, 0 neutral or unknown (character code "lg".."ce", or a stat block's alignment text). */
+export function goodEvil(alignment) {
+  const a = String(alignment ?? "").toLowerCase();
+  if (/^[lnc]?g$/.test(a) || /\bgood\b/.test(a)) return 1;
+  if (/^[lnc]?e$/.test(a) || /\bevil\b/.test(a)) return -1;
+  return 0;
+}
+
+/**
+ * Warnings for bonding `animal` as the character's companion or mount ("tooBig", "tooSmall", "affinity", "alignment").
+ * Owner's lists (module/rules/companion-tables.mjs `raceFit`, actor identifiers); a creature not in the generated tables
+ * is checked for alignment only.
+ */
+export function fitIssues(character, animal, kind, fit = COMPANIONS.raceFit) {
+  const race = character?.system?.raceInfo?.raceItem?.system?.identifier ?? "";
+  const id = animal?.system?.identifier ?? "";
+  const issues = [];
+  if (kind === "mount") {
+    if (fit?.mount?.tooBig?.[race]?.includes(id)) issues.push("tooBig");
+    if (fit?.mount?.tooSmall?.[race]?.includes(id)) issues.push("tooSmall");
+  } else if (kind === "companion") {
+    const list = fit?.companion?.[race];
+    const known = Object.values(fit?.companion ?? {}).some(l => l.includes(id)) || (COMPANIONS.companions ?? []).some(r => r.actors.some(a => a.identifier === id));
+    if (list && known && !list.includes(id)) issues.push("affinity");
+    const master = goodEvil(character?.system?.alignment), creature = goodEvil(animal?.system?.alignment);
+    if (master && creature && master !== creature) issues.push("alignment");
+  }
+  return issues;
+}
+
+/** Localized warning lines for `fitIssues`. */
+export function fitText(character, animal, kind) {
+  const race = character?.system?.raceInfo?.raceItem?.name ?? "";
+  return fitIssues(character, animal, kind).map(k => i18n(`AD2E.Bond.Fit.${k}`, { name: animal.name, race,
+    alignment: String(animal.system?.alignment ?? "") }));
 }
 
 /** Whether an animal may become the character's companion or mount, or the reason it may not. */
@@ -184,9 +231,12 @@ export async function rollBondCreature(character, kind, homeland = "any") {
   const links = r.row.actors.map(a => `@UUID[Compendium.${PACK}.Actor.${a.id}]{${esc(r.row.name)}}`).join(" / ");
   const group = r.homeland ? ` (${i18n(`AD2E.Bond.Homeland.${r.homeland}`)}, d${COMPANIONS.homelands[r.homeland].length})`
     : (r.group ? ` (${i18n(`AD2E.Bond.Group.${r.group}`)}, d6 ${r.rolls[0]})` : "");
+  // The race's fit for the rolled creature (owner's lists; the GM decides).
+  const warn = [...new Set(r.row.actors.flatMap(a => fitText(character, { name: r.row.name, system: { identifier: a.identifier } }, kind)))];
   return ChatMessage.create({ speaker: speaker(character), whisper: ChatMessage.getWhisperRecipients?.("GM") ?? [],
     content: `<p><strong>${esc(i18n(kind === "companion" ? "AD2E.Bond.CompanionTable" : "AD2E.Bond.MountTable"))}</strong>${esc(group)}: `
-      + `${r.rolls.at(-1)} — ${links}</p><p class="ad2e-note">${esc(i18n("AD2E.Bond.DragHint"))}</p>` });
+      + `${r.rolls.at(-1)} — ${links}</p>` + warn.map(w => `<p class="ad2e-unmet">${esc(w)}</p>`).join("")
+      + `<p class="ad2e-note">${esc(i18n("AD2E.Bond.DragHint"))}</p>` });
 }
 
 /** Bond an animal (already in the character's animal list) as companion or mount. */
@@ -198,6 +248,7 @@ export async function setBond(character, animal, kind) {
   }
   await character.update({ [`system.bond.${kind}`]: animal.uuid });
   if (kind === "companion" && oversizeCompanion(animal)) ui.notifications.warn(i18n("AD2E.Bond.Oversize", { name: animal.name, size: animal.system.size }));
+  for (const w of fitText(character, animal, kind)) ui.notifications.warn(w);
   return true;
 }
 

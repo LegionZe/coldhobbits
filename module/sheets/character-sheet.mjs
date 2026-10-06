@@ -14,7 +14,7 @@ import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
 import { kitSpecial, meditate, meditationActive, rollSocialRank, weaponMasterDisplay } from "../kit-features.mjs";
 import { sideOf } from "../initiative.mjs";
-import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, endFeeblemind, feeblemindActive, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
+import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, endFeeblemind, feeblemindActive, fitText, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -1312,7 +1312,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize(`AD2E.Bond.Title.${kind}`) },
           content: `<p>${foundry.utils.escapeHTML(game.i18n.format(`AD2E.Bond.Ask.${kind}`, { name: animal.name }))}</p>`
             + (kind === "companion" && oversizeCompanion(animal) ? `<p class="ad2e-unmet">${foundry.utils.escapeHTML(game.i18n.format("AD2E.Bond.Oversize",
-              { name: animal.name, size: animal.system.size }))}</p>` : ""), rejectClose: false });
+              { name: animal.name, size: animal.system.size }))}</p>` : "")
+            + fitText(this.actor, animal, kind).map(w => `<p class="ad2e-unmet">${foundry.utils.escapeHTML(w)}</p>`).join(""), rejectClose: false });
         if (ok) await setBond(this.actor, animal, kind);
       }
       return animal;
