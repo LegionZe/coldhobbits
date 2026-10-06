@@ -139,10 +139,18 @@
   <p>The Main tab of a character has two GM buttons. "Energy drain" asks how many levels are lost: each comes off the
   highest class (multi- and dual-class characters), reduces maximum hit points by that level's roll, and sets that
   class's experience halfway to the next level; wizard spells the character can no longer cast are marked not
-  understood. A character drained below 1st level becomes 0-level and cannot level up; a further drain is reported as
-  fatal. "Restoration" brings back the most recent drained level (with its hit points and the minimum experience for
-  the level) if cast in time: one day per level of the priest, which the dialog asks for. Drained levels are listed on
-  the Main tab until regained.</p>
+  understood. If memorized spells exceed the new slots, a dialog asks which memorizations are forgotten (uncast ones
+  are proposed). A character drained below 1st level becomes 0-level and cannot level up; a further drain kills the
+  character, and you are whispered how many days (2d4) until the character rises as an undead of its slayer's type.
+  "Restoration" brings back the most recent drained level (with its hit points and the minimum experience for the
+  level) if cast in time: one day per level of the priest, which the dialog asks for; choose the casting priest there
+  and both recorded ages (Biography tab) go up by two years. Drained levels are listed on the Main tab until
+  regained.</p>
+  <h3>Lasso</h3>
+  <p>A character attacking with a lasso gets its own dialog: legs (pull/trip), arms (trap), unhorse a rider, or a
+  pull/trip by spurring a mount the lasso is tied to. Target the defender first: its Strength, Dexterity, THAC0 and size
+  are filled in (for monsters from size, Hit Dice and movement) and can be changed. Tick four legs, unaware or
+  stationary as they apply. Chat shows every roll and the result.</p>
   <h3>Multi-class characters</h3>
   <p>With the world setting "Multi-class characters" on, dropping another class on a demihuman asks whether to add it
   (multi-class) or replace the class. Adding is offered at creation only, for the race's combinations, with an allowed

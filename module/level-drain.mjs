@@ -13,6 +13,10 @@
  *  - Restoration raises the level by one, to "exactly the number of experience points necessary", "restoring
  *    additional Hit Dice (or hit points)", if cast "within one day of the recipient's loss of life energy, per
  *    experience level of the priest casting it".
+ *  - "The character must instantly forget any spells that are in excess of those allowed for his new level" [owner's
+ *    ruling: the GM picks the memorizations to forget; uncast ones are proposed first (`excessPlan`)].
+ *  - Drained below 0-level: "he returns as an undead of the same type as his slayer in 2d4 days" (`UNDEAD_RISE`).
+ *  - Restoration: "Casting this spell ages both the caster and the recipient by two years" (`RESTORATION_AGE`).
  *  - Dual-class: until all lost levels are regained, using another class's abilities costs experience (PHB); the
  *    system applies the dual-class restrictions while drained levels are pending (implementation choice).
  */
@@ -20,6 +24,39 @@
 import { minimumXp } from "./dual-class.mjs";
 
 export { minimumXp };
+
+export const UNDEAD_RISE = "2d4";
+export const RESTORATION_AGE = 2;
+
+/** Memorizations after forgetting `forget` of them: uncast ones go first. */
+export function forgetMemorized(prepared, cast, forget) {
+  const f = Math.min(Math.max(forget, 0), prepared);
+  const uncast = Math.max(prepared - cast, 0);
+  return { prepared: prepared - f, cast: Math.max(cast - Math.max(f - uncast, 0), 0) };
+}
+
+/**
+ * Spell levels with more memorized spells than slots, and a proposal of what to forget (uncast memorizations first,
+ * from the spells with the most of them; then cast ones).
+ * @param {Array<{level: number, kind: string, slots: number, spells: Array<{id: string, name: string, prepared: number, cast: number}>}>} levels
+ */
+export function excessPlan(levels) {
+  return levels.map(l => {
+    const memorized = l.spells.reduce((n, s) => n + s.prepared, 0);
+    let need = Math.max(memorized - l.slots, 0);
+    const spells = l.spells.filter(s => s.prepared > 0).map(s => ({ ...s, forget: 0 }));
+    for (const pass of ["uncast", "cast"]) {
+      for (const s of [...spells].sort((a, b) => (b.prepared - b.cast) - (a.prepared - a.cast))) {
+        if (!need) break;
+        const room = pass === "uncast" ? Math.max(s.prepared - s.cast, 0) - s.forget : s.prepared - s.forget;
+        const take = Math.min(Math.max(room, 0), need);
+        s.forget += take;
+        need -= take;
+      }
+    }
+    return { level: l.level, kind: l.kind, slots: l.slots, memorized, excess: Math.max(memorized - l.slots, 0), spells };
+  }).filter(l => l.excess > 0);
+}
 
 /** Experience after losing a level: halfway between the new level's minimum and the next level's. */
 export function drainedXp(table, newLevel) {
