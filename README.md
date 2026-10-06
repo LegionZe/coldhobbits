@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.119)
+## Status (v0.0.120)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -560,5 +560,15 @@ Node only until confirmed.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
+- Multi-class characters (world setting, off by default; Multi-Class and Dual-Class Characters (PHB), rev 271818):
+  "Only demihumans can be multi-class characters", in the combinations listed per race (dwarf fighter/thief and
+  fighter/cleric; elf fighter/mage, fighter/thief, mage/thief, fighter/mage/thief; gnome combinations with the
+  illusionist; halfling fighter/thief; half-elf combinations with cleric or druid, ranger, mage and thief); "specialist
+  wizards cannot be multi-class (gnome illusionists are the single exception)". Experience "is divided equally between
+  each class"; the character "always uses the most favorable combat value and the best saving throw"; hit points are the
+  average of the classes' Hit Dice rolls (Constitution bonus divided between the classes); proficiency slots at the
+  largest starting number and the fastest rate; class restrictions such as priests' weapons, wizards' armour and thief
+  skills in armour still apply. Needs the owner's rulings on kits for multi-class characters (the Complete Handbooks
+  restrict most kits to single-class characters) and on racial level limits per class.
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).
