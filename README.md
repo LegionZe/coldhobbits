@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.118)
+## Status (v0.0.119)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -35,8 +35,8 @@ Node only until confirmed.
   and spell save rolls (and shown vs. poison). The race limits which classes can be dropped. Racial level limits come from a table supplied by the
   repository owner; Complete Bard's Handbook kits add kit-specific racial limits and open the bard class to demihumans
   (kit-only classes need a kit that lists the race).
-- Multi-class and dual-class characters are not supported (a deliberate choice): each character has one class and at
-  most one kit. The kit handbooks this system ships restrict kits to single-class characters: "only single-class
+- Multi-class characters are not supported (a deliberate choice): each character has one class at a time and at
+  most one kit (dual-class characters keep their earlier classes, see below). The kit handbooks this system ships restrict kits to single-class characters: "only single-class
   warriors can take one of the Warrior Kits" ("Warrior Kits and Multi-Class Characters (CFH)") and "only single-class
   thieves can take one of the Thief Kits" ("Thief Types and Multi-Class Characters (CTH)"), because a multi-class
   character "doesn't need any more depth". The Complete Priest's Handbook allows one kit for a multi-class priest and
@@ -536,6 +536,24 @@ Node only until confirmed.
   ammunition and magical items, adding, learning, memorizing and casting spells, attacking with targets, saves and
   checks, mounts and riding (Riding, rider weight, tokens moving together, mounted options, pushing), advancing, and
   henchmen and familiars. Named "player guide" (not "Player's Handbook", the rulebook's title); no rulebook text.
+- Dual-class characters (world setting "Dual-class characters", off by default; Multi-Class and Dual-Class Characters
+  (PHB), "Dual-Class Benefits and Restrictions"): dropping a new class on a character with a class asks whether to
+  dual-class (keeping the old class) or replace it. Dual-classing needs a human ("Only humans can be dual-classed
+  characters"), 15 or more in the current class's prime requisites and 17 or more in the new class's, at least 2nd level,
+  an allowed alignment and a class not taken before. The new class starts at 1st level with 0 experience points and keeps
+  the hit points; Level Up gives no hit points until the new level is higher than every earlier class's (the PHB's
+  Tarus example: cleric 3 then fighter, 1d10 at fighter 4). Earlier classes keep their abilities at their last level:
+  thief, bard and ranger skills, backstab, turning undead, paladin powers and spells (a second spell list with that
+  class's slots and casting level), shown as "from earlier classes". While the restrictions apply ("until the character
+  reaches a higher level in his new class than his maximum level in any of his previous classes"), using any of them, or
+  the earlier class's better THAC0 or saving throw (a tick box in the attack and save dialogs), sets the penalty flags
+  and posts a note; afterwards the better THAC0 and saves apply automatically (owner's ruling). Experience awards
+  (individual and group) ask whether they are for an encounter or the adventure: with the flags, an encounter award
+  gives nothing and an adventure award half ("he earns no experience for that encounter and only half experience for
+  the adventure"); awards clear the flags they apply, and the GM can clear them on the Race & Class tab (owner's
+  rulings). Proficiency slots are the larger of the earlier class's at its last level and the new class's
+  (implementation choice; the PHB only keeps the old proficiencies). Level draining of dual-class characters is not
+  automated.
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
   adds it and brings the tab back.
@@ -544,7 +562,3 @@ Node only until confirmed.
 ## Planned
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).
-- Dual-class characters (Multi-Class and Dual-Class Characters (PHB), "Dual-Class Benefits and Restrictions"): humans
-  only; prime requisites 15+ in the first class and 17+ in the new one; at least 2nd level before switching; the new
-  class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
-  using the old class's abilities costs experience until the new class's level exceeds the old one.

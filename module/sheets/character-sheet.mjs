@@ -10,6 +10,7 @@ import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, 
 import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
+import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -182,6 +183,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       deleteItem: CharacterSheet.onDeleteItem,
       toggleSeverity: CharacterSheet.onToggleSeverity,
       rollProficiency: CharacterSheet.onRollProficiency,
+      clearDualPenalty: CharacterSheet.#onClearDualPenalty,
       rollAttack: CharacterSheet.onRollAttack,
       rollWeaponAttack: CharacterSheet.onRollWeaponAttack,
       rollWeaponDamage: CharacterSheet.onRollWeaponDamage,
@@ -388,6 +390,16 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       levelLimit: info.levelLimit,
       needsRaceKit: info.needsRaceKit,
       kitRaceLimits: formatRaceLimits(info.kitItem?.system.raceLimits),
+      // Dual-class (module/dual-class.mjs): earlier classes, restriction status, penalty flags (GM clears them).
+      dual: sys.dual ? {
+        previous: sys.dual.previous.map(p => game.i18n.format("AD2E.Dual.PreviousRow", { name: p.name, level: p.level })).join(", "),
+        restricted: sys.dual.restricted,
+        status: game.i18n.format(sys.dual.restricted ? "AD2E.Dual.Restricted" : "AD2E.Dual.Unrestricted", { level: sys.dual.maxOld + 1 }),
+        oldThac0: sys.dual.oldThac0, oldSaves: AD2E.saves.map(k => `${game.i18n.localize(`AD2E.Save.${k}`)} ${sys.dual.oldSaves[k] ?? "—"}`).join(", "),
+        encounter: sys.dual.penalty.encounter, adventure: sys.dual.penalty.adventure,
+        penaltyText: sys.dual.penalty.encounter || sys.dual.penalty.adventure ? game.i18n.localize("AD2E.Dual.PenaltyPending") : "",
+        isGM: !!game.user?.isGM
+      } : null,
       kitRacesBarred: (info.kitItem?.system.racesBarred ?? []).join(", "),
       kitBonusProfs: formatKitProficiencies(info.kitItem?.system.bonusProficiencies),
       kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
@@ -473,7 +485,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const i18n = k => game.i18n.localize(k);
     const fmt = (k, d) => game.i18n.format(k, d);
     const sgn = v => (v ? signed(v) : "—");
-    const def = AD2E.skillClasses[info.classId] ?? null;
+    // Dual-class: skills of an earlier class (module/dual-class.mjs) use that class's tables and titles.
+    const skillId = info.skillClassId ?? info.classId;
+    const def = AD2E.skillClasses[skillId] ?? null;
+    const oldFrom = [...new Set(Object.values(info.old ?? {}))];
+    const dualNote = oldFrom.length && sys.dual ? fmt(sys.dual.restricted ? "AD2E.Dual.OldAbilitiesRestricted" : "AD2E.Dual.OldAbilitiesFree",
+      { classes: oldFrom.join(", "), level: sys.dual.maxOld + 1 }) : "";
     const features = (AD2E.classFeatures[info.classId] ?? []).map(([key, level, ns]) => ({
       name: i18n(`AD2E.Feature.${ns ?? info.classId}.${key}.name`), text: i18n(`AD2E.Feature.${ns ?? info.classId}.${key}.text`),
       level: fmt("AD2E.Ability2.Level", { n: level }), gained: sys.level >= level
@@ -492,7 +509,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return {
       classItem: sys.classInfo.classItem,
       hasSkills: info.skills.length > 0,
-      skillTitle: i18n({ thief: "AD2E.Skill.Skills", bard: "AD2E.Skill.BardAbilities", ranger: "AD2E.Skill.RangerSkills" }[info.classId] ?? "AD2E.Skill.Skills"),
+      skillTitle: i18n({ thief: "AD2E.Skill.Skills", bard: "AD2E.Skill.BardAbilities", ranger: "AD2E.Skill.RangerSkills" }[skillId] ?? "AD2E.Skill.Skills"),
+      dualNote, dualRestricted: !!sys.dual?.restricted && oldFrom.length > 0,
       showPoints: !!def?.points,
       showArmor: !!def?.armor,
       skills: info.skills.map(sk => ({ ...sk, label: i18n(`AD2E.Skill.${sk.key}`), raceText: sgn(sk.race), dexText: sgn(sk.dex),
@@ -500,8 +518,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       budget: info.budget ? fmt("AD2E.Skill.Budget", info.budget) : "",
       budgetOver: !!info.budget?.over,
       perSkillMax: info.perSkillMax !== null ? fmt("AD2E.Skill.PerSkillMax", { n: info.perSkillMax }) : "",
-      cap: info.classId === "thief",
-      ranger: info.classId === "ranger",
+      cap: skillId === "thief",
+      ranger: skillId === "ranger",
       trapNote: info.skills.some(sk => sk.key === "rt"),
       armorBlocked: info.armorBlocked,
       backstab: info.backstab ? fmt("AD2E.Ability2.BackstabText", { mult: info.backstab }) : "",
@@ -556,7 +574,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     } : null;
     const levels = sp.levels.map(l => ({
       ...l,
-      label: l.level === 0 ? i18n("AD2E.Spell.Cantrips") : ordinal(l.level),
+      label: (l.level === 0 ? i18n("AD2E.Spell.Cantrips") : ordinal(l.level))
+        + (sp.old ? ` (${l.old ? game.i18n.format("AD2E.Dual.OldSpells", { class: l.oldClass, kind: i18n(`AD2E.Spell.${l.kind}`) })
+          : i18n(`AD2E.Spell.${l.kind}`)})` : ""),
       slotText: !(l.bonus || l.school) ? "" : [l.base ? `${l.base}` : null, l.bonus ? `+${l.bonus} ${i18n("AD2E.Spell.WisdomBonus")}` : null,
         l.school ? `+${l.school} ${i18n("AD2E.Spell.SchoolBonus")}` : null].filter(Boolean).join(" "),
       rows: l.spells.map(i => {
@@ -566,7 +586,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         const unlearned = !shair && s.kind === "wizard" && s.learned === false;
         const lc = unlearned ? learnChance(this.document, i) : null;
         return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared,
-          remaining: Math.max(s.prepared - s.cast, 0), usable: shair || s.kind === sp.kind, unlearned,
+          remaining: Math.max(s.prepared - s.cast, 0), usable: shair || s.kind === (l.kind ?? sp.kind), unlearned,
           learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
             : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
           learnBlocked: !!lc?.blocked, damage: (s.damage ?? []).some(d => d.formula),
@@ -577,7 +597,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
             .filter(v => v && !/ $/.test(v)).join(" · ") };
       }).sort((a, b) => a.name.localeCompare(b.name))
     }));
-    return { kind: sp.kind ? i18n(`AD2E.Spell.${sp.kind}`) : null, castingLevel: sp.castingLevel, levels,
+    // Dual-class: the earlier class's spells (module/dual-class.mjs); casting them while restricted costs experience.
+    const oldCaster = sp.old ? game.i18n.format(sys.dual?.restricted ? "AD2E.Dual.OldCasterRestricted" : "AD2E.Dual.OldCaster",
+      { class: sp.old.className, kind: i18n(`AD2E.Spell.${sp.old.kind}`), level: sp.old.castingLevel }) : "";
+    return { kind: sp.kind ? i18n(`AD2E.Spell.${sp.kind}`) : (sp.old ? i18n(`AD2E.Spell.${sp.old.kind}`) : null),
+      castingLevel: sp.kind ? sp.castingLevel : sp.old?.castingLevel ?? null, oldCaster, oldRestricted: !!(sp.old && sys.dual?.restricted), levels,
       hasSlots: sp.levels.some(l => l.slots > 0), shair, gen: genPanel };
   }
 
@@ -799,6 +823,39 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   /** An item dropped on a container goes into it (module/sheets/containers-ui.mjs); otherwise _dropItemDefault. */
+  /** Dual-class: the GM clears the encounter penalty flag, or both ("end of adventure"); data-kind "encounter" | "all". */
+  static async #onClearDualPenalty(event, target) {
+    if (!game.user?.isGM) return;
+    const all = target.dataset.kind === "all";
+    await this.actor.update({ "system.dualClass.penalty.encounter": false, ...(all ? { "system.dualClass.penalty.adventure": false } : {}) });
+  }
+
+  /**
+   * Dual-class prompt when a class is dropped on a character that has one (world setting on): "dual" (keep the
+   * current class as an earlier class; only when eligible, module/dual-class.mjs), "replace", or null (cancelled).
+   */
+  async #askDualClass(current, next, raceItem) {
+    const sys = this.actor.system;
+    const scores = Object.fromEntries(AD2E.abilities.map(k => [k, sys.abilities[k].total]));
+    const elig = dualEligibility({ raceId: raceItem?.system.identifier ?? "", level: sys.level, current: current.system, next: next.system,
+      scores, alignment: sys.alignment, previous: sys.dualClass?.previous ?? [] });
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
+    const reasons = elig.reasons.map(r => `<li>${esc(game.i18n.format(`AD2E.Dual.Reason.${r}`, { from: current.name, to: next.name }))}</li>`).join("");
+    const buttons = [];
+    if (elig.ok) buttons.push({ action: "dual", label: game.i18n.format("AD2E.Dual.Become", { from: current.name, to: next.name }), default: true });
+    buttons.push({ action: "replace", label: game.i18n.format("AD2E.Dual.Replace", { from: current.name, to: next.name }) });
+    buttons.push({ action: "cancel", label: i18n("Cancel") });
+    const choice = await foundry.applications.api.DialogV2.wait({
+      window: { title: i18n("AD2E.Dual.Title") },
+      content: `<p>${esc(game.i18n.format("AD2E.Dual.Question", { from: current.name, to: next.name }))}</p>`
+        + (elig.ok ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Dual.Explain", { from: current.name, to: next.name }))}</p>`
+          : `<p class="ad2e-unmet">${esc(i18n("AD2E.Dual.NotEligible"))}</p><ul>${reasons}</ul>`),
+      buttons, rejectClose: false
+    });
+    return choice === "dual" || choice === "replace" ? choice : null;
+  }
+
   async _onDropItem(event, item) {
     const onContainer = await dropOnContainer(this, event, item, () => this._dropItemDefault(event, item));
     return onContainer === undefined ? this._dropItemDefault(event, item) : onContainer;
@@ -897,6 +954,23 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       if (raceItem && !raceAllows(raceItem, item.system.identifier)) {
         ui.notifications.warn(game.i18n.format("AD2E.Race.ClassNotForRace", { class: item.name, race: raceItem.name }));
         return null;
+      }
+      // Dual-class (world setting, module/dual-class.mjs): keep the current class as an earlier class instead of replacing it.
+      if (classItem && dualClassOn() && classItem.system.identifier !== item.system.identifier) {
+        const choice = await this.#askDualClass(classItem, item, raceItem);
+        if (!choice) return null;
+        if (choice === "dual") {
+          const prev = this.actor.system.dualClass?.previous ?? [];
+          await this.actor.update({
+            "system.dualClass.previous": [...prev.map(p => ({ ...p, prime: [...(p.prime ?? [])] })), {
+              identifier: classItem.system.identifier, name: classItem.name, group: classItem.system.group,
+              level: this.actor.system.level, school: classItem.system.school ?? "", prime: [...(classItem.system.prime ?? [])] }],
+            "system.dualClass.penalty": { encounter: false, adventure: false },
+            "system.level": 1, "system.xp": 0
+          });
+          await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), content: `<p>${foundry.utils.escapeHTML(
+            game.i18n.format("AD2E.Dual.Switched", { name: this.actor.name, from: classItem.name, level: this.actor.system.dualClass.previous.at(-1)?.level ?? "", to: item.name }))}</p>` });
+        }
       }
       if (classItem) remove.push(classItem.id);
       if (kitItem && (!kitItem.system.classes.has(item.system.identifier)

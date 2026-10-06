@@ -4,6 +4,7 @@
     {{#if st.kind}}<span>{{localize "AD2E.Spell.Caster"}}: <strong>{{st.kind}}</strong></span>
     <span>{{localize "AD2E.Spell.CastingLevel"}}: <strong>{{st.castingLevel}}</strong></span>
     {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Spell.NoCaster"}}</span>{{/if}}
+    {{#if st.oldCaster}}<span class="ad2e-note {{#if st.oldRestricted}}ad2e-unmet{{/if}}">{{st.oldCaster}}</span>{{/if}}
     {{#if @root.editable}}<button type="button" data-action="restSpells" data-tooltip="{{localize 'AD2E.Spell.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Spell.Rest"}}</button>{{/if}}
   </div>
   {{#if st.gen}}

@@ -10,6 +10,9 @@
   <div class="ad2e-importer-controls">
     <label>{{localize "AD2E.Xp.Other"}} <input type="number" name="other" value="{{other}}" min="0" step="1"></label>
     <label>{{localize "AD2E.Roll.ModifierNote"}} <input type="text" name="reason" value="{{reason}}" placeholder="{{localize 'AD2E.Xp.ReasonHint'}}"></label>
+    {{#if dual}}<label data-tooltip="{{localize 'AD2E.Dual.AwardKindHint'}}">{{localize "AD2E.Dual.AwardKind"}}
+      <select name="kind"><option value="encounter" {{#if kindEncounter}}selected{{/if}}>{{localize "AD2E.Dual.Kind.encounter"}}</option>
+      <option value="adventure" {{#unless kindEncounter}}selected{{/unless}}>{{localize "AD2E.Dual.Kind.adventure"}}</option></select></label>{{/if}}
   </div>
   <table class="ad2e-race-table">
     <thead><tr><th></th><th>{{localize "AD2E.Xp.Share"}}</th><th>{{localize "AD2E.Class.XpBonus"}}</th><th>{{localize "AD2E.Xp.Gain"}}</th><th>{{localize "AD2E.Character.xp"}}</th></tr></thead>
@@ -17,7 +20,7 @@
       {{#each characters as |c|}}
       <tr class="{{#if c.dead}}ad2e-placeholder{{/if}}">
         <th><label class="ad2e-check"><input type="checkbox" data-recipient="{{c.id}}" {{#if c.checked}}checked{{/if}}> {{c.name}}</label></th>
-        <td>{{c.share}}</td><td>{{c.bonus}}</td><td>{{c.gain}}</td><td>{{c.xp}}{{#if c.canLevel}} <strong>{{localize "AD2E.Xp.CanLevel"}}</strong>{{/if}}</td>
+        <td>{{c.share}}</td><td>{{c.bonus}}</td><td>{{c.gain}}{{#if c.penalty}} <span class="ad2e-unmet">({{c.penalty}})</span>{{/if}}</td><td>{{c.xp}}{{#if c.canLevel}} <strong>{{localize "AD2E.Xp.CanLevel"}}</strong>{{/if}}</td>
       </tr>
       {{/each}}
     </tbody>

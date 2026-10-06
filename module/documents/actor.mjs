@@ -8,6 +8,7 @@ import { dieBonus, diceCount, elementFlag, elementOf, PROVINCES } from "../eleme
 import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
+import { gainsHitPoints, penalizedAward } from "../dual-class.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
 
 /** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
@@ -53,6 +54,32 @@ export default class AD2EActor extends Actor {
     return { sum: chosen.reduce((n, m) => n + m.current, 0), text: chosen.map(m => m.condition).join("; ") };
   }
 
+  /** Dual-class (module/dual-class.mjs): tick box offering the better old THAC0 or save while restricted ("" otherwise). */
+  #dualField(value) {
+    if (value === null || value === undefined) return "";
+    const label = game.i18n.format("AD2E.Dual.UseOld", { n: value });
+    return `<div class="form-group"><label>${foundry.utils.escapeHTML?.(label) ?? label}</label><input type="checkbox" name="dualOld"></div>`;
+  }
+
+  /**
+   * Dual-class: using an earlier class's ability (or its better attack or saving throw number) while the restrictions
+   * apply costs the experience of this encounter and half that of the adventure ("If he uses any of his previous
+   * class's abilities during an encounter, he earns no experience for that encounter and only half experience for the
+   * adventure", Multi-Class and Dual-Class Characters (PHB)). Sets both penalty flags and posts a note.
+   * @param {string} what  the ability used (for the chat note)
+   */
+  async markOldClassUse(what) {
+    if (this.type !== "character" || !this.system.dual?.restricted) return false;
+    const pen = this.system.dualClass?.penalty ?? {};
+    if (!pen.encounter || !pen.adventure) {
+      await this.update({ "system.dualClass.penalty.encounter": true, "system.dualClass.penalty.adventure": true });
+    }
+    const text = game.i18n.format("AD2E.Dual.PenaltyNote", { name: this.name, what });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p class="ad2e-note">${foundry.utils.escapeHTML?.(text) ?? text}</p>` });
+    return true;
+  }
+
   /** Dialog with a situational modifier (and reason) and the conditional kit modifiers; null when cancelled. */
   async #promptRoll(title, options, unit = "", extra = "") {
     return DialogV2.prompt({
@@ -62,7 +89,7 @@ export default class AD2EActor extends Actor {
         const kit = AD2EActor.#kitPicked(button.form, options);
         const { mod, note } = readModifier(button.form);
         return { mod, note, kit: kit.sum, kitText: kit.text, genWard: !!button.form.elements.genWard?.checked,
-          masterSave: !!button.form.elements.masterSave?.checked };
+          masterSave: !!button.form.elements.masterSave?.checked, dualOld: !!button.form.elements.dualOld?.checked };
       } },
       rejectClose: false
     });
@@ -111,6 +138,14 @@ export default class AD2EActor extends Actor {
     if (limit && level > limit) {
       ui.notifications.warn(game.i18n.format("AD2E.Race.LevelLimitReached", { limit }));
       return null;
+    }
+    // Dual-class: "the character earns no additional Hit Dice or hit points while advancing in his new class" until his
+    // new level is higher than every earlier class's (Multi-Class and Dual-Class Characters (PHB)).
+    const prev = this.type === "character" && this.system.dual ? this.system.dualClass.previous : [];
+    if (!gainsHitPoints(prev, level)) {
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
+        content: `<p>${game.i18n.format("AD2E.Dual.NoHitPoints", { level, max: this.system.dual.maxOld })}</p>` });
+      return this.update({ "system.level": level });
     }
     const hp = await this.rollHitPointsForLevel(level);
     return this.update({
@@ -240,14 +275,18 @@ export default class AD2EActor extends Actor {
     const masterSave = master?.system?.saves?.[key] ?? null;
     const masterField = masterSave ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Familiar.MasterSave",
       { name: master.name, n: masterSave.value })) ?? ""}</label><input type="checkbox" name="masterSave"${familiarContact(this, master) ? " checked" : ""}></div>` : "";
-    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "", genField + masterField);
+    const oldSave = this.type === "character" ? (this.system.dual?.saveOptions?.[key] ?? null) : null;
+    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "",
+      genField + masterField + this.#dualField(oldSave));
     if (!input) return;
     const genBonus = input.genWard && province ? SHAIR.genWard.save : 0;
     if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
     const useMaster = !!(input.masterSave && masterSave);
     if (useMaster) input.kitText = [input.kitText, game.i18n.format("AD2E.Familiar.MasterSaveShort", { name: master.name })].filter(Boolean).join("; ");
     const mod = input.mod + input.kit + genBonus;
-    const target = useMaster ? masterSave.value : this.system.saves[key].value;
+    const useOld = !useMaster && !!(input.dualOld && oldSave !== null);
+    if (useOld) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatSave", { save: game.i18n.localize(`AD2E.Save.${key}`) }));
+    const target = useMaster ? masterSave.value : (useOld ? oldSave : this.system.saves[key].value);
     const bonus = useMaster ? (masterSave.bonus ?? 0) : this.system.saves[key].bonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
@@ -384,7 +423,7 @@ export default class AD2EActor extends Actor {
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
-        + styleField
+        + styleField + this.#dualField(this.system.dual?.thac0Option)
         + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
         + modifierFields()
         + this.#kitFields(kitOptions),
@@ -399,7 +438,8 @@ export default class AD2EActor extends Actor {
             twoWeapon: f.twoWeapon?.value || "", mainWeapon: f.mainWeapon?.value ?? null, nonlethal: !!f.nonlethal?.checked,
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
             mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
-            untrainedMount: !!f.untrainedMount?.checked, mountedMelee: use === "melee" ? AD2EActor.#mountedMeleePicked(f) : null };
+            untrainedMount: !!f.untrainedMount?.checked, mountedMelee: use === "melee" ? AD2EActor.#mountedMeleePicked(f) : null,
+            dualOld: !!f.dualOld?.checked };
         }
       },
       rejectClose: false
@@ -407,6 +447,13 @@ export default class AD2EActor extends Actor {
     if (!input) return;
     const ammo = input.ammo ? this.items.get(input.ammo) : null;
     if (ammoList && !ammo) return;
+    // Dual-class: the earlier class's THAC0, or its backstab, while restricted (module/dual-class.mjs).
+    const dualThac0 = input.dualOld ? (this.system.dual?.thac0Option ?? null) : null;
+    input.thac0 = dualThac0 ?? this.system.thac0.value;
+    if (dualThac0 !== null) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatThac0", { n: dualThac0 }));
+    if (input.backstab && this.system.classAbilities?.info?.old?.backstab) {
+      await this.markOldClassUse(game.i18n.localize("AD2E.Ability2.BackstabAttack"));
+    }
     // "Both": this weapon as the main weapon, then the other weapon as the second (one extra attack per round).
     const other = input.twoWeapon && input.mainWeapon ? this.items.get(input.mainWeapon) : null;
     const attacks = [{ item, entry, attack, hand: input.twoWeapon === "both" ? "main" : input.twoWeapon, main: other,
@@ -507,7 +554,7 @@ export default class AD2EActor extends Actor {
     const rangeDouble = rangeBase < 0 && (item.system.weapon?.rules ?? []).includes("rangeDouble");
     if (rangeDouble) notes.push(game.i18n.localize("AD2E.Firearm.RangeDoubled"));
     const rangeMod = (rangeDouble ? rangeBase * 2 : rangeBase) + pbHit;
-    const needed = this.system.thac0.value - input.ac;
+    const needed = (input.thac0 ?? this.system.thac0.value) - input.ac;
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
@@ -540,7 +587,7 @@ export default class AD2EActor extends Actor {
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${item.name}${ammo ? ` (${ammo.name})` : ""} (${i18n(`AD2E.Weapon.${use}`)}${input.range ? `, ${i18n(`AD2E.Weapon.${input.range === "pointBlank" ? "PointBlank" : input.range[0].toUpperCase() + input.range.slice(1)}`)}` : ""}) `
-        + `vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
+        + `vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${input.thac0 ?? this.system.thac0.value}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") + status + spent
         + (a.backstab ? ` [${i18n("AD2E.Ability2.BackstabAttack")}]` : "")
         + (notes.length ? ` [${notes.join("; ")}]` : "")
@@ -805,11 +852,11 @@ export default class AD2EActor extends Actor {
       content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}`
         + `${monster ? ` ${i18n("AD2E.Unarmed.CreatureHint")}` : ""}</p>`
         + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus>`)
-        + extra + AD2EActor.#combatModFields(targets) + modifierFields() + this.#kitFields(kitOptions),
+        + extra + (monster ? "" : this.#dualField(this.system.dual?.thac0Option)) + AD2EActor.#combatModFields(targets) + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form.elements;
         const kit = AD2EActor.#kitPicked(button.form, kitOptions);
-        return { ...readModifier(button.form), kit: kit.sum, kitText: kit.text, ac: Number(f.ac.value) || 0,
+        return { ...readModifier(button.form), kit: kit.sum, kitText: kit.text, ac: Number(f.ac.value) || 0, dualOld: !!f.dualOld?.checked,
           t51: AD2EActor.#combatModPicked(button.form),
           gauntlet: !!f.gauntlet?.checked, pull: !!f.pull?.checked, holdRound: Math.max(Math.floor(Number(f.holdRound?.value) || 0), 0),
           addStr: !!f.addStr?.checked, attacker: f.attacker?.value ?? "M", defender: f.defender?.value ?? "M",
@@ -846,7 +893,9 @@ export default class AD2EActor extends Actor {
     input.t51 ??= { sum: 0, auto: false, text: "" };
     if (input.t51.text) { situation += input.t51.sum; parts.push(input.t51.text); }
     const roll = await new Roll("1d20 + @hit + @situation + @kit + @mod", { hit: hitAdj, situation, kit: input.kit, mod: input.mod }).evaluate();
-    const needed = sys.thac0.value - input.ac;
+    const dualThac0 = !monster && input.dualOld ? (sys.dual?.thac0Option ?? null) : null;
+    if (dualThac0 !== null) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatThac0", { n: dualThac0 }));
+    const needed = (dualThac0 ?? sys.thac0.value) - input.ac;
     const hit = input.t51.auto || roll.total >= needed;
     const rolls = [roll];
     let result = i18n("AD2E.Roll.Miss");
@@ -1191,6 +1240,10 @@ export default class AD2EActor extends Actor {
     // Material components (module/components.mjs; world setting "trackComponents"): missing ones ask to cast anyway.
     const comp = await useComponents(this, spell);
     if (!comp.cast) return;
+    // Dual-class: a spell of the earlier class (module/dual-class.mjs) is cast at that class's level and, while the
+    // restrictions apply, costs experience.
+    const oldCaster = this.type === "character" && this.system.spells?.old?.kind === sys.kind ? this.system.spells.old : null;
+    if (oldCaster) await this.markOldClassUse(spell.name);
     const left = sys.prepared - sys.cast - 1;
     // Sha'ir: the spell the gen brought is used up and the gen is free again (module/shair.mjs).
     const fetched = isShair(this) && this.system.gen?.fetch?.spellId === spell.id;
@@ -1206,7 +1259,7 @@ export default class AD2EActor extends Actor {
       [i18n(sys.kind === "priest" ? "AD2E.Spell.Spheres" : "AD2E.Spell.Schools"), (sys.kind === "priest" ? sys.spheres : sys.schools).join(", ")],
       [i18n("AD2E.Spell.CastingTime"), sys.castingTime], [i18n("AD2E.Spell.Range"), sys.range],
       [i18n("AD2E.Spell.Area"), sys.area], [i18n("AD2E.Spell.Duration"), sys.duration], [i18n("AD2E.Spell.Save"), sys.save],
-      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), this.system.spells?.castingLevel ?? this.system.level]
+      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), oldCaster?.castingLevel ?? this.system.spells?.castingLevel ?? this.system.level]
     ].filter(([, v]) => v !== "" && v !== null && v !== undefined);
     const content = `<div class="ad2e-spell-card"><h3>${esc(spell.name)}${sys.reversible ? ` <em>(${i18n("AD2E.Spell.Reversible")})</em>` : ""}</h3>`
       + `<dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
@@ -1293,7 +1346,8 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(`${name}: ${i18n(skill.belowOne && !info.armorBlocked ? "AD2E.Skill.BelowOne" : "AD2E.Skill.HeavyArmor")}`);
       return;
     }
-    const ranger = info.classId === "ranger";
+    const ranger = (info.skillClassId ?? info.classId) === "ranger";
+    if (info.old?.skills) await this.markOldClassUse(name);
     const kitOptions = this.#kitOptions("skill", key);
     const input = await DialogV2.prompt({
       window: { title: name },
@@ -1328,6 +1382,7 @@ export default class AD2EActor extends Actor {
   async rollTurnUndead() {
     const level = this.system.classAbilities?.info?.turnLevel;
     if (!level) return;
+    if (this.system.classAbilities.info.old?.turnLevel) await this.markOldClassUse(game.i18n.localize("AD2E.Ability2.TurnUndead"));
     const t = AD2E.classTables.turnUndead;
     const col = t.columns.findIndex(([lo, hi]) => level >= lo && level <= hi);
     const i18n = k => game.i18n.localize(k);
@@ -1383,6 +1438,7 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(game.i18n.localize("AD2E.Ability2.LayOnHandsUsed"));
       return;
     }
+    if (this.system.classAbilities.info.old?.layOnHands) await this.markOldClassUse(game.i18n.localize("AD2E.Ability2.LayOnHands"));
     await this.update({ "system.classAbilities.layOnHandsUsed": true });
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
       content: `<p>${game.i18n.format("AD2E.Ability2.LayOnHandsChat", { hp: info.hp })}</p>` });
@@ -1493,19 +1549,32 @@ export default class AD2EActor extends Actor {
     if (this.type !== "character") return;
     const i18n = k => game.i18n.localize(k);
     const bonus = this.system.classInfo?.xpBonus ?? 0;
+    // Dual-class (module/dual-class.mjs): the award is for an encounter or the adventure; the penalty flags apply.
+    const dual = this.system.dual;
+    const pen = this.system.dualClass?.penalty ?? {};
+    const kindField = dual ? `<div class="form-group"><label>${i18n("AD2E.Dual.AwardKind")}</label><select name="kind">`
+      + `<option value="encounter"${game.combat ? " selected" : ""}>${i18n("AD2E.Dual.Kind.encounter")}</option>`
+      + `<option value="adventure"${game.combat ? "" : " selected"}>${i18n("AD2E.Dual.Kind.adventure")}</option></select></div>`
+      + (pen.encounter || pen.adventure ? `<p class="ad2e-note ad2e-unmet">${i18n("AD2E.Dual.PenaltyPending")}</p>` : "") : "";
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${i18n("AD2E.Xp.AddTitle")}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Xp.Amount")}</label><input type="number" name="amount" value="0" min="0" step="1" autofocus></div>`
         + `<div class="form-group"><label>${i18n("AD2E.Roll.ModifierNote")}</label><input type="text" name="reason" placeholder="${i18n("AD2E.Xp.ReasonHint")}"></div>`
+        + kindField
         + (bonus ? `<p class="ad2e-note">${game.i18n.format("AD2E.Xp.BonusNote", { bonus })}</p>` : ""),
       ok: { label: i18n("AD2E.Xp.Award"), callback: (event, button) => ({
-        amount: Math.max(Math.floor(Number(button.form.elements.amount.value) || 0), 0), reason: button.form.elements.reason.value.trim() }) },
+        amount: Math.max(Math.floor(Number(button.form.elements.amount.value) || 0), 0), reason: button.form.elements.reason.value.trim(),
+        kind: button.form.elements.kind?.value ?? "adventure" }) },
       rejectClose: false
     });
     if (!input?.amount) return;
-    const gain = Math.floor(input.amount * (100 + bonus) / 100);
+    const full = Math.floor(input.amount * (100 + bonus) / 100);
+    const penalized = dual ? penalizedAward(full, input.kind, pen) : { gain: full, rule: "", clear: {} };
+    const gain = penalized.gain;
     const xp = (this.system.xp ?? 0) + gain;
-    await this.update({ "system.xp": xp });
+    await this.update({ "system.xp": xp,
+      ...Object.fromEntries(Object.entries(penalized.clear).map(([k, v]) => [`system.dualClass.penalty.${k}`, v])) });
+    if (penalized.rule) input.reason = [input.reason, i18n(`AD2E.Dual.Award.${penalized.rule}`)].filter(Boolean).join("; ");
     const next = this.system.xpNext;
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Xp.Gained",
@@ -1694,21 +1763,24 @@ export default class AD2EActor extends Actor {
     const targets = AD2EActor.#targetsNow();
     const input = await promptModifier(game.i18n.localize("AD2E.Roll.Attack"), {
       extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, missile)}" autofocus></div>`
-        + AD2EActor.#combatModFields(targets),
-      read: form => ({ ac: Number(form.elements.ac.value) || 0, t51: AD2EActor.#combatModPicked(form) })
+        + this.#dualField(this.system.dual?.thac0Option) + AD2EActor.#combatModFields(targets),
+      read: form => ({ ac: Number(form.elements.ac.value) || 0, t51: AD2EActor.#combatModPicked(form), dualOld: !!form.elements.dualOld?.checked })
     });
     if (!input) return;
     const targetAc = Number(input.ac ?? 10);
     const sys = this.system;
     const adj = missile ? sys.mods.missileAttack : sys.mods.meleeAttack; // includes the encumbrance penalty
-    const needed = sys.thac0.value - targetAc;
+    const dualThac0 = input.dualOld ? (sys.dual?.thac0Option ?? null) : null;
+    if (dualThac0 !== null) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatThac0", { n: dualThac0 }));
+    const thac0 = dualThac0 ?? sys.thac0.value;
+    const needed = thac0 - targetAc;
     const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
     const roll = await new Roll("1d20 + @adj + @mod", { adj: adj + t51.sum, mod: input.mod }).evaluate();
     const hit = t51.auto || roll.total >= needed;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc}${AD2EActor.#targetText(targets)} `
-        + `(THAC0 ${sys.thac0.value}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)`
+        + `(THAC0 ${thac0}, ${game.i18n.localize("AD2E.Roll.Needs")} ${needed}+)`
         + `${t51.text ? ` [${foundry.utils.escapeHTML?.(t51.text) ?? t51.text}]` : ""}${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
     });

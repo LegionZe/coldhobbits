@@ -104,6 +104,21 @@
       </tbody>
     </table>
   </fieldset>
+  {{#if ct.dual}}
+  <fieldset class="ad2e-dual-class">
+    <legend>{{localize "AD2E.Dual.Legend"}}</legend>
+    <dl class="ad2e-facts">
+      <dt>{{localize "AD2E.Dual.Previous"}}</dt><dd>{{ct.dual.previous}}</dd>
+      <dt>{{localize "AD2E.Dual.Status"}}</dt><dd class="{{#if ct.dual.restricted}}ad2e-unmet{{/if}}">{{ct.dual.status}}</dd>
+      <dt>{{localize "AD2E.Dual.OldNumbers"}}</dt><dd>THAC0 {{ct.dual.oldThac0}}; {{ct.dual.oldSaves}}</dd>
+    </dl>
+    {{#if ct.dual.penaltyText}}<p class="ad2e-unmet">{{ct.dual.penaltyText}}</p>{{/if}}
+    {{#if ct.dual.isGM}}<div class="ad2e-buttons">
+      <button type="button" data-action="clearDualPenalty" data-kind="encounter" {{#unless ct.dual.encounter}}disabled{{/unless}}>{{localize "AD2E.Dual.ClearEncounter"}}</button>
+      <button type="button" data-action="clearDualPenalty" data-kind="all" {{#unless ct.dual.adventure}}disabled{{/unless}}>{{localize "AD2E.Dual.EndAdventure"}}</button>
+    </div>{{/if}}
+  </fieldset>
+  {{/if}}
   {{/with}}
 
   <fieldset class="ad2e-class-notes">
