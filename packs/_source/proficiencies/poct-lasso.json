@@ -1,11 +1,11 @@
 {
-  "_id": "NLr8r0RcSJTJNakh",
-  "_key": "!items!NLr8r0RcSJTJNakh",
-  "name": "Two-handed axe",
+  "_id": "ATsNlIJLW6v3neLI",
+  "_key": "!items!ATsNlIJLW6v3neLI",
+  "name": "Lasso",
   "type": "proficiency",
   "img": "icons/svg/sword.svg",
   "system": {
-    "identifier": "two-handed-axe",
+    "identifier": "lasso",
     "kind": "weapon",
     "slots": 1,
     "ability": null,
@@ -18,30 +18,21 @@
     },
     "weapon": {
       "size": "L",
-      "type": "S",
-      "speed": 9,
-      "damage": [
-        {
-          "label": "",
-          "sm": "1d10",
-          "l": "2d8",
-          "speed": null
-        }
-      ],
-      "melee": true,
-      "missile": false,
+      "type": null,
+      "speed": 10,
+      "damage": [],
+      "melee": false,
+      "missile": true,
       "range": {
-        "rof": "",
-        "short": "",
-        "medium": "",
-        "long": ""
+        "rof": "1/2",
+        "short": "10",
+        "medium": "20",
+        "long": "30"
       },
       "family": "other",
-      "missileColumn": "",
+      "missileColumn": "otherMissile",
       "strength": "full",
-      "rules": [
-        "twoHands"
-      ],
+      "rules": [],
       "misfire": {
         "dry": null,
         "wet": null
@@ -57,7 +48,7 @@
   },
   "effects": [],
   "folder": "FIaRTdn72joCvdmE",
-  "sort": 5100,
+  "sort": 2400,
   "ownership": {
     "default": 0
   },

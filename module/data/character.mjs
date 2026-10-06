@@ -67,13 +67,17 @@ export function weaponRestriction(classes, item) {
   const rules = AD2E.classTables?.classWeapons ?? {};
   const sys = item?.system ?? {};
   if (!sys.proficiency || !classes?.length) return "";
+  // A class or kit item's own list (e.g. a specialty priest's; names or identifiers) replaces the generated one.
+  const slug = v => String(v ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const own = id => classes.find(c => c.identifier === id)?.allowed ?? [];
   const allows = id => {
+    if (own(id).length) return own(id).map(slug).includes(slug(sys.proficiency));
     const rule = rules[id];
     if (!rule) return true;
     if (rule.type) return (sys.weapon?.type ?? "") === rule.type;
     return (rule.ids ?? []).includes(sys.proficiency);
   };
-  const reason = id => (rules[id]?.type ? "notBludgeoning" : "notAllowed");
+  const reason = id => (!own(id).length && rules[id]?.type ? "notBludgeoning" : "notAllowed");
   const priests = classes.filter(c => c.group === "priest");
   for (const p of priests) if (!allows(p.identifier)) return reason(p.identifier);
   if (priests.length) return "";
@@ -559,11 +563,16 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const equipped = worn.filter(i => !misfit.includes(i));
     // Class armour limits (Wizard, Thief, Bard, Druid (PHB); class-tables.mjs classArmor): shown, still counted.
     const classId = this.classInfo?.classItem?.system.identifier ?? null;
-    // Multi-class (implementation choice): an armour is restricted only if every class restricts it; wizards' casting in
-    // armour (actor castSpell) and thieves' skills in armour (#multiThiefLimit) are handled separately.
-    const ids = this.classInfo?.multi ? this.classInfo.classItems.map(c => c.system.identifier) : [classId];
-    const restricted = worn.map(i => ({ item: i, reason: ids.map(id => armorRestriction(id, i)).every(Boolean) ? armorRestriction(ids[0], i) : "" }))
-      .filter(r => r.reason);
+    // Multi-class (implementation choice): an armour is restricted only if every class restricts it, except a druid's
+    // (priest) limits, which always apply (owner's ruling); wizards' casting in armour (actor castSpell) and thieves'
+    // skills in armour (#multiThiefLimit) are handled separately.
+    const multiItems = this.classInfo?.multi ? this.classInfo.classItems : null;
+    const ids = multiItems ? multiItems.map(c => c.system.identifier) : [classId];
+    const priestIds = multiItems ? multiItems.filter(c => c.system.group === "priest").map(c => c.system.identifier) : [];
+    const restricted = worn.map(i => {
+      const priest = priestIds.map(id => armorRestriction(id, i)).find(Boolean);
+      return { item: i, reason: priest || (ids.map(id => armorRestriction(id, i)).every(Boolean) ? armorRestriction(ids[0], i) : "") };
+    }).filter(r => r.reason);
     const bodies = equipped.filter(i => i.system.kind === "body" && i.system.ac !== null)
       .sort((a, b) => (a.system.ac - a.system.bonus) - (b.system.ac - b.system.bonus));
     const shields = equipped.filter(i => i.system.kind === "shield")
@@ -901,8 +910,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Skills & Powers: the two weapon style lets any class fight with two weapons.
     const twoReady = (canFightTwoWeapons(this.classGroup) || !!p.sp?.styles.twoWeapon) && inHand.length >= 2;
     // Class weapon limits (weaponRestriction): the current class, or every class of a multi-class character.
-    const weaponClasses = this.multi ? this.multi.classes : (this.classInfo.classItem
-      ? [{ identifier: this.classInfo.classItem.system.identifier, group: this.classInfo.classItem.system.group }] : []);
+    // A fitting kit's or the class item's own weapon list replaces the class's (specialty priests, owner's ruling).
+    const kit = this.classInfo.kitFits ? this.classInfo.kitItem?.system : null;
+    const withAllowed = (identifier, group, item) => ({ identifier, group,
+      allowed: (kit?.classes?.has(identifier) && kit.allowedWeapons?.length ? kit.allowedWeapons : item?.system.allowedWeapons) ?? [] });
+    const weaponClasses = this.multi ? this.multi.classes.map(c => withAllowed(c.identifier, c.group, c.item))
+      : (this.classInfo.classItem ? [withAllowed(this.classInfo.classItem.system.identifier, this.classInfo.classItem.system.group, this.classInfo.classItem)] : []);
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;

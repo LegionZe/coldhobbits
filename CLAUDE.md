@@ -253,7 +253,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   class-tables.mjs also holds `classArmor` (CLASS_ARMOR in the generator, asserted against Wizard/Thief/Bard/Druid (PHB));
   `armorRestriction`, `armorFits`, `armorWeightFactor` in character.mjs; armour item `size` ("" = made for its wearer).
   `classWeapons` (CLASS_WEAPONS, regex-checked; cleric `type` B alone, others proficiency ids) -> `weaponRestriction(classes, item)`
-  (warning on weapon rows and in the attack dialog, owner's ruling; multi-class: priest limits always, else most permissive).
+  (warning on weapon rows and in the attack dialog, owner's ruling; multi-class: priest limits always, else most permissive;
+  class/kit item `allowedWeapons` (names or identifiers, slug-matched) replaces a class's list, the kit's for its own class).
+  Multi-class armour: druid (priest) limits always, others only when every class has them. Lasso: POCT `TARGETS`.
 - Kit mechanics: `tools/build-kit-mechanics.py` (run after build-proficiency-data.py) writes `modifiers`, `skillAdjust`
   and `skillPoints` ({ first, perLevel, bardFirst }: barber bards 10) into the kit sources from the curated `KIT_MODIFIERS` / `KIT_SKILLS` / `KIT_POINTS`; each entry has
   a `match` regex that must occur in the current kit page (the script fails otherwise). Conditions are paraphrased.

@@ -44,7 +44,7 @@ TARGETS = {
     "Chijikiri": ["Chijikiri"], "Cho-ku-no": ["Crossbow, Cho-ku-no"], "Claymore": ["Sword, Claymore"], "Drusus": ["Sword, Drusus"],
     "Estoc": ["Sword, Estoc"], "Falchion": ["Sword, Falchion"], "Gladius": ["Sword, Gladius"], "Great club": ["Club, Great"],
     "Hatchet": ["Hatchet"], "Jitte": ["Jitte"], "Katana": ["Sword, Katana"], "Kau sin ke": ["Kau sin ke"], "Kawanaga": ["Kawanaga"],
-    "Kusari-gama": ["Kusari-gama"], "Lajatang": ["Polearm, Lajatang"], "Long spear": ["Spear, Long"], "Mace-axe": ["Mace-axe"],
+    "Kusari-gama": ["Kusari-gama"], "Lasso": ["Lasso"], "Lajatang": ["Polearm, Lajatang"], "Long spear": ["Spear, Long"], "Mace-axe": ["Mace-axe"],
     "Main-gauche": ["Dagger, Main-gauche"], "Maul": ["Maul"], "Nagimaki": ["Polearm, Nagimaki"], "Naginata": ["Polearm, Naginata"],
     "Ninja-to": ["Sword, Ninja-to"], "No-dachi": ["Sword, No-dachi"], "Nunchaku": ["Nunchaku"], "Parrying dagger": ["Dagger, Parrying"],
     "Pellet bow": ["Crossbow, Pellet bow"], "Pick": ["Pick, Farming tool"], "Pilum": ["Pilum"], "Rapier": ["Sword, Rapier"],

@@ -1,6 +1,6 @@
 import { AD2E } from "../config.mjs";
 
-const { SchemaField, NumberField, StringField, SetField } = foundry.data.fields;
+const { ArrayField, SchemaField, NumberField, StringField, SetField } = foundry.data.fields;
 
 /** Per-ability minimum scores; null = no minimum. Shared by class and kit items. */
 export function minimumsField() {
@@ -20,6 +20,9 @@ export default class ClassData extends foundry.abstract.TypeDataModel {
       school: new StringField({ initial: "" }),
       opposition: new StringField({ initial: "" }),
       races: new SetField(new StringField()),
+      // Weapons allowed (weapon proficiency names or identifiers), e.g. a specialty priest's; when set they replace the
+      // class's generated list for the weapon warning (owner's ruling; CharacterData weaponRestriction).
+      allowedWeapons: new ArrayField(new StringField()),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };

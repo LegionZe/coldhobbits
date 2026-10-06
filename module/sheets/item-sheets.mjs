@@ -50,7 +50,13 @@ export class ClassSheet extends AD2EItemSheet {
     context.alignments = AD2E.alignments;
     context.prime = [...this.document.system.prime];
     context.alignmentList = [...this.document.system.alignments];
+    context.allowedWeaponsText = (this.document.system.allowedWeapons ?? []).join(", ");
     return context;
+  }
+
+  /** Allowed weapons are edited as comma-separated text. */
+  _processFormData(event, form, formData) {
+    return parseClassesText(super._processFormData(event, form, formData), ["allowedWeapons"]);
   }
 }
 
@@ -85,6 +91,7 @@ export class KitSheet extends AD2EItemSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.classesText = [...this.document.system.classes].join(", ");
+    context.allowedWeaponsText = (this.document.system.allowedWeapons ?? []).join(", ");
     context.kitBonusProfs = formatKitProficiencies(this.document.system.bonusProficiencies);
     context.kitRecommended = formatKitRecommended(this.document.system.recommendedProficiencies);
     context.kitSpecialization = formatKitSpecialization(this.document.system.specialization);
@@ -105,7 +112,7 @@ export class KitSheet extends AD2EItemSheet {
 
   /** Class list and race limits are edited as comma-separated text. */
   _processFormData(event, form, formData) {
-    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData), ["classes", "racesBarred"]));
+    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData), ["classes", "racesBarred", "allowedWeapons"]));
   }
 }
 
