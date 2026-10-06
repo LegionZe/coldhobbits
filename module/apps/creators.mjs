@@ -321,3 +321,164 @@ export class WeaponCreator extends HandlebarsApplicationMixin(ApplicationV2) {
     return docs;
   }
 }
+
+/**
+ * Item creator: equipment (gear by category, or a container with its capacity), armour (body armour AC, shield bonus vs.
+ * melee and missiles and the attackers it covers, helmet; the size it was made for; magical bonus) or ammunition
+ * (launchers, damage vs. small/medium and large). Starts from any item of that kind in the compendiums or the Items
+ * directory, or from blank; checks the cost ("5 gp", "2 sp each"), damage dice and armour values.
+ */
+export const ITEM_KINDS = { gear: "equipment", container: "equipment", armor: "armor", ammunition: "ammunition" };
+
+/** A cost as the item lists write it: a number and a coin (cp, sp, ep, gp, pp), optionally followed by text. Blank is allowed. */
+export function costValid(cost) {
+  return !String(cost ?? "").trim() || /^\d+(?:[.,]\d+)?\s*(cp|sp|ep|gp|pp)\b/i.test(String(cost).trim());
+}
+
+const DICE = f => /^\d*d\d+([+-]\d+)?$/i.test(String(f).replace(/\s/g, "")) || /^\d+$/.test(String(f).trim());
+
+/** Problems with an item creator state (keys of AD2E.Creator.Item.Issue). */
+export function itemIssues(s) {
+  const issues = [];
+  if (!costValid(s.cost)) issues.push("badCost");
+  if (s.kind === "container" && !s.capacityWeight && !s.capacityVolume) issues.push("noCapacity");
+  if (s.kind === "armor") {
+    if (s.armorKind === "body" && (s.ac === null || s.ac === "" || s.ac < -10 || s.ac > 10)) issues.push("badAc");
+    if (s.armorKind === "shield" && !(s.shieldMelee > 0)) issues.push("badShield");
+  }
+  if (s.kind === "ammunition") {
+    if (!s.launchers.length) issues.push("noLaunchers");
+    if (!(s.damageSm && s.damageL) || !DICE(s.damageSm) || !DICE(s.damageL)) issues.push("badDamage");
+  }
+  return issues;
+}
+
+export class ItemCreator extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-item-creator",
+    classes: ["ad2e", "creator"],
+    window: { title: "AD2E.Creator.Item.Title", icon: "fa-solid fa-sack-dollar", resizable: true },
+    position: { width: 640, height: 720 },
+    actions: { create: ItemCreator.#onCreate }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/item-creator.hbs", scrollable: [".ad2e-creator-body"] } };
+
+  static blank(kind = "gear") {
+    return { kind, source: "", name: "", identifier: "", cost: "", weight: null, notes: "", destination: "",
+      category: "gear", capacityWeight: null, capacityVolume: "",
+      armorKind: "body", ac: 8, shieldMelee: 1, shieldMissile: 1, shieldAttacks: 2, size: "", bonus: 0,
+      launchers: [], ammoType: "P", ammoSize: "S", damageSm: "1d6", damageL: "1d6", hit: 0, dmg: 0 };
+  }
+
+  state = ItemCreator.blank();
+  index = null; // { equipment: [], armor: [], ammunition: [], launchers: [] }
+
+  async #loadIndex() {
+    const out = { equipment: [], armor: [], ammunition: [], launchers: new Map() };
+    const add = (e, uuid, origin) => {
+      if (out[e.type]) out[e.type].push({ uuid, name: e.name, origin, capacity: !!(e.system?.capacity?.weight || e.system?.capacity?.volume) });
+      const w = e.system?.weapon;
+      if (e.type === "weapon" && w?.missile && (w.family !== "other" || w.ammo || (w.damage ?? []).some(d => d.label))) {
+        out.launchers.set(e.system.identifier, e.name);
+      }
+    };
+    for (const pack of game.packs ?? []) {
+      if (pack.documentName !== "Item") continue;
+      const index = await pack.getIndex({ fields: ["type", "system.identifier", "system.weapon", "system.capacity"] });
+      for (const e of index) add(e, e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, pack.metadata.label);
+    }
+    for (const i of game.items ?? []) add(i, i.uuid, game.i18n.localize("AD2E.Creator.World"));
+    for (const k of ["equipment", "armor", "ammunition"]) out[k].sort((a, b) => a.name.localeCompare(b.name));
+    out.launchers = [...out.launchers].map(([identifier, name]) => ({ identifier, name })).sort((a, b) => a.name.localeCompare(b.name));
+    this.index = out;
+  }
+
+  /** Copy an item into the state. */
+  static fromItem(item, kind) {
+    const s = ItemCreator.blank(kind);
+    const sys = item.system;
+    Object.assign(s, { name: `${item.name} (copy)`, cost: sys.cost ?? "", weight: sys.weight ?? null, notes: sys.notes ?? "" });
+    if (item.type === "equipment") Object.assign(s, { category: sys.category ?? "gear", capacityWeight: sys.capacity?.weight ?? null,
+      capacityVolume: sys.capacity?.volume ?? "" });
+    if (item.type === "armor") Object.assign(s, { armorKind: sys.kind, ac: sys.ac, shieldMelee: sys.shield?.melee ?? 0,
+      shieldMissile: sys.shield?.missile ?? 0, shieldAttacks: sys.shield?.attacks ?? null, size: sys.size ?? "", bonus: sys.bonus ?? 0 });
+    if (item.type === "ammunition") Object.assign(s, { launchers: [...(sys.launchers ?? [])], ammoType: sys.type ?? "", ammoSize: sys.size ?? "",
+      damageSm: sys.damage?.sm ?? "", damageL: sys.damage?.l ?? "", hit: sys.bonus?.hit ?? 0, dmg: sys.bonus?.dmg ?? 0 });
+    return s;
+  }
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    if (!this.index) await this.#loadIndex();
+    const s = this.state;
+    const type = ITEM_KINDS[s.kind];
+    const list = (this.index[type] ?? []).filter(x => s.kind !== "container" || x.capacity);
+    const packs = [...(game.packs ?? [])].filter(pk => pk.documentName === "Item" && pk.metadata?.packageType === "world" && !pk.locked);
+    const i18n = k => game.i18n.localize(k);
+    return {
+      ...context, s, ident: s.identifier || slugify(s.name),
+      kinds: Object.keys(ITEM_KINDS).map(k => ({ key: k, label: i18n(`AD2E.Creator.Item.Kind.${k}`), selected: k === s.kind })),
+      is: { gear: s.kind === "gear", container: s.kind === "container", armor: s.kind === "armor", ammunition: s.kind === "ammunition",
+        body: s.armorKind === "body", shield: s.armorKind === "shield" },
+      sourceOptions: list.map(x => ({ ...x, selected: x.uuid === s.source })),
+      categories: Object.entries(AD2E.equipmentCategories).map(([k, v]) => ({ key: k, label: i18n(v), selected: k === s.category })),
+      armorKinds: Object.entries(AD2E.armorKinds).map(([k, v]) => ({ key: k, label: i18n(v), selected: k === s.armorKind })),
+      armorSizes: ["", "S", "M", "L"].map(k => ({ key: k, label: k || i18n("AD2E.Creator.Item.AnySize"), selected: k === (s.size ?? "") })),
+      launcherOptions: this.index.launchers.map(l => ({ ...l, checked: s.launchers.includes(l.identifier) })),
+      issues: itemIssues(s).map(k => i18n(`AD2E.Creator.Item.Issue.${k}`)),
+      destinations: [{ key: "", label: i18n("AD2E.Creator.World"), selected: !s.destination },
+        ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))]
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element.querySelectorAll("[data-field]")) input.addEventListener("change", async ev => {
+      const t = ev.currentTarget;
+      const f = t.dataset.field;
+      const value = t.type === "checkbox" ? t.checked : (t.type === "number" ? (t.value === "" ? null : Number(t.value)) : t.value);
+      const destination = this.state.destination;
+      if (f === "kind") this.state = Object.assign(ItemCreator.blank(value), { destination });
+      else if (f === "source") {
+        const item = value ? await fromUuid(value) : null;
+        this.state = Object.assign(item ? ItemCreator.fromItem(item, this.state.kind) : ItemCreator.blank(this.state.kind), { source: value, destination });
+      } else if (f === "launcher") {
+        const set = new Set(this.state.launchers);
+        if (t.checked) set.add(t.dataset.key); else set.delete(t.dataset.key);
+        this.state.launchers = [...set];
+      } else this.state[f] = value;
+      this.render();
+    });
+  }
+
+  /** Item data from the state (pure). */
+  static itemData(s) {
+    const base = { identifier: s.identifier || slugify(s.name), cost: s.cost, weight: s.weight, notes: s.notes, source: game.i18n.localize("AD2E.Creator.Custom") };
+    if (s.kind === "gear" || s.kind === "container") {
+      return { name: s.name, type: "equipment", img: "icons/svg/item-bag.svg", system: { ...base, category: s.kind === "container" ? "gear" : s.category,
+        quantity: 1, carried: true, capacity: s.kind === "container" ? { weight: s.capacityWeight, volume: s.capacityVolume ?? "" }
+          : { weight: null, volume: "" } } };
+    }
+    if (s.kind === "armor") {
+      const shield = s.armorKind === "shield" ? { melee: s.shieldMelee ?? 0, missile: s.shieldMissile ?? 0, attacks: s.shieldAttacks || null } : { melee: 0, missile: 0, attacks: null };
+      return { name: s.name, type: "armor", img: "icons/svg/shield.svg", system: { ...base, kind: s.armorKind, ac: s.armorKind === "body" ? s.ac : null,
+        shield, size: s.size ?? "", bonus: s.bonus || 0 } };
+    }
+    return { name: s.name, type: "ammunition", img: "icons/svg/target.svg", system: { ...base, launchers: s.launchers, type: s.ammoType || null,
+      size: s.ammoSize || null, damage: { sm: s.damageSm, l: s.damageL }, quantity: 1, bonus: { hit: s.hit || 0, dmg: s.dmg || 0 } } };
+  }
+
+  static async #onCreate() {
+    const s = this.state;
+    if (!s.name) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.NeedName"));
+    const issues = itemIssues(s);
+    if (issues.length) return ui.notifications.warn(issues.map(k => game.i18n.localize(`AD2E.Creator.Item.Issue.${k}`)).join(" "));
+    const doc = await Item.implementation.create(ItemCreator.itemData(s), s.destination ? { pack: s.destination } : {});
+    if (!doc) return null;
+    ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }));
+    this.index = null;
+    doc.sheet?.render(true);
+    return doc;
+  }
+}
