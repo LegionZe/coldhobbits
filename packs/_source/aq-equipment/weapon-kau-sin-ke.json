@@ -1,0 +1,62 @@
+{
+  "_id": "QgD2gQZxoWXa7WxY",
+  "_key": "!items!QgD2gQZxoWXa7WxY",
+  "name": "Kau sin ke",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "kau-sin-ke",
+    "proficiency": "kau-sin-ke",
+    "weapon": {
+      "size": "M",
+      "type": "B",
+      "speed": 6,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "30 gp(Oriental)",
+    "weight": 4.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (3 gp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Fence_(Character_Kit)",
     "notes": "",
@@ -52,6 +54,18 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "alertness",
+      "fast-talking",
+      "forgery",
+      "gem-cutting",
+      "local-history",
+      "observation"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [
       {
         "target": "reaction",
@@ -79,23 +93,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "fast-talking",
-      "forgery",
-      "gem-cutting",
-      "local-history",
-      "observation"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 44000,
+  "sort": 53000,
   "ownership": {
     "default": 0
   },

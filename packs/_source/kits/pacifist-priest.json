@@ -22,6 +22,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Pacifist_Priest_(Character_Kit)",
     "notes": "",
@@ -36,6 +38,18 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "languages-modern",
+      "languages-ancient",
+      "ancient-history",
+      "singing",
+      "musical-instrument",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -75,23 +89,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "languages-modern",
-      "languages-ancient",
-      "ancient-history",
-      "singing",
-      "musical-instrument",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",
-  "sort": 89000,
+  "sort": 105000,
   "ownership": {
     "default": 0
   },

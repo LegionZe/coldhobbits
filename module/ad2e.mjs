@@ -30,6 +30,7 @@ import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
 import { registerAqRules } from "./aq-rules.mjs";
 import { registerSpWeapons } from "./sp-weapons.mjs";
+import { registerSpProficiencies } from "./sp-proficiencies.mjs";
 import { registerShairHooks } from "./shair.mjs";
 import { registerGenHooks } from "./gens.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
@@ -104,6 +105,7 @@ Hooks.once("init", () => {
 
   registerAqRules();
   registerSpWeapons();
+  registerSpProficiencies();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
   // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).
   CONFIG.time.roundTime = 60;

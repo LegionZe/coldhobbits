@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Pathfinder_-_Ranger_(Character_Kit)",
     "notes": "",
@@ -52,6 +54,21 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "camouflage",
+      "endurance",
+      "fire-building",
+      "foraging",
+      "mountaineering",
+      "navigation",
+      "signaling",
+      "trail-signs",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -67,26 +84,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "camouflage",
-      "endurance",
-      "fire-building",
-      "foraging",
-      "mountaineering",
-      "navigation",
-      "signaling",
-      "trail-signs",
-      "weather-sense"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 90000,
+  "sort": 106000,
   "ownership": {
     "default": 0
   },

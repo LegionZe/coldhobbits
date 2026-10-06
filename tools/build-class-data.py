@@ -9,7 +9,7 @@ Sources (AD&D 2e fandom wiki, via the MediaWiki API; the HTML pages return a JS 
   * PHB class pages for prime requisites and alignment rules (curated below, with the
     sentence each value comes from).
   * Kit lists from the wiki categories of the Complete Handbooks (CFH, CPaH, CRH, CWH,
-    CPrH, CTH, CBH). Kit ability minimums are curated below from each kit page, because
+    CPrH, CTH, CBH), Al-Qadim, and Player's Option: Skills & Powers (POSP_REQ). Kit ability minimums are curated below from each kit page, because
     the pages phrase requirements too inconsistently to parse safely.
 
 Only mechanical facts are emitted (names, minimums, flags, links); no rulebook prose.
@@ -131,6 +131,7 @@ KIT_SOURCES = {  # category -> (book, classes the kits apply to)
     "The_Complete_Bard's_Handbook": ("Complete Bard's Handbook", ["bard"]),
     "Character Kit AA": ("Al-Qadim: Arabian Adventures", None),       # classes per kit: "Kits (AA)" Table 3
     "Character Kit CShaH": ("The Complete Sha'ir's Handbook", ["mage"]),  # "the new wizard kits" (Wizard Kits (CShaH))
+    "Character Kit POSP": ("Player's Option: Skills & Powers", None),  # classes per kit: POSP_REQ
 }
 AL_QADIM = {"Character Kit AA", "Character Kit CShaH"}
 WARRIORS, ROGUES = ["fighter", "paladin", "ranger"], ["thief", "bard"]
@@ -179,6 +180,111 @@ AQ_REQ = {
     "Mystic of Nog (Character Kit)": ({}, True, r"must be of any alignment that is not neutral"),
     "Spellslayer (Character Kit)": ({}, True, r"may only be of non-good, chaotic alignments"),
 }
+# Player's Option: Skills & Powers kits ("Character Kits (POSP)": "With some exceptions, a character of any class can
+# choose any kit"). Requirements curated from each kit page: (ability minimums, classes, barred standard races, other
+# restriction, regex the page's "Requirements" text must contain; links removed, spacing normalized). Subabilities are
+# not used (owner's ruling), so a subability minimum (Dexterity/Balance 14) applies to its ability (Dexterity 14).
+# The minimums add to the class's (`minStacks`: the higher applies). Optional S&P races (half-ogres, aarakocra...) are
+# not in this system; only the standard races are barred. "other": alignment, sex, prime requisite or DM approval.
+POSP_ALL = ["fighter", "paladin", "ranger"] + ["mage", "abjurer", "conjurer", "diviner", "enchanter", "illusionist",
+                                              "invoker", "necromancer", "transmuter"] + ["cleric", "druid", "thief", "bard"]
+POSP_WIZ = POSP_ALL[3:12]
+
+
+def posp_without(*barred):
+    return [c for c in POSP_ALL if c not in barred]
+
+
+POSP_REQ = {
+    "Acrobat - POSP (Character Kit)": ({"dex": 14, "str": 12}, POSP_ALL, [], False,
+        r"minimum Dexterity/Balance of 14 and a minimum Strength/Stamina of 12"),
+    "Amazon - POSP (Character Kit)": ({}, POSP_ALL, [], True, r"Female characters of any demihuman or humanoid race can choose this kit"),
+    "Animal Master - POSP (Character Kit)": ({"con": 10, "wis": 12}, POSP_ALL, [], False,
+        r"minimum Constitution/Fitness of 10 and a minimum Wisdom/Intuition of 12\. This kit is open to all player character races"),
+    "Assassin - POSP (Character Kit)": ({"int": 10, "wis": 12}, posp_without("paladin", "ranger", "druid"), [], True,
+        r"minimum Intelligence/Reason of 10 and a minimum Wisdom/Willpower of 12\. The assassin kit is barred to paladins, "
+        r"rangers, and druids\. This kit is open to all player character races\. The character must have evil alignment"),
+    "Barbarian - POSP (Character Kit)": ({"str": 13, "con": 13}, posp_without("paladin", "cleric", "bard"), [], False,
+        r"minimum Strength/Stamina and Constitution/Health scores of 13\. The barbarian kit is barred to paladins, clerics, "
+        r"and bards\. This kit is open to all player character races"),
+    "Beggar - POSP (Character Kit)": ({"cha": 10}, posp_without("paladin", "ranger", "druid", *POSP_WIZ), [], True,
+        r"Beggars must be chaotic in alignment and have a Charisma/Leadership score of at least 10\. This kit is barred to all "
+        r"optional races except kobolds, goblins, and mongrelmen, as well as paladins, rangers, druids, and wizards of all types"),
+    "Cavalier - POSP (Character Kit)": ({"cha": 14}, posp_without("ranger", "thief", "druid", "bard"), ["gnome", "halfling"], True,
+        r"minimum score of 13 in their class's prime requisite\. Also, all cavaliers must a minimum Charisma/Leadership of 14\. "
+        r"Cavaliers can be humans, elves, half-elves, or dwarves; this kit is barred to rangers, thieves, druids, and bards"),
+    "Diplomat - POSP (Character Kit)": ({"int": 10, "wis": 12, "cha": 12}, POSP_ALL, [], False,
+        r"minimum Intelligence/Knowledge score of 10 and minimum Wisdom/Intuition and Charisma/Appearance scores of 12\. "
+        r"The diplomat kit is barred to half-orcs, half-ogres, and any of the optional races"),
+    "Explorer - POSP (Character Kit)": ({"wis": 12, "int": 12}, POSP_ALL, [], False,
+        r"minimum of 12 for Wisdom/Willpower and Intelligence/Knowledge scores\. This kit is open to all player character races and classes"),
+    "Gladiator - POSP (Character Kit)": ({"str": 13, "con": 13}, posp_without("paladin", "ranger", "thief", "bard", *POSP_WIZ), [], False,
+        r"Strength/Muscle and Constitution/Fitness scores of 13 or greater\. This kit is barred to satyrs and swanmays\. In addition, "
+        r"paladins, rangers, wizards, thieves, and bards may not choose this kit"),
+    "Jester - POSP (Character Kit)": ({"int": 12, "cha": 13}, ["thief", "bard"], ["dwarf", "elf"], False,
+        r"minimum Intelligence/Reason of 12 and a minimum Charisma/Leadership of 13\. Dwarves, elves, and any of the optional PC "
+        r"races except for kobolds or goblins may not choose this kit\. Only bards and thieves may choose this kit"),
+    "Mariner - POSP (Character Kit)": ({"int": 9}, POSP_ALL, ["dwarf"], False,
+        r"minimum Intelligence/Knowledge score of 9\. The mariner kit is prohibited for dwarves"),
+    "Merchant - POSP (Character Kit)": ({"int": 9, "cha": 9}, posp_without("paladin", "ranger", "druid"), [], False,
+        r"minimum Intelligence/Knowledge and Charisma/Appearance scores of 9\. This kit is closed to paladins, rangers, druids and"),
+    "Mystic - POSP (Character Kit)": ({"wis": 13}, posp_without("thief", "bard"), ["dwarf"], False,
+        r"minimum Wisdom/Intuition score of 13\. This kit is closed to thieves and bards\. Only characters of the following races "
+        r"can choose this kit: human, elf, half-elf, gnome, halfling,"),
+    "Noble - POSP (Character Kit)": ({}, POSP_ALL, [], False,
+        r"Nobles need only meet the requirements of their adventuring class\. This kit is open to all classes and races except mongrelmen"),
+    "Outlaw - POSP (Character Kit)": ({"str": 12, "con": 12}, POSP_ALL, [], True,
+        r"minimum Strength/Stamina and Constitution/Health scores of 12\. This kit is open to all races and classes, but paladin "
+        r"outlaws require special approval from the DM"),
+    "Peasant Hero - POSP (Character Kit)": ({}, POSP_ALL, [], False,
+        r"This kit is open to all classes and races\. There are no ability score requirements"),
+    "Pirate - POSP (Character Kit)": ({"con": 12, "dex": 12}, POSP_ALL, ["dwarf"], False,
+        r"minimum Constitution/Health and Dexterity/Balance scores of 12\. The pirate kit is prohibited for dwarves,.*?This kit is open to all classes"),
+    "Pugilist - POSP (Character Kit)": ({"str": 14, "dex": 14}, posp_without(*POSP_WIZ), [], False,
+        r"minimum Strength/Muscle and Dexterity/Balance scores of 14\..*?The kit is open to all classes except wizards"),
+    "Rider - POSP (Character Kit)": ({"cha": 13}, POSP_ALL, [], False,
+        r"minimum Charisma/Leadership of 13\. This kit is open to the standard player character races,.*?The kit is open to all classes"),
+    "Savage - POSP (Character Kit)": ({"con": 13}, posp_without("paladin"), [], False,
+        r"minimum Constitution/Fitness score of 13\. This kit is open to all races except githzerai and swanmays, and to all classes except paladins"),
+    "Scholar - POSP (Character Kit)": ({"int": 13}, posp_without("fighter"), [], False,
+        r"minimum Intelligence/Knowledge of 13\. This kit is open to all standard player chacter races.*?Fighters may not be scholars"),
+    "Scout - POSP (Character Kit)": ({"wis": 12}, POSP_ALL, [], False,
+        r"minimum Wisdom/Intuition score of 12\. This kit is open to all races and classes"),
+    "Sharpshooter - POSP (Character Kit)": ({"dex": 13}, posp_without("cleric", "druid", *POSP_WIZ), [], True,
+        r"minimum Dexterity/Aim of 13\..*?This kit is barred to wizards and priests \(although the DM may allow some specialty priests, "
+        r"such as druids, to become sharpshooters\)"),
+    "Smuggler - POSP (Character Kit)": ({"wis": 12}, POSP_ALL, [], True,
+        r"minimum Wisdom/Willpower score of 12,.*?This kit is open to all races and classes, but paladin smugglers require special approval from the DM"),
+    "Soldier - POSP (Character Kit)": ({"con": 12}, POSP_ALL, [], False,
+        r"minimum Constitution/Fitness score of 12,.*?The kit is open to all classes"),
+    "Spy - POSP (Character Kit)": ({"int": 13, "cha": 13}, POSP_ALL, [], False,
+        r"minimum Intelligence/Reason and Charisma/Appearance scores of 13\..*?The kit is open to all classes"),
+    "Swashbuckler - POSP (Character Kit)": ({"dex": 12, "int": 12}, posp_without("ranger", "druid"), [], False,
+        r"minimum Dexterity/Balance and Intelligence/Reason scores of 12\. This kit is closed to the optional player character races, and to rangers and druids"),
+    "Thug - POSP (Character Kit)": ({"str": 10, "cha": 10}, ["fighter", "thief"], [], False,
+        r"Thugs must have minimum Strength/Muscle and Charisma/Appearance scores of 10\..*?Only fighters and thieves may select this kit"),
+    "Weapon Master - POSP (Character Kit)": ({"str": 13, "dex": 13}, ["fighter", "cleric", "druid", "thief"], [], False,
+        r"Only fighters, priests, and thieves can become weapon masters\. Further, they must have minimum Strength/Stamina and "
+        r"Dexterity/Aim scores of 13\. The kit is open to all races"),
+}
+KIT_NOTES_POSP = {
+    "Amazon - POSP (Character Kit)": "Female characters only.",
+    "Assassin - POSP (Character Kit)": "Evil alignment required.",
+    "Beggar - POSP (Character Kit)": "Chaotic alignment required.",
+    "Cavalier - POSP (Character Kit)": "A score of 13 or more in the class's prime requisite is required.",
+    "Outlaw - POSP (Character Kit)": "Paladins need the DM's approval.",
+    "Sharpshooter - POSP (Character Kit)": "The DM may allow some specialty priests (such as druids).",
+    "Smuggler - POSP (Character Kit)": "Paladins need the DM's approval.",
+}
+
+
+def flat_text(wiki):
+    """Wikitext with links, bold/italic markup and spacing normalized (for the curated regexes)."""
+    t = re.sub(r"\[\[(?:[^\]|]*\|)?([^\]]*)\]\]", r"\1", wiki)
+    t = re.sub(r"'{2,}", "", t)
+    return re.sub(r"\s+", " ", t)
+
+
 KIT_NOTES = {"Kahin (Character Kit)": "Uses the druid experience table (Kits (AA), Table 3)."}
 # Kits with another class's experience table: Table 3 "Clerics*" with the footnote "* Uses Druid Experience Table".
 KIT_XP = {"Kahin (Character Kit)": "druid"}
@@ -323,7 +429,8 @@ KIT_RACES = {
 
 def kit_name(title):
     name = title.replace(" (Character Kit)", "")
-    name = re.sub(r" - Al-Qadim$", " (Al-Qadim)", name)  # Corsair, Mystic: other books have kits of these names
+    name = re.sub(r" - Al-Qadim$", " (Al-Qadim)", name)
+    name = re.sub(r" - POSP$", " (POSP)", name)  # Skills & Powers kits share names with Complete Handbook kits  # Corsair, Mystic: other books have kits of these names
     return re.sub(r" - (Fighter|Paladin|Ranger|Wizard|Thief|Bard|Sha'ir)$", "", name)
 
 
@@ -369,6 +476,14 @@ def build_kits():
                 if classes is None and title not in table3:
                     raise SystemExit(f"{title} is not in Kits (AA) Table 3")
                 kit_classes = table3[title] if classes is None else classes
+            elif cat == "Character Kit POSP":
+                if title not in POSP_REQ:
+                    raise SystemExit(f"No curated requirements for {title!r}; add it to POSP_REQ.")
+                mins, kit_classes, barred, other, pattern = POSP_REQ[title]
+                wiki, revid, _ = page(title)
+                if not re.search(pattern, flat_text(wiki)):
+                    raise SystemExit(f"{title}: requirement text changed (POSP_REQ pattern {pattern!r} not found)")
+                req = {"min": mins, "other": other, "barred": barred, "stacks": True}
             else:
                 if title not in KIT_REQ:
                     raise SystemExit(f"No curated requirements for {title!r}; add it to KIT_REQ.")
@@ -384,11 +499,13 @@ def build_kits():
             kits[key] = {"name": kit_name(title), "classes": kit_classes, "source": book,
                                  "min": req.get("min", {}), "otherRequirements": req.get("other", False),
                                  "raceLimits": race_limits, "raceOnly": race_only, "alQadim": cat in AL_QADIM,
-                                 "notes": KIT_NOTES.get(title, ""), "xpTable": KIT_XP.get(title, ""), "url": url(title), "revid": revid}
+                                 "racesBarred": req.get("barred", []), "minStacks": req.get("stacks", False),
+                                 "posp": cat == "Character Kit POSP",
+                                 "notes": KIT_NOTES.get(title, KIT_NOTES_POSP.get(title, "")), "xpTable": KIT_XP.get(title, ""), "url": url(title), "revid": revid}
             seen.add(title)
     if set(table3) - seen:
         raise SystemExit(f"Kits (AA) Table 3 kits missing from the category: {sorted(set(table3) - seen)}")
-    stale = (set(KIT_REQ) | set(KIT_RACES) | set(AQ_REQ)) - seen
+    stale = (set(KIT_REQ) | set(KIT_RACES) | set(AQ_REQ) | set(POSP_REQ)) - seen
     if stale:
         raise SystemExit(f"Curated kits not found on the wiki: {sorted(stale)}")
     return dict(sorted(kits.items(), key=lambda kv: kv[1]["name"].lower()))
@@ -463,6 +580,9 @@ if __name__ == "__main__":
         sub = folder_doc(f"kits.{g}.alqadim", "Al-Qadim", parent=group_ids[g][1], sort=90000)
         kit_folders.append(sub)
         aq_folder[g] = sub["_id"]
+    # Skills & Powers kits are open to most classes: one top-level folder.
+    posp_folder = folder_doc("kits.posp", "Skills & Powers (POSP)", sort=len(GROUP_FOLDERS) * 1000)
+    kit_folders.append(posp_folder)
 
     class_docs = []
     for i, (key, c) in enumerate(classes.items()):
@@ -479,8 +599,10 @@ if __name__ == "__main__":
             "identifier": key, "classes": k["classes"], "source": k["source"],
             "min": {a: k["min"].get(a) for a in MINS},
             "otherRequirements": k["otherRequirements"], "raceLimits": k["raceLimits"], "raceOnly": k["raceOnly"],
+            "racesBarred": k["racesBarred"], "minStacks": k["minStacks"],
             "xpTable": k.get("xpTable", ""), "url": k["url"], "notes": k["notes"]}, i * 1000))
-        kit_docs[-1]["folder"] = aq_folder[group_of[k["classes"][0]]] if k["alQadim"] else kit_folder_for[k["classes"][0]]
+        kit_docs[-1]["folder"] = (posp_folder["_id"] if k["posp"] else aq_folder[group_of[k["classes"][0]]] if k["alQadim"]
+                                  else kit_folder_for[k["classes"][0]])
     write_docs("packs/_source/classes", class_folders + class_docs)
     write_docs("packs/_source/kits", kit_folders + kit_docs)
     print(f"wrote packs/_source: {len(class_docs)} classes, {len(kit_docs)} kits "

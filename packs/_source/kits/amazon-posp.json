@@ -1,0 +1,128 @@
+{
+  "_id": "dLfqEPBv0FasjC6M",
+  "_key": "!items!dLfqEPBv0FasjC6M",
+  "name": "Amazon (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "amazon-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "cleric",
+      "druid",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Amazon_-_POSP_(Character_Kit)",
+    "notes": "Female characters only.",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "riding-land-based",
+      "rope-use",
+      "engineering",
+      "navigation",
+      "endurance",
+      "animal-training",
+      "animal-handling",
+      "armorer",
+      "bowyer-fletcher",
+      "hunting",
+      "running",
+      "set-snares",
+      "survival",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "attack",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "first attack of a melee against a male opponent",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "damage",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "first damage roll of a melee against a male opponent",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "NPCs of male-dominated societies",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 6000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

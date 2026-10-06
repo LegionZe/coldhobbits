@@ -376,6 +376,8 @@ export function kitArmorMatches(armor, body) {
   const name = String(body?.name ?? "").toLowerCase();
   if (armor === "none") return !body;
   if (armor === "light") return !body || (/\b(leather|padded)\b/.test(name) && !name.includes("studded"));
+  // No heavier than studded leather (Swashbuckler - POSP (Character Kit)): leather, padded or studded leather.
+  if (armor === "studded") return !body || /\b(leather|padded)\b/.test(name);
   if (armor === "any") return !!body;
   return false;
 }

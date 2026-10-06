@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Mystic_-_Al-Qadim_(Character_Kit)",
     "notes": "Bonus: one priest or general proficiency for the action that brings spells (player's choice; none for solitude and meditation).",
@@ -35,6 +37,21 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "survival",
+      "ancient-history",
+      "healing",
+      "herbalism",
+      "reading-writing",
+      "spellcraft",
+      "genie-lore",
+      "begging"
+    ],
+    "specialization": {
+      "mode": "forbidden",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,26 +91,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "endurance",
-      "survival",
-      "ancient-history",
-      "healing",
-      "herbalism",
-      "reading-writing",
-      "spellcraft",
-      "genie-lore",
-      "begging"
-    ],
-    "specialization": {
-      "mode": "forbidden",
-      "free": []
     }
   },
   "effects": [],
   "folder": "InEiVfQCHSnHco4F",
-  "sort": 82000,
+  "sort": 95000,
   "ownership": {
     "default": 0
   },

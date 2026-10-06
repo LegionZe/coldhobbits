@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Beggar_-_Thief_(Character_Kit)",
     "notes": "",
@@ -51,6 +53,15 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "alertness",
+      "singing",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [
       {
         "target": "reaction",
@@ -78,20 +89,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "singing",
-      "trailing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 17000,
+  "sort": 22000,
   "ownership": {
     "default": 0
   },

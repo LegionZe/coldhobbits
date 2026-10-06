@@ -118,7 +118,7 @@ def build_nonweapon(phb):
                 titles="|".join(titles[i:i + 50]))
         for p in r["query"]["pages"].values():
             wiki = p["revisions"][0]["slots"]["main"]["*"]
-            info = dict(re.findall(r"\|\s*(\w+)\s*=\s*([^\n]*)", re.search(r"\{\{Infobox Proficiency(.*?)\n\}\}", wiki, re.S).group(1)))
+            info = dict(re.findall(r"\|\s*(\w+)[ \t]*=[ \t]*([^\n]*)", re.search(r"\{\{Infobox Proficiency(.*?)\n\}\}", wiki, re.S).group(1)))
             name = p["title"].replace(" (Proficiency)", "")
             cats = [c["title"].replace("Category:", "").replace(" ", "_") for c in p.get("categories", [])]
             books = [c for c in cats if c.endswith("_Proficiencies")]
@@ -334,6 +334,13 @@ KIT_OVERRIDES = {
     "Spellslayer (Character Kit)": {"bonus": [{"choice": ["Blind-fighting", "Awareness", "Display Weapon Prowess"]}]},
     # "The clockwork mage receives the clockwork creation nonweapon proficiency"
     "Clockwork Mage (Character Kit)": {"bonus": ["Clockwork Creation"]},
+    # Skills & Powers (Benefits): "Explorers gain the survival nonweapon proficiency at no cost"; beggars and soldiers
+    # gain one free nonweapon proficiency "from the above recommended list" (RECOMMENDED = a choice of that list).
+    "Explorer - POSP (Character Kit)": {"bonus": ["Survival"], "match": r"Explorers gain the survival nonweapon proficiency at no cost"},
+    "Beggar - POSP (Character Kit)": {"bonus": ["RECOMMENDED"],
+                                      "match": r"Beggars receive one free nonweapon proficiency at the time of character creation"},
+    "Soldier - POSP (Character Kit)": {"bonus": ["RECOMMENDED"],
+                                       "match": r"the soldier gains one free nonweapon proficiency, provided it is selected from the recommended list"},
 }
 # Extra proficiency slots granted by a kit.
 KIT_SLOTS = {
@@ -452,6 +459,12 @@ def kit_recommended(wiki, names, weapon_names=None):
                 break
             section.append(line)
     groups, current = [], None
+    # Skills & Powers kits: one bold line "Recommended nonweapon proficiencies: a, b, c." (Character Kits (POSP); the
+    # Sharpshooter page omits "Recommended").
+    posp = "{{Sidebar POSP" in wiki and re.search(
+        r"^" + BOLD + r"(?:Recommended )?nonweapon proficiencies:" + BOLD + r"([^\n]*)", wiki, re.M | re.I)
+    if posp:
+        groups.append([posp.group(1)])
     rec = r"(?:Pirate's )?(?:Recommended|Suggested)[^:\n]*:"
     any_label = r"(?:(?:Pirate's )?(?:Recommended|Suggested)|Forbidden|Bonus(?:es)?(?: Proficienc(?:y|ies))?|Required)[^:\n]{0,30}:"
     for line in section:
@@ -506,6 +519,7 @@ def apply_kits(prof_names):
     key_of = dict(prof_names)
     # Every entry is stored as {"choice": [identifiers]}; a single proficiency is a choice of one.
     to_key = lambda e: {"choice": [key_of[x] for x in (e["choice"] if isinstance(e, dict) else [e])]}
+    flat = lambda w: re.sub(r"\s+", " ", re.sub(r"'{2,}", "", unlink(w)))
     problems = []
     for f in glob.glob("packs/_source/kits/[!_]*.json"):
         doc = json.load(open(f))
@@ -523,7 +537,12 @@ def apply_kits(prof_names):
             result[label] = entries
         if problems:
             continue
-        doc["system"]["bonusProficiencies"] = [to_key(e) for e in result["bonus"]]
+        over = KIT_OVERRIDES.get(title, {})
+        if over.get("match") and not re.search(over["match"], flat(wiki)):
+            problems.append(f"{title}: KIT_OVERRIDES text changed ({over['match']})")
+            continue
+        recommended = kit_recommended(wiki, prof_names)
+        doc["system"]["bonusProficiencies"] = [({"choice": recommended} if e == "RECOMMENDED" else to_key(e)) for e in result["bonus"]]
         doc["system"]["requiredProficiencies"] = [to_key(e) for e in result["required"]]
         doc["system"]["bonusSlots"] = {"weapon": 0, "nonweapon": 0, **KIT_SLOTS.get(title, {})}
         doc["system"]["recommendedProficiencies"] = kit_recommended(wiki, prof_names, WEAPON_PROF_NAMES)

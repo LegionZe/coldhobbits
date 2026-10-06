@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "druid",
     "url": "https://adnd2e.fandom.com/wiki/Kahin_(Character_Kit)",
     "notes": "Uses the druid experience table (Kits (AA), Table 3).",
@@ -35,22 +37,6 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
-    },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
     },
     "recommendedProficiencies": [
       "agriculture",
@@ -76,11 +62,27 @@
     "specialization": {
       "mode": "",
       "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "InEiVfQCHSnHco4F",
-  "sort": 67000,
+  "sort": 78000,
   "ownership": {
     "default": 0
   },

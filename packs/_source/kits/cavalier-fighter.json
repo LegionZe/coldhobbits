@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Cavalier_-_Fighter_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "dancing",
+      "heraldry",
+      "musical-instrument",
+      "reading-writing",
+      "blind-fighting",
+      "endurance",
+      "animal-handling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -112,25 +128,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-training",
-      "dancing",
-      "heraldry",
-      "musical-instrument",
-      "reading-writing",
-      "blind-fighting",
-      "endurance",
-      "animal-handling"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 24000,
+  "sort": 30000,
   "ownership": {
     "default": 0
   },

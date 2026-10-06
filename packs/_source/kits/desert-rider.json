@@ -23,6 +23,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Desert_Rider_(Character_Kit)",
     "notes": "",
@@ -43,6 +45,19 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "direction-sense",
+      "awareness",
+      "animal-lore",
+      "endurance",
+      "hunting"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -71,24 +86,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "direction-sense",
-      "awareness",
-      "animal-lore",
-      "endurance",
-      "hunting"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "AKpnHCDNvBQdGgBS",
-  "sort": 30000,
+  "sort": 37000,
   "ownership": {
     "default": 0
   },

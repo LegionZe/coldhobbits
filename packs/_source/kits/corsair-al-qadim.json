@@ -22,6 +22,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Corsair_-_Al-Qadim_(Character_Kit)",
     "notes": "",
@@ -36,6 +38,22 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "direction-sense",
+      "fishing",
+      "haggling",
+      "rope-use",
+      "swimming",
+      "weather-sense",
+      "navigation",
+      "astrology",
+      "jumping",
+      "tightrope-walking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -64,27 +82,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "direction-sense",
-      "fishing",
-      "haggling",
-      "rope-use",
-      "swimming",
-      "weather-sense",
-      "navigation",
-      "astrology",
-      "jumping",
-      "tightrope-walking"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "AKpnHCDNvBQdGgBS",
-  "sort": 28000,
+  "sort": 35000,
   "ownership": {
     "default": 0
   },

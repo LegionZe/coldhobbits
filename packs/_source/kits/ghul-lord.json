@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Ghul_Lord_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,21 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "debate",
+      "artistic-ability",
+      "etiquette",
+      "survival",
+      "set-snares",
+      "languages-ancient",
+      "ancient-history",
+      "reading-writing",
+      "spellcraft"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [],
     "skillAdjust": {
@@ -51,26 +68,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "debate",
-      "artistic-ability",
-      "etiquette",
-      "survival",
-      "set-snares",
-      "languages-ancient",
-      "ancient-history",
-      "reading-writing",
-      "spellcraft"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 50000,
+  "sort": 59000,
   "ownership": {
     "default": 0
   },

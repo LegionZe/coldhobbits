@@ -11,6 +11,8 @@
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
     <label>{{localize "AD2E.Race.KitRaceLimits"}} <input type="text" name="raceLimitsText" value="{{raceLimitsText}}" data-tooltip="{{localize 'AD2E.Race.KitRaceLimitsHint'}}"></label>
     <label class="ad2e-checkbox"><input type="checkbox" name="system.raceOnly" {{#if system.raceOnly}}checked{{/if}}> {{localize "AD2E.Race.RaceOnly"}}</label>
+    <label>{{localize "AD2E.Race.KitRacesBarred"}} <input type="text" name="racesBarredText" value="{{racesBarredText}}" data-tooltip="{{localize 'AD2E.Race.KitRacesBarredHint'}}"></label>
+    <label class="ad2e-checkbox" data-tooltip="{{localize 'AD2E.Class.MinStacksHint'}}"><input type="checkbox" name="system.minStacks" {{#if system.minStacks}}checked{{/if}}> {{localize "AD2E.Class.MinStacks"}}</label>
     <label class="ad2e-checkbox"><input type="checkbox" name="system.otherRequirements" {{#if system.otherRequirements}}checked{{/if}}> {{localize "AD2E.Item.otherRequirements"}}</label>
   </div>
   <fieldset>

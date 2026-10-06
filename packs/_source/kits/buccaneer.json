@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Buccaneer_(Character_Kit)",
     "notes": "",
@@ -45,6 +47,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "direction-sense",
+      "fishing",
+      "intimidation",
+      "looting",
+      "rope-use",
+      "tightrope-walking",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -106,25 +122,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "direction-sense",
-      "fishing",
-      "intimidation",
-      "looting",
-      "rope-use",
-      "tightrope-walking",
-      "weather-sense"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 22000,
+  "sort": 28000,
   "ownership": {
     "default": 0
   },

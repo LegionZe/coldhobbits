@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Greenwood_Ranger_(Character_Kit)",
     "notes": "",
@@ -29,6 +31,11 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,16 +75,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 54000,
+  "sort": 64000,
   "ownership": {
     "default": 0
   },

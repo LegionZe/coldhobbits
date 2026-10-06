@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Swashbuckler_-_Thief_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,22 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "blind-fighting",
+      "disguise",
+      "fast-talking",
+      "intimidation",
+      "jumping",
+      "navigation",
+      "riding-land-based",
+      "tightrope-walking",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,27 +86,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "blind-fighting",
-      "disguise",
-      "fast-talking",
-      "intimidation",
-      "jumping",
-      "navigation",
-      "riding-land-based",
-      "tightrope-walking",
-      "trailing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 119000,
+  "sort": 146000,
   "ownership": {
     "default": 0
   },

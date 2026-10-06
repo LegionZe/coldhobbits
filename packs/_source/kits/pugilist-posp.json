@@ -1,0 +1,74 @@
+{
+  "_id": "JPpgHnTNtGe84gxK",
+  "_key": "!items!JPpgHnTNtGe84gxK",
+  "name": "Pugilist (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "pugilist-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "cleric",
+      "druid",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 14,
+      "dex": 14,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Pugilist_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "endurance",
+      "running"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 116000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

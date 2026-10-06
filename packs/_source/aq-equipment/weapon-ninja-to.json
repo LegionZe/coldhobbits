@@ -1,0 +1,62 @@
+{
+  "_id": "yFzjN8LsfJ3fticG",
+  "_key": "!items!yFzjN8LsfJ3fticG",
+  "name": "Ninja-to",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "ninja-to",
+    "proficiency": "ninja-to",
+    "weapon": {
+      "size": "M",
+      "type": "S/P",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "200 gp(Oriental)",
+    "weight": 5.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (20 gp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 9000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

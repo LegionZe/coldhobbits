@@ -10,7 +10,8 @@ const proficiencyChoices = () => new ArrayField(new SchemaField({ choice: new Ar
  * Item type "kit": a class kit. `classes` holds class identifiers the kit is open to.
  * `min` overrides the class minimum per ability (0 removes it; null keeps the class value).
  * `raceLimits`: { raceIdentifier: maxLevel | null } for races this kit opens the class to (overrides the race's
- * own level limit); `raceOnly`: only the listed races may take the kit.
+ * own level limit); `raceOnly`: only the listed races may take the kit; `racesBarred`: races that may not take it.
+ * `minStacks`: the kit's minimums add to the class's (the higher applies) instead of replacing them (Skills & Powers kits).
  * `bonusProficiencies`: granted free when the kit is added; `requiredProficiencies`: added too, but use slots.
  * `bonusSlots`: extra proficiency slots from the kit.
  * `recommendedProficiencies`: proficiency identifiers the kit page recommends (tools/build-proficiency-data.py).
@@ -32,6 +33,8 @@ export default class KitData extends foundry.abstract.TypeDataModel {
       otherRequirements: new BooleanField({ initial: false }),
       raceLimits: new ObjectField(),
       raceOnly: new BooleanField({ initial: false }),
+      racesBarred: new ArrayField(new StringField()),
+      minStacks: new BooleanField({ initial: false }),
       xpTable: new StringField({ required: true, blank: true, initial: "" }),
       bonusProficiencies: proficiencyChoices(),
       requiredProficiencies: proficiencyChoices(),
@@ -64,7 +67,7 @@ export default class KitData extends foundry.abstract.TypeDataModel {
         from: new NumberField({ required: true, integer: true, min: 1, initial: 1, nullable: false }),
         condition: new StringField({ initial: "" }),
         // blank must be explicit: a StringField with choices is not blank-able by default (Foundry StringField docs).
-        armor: new StringField({ initial: "", blank: true, choices: ["none", "light", "any"] }),
+        armor: new StringField({ initial: "", blank: true, choices: ["none", "light", "studded", "any"] }),
         max: new NumberField({ integer: true, nullable: true, initial: null })
       })),
       url: new StringField({ initial: "" }),

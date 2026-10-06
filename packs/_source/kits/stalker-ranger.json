@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Stalker_-_Ranger_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "etiquette",
+      "languages-modern",
+      "persuasion",
+      "signaling",
+      "trail-marking",
+      "trail-signs"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -56,24 +71,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "blind-fighting",
-      "etiquette",
-      "languages-modern",
-      "persuasion",
-      "signaling",
-      "trail-marking",
-      "trail-signs"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 117000,
+  "sort": 144000,
   "ownership": {
     "default": 0
   },

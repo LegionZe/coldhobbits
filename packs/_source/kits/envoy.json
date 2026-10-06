@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Envoy_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "dancing",
+      "gaming",
+      "heraldry",
+      "law",
+      "local-history",
+      "oratory",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -69,25 +85,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "dancing",
-      "gaming",
-      "heraldry",
-      "law",
-      "local-history",
-      "oratory",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 36000,
+  "sort": 44000,
   "ownership": {
     "default": 0
   },

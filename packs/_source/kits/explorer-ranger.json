@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Explorer_-_Ranger_(Character_Kit)",
     "notes": "",
@@ -46,6 +48,33 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "bowyer-fletcher",
+      "camouflage",
+      "direction-sense",
+      "distance-sense",
+      "endurance",
+      "fire-building",
+      "fishing",
+      "foraging",
+      "herbalism",
+      "hunting",
+      "languages-ancient",
+      "languages-modern",
+      "mountaineering",
+      "navigation",
+      "rope-use",
+      "signaling",
+      "swimming",
+      "trail-marking",
+      "trail-signs",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,38 +103,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "ancient-history",
-      "bowyer-fletcher",
-      "camouflage",
-      "direction-sense",
-      "distance-sense",
-      "endurance",
-      "fire-building",
-      "fishing",
-      "foraging",
-      "herbalism",
-      "hunting",
-      "languages-ancient",
-      "languages-modern",
-      "mountaineering",
-      "navigation",
-      "rope-use",
-      "signaling",
-      "swimming",
-      "trail-marking",
-      "trail-signs",
-      "weather-sense"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 41000,
+  "sort": 49000,
   "ownership": {
     "default": 0
   },

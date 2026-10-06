@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Sorcerer_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,18 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "endurance",
+      "survival",
+      "local-history",
+      "spellcraft",
+      "languages-ancient",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [],
     "skillAdjust": {
@@ -51,23 +65,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "endurance",
-      "survival",
-      "local-history",
-      "spellcraft",
-      "languages-ancient",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
-  "sort": 113000,
+  "sort": 139000,
   "ownership": {
     "default": 0
   },

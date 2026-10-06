@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Thespian_(Character_Kit)",
     "notes": "",
@@ -50,6 +52,26 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "crowd-working",
+      "dancing",
+      "etiquette",
+      "jumping",
+      "languages-ancient",
+      "musical-instrument",
+      "poetry",
+      "reading-lips",
+      "seamstress-tailor",
+      "singing",
+      "tumbling",
+      "ventriloquism",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -100,31 +122,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "crowd-working",
-      "dancing",
-      "etiquette",
-      "jumping",
-      "languages-ancient",
-      "musical-instrument",
-      "poetry",
-      "reading-lips",
-      "seamstress-tailor",
-      "singing",
-      "tumbling",
-      "ventriloquism",
-      "weaving"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 121000,
+  "sort": 149000,
   "ownership": {
     "default": 0
   },

@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Academician_(Character_Kit)",
     "notes": "",
@@ -43,6 +45,22 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "artistic-ability",
+      "etiquette",
+      "heraldry",
+      "languages-modern",
+      "ancient-history",
+      "astrology",
+      "herbalism",
+      "languages-ancient",
+      "spellcraft",
+      "local-history"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -104,22 +122,6 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "artistic-ability",
-      "etiquette",
-      "heraldry",
-      "languages-modern",
-      "ancient-history",
-      "astrology",
-      "herbalism",
-      "languages-ancient",
-      "spellcraft",
-      "local-history"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],

@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Ethoist_(Character_Kit)",
     "notes": "",
@@ -41,22 +43,6 @@
       "weapon": 0,
       "nonweapon": 0
     },
-    "modifiers": [],
-    "skillAdjust": {
-      "pp": 0,
-      "ol": 0,
-      "rt": 0,
-      "ms": 0,
-      "hs": 0,
-      "dn": 0,
-      "cw": 0,
-      "rl": 0
-    },
-    "skillPoints": {
-      "first": null,
-      "perLevel": null,
-      "bardFirst": null
-    },
     "recommendedProficiencies": [
       "cooking",
       "debate",
@@ -73,11 +59,27 @@
     "specialization": {
       "mode": "",
       "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
     }
   },
   "effects": [],
   "folder": "InEiVfQCHSnHco4F",
-  "sort": 39000,
+  "sort": 47000,
   "ownership": {
     "default": 0
   },

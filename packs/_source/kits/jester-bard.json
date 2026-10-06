@@ -24,6 +24,8 @@
       "halfling": 8
     },
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Jester_-_Bard_(Character_Kit)",
     "notes": "",
@@ -53,6 +55,19 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "crowd-working",
+      "disguise",
+      "jumping",
+      "musical-instrument",
+      "poetry",
+      "singing",
+      "ventriloquism"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -136,24 +151,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "crowd-working",
-      "disguise",
-      "jumping",
-      "musical-instrument",
-      "poetry",
-      "singing",
-      "ventriloquism"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 64000,
+  "sort": 74000,
   "ownership": {
     "default": 0
   },

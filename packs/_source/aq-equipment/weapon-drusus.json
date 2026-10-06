@@ -1,0 +1,62 @@
+{
+  "_id": "2jzo8tDzJj26ky3s",
+  "_key": "!items!2jzo8tDzJj26ky3s",
+  "name": "Drusus",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "drusus",
+    "proficiency": "drusus",
+    "weapon": {
+      "size": "M",
+      "type": "S",
+      "speed": 3,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d6+1",
+          "l": "1d8+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "500 gp(Roman)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (50 gp (Roman))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 2800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

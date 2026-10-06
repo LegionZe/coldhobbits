@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Wilderness_Warrior_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,21 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-handling",
+      "animal-training",
+      "dancing",
+      "fire-building",
+      "fishing",
+      "riding-land-based",
+      "swimming",
+      "mountaineering",
+      "tracking"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -68,26 +85,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-handling",
-      "animal-training",
-      "dancing",
-      "fire-building",
-      "fishing",
-      "riding-land-based",
-      "swimming",
-      "mountaineering",
-      "tracking"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 128000,
+  "sort": 158000,
   "ownership": {
     "default": 0
   },

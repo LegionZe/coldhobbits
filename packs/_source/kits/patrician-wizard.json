@@ -29,6 +29,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Patrician_-_Wizard_(Character_Kit)",
     "notes": "",
@@ -53,6 +55,24 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "dancing",
+      "languages-modern",
+      "riding-land-based",
+      "singing",
+      "ancient-history",
+      "languages-ancient",
+      "reading-writing",
+      "religion",
+      "appraising",
+      "gaming",
+      "local-history",
+      "musical-instrument"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -81,29 +101,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "dancing",
-      "languages-modern",
-      "riding-land-based",
-      "singing",
-      "ancient-history",
-      "languages-ancient",
-      "reading-writing",
-      "religion",
-      "appraising",
-      "gaming",
-      "local-history",
-      "musical-instrument"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "eD23LTRQEDu5HUc7",
-  "sort": 91000,
+  "sort": 107000,
   "ownership": {
     "default": 0
   },

@@ -1,0 +1,68 @@
+{
+  "_id": "nEI475xGNmRNZoo6",
+  "_key": "!items!nEI475xGNmRNZoo6",
+  "name": "Katana",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "katana",
+    "proficiency": "katana",
+    "weapon": {
+      "size": "M",
+      "type": "S/P",
+      "speed": 4,
+      "damage": [
+        {
+          "label": "One-handed",
+          "sm": "1d10",
+          "l": "1d12",
+          "speed": null
+        },
+        {
+          "label": "Two-handed",
+          "sm": "2d6",
+          "l": "2d6",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "1,000 gp(Oriental)",
+    "weight": 6.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (100 gp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 6300,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

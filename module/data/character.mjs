@@ -3,6 +3,7 @@ import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } from "../sp-weapons.mjs";
+import { spProficienciesOn, spRating } from "../sp-proficiencies.mjs";
 import { isShairKit } from "../shair.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
@@ -282,12 +283,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // A kit fits if it is open to the class and, with a race: a race-only kit must list the race, and a
     // class the race only reaches through kits needs a kit that lists the race.
     const kitFits = !!(cls && kitItem && kitItem.system.classes.has(cls.identifier)
+      && !(raceId && (kitItem.system.racesBarred ?? []).includes(raceId))
       && (!race || ((!kitItem.system.raceOnly || kitListsRace) && (classViaRace || kitListsRace))));
     const kit = kitFits ? kitItem.system : null;
     const requirements = AD2E.abilities.map(key => {
       const classMin = cls?.min[key] ?? null;
       const kitMin = kit ? (kit.min[key] ?? null) : null;
-      const required = kitMin ?? classMin ?? 0;
+      // Skills & Powers kits (`minStacks`): the higher of the kit's and the class's minimum.
+      const required = kit?.minStacks ? Math.max(kitMin ?? 0, classMin ?? 0) : (kitMin ?? classMin ?? 0);
       const score = this.abilities[key].total;
       return { key, classMin, kitMin, required, score, met: score >= required };
     });
@@ -510,14 +513,23 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const groupKeys = sp && this.classGroup === "warrior"
       ? items.filter(i => i.system.kind === "group" && SP.groups[i.system.spGroup]).map(i => i.system.spGroup) : [];
     const covered = id => groupKeys.some(k => SP.groups[k].ids.includes(id));
+    const spProf = spProficienciesOn();
+    const scores = Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].total]));
     const styleItems = items.filter(i => i.system.kind === "style").sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0) || String(a.id).localeCompare(String(b.id)));
     const shieldAllowed = AD2E.classTables?.classArmor?.[classId]?.shield !== "none";
     const entries = items.map(item => {
       const p = item.system;
       const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
       const isFree = p.kind === "weapon" && free.has(p.identifier);
-      const target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) + this.kitMods.total("proficiency", p.identifier) : null;
-      const entry = { item, cost: 0, crossGroup, target, invalid: [], parts: [], spOff: false };
+      // Extra nonweapon slots: +1 each (Nonweapon Proficiencies II (PHB)).
+      const extra = p.kind === "nonweapon" ? (p.extraSlots ?? 0) : 0;
+      const kitProf = this.kitMods.total("proficiency", p.identifier);
+      let target = p.ability ? this.abilities[p.ability].total + (p.modifier ?? 0) + extra + kitProf : null;
+      // Skills & Powers ratings (world setting): Table 45 rating + extra slots (max 16) + Table 44 ability modifier.
+      const spr = spProf && p.kind === "nonweapon" ? spRating({ identifier: p.identifier, rating: p.sp?.rating ?? null,
+        abilityText: p.sp?.ability ?? "", group: this.classGroup, extra, scores }) : null;
+      if (spr) target = spr.target + kitProf;
+      const entry = { item, cost: 0, crossGroup, target, extra, spRating: spr, invalid: [], parts: [], spOff: false };
       if (sp && p.kind !== "nonweapon") {
         const res = spCost(p, { group: this.classGroup, classId, level: this.level, covered: p.kind === "weapon" && covered(p.identifier),
           free: isFree, forbidden: kitSpec.mode === "forbidden", extraSpec: p.specialized && !isFree && specializedCount > 1,
@@ -546,7 +558,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }
       // Specialization: one extra slot (melee weapons, crossbows), two for bows (Weapon Specialization (PHB)).
       const specCost = (p.kind === "weapon" && p.specialized && !isFree) ? AD2E.specialization.extraSlots[p.weapon?.family ?? "other"] : 0;
-      entry.cost = p.grantedBy ? specCost : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0));
+      entry.cost = p.grantedBy ? specCost + extra : (p.kind === "weapon" ? 1 + specCost : p.slots + (crossGroup ? 1 : 0) + extra);
       if (p.kind === "weapon") {
         // A kit's free specialization applies on its own (no tick box needed).
         entry.specialized = p.specialized || isFree;
@@ -586,6 +598,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       groups,
       canSpecialize,
       sp: spInfo,
+      spRatings: spProf,
       specRule: { mode: kitSpec.mode ?? "", free: [...free],
         missing: kitSpec.mode === "required" && specializedCount === 0 },
       penalty: sp ? spInfo.penalty.nonproficient : rules.penalty,

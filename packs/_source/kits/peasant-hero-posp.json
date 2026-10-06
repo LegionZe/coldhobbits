@@ -1,0 +1,92 @@
+{
+  "_id": "cmAhmTi3WHgOXtel",
+  "_key": "!items!cmAhmTi3WHgOXtel",
+  "name": "Peasant Hero (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "peasant-hero-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "cleric",
+      "druid",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Peasant_Hero_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "fishing",
+      "animal-handling",
+      "animal-lore",
+      "blacksmithing",
+      "carpentry",
+      "cooking",
+      "cobbling",
+      "fire-building",
+      "pottery",
+      "stonemasonry",
+      "weaving"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 109000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

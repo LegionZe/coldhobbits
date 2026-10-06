@@ -1,0 +1,95 @@
+{
+  "_id": "HrOa1EZkQ0i17LMK",
+  "_key": "!items!HrOa1EZkQ0i17LMK",
+  "name": "Beggar (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "beggar-posp",
+    "classes": [
+      "fighter",
+      "cleric",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": 10
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Beggar_-_POSP_(Character_Kit)",
+    "notes": "Chaotic alignment required.",
+    "bonusProficiencies": [
+      {
+        "choice": [
+          "disguise",
+          "forgery",
+          "gaming",
+          "ventriloquism",
+          "seamstress-tailor"
+        ]
+      }
+    ],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "disguise",
+      "forgery",
+      "gaming",
+      "ventriloquism",
+      "seamstress-tailor"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "reaction",
+        "key": "",
+        "value": -4,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "socializing with the upper classes",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 23000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

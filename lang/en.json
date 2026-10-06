@@ -124,6 +124,8 @@
     "Requirements": "Ability Requirements",
     "ClassMin": "Class Min.",
     "KitMin": "Kit Min.",
+    "MinStacks": "Kit minimums add to the class's",
+    "MinStacksHint": "The higher of the kit's and the class's minimum applies (Skills & Powers kits); unticked, the kit's minimum replaces the class's.",
     "Score": "Score",
     "NoMinimum": "none",
     "Notes": "Class & Kit Notes",
@@ -206,6 +208,8 @@
     "KitRaceLimits": "Race level limits",
     "KitRaceLimitsHint": "race level, comma-separated, e.g. dwarf 15, gnome 6 (no number = unlimited)",
     "RaceOnly": "Only the listed races",
+    "KitRacesBarred": "Races barred",
+    "KitRacesBarredHint": "race identifiers, comma-separated, e.g. dwarf, elf",
     "NeedsRaceKit": "{race} can only be a {class} through a kit that allows {race}; add one.",
     "NeedsKitNote": "This race can only take this class through a kit that allows the race; add a qualifying kit.",
     "KitNotForRace": "{kit} is not available to {race} for this class."
@@ -231,9 +235,12 @@
     "Modifier": "Check Modifier",
     "Groups": "Groups",
     "NoCheck": "— (no check)",
-    "SkillsPowers": "Skills & Powers",
+    "SkillsPowers": "Skills & Powers (Table 45; rating used with the world setting)",
     "Rating": "Rating",
     "Cost": "Cost (CP)",
+    "ExtraSlots": "Extra slots",
+    "ExtraShort": "+{n}",
+    "ExtraHint": "Additional nonweapon slots spent on this proficiency: +1 to its checks for each (Nonweapon Proficiencies II (PHB)). They count against the slots available.",
     "GrantedBy": "Granted free by kit",
     "WeaponSlots": "Weapon slots used / available",
     "NonweaponSlots": "Nonweapon slots used / available",
@@ -958,6 +965,7 @@
     "Armor": {
       "none": "without body armour",
       "light": "in no armour, leather or padded",
+      "studded": "in no armour, leather, padded or studded leather",
       "any": "while wearing body armour"
     },
     "Status": {
@@ -1498,6 +1506,12 @@
     "WeaponUses": "Attack uses {province} (+1 per damage die)",
     "DieBonusNote": "{province} +{n}",
     "Warded": "{name} (elemental mage): {from} damage becomes {to} (-2 per die of its own province)."
+  },
+  "AD2E.SPProf": {
+    "Setting": "Skills & Powers nonweapon proficiency ratings",
+    "SettingHint": "Player's Option: Skills & Powers chapter 6: a nonweapon proficiency on Table 45 is checked against its initial rating plus the Table 44 modifier of the better of its abilities (subabilities count as their ability), instead of the PHB ability score and modifier. Character points are not used: each extra slot spent on the proficiency adds +1, up to an unmodified rating of 16. Proficiencies not on Table 45 keep the PHB check. Reloads the world.",
+    "Hint": "Skills & Powers: rating {base} + {extra} extra slots = {unmodified}, {ability} {mod} (Table 44)",
+    "HintCapped": "Skills & Powers: rating {base} + {extra} extra slots, at most {unmodified} (Improving Proficiencies), {ability} {mod} (Table 44)"
   },
   "AD2E.SP": {
     "Setting": "Skills & Powers weapon rules",

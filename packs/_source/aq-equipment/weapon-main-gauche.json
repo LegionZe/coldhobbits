@@ -1,0 +1,62 @@
+{
+  "_id": "FdScr7Cu11vgvfvS",
+  "_key": "!items!FdScr7Cu11vgvfvS",
+  "name": "Main-gauche",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "main-gauche",
+    "proficiency": "main-gauche",
+    "weapon": {
+      "size": "S",
+      "type": "P/S",
+      "speed": 2,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d4",
+          "l": "1d3",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "30 gp(The Renaissance)",
+    "weight": 2.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (3 gp (The Renaissance))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 7800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

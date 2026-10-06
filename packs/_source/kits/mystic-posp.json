@@ -1,0 +1,96 @@
+{
+  "_id": "5dAsNgg0oyakN6Ba",
+  "_key": "!items!5dAsNgg0oyakN6Ba",
+  "name": "Mystic (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "mystic-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "cleric",
+      "druid"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": 13,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [
+      "dwarf"
+    ],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Mystic_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "astrology",
+      "astronomy",
+      "religion",
+      "etiquette",
+      "languages-modern",
+      "languages-ancient",
+      "local-history",
+      "ancient-history",
+      "reading-writing",
+      "heraldry",
+      "riding-land-based",
+      "herbalism",
+      "healing",
+      "gem-cutting",
+      "musical-instrument",
+      "navigation"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 96000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

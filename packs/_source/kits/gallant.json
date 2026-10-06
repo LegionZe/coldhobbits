@@ -21,6 +21,8 @@
     "otherRequirements": true,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Gallant_(Character_Kit)",
     "notes": "",
@@ -50,6 +52,25 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "armorer",
+      "artistic-ability",
+      "blacksmithing",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "languages-modern",
+      "leatherworking",
+      "musical-instrument",
+      "riding-land-based",
+      "reading-writing",
+      "singing",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -111,30 +132,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-training",
-      "armorer",
-      "artistic-ability",
-      "blacksmithing",
-      "blind-fighting",
-      "bowyer-fletcher",
-      "languages-modern",
-      "leatherworking",
-      "musical-instrument",
-      "riding-land-based",
-      "reading-writing",
-      "singing",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 48000,
+  "sort": 57000,
   "ownership": {
     "default": 0
   },

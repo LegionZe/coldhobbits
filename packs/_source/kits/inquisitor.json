@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Inquisitor_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,16 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "astrology",
+      "languages-ancient",
+      "languages-modern",
+      "reading-writing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -56,21 +68,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "astrology",
-      "languages-ancient",
-      "languages-modern",
-      "reading-writing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 61000,
+  "sort": 71000,
   "ownership": {
     "default": 0
   },

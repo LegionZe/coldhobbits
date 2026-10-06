@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Blade_(Character_Kit)",
     "notes": "",
@@ -51,6 +53,17 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "blacksmithing",
+      "bowyer-fletcher",
+      "disguise",
+      "poetry",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -66,22 +79,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "blacksmithing",
-      "bowyer-fletcher",
-      "disguise",
-      "poetry",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 20000,
+  "sort": 26000,
   "ownership": {
     "default": 0
   },

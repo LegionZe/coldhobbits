@@ -14,8 +14,8 @@
       "wizard"
     ],
     "sp": {
-      "ability": "| Rating_SP = 7",
-      "rating": null,
+      "ability": "",
+      "rating": 7,
       "cost": 7
     },
     "source": "Dragon Magazine",

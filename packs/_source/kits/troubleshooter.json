@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Troubleshooter_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,17 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "alertness",
+      "fast-talking",
+      "information-gathering",
+      "locksmithing",
+      "trailing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [],
     "skillAdjust": {
@@ -51,22 +64,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "alertness",
-      "fast-talking",
-      "information-gathering",
-      "locksmithing",
-      "trailing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 123000,
+  "sort": 152000,
   "ownership": {
     "default": 0
   },

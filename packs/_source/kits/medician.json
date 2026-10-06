@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Medician_(Character_Kit)",
     "notes": "",
@@ -40,6 +42,24 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "animal-handling",
+      "animal-lore",
+      "animal-training",
+      "heraldry",
+      "herbalism",
+      "languages-ancient",
+      "languages-modern",
+      "reading-writing",
+      "religion",
+      "riding-airborne",
+      "riding-land-based"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -79,29 +99,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "ancient-history",
-      "animal-handling",
-      "animal-lore",
-      "animal-training",
-      "heraldry",
-      "herbalism",
-      "languages-ancient",
-      "languages-modern",
-      "reading-writing",
-      "religion",
-      "riding-airborne",
-      "riding-land-based"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",
-  "sort": 72000,
+  "sort": 84000,
   "ownership": {
     "default": 0
   },

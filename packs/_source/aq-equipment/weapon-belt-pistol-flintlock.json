@@ -1,0 +1,64 @@
+{
+  "_id": "8eMvTVrwLOA53Xrk",
+  "_key": "!items!8eMvTVrwLOA53Xrk",
+  "name": "Belt pistol (flintlock)",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "belt-pistol-flintlock",
+    "proficiency": "belt-pistol",
+    "weapon": {
+      "size": "S",
+      "type": "P",
+      "speed": 7,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d8",
+          "l": "1d8",
+          "speed": null
+        }
+      ],
+      "melee": false,
+      "missile": true,
+      "range": {
+        "rof": "1/2",
+        "short": "20",
+        "medium": "40",
+        "long": "60"
+      },
+      "family": "other",
+      "missileColumn": "otherMissile",
+      "strength": "none",
+      "rules": [
+        "knockdown"
+      ],
+      "misfire": {
+        "dry": 1,
+        "wet": null
+      },
+      "knockdownDie": "d8",
+      "ammo": true,
+      "powder": true,
+      "match": false
+    },
+    "cost": "300 gp(Firearms)",
+    "weight": 3.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (30 gp (Firearms))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,62 @@
+{
+  "_id": "votx3W8iN5SDgB1p",
+  "_key": "!items!votx3W8iN5SDgB1p",
+  "name": "No-dachi",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "no-dachi",
+    "proficiency": "no-dachi",
+    "weapon": {
+      "size": "L",
+      "type": "S/P",
+      "speed": 8,
+      "damage": [
+        {
+          "label": "",
+          "sm": "1d10",
+          "l": "1d20",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "450 gp(Oriental)",
+    "weight": 10.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (45 gp (Oriental))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 9100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

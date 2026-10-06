@@ -1,0 +1,99 @@
+{
+  "_id": "laMN2ZZpX6w8rkU5",
+  "_key": "!items!laMN2ZZpX6w8rkU5",
+  "name": "Gladiator (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "gladiator-posp",
+    "classes": [
+      "fighter",
+      "cleric",
+      "druid"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 13,
+      "dex": null,
+      "con": 13,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Gladiator_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "endurance",
+      "gaming",
+      "jumping",
+      "tumbling",
+      "armorer",
+      "weaponsmithing",
+      "healing",
+      "rope-use"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "the chosen melee weapon",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "initiative",
+        "key": "",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 62000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

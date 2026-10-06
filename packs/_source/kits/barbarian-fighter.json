@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Barbarian_-_Fighter_(Character_Kit)",
     "notes": "",
@@ -35,6 +37,26 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "animal-training",
+      "direction-sense",
+      "fire-building",
+      "riding-land-based",
+      "weather-sense",
+      "blind-fighting",
+      "hunting",
+      "mountaineering",
+      "running",
+      "set-snares",
+      "survival",
+      "tracking",
+      "herbalism",
+      "jumping"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -74,31 +96,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "animal-training",
-      "direction-sense",
-      "fire-building",
-      "riding-land-based",
-      "weather-sense",
-      "blind-fighting",
-      "hunting",
-      "mountaineering",
-      "running",
-      "set-snares",
-      "survival",
-      "tracking",
-      "herbalism",
-      "jumping"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",
-  "sort": 12000,
+  "sort": 16000,
   "ownership": {
     "default": 0
   },

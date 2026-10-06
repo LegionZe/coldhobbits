@@ -1,0 +1,107 @@
+{
+  "_id": "oefuq5uPNGM2mg6g",
+  "_key": "!items!oefuq5uPNGM2mg6g",
+  "name": "Sharpshooter (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "sharpshooter-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": null,
+      "dex": 13,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": true,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Sharpshooter_-_POSP_(Character_Kit)",
+    "notes": "The DM may allow some specialty priests (such as druids).",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "bowyer-fletcher",
+      "hunting",
+      "heraldry",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "attack",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "the chosen missile weapon, used as a missile",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "damage",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "the chosen missile weapon, used as a missile",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "initiative",
+        "key": "",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "melee combat",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 133000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

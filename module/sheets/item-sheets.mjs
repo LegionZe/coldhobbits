@@ -91,6 +91,7 @@ export class KitSheet extends AD2EItemSheet {
     context.kitRequiredProfs = formatKitProficiencies(this.document.system.requiredProficiencies);
     context.raceLimitsText = Object.entries(this.document.system.raceLimits ?? {})
       .map(([race, max]) => (max === null ? race : `${race} ${max}`)).join(", ");
+    context.racesBarredText = (this.document.system.racesBarred ?? []).join(", ");
     context.skillAdjust = AD2E.thiefSkills.map(key => ({ key, label: game.i18n.localize(`AD2E.Skill.${key}`),
       value: this.document.system.skillAdjust?.[key] ?? 0 }));
     context.kitModifiers = (this.document.system.modifiers ?? []).map(m => formatKitModifier(m));
@@ -104,7 +105,7 @@ export class KitSheet extends AD2EItemSheet {
 
   /** Class list and race limits are edited as comma-separated text. */
   _processFormData(event, form, formData) {
-    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData)));
+    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData), ["classes", "racesBarred"]));
   }
 }
 
@@ -140,6 +141,7 @@ export class ProficiencySheet extends AD2EItemSheet {
     context.nonweaponGroups = AD2E.nonweaponGroups;
     context.groupList = [...this.document.system.groups];
     context.isWeapon = this.document.system.kind === "weapon";
+    context.isNonweapon = this.document.system.kind === "nonweapon";
     if (context.isWeapon) context.weapon = weaponStats(this.document.system.weapon);
     // Skills & Powers kinds (module/sp-weapons.mjs).
     const kind = this.document.system.kind;

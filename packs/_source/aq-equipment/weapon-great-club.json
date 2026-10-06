@@ -1,0 +1,62 @@
+{
+  "_id": "ESxOWQtoDM7K5u8l",
+  "_key": "!items!ESxOWQtoDM7K5u8l",
+  "name": "Great club",
+  "type": "weapon",
+  "img": "icons/svg/sword.svg",
+  "system": {
+    "identifier": "great-club",
+    "proficiency": "great-club",
+    "weapon": {
+      "size": "L",
+      "type": "B",
+      "speed": 9,
+      "damage": [
+        {
+          "label": "",
+          "sm": "2d4",
+          "l": "1d6+1",
+          "speed": null
+        }
+      ],
+      "melee": true,
+      "missile": false,
+      "range": {
+        "rof": "",
+        "short": "",
+        "medium": "",
+        "long": ""
+      },
+      "family": "other",
+      "missileColumn": "",
+      "strength": "full",
+      "rules": [],
+      "misfire": {
+        "dry": null,
+        "wet": null
+      },
+      "knockdownDie": "",
+      "ammo": false,
+      "powder": false,
+      "match": false
+    },
+    "cost": "20 gp(Tools/Common)",
+    "weight": 15.0,
+    "quantity": 1,
+    "equipped": false,
+    "bonus": {
+      "hit": 0,
+      "dmg": 0
+    },
+    "source": "Al-Qadim: Arabian Adventures",
+    "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
+    "notes": "Exotic in Zakhara: 10 times the PHB price (2 gp (Tools/Common))."
+  },
+  "effects": [],
+  "folder": "kpvZVE64nZcSCNhf",
+  "sort": 4000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

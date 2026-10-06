@@ -1,0 +1,120 @@
+{
+  "_id": "PWYPLq6DWnlegh52",
+  "_key": "!items!PWYPLq6DWnlegh52",
+  "name": "Acrobat (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "acrobat-posp",
+    "classes": [
+      "fighter",
+      "paladin",
+      "ranger",
+      "mage",
+      "abjurer",
+      "conjurer",
+      "diviner",
+      "enchanter",
+      "illusionist",
+      "invoker",
+      "necromancer",
+      "transmuter",
+      "cleric",
+      "druid",
+      "thief",
+      "bard"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 12,
+      "dex": 14,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": null
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Acrobat_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "disguise",
+      "juggling",
+      "jumping",
+      "musical-instrument",
+      "tightrope-walking",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "proficiency",
+        "key": "tumbling,tightrope-walking,jumping",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "none",
+        "max": null
+      },
+      {
+        "target": "ac",
+        "key": "",
+        "value": 2,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "against hurled missiles, with room to dodge",
+        "armor": "",
+        "max": null
+      },
+      {
+        "target": "proficiency",
+        "key": "tumbling,tightrope-walking,jumping",
+        "value": -1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "armour better than AC 7: -1 per point (tick once per point)",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 2000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

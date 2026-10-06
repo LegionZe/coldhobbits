@@ -23,6 +23,8 @@
       "dwarf": 12
     },
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Skald_(Character_Kit)",
     "notes": "",
@@ -52,6 +54,22 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "armorer",
+      "blacksmithing",
+      "blind-fighting",
+      "bowyer-fletcher",
+      "crowd-working",
+      "etiquette",
+      "hunting",
+      "leatherworking",
+      "musical-instrument",
+      "weaponsmithing"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -91,27 +109,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "armorer",
-      "blacksmithing",
-      "blind-fighting",
-      "bowyer-fletcher",
-      "crowd-working",
-      "etiquette",
-      "hunting",
-      "leatherworking",
-      "musical-instrument",
-      "weaponsmithing"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 110000,
+  "sort": 134000,
   "ownership": {
     "default": 0
   },

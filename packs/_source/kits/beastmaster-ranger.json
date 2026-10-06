@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Beastmaster_-_Ranger_(Character_Kit)",
     "notes": "",
@@ -29,6 +31,20 @@
     "bonusSlots": {
       "weapon": 0,
       "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "agriculture",
+      "bowyer-fletcher",
+      "endurance",
+      "hunting",
+      "leatherworking",
+      "running",
+      "swimming",
+      "weather-sense"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
     },
     "modifiers": [
       {
@@ -123,25 +139,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "agriculture",
-      "bowyer-fletcher",
-      "endurance",
-      "hunting",
-      "leatherworking",
-      "running",
-      "swimming",
-      "weather-sense"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",
-  "sort": 16000,
+  "sort": 21000,
   "ownership": {
     "default": 0
   },

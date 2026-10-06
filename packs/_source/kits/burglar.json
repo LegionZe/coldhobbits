@@ -21,6 +21,8 @@
     "otherRequirements": false,
     "raceLimits": {},
     "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Burglar_(Character_Kit)",
     "notes": "",
@@ -41,6 +43,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "begging",
+      "information-gathering",
+      "jumping",
+      "observation",
+      "rope-use",
+      "tightrope-walking",
+      "tumbling"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [],
     "skillAdjust": {
       "pp": 0,
@@ -56,24 +71,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "begging",
-      "information-gathering",
-      "jumping",
-      "observation",
-      "rope-use",
-      "tightrope-walking",
-      "tumbling"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",
-  "sort": 23000,
+  "sort": 29000,
   "ownership": {
     "default": 0
   },

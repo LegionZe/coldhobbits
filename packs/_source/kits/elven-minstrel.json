@@ -24,6 +24,8 @@
       "half-elf": 12
     },
     "raceOnly": true,
+    "racesBarred": [],
+    "minStacks": false,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Elven_Minstrel_(Character_Kit)",
     "notes": "",
@@ -54,6 +56,19 @@
       "weapon": 0,
       "nonweapon": 0
     },
+    "recommendedProficiencies": [
+      "ancient-history",
+      "artistic-ability",
+      "craft-instrument",
+      "etiquette",
+      "heraldry",
+      "local-history",
+      "poetry"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
     "modifiers": [
       {
         "target": "save",
@@ -81,24 +96,11 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    },
-    "recommendedProficiencies": [
-      "ancient-history",
-      "artistic-ability",
-      "craft-instrument",
-      "etiquette",
-      "heraldry",
-      "local-history",
-      "poetry"
-    ],
-    "specialization": {
-      "mode": "",
-      "free": []
     }
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",
-  "sort": 35000,
+  "sort": 43000,
   "ownership": {
     "default": 0
   },

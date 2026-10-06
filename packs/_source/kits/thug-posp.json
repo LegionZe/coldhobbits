@@ -1,0 +1,84 @@
+{
+  "_id": "equO3tLTYezW1K6o",
+  "_key": "!items!equO3tLTYezW1K6o",
+  "name": "Thug (POSP)",
+  "type": "kit",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "thug-posp",
+    "classes": [
+      "fighter",
+      "thief"
+    ],
+    "source": "Player's Option: Skills & Powers",
+    "min": {
+      "str": 10,
+      "dex": null,
+      "con": null,
+      "int": null,
+      "wis": null,
+      "cha": 10
+    },
+    "otherRequirements": false,
+    "raceLimits": {},
+    "raceOnly": false,
+    "racesBarred": [],
+    "minStacks": true,
+    "xpTable": "",
+    "url": "https://adnd2e.fandom.com/wiki/Thug_-_POSP_(Character_Kit)",
+    "notes": "",
+    "bonusProficiencies": [],
+    "requiredProficiencies": [],
+    "bonusSlots": {
+      "weapon": 0,
+      "nonweapon": 0
+    },
+    "recommendedProficiencies": [
+      "blind-fighting",
+      "endurance",
+      "gaming",
+      "jumping",
+      "rope-use",
+      "running"
+    ],
+    "specialization": {
+      "mode": "",
+      "free": []
+    },
+    "modifiers": [
+      {
+        "target": "damage",
+        "key": "",
+        "value": 1,
+        "every": 0,
+        "step": 0,
+        "from": 1,
+        "condition": "",
+        "armor": "",
+        "max": null
+      }
+    ],
+    "skillAdjust": {
+      "pp": 0,
+      "ol": 0,
+      "rt": 0,
+      "ms": 0,
+      "hs": 0,
+      "dn": 0,
+      "cw": 0,
+      "rl": 0
+    },
+    "skillPoints": {
+      "first": null,
+      "perLevel": null,
+      "bardFirst": null
+    }
+  },
+  "effects": [],
+  "folder": "rcA6GiG2S1laSGYs",
+  "sort": 151000,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

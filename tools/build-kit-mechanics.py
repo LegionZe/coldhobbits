@@ -13,7 +13,8 @@ Modifier fields (stored on the kit item as system.modifiers):
   value     the bonus (+) or penalty (-); "ac": positive = better Armour Class; "initiative": positive = acts sooner
   every, step, from   level scaling: value + step x floor((level - from) / every) from level `from` on (every 0 = flat)
   condition when it applies; "" = always (applied automatically). Conditional ones are offered in the roll dialog.
-  armor     "" | "none" (no body armour) | "light" (none, leather or padded) | "any" (any body armour): applied
+  armor     "" | "none" (no body armour) | "light" (none, leather or padded) | "studded" (light or studded leather) |
+            "any" (any body armour): applied
             automatically only while the character's equipped body armour matches.
   max       "score" only: the bonus cannot raise the score above this.
 Unconditional thief skill adjustments go into system.skillAdjust; kit skill point budgets into system.skillPoints.
@@ -412,6 +413,109 @@ KIT_MODIFIERS = {
           condition="other evil dragons"),
         reaction(-4, r"the Wyrmslayer suffers a .4 penalty to all encounter reactions with his principal foe",
                  "his principal foe"),
+    ],
+    # --- Player's Option: Skills & Powers kits (Benefits / Hindrances); subabilities are not used (owner's ruling) ---
+    "acrobat-posp": [
+        m("proficiency", 2, r"If unarmored, acrobats receive a \+2 bonus to tumbling, tightrope-walking, and jumping proficiency checks",
+          key="tumbling,tightrope-walking,jumping", armor="none"),
+        m("ac", 2, r"they gain a \+2 bonus to Armor Class versus hurled missile weapons",
+          condition="against hurled missiles, with room to dodge"),
+        m("proficiency", -1, r"Any acrobat who wears armor heavier than studded leather \(AC 7\) suffers a .1 penalty to tumbling, tightrope-walking, and jumping",
+          key="tumbling,tightrope-walking,jumping", condition="armour better than AC 7: -1 per point (tick once per point)"),
+    ],
+    "amazon-posp": [
+        m("attack", 2, r"in any melee combat where an Amazon is fighting a male opponent, the Amazon gains a \+2 bonus to her first attack and damage roll",
+          condition="first attack of a melee against a male opponent"),
+        m("damage", 2, r"in any melee combat where an Amazon is fighting a male opponent, the Amazon gains a \+2 bonus to her first attack and damage roll",
+          condition="first damage roll of a melee against a male opponent"),
+        reaction(-2, r"Amazons suffer a .2 reaction roll penalty from NPCs of male-dominated societies", "NPCs of male-dominated societies"),
+    ],
+    "assassin-posp": [
+        m("proficiency", 1, r"An assassin with the healing proficiency can treat poison victims with a \+1 bonus to his proficiency check",
+          key="healing", condition="treating a poison victim"),
+        reaction(-4, r"Assassins suffer a .4 reaction roll penalty whenever they encounter someone who knows their profession",
+                 "someone who knows the profession"),
+    ],
+    "beggar-posp": [
+        reaction(-4, r"This equates to a .4 reaction roll penalty if the beggar is trying to socialize with the upper crust",
+                 "socializing with the upper classes"),
+    ],
+    "cavalier-posp": [
+        m("save", 2, r"he gains a \+2 saving throw bonus against all mind-affecting magics", condition="against mind-affecting magic"),
+    ],
+    "diplomat-posp": [
+        reaction(2, r"he receives a \+2 bonus to all reaction rolls", ""),
+    ],
+    "gladiator-posp": [
+        m("attack", 1, r"Gladiators enjoy a \+1 bonus on attack rolls with one particular melee weapon", condition="the chosen melee weapon"),
+        m("initiative", -1, r"they suffer a \+1 penalty to their initiative rolls"),
+    ],
+    "jester-posp": [
+        m("ability", 1, r"Jesters enjoy a \+1 bonus to Charisma when they are working an audience", key="cha", condition="working an audience"),
+        reaction(-1, r"When trying to conduct business deals or when socializing, NPCs have a .1 reaction roll penalty toward them",
+                 "business deals or socializing"),
+    ],
+    "mariner-posp": [
+        reaction(2, r"Mariners enjoy a \+2 bonus on reaction rolls from sailors, ship captains, and aquatic races",
+                 "sailors, ship captains and aquatic races"),
+        m("attack", 1, r"they gain a \+1 to hit bonus with nets", condition="with a net"),
+        reaction(-2, r"When there is no water in sight, they are out of their element, and they suffer a .2 reaction roll penalty",
+                 "no water in sight"),
+    ],
+    "merchant-posp": [
+        reaction(1, r"merchants receive a \+1 reaction roll bonus in city settings", "in a city"),
+        m("proficiency", 2, r"merchants with the appraising proficiency gain a permanent \+2 bonus to that skill", key="appraising"),
+        reaction(-2, r"he suffers a .2 penalty to all reaction rolls until his innocence is proven",
+                 "publicly accused of cheating (replaces the +1)"),
+    ],
+    "noble-posp": [
+        reaction(2, r"Player character nobles receive a \+2 reaction roll bonus when interacting with individuals from the upper class and upper middle class",
+                 "upper and upper middle class"),
+    ],
+    "pirate-posp": [
+        m("attack", 1, r"They gain a \+1 bonus to their attack rolls while fighting at sea", condition="fighting at sea"),
+        reaction(-2, r"Pirates suffer a .2 penalty on reaction rolls when they enter a port", "entering a port"),
+    ],
+    "savage-posp": [
+        m("initiative", -2, r"They suffer a .2 initiative penalty when traveling within the confines of a town or keep",
+          condition="in a town or keep"),
+    ],
+    "scholar-posp": [
+        m("ability", 1, r"Scholars gain a \+1 bonus either to Intelligence or Wisdom checks \(player's choice\)", key="int",
+          condition="if Intelligence was chosen (player's choice: Intelligence or Wisdom)"),
+        m("ability", 1, r"Scholars gain a \+1 bonus either to Intelligence or Wisdom checks \(player's choice\)", key="wis",
+          condition="if Wisdom was chosen (player's choice: Intelligence or Wisdom)"),
+        m("proficiency", 1, r"including proficiency checks based on Intelligence or Wisdom",
+          condition="proficiency based on the chosen ability (Intelligence or Wisdom)"),
+        m("initiative", -1, r"All scholars suffer a .1 penalty on their initiative rolls when fighting"),
+    ],
+    "scout-posp": [
+        m("proficiency", 1, r"Scouts gain a \+1 bonus to all nonweapon proficiency checks while in the wilderness or natural cave settings",
+          condition="in the wilderness or natural caves"),
+        m("proficiency", -1, r"They suffer a .1 penalty on all nonweapon proficiency checks when in such locales",
+          condition="in a town or dungeon"),
+    ],
+    "sharpshooter-posp": [
+        m("attack", 1, r"Sharpshooters gain a \+1 bonus to attack and damage rolls with one particular missile weapon",
+          condition="the chosen missile weapon, used as a missile"),
+        m("damage", 1, r"Sharpshooters gain a \+1 bonus to attack and damage rolls with one particular missile weapon",
+          condition="the chosen missile weapon, used as a missile"),
+        m("initiative", -1, r"he suffers a .1 penalty on initiative rolls for melee combat", condition="melee combat"),
+    ],
+    "smuggler-posp": [
+        m("proficiency", 2, r"If a smuggler chooses the appraising nonweapon proficiency, he gains a \+2 bonus to that proficiency score",
+          key="appraising"),
+    ],
+    "spy-posp": [
+        reaction(2, r"he receives a \+2 bonus for all NPCs' reaction rolls", ""),
+    ],
+    "swashbuckler-posp": [
+        m("ac", 2, r"When unarmored or wearing armor no heavier than studded leather, swashbucklers gain a \+2 armor class bonus",
+          armor="studded"),
+        reaction(2, r"swashbucklers gain a \+2 reaction roll bonus from NPC members of the opposite sex", "NPCs of the opposite sex"),
+    ],
+    "thug-posp": [
+        m("damage", 1, r"thugs gain a \+1 bonus to all damage rolls"),
     ],
 }
 
