@@ -148,6 +148,17 @@ The owner installs and updates from that manifest URL only (no shell access to t
   Player guide: `PlayerGuide` (subclass; `SECTIONS` = `GUIDE_SECTIONS`, `LANG` "AD2E.Guide"), template
   `templates/apps/player-guide.hbs`, menu `ad2e.playerGuide` (not restricted), sidebar button for every user,
   `game.ad2e.playerGuide()`; keep it in step with sheet changes (tab names, button labels).
+- Dual-class (world setting `dualClass`, off by default): `module/dual-class.mjs` (pure: `dualEligibility`,
+  `dualRestriction`, `gainsHitPoints`, `penalizedAward`, `better`); character `system.dualClass` { previous: [{ identifier,
+  name, group, level, school, prime }], penalty { encounter, adventure } }; derived `system.dual` (null unless on and
+  previous) { restricted, maxOld, oldThac0, oldSaves, thac0Option, saveOptions, penalty }. `#classAbilitiesFor(id, level, kit)`
+  and `#spellsFor(cls, level, { kitItem, kindOnly })` per class; earlier classes fill missing abilities (`info.old`,
+  `skillClassId`) and add their spell levels (`spells.old`, levels `old`/`kind`). Actor `markOldClassUse(what)` (flags +
+  note) in skills, turning, lay on hands, backstab, casting, `#dualField` tick box (`dualOld`) in saves and attacks;
+  levelUp skips HP while restricted; awards (`awardExperience`, AwardXp `shares(total, actors, kind)`) use
+  `penalizedAward`. Switch: CharacterSheet `#askDualClass` on class drop; GM `clearDualPenalty` on the Race & Class tab.
+  Owner's rulings: setting toggle, enforced penalty with encounter/adventure awards, old numbers by tick box while
+  restricted and the better ones after, all old abilities kept.
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with

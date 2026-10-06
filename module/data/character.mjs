@@ -5,6 +5,7 @@ import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { nonproficiency, SP, spCost, spWeaponsOn, styleAc, weaponFamiliarity } from "../sp-weapons.mjs";
 import { spProficienciesOn, spRating } from "../sp-proficiencies.mjs";
 import { isShairKit } from "../shair.mjs";
+import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -152,6 +153,16 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         }),
         attempts: new ArrayField(new SchemaField({ key: new StringField({ initial: "" }), at: new NumberField({ initial: 0 }) }))
       }),
+      // Dual-class characters (module/dual-class.mjs, world setting "dualClass"): the earlier classes (identifier, name,
+      // group, last level, specialist school, prime requisites) and the experience penalty flags for using their abilities.
+      dualClass: new SchemaField({
+        previous: new ArrayField(new SchemaField({
+          identifier: new StringField({ initial: "" }), name: new StringField({ initial: "" }),
+          group: new StringField({ initial: "warrior" }), level: int(1, 1, 30), school: new StringField({ initial: "" }),
+          prime: new ArrayField(new StringField())
+        })),
+        penalty: new SchemaField({ encounter: new BooleanField({ initial: false }), adventure: new BooleanField({ initial: false }) })
+      }),
       biography: new HTMLField()
     };
   }
@@ -179,6 +190,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Class next: the class item sets the group used below (warrior CON bonus, THAC0).
     this.classInfo = this.#computeClassInfo();
     if (this.classInfo.classItem) this.classGroup = this.classInfo.classItem.system.group;
+    this.dual = this.#computeDual();
     // Kit ability score bonuses (e.g. Pacifist priest Charisma +2, at most 18) count after the kit's requirements.
     for (const mod of this.#kitModifierList()) {
       if (mod.target !== "score" || !this.abilities[mod.key]) continue;
@@ -238,9 +250,15 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Paladins: "+2 bonus to all saving throws" (Paladin (PHB)); a roll bonus like the racial one.
     const classSave = this.classInfo.classItem?.system.identifier === "paladin" ? AD2E.paladinSaveBonus : 0;
     this.classInfo.saveBonus = classSave;
+    const dual = this.dual;
     for (const key of AD2E.saves) {
       this.saves[key].table = saveRow[key];
-      this.saves[key].value = this.saves[key].override ?? saveRow[key];
+      // Dual-class: the better of the old and new tables once the restrictions are lifted (owner's ruling); while they
+      // apply, a better old number is offered in the save dialog (using it costs experience).
+      const old = dual ? dual.oldSaves[key] : null;
+      const best = dual && !dual.restricted ? better(saveRow[key], old) : saveRow[key];
+      if (dual) dual.saveOptions[key] = dual.restricted && old !== null && old < saveRow[key] ? old : null;
+      this.saves[key].value = this.saves[key].override ?? best;
       this.saves[key].bonus = (["rsw", "sp"].includes(key) ? raceCon : 0) + classSave + this.kitMods.total("save", key);
     }
 
@@ -263,7 +281,25 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
     const computed = thac0At(this.classGroup, this.level);
     this.thac0.computed = computed;
-    this.thac0.value = this.thac0.override ?? computed;
+    const oldThac0 = dual?.oldThac0 ?? null;
+    if (dual) dual.thac0Option = dual.restricted && oldThac0 !== null && oldThac0 < computed ? oldThac0 : null;
+    this.thac0.value = this.thac0.override ?? (dual && !dual.restricted ? better(computed, oldThac0) : computed);
+  }
+
+  /**
+   * Dual-class state (null unless the world setting is on and the character has earlier classes): the earlier classes,
+   * the highest of their levels, whether the restrictions still apply, their best THAC0 and saving throws, and the
+   * experience penalty flags. `thac0Option` / `saveOptions` (set below) are the better old numbers offered while restricted.
+   */
+  #computeDual() {
+    const previous = this.dualClass?.previous ?? [];
+    if (!previous.length || !dualClassOn()) return null;
+    const { maxOld, restricted } = dualRestriction(previous, this.level);
+    const oldSaves = Object.fromEntries(AD2E.saves.map(k => [k, previous.reduce((best, p) =>
+      better(best, lookup(AD2E.saveTable[p.group], p.level)?.[k] ?? null), null)]));
+    const oldThac0 = previous.reduce((best, p) => better(best, thac0At(p.group, p.level)), null);
+    return { previous, maxOld, restricted, oldSaves, oldThac0, saveOptions: {}, thac0Option: null,
+      penalty: { encounter: !!this.dualClass.penalty?.encounter, adventure: !!this.dualClass.penalty?.adventure } };
   }
 
   /**
@@ -573,10 +609,21 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     });
     const weaponKinds = AD2E.weaponSlotKinds;
     const used = kinds => entries.filter(e => kinds.includes(e.item.system.kind)).reduce((n, e) => n + e.cost, 0);
+    // Dual-class (module/dual-class.mjs; implementation choice): the larger of each earlier class's slots at its last
+    // level and the current class's, since the old proficiencies are kept.
+    const slotsAt = (r, level) => ({ weapon: r.weaponInitial + Math.floor(level / r.weaponRate),
+      nonweapon: r.nonweaponInitial + Math.floor(level / r.nonweaponRate) });
+    const base = slotsAt(rules, this.level);
+    for (const p of this.dual?.previous ?? []) {
+      const r = AD2E.proficiencySlots[p.group];
+      if (!r) continue;
+      const o = slotsAt(r, p.level);
+      base.weapon = Math.max(base.weapon, o.weapon);
+      base.nonweapon = Math.max(base.nonweapon, o.nonweapon);
+    }
     const available = {
-      weapon: rules.weaponInitial + Math.floor(this.level / rules.weaponRate) + (kit?.bonusSlots.weapon ?? 0),
-      nonweapon: rules.nonweaponInitial + Math.floor(this.level / rules.nonweaponRate)
-        + (this.abilityData.int.languages ?? 0) + (kit?.bonusSlots.nonweapon ?? 0)
+      weapon: base.weapon + (kit?.bonusSlots.weapon ?? 0),
+      nonweapon: base.nonweapon + (this.abilityData.int.languages ?? 0) + (kit?.bonusSlots.nonweapon ?? 0)
     };
     // Skills & Powers effects of the valid purchases.
     const valid = kind => sp ? entries.filter(e => e.item.system.kind === kind && !e.invalid.length) : [];
@@ -751,14 +798,28 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    * Paladins and rangers get no Wisdom bonus spells. Owned spell items are grouped by level with their memorized counts.
    */
   #computeSpells() {
-    const cls = this.classInfo.classItem?.system;
+    const main = this.#spellsFor(this.classInfo.classItem?.system, this.level, { kitItem: this.classInfo.kitItem });
+    // Dual-class: an earlier class casting the other kind of spells keeps its slots at its last level (module/dual-class.mjs);
+    // its spell levels follow the current class's, marked `old` with their own casting level.
+    const prev = (this.dual?.previous ?? []).map(p => ({ p, info: AD2E.casterTables[p.identifier] ? AD2E.casterKinds[AD2E.casterTables[p.identifier]] : null }))
+      .find(x => x.info && x.info !== main.kind);
+    if (!prev) return main;
+    const old = this.#spellsFor({ identifier: prev.p.identifier, school: prev.p.school }, prev.p.level, { kindOnly: prev.info });
+    const mainLevels = main.kind ? main.levels.map(l => ({ ...l, kind: main.kind, spells: l.spells.filter(i => i.system.kind !== old.kind) }))
+      .filter(l => l.slots > 0 || l.spells.length) : [];
+    const oldLevels = old.levels.map(l => ({ ...l, kind: old.kind, old: true, oldClass: prev.p.name, castingLevel: old.castingLevel }));
+    return { ...main, levels: [...mainLevels, ...oldLevels], available: true,
+      old: { kind: old.kind, table: old.table, castingLevel: old.castingLevel, className: prev.p.name } };
+  }
+
+  #spellsFor(cls, level, { kitItem = null, kindOnly = null } = {}) {
     const table = AD2E.casterTables[cls?.identifier] ?? null;
     const kind = table ? AD2E.casterKinds[table] : null;
     // Sha'ir: no memorized spells; the gen fetches each one (module/shair.mjs).
-    const shair = kind === "wizard" && isShairKit(this.classInfo.kitItem);
+    const shair = kind === "wizard" && isShairKit(kitItem);
     const rows = table ? AD2E.spellProgression[table] : null;
     const levels = rows ? Object.keys(rows).map(Number) : [];
-    const rowLevel = levels.length ? Math.min(this.level, Math.max(...levels)) : null;
+    const rowLevel = levels.length ? Math.min(level, Math.max(...levels)) : null;
     const row = rows?.[rowLevel] ?? null;
     const base = row ? [...row.slots] : [];
     const bonus = base.map(() => 0);
@@ -779,7 +840,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }
     }
     if (shair) { base.fill(0); bonus.fill(0); school.fill(0); }
-    const owned = (this.parent?.items?.filter(i => i.type === "spell") ?? []);
+    const owned = (this.parent?.items?.filter(i => i.type === "spell" && (!kindOnly || i.system.kind === kindOnly)) ?? []);
     const maxKnown = this.abilityData.int.maxSpells;
     const byLevel = new Map();
     const count = Math.max(base.length, ...owned.map(i => i.system.level), 0);
@@ -816,7 +877,29 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
    *    (once a week per 5 levels); ranger tracking bonus (+1 per 3 levels).
    */
   #computeClassAbilities() {
-    const id = this.classInfo.classItem?.system.identifier ?? null;
+    const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
+    const out = this.#classAbilitiesFor(this.classInfo.classItem?.system.identifier ?? null, this.level, kit);
+    out.old = {};
+    // Dual-class: abilities of an earlier class that the current one lacks stay available at that class's last level
+    // (marked `old`: using them while restricted costs experience, module/dual-class.mjs).
+    for (const p of this.dual?.previous ?? []) {
+      const prev = this.#classAbilitiesFor(p.identifier, p.level, null);
+      if (!out.skills.length && prev.skills.length) {
+        Object.assign(out, { skills: prev.skills, budget: prev.budget, perSkillMax: prev.perSkillMax, armorColumn: prev.armorColumn,
+          armorBlocked: prev.armorBlocked, skillClassId: prev.classId });
+        out.old.skills = p.name;
+      }
+      for (const key of ["backstab", "turnLevel", "layOnHands", "cureDisease", "tracking"]) {
+        if ((out[key] === null || out[key] === undefined) && prev[key] !== null && prev[key] !== undefined) {
+          out[key] = prev[key];
+          out.old[key] = p.name;
+        }
+      }
+    }
+    return out;
+  }
+
+  #classAbilitiesFor(id, level, kit) {
     const T = AD2E.classTables;
     const def = AD2E.skillClasses[id] ?? null;
     const out = { classId: id, skills: [], budget: null, perSkillMax: null, armorColumn: null, armorBlocked: false,
@@ -836,8 +919,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         // Ranger: studded leather (AC 7) or lighter.
         out.armorBlocked = !!body && (body.system.ac ?? 10) < 7;
       }
-      const kit = this.classInfo.kitFits ? this.classInfo.kitItem.system : null;
-      const rangerRow = id === "ranger" ? T.ranger.find(r => r.level === Math.min(this.level, T.ranger.at(-1).level)) : null;
+      const rangerRow = id === "ranger" ? T.ranger.find(r => r.level === Math.min(level, T.ranger.at(-1).level)) : null;
       const points = this.classAbilities.points;
       for (const key of def.skills) {
         const base = def.base === "thief" ? T.thief.base[key] : (def.base === "bard" ? T.bard[key] : rangerRow?.[key] ?? 0);
@@ -861,22 +943,22 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         const first = (id === "bard" ? kit?.skillPoints?.bardFirst : kitPoints?.first) ?? def.points[0];
         const per = kitPoints?.perLevel ?? def.points[1];
         const used = def.skills.reduce((n, k) => n + (points[k] ?? 0), 0);
-        out.budget = { total: first + per * (this.level - 1), used };
+        out.budget = { total: first + per * (level - 1), used };
         out.budget.over = used > out.budget.total;
         if (id === "thief") {
-          out.perSkillMax = AD2E.thiefPointLimits.first + AD2E.thiefPointLimits.perLevel * (this.level - 1);
+          out.perSkillMax = AD2E.thiefPointLimits.first + AD2E.thiefPointLimits.perLevel * (level - 1);
           for (const s of out.skills) s.overLimit = s.points > out.perSkillMax;
         }
       }
     }
-    if (id === "thief") out.backstab = T.backstab.find(r => this.level >= r.min && this.level <= r.max)?.multiplier ?? null;
+    if (id === "thief") out.backstab = T.backstab.find(r => level >= r.min && level <= r.max)?.multiplier ?? null;
     const turn = AD2E.turnUndead[id];
-    if (turn && this.level >= turn.from) out.turnLevel = this.level + turn.offset;
+    if (turn && level >= turn.from) out.turnLevel = level + turn.offset;
     if (id === "paladin") {
-      out.layOnHands = { hp: 2 * this.level, used: this.classAbilities.layOnHandsUsed };
-      out.cureDisease = Math.ceil(this.level / 5);
+      out.layOnHands = { hp: 2 * level, used: this.classAbilities.layOnHandsUsed };
+      out.cureDisease = Math.ceil(level / 5);
     }
-    if (id === "ranger") out.tracking = Math.floor(this.level / 3);
+    if (id === "ranger") out.tracking = Math.floor(level / 3);
     return out;
   }
 

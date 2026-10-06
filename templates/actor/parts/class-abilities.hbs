@@ -3,6 +3,7 @@
 {{!-- Re-bind ft as a block parameter: hash values are not visible inside nested {{#each}} blocks. --}}
 {{#with ft as |ft|}}
 {{#unless ft.classItem}}<p class="ad2e-placeholder">{{localize "AD2E.Ability2.None"}}</p>{{/unless}}
+{{#if ft.dualNote}}<p class="ad2e-note {{#if ft.dualRestricted}}ad2e-unmet{{/if}}">{{ft.dualNote}}</p>{{/if}}
 
 {{#if ft.hasSkills}}
 <fieldset class="ad2e-skills">
