@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.105)
+## Status (v0.0.106)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), and the optional Skills & Powers and Combat & Tactics weapon rules. The features
@@ -472,8 +472,8 @@ Node only until confirmed.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Skills & Powers beyond weapons: subabilities, character points, traits (ambidexterity), non-weapon skills, kits,
-  psionics.
+- Skills & Powers beyond weapons: character points, traits (ambidexterity), non-weapon skills, kits, psionics.
+  Subabilities are not planned (owner's decision).
 - Dual-class characters (Multi-Class and Dual-Class Characters (PHB), "Dual-Class Benefits and Restrictions"): humans
   only; prime requisites 15+ in the first class and 17+ in the new one; at least 2nd level before switching; the new
   class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
