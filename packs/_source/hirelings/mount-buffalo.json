@@ -1,0 +1,71 @@
+{
+  "_id": "3yh5kB1dnbt8mofy",
+  "_key": "!actors!3yh5kB1dnbt8mofy",
+  "name": "Buffalo",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-buffalo",
+    "role": "mount",
+    "climate": "Tropical and temperate plains",
+    "frequency": "Uncommon",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Herbivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Nil",
+    "numberAppearing": "4-24 (4d6)",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "5",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d8",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1-8/1-8",
+    "specialAttacks": "Charge",
+    "specialDefenses": "Head is AC 3",
+    "magicResistance": "Nil",
+    "size": "L (5' at shoulder)",
+    "morale": {
+      "value": 10,
+      "text": "Average (10)"
+    },
+    "xp": 175,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Herd_Mammal",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Herd Mammal, Buffalo.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6600,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

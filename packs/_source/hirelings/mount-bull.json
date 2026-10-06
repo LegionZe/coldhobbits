@@ -1,0 +1,71 @@
+{
+  "_id": "bsiosdrbCLGI1gfG",
+  "_key": "!actors!bsiosdrbCLGI1gfG",
+  "name": "Bull",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-bull",
+    "role": "mount",
+    "climate": "",
+    "frequency": "",
+    "organization": "",
+    "activity": "",
+    "diet": "",
+    "intelligence": "",
+    "treasure": "",
+    "alignment": "",
+    "numberAppearing": "1-20",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1d6/1d6",
+    "specialAttacks": "Charge",
+    "specialDefenses": "",
+    "magicResistance": "",
+    "size": "",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 175,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Herd_Mammal_II",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Herd Mammal II, Bull (wild ox).</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6500,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

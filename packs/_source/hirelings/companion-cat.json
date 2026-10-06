@@ -1,0 +1,71 @@
+{
+  "_id": "LmFVQlQKG2MRu8Si",
+  "_key": "!actors!LmFVQlQKG2MRu8Si",
+  "name": "Cat",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "companion-cat",
+    "role": "pet",
+    "climate": "Any inhabited",
+    "frequency": "Common",
+    "organization": "Solitary",
+    "activity": "Any",
+    "diet": "Carnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1 (1-12)",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 9,
+      "text": "9"
+    },
+    "hitDice": "1/2",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d2",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "2",
+    "damageText": "1-2/1 (claws/bite)",
+    "specialAttacks": "Rear claw rake, 1-2",
+    "specialDefenses": "See below",
+    "magicResistance": "Nil",
+    "size": "T (1' tall)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 7,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Small_Cat_(MM)",
+    "notes": "<p>Animal companion (Animal Master (POSP), Table 42). Statistics: Small Cat (MM), Domestic.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 5900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

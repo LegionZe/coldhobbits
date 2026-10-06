@@ -1,0 +1,66 @@
+{
+  "_id": "GVpBGQrdkINzH1PD",
+  "_key": "!actors!GVpBGQrdkINzH1PD",
+  "name": "Skunk",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "companion-skunk",
+    "role": "pet",
+    "climate": "Temperate or subtropical forests",
+    "frequency": "Common",
+    "organization": "Solitary or family",
+    "activity": "Any",
+    "diet": "Omnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1 or 1-6",
+    "ac": {
+      "base": 8,
+      "text": "8"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "1-2 hp",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1",
+    "specialAttacks": "Squirt musk",
+    "specialDefenses": "Squirt musk",
+    "magicResistance": "Nil",
+    "size": "T (2' long)",
+    "morale": {
+      "value": 5,
+      "text": "Unsteady (5)"
+    },
+    "xp": 35,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Skunk",
+    "notes": "<p>Animal companion (Animal Master (POSP), Table 42). Statistics: Skunk, Normal.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 5800,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -1,0 +1,76 @@
+{
+  "_id": "Ky7OWa2yf1emmOz6",
+  "_key": "!actors!Ky7OWa2yf1emmOz6",
+  "name": "Hippogriff",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-hippogriff",
+    "role": "mount",
+    "climate": "Unpopulated regions",
+    "frequency": "Rare",
+    "organization": "Herd",
+    "activity": "Day",
+    "diet": "Omnivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Q×5",
+    "alignment": "Neutral",
+    "numberAppearing": "2-16",
+    "ac": {
+      "base": 5,
+      "text": "5"
+    },
+    "movement": {
+      "base": 18,
+      "text": "18, FI 36 (C,D)"
+    },
+    "hitDice": "3+3",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d6",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "1d10",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "",
+    "damageText": "1-6/1-6/1-10",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (10' long)",
+    "morale": {
+      "value": 9,
+      "text": "Average (9)"
+    },
+    "xp": 175,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Hippogriff",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Hippogriff, Hippogriff.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 7100,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

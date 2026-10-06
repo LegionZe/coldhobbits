@@ -203,6 +203,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
           identifier: new StringField({ initial: "" }), level: int(1, 1, 30), xp: int(0, 0)
         }))
       }),
+      // Skills & Powers animal companion / bonded mount (module/companions.mjs): actor UUIDs, species no longer allowed as
+      // companion (lost carelessly), and the rider's lost rapport (a mount fled).
+      bond: new SchemaField({
+        companion: new StringField({ required: true, blank: true, initial: "" }), mount: new StringField({ required: true, blank: true, initial: "" }),
+        barred: new ArrayField(new StringField()), rapportLost: new BooleanField({ initial: false })
+      }),
       // Energy drain (module/level-drain.mjs): levels lost and not yet regained (key "main", "multi:<id>" or
       // "prev:<id>", the lost level, hit points lost, world time) and the 0-level state.
       drain: new SchemaField({

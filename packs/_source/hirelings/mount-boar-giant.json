@@ -1,0 +1,66 @@
+{
+  "_id": "PR6t4yDmTv7ne8xf",
+  "_key": "!actors!PR6t4yDmTv7ne8xf",
+  "name": "Giant boar",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-boar-giant",
+    "role": "mount",
+    "climate": "Any land",
+    "frequency": "Uncommon",
+    "organization": "Family",
+    "activity": "Day",
+    "diet": "Omnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "2-8 (2d4)",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "7",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "3d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "3-18 (3d6)",
+    "specialAttacks": "Nil",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "M (5' at shoulder)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 650,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Boar",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Boar, Giant (Elothere).</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 7900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

@@ -670,6 +670,58 @@
     "ZeroRestored": "{name} may adventure again.",
     "NothingToRestore": "No drained levels to restore."
   },
+  "AD2E.Bond": {
+    "Title": {
+      "companion": "Animal companion",
+      "mount": "Bonded mount"
+    },
+    "Ask": {
+      "companion": "Make {name} your animal companion (Animal Master)?",
+      "mount": "Make {name} your bonded mount (Rider)?"
+    },
+    "CompanionRule": "Animal Master: a bond like a familiar's; simple verbal commands. Lost through carelessness: -10% experience and no companion of that species again; a natural death costs nothing.",
+    "MountRule": "Rider: each knows the other's health, direction and distance (shown when both tokens are on the scene). Its death: 2d6 damage to the rider (by negligence also a save vs. spells or feeblemind for 2d6 hours). Neglected, it may flee: no rapport with an animal again.",
+    "MountNeeded": "This kit requires a mount: drag one onto the sheet (Hirelings & Mounts).",
+    "None": "None yet: drag the animal's actor onto the sheet, or choose one of your animals.",
+    "Set": "Bond",
+    "Clear": "Remove the bond",
+    "Barred": "Species that will not serve as companion",
+    "RapportLost": "Rapport lost: no bonded mount again (a mount fled).",
+    "CompanionTable": "Roll Table 42 (companion)",
+    "MountTable": "Roll Table 43 (mount)",
+    "RollHint": "GM: roll the kit's table; the chat card links the creature in the Hirelings & Mounts compendium.",
+    "DragHint": "Drag the creature from the link onto the character sheet to add and bond it.",
+    "Group": {
+      "natural": "natural creatures",
+      "flying": "flying creatures",
+      "land": "giant land creatures",
+      "underwater": "underwater creatures"
+    },
+    "LostNatural": "Companion died (no penalty)",
+    "LostCareless": "Companion lost carelessly",
+    "CarelessConfirm": "The character loses 10% of the current experience and no companion of this species will serve again. Continue?",
+    "CompanionGone": "{name}'s companion {animal} is gone.",
+    "Careless": "Lost through carelessness: -{xp} XP; {name}'s species will not serve again.",
+    "MountDiedTitle": "Mount died",
+    "MountDiedQuestion": "Did the mount die through the rider's negligence?",
+    "NotNegligent": "Not negligent (2d6 damage)",
+    "WasNegligent": "Negligent (2d6 damage, save vs. spells)",
+    "MountDied": "{name}'s mount {mount} died: {damage} points of damage.",
+    "Negligent": "Negligence: save vs. spells; on a failure the rider acts as if feebleminded for {hours} hours.",
+    "FledTitle": "Mount fled",
+    "FledConfirm": "The mount flees from neglect: the rider can never again have a bonded mount. Continue?",
+    "Fled": "{name}'s mount {mount} fled: no empathic rapport with an animal again.",
+    "DeathNotice": {
+      "companion": "{name}'s animal companion {animal} has died: use the buttons on {name}'s Biography tab.",
+      "mount": "{name}'s bonded mount {animal} has died: use \"Mount died\" on {name}'s Biography tab."
+    },
+    "Refused": {
+      "kit": "{name}: the character's kit has no such bond.",
+      "barred": "{name}: this species will no longer serve as companion.",
+      "rapport": "{name}: the rider has lost the rapport with animals.",
+      "hasOne": "{name}: there is already a living bonded animal."
+    }
+  },
   "AD2E.Guide": {
     "Title": "AD&D 2e player guide",
     "Open": "AD&D 2e player guide",

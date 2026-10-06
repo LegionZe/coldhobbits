@@ -1,0 +1,66 @@
+{
+  "_id": "rSoufeJZGwcnTJjs",
+  "_key": "!actors!rSoufeJZGwcnTJjs",
+  "name": "Brush rat",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "companion-brush-rat",
+    "role": "pet",
+    "climate": "Any",
+    "frequency": "Common",
+    "organization": "Pack",
+    "activity": "Night",
+    "diet": "Scavenger",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-100",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 15,
+      "text": "15"
+    },
+    "hitDice": "1/4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1",
+    "specialAttacks": "Disease",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "T (1' long)",
+    "morale": {
+      "value": 4,
+      "text": "Unreliable (2-4)"
+    },
+    "xp": 7,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Rat",
+    "notes": "<p>Brush rat: statistics of the common rat; brush rats are herbivores, do not attack humans and carry no disease (Rat).</p><p>Animal companion (Animal Master (POSP), Table 42). Statistics: Rat, Common.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 4900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

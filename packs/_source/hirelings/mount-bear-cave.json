@@ -1,0 +1,76 @@
+{
+  "_id": "Pqp0ADuregiemRE6",
+  "_key": "!actors!Pqp0ADuregiemRE6",
+  "name": "Cave bear",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-bear-cave",
+    "role": "mount",
+    "climate": "Any land",
+    "frequency": "Uncommon",
+    "organization": "Family",
+    "activity": "Day",
+    "diet": "Omnivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-2",
+    "ac": {
+      "base": 6,
+      "text": "6"
+    },
+    "movement": {
+      "base": 12,
+      "text": "12"
+    },
+    "hitDice": "6+6",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack 1",
+        "damage": "1d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 2",
+        "damage": "1d8",
+        "bonus": 0
+      },
+      {
+        "name": "Attack 3",
+        "damage": "1d12",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "3",
+    "damageText": "1- 8/1-8/1-12",
+    "specialAttacks": "Hug",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "H (12'+ tall)",
+    "morale": {
+      "value": 10,
+      "text": "Average (8-10)"
+    },
+    "xp": 650,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Bear",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Bear, Cave.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 6700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

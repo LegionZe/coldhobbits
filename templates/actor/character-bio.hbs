@@ -27,6 +27,40 @@
     </div>
   </fieldset>
   {{/with}}
+  {{#with bond as |b|}}
+  <fieldset class="ad2e-prof-list ad2e-bond">
+    <legend>{{#if b.isCompanion}}{{localize "AD2E.Bond.Title.companion"}}{{else}}{{localize "AD2E.Bond.Title.mount"}}{{/if}}</legend>
+    {{#if b.rule}}<p class="ad2e-note">{{b.rule}}</p>{{/if}}
+    {{#if b.kind}}
+    {{#if b.current.actor}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{b.current.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{b.current.uuid}}">{{b.current.name}}</a></span>
+        <span class="ad2e-weapon-meta {{#if b.current.dead}}ad2e-unmet{{/if}}">{{b.current.meta}}</span>
+      </div>
+      {{#if @root.editable}}<a data-action="bondClear" data-tooltip="{{localize 'AD2E.Bond.Clear'}}"><i class="fa-solid fa-link-slash"></i></a>{{else}}<span></span>{{/if}}
+    </div>
+    {{else}}
+    <p class="ad2e-placeholder">{{localize "AD2E.Bond.None"}}</p>
+    {{#if b.candidates.length}}{{#if @root.editable}}<div class="ad2e-prof-summary"><select data-bond-candidate>{{#each b.candidates as |c|}}<option value="{{c.uuid}}">{{c.name}}</option>{{/each}}</select>
+      <button type="button" data-action="bondSet">{{localize "AD2E.Bond.Set"}}</button></div>{{/if}}{{/if}}
+    {{/if}}
+    {{#if b.barredText}}<p class="ad2e-note">{{localize "AD2E.Bond.Barred"}}: {{b.barredText}}</p>{{/if}}
+    {{#if b.rapportLost}}<p class="ad2e-unmet">{{localize "AD2E.Bond.RapportLost"}}</p>{{/if}}
+    {{#if b.isGM}}<div class="ad2e-prof-summary">
+      <button type="button" data-action="bondRoll" data-tooltip="{{localize 'AD2E.Bond.RollHint'}}"><i class="fa-solid fa-dice"></i> {{#if b.isCompanion}}{{localize "AD2E.Bond.CompanionTable"}}{{else}}{{localize "AD2E.Bond.MountTable"}}{{/if}}</button>
+      {{#if b.current.actor}}{{#if b.isCompanion}}
+      <button type="button" data-action="companionLost" data-careless="false">{{localize "AD2E.Bond.LostNatural"}}</button>
+      <button type="button" data-action="companionLost" data-careless="true">{{localize "AD2E.Bond.LostCareless"}}</button>
+      {{else}}
+      <button type="button" data-action="mountDied">{{localize "AD2E.Bond.MountDiedTitle"}}</button>
+      <button type="button" data-action="mountFled">{{localize "AD2E.Bond.FledTitle"}}</button>
+      {{/if}}{{/if}}
+    </div>{{/if}}
+    {{/if}}
+  </fieldset>
+  {{/with}}
   {{#with henchmen as |h|}}
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Henchmen.Title"}}</legend>

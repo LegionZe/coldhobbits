@@ -1,0 +1,66 @@
+{
+  "_id": "JPK11V2oyLjfWYiO",
+  "_key": "!actors!JPK11V2oyLjfWYiO",
+  "name": "Sea horse",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-sea-horse-giant",
+    "role": "mount",
+    "climate": "All except arctic/Ocean",
+    "frequency": "Common",
+    "organization": "Schools",
+    "activity": "Any",
+    "diet": "Herbivore",
+    "intelligence": "Semi- (2-4)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1-20",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 21,
+      "text": "Sw 21"
+    },
+    "hitDice": "2-4",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d4",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-4, 2-5, or 2-8",
+    "specialAttacks": "Constriction",
+    "specialDefenses": "Nil",
+    "magicResistance": "Nil",
+    "size": "L (8-12' long)",
+    "morale": {
+      "value": 10,
+      "text": "Average (10)"
+    },
+    "xp": 35,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Giant_Sea_Horse",
+    "notes": "<p>Variable size: the actor uses the first variant's experience value (2 HD: 35; 3 HD: 65; 4 HD: 120); hit points and damage by the DM.</p><p>Mount (Rider (POSP), Table 43). Statistics: Giant Sea Horse, Giant Sea Horse.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8700,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

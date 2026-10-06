@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.124)
+## Status (v0.0.125)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -524,7 +524,7 @@ Node only until confirmed.
   numbers are kit modifiers (applied, or tick boxes in roll dialogs when conditional; reactions are for the DM), e.g.
   Acrobat +2 tumbling, tightrope walking and jumping unarmoured, Diplomat and Spy +2 reactions, Gladiator +1 to hit
   with the chosen weapon and -1 initiative, Swashbuckler +2 AC in armour no heavier than studded leather, Thug +1
-  damage. Not automated: animal companions and mounts, Mystic meditation (a subability), Pugilist unarmed attacks
+  damage. Animal companions and mounts: see below. Not automated: Mystic meditation (a subability), Pugilist unarmed attacks
   counting as armed, Weapon Master's display, Barbarian reactions, social ranks (Table 40).
 - GM manual: the "AD&D 2e GM manual" button in the Settings sidebar tab (GM only), Configure Settings > "AD&D 2e GM
   manual", or `game.ad2e.manual()`. Sections: getting started (first steps and this system's compendiums), GM tools
@@ -607,6 +607,23 @@ Node only until confirmed.
   Restoration brings back the most recent drained level with "exactly the number of experience points necessary" and
   the hit points it cost, if within one day per level of the priest (the dialog asks the priest's level); the aging is
   not tracked. Excess memorized spells are flagged on the Spells tab, not removed.
+- Animal companions and mounts (Skills & Powers kits Animal Master and Rider; Animal Master - POSP rev 271658, Rider -
+  POSP rev 271694): 48 creatures in the Hirelings & Mounts compendium, folder "Animal Companions & Mounts (POSP)",
+  generated from their Monstrous Manual pages (owner's choices for ambiguous names: dog = Wild Dog, snake = Poison
+  (Normal), brush rat = Rat Common with the page's note, giant beetle = Rhinoceros, giant boar = Giant (Elothere),
+  giant otter = Giant Mammal, giant ray = Manta, stag = Wild Stag, hawk = Large, falcon = Small (Falcon); horse/pony,
+  camel, mule and elephant are the existing Mounts actors; variable-size creatures carry the first variant's
+  experience value). Tables 42 (d20) and 43 (d6 group, d8 mount) and the rules are in
+  `module/rules/companion-tables.mjs`, regex-checked by `tools/build-hireling-data.py`. On the Biography tab of an
+  Animal Master or Rider: the bonded animal (dropping a pet or mount on the sheet offers the bond), its hit points and,
+  for a Rider, the distance and direction of its token on the viewed scene ("Each will know the general state of
+  health of the other, the direction the other is in, and the distance"); GM buttons roll the table (chat card with
+  links to the creatures), "Companion died" (no penalty), "Companion lost carelessly" (-10% of the current experience,
+  every class of a multi-class character, and "he loses his affinity to that species": that species is refused), "Mount
+  died" (2d6 damage to the rider; by negligence a save vs. spells is rolled and the card names the 2d6 hours of
+  feeblemind on a failure, not applied) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
+  animal dies. Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
+  (owner's rulings: generated stat blocks, bond and GM buttons, warning).
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
   adds it and brings the tab back.

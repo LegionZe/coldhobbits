@@ -1,0 +1,66 @@
+{
+  "_id": "7K2hg5Qge9nv14fD",
+  "_key": "!actors!7K2hg5Qge9nv14fD",
+  "name": "Giant skunk",
+  "type": "monster",
+  "img": "icons/svg/pawprint.svg",
+  "system": {
+    "identifier": "mount-skunk-giant",
+    "role": "mount",
+    "climate": "Temperate or subtropical forests",
+    "frequency": "Uncommon",
+    "organization": "Solitary or family",
+    "activity": "Any",
+    "diet": "Omnivore",
+    "intelligence": "Animal (1)",
+    "treasure": "Nil",
+    "alignment": "Neutral",
+    "numberAppearing": "1 or 1-4",
+    "ac": {
+      "base": 7,
+      "text": "7"
+    },
+    "movement": {
+      "base": 9,
+      "text": "9"
+    },
+    "hitDice": "5",
+    "thac0": {
+      "override": null
+    },
+    "attacks": [
+      {
+        "name": "Attack",
+        "damage": "1d6",
+        "bonus": 0
+      }
+    ],
+    "attacksText": "1",
+    "damageText": "1-6",
+    "specialAttacks": "Squirt musk",
+    "specialDefenses": "Squirt musk",
+    "magicResistance": "Nil",
+    "size": "M (6' long)",
+    "morale": {
+      "value": 9,
+      "text": "Average (9)"
+    },
+    "xp": 270,
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "url": "https://adnd2e.fandom.com/wiki/Skunk",
+    "notes": "<p>Mount (Rider (POSP), Table 43). Statistics: Skunk, Giant.</p>",
+    "cost": ""
+  },
+  "items": [],
+  "effects": [],
+  "folder": "v8Owk82NVnDO0hYM",
+  "sort": 8400,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}
