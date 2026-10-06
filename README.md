@@ -14,12 +14,33 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.135)
-Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
-familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
-and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
-are listed under "Verify before use" below. Confirmed in Foundry 14.368 up to 0.0.88; later releases are tested in
-Node only until confirmed.
+## Status (v1.0.0)
+First stable release (2026-10-06). Covered:
+- Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
+  proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
+  spells (learning, memorization, components, damage), encumbrance and containers; optional dual-class and multi-class
+  characters; energy drain and restoration.
+- Combat: initiative (individual, group, standard), attacks and damage with the PHB/DMG modifiers, two weapons, unarmed
+  combat, mounted combat, Combat & Tactics weapons (firearms, lasso, net), death and healing rules.
+- Monsters, hirelings, mounts, pack animals, familiars, Skills & Powers animal companions and mounts, sha'ir gens;
+  monster and spell importers; treasure and magical items with identification.
+- GM manual and player guide in the Settings sidebar.
+
+Confirmed in Foundry 14.368 by the owner up to 0.0.88, and since then feature by feature as each was tried. Not yet
+confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbarian and Mystic features, social ranks
+and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
+(0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
+the net (0.0.135). The features are listed under "Verify before use" below.
+
+## Known limitations
+- Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
+- With the Skills & Powers weapon rules, a multi-class character specializes on its main class's row of Tables 53/54
+  (the multi-class row is not applied).
+- Dual-class: the PHB's per-adventure choice of class while restricted is not tracked (the tick boxes in the dialogs
+  and the experience penalty are).
+- Net: its hand-to-hand block and disarm are not modelled; a trapped victim is described in chat, not marked.
+- Lasso and net dialogs are for characters; a monster attacking with either makes a normal attack.
+- Overland terrain movement is not modelled; psionics are not included; monster pictures are never shipped.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by
@@ -406,7 +427,7 @@ Node only until confirmed.
   (elephant goad, jambiya, katar, razor, scythe, cutlass, great scimitar, tiger claws, tufenk) with a weapon
   proficiency each; lamellar armour (AC 6) and the daraq shield (as the buckler). Familiar weapons and armour are the
   PHB items. The tufenk's Greek fire attack is described in its notes and rolled by hand. Services and slaves are not
-  items. The optional heat penalty for armour better than AC 7 ("Armor in Fiery Zakhara") is not applied.
+  items. The heat penalty for armour better than AC 7 ("Armor in Fiery Zakhara") is the world setting described above.
 - "Magical Items (DMG)" compendium: 347 items from DMG Tables 89-104 (potions, rings, rods, staves, wands and the
   miscellaneous magic tables), one folder per table, each with its XP value, the groups that may use it, and a link
   to its description page (descriptions are not copied). Wands, rods and staves carry their DMG charges when found

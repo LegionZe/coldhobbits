@@ -113,6 +113,18 @@
   the status and has buttons to clear the penalty, and "Undo dual-class" to correct a mistaken switch: the current class
   is removed and the earlier one comes back from the Classes compendium at its last level, with the experience it had at
   the switch (for switches made before 0.0.122, the minimum for that level). Hit points and the kit are not changed.</p>
+  <h3>Multi-class characters</h3>
+  <p>With the world setting "Multi-class characters" on, dropping another class on a demihuman asks whether to add it
+  (multi-class) or replace the class. Adding is offered at creation only, for the race's combinations, with an allowed
+  alignment and the class's minimums. Experience awards (individual and group) are divided between the classes, each
+  share with its class's prime requisite bonus. The Race &amp; Class tab lists the classes with a Level Up button each; a
+  class stops at its racial level limit. After adding the classes, roll 1st-level hit points again (the dice are
+  averaged). One kit, open to any of the classes; kits from the Complete Fighter's and Thief's Handbooks show a
+  single-class warning for you to rule on. Bard combinations from the Complete Bard's Handbook need one of the kits the
+  Race &amp; Class tab names. The other classes' levels and experience can be corrected in the class table. Weapons outside
+  a class's list are marked (a priest's list always applies to a multi-class priest; for a specialty priest fill in
+  "Allowed weapons" on the class or kit item); a multi-class druid's armour limits always show; casting a wizard spell in armour
+  asks for confirmation (elves in elven chain excepted).</p>
   <h3>Skills &amp; Powers kit features</h3>
   <p>Social rank: Roll on the Race &amp; Class tab (the kit's 2d6 table). Encounter reactions ask the NPC's social class
   when a Pugilist is present and whether it is a first meeting with a Barbarian. A Weapon Master's "Display" (Combat
@@ -146,29 +158,6 @@
   level) if cast in time: one day per level of the priest, which the dialog asks for; choose the casting priest there
   and both recorded ages (Biography tab) go up by two years. Drained levels are listed on the Main tab until
   regained.</p>
-  <h3>Lasso</h3>
-  <p>A character attacking with a lasso gets its own dialog: legs (pull/trip), arms (trap), unhorse a rider, or a
-  pull/trip by spurring a mount the lasso is tied to. Target the defender first: its Strength, Dexterity, THAC0 and size
-  are filled in (for monsters from size, Hit Dice and movement) and can be changed. Tick four legs, unaware or
-  stationary as they apply. Chat shows every roll and the result.</p>
-  <h3>Net</h3>
-  <p>The Net is in the Combat &amp; Tactics weapons. Attacking with it opens its own dialog: throw (traps weapon and
-  shield; the target AC counts only Dexterity and magic, so enter any magical protection), loop the rope round (the
-  victim breaks free at -4), pull/trip, or fold the net (2 rounds; after the first throw it is at -4 to hit until
-  folded). A netted character or monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength
-  check.</p>
-  <h3>Multi-class characters</h3>
-  <p>With the world setting "Multi-class characters" on, dropping another class on a demihuman asks whether to add it
-  (multi-class) or replace the class. Adding is offered at creation only, for the race's combinations, with an allowed
-  alignment and the class's minimums. Experience awards (individual and group) are divided between the classes, each
-  share with its class's prime requisite bonus. The Race &amp; Class tab lists the classes with a Level Up button each; a
-  class stops at its racial level limit. After adding the classes, roll 1st-level hit points again (the dice are
-  averaged). One kit, open to any of the classes; kits from the Complete Fighter's and Thief's Handbooks show a
-  single-class warning for you to rule on. Bard combinations from the Complete Bard's Handbook need one of the kits the
-  Race &amp; Class tab names. The other classes' levels and experience can be corrected in the class table. Weapons outside
-  a class's list are marked (a priest's list always applies to a multi-class priest; for a specialty priest fill in
-  "Allowed weapons" on the class or kit item); a multi-class druid's armour limits always show; casting a wizard spell in armour
-  asks for confirmation (elves in elven chain excepted).</p>
   {{/if}}
 
   {{#if is.combat}}
@@ -189,6 +178,16 @@
     <li><strong>Surprise, morale, reactions</strong>: Surprise on the character sheet and the eye button on monster
     sheets; morale and reaction buttons on monster sheets.</li>
     <li><strong>Modifiers</strong>: every roll dialog has a modifier and reason for anything the system does not track.</li>
+    <li><strong>Lasso</strong>: a character attacking with a lasso gets its own dialog: legs (pull/trip), arms (trap),
+    unhorse a rider, or a pull/trip by spurring a mount the lasso is tied to. Target the defender first: its Strength,
+    Dexterity, THAC0 and size are filled in (for monsters from size, Hit Dice and movement) and can be changed. Tick four
+    legs, unaware or stationary as they apply. Chat shows every roll and the result.</li>
+    <li><strong>Net</strong>: attacking with a net opens its own dialog: throw (traps weapon and shield; the target AC
+    counts only Dexterity and magic, so enter any magical protection), loop the rope round (the victim breaks free at -4),
+    pull/trip, or fold the net (2 rounds; after the first throw it is at -4 to hit until folded). A netted character or
+    monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength check.</li>
+    <li><strong>Class weapons</strong>: weapons outside the class's list are marked in red and the attack dialog warns;
+    the attack is still allowed (your ruling).</li>
   </ul>
   {{/if}}
 
@@ -199,7 +198,8 @@
     saving throws by Hit Dice, morale, natural attacks plus owned weapons and armour. "Monsters &amp; NPCs (prototypes)"
     has an orc, a riding horse and a mercenary as examples.</li>
     <li><strong>Hirelings &amp; Mounts</strong> compendium: DMG soldiers with their equipment and wages, civilian
-    specialists, horses, camels, an elephant, pack animals and familiars.</li>
+    specialists, horses, camels, an elephant, pack animals, familiars, and the Skills &amp; Powers animal companions and
+    mounts (Animal Master Table 42, Rider Table 43; see <em>Characters</em>).</li>
     <li><strong>Mounts</strong>: a rider's load is checked against the mount's capacity; the Push button pushes a mount
     beyond its normal pace. With the world setting on, a rider's and mount's tokens move together.</li>
     <li><strong>Familiars</strong>: Find Familiar is rolled by the GM from the character sheet; the familiar's death and
@@ -239,6 +239,7 @@
     kits folder and the "Traits &amp; Disadvantages" compendium.</li>
     <li><strong>Combat &amp; Tactics weapons</strong> are items in the weapon compendiums (misfires, knockdown dice, firearms
     powder and matches).</li>
+    <li><strong>Dual-class</strong> and <strong>multi-class characters</strong>: see <em>Characters</em>.</li>
     <li><strong>Al-Qadim</strong>: kits, sha'ir and gens, elemental mages; the heat penalty for heavy armour is a setting.</li>
     <li><strong>Spell components</strong>, <strong>maximum spells per level</strong> and the <strong>initiative question</strong>
     are settings too.</li>
