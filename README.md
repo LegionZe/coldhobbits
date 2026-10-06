@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.117)
+## Status (v0.0.118)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -530,6 +530,12 @@ Node only until confirmed.
   Configure Settings), every system setting with its current value and what it does (read from the registered
   settings, so new settings appear on their own) and the setting menus, characters, combat, monsters and hirelings,
   items and treasure, optional rules, and the `game.ad2e` macros. Procedures only; no rulebook text.
+- Player guide: the "AD&D 2e player guide" button in the Settings sidebar tab (every user), Configure Settings, or
+  `game.ad2e.playerGuide()`. How to use the character sheet: its tabs, creating a character (abilities, race, class,
+  kit, hit points, body weight), proficiencies and extra slots, buying and equipping gear, carried items, containers,
+  ammunition and magical items, adding, learning, memorizing and casting spells, attacking with targets, saves and
+  checks, mounts and riding (Riding, rider weight, tokens moving together, mounted options, pushing), advancing, and
+  henchmen and familiars. Named "player guide" (not "Player's Handbook", the rulebook's title); no rulebook text.
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
   adds it and brings the tab back.

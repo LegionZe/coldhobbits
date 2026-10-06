@@ -42,7 +42,7 @@ export function systemSettings(registry = game.settings.settings, get = (ns, key
 
 /** This system's settings menus (Configure Settings buttons) other than the manual itself. */
 export function systemMenus(menus = game.settings.menus, i18n = k => game.i18n.localize(k)) {
-  return [...menus.entries()].filter(([k]) => k.startsWith("ad2e.") && k !== "ad2e.manual")
+  return [...menus.entries()].filter(([k]) => k.startsWith("ad2e.") && !["ad2e.manual", "ad2e.playerGuide"].includes(k))
     .map(([key, m]) => ({ key, name: i18n(m.name), hint: m.hint ? i18n(m.hint) : "", icon: m.icon ?? "fa-solid fa-gear" }));
 }
 
@@ -67,18 +67,23 @@ export default class Manual extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static PARTS = { main: { template: "systems/ad2e/templates/apps/manual.hbs", scrollable: [".ad2e-manual-body"] } };
 
+  /** Section ids in order, and the localization prefix of their labels (`<prefix>.Section.<id>`). */
+  static SECTIONS = MANUAL_SECTIONS;
+  static LANG = "AD2E.Manual";
+
   section = "start";
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const i18n = k => game.i18n.localize(k);
+    const { SECTIONS, LANG } = this.constructor;
     return {
       ...context,
       isGM: !!game.user?.isGM,
       version: game.system?.version ?? "",
-      sections: MANUAL_SECTIONS.map(id => ({ id, label: i18n(`AD2E.Manual.Section.${id}`), active: id === this.section })),
+      sections: SECTIONS.map(id => ({ id, label: i18n(`${LANG}.Section.${id}`), active: id === this.section })),
       section: this.section,
-      is: Object.fromEntries(MANUAL_SECTIONS.map(id => [id, id === this.section])),
+      is: Object.fromEntries(SECTIONS.map(id => [id, id === this.section])),
       settings: this.section === "settings" ? systemSettings() : [],
       menus: this.section === "settings" ? systemMenus() : [],
       packs: this.section === "start" ? [...(game.packs ?? [])].filter(p => p.metadata?.packageName === "ad2e")
@@ -102,6 +107,28 @@ export default class Manual extends HandlebarsApplicationMixin(ApplicationV2) {
   }
 }
 
+/** Player guide sections, in order. */
+export const GUIDE_SECTIONS = ["start", "create", "proficiencies", "equipment", "spells", "combat", "riding", "advancing", "more"];
+
+/**
+ * The players' guide to using the system (Configure Settings > "AD&D 2e player guide", the button in the Settings
+ * sidebar tab for every user, or game.ad2e.playerGuide()): creating a character, proficiencies, equipment and
+ * containers, spells, combat, mounts and riding, advancing, henchmen and familiars. How to use the sheets only; the
+ * rules themselves are in the player's own books.
+ */
+export class PlayerGuide extends Manual {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-player-guide",
+    classes: ["ad2e", "ad2e-manual", "ad2e-player-guide"],
+    window: { title: "AD2E.Guide.Title", icon: "fa-solid fa-book-open-reader" }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/player-guide.hbs", scrollable: [".ad2e-manual-body"] } };
+
+  static SECTIONS = GUIDE_SECTIONS;
+  static LANG = "AD2E.Guide";
+}
+
 /**
  * Configure Settings entry and a button in the Settings sidebar tab (GM only). The button goes after the sidebar's
  * `.info` section, as dnd5e 6.0.5 (v14) inserts its own section (module/applications/settings/sidebar.mjs, hook
@@ -112,16 +139,26 @@ export function registerManual() {
     name: "AD2E.Manual.Title", label: "AD2E.Manual.Open", hint: "AD2E.Manual.MenuHint", icon: "fa-solid fa-book",
     type: Manual, restricted: true
   });
+  game.settings.registerMenu("ad2e", "playerGuide", {
+    name: "AD2E.Guide.Title", label: "AD2E.Guide.Open", hint: "AD2E.Guide.MenuHint", icon: "fa-solid fa-book-open-reader",
+    type: PlayerGuide, restricted: false
+  });
   Hooks.on("renderSettings", (app, html) => {
     const root = html instanceof HTMLElement ? html : html?.[0];
-    if (!root || !game.user?.isGM || root.querySelector(".ad2e-manual-button")) return;
-    const button = document.createElement("button");
-    button.type = "button";
-    button.classList.add("ad2e-manual-button");
-    button.innerHTML = `<i class="fa-solid fa-book"></i> ${game.i18n.localize("AD2E.Manual.Open")}`;
-    button.addEventListener("click", () => new Manual().render({ force: true }));
+    if (!root || root.querySelector(".ad2e-manual-button")) return;
+    const make = (cls, icon, label, App) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.classList.add("ad2e-manual-button", cls);
+      button.innerHTML = `<i class="${icon}"></i> ${game.i18n.localize(label)}`;
+      button.addEventListener("click", () => new App().render({ force: true }));
+      return button;
+    };
+    // The player guide for everyone; the GM manual for GMs.
+    const buttons = [make("ad2e-guide-button", "fa-solid fa-book-open-reader", "AD2E.Guide.Open", PlayerGuide)];
+    if (game.user?.isGM) buttons.push(make("ad2e-gm-button", "fa-solid fa-book", "AD2E.Manual.Open", Manual));
     const info = root.querySelector(".info");
-    if (info) info.after(button);
-    else root.append(button);
+    if (info) info.after(...buttons);
+    else root.append(...buttons);
   });
 }
