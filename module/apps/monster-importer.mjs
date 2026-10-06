@@ -45,15 +45,40 @@ function listLocal() {
   return localFiles;
 }
 
+/**
+ * The site's pictures are GIFs, which Foundry 14.368 rejects as canvas textures ("Invalid Asset" from loadTexture, owner's
+ * diagnostic: the same picture as PNG loads), so tokens showed the default icon. A GIF is redrawn (first frame) and
+ * stored as WebP, or PNG where the browser cannot encode WebP (OffscreenCanvas#convertToBlob falls back to PNG).
+ * Other formats are stored as they are; if the browser cannot convert, the GIF is stored (the portrait still shows).
+ */
+export async function toCanvasImage(blob) {
+  if (blob.type !== "image/gif") return blob;
+  try {
+    const bitmap = await createImageBitmap(blob);
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+    canvas.getContext("2d").drawImage(bitmap, 0, 0);
+    bitmap.close?.();
+    return await canvas.convertToBlob({ type: "image/webp", quality: 0.9 });
+  } catch (err) {
+    console.warn("ad2e | could not convert a GIF monster picture", err);
+    return blob;
+  }
+}
+
+const EXTENSION = { "image/webp": "webp", "image/png": "png", "image/gif": "gif", "image/jpeg": "jpg" };
+
 const localChecks = new Map();
 /** Local path for a site picture: from the folder, or downloaded and uploaded; null if the site has no such picture. */
 function localImage(url) {
   if (!localChecks.has(url)) localChecks.set(url, (async () => {
-    const name = cc.localImageName(url);
-    if (!name) return (await imageExists(url)) ? url : null;
+    const original = cc.localImageName(url);
+    if (!original) return (await imageExists(url)) ? url : null;
     const have = await listLocal();
-    const path = `${imageDir()}/${name}`;
-    if (have.has(name)) return path;
+    const base = original.replace(/\.[^.]+$/, "");
+    // A converted copy from an earlier import (GIFs are stored as WebP or PNG).
+    const known = /\.gif$/i.test(original) ? [`${base}.webp`, `${base}.png`] : [original];
+    const found = known.find(n => have.has(n));
+    if (found) return `${imageDir()}/${found}`;
     let blob;
     try {
       const response = await fetch(url);
@@ -63,6 +88,9 @@ function localImage(url) {
     } catch {
       return null;
     }
+    blob = await toCanvasImage(blob);
+    const name = EXTENSION[blob.type] ? `${base}.${EXTENSION[blob.type]}` : original;
+    const path = `${imageDir()}/${name}`;
     try {
       const result = await FP().upload("data", imageDir(), new File([blob], name, { type: blob.type }), {}, { notify: false });
       if (result === false || result?.status === "error") throw new Error(result?.message ?? "upload refused");
@@ -114,11 +142,38 @@ export function monsterUpdate(existing, data, { name = true } = {}) {
   system.attacks = (system.attacks ?? []).map((a, i) => (!a.element && old[i]?.element && old[i].name === a.name ? { ...a, element: old[i].element } : a));
   const change = { _id: existing.id, system, flags: data.flags };
   if (name) change.name = data.name;
-  const replaceable = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE)
-    || String(src).startsWith(`${imageDir()}/`);
-  if (data.img !== cc.DEFAULT_IMAGE && replaceable(existing.img)) change.img = data.img;
-  if (data.img !== cc.DEFAULT_IMAGE && replaceable(existing.prototypeToken?.texture?.src)) change["prototypeToken.texture.src"] = data.img;
+  if (data.img !== cc.DEFAULT_IMAGE && data.img !== existing.img && replaceablePicture(existing.img)) change.img = data.img;
+  const token = existing.prototypeToken?.texture?.src;
+  if (data.img !== cc.DEFAULT_IMAGE && data.img !== token && replaceablePicture(token)) change["prototypeToken.texture.src"] = data.img;
   return change;
+}
+
+/**
+ * Tokens already placed on scenes keep their own picture: those of updated world actors that show a site picture, an
+ * earlier local copy (such as the GIFs stored by 0.0.112-0.0.113) or the default icon take the actor's new token picture.
+ * A picture a GM chose for one token stays. Returns the number of tokens changed.
+ */
+export async function updatePlacedTokens(changes) {
+  const src = new Map(changes.filter(c => c["prototypeToken.texture.src"]).map(c => [c._id, c["prototypeToken.texture.src"]]));
+  if (!src.size) return 0;
+  let count = 0;
+  for (const scene of game.scenes ?? []) {
+    const updates = [];
+    for (const token of scene.tokens ?? []) {
+      const next = src.get(token.actorId);
+      if (next && next !== token.texture?.src && replaceablePicture(token.texture?.src)) updates.push({ _id: token.id, "texture.src": next });
+    }
+    if (updates.length) {
+      await scene.updateEmbeddedDocuments("Token", updates);
+      count += updates.length;
+    }
+  }
+  return count;
+}
+
+/** A picture the importer may replace: none, the default icon, one from the site, or a local copy it stored. */
+function replaceablePicture(src) {
+  return !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE) || String(src).startsWith(`${imageDir()}/`);
 }
 
 /**
@@ -172,10 +227,11 @@ export async function updateExistingMonsters() {
   });
   if (world.length) await Actor.updateDocuments(world);
   for (const [pack, changes] of packs) await Actor.updateDocuments(changes, { pack: pack.collection });
+  const tokens = await updatePlacedTokens(world);
   const updated = world.length + [...packs.values()].reduce((n, c) => n + c.length, 0);
   ui.notifications.remove?.(note);
-  ui.notifications.info(game.i18n.format("AD2E.Importer.Updated", { updated, failed }));
-  return { updated, failed };
+  ui.notifications.info(game.i18n.format("AD2E.Importer.Updated", { updated, failed, tokens }));
+  return { updated, failed, tokens };
 }
 
 /** Run `fn` over `items` with at most `limit` requests at a time. */
