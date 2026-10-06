@@ -12,7 +12,7 @@ import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, i
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
-import { bondInfo, bondKind, canBond, companionLost, mountDied, mountFled, rollBondCreature, setBond } from "../companions.mjs";
+import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, mountDied, mountFled, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -1362,9 +1362,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rule: info.kind ? i18n(info.kind === "companion" ? "AD2E.Bond.CompanionRule" : "AD2E.Bond.MountRule") : "" };
   }
 
-  static #onBondRoll() {
+  static async #onBondRoll() {
     if (!game.user?.isGM) return;
-    return rollBondCreature(this.actor, bondKind(this.actor));
+    const kind = bondKind(this.actor);
+    if (kind !== "mount") return rollBondCreature(this.actor, kind);
+    // Rider: the homeland's subtable or Table 43 as printed (module/companions.mjs, owner's choice).
+    const lands = ["any", ...Object.keys(COMPANIONS.homelands ?? {})];
+    const homeland = await foundry.applications.api.DialogV2.prompt({
+      window: { title: game.i18n.localize("AD2E.Bond.MountTable") },
+      content: `<div class="form-group"><label>${game.i18n.localize("AD2E.Bond.HomelandLabel")}</label><select name="homeland">`
+        + lands.map(l => `<option value="${l}">${foundry.utils.escapeHTML(game.i18n.localize(`AD2E.Bond.Homeland.${l}`))}`
+          + `${l === "any" ? "" : ` (${COMPANIONS.homelands[l].map(r => r.name).join(", ")})`}</option>`).join("")
+        + `</select></div><p class="ad2e-note">${game.i18n.localize("AD2E.Bond.HomelandHint")}</p>`,
+      ok: { label: game.i18n.localize("AD2E.Bond.Roll"), callback: (event, button) => button.form.elements.homeland.value },
+      rejectClose: false });
+    if (!homeland) return;
+    return rollBondCreature(this.actor, kind, homeland);
   }
 
   static #onBondSet(event, target) {
