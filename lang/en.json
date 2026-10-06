@@ -716,6 +716,12 @@
     "NotNegligent": "Not negligent (2d6 damage)",
     "WasNegligent": "Negligent (2d6 damage, save vs. spells)",
     "MountDied": "{name}'s mount {mount} died: {damage} points of damage.",
+    "Fit": {
+      "tooBig": "{name} is too big a mount for a {race} rider (Rider: the character's race; GM's decision).",
+      "tooSmall": "{name} is too small a mount for a {race} rider (Rider: the character's race; GM's decision).",
+      "affinity": "{name} is not among the creatures a {race} animal master attracts (Animal Master: the character's race; GM's decision).",
+      "alignment": "{name} ({alignment}) is not of like demeanor: its good/evil alignment opposes the animal master's (GM's decision)."
+    },
     "Feeblemind": "Feebleminded",
     "FeebleStart": "{name} failed the saving throw and acts as if feebleminded for {hours} hours.",
     "FeebleEnded": "{name} is no longer feebleminded.",

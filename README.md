@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.132)
+## Status (v0.0.133)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -646,7 +646,14 @@ Node only until confirmed.
   with the system's own icon `styles/icons/feeblemind.svg`, casting asks to confirm, the active GM ends it when world
   time passes, GM "End feeblemind" button on the Biography tab for an early end such as a heal spell)) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
   animal dies. "All animal companions should be size S (small)": a companion of size M or larger is bonded with a
-  warning (owner's ruling; T, S or no size pass; every Table 42 creature passes). Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
+  warning (owner's ruling; T, S or no size pass; every Table 42 creature passes). Race and alignment fit (0.0.133, owner's lists and
+  rulings, warnings on the roll card, the bonding prompt and the Biography tab; `raceFit` in companion-tables.mjs from
+  build-hireling-data.py `MOUNT_RACE_FIT` / `COMPANION_RACES`, the kit sentences regex-checked): mounts too big for gnome
+  and halfling riders (elephant, cave bear, giant lizard, huge bat, hippocampus, killer whale, giant ray) or too small for
+  human, half-elf, elf and dwarf riders (huge raven, giant badger, giant frog, giant skunk); Animal Master race affinity
+  (dwarf and gnome: badger, woodchuck, brush rat, ferret, snake, skunk; elf: owl, fox, squirrel, raccoon, hawk, falcon,
+  wolf, badger, raven, skunk, opossum; other races any); "attracted only to animal masters of like demeanor": a warning
+  when the creature's good/evil alignment opposes the master's (neutral creatures fit everyone). Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
   (owner's rulings: generated stat blocks, bond and GM buttons, warning).
 - Spells tab: shown only for characters with spells (slots at their level, a sha'ir, or owned spell items), so
   fighters, thieves and paladins or rangers below their spell levels do not see it; dropping a spell on the sheet still
