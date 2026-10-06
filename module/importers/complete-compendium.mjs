@@ -71,6 +71,19 @@ export function monsterImages(images) {
   return out;
 }
 
+/**
+ * File name for a local copy of a site picture: the path after /images/monsters/ (or after the root) with "/" as "-",
+ * e.g. ".../images/monsters/img/aarakath.gif" -> "img-aarakath.gif", ".../img/spc/x.gif" -> "img-spc-x.gif".
+ * Returns null for a URL that is not on the site.
+ */
+export function localImageName(url) {
+  const u = String(url ?? "");
+  if (!u.startsWith(`${SITE}/`)) return null;
+  const path = decodeURIComponent(u.slice(SITE.length + 1).split(/[?#]/)[0]).replace(/^images\/monsters\//i, "");
+  const name = path.replace(/\//g, "-").replace(/[^A-Za-z0-9._-]/g, "_");
+  return /\.(gif|png|jpe?g|webp|svg)$/i.test(name) ? name : null;
+}
+
 /** Picture for a stat block variant: the one whose alt text names the variant, else the page's first picture. */
 export function monsterImage(images, variant = "") {
   const v = cleanText(variant).toLowerCase();
