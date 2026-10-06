@@ -19,6 +19,76 @@ function imageExists(url) {
   return imageChecks.get(url);
 }
 
+/**
+ * Local copies of the pictures (world setting "monsterImagesLocal", on by default): each picture is downloaded once
+ * into the world folder `worlds/<world>/ad2e-monsters/` (FilePicker.upload to the "data" source, Foundry v14 API) and
+ * actors and tokens use that path, so players' clients load it from the Foundry server, not from the site. A picture
+ * already in the folder is not downloaded again. The site allows these downloads (`access-control-allow-origin: *`).
+ * If the folder cannot be written (no upload permission, another file storage), the site's address is used as before.
+ */
+const FP = () => foundry.applications.apps.FilePicker.implementation;
+export const imageDir = () => `worlds/${game.world.id}/ad2e-monsters`;
+let localFiles = null;
+let uploadWarned = false;
+
+/** Names of the pictures already in the world folder (the folder is created when missing); listed once per session. */
+function listLocal() {
+  localFiles ??= (async () => {
+    try {
+      const result = await FP().browse("data", imageDir());
+      return new Set((result.files ?? []).map(f => decodeURIComponent(String(f).split("/").pop())));
+    } catch {
+      try { await FP().createDirectory("data", imageDir()); } catch (err) { console.warn("ad2e | could not create", imageDir(), err); }
+      return new Set();
+    }
+  })();
+  return localFiles;
+}
+
+const localChecks = new Map();
+/** Local path for a site picture: from the folder, or downloaded and uploaded; null if the site has no such picture. */
+function localImage(url) {
+  if (!localChecks.has(url)) localChecks.set(url, (async () => {
+    const name = cc.localImageName(url);
+    if (!name) return (await imageExists(url)) ? url : null;
+    const have = await listLocal();
+    const path = `${imageDir()}/${name}`;
+    if (have.has(name)) return path;
+    let blob;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return null;
+      blob = await response.blob();
+      if (!/^image\//.test(blob.type)) return null;
+    } catch {
+      return null;
+    }
+    try {
+      const result = await FP().upload("data", imageDir(), new File([blob], name, { type: blob.type }), {}, { notify: false });
+      if (result === false || result?.status === "error") throw new Error(result?.message ?? "upload refused");
+      have.add(name);
+      return result?.path ?? path;
+    } catch (err) {
+      console.warn("ad2e | could not store a monster picture locally; using the site's address", err);
+      if (!uploadWarned) ui.notifications.warn(game.i18n.localize("AD2E.Importer.LocalFailed"));
+      uploadWarned = true;
+      return url;
+    }
+  })());
+  return localChecks.get(url);
+}
+
+export function registerMonsterImageSetting() {
+  game.settings.register("ad2e", "monsterImagesLocal", {
+    name: "AD2E.Importer.LocalSetting", hint: "AD2E.Importer.LocalSettingHint", scope: "world", config: true, type: Boolean,
+    default: true
+  });
+}
+
+function storeLocally() {
+  try { return game.settings.get("ad2e", "monsterImagesLocal") !== false; } catch { return true; }
+}
+
 /** Run `fn` over `items` with at most `limit` requests at a time. */
 async function pool(items, limit, fn) {
   let next = 0;
@@ -184,12 +254,17 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
       folder = game.folders.find(f => f.type === "Actor" && f.name === book.title)
         ?? await Folder.create({ name: book.title, type: "Actor" });
     }
-    // Keep only the pictures that exist (the page's own picture for a variant, else the page's first one, else none).
+    // Keep only the pictures that exist (the page's own picture for a variant, else the page's first one, else none);
+    // with the world setting, as local copies in the world folder.
     const pages = [...new Set(chosen.map(e => e.page))];
     const images = new Map();
+    const local = storeLocally();
     await pool(pages, 4, async page => {
       const ok = [];
-      for (const img of page.images ?? []) if (await imageExists(img.url)) ok.push(img);
+      for (const img of page.images ?? []) {
+        const src = local ? await localImage(img.url) : ((await imageExists(img.url)) ? img.url : null);
+        if (src) ok.push({ ...img, url: src });
+      }
       images.set(page, ok);
     });
     const create = [];
@@ -205,8 +280,10 @@ export default class MonsterImporter extends HandlebarsApplicationMixin(Applicat
       if (existing) {
         const { hp, ...system } = data.system; // keep current hit points
         const change = { _id: existing.id, name: data.name, system, flags: data.flags };
-        // Pictures: replace only the default icon or an earlier picture from the site (keep ones a GM chose).
-        const fromSite = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE);
+        // Pictures: replace only the default icon, an earlier picture from the site or a local copy (keep ones a GM
+        // chose); re-importing replaces the site's address with the local copy.
+        const fromSite = src => !src || src === cc.DEFAULT_IMAGE || String(src).startsWith(cc.SITE)
+          || String(src).startsWith(`${imageDir()}/`);
         if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.img)) change.img = data.img;
         if (data.img !== cc.DEFAULT_IMAGE && fromSite(existing.prototypeToken?.texture?.src)) change["prototypeToken.texture.src"] = data.img;
         update.push(change);

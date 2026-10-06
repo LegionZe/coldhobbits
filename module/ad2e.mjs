@@ -22,7 +22,7 @@ import { registerAnimalHooks } from "./animals.mjs";
 import { registerTokenRiders } from "./token-riders.mjs";
 import { rollTreasureDialog } from "./treasure.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
-import MonsterImporter from "./apps/monster-importer.mjs";
+import MonsterImporter, { registerMonsterImageSetting } from "./apps/monster-importer.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
 import SpellData from "./data/item-spell.mjs";
@@ -48,6 +48,7 @@ Hooks.once("init", () => {
     name: "AD2E.Importer.Title", label: "AD2E.Importer.Open", hint: "AD2E.Importer.MenuHint",
     icon: "fa-solid fa-dragon", type: MonsterImporter, restricted: true
   });
+  registerMonsterImageSetting();
   // GM tool: import spells from the AD&D 2e wiki by source book (Configure Settings, or game.ad2e.importSpells()).
   game.settings.registerMenu("ad2e", "spellImporter", {
     name: "AD2E.SpellImporter.Title", label: "AD2E.SpellImporter.Open", hint: "AD2E.SpellImporter.MenuHint",

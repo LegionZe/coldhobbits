@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.111)
+## Status (v0.0.112)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -421,9 +421,14 @@ Node only until confirmed.
   current hit points. Hit Dice as written ("14 (base)", "6+6 or 9+9", "16 + 2-7 hit points", "45-75 hp", "1/4") are
   parsed; the listed THAC0 is kept when it differs from DMG Table 39.
   The monster's picture from its page becomes the actor portrait and token image (the picture whose caption names the
-  stat block, else the page's first; pictures the site links to but does not have are skipped). Pictures are linked,
-  not copied, so they load from completecompendium.com and need an internet connection. Re-importing replaces only the
-  default icon or an earlier picture from the site, not one a GM chose.
+  stat block, else the page's first; pictures the site links to but does not have are skipped). No pictures ship with
+  the system (copyright; owner's decision). With the world setting "Store imported monster pictures in the world" (on by
+  default) the importer downloads each picture once into `worlds/<world>/ad2e-monsters/` and the portrait and token use
+  that copy, so players' browsers load it from the Foundry server instead of completecompendium.com; a picture already
+  in the folder is not downloaded again. If the folder cannot be written (no upload permission, another file storage)
+  the site's address is used and a warning is shown; with the setting off, pictures are linked as before. Re-importing
+  replaces only the default icon, an earlier picture from the site or a local copy, not one a GM chose (re-importing
+  monsters imported before 0.0.112 replaces their site links with local copies).
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by
@@ -507,10 +512,10 @@ Node only until confirmed.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Not planned: subabilities and character points; psionics not for the time being (owner's decisions).
+- Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
+  for the time being (owner's decisions).
 - Dual-class characters (Multi-Class and Dual-Class Characters (PHB), "Dual-Class Benefits and Restrictions"): humans
   only; prime requisites 15+ in the first class and 17+ in the new one; at least 2nd level before switching; the new
   class starts at 1st level with 0 XP, keeping Hit Dice and hit points; combat and saving throw tables of the new class;
   using the old class's abilities costs experience until the new class's level exceeds the old one.
-- Monster pictures bundled with the system.
 - A GM instruction manual for the system.
