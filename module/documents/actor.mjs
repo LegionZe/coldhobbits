@@ -24,6 +24,7 @@ import { canFightTwoWeapons, twoWeaponStyle, COMBAT_TABLES, halveRate, mountedFi
 
 const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
+import { kitSpecial } from "../kit-features.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -1138,8 +1139,10 @@ export default class AD2EActor extends Actor {
     // "an armed defender is automatically allowed to strike with his weapon before the unarmed attack is made ... the
     // defender gains a +4 bonus to his attack and damage rolls" (Attacking Without Killing (PHB)); targets the user can see.
     const armed = targetActors.filter(a => AD2EActor.#isArmed(a));
-    const armedText = armed.length ? game.i18n.format("AD2E.Unarmed.ArmedTarget",
-      { names: armed.map(a => a.name).join(", "), bonus: C.armedDefender }) : "";
+    // Pugilist (Skills & Powers): "treated as if they were armed when making unarmed attacks" (module/kit-features.mjs).
+    const pugilist = this.type === "character" && !!kitSpecial(this).unarmedArmed;
+    const armedText = armed.length ? (pugilist ? game.i18n.format("AD2E.KitFeature.PugilistArmed", { names: armed.map(a => a.name).join(", ") })
+      : game.i18n.format("AD2E.Unarmed.ArmedTarget", { names: armed.map(a => a.name).join(", "), bonus: C.armedDefender })) : "";
     const armedNote = armedText ? `<p class="ad2e-note">${esc(armedText)}</p>` : "";
     // A maintained hold needs no attack roll: 1 more point each round (round 2 = 2 points, ...).
     if (form === "wrestle" && input.holdRound >= 2) {

@@ -13,6 +13,7 @@
 
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Prof.Weapon"}}</legend>
+    {{#if pt.weaponMaster}}<p class="ad2e-unmet">{{pt.weaponMaster}}</p>{{/if}}
     {{#each pt.weapon.rows as |r|}}
     <div class="ad2e-prof-row ad2e-prof-row-weapon">
       <img src="{{r.img}}" alt="" width="24" height="24">
@@ -20,14 +21,17 @@
         <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>
         <span class="ad2e-weapon-meta">{{r.meta}}{{#if r.covered}} · {{localize "AD2E.SP.Covered"}}{{/if}}</span>
         {{#if r.invalidText}}<span class="ad2e-unmet">{{r.invalidText}}</span>{{/if}}
+        {{#if r.typeConflict}}<span class="ad2e-unmet">{{r.typeConflict}}</span>{{/if}}
       </div>
       <label class="ad2e-spec {{#if r.specInvalid}}ad2e-unmet{{/if}}" data-tooltip="{{#if r.specInvalid}}{{localize 'AD2E.Weapon.SpecInvalid'}}{{else}}{{localize 'AD2E.Weapon.Specialize'}}{{/if}}">
         <input type="checkbox" data-action="toggleSpecialized" data-item-id="{{r.id}}" {{checked r.specialized}} {{#unless @root.editable}}disabled{{/unless}}>
         {{localize "AD2E.Weapon.Specialized"}}</label>
-      {{#if pt.sp}}
+      {{#if pt.choiceBox}}
       <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.SP.ChoiceHint'}}">
         <input type="checkbox" data-action="toggleProfFlag" data-field="choice" data-item-id="{{r.id}}" {{checked r.choice}} {{#unless @root.editable}}disabled{{/unless}}>
         {{localize "AD2E.SP.Choice"}}</label>
+      {{/if}}
+      {{#if pt.sp}}
       <label class="ad2e-spec" data-tooltip="{{localize 'AD2E.SP.ExpertiseHint'}}">
         <input type="checkbox" data-action="toggleProfFlag" data-field="expertise" data-item-id="{{r.id}}" {{checked r.expertise}} {{#unless @root.editable}}disabled{{/unless}}>
         {{localize "AD2E.SP.Expertise"}}</label>

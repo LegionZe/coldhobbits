@@ -108,7 +108,34 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    }
+    },
+    "special": {},
+    "socialRanks": [
+      {
+        "min": 2,
+        "max": 3,
+        "rank": "lower",
+        "title": "Works for someone else"
+      },
+      {
+        "min": 4,
+        "max": 7,
+        "rank": "lowerMiddle",
+        "title": "Owns a stall or rents a storefront"
+      },
+      {
+        "min": 8,
+        "max": 10,
+        "rank": "upperMiddle",
+        "title": "Owns a storefront"
+      },
+      {
+        "min": 11,
+        "max": 12,
+        "rank": "upper",
+        "title": "Owns a large storefront"
+      }
+    ]
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

@@ -83,6 +83,9 @@
         <select name="system.element" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.elementChoice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{#if ct.element2Choice}}
         <select name="system.element2" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.element2Choice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}</label>{{/if}}
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
+      {{#if ct.socialRank}}<p>{{localize "AD2E.KitFeature.SocialRank"}}: <strong>{{ct.socialRank.text}}</strong>
+        {{#if @root.editable}}<button type="button" data-action="socialRank"><i class="fa-solid fa-dice"></i> {{localize "AD2E.KitFeature.RollRank"}}</button>{{/if}}</p>{{/if}}
+      {{#if ct.meditation}}<p>{{ct.meditation.text}} {{#if @root.editable}}<button type="button" data-action="meditate">{{localize "AD2E.KitFeature.Meditate"}}</button>{{/if}}</p>{{/if}}
       {{#if ct.mountNeeded}}<p class="ad2e-unmet">{{localize "AD2E.Bond.MountNeeded"}}</p>{{/if}}
       {{#if ct.kitSingleClass}}<p class="ad2e-unmet">{{ct.kitSingleClass}}</p>{{/if}}
       {{#if ct.kit.otherRequirements}}<p class="ad2e-note">{{localize "AD2E.Class.OtherRequirements"}}</p>{{/if}}

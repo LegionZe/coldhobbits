@@ -181,6 +181,14 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `module/companions.mjs` (`bondKind`, `canBond`, `bondInfo` with `tokenBearing`/`compass`, `carelessXp`, `rollBondTable`, `oversizeCompanion` (warning above S, owner's ruling),
   GM `companionLost`/`mountDied`/`mountFled`, `registerCompanions` death notice); character `system.bond` { companion,
   mount, barred, rapportLost }; Bio tab panel, drop prompt in `_onDropActor`; Cavalier/Noble `mountNeeded` on Race & Class.
+- S&P kit features: kit `special` (build-kit-mechanics.py `KIT_SPECIAL`, regex-checked) and `socialRanks` (`social_ranks`
+  parses each POSP page's 2d6 table from the raw wikitext). `module/kit-features.mjs` (`kitSpecial`, `socialRankFor`,
+  `barbarianReaction`, `pugilistCharisma`, `applyMeditation`/`meditationActive` (character `system.meditation` { ability,
+  from, until }, applied in prepareDerivedData; the sheet's exceptional input shows `_source`), `weaponTypeConflicts`
+  (proficiencies `weaponType`, entry `typeConflict`), `displayPenalty` (actor flag `ad2e.display` { combat, side };
+  AD2ECombatant#getInitiativeRoll and the initiative dialog), `rollSocialRank` (`system.socialRank` / `socialTitle`),
+  `registerKitFeatures` (updateWorldTime: reset on start/end, GM clears)); reaction.mjs `chaReaction`; `sideOf` now in
+  initiative.mjs (re-exported by combat.mjs).
 - Energy drain: `module/level-drain.mjs` (pure: `drainTarget` highest level then most XP, `drainedXp` halfway, `pendingDrain`,
   `restorationInTime`; `minimumXp` from dual-class.mjs). Character `system.drain` { lost [{ key "main" | "multi:<id>" |
   "prev:<id>", identifier, name, level, hp, at }], zero }, `drainLevels()` keys, derived `drainInfo` { pending, zero, any }

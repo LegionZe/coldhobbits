@@ -558,6 +558,45 @@ KIT_SPECIALIZATION = {
     "mystic-al-qadim": ({"mode": "forbidden", "free": []}, r"Mystics may not specialize in weapons"),
 }
 
+# Skills & Powers kit features with figures (kit field `special`, read by module/kit-features.mjs); each value with the
+# text it must match on the kit page (normalized). Owner's rulings: Mystic meditation boosts the ability (no subabilities),
+# Weapon Master's display applies automatically to the other side, the hindrance is a warning, social ranks are rolled.
+KIT_SPECIAL = {
+    "pugilist-posp": {"charismaByClass": ({"lower": 0, "middle": 1, "upper": 2},
+        r"A pugilist's Charisma is effectively lowered by 1 when dealing with those from the middle class and by 2 when speaking to people from the upper class"),
+        "unarmedArmed": (True, r"they are treated as if they were armed when making unarmed attacks")},
+    "barbarian-posp": {"firstReaction": ({"low": 8, "high": 14, "adjust": 2},
+        r"If the NPC's reaction roll result is 8 or less, an additional .2 bonus is applied to the result.*?if the shopkeeper's reaction roll was a 14 or higher, the modifier becomes a \+2 penalty")},
+    "weapon-master-posp": {"display": ({"initiative": 2, "rounds": 2},
+        r"This causes all opponents who see the display to suffer a .2 initiative penalty for the first two rounds of combat"),
+        "weaponType": (True, r"he cannot become proficient with weapons of another type")},
+    "mystic-posp": {"meditation": ({"bonus": 2, "exceptional": 20, "fraction": 3},
+        r"A mystic can temporarily boost one of his 12 subability scores by \+2.*?the bonus counts as 20% rather than 2 points.*?"
+        r"The subability score remains boosted for one-third of the mystic's meditation time.*?a mystic cannot gain multiple meditation bonuses at one time")},
+}
+# Social rank tables ("Social ranks:" 2d6 table on each Skills & Powers kit page): rank names -> keys.
+RANKS = {"lower class": "lower", "lower middle class": "lowerMiddle", "upper middle class": "upperMiddle", "upper class": "upper"}
+
+
+def social_ranks(raw):
+    """The kit page's 2d6 social rank table: [{min, max, rank, title}], or [] if the page has none."""
+    i = raw.lower().find("social rank")
+    if i < 0:
+        return []
+    t = raw[raw.index("{|", i):]
+    t = t[:t.index("|}")]
+    rows = []
+    for chunk in re.split(r"\n\|-", t)[1:]:
+        cells = [c.strip() for line in chunk.strip().split("\n") if line.startswith("|") for c in line[1:].split("||")]
+        if len(cells) < 2:
+            continue
+        lo, _, hi = cells[0].replace("–", "-").partition("-")
+        rows.append({"min": int(lo), "max": int(hi or lo), "rank": RANKS[cells[1].strip().lower()],
+                     "title": cells[2] if len(cells) > 2 else ""})
+    covered = [n for r in rows for n in range(r["min"], r["max"] + 1)]
+    assert covered == list(range(2, 13)), rows
+    return rows
+
 
 def normalize(wiki):
     w = re.sub(r"\[\[(?:[^\]|]*\|)?([^\]]*)\]\]", r"\1", wiki)
@@ -569,6 +608,7 @@ def kit_pages(docs):
     titles = {d["system"]["identifier"]: urllib.parse.unquote(d["system"]["url"].split("/wiki/", 1)[1]).replace("_", " ")
               for d in docs}
     text, revs = {}, {}
+    raw = kit_pages.raw = {}
     items = list(titles.items())
     for i in range(0, len(items), 40):
         batch = dict(items[i:i + 40])
@@ -576,7 +616,8 @@ def kit_pages(docs):
         by_title = {p["title"]: p for p in r["query"]["pages"].values()}
         for ident, title in batch.items():
             p = by_title[title]
-            text[ident] = normalize(p["revisions"][0]["slots"]["main"]["*"])
+            raw[ident] = p["revisions"][0]["slots"]["main"]["*"]
+            text[ident] = normalize(raw[ident])
             revs[ident] = p["revisions"][0]["revid"]
     return text, revs
 
@@ -585,7 +626,7 @@ if __name__ == "__main__":
     files = sorted(glob.glob("packs/_source/kits/[!_]*.json"))
     docs = [json.load(open(f)) for f in files]
     idents = {d["system"]["identifier"] for d in docs}
-    unknown = (set(KIT_MODIFIERS) | set(KIT_SKILLS) | set(KIT_POINTS) | set(KIT_SPECIALIZATION)) - idents
+    unknown = (set(KIT_MODIFIERS) | set(KIT_SKILLS) | set(KIT_POINTS) | set(KIT_SPECIALIZATION) | set(KIT_SPECIAL)) - idents
     assert not unknown, f"curated kits not in packs/_source/kits: {sorted(unknown)}"
     text, revs = kit_pages(docs)
     problems = []
@@ -611,6 +652,13 @@ if __name__ == "__main__":
             spec, pattern = KIT_SPECIALIZATION[ident]
             check(ident, pattern)
         doc["system"]["specialization"] = spec
+        special = {}
+        for key, (value, pattern) in KIT_SPECIAL.get(ident, {}).items():
+            check(ident, pattern)
+            special[key] = value
+        doc["system"]["special"] = special
+        doc["system"]["socialRanks"] = social_ranks(kit_pages.raw[ident]) if ident.endswith("-posp") else []
+        counts["ranks"] = counts.get("ranks", 0) + bool(doc["system"]["socialRanks"])
         doc["system"]["modifiers"] = mods
         doc["system"]["skillAdjust"] = adjust
         doc["system"]["skillPoints"] = ({"first": points[0], "perLevel": points[1], "bardFirst": points[2] if len(points) > 2 else None}
@@ -625,4 +673,5 @@ if __name__ == "__main__":
             json.dump(doc, out, indent=2, ensure_ascii=False)
             out.write("\n")
     print(f"kits updated: {counts['modifiers']} modifiers in {len(KIT_MODIFIERS)} kits, skill adjustments in "
-          f"{counts['skills']}, skill points in {counts['points']}, specialization rules in {len(KIT_SPECIALIZATION)}")
+          f"{counts['skills']}, skill points in {counts['points']}, specialization rules in {len(KIT_SPECIALIZATION)}, "
+          f"special features in {len(KIT_SPECIAL)}, social rank tables in {counts.get('ranks', 0)}")

@@ -73,6 +73,11 @@ export default class KitData extends foundry.abstract.TypeDataModel {
       url: new StringField({ initial: "" }),
       // Weapons allowed to the kit's class (weapon proficiency names or identifiers; replaces the class's list, owner's ruling).
       allowedWeapons: new ArrayField(new StringField()),
+      // Skills & Powers kit features with figures (module/kit-features.mjs; tools/build-kit-mechanics.py KIT_SPECIAL) and
+      // the kit's 2d6 social rank table (rank: lower | lowerMiddle | upperMiddle | upper; Soldier: military title).
+      special: new ObjectField(),
+      socialRanks: new ArrayField(new SchemaField({ min: new NumberField({ integer: true, initial: 2 }), max: new NumberField({ integer: true, initial: 12 }),
+        rank: new StringField({ initial: "" }), title: new StringField({ initial: "" }) })),
       notes: new StringField({ initial: "" })
     };
   }

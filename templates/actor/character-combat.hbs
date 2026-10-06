@@ -8,6 +8,7 @@
     <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
     <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>
     <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
+    {{#if weaponMasterDisplay}}<button type="button" data-action="display" data-tooltip="{{localize 'AD2E.KitFeature.DisplayHint'}}"><i class="fa-solid fa-khanda"></i> {{localize "AD2E.KitFeature.Display"}}</button>{{/if}}
     {{/if}}
   </div>
   {{> "ad2e.weapon-list" wt=weaponTab rows=weaponTab.combatRows note=weaponTab.combatNote}}

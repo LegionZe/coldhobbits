@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.128)
+## Status (v0.0.129)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -526,8 +526,23 @@ Node only until confirmed.
   numbers are kit modifiers (applied, or tick boxes in roll dialogs when conditional; reactions are for the DM), e.g.
   Acrobat +2 tumbling, tightrope walking and jumping unarmoured, Diplomat and Spy +2 reactions, Gladiator +1 to hit
   with the chosen weapon and -1 initiative, Swashbuckler +2 AC in armour no heavier than studded leather, Thug +1
-  damage. Animal companions and mounts: see below. Not automated: Mystic meditation (a subability), Pugilist unarmed attacks
-  counting as armed, Weapon Master's display, Barbarian reactions, social ranks (Table 40).
+  damage. Animal companions and mounts: see below. Kit features with figures (`module/kit-features.mjs`; kit field
+  `special` from build-kit-mechanics.py `KIT_SPECIAL`, each regex-checked against its page):
+  - Pugilist (rev 271692): "treated as if they were armed when making unarmed attacks" (the unarmed card no longer
+    gives an armed target the first strike); Charisma "lowered by 1 when dealing with those from the middle class and
+    by 2 when speaking to people from the upper class" (the encounter reaction dialog asks the NPC's social class and
+    recomputes the Table 6 adjustment).
+  - Barbarian (rev 271662): on a first meeting (a pre-ticked box in the reaction dialog) a result of 8 or less gets -2
+    and 14 or more +2.
+  - Weapon Master (rev 271714): a "Display" button on the Combat tab during combat; the opposing side's initiative in
+    rounds 1 and 2 gets +2 (worse), pre-ticked in their initiative dialog for those who did not see it (owner's ruling);
+    weapon proficiencies whose type (B/P/S) shares nothing with the weapon of choice are marked (owner's ruling: a
+    warning; the weapon-of-choice box is shown for weapon masters without the Skills & Powers weapon rules).
+  - Mystic (rev 271680): "Meditate" on the Race & Class tab: +2 to one ability (owner's ruling: the ability, as
+    subabilities are not used), or +20% to an 18/xx Strength (capped at 18/00, implementation choice), from the end of
+    the meditation for one-third of its time (world time), one boost at a time.
+  - Social ranks: each Skills & Powers kit's 2d6 table (all 30 parsed, coverage 2-12 asserted; the Soldier's military
+    titles kept); a Roll button and the result on the Race & Class tab (owner's ruling).
 - GM manual: the "AD&D 2e GM manual" button in the Settings sidebar tab (GM only), Configure Settings > "AD&D 2e GM
   manual", or `game.ad2e.manual()`. Sections: getting started (first steps and this system's compendiums), GM tools
   (buttons for the monster and spell importers and updates, experience awards, treasure, encounter reactions and

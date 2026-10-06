@@ -9,6 +9,13 @@
  */
 import { ENCOUNTER_TABLES } from "./rules/encounter-tables.mjs";
 import { modifierFields, modifierText, readModifier } from "./roll-modifiers.mjs";
+import { AD2E, lookup } from "./config.mjs";
+import { barbarianReaction, kitSpecial, pugilistCharisma } from "./kit-features.mjs";
+
+/** Charisma reaction adjustment (PHB Table 6) for a score. */
+export function chaReaction(score) {
+  return lookup(AD2E.abilityTables.cha, score)?.reaction ?? 0;
+}
 
 export const REACTION_COLUMNS = ["friendly", "indifferent", "threatening", "hostile"];
 
@@ -44,6 +51,14 @@ export async function rollEncounterReaction(creature = null) {
   })];
   // Conditional kit reaction modifiers of every listed character (shown with its name; only the speaker's count).
   const kitRows = pcs.flatMap(a => speakerAdjustment(a).options.map(m => ({ actor: a, m })));
+  // Skills & Powers kits (module/kit-features.mjs): the Pugilist's Charisma by the NPC's social class, the Barbarian's
+  // first-meeting swing; asked when a listed character has them, applied for the speaker only.
+  const pugilists = pcs.filter(a => kitSpecial(a).charismaByClass);
+  const barbarians = pcs.filter(a => kitSpecial(a).firstReaction);
+  const kitFeatureFields = (pugilists.length ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.KitFeature.NpcClass", { names: pugilists.map(a => a.name).join(", ") }))}</label>`
+      + `<select name="npcClass">${["lower", "middle", "upper"].map(c => `<option value="${c}">${i18n(`AD2E.KitFeature.Class.${c}`)}</option>`).join("")}</select></div>` : "")
+    + (barbarians.length ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.KitFeature.FirstMeeting", { names: barbarians.map(a => a.name).join(", ") }))}</label>`
+      + `<input type="checkbox" name="firstMeeting" checked></div>` : "");
   const content = `<p class="ad2e-note">${i18n("AD2E.Reaction.Hint")}</p>`
     + `<div class="form-group"><label>${i18n("AD2E.Reaction.Behaviour")}</label><select name="column">${REACTION_COLUMNS.map(c =>
       `<option value="${c}"${c === "indifferent" ? " selected" : ""}>${i18n(`AD2E.Reaction.Column.${c}`)}</option>`).join("")}</select></div>`
@@ -51,6 +66,7 @@ export async function rollEncounterReaction(creature = null) {
     + (kitRows.length ? `<fieldset><legend>${i18n("AD2E.Reaction.KitSituational")}</legend>${kitRows.map(({ actor, m }) =>
       `<div class="form-group"><label>${esc(`${actor.name}: ${signed(m.current)} ${m.condition}`)}</label>`
       + `<input type="checkbox" name="kitreact" value="${actor.id}.${m.index}"></div>`).join("")}</fieldset>` : "")
+    + kitFeatureFields
     + modifierFields();
   const input = await foundry.applications.api.DialogV2.prompt({
     classes: ["ad2e"],
@@ -59,19 +75,28 @@ export async function rollEncounterReaction(creature = null) {
     ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
       const f = button.form.elements;
       const ticked = [...(button.form.querySelectorAll?.("input[name=kitreact]:checked") ?? [])].map(i => i.value);
-      return { column: f.column?.value ?? "indifferent", speaker: f.speaker?.value || null, ticked, ...readModifier(button.form) };
+      return { column: f.column?.value ?? "indifferent", speaker: f.speaker?.value || null, ticked, npcClass: f.npcClass?.value ?? "lower",
+        firstMeeting: !!f.firstMeeting?.checked, ...readModifier(button.form) };
     } },
     rejectClose: false
   });
   if (!input) return null;
   const speaker = input.speaker ? (game.actors.get(input.speaker) ?? null) : null;
   const adj = speakerAdjustment(speaker);
+  const special = kitSpecial(speaker);
+  const chaDrop = pugilistCharisma(special.charismaByClass, input.npcClass);
+  if (chaDrop) adj.cha = chaReaction((speaker.system.abilities?.cha?.total ?? 10) - chaDrop);
   const kitPicked = adj.options.filter(m => input.ticked.includes(`${speaker?.id}.${m.index}`));
   const bonus = adj.cha + adj.kit + kitPicked.reduce((n, m) => n + m.current, 0);
   // A bonus for the speaker lowers the roll (friendlier); the manual modifier is added as entered.
   const roll = await new Roll("2d10 - @bonus + @mod", { bonus, mod: input.mod }).evaluate();
-  const result = reactionResult(roll.total, input.column);
+  // Barbarian, first meeting: 8 or less -2 more, 14 or more +2 more.
+  const swing = input.firstMeeting && special.firstReaction ? special.firstReaction : null;
+  const total = barbarianReaction(roll.total, swing);
+  const result = reactionResult(total, input.column);
   const parts = [speaker ? `${speaker.name}: ${i18n("AD2E.Reaction.Cha")} ${signed(adj.cha)}` : null,
+    chaDrop ? game.i18n.format("AD2E.KitFeature.ChaDrop", { n: chaDrop, cls: i18n(`AD2E.KitFeature.Class.${input.npcClass}`) }) : null,
+    total !== roll.total ? game.i18n.format("AD2E.KitFeature.Swing", { from: roll.total, to: total }) : null,
     adj.kit ? `${i18n("AD2E.Reaction.Kit")} ${signed(adj.kit)}` : null,
     ...kitPicked.map(m => `${m.condition} ${signed(m.current)}`)].filter(Boolean);
   const flavor = `${creature ? game.i18n.format("AD2E.Reaction.TitleFor", { name: esc(creature.name) }) : i18n("AD2E.Reaction.Title")}`

@@ -120,3 +120,10 @@ export function defaultAction(actor, actions = initiativeActions(actor)) {
 
 /** Table 55 standard modifiers: [{ key, label, value }]. */
 export const STANDARD_MODIFIERS = T.standard;
+
+/** A combatant's side: its token's disposition (friendly 1, neutral 0, hostile -1; secret counts as hostile). */
+export function sideOf(combatant) {
+  const d = combatant?.token?.disposition;
+  if (typeof d === "number") return d < -1 ? -1 : d;
+  return combatant?.actor?.hasPlayerOwner ? 1 : -1;
+}
