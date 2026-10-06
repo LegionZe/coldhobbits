@@ -1,5 +1,8 @@
 import { modifierFields, modifierText, readModifier } from "../roll-modifiers.mjs";
-import { castingTimeModifier, defaultAction, initiativeActions, STANDARD_MODIFIERS } from "../initiative.mjs";
+import { castingTimeModifier, defaultAction, initiativeActions, sideOf, STANDARD_MODIFIERS } from "../initiative.mjs";
+import { displayPenalty } from "../kit-features.mjs";
+
+export { sideOf };
 
 /** Roll term flavor text (no brackets). */
 const flavor = s => String(s ?? "").replace(/[[\]]/g, "").trim();
@@ -16,13 +19,6 @@ export function initiativeMode() {
   let m;
   try { m = game.settings.get("ad2e", "initiativeMode"); } catch { /* not registered */ }
   return ["group", "standard"].includes(m) ? m : "individual";
-}
-
-/** A combatant's side: its token's disposition (friendly 1, neutral 0, hostile -1; secret counts as hostile). */
-export function sideOf(combatant) {
-  const d = combatant?.token?.disposition;
-  if (typeof d === "number") return d < -1 ? -1 : d;
-  return combatant?.actor?.hasPlayerOwner ? 1 : -1;
 }
 
 /** The side rolls stored for the combat's current round: { "<side>": n } (combat flag ad2e.sides.r<round>). */
@@ -51,10 +47,13 @@ export class AD2ECombatant extends Combatant {
   getInitiativeRoll(formula) {
     if (formula || !this.actor) return super.getInitiativeRoll(formula);
     const mode = initiativeMode();
+    // Weapon Master's display (module/kit-features.mjs): the other side's rolls in rounds 1-2 get the penalty.
+    const shown = displayPenalty(this.parent, this, sideOf);
+    const display = shown ? ` + ${shown.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: shown.name }))}]` : "";
     const base = baseFormula(this, mode);
-    if (mode === "standard") return super.getInitiativeRoll(base);
+    if (mode === "standard") return super.getInitiativeRoll(base + display);
     const action = defaultAction(this.actor);
-    return super.getInitiativeRoll(action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base);
+    return super.getInitiativeRoll((action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base) + display);
   }
 }
 
@@ -115,11 +114,13 @@ export default class AD2ECombat extends Combat {
       const situations = hasteLost ? input.situations.filter(s => s.key !== "hasted") : input.situations;
       const action = mode === "standard" ? null : input.action;
       const terms = [action?.value ? `${action.value}[${flavor(action.short)}]` : null,
+        input.display ? `${input.display.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }))}]` : null,
         // A kit initiative bonus lowers the roll (lowest acts first).
         ...(mode === "standard" ? [] : input.kit.map(k => `${-k.current}[${flavor(k.condition)}]`)),
         ...situations.map(s => `${s.value}[${flavor(s.label)}]`), input.mod ? `${input.mod}[${flavor(input.note || "modifier")}]` : null]
         .filter(Boolean);
       const parts = [action && action.key !== "none" ? action.label : null, action?.note || null,
+        input.display ? game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }) + ` +${input.display.value}` : null,
         ...situations.map(s => `${s.label} ${s.value > 0 ? "+" : ""}${s.value}`),
         ...(mode === "standard" ? [] : input.kit.map(k => `${k.condition} ${-k.current > 0 ? "+" : ""}${-k.current}`)),
         hasteLost ? game.i18n.localize("AD2E.Init.HasteCasting") : null,
@@ -147,6 +148,8 @@ export default class AD2ECombat extends Combat {
     const hasScroll = actions.some(a => a.scroll);
     // Conditional kit initiative modifiers (e.g. the astrologer's hung spells); unconditional ones are in @init.
     const kitOptions = actor?.type === "character" && mode !== "standard" ? (actor.system.kitMods?.options("initiative") ?? []) : [];
+    // Weapon Master's display seen by this combatant's side (pre-ticked; untick if it did not see it).
+    const shown = displayPenalty(combatant?.parent, combatant, sideOf);
     const content = `<p class="ad2e-note">${i18n("AD2E.Init.Hint")}${mode !== "individual" ? ` ${i18n(`AD2E.Init.ModeNote.${mode}`)}` : ""}</p>`
       + (mode === "standard" ? "" : `<div class="form-group"><label>${i18n("AD2E.Init.ActionLabel")}</label><select name="action">${actions.map(a =>
         `<option value="${esc(a.key)}"${a.key === chosen.key ? " selected" : ""}>${esc(a.label)}</option>`).join("")}</select></div>`
@@ -156,6 +159,8 @@ export default class AD2ECombat extends Combat {
       + (kitOptions.length ? `<fieldset><legend>${esc(game.i18n.format("AD2E.Kit.Situational", { kit: actor.system.classInfo?.kitItem?.name ?? "" }))}</legend>`
         + kitOptions.map(m => `<div class="form-group"><label>${esc(`${m.current > 0 ? "-" : "+"}${Math.abs(m.current)} ${m.condition}`)}</label>`
           + `<input type="checkbox" name="kitinit" value="${m.index}"></div>`).join("") + "</fieldset>" : "")
+      + (shown ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.KitFeature.SawDisplay", { name: shown.name, n: shown.value }))}</label>`
+        + `<input type="checkbox" name="display" checked></div>` : "")
       + modifierFields();
     return foundry.applications.api.DialogV2.prompt({
       classes: ["ad2e"],
@@ -173,7 +178,7 @@ export default class AD2ECombat extends Combat {
         const situations = STANDARD_MODIFIERS.filter(m => f[`t55-${m.key}`]?.checked);
         const ticked = [...(button.form.querySelectorAll?.("input[name=kitinit]:checked") ?? [])].map(i => Number(i.value));
         const kit = kitOptions.filter(m => ticked.includes(m.index));
-        return { action, situations, kit, ...readModifier(button.form) };
+        return { action, situations, kit, display: shown && f.display?.checked ? shown : null, ...readModifier(button.form) };
       } },
       rejectClose: false
     });

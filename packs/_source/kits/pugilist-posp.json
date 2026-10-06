@@ -62,7 +62,29 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    }
+    },
+    "special": {
+      "charismaByClass": {
+        "lower": 0,
+        "middle": 1,
+        "upper": 2
+      },
+      "unarmedArmed": true
+    },
+    "socialRanks": [
+      {
+        "min": 2,
+        "max": 10,
+        "rank": "lower",
+        "title": ""
+      },
+      {
+        "min": 11,
+        "max": 12,
+        "rank": "lowerMiddle",
+        "title": ""
+      }
+    ]
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

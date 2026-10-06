@@ -731,6 +731,43 @@
       "hasOne": "{name}: there is already a living bonded animal."
     }
   },
+  "AD2E.KitFeature": {
+    "SocialRank": "Social rank",
+    "RollRank": "Roll (2d6)",
+    "Rank": {
+      "lower": "Lower class",
+      "lowerMiddle": "Lower middle class",
+      "upperMiddle": "Upper middle class",
+      "upper": "Upper class"
+    },
+    "Class": {
+      "lower": "lower class",
+      "middle": "middle class",
+      "upper": "upper class"
+    },
+    "NpcClass": "NPC's social class ({names}: Charisma lower with the middle and upper classes)",
+    "ChaDrop": "Pugilist: Charisma -{n} with the {cls}",
+    "FirstMeeting": "First meeting with {names} (barbarian: 8 or less -2, 14 or more +2)",
+    "Swing": "barbarian, first meeting: {from} → {to}",
+    "PugilistArmed": "{names} armed, but a pugilist counts as armed: no attack first with +4",
+    "Display": "Display",
+    "DisplayHint": "Weapon Master: display your skill as combat begins; the other side's initiative gets the penalty for the first two rounds.",
+    "DisplayNoCombat": "The display needs a combat with this character in it.",
+    "Displayed": "{name} displays weapon mastery: opponents who see it get +{n} to initiative (worse) for the first {rounds} rounds.",
+    "DisplayTerm": "{name}'s display",
+    "SawDisplay": "Saw {name}'s display (+{n} initiative)",
+    "TypeConflict": "Weapon Master: another type than the weapon of choice",
+    "ChooseWeapon": "Weapon Master: tick the weapon of choice; proficiencies of another weapon type are marked.",
+    "Meditate": "Meditate",
+    "MeditateHint": "Mystic: the boost (+2, or +20% to an 18/xx Strength) starts when the meditation ends and lasts one-third of its time; one boost at a time. The GM advances world time.",
+    "Hours": "Hours of meditation",
+    "Ability": "Ability to boost",
+    "Meditated": "{name} meditates for {hours} hours: {ability} boosted afterwards for {minutes} minutes.",
+    "OneBoost": "A mystic cannot gain multiple meditation bonuses at one time.",
+    "Boosted": "Meditation: {ability} boosted.",
+    "MeditationPending": "Meditating (then {ability} boosted).",
+    "NoMeditation": "No meditation boost."
+  },
   "AD2E.Guide": {
     "Title": "AD&D 2e player guide",
     "Open": "AD&D 2e player guide",

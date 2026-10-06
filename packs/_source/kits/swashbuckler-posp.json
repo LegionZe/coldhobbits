@@ -98,7 +98,22 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    }
+    },
+    "special": {},
+    "socialRanks": [
+      {
+        "min": 2,
+        "max": 7,
+        "rank": "upperMiddle",
+        "title": ""
+      },
+      {
+        "min": 8,
+        "max": 12,
+        "rank": "upper",
+        "title": ""
+      }
+    ]
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

@@ -8,6 +8,7 @@ import { isShairKit } from "../shair.mjs";
 import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
 import { bardKitFits, bardKitRule, combinationAllowed, comboKey, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
 import { pendingDrain } from "../level-drain.mjs";
+import { applyMeditation, kitSpecial, meditationActive, weaponTypeConflicts } from "../kit-features.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
@@ -160,6 +161,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       element: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
       // Sorcerer kit (Al-Qadim): the second chosen province (the first is `element`).
       element2: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
+      // Skills & Powers kits (module/kit-features.mjs): social rank (rolled on the kit's table) and military title, and a
+      // Mystic's meditation (ability boosted from `from` to `until`, world time in seconds).
+      socialRank: new StringField({ required: true, blank: true, initial: "" }),
+      socialTitle: new StringField({ required: true, blank: true, initial: "" }),
+      meditation: new SchemaField({ ability: new StringField({ required: true, blank: true, initial: "" }),
+        from: new NumberField({ nullable: true, initial: null }), until: new NumberField({ nullable: true, initial: null }) }),
       // Familiar (module/familiars.mjs): its actor UUID, within the 1 mile link (surprise bonus), separated (loses 1 hp a
       // day), its death resolved (system shock rolled), world time of the last Find Familiar attempt.
       familiar: new SchemaField({ uuid: new StringField({ required: true, blank: true, initial: "" }),
@@ -259,6 +266,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const ab = this.abilities[mod.key];
       ab.total = mod.max !== null && mod.max !== undefined ? Math.max(ab.total, Math.min(ab.total + v, mod.max)) : ab.total + v;
     }
+    // Mystic meditation (module/kit-features.mjs): +2 to one score (18/xx Strength: +20%) while the boost lasts.
+    const medRule = kitSpecial(this.parent).meditation;
+    this.meditationInfo = medRule && meditationActive(this.meditation, game.time?.worldTime ?? 0)
+      ? applyMeditation(this.abilities, this.meditation, medRule) : null;
 
     const a = this.abilities;
     const T = AD2E.abilityTables;
@@ -808,6 +819,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       penalty: sp ? spInfo.penalty.nonproficient
         : (this.multi ? Math.max(...this.multi.classes.map(c => AD2E.proficiencySlots[c.group]?.penalty ?? -Infinity)) : rules.penalty),
       entries,
+      // Weapon Master (module/kit-features.mjs): proficiencies of another type than the weapon of choice (a warning).
+      weaponType: (() => {
+        if (!kitSpecial(this.parent).weaponType) return null;
+        const res = weaponTypeConflicts(entries.filter(e => e.item.system.kind === "weapon").map(e => ({
+          identifier: e.item.system.identifier, choice: !!e.item.system.choice, type: e.item.system.weapon?.type ?? "" })));
+        for (const e of entries) e.typeConflict = res.conflicts.includes(e.item.system.identifier);
+        return res;
+      })(),
       weapon: { available: available.weapon, used: used(weaponKinds) },
       nonweapon: { available: available.nonweapon, used: used(["nonweapon"]) }
     };

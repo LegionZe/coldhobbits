@@ -12,6 +12,8 @@ import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, i
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
+import { kitSpecial, meditate, meditationActive, rollSocialRank, weaponMasterDisplay } from "../kit-features.mjs";
+import { sideOf } from "../initiative.mjs";
 import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
@@ -239,6 +241,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       familiarDeath: CharacterSheet.onFamiliarDeath,
       removeFamiliar: CharacterSheet.onRemoveFamiliar,
       bondRoll: CharacterSheet.#onBondRoll,
+      socialRank: CharacterSheet.#onSocialRank,
+      meditate: CharacterSheet.#onMeditate,
+      display: CharacterSheet.#onDisplay,
       bondSet: CharacterSheet.#onBondSet,
       bondClear: CharacterSheet.#onBondClear,
       companionLost: CharacterSheet.#onCompanionLost,
@@ -333,7 +338,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       total: sys.abilities[key].total,
       adjusted: sys.abilities[key].total !== sys.abilities[key].value,
       isStr: key === "str",
-      exceptional: sys.abilities[key].exceptional
+      // The stored value (a Mystic's meditation raises the derived one; the input must not save the boost).
+      exceptional: this.document._source?.system?.abilities?.[key]?.exceptional ?? sys.abilities[key].exceptional
     }));
     context.saves = AD2E.saves.map(key => ({
       key,
@@ -372,6 +378,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.henchmen = this._henchmenContext();
     context.familiar = this._familiarContext();
     context.bond = this._bondContext();
+    context.weaponMasterDisplay = !!kitSpecial(this.document).display;
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
     // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
@@ -440,6 +447,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           { kits: sys.multi.bard.kits.map(k => k.replace(/-/g, " ")).join(", ") }) : "",
         bardOk: !sys.multi.bard || sys.multi.bard.ok
       } : null,
+      // Skills & Powers kit features (module/kit-features.mjs): social rank, Mystic meditation.
+      socialRank: (info.kitFits && info.kitItem?.system.socialRanks?.length) ? {
+        text: sys.socialRank ? game.i18n.localize(`AD2E.KitFeature.Rank.${sys.socialRank}`) + (sys.socialTitle ? ` (${sys.socialTitle})` : "") : "—" } : null,
+      meditation: kitSpecial(this.document).meditation ? {
+        text: sys.meditation?.ability ? game.i18n.format(meditationActive(sys.meditation, game.time?.worldTime ?? 0) ? "AD2E.KitFeature.Boosted" : "AD2E.KitFeature.MeditationPending",
+          { ability: game.i18n.localize(`AD2E.Ability.${sys.meditation.ability}`) }) : game.i18n.localize("AD2E.KitFeature.NoMeditation") } : null,
       // Cavalier and Noble (POSP) "must purchase a mount" (owner's ruling: a warning while no mount is owned).
       mountNeeded: bondInfo(this.document).mountNeeded,
       kitSingleClass: sys.multi && info.kitItem && SINGLE_CLASS_KITS[info.kitItem.system.source]
@@ -825,7 +838,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     });
     const weaponRow = e => ({ ...row(e), ...weaponDisplay(e), ...spText(e), specialized: e.specialized, specInvalid: e.specInvalid,
       choice: !!e.item.system.choice, expertise: !!e.item.system.expertise, mastery: !!e.item.system.mastery,
-      masteryInvalid: !!e.masteryInvalid, covered: !!e.covered });
+      masteryInvalid: !!e.masteryInvalid, covered: !!e.covered,
+      typeConflict: e.typeConflict ? game.i18n.localize("AD2E.KitFeature.TypeConflict") : "" });
     const spKinds = ["group", "style", "armor", "shield"];
     const spRow = e => {
       const sys = e.item.system;
@@ -836,6 +850,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const spRows = p.entries.filter(e => spKinds.includes(e.item.system.kind)).map(spRow).sort(sortByName);
     return {
       sp: !!p.sp,
+      // Weapon Master: the weapon of choice is ticked here even without the Skills & Powers weapon rules.
+      choiceBox: !!p.sp || !!p.weaponType,
+      weaponMaster: p.weaponType ? (p.weaponType.choice ? "" : game.i18n.localize("AD2E.KitFeature.ChooseWeapon")) : "",
       spPenalty: p.sp ? game.i18n.format("AD2E.SP.PenaltySummary", { non: p.sp.penalty.nonproficient, fam: p.sp.penalty.familiar }) : "",
       spRows,
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,
@@ -1362,6 +1379,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       current: info.kind ? (info.kind === "companion" ? row(info.companion) : row(info.mount)) : null,
       barredText: info.barred.join(", "),
       rule: info.kind ? i18n(info.kind === "companion" ? "AD2E.Bond.CompanionRule" : "AD2E.Bond.MountRule") : "" };
+  }
+
+  static #onSocialRank() {
+    return rollSocialRank(this.actor);
+  }
+
+  static #onMeditate() {
+    return meditate(this.actor);
+  }
+
+  static #onDisplay() {
+    return weaponMasterDisplay(this.actor, sideOf);
   }
 
   static async #onBondRoll() {

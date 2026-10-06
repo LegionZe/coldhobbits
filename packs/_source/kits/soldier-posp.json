@@ -109,7 +109,34 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    }
+    },
+    "special": {},
+    "socialRanks": [
+      {
+        "min": 2,
+        "max": 5,
+        "rank": "lower",
+        "title": "Man-at-arms/foot soldier"
+      },
+      {
+        "min": 6,
+        "max": 9,
+        "rank": "lowerMiddle",
+        "title": "Sergeant/horse soldier"
+      },
+      {
+        "min": 10,
+        "max": 11,
+        "rank": "upperMiddle",
+        "title": "Lieutenant"
+      },
+      {
+        "min": 12,
+        "max": 12,
+        "rank": "upper",
+        "title": "Captain/commander"
+      }
+    ]
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

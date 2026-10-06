@@ -93,7 +93,9 @@
       "first": 40,
       "perLevel": null,
       "bardFirst": 10
-    }
+    },
+    "special": {},
+    "socialRanks": []
   },
   "effects": [],
   "folder": "BVfipmiC4r0zp30k",

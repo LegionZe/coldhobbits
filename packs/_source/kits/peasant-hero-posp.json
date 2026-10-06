@@ -80,7 +80,22 @@
       "first": null,
       "perLevel": null,
       "bardFirst": null
-    }
+    },
+    "special": {},
+    "socialRanks": [
+      {
+        "min": 2,
+        "max": 9,
+        "rank": "lower",
+        "title": ""
+      },
+      {
+        "min": 10,
+        "max": 12,
+        "rank": "lowerMiddle",
+        "title": ""
+      }
+    ]
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

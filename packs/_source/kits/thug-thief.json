@@ -75,7 +75,9 @@
       "first": 40,
       "perLevel": 30,
       "bardFirst": null
-    }
+    },
+    "special": {},
+    "socialRanks": []
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

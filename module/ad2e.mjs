@@ -35,6 +35,7 @@ import { registerSpProficiencies } from "./sp-proficiencies.mjs";
 import { registerDualClass } from "./dual-class.mjs";
 import { registerMultiClass } from "./multi-class.mjs";
 import { registerCompanions } from "./companions.mjs";
+import { registerKitFeatures } from "./kit-features.mjs";
 import { registerShairHooks } from "./shair.mjs";
 import { registerGenHooks } from "./gens.mjs";
 import AD2ECombat, { AD2ECombatant } from "./documents/combat.mjs";
@@ -118,6 +119,7 @@ Hooks.once("init", () => {
   registerSpProficiencies();
   registerDualClass();
   registerCompanions();
+  registerKitFeatures();
   registerMultiClass();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
   // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).
