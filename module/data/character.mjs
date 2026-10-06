@@ -713,6 +713,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const scores = Object.fromEntries(AD2E.abilities.map(k => [k, this.abilities[k].total]));
     const styleItems = items.filter(i => i.system.kind === "style").sort((a, b) => (a.sort ?? 0) - (b.sort ?? 0) || String(a.id).localeCompare(String(b.id)));
     const shieldAllowed = AD2E.classTables?.classArmor?.[classId]?.shield !== "none";
+    // Weapon Master (owner's ruling): the chosen weapon (specialization, else expertise) is the weapon of choice at no cost.
+    const weaponMaster = !!kitSpecial(this.parent).weaponType;
     const entries = items.map(item => {
       const p = item.system;
       const crossGroup = p.kind === "nonweapon" && p.groups.size > 0 && ![...p.groups].some(g => groups.includes(g));
@@ -729,7 +731,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       if (sp && p.kind !== "nonweapon") {
         const res = spCost(p, { group: this.classGroup, classId, level: this.level, covered: p.kind === "weapon" && covered(p.identifier),
           free: isFree, forbidden: kitSpec.mode === "forbidden", extraSpec: p.specialized && !isFree && specializedCount > 1,
-          styleIndex: styleItems.indexOf(item), shieldAllowed });
+          styleIndex: styleItems.indexOf(item), shieldAllowed, choiceFree: weaponMaster });
         Object.assign(entry, { cost: res.slots, invalid: res.invalid, parts: res.parts });
         if (p.kind === "weapon") {
           entry.covered = covered(p.identifier);
@@ -740,7 +742,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
           entry.mastery = res.masteryValid;
           entry.masteryValid = res.masteryValid;
           entry.masteryInvalid = !!p.mastery && !res.masteryValid;
-          entry.choice = !!p.choice;
+          entry.choice = !weaponMaster && !!p.choice;
           entry.expertise = !!p.expertise;
           entry.attack = this.#weaponAttack(p.weapon, { specialized: res.specValid, expertise: entry.expertise,
             mastery: res.masteryValid, choice: entry.choice, sp: true });
@@ -822,11 +824,18 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Weapon Master (module/kit-features.mjs): the chosen weapon (specialization or expertise) and proficiencies of
       // another type (a warning).
       weaponType: (() => {
-        if (!kitSpecial(this.parent).weaponType) return null;
+        if (!weaponMaster) return null;
         const res = weaponTypeConflicts(entries.filter(e => e.item.system.kind === "weapon").map(e => ({
           identifier: e.item.system.identifier, type: e.item.system.weapon?.type ?? "", melee: !!e.item.system.weapon?.melee,
           specialized: !!e.specValid, expertise: !!e.expertise && !(e.invalid ?? []).length })));
-        res.name = entries.find(e => e.item.system.kind === "weapon" && e.item.system.identifier === res.choice)?.item.name ?? "";
+        const chosen = entries.find(e => e.item.system.kind === "weapon" && e.item.system.identifier === res.choice);
+        res.name = chosen?.item.name ?? "";
+        // Skills & Powers: the chosen weapon is the weapon of choice (+1 to hit), free for the kit.
+        if (chosen && sp) {
+          chosen.choice = true;
+          chosen.attack = this.#weaponAttack(chosen.item.system.weapon, { specialized: !!chosen.specValid, expertise: !!chosen.expertise,
+            mastery: !!chosen.masteryValid, choice: true, sp: true });
+        }
         for (const e of entries) e.typeConflict = res.conflicts.includes(e.item.system.identifier);
         return res;
       })(),
