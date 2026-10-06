@@ -8,7 +8,7 @@ import { dieBonus, diceCount, elementFlag, elementOf, PROVINCES } from "../eleme
 import { missileStyleOf, mountedMissileModifier, shieldType, SP } from "../sp-weapons.mjs";
 import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
-import { gainsHitPoints, penalizedAward } from "../dual-class.mjs";
+import { gainsHitPoints, penalizedAward, undoDual } from "../dual-class.mjs";
 import { firstLevelHitPoints, levelHitPoints, multiAward, multiEntries } from "../multi-class.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
 
@@ -177,6 +177,48 @@ export default class AD2EActor extends Actor {
       "system.hp.max": this.system.hp.max + hp,
       "system.hp.value": this.system.hp.value + hp
     });
+  }
+
+  /**
+   * Undo the last dual-class switch (GM correction): the current class item is replaced by the earlier class from the
+   * system's Classes compendium at its last level and experience (module/dual-class.mjs undoDual); the current class's
+   * levels and experience are lost. Hit points and the kit are left as they are.
+   */
+  async undoDualClass() {
+    if (this.type !== "character" || !game.user?.isGM) return null;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const undo = undoDual(this.system.dualClass?.previous ?? [], AD2E.xpTable);
+    if (!undo) return null;
+    const current = this.items.find(i => i.type === "class");
+    const fmt = { name: this.name, from: current?.name ?? "—", level: this.system.level, xp: this.system.xp ?? 0,
+      to: undo.restore.name, toLevel: undo.level, toXp: undo.xp };
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: i18n("AD2E.Dual.Undo") },
+      content: `<p>${esc(game.i18n.format("AD2E.Dual.UndoQuestion", fmt))}</p>`
+        + (undo.estimated ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Dual.UndoEstimated", fmt))}</p>` : "")
+        + `<p class="ad2e-note">${esc(i18n("AD2E.Dual.UndoKeeps"))}</p>`,
+      rejectClose: false
+    });
+    if (!ok) return null;
+    const pack = game.packs?.get("ad2e.classes");
+    const index = pack ? await pack.getIndex({ fields: ["system.identifier"] }) : [];
+    const entry = [...index].find(e => e.system?.identifier === undo.restore.identifier);
+    if (!entry) {
+      ui.notifications.warn(game.i18n.format("AD2E.Dual.UndoMissing", { name: undo.restore.name }));
+      return null;
+    }
+    const data = (await pack.getDocument(entry._id)).toObject();
+    delete data._id;
+    if (current) await this.deleteEmbeddedDocuments("Item", [current.id]);
+    await this.createEmbeddedDocuments("Item", [data]);
+    await this.update({
+      "system.dualClass.previous": undo.remaining.map(p => ({ ...p, prime: [...(p.prime ?? [])] })),
+      "system.dualClass.penalty": { encounter: false, adventure: false },
+      "system.level": undo.level, "system.xp": undo.xp
+    });
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
+      content: `<p>${esc(game.i18n.format("AD2E.Dual.Undone", fmt))}</p>` });
   }
 
   /**

@@ -153,7 +153,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   name, group, level, school, prime }], penalty { encounter, adventure } }; derived `system.dual` (null unless on and
   previous) { restricted, maxOld, oldThac0, oldSaves, thac0Option, saveOptions, penalty }. `#classAbilitiesFor(id, level, kit)`
   and `#spellsFor(cls, level, { kitItem, kindOnly })` per class; earlier classes fill missing abilities (`info.old`,
-  `skillClassId`) and add their spell levels (`spells.old`, levels `old`/`kind`). Actor `markOldClassUse(what)` (flags +
+  `skillClassId`) and add their spell levels (`spells.old`, levels `old`/`kind`). Previous entries record `xp` at the
+  switch (null before 0.0.122); GM `undoDualClass` (actor, `undoDual` in dual-class.mjs) restores the last one from the
+  `ad2e.classes` pack. Actor `markOldClassUse(what)` (flags +
   note) in skills, turning, lay on hands, backstab, casting, `#dualField` tick box (`dualOld`) in saves and attacks;
   levelUp skips HP while restricted; awards (`awardExperience`, AwardXp `shares(total, actors, kind)`) use
   `penalizedAward`. Switch: CharacterSheet `#askDualClass` on class drop; GM `clearDualPenalty` on the Race & Class tab.

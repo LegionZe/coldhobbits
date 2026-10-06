@@ -595,7 +595,14 @@
     "AwardKind": "Award for",
     "AwardKindHint": "Dual-class characters who used an earlier class's abilities get no experience for that encounter and half for the adventure.",
     "Kind": { "encounter": "an encounter", "adventure": "the adventure" },
-    "Award": { "none": "no experience: earlier class used in this encounter", "half": "half: earlier class used this adventure" }
+    "Award": { "none": "no experience: earlier class used in this encounter", "half": "half: earlier class used this adventure" },
+    "Undo": "Undo dual-class",
+    "UndoHint": "GM correction: brings back the earlier class at its last level and experience; the current class is removed.",
+    "UndoQuestion": "Remove {from} (level {level}, {xp} XP) and bring back {to} at level {toLevel} with {toXp} XP?",
+    "UndoEstimated": "The experience {to} had at the switch was not recorded (changed before 0.0.122): {toXp} XP is the minimum for level {toLevel}.",
+    "UndoKeeps": "Hit points and the kit are not changed; adjust them by hand if needed.",
+    "UndoMissing": "{name} was not found in the system's Classes compendium.",
+    "Undone": "{name}: dual-class undone; {from} (level {level}) removed, {to} restored at level {toLevel} with {toXp} XP."
   },
   "AD2E.Multi": {
     "Setting": "Multi-class characters",

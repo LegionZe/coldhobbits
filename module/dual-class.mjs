@@ -82,6 +82,26 @@ export function penalizedAward(amount, kind, penalty = {}) {
     : { gain: amount, rule: "", clear: { encounter: false } };
 }
 
+/** Minimum experience for a level on an experience table (index = level - 1; tables start at 0 for 1st level). */
+export function minimumXp(table, level) {
+  return table?.[Math.max(level, 1) - 1] ?? 0;
+}
+
+/**
+ * Undoing the last class change (GM correction; the PHB allows no return to an earlier class): the earlier class comes
+ * back at its last level with the experience recorded at the switch, or, for switches made before that was recorded,
+ * the minimum for its level (`estimated`).
+ * @param {Array<{identifier: string, level: number, xp: number|null}>} previous
+ * @param {Record<string, number[]>} xpTables  experience tables by class identifier
+ */
+export function undoDual(previous, xpTables) {
+  const last = previous?.at(-1);
+  if (!last) return null;
+  const recorded = last.xp !== null && last.xp !== undefined;
+  return { restore: last, level: last.level, xp: recorded ? last.xp : minimumXp(xpTables?.[last.identifier], last.level),
+    estimated: !recorded, remaining: previous.slice(0, -1) };
+}
+
 /** Better (lower) of two target numbers; null/undefined ignored. */
 export function better(a, b) {
   if (a === null || a === undefined) return b ?? null;
