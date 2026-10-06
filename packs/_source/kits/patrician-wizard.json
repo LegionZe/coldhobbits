@@ -30,7 +30,7 @@
     "raceLimits": {},
     "raceOnly": false,
     "racesBarred": [],
-    "minStacks": false,
+    "minStacks": true,
     "xpTable": "",
     "url": "https://adnd2e.fandom.com/wiki/Patrician_-_Wizard_(Character_Kit)",
     "notes": "",

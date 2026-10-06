@@ -134,6 +134,10 @@ KIT_SOURCES = {  # category -> (book, classes the kits apply to)
     "Character Kit POSP": ("Player's Option: Skills & Powers", None),  # classes per kit: POSP_REQ
 }
 AL_QADIM = {"Character Kit AA", "Character Kit CShaH"}
+# Kit categories whose minimums add to the class's (`minStacks`; owner's ruling for the Complete Wizard's Handbook:
+# "Generally, any kit can be assigned to a specialist from any school" (Wizard Kits (CWH)), and the Witch's minimums are
+# "higher than for any other kit", so a kit does not lower a specialist's own minimums). Skills & Powers kits: POSP_REQ.
+MIN_STACKS = {"Character Kit CWH"}
 WARRIORS, ROGUES = ["fighter", "paladin", "ranger"], ["thief", "bard"]
 WIZARDS = ["mage", "abjurer", "conjurer", "diviner", "enchanter", "illusionist", "invoker", "necromancer", "transmuter"]
 # "Kits (AA)" Table 3 "Eligible Classes" -> class identifiers. "Clerics*": "Uses Druid Experience Table" (kahin).
@@ -499,7 +503,7 @@ def build_kits():
             kits[key] = {"name": kit_name(title), "classes": kit_classes, "source": book,
                                  "min": req.get("min", {}), "otherRequirements": req.get("other", False),
                                  "raceLimits": race_limits, "raceOnly": race_only, "alQadim": cat in AL_QADIM,
-                                 "racesBarred": req.get("barred", []), "minStacks": req.get("stacks", False),
+                                 "racesBarred": req.get("barred", []), "minStacks": req.get("stacks", False) or cat in MIN_STACKS,
                                  "posp": cat == "Character Kit POSP",
                                  "notes": KIT_NOTES.get(title, KIT_NOTES_POSP.get(title, "")), "xpTable": KIT_XP.get(title, ""), "url": url(title), "revid": revid}
             seen.add(title)
