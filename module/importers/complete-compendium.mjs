@@ -167,6 +167,18 @@ export function parseAttacks(text) {
 }
 
 /**
+ * Token footprint in grid squares (5 feet each) for a stat block's Size ("L (12' tall)", "L-H (10-20' long)"): by the
+ * first size letter, owner's ruling: T 0.5, S 1, M 1, L 2, H 3, G 4 (the letters as defined in How to use this Book (MM):
+ * tiny 2' or less, small 2+' to 4', man-sized 4+' to 7', large 7+' to 12', huge 12+' to 25', gargantuan 25+'). The
+ * stated feet are not used. Null without a size letter.
+ */
+export const TOKEN_SQUARES = { T: 0.5, S: 1, M: 1, L: 2, H: 3, G: 4 };
+export function tokenSquares(size) {
+  const letter = String(size ?? "").trim().match(/^([TSMLHG])(?![A-Za-z])/i)?.[1]?.toUpperCase();
+  return letter ? TOKEN_SQUARES[letter] : null;
+}
+
+/**
  * Monster actor data from one stat block variant. The listed THAC0 is kept as an override when it differs from
  * DMG Table 39 for the Hit Dice.
  */
@@ -181,6 +193,7 @@ export function monsterActorData({ key, title, sources, images }, { name, block 
   const moraleNumbers = morale.match(/\d+/g);
   const avgHp = Math.max(1, Math.round(hd.dice ? hd.dice * 4.5 + hd.bonus : 3.5));
   const img = monsterImage(images, name)?.url ?? DEFAULT_IMAGE;
+  const squares = tokenSquares(get("Size"));
   return {
     name: name || title,
     type: "monster",
@@ -203,7 +216,8 @@ export function monsterActorData({ key, title, sources, images }, { name, block 
       xp: firstInt(get("XP Value")) ?? 0,
       url: monsterPageUrl(key), notes: ""
     },
-    prototypeToken: { name: name || title, disposition: -1, actorLink: false, texture: { src: img } },
+    prototypeToken: { name: name || title, disposition: -1, actorLink: false, texture: { src: img },
+      ...(squares ? { width: squares, height: squares } : {}) },
     flags: { ad2e: { completeCompendium: { key, variant: name, sources },
       ...(guessElement(name || title, get("Special Attacks")) ? { elementGuess: guessElement(name || title, get("Special Attacks")) } : {}) } }
   };

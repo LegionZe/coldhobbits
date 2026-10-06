@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.114)
+## Status (v0.0.115)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -438,6 +438,12 @@ Node only until confirmed.
   diagnostic macro: the same picture as PNG loads), so tokens showed the default icon in 0.0.112-0.0.113. Since 0.0.114
   each GIF is stored as WebP (PNG where the browser cannot encode WebP); run "Update existing monsters" once to convert
   the pictures of monsters imported before and fix their placed tokens (the old .gif files can be deleted).
+  Token footprint (squares of 5 feet) follows the stat block's size letter (owner's ruling): T 0.5, S 1, M 1, L 2, H 3,
+  G 4; a range such as "L-H" uses the first letter, and the stated feet are not used. Size letters as defined in How to
+  use this Book (MM): "T = tiny (2' tall or less); S = smaller than a typical human (2+' to 4'); M = man-sized (4+' to
+  7'); L = larger than man-sized (7+' to 12'); H = huge (12+' to 25'); and G = gargantuan (25+')". New imports get it;
+  re-import and "Update existing monsters" set it on prototype tokens and placed tokens still at the default 1x1 (a size
+  a GM set stays); stat blocks without a size letter keep 1x1.
 - Classes and kits are Items (types `class`, `kit`) shipped in the "Classes (PHB)" and "Class Kits" compendiums.
   Drag a class, then a kit, onto a character. Compendium folders: classes by group; kits by group and class
   (Warrior: Fighter/Paladin/Ranger; Wizard; Priest; Rogue: Thief/Bard). Source documents are generated into `packs/_source/` by

@@ -574,9 +574,9 @@
     "SomeFailed": "{n} monster page(s) could not be loaded: {keys}",
     "Done": "Monsters imported: {created} created, {updated} updated.",
     "Update": "Update existing monsters",
-    "UpdateHint": "Re-read the page of every imported monster in this world and in unlocked world compendiums and update its stat block (names, current hit points, pictures a GM chose and attack elements a GM set stay). Pictures are stored as WebP (Foundry does not load the site's GIFs as token images); tokens already placed on scenes get the new picture. Also game.ad2e.updateMonsters().",
+    "UpdateHint": "Re-read the page of every imported monster in this world and in unlocked world compendiums and update its stat block (names, current hit points, pictures a GM chose and attack elements a GM set stay). Pictures are stored as WebP (Foundry does not load the site's GIFs as token images); token footprints follow the size letter (T 0.5, S/M 1, L 2, H 3, G 4 squares; only over the default 1x1); tokens already placed on scenes get the new picture and size. Also game.ad2e.updateMonsters().",
     "Updating": "Updating {n} monsters from {pages} pages...",
-    "Updated": "Monsters updated: {updated}; page or stat block not found: {failed}; placed tokens given the new picture: {tokens}.",
+    "Updated": "Monsters updated: {updated}; page or stat block not found: {failed}; placed tokens given the new picture or size: {tokens}.",
     "GmOnly": "Only a GM can update monsters."
   },
   "AD2E.Sheet.Spell": "AD&D 2e Spell",

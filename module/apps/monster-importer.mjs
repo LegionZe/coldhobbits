@@ -145,23 +145,38 @@ export function monsterUpdate(existing, data, { name = true } = {}) {
   if (data.img !== cc.DEFAULT_IMAGE && data.img !== existing.img && replaceablePicture(existing.img)) change.img = data.img;
   const token = existing.prototypeToken?.texture?.src;
   if (data.img !== cc.DEFAULT_IMAGE && data.img !== token && replaceablePicture(token)) change["prototypeToken.texture.src"] = data.img;
+  // Footprint from the size letter: only over the default 1x1 (a size a GM set stays).
+  const squares = data.prototypeToken?.width;
+  const proto = existing.prototypeToken;
+  if (squares && squares !== 1 && (proto?.width ?? 1) === 1 && (proto?.height ?? 1) === 1) {
+    change["prototypeToken.width"] = squares;
+    change["prototypeToken.height"] = squares;
+  }
   return change;
 }
 
 /**
- * Tokens already placed on scenes keep their own picture: those of updated world actors that show a site picture, an
- * earlier local copy (such as the GIFs stored by 0.0.112-0.0.113) or the default icon take the actor's new token picture.
- * A picture a GM chose for one token stays. Returns the number of tokens changed.
+ * Tokens already placed on scenes keep their own picture and size: those of updated world actors that show a site
+ * picture, an earlier local copy (such as the GIFs stored by 0.0.112-0.0.113) or the default icon take the actor's new
+ * token picture, and those still at the default 1x1 take the footprint of the monster's size (`sizes`: actor id ->
+ * squares). A picture or size a GM chose for one token stays. Returns the number of tokens changed.
  */
-export async function updatePlacedTokens(changes) {
+export async function updatePlacedTokens(changes, sizes = new Map()) {
   const src = new Map(changes.filter(c => c["prototypeToken.texture.src"]).map(c => [c._id, c["prototypeToken.texture.src"]]));
-  if (!src.size) return 0;
+  if (!src.size && !sizes.size) return 0;
   let count = 0;
   for (const scene of game.scenes ?? []) {
     const updates = [];
     for (const token of scene.tokens ?? []) {
+      const change = {};
       const next = src.get(token.actorId);
-      if (next && next !== token.texture?.src && replaceablePicture(token.texture?.src)) updates.push({ _id: token.id, "texture.src": next });
+      if (next && next !== token.texture?.src && replaceablePicture(token.texture?.src)) change["texture.src"] = next;
+      const squares = sizes.get(token.actorId);
+      if (squares && squares !== 1 && (token.width ?? 1) === 1 && (token.height ?? 1) === 1) {
+        change.width = squares;
+        change.height = squares;
+      }
+      if (Object.keys(change).length) updates.push({ _id: token.id, ...change });
     }
     if (updates.length) {
       await scene.updateEmbeddedDocuments("Token", updates);
@@ -203,6 +218,7 @@ export async function updateExistingMonsters() {
   const note = ui.notifications.info(game.i18n.format("AD2E.Importer.Updating", { n: targets.length, pages: byKey.size }));
   const world = [];
   const packs = new Map();
+  const sizes = new Map();
   let failed = 0;
   await pool([...byKey.keys()], 4, async key => {
     let page;
@@ -217,7 +233,9 @@ export async function updateExistingMonsters() {
     for (const t of byKey.get(key)) {
       const variant = page.variants.find(v => v.name === (t.doc.flags.ad2e.completeCompendium.variant ?? ""));
       if (!variant) { failed++; continue; }
-      const change = monsterUpdate(t.doc, cc.monsterActorData({ ...page, images }, variant), { name: false });
+      const data = cc.monsterActorData({ ...page, images }, variant);
+      const change = monsterUpdate(t.doc, data, { name: false });
+      if (!t.pack && data.prototypeToken.width) sizes.set(t.doc.id, data.prototypeToken.width);
       if (!t.pack) world.push(change);
       else {
         if (!packs.has(t.pack)) packs.set(t.pack, []);
@@ -227,7 +245,7 @@ export async function updateExistingMonsters() {
   });
   if (world.length) await Actor.updateDocuments(world);
   for (const [pack, changes] of packs) await Actor.updateDocuments(changes, { pack: pack.collection });
-  const tokens = await updatePlacedTokens(world);
+  const tokens = await updatePlacedTokens(world, sizes);
   const updated = world.length + [...packs.values()].reduce((n, c) => n + c.length, 0);
   ui.notifications.remove?.(note);
   ui.notifications.info(game.i18n.format("AD2E.Importer.Updated", { updated, failed, tokens }));
