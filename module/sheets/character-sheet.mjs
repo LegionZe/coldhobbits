@@ -850,9 +850,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const spRows = p.entries.filter(e => spKinds.includes(e.item.system.kind)).map(spRow).sort(sortByName);
     return {
       sp: !!p.sp,
-      // Weapon Master: the weapon of choice is ticked here even without the Skills & Powers weapon rules.
-      choiceBox: !!p.sp || !!p.weaponType,
-      weaponMaster: p.weaponType ? (p.weaponType.choice ? "" : game.i18n.localize("AD2E.KitFeature.ChooseWeapon")) : "",
+      choiceBox: !!p.sp,
+      // Weapon Master: the chosen weapon is the specialized (else expertise) melee weapon, at no extra cost.
+      weaponMaster: p.weaponType?.choice ? "" : (p.weaponType ? game.i18n.localize("AD2E.KitFeature.ChooseWeapon") : ""),
+      chosenWeapon: p.weaponType?.choice ? game.i18n.format("AD2E.KitFeature.ChosenWeapon", { name: p.weaponType.name }) : "",
       spPenalty: p.sp ? game.i18n.format("AD2E.SP.PenaltySummary", { non: p.sp.penalty.nonproficient, fam: p.sp.penalty.familiar }) : "",
       spRows,
       weapon: { ...p.weapon, over: p.weapon.used > p.weapon.available,

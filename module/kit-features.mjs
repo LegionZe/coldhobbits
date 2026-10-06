@@ -6,7 +6,9 @@
  *  - Barbarian: on a first meeting, an NPC reaction result of 8 or less gets -2 more, 14 or more +2 more.
  *  - Weapon Master: a display of skill gives the opponents who see it -2 initiative (+2 on the d10) for the first two
  *    rounds of combat [a Combat tab button; the opposing side's rolls in rounds 1-2 get it, pre-ticked in their dialog];
- *    no proficiency with weapons of another type than the weapon of choice [a warning].
+ *    no proficiency with weapons of another type than the chosen weapon [a warning; the chosen weapon is the melee weapon
+ *    with specialization, else expertise (the kit's "expertise or specialization in at least one melee weapon"), at no
+ *    extra cost; the Skills & Powers weapon of choice is a separate purchase (owner's ruling)].
  *  - Mystic: meditation boosts a score by +2 (Strength 18/xx: +20%) for one-third of the meditation time, one boost at
  *    a time [the ability instead of a subability; 18/xx capped at 18/00, implementation choice].
  *  - Social ranks: each kit's 2d6 table [rolled and recorded on the character].
@@ -71,9 +73,13 @@ export function applyMeditation(abilities, meditation, rule) {
 /** Weapon damage type letters ("P/S" -> ["P", "S"]). */
 const typeLetters = t => String(t ?? "").toUpperCase().split(/[^BPS]+/).filter(Boolean);
 
-/** Weapon Master: weapon proficiency identifiers whose type shares nothing with the weapon of choice's. */
+/**
+ * Weapon Master: the chosen weapon (the first melee weapon with valid specialization, else with expertise) and the
+ * weapon proficiency identifiers whose type shares nothing with its type.
+ * @param {Array<{identifier: string, type: string, melee: boolean, specialized: boolean, expertise: boolean}>} profs
+ */
 export function weaponTypeConflicts(profs) {
-  const choice = profs.find(p => p.choice);
+  const choice = profs.find(p => p.melee && p.specialized) ?? profs.find(p => p.melee && p.expertise);
   if (!choice) return { choice: null, conflicts: [] };
   const allowed = new Set(typeLetters(choice.type));
   return { choice: choice.identifier, conflicts: profs.filter(p => p !== choice && typeLetters(p.type).length

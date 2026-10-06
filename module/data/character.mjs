@@ -819,11 +819,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       penalty: sp ? spInfo.penalty.nonproficient
         : (this.multi ? Math.max(...this.multi.classes.map(c => AD2E.proficiencySlots[c.group]?.penalty ?? -Infinity)) : rules.penalty),
       entries,
-      // Weapon Master (module/kit-features.mjs): proficiencies of another type than the weapon of choice (a warning).
+      // Weapon Master (module/kit-features.mjs): the chosen weapon (specialization or expertise) and proficiencies of
+      // another type (a warning).
       weaponType: (() => {
         if (!kitSpecial(this.parent).weaponType) return null;
         const res = weaponTypeConflicts(entries.filter(e => e.item.system.kind === "weapon").map(e => ({
-          identifier: e.item.system.identifier, choice: !!e.item.system.choice, type: e.item.system.weapon?.type ?? "" })));
+          identifier: e.item.system.identifier, type: e.item.system.weapon?.type ?? "", melee: !!e.item.system.weapon?.melee,
+          specialized: !!e.specValid, expertise: !!e.expertise && !(e.invalid ?? []).length })));
+        res.name = entries.find(e => e.item.system.kind === "weapon" && e.item.system.identifier === res.choice)?.item.name ?? "";
         for (const e of entries) e.typeConflict = res.conflicts.includes(e.item.system.identifier);
         return res;
       })(),
