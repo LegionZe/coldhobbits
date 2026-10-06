@@ -1,5 +1,7 @@
 import { AD2E, creatureHitDice } from "../config.mjs";
 import { CREATOR_TABLES } from "../rules/creator-tables.mjs";
+import { TREASURE_ROLLS } from "../rules/treasure-tables.mjs";
+import { SP_WEAPONS } from "../rules/sp-weapon-tables.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -475,6 +477,188 @@ export class ItemCreator extends HandlebarsApplicationMixin(ApplicationV2) {
     const issues = itemIssues(s);
     if (issues.length) return ui.notifications.warn(issues.map(k => game.i18n.localize(`AD2E.Creator.Item.Issue.${k}`)).join(" "));
     const doc = await Item.implementation.create(ItemCreator.itemData(s), s.destination ? { pack: s.destination } : {});
+    if (!doc) return null;
+    ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }));
+    this.index = null;
+    doc.sheet?.render(true);
+    return doc;
+  }
+}
+
+/**
+ * Magic item creator. Two modes:
+ *  - a magical item (item type "magic"): DMG Table 88 category, charges (wands 1d20+80, rods 1d10+40, staves 1d6+19 when
+ *    found, rolled at creation if asked; CREATOR_TABLES.magic.charges, checked against the DMG pages), usable-by groups,
+ *    XP and gp values, a container's capacity (weightless: contents add no weight), quantity for consumables;
+ *  - magical arms: a weapon, armour or ammunition item copied from a base item with a bonus (-1 cursed to +5); the XP value
+ *    comes from DMG Tables 105/107 (TREASURE_ROLLS.arms: armour +1 500 ... +5 3,000; swords +1 400 ... +5 3,000, other
+ *    weapons +1 500, +2 1,000, +3 2,000; a sword = a weapon of the Skills & Powers "swords" group) and is written in the
+ *    notes (weapon and armour items have no XP field).
+ * Both arrive unidentified unless ticked (module/identify.mjs).
+ */
+export const MAGIC_GROUPS = ["Warrior", "Priest", "Rogue", "Wizard"];
+const SWORDS = new Set(SP_WEAPONS.groups?.swords?.ids ?? []);
+
+/** Charges an item of the category has when found: { formula, max } or null. */
+export function chargesFor(category) {
+  return CREATOR_TABLES.magic.charges[category] ?? null;
+}
+
+/** Is the weapon item a sword (DMG Table 107's sword column)? */
+export function isSword(system) {
+  return SWORDS.has(system?.proficiency) || SWORDS.has(system?.identifier);
+}
+
+/** DMG Tables 105/107 experience value of magical arms: type "armor" | "weapon" | "ammunition", bonus, sword. Null if none listed. */
+export function armsXp(type, bonus, sword = false) {
+  if (!(bonus > 0)) return null;
+  const arms = TREASURE_ROLLS.arms;
+  if (type === "armor") return arms.acAdjust.find(r => r.adj === bonus)?.xp ?? null;
+  const row = arms.attackAdjust.find(r => (sword ? r.sword : r.other) === bonus);
+  return row ? (sword ? row.swordXp : row.otherXp) : null;
+}
+
+export class MagicItemCreator extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-magic-item-creator",
+    classes: ["ad2e", "creator"],
+    window: { title: "AD2E.Creator.Magic.Title", icon: "fa-solid fa-hat-wizard", resizable: true },
+    position: { width: 640, height: 720 },
+    actions: { create: MagicItemCreator.#onCreate }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/magic-item-creator.hbs", scrollable: [".ad2e-creator-body"] } };
+
+  static blank(mode = "item") {
+    return { mode, source: "", name: "", identifier: "", category: "potion", quantity: 1, weight: null,
+      chargesFormula: "", chargesMax: null, rollCharges: true, usableBy: [], xpValue: null, gpValue: null,
+      capacityWeight: null, capacityVolume: "", weightless: false, identified: false, unidentifiedName: "", notes: "", destination: "",
+      url: "", base: "", baseName: "", baseType: "", baseImg: "", baseSystem: null, bonus: 1 };
+  }
+
+  state = MagicItemCreator.blank();
+  index = null;
+
+  async #loadIndex() {
+    const out = { magic: [], arms: [] };
+    const add = (e, uuid, origin) => {
+      if (e.type === "magic") out.magic.push({ uuid, name: e.name, origin });
+      if (["weapon", "armor", "ammunition"].includes(e.type)) out.arms.push({ uuid, name: e.name, origin, type: e.type });
+    };
+    for (const pack of game.packs ?? []) {
+      if (pack.documentName !== "Item") continue;
+      for (const e of await pack.getIndex({ fields: ["type"] })) add(e, e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, pack.metadata.label);
+    }
+    for (const i of game.items ?? []) add(i, i.uuid, game.i18n.localize("AD2E.Creator.World"));
+    out.magic.sort((a, b) => a.name.localeCompare(b.name));
+    out.arms.sort((a, b) => a.name.localeCompare(b.name));
+    this.index = out;
+  }
+
+  /** Copy a magical item into the state. */
+  static fromItem(item) {
+    const s = MagicItemCreator.blank("item");
+    const sys = item.system;
+    Object.assign(s, { name: `${item.name} (copy)`, category: sys.category, quantity: sys.quantity ?? 1, weight: sys.weight ?? null,
+      chargesFormula: sys.charges?.formula ?? "", chargesMax: sys.charges?.max ?? null,
+      usableBy: String(sys.usableBy ?? "").split(/\s*,\s*/).filter(g => MAGIC_GROUPS.includes(g)),
+      xpValue: sys.xpValue ?? null, gpValue: sys.gpValue ?? null, capacityWeight: sys.capacity?.weight ?? null,
+      capacityVolume: sys.capacity?.volume ?? "", weightless: !!sys.capacity?.weightless, notes: sys.notes ?? "", url: sys.url ?? "" });
+    return s;
+  }
+
+  /** Magical arms: name, XP and the item data (pure). */
+  static armsData(s) {
+    const sys = foundry.utils.deepClone?.(s.baseSystem) ?? JSON.parse(JSON.stringify(s.baseSystem));
+    const sword = s.baseType === "weapon" && isSword(sys);
+    const xp = armsXp(s.baseType, s.bonus, sword);
+    const sign = s.bonus >= 0 ? "+" : "";
+    const name = s.name || `${s.baseName} ${sign}${s.bonus}`;
+    if (s.baseType === "armor") sys.bonus = s.bonus; else sys.bonus = { hit: s.bonus, dmg: s.bonus };
+    Object.assign(sys, { identifier: s.identifier || slugify(name), identified: !!s.identified, unidentifiedName: s.unidentifiedName ?? "",
+      equipped: false, container: "", source: game.i18n.localize("AD2E.Creator.Custom"),
+      notes: [s.notes, xp ? game.i18n.format("AD2E.Creator.Magic.XpNote", { xp }) : ""].filter(Boolean).join(" ") });
+    return { xp, sword, item: { name, type: s.baseType, img: s.baseImg || "icons/svg/sword.svg", system: sys } };
+  }
+
+  /** A magical item's data (pure). */
+  static itemData(s) {
+    return { name: s.name, type: "magic", img: "icons/svg/item-bag.svg", system: {
+      identifier: s.identifier || slugify(s.name), category: s.category, quantity: s.quantity ?? 1, weight: s.weight, carried: true,
+      capacity: { weight: s.capacityWeight, volume: s.capacityVolume ?? "", weightless: !!s.weightless },
+      charges: { value: s.chargesMax ?? 0, max: s.chargesMax ?? null, formula: s.chargesFormula ?? "" },
+      usableBy: s.usableBy.join(", "), identified: !!s.identified, unidentifiedName: s.unidentifiedName ?? "",
+      xpValue: s.xpValue, gpValue: s.gpValue, url: s.url ?? "", notes: s.notes } };
+  }
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    if (!this.index) await this.#loadIndex();
+    const s = this.state;
+    const i18n = k => game.i18n.localize(k);
+    const packs = [...(game.packs ?? [])].filter(pk => pk.documentName === "Item" && pk.metadata?.packageType === "world" && !pk.locked);
+    const arms = s.mode === "arms" && s.baseSystem ? MagicItemCreator.armsData(s) : null;
+    const issues = [];
+    if (s.mode === "item" && !s.name) issues.push(i18n("AD2E.Creator.NeedName"));
+    if (s.mode === "arms" && !s.baseSystem) issues.push(i18n("AD2E.Creator.Magic.NeedBase"));
+    if (s.mode === "item" && s.chargesFormula && !DICE(s.chargesFormula)) issues.push(i18n("AD2E.Creator.Magic.BadCharges"));
+    return {
+      ...context, s, ident: s.identifier || slugify(s.name || arms?.item.name || ""), isItem: s.mode === "item", isArms: s.mode === "arms",
+      modes: ["item", "arms"].map(k => ({ key: k, label: i18n(`AD2E.Creator.Magic.Mode.${k}`), selected: k === s.mode })),
+      categories: Object.entries(AD2E.magicCategories).map(([k, v]) => ({ key: k, label: i18n(v), selected: k === s.category })),
+      sourceOptions: (s.mode === "item" ? this.index.magic : this.index.arms).map(x => ({ ...x, selected: x.uuid === (s.mode === "item" ? s.source : s.base) })),
+      groups: MAGIC_GROUPS.map(g => ({ key: g, checked: s.usableBy.includes(g) })),
+      isContainer: ["bag", "household"].includes(s.category) || s.capacityWeight || s.capacityVolume || s.weightless,
+      arms, issues,
+      destinations: [{ key: "", label: i18n("AD2E.Creator.World"), selected: !s.destination },
+        ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))]
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element.querySelectorAll("[data-field]")) input.addEventListener("change", async ev => {
+      const t = ev.currentTarget;
+      const f = t.dataset.field;
+      const value = t.type === "checkbox" ? t.checked : (t.type === "number" ? (t.value === "" ? null : Number(t.value)) : t.value);
+      const destination = this.state.destination;
+      if (f === "mode") this.state = Object.assign(MagicItemCreator.blank(value), { destination });
+      else if (f === "source") {
+        const item = value ? await fromUuid(value) : null;
+        this.state = Object.assign(item ? MagicItemCreator.fromItem(item) : MagicItemCreator.blank("item"), { source: value, destination });
+      } else if (f === "base") {
+        const item = value ? await fromUuid(value) : null;
+        Object.assign(this.state, { base: value, baseName: item?.name ?? "", baseType: item?.type ?? "", baseImg: item?.img ?? "",
+          baseSystem: item ? (item.toObject?.().system ?? item.system) : null, name: "" });
+      } else if (f === "category") {
+        const ch = chargesFor(value);
+        Object.assign(this.state, { category: value, chargesFormula: ch?.formula ?? "", chargesMax: ch?.max ?? null });
+      } else if (f === "group") {
+        const set = new Set(this.state.usableBy);
+        if (t.checked) set.add(t.dataset.key); else set.delete(t.dataset.key);
+        this.state.usableBy = MAGIC_GROUPS.filter(g => set.has(g));
+      } else this.state[f] = value;
+      this.render();
+    });
+  }
+
+  static async #onCreate() {
+    const s = this.state;
+    let data;
+    if (s.mode === "arms") {
+      if (!s.baseSystem) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.Magic.NeedBase"));
+      data = MagicItemCreator.armsData(s).item;
+    } else {
+      if (!s.name) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.NeedName"));
+      if (s.chargesFormula && !DICE(s.chargesFormula)) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.Magic.BadCharges"));
+      data = MagicItemCreator.itemData(s);
+      // Charges when found: rolled now if asked (the item sheet can roll them again).
+      if (s.chargesFormula && s.rollCharges) {
+        const roll = await new Roll(s.chargesFormula).evaluate();
+        data.system.charges.value = s.chargesMax ? Math.min(roll.total, s.chargesMax) : roll.total;
+      }
+    }
+    const doc = await Item.implementation.create(data, s.destination ? { pack: s.destination } : {});
     if (!doc) return null;
     ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }));
     this.index = null;

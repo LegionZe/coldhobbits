@@ -63,6 +63,12 @@
       AC, a shield's bonus against melee and missiles and the attackers it covers, a helmet; the size it was made for and a
       magical bonus) or ammunition (the weapons that fire it and its damage). Start from an existing item of that kind or a
       blank one; the cost is checked ("5 gp", "2 sp each").</p></div>
+    <div><button type="button" data-action="tool" data-tool="createMagicItem"><i class="fa-solid fa-hat-wizard"></i> Create magic item</button>
+      <p>Either a magical item (category, charges when found for wands, rods and staves, rolled at once if you like, the
+      classes that may use it, XP and gp values, a container's capacity and whether its contents weigh nothing), or
+      magical arms: a copy of a weapon, armour or ammunition with a bonus (-5 to +5), named and valued from the DMG tables
+      (armour +1 500 XP, swords +1 400 XP, other weapons +1 500 XP and so on; the value goes in the notes). Items are
+      unidentified unless you tick Identified.</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -276,6 +282,7 @@
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
       <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>
       <tr><td><code>game.ad2e.createItem()</code></td><td>Item creator (equipment, containers, armour, ammunition).</td></tr>
+      <tr><td><code>game.ad2e.createMagicItem()</code></td><td>Magic item creator.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>
