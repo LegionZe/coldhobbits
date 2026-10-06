@@ -68,11 +68,12 @@ export class MonsterCreator extends HandlebarsApplicationMixin(ApplicationV2) {
     id: "ad2e-monster-creator",
     classes: ["ad2e", "creator"],
     window: { title: "AD2E.Creator.Monster.Title", icon: "fa-solid fa-dragon", resizable: true },
-    position: { width: 640, height: "auto" },
+    position: { width: 640, height: 720 },
     actions: { create: MonsterCreator.#onCreate }
   };
 
-  static PARTS = { main: { template: "systems/ad2e/templates/apps/monster-creator.hbs" } };
+  // The body scrolls (styles/ad2e.css .ad2e-creator-body) and keeps its position when a change re-renders the window.
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/monster-creator.hbs", scrollable: [".ad2e-creator-body"] } };
 
   state = {
     name: "", role: "monster", size: "M", hitDice: "1", ac: 10, move: 12, moveText: "", intelligence: 8, alignment: "Neutral",

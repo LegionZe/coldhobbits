@@ -187,6 +187,10 @@ body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="
 body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="journal"] { --ad2e-tab-colour: #F0E442; }
 body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="compendium"] { --ad2e-tab-colour: #CC79A7; }
 
+/* GM creators (module/apps/creators.mjs): the body scrolls, the Create row stays at the bottom (as the sheets' tabs above). */
+.ad2e.creator .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.ad2e-creator { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.5rem; }
+.ad2e-creator-body { flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.5rem; }
 /* GM manual (module/apps/manual.mjs): the system's own markup only. */
 .ad2e.ad2e-manual .ad2e-manual-layout { display: flex; gap: 0.75rem; height: 100%; }
 .ad2e-manual-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 0 0 11rem; }
