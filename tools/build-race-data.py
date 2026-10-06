@@ -117,8 +117,44 @@ def level_limits(race, classes):
     return out
 
 
+# Multi-class combinations ("Multi-Class Combinations", Multi-Class and Dual-Class Characters (PHB)): class names per
+# race, "*" = "or Druid" (the cleric may be a druid). Parsed from the page; checked against the curated count per race.
+MULTI_PAGE = "Multi-Class and Dual-Class Characters (PHB)"
+MULTI_COUNT = {"Dwarf": 2, "Elf": 4, "Gnome": 6, "Halfling": 1, "Half-Elf": 7}
+
+
+def multi_class_combinations():
+    """Race name -> sorted list of combinations, each a "/"-joined list of class identifiers (cleric* also as druid)."""
+    wiki, rev, _ = classdata.page(MULTI_PAGE)
+    sec = wiki[wiki.index("==Multi-Class Combinations=="):wiki.index("==Multi-Class Benefits")]
+    assert re.search(r"<nowiki>\*</nowiki> or Druid", sec), "Multi-Class Combinations: footnote changed"
+    assert re.search(r"specialist wizards cannot be multi-class \(gnome illusionists are the single exception to this rule\)", sec), \
+        "Multi-Class Combinations: specialist rule changed"
+    out, race = {}, None
+    for line in sec.splitlines():
+        m = re.match(r"\[\[([^\]|]+)\]\]\s*$", line.strip())
+        if m:
+            race = m.group(1)
+            out[race] = []
+            continue
+        m = re.match(r"\*\s*([A-Za-z/*]+)\s*$", line.strip())
+        if m and race:
+            names = m.group(1).split("/")
+            variants = [[]]
+            for n in names:
+                ids = ["cleric", "druid"] if n.endswith("*") else [n.lower()]
+                variants = [v + [i] for v in variants for i in ids]
+            for v in variants:
+                out[race].append("/".join(v))
+    for race, n in MULTI_COUNT.items():
+        listed = len({c.replace("druid", "cleric") for c in out.get(race, [])})
+        assert listed == n, f"Multi-Class Combinations: {race} has {listed} combinations, expected {n}"
+    return out, rev
+
+
 def build():
     base_move, _ = movement.build_base_move()
+    multi, multi_rev = multi_class_combinations()
     wiki, rev, _ = classdata.page("Character Race Tables (PHB)")
     t7 = classdata.table_rows(wiki, "Table 7: Racial Ability Requirements")
     header = [link_text(h) for h in re.findall(r"!\s*scope=\"col\"\|\s*([^\n]+)", wiki[wiki.index("Table 7: Racial Ability Requirements"):])[1:7]]
@@ -164,9 +200,10 @@ def build():
                   "classes": classes, "kitClasses": kit_classes, "conSaves": f["conSaves"], "conPoison": f["conPoison"],
                   "infravision": f["infravision"], "infravisionByLineage": f.get("infravisionByLineage", False),
                   "levelLimits": level_limits(name, classes),
+                  "multiClass": sorted(multi.get(name, [])),
                   "url": classdata.url(f["page"]), "notes": ""}
         docs.append(classdata.item_doc("race", key, name, "icons/svg/mystery-man.svg", system, i * 1000))
-        print(f"{name}: page rev {page_rev}, classes {classes}, via kit {kit_classes}")
+        print(f"{name}: page rev {page_rev}, classes {classes}, via kit {kit_classes}, multi-class {sorted(multi.get(name, []))} (rev {multi_rev})")
     classdata.write_docs("packs/_source/races", docs)
 
     # Table 9: Constitution Saving Throw Bonuses (dwarf, gnome, halfling).

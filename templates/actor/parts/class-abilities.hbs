@@ -14,7 +14,7 @@
     {{#if ft.perSkillMax}}<span>{{ft.perSkillMax}}</span>{{/if}}
   </div>
   {{/if}}
-  {{#if ft.armorBlocked}}<p class="ad2e-unmet">{{localize "AD2E.Skill.HeavyArmor"}}</p>{{/if}}
+  {{#if ft.armorLimited}}<p class="ad2e-unmet">{{localize "AD2E.Multi.ThiefArmor"}}</p>{{else if ft.armorBlocked}}<p class="ad2e-unmet">{{localize "AD2E.Skill.HeavyArmor"}}</p>{{/if}}
   <table class="ad2e-race-table ad2e-skill-table">
     <thead><tr><th></th><th>{{localize "AD2E.Skill.Base"}}</th><th>{{localize "AD2E.Skill.Race"}}</th><th>{{localize "AD2E.Skill.Dex"}}</th>
       {{#if ft.showArmor}}<th>{{localize "AD2E.Skill.Armor"}}</th>{{/if}}<th>{{localize "AD2E.Skill.Kit"}}</th>

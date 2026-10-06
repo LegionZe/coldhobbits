@@ -83,6 +83,7 @@
         <select name="system.element" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.elementChoice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{#if ct.element2Choice}}
         <select name="system.element2" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.element2Choice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}</label>{{/if}}
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
+      {{#if ct.kitSingleClass}}<p class="ad2e-unmet">{{ct.kitSingleClass}}</p>{{/if}}
       {{#if ct.kit.otherRequirements}}<p class="ad2e-note">{{localize "AD2E.Class.OtherRequirements"}}</p>{{/if}}
       {{else}}
       <p>{{localize "AD2E.Class.DropKit"}}</p>
@@ -104,6 +105,28 @@
       </tbody>
     </table>
   </fieldset>
+  {{#if ct.multi}}
+  <fieldset class="ad2e-multi-class">
+    <legend>{{localize "AD2E.Multi.Legend"}}</legend>
+    {{#unless ct.multi.allowed}}<p class="ad2e-unmet">{{localize "AD2E.Multi.NotCombination"}}</p>{{/unless}}
+    <table>
+      <thead><tr><th>{{localize "AD2E.Character.className"}}</th><th>{{localize "AD2E.Character.level"}}</th><th>XP</th><th>{{localize "AD2E.HP.NextLevel"}}</th>
+        <th>{{localize "AD2E.HP.HitDice"}}</th><th>{{localize "AD2E.Race.LevelLimit"}}</th><th>{{localize "AD2E.Class.XpBonus"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each ct.multi.rows as |r|}}
+        <tr>
+          <th><a data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>{{#if r.primary}} <span class="ad2e-note" data-tooltip="{{localize 'AD2E.Multi.PrimaryHint'}}">({{localize "AD2E.Multi.Primary"}})</span>{{/if}}</th>
+          <td>{{r.level}}</td><td>{{r.xp}}</td><td>{{r.xpNext}}</td><td>{{r.hitDice}}</td>
+          <td class="{{#if r.atLimit}}ad2e-unmet{{/if}}">{{r.limit}}</td><td>{{r.bonus}}</td>
+          <td>{{#if @root.editable}}<button type="button" data-action="levelUp" data-class-id="{{r.identifier}}" {{#if r.atLimit}}disabled{{/if}}>{{#if r.canLevel}}<i class="fa-solid fa-arrow-up"></i> {{/if}}{{localize "AD2E.HP.LevelUp"}}</button>
+            {{#unless r.primary}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/unless}}{{/if}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <p class="ad2e-note">{{localize "AD2E.Multi.TabNote"}}</p>
+  </fieldset>
+  {{/if}}
   {{#if ct.dual}}
   <fieldset class="ad2e-dual-class">
     <legend>{{localize "AD2E.Dual.Legend"}}</legend>

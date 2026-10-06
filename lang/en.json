@@ -597,6 +597,37 @@
     "Kind": { "encounter": "an encounter", "adventure": "the adventure" },
     "Award": { "none": "no experience: earlier class used in this encounter", "half": "half: earlier class used this adventure" }
   },
+  "AD2E.Multi": {
+    "Setting": "Multi-class characters",
+    "SettingHint": "Multi-Class and Dual-Class Characters (PHB): a demihuman may take two or three classes at creation, in the combinations its race allows (drop each class on the sheet). Experience is divided equally between the classes (each share with that class's prime requisite bonus); each class levels up separately and stops at its racial level limit. Hit points: the 1st-level dice are averaged, later Hit Dice are divided by the number of classes. The best THAC0 and saving throws, the most proficiency slots and every class's abilities and spells apply; no weapon specialization. One kit, open to any of the classes. Reloads the world.",
+    "Title": "Add a class",
+    "Question": "Add {to} to {from} ({race})?",
+    "Combinations": "{race} combinations: {list}",
+    "Explain": "Multi-class: all the classes start at 1st level with 0 experience points; experience is divided between them. Roll 1st-level hit points again afterwards.",
+    "NotEligible": "This character cannot add this class:",
+    "Become": "Multi-class: {from}/{to}",
+    "Reason": {
+      "race": "{race} characters cannot be multi-class (only demihumans, in their race's combinations).",
+      "same": "The character already has {to}.",
+      "combination": "{from}/{to} is not one of the {race} combinations.",
+      "creation": "Classes are combined only at character creation (all classes at 1st level with no experience).",
+      "alignment": "The character's alignment is not allowed for {to}.",
+      "minimum": "The ability scores do not meet {to}'s minimums."
+    },
+    "Added": "{name} is now a multi-class {classes}.",
+    "Legend": "Multi-class",
+    "NotCombination": "These classes are not one of the race's multi-class combinations.",
+    "Primary": "main",
+    "PrimaryHint": "Its level and experience are the ones in the sheet header; the warrior class comes first (warrior Constitution bonus).",
+    "TabNote": "Experience awards are divided between the classes. Level Up here advances one class; the Level Up button on the Main tab asks which.",
+    "WhichClass": "Which class advances?",
+    "HpGained": "{hp} hit points (Hit Die divided by {n} classes)",
+    "FirstHp": "{hp} hit points ({n} dice averaged, plus Constitution)",
+    "AwardNote": "Divided equally between the {n} classes, each share with its class's prime requisite bonus.",
+    "Gained": "{name} gains {gain} XP (multi-class)",
+    "KitSingleClass": "{source}: its kits are for single-class characters only ({page}). The GM decides.",
+    "ThiefArmor": "Multi-class: in armour not allowed to thieves only open locks and detect noise can be used (no armour adjustment)."
+  },
   "AD2E.Guide": {
     "Title": "AD&D 2e player guide",
     "Open": "AD&D 2e player guide",

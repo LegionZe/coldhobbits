@@ -10,6 +10,8 @@ const { BooleanField, NumberField, ObjectField, SchemaField, StringField, SetFie
  * `conSaves`/`conPoison`: Table 9 Constitution bonus vs. rod/staff/wand and spells / vs. poison.
  * `levelLimits`: { classIdentifier: maxLevel | null } (null = unlimited).
  * `move`: base movement rate (PHB Table 64).
+ * `multiClass`: allowed multi-class combinations, class identifiers joined by "/" (Multi-Class Combinations (PHB);
+ *   tools/build-race-data.py), used with the world setting "multiClass" (module/multi-class.mjs).
  */
 export default class RaceData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -27,6 +29,7 @@ export default class RaceData extends foundry.abstract.TypeDataModel {
       infravision: new NumberField({ required: true, integer: true, min: 0, initial: 0, nullable: false }),
       infravisionByLineage: new BooleanField({ initial: false }),
       levelLimits: new ObjectField(),
+      multiClass: new SetField(new StringField()),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };

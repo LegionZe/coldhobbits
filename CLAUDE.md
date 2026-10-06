@@ -159,6 +159,17 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `penalizedAward`. Switch: CharacterSheet `#askDualClass` on class drop; GM `clearDualPenalty` on the Race & Class tab.
   Owner's rulings: setting toggle, enforced penalty with encounter/adventure awards, old numbers by tick box while
   restricted and the better ones after, all old abilities kept.
+- Multi-class (world setting `multiClass`, off by default): `module/multi-class.mjs` (pure: `multiEligibility`,
+  `combinationAllowed`, `primaryClass` (warrior, priest, rogue, wizard), `splitExperience`, `multiAward`, `multiEntries`,
+  `firstLevelHitPoints`, `levelHitPoints`, `multiSlots`, `SINGLE_CLASS_KITS` (CFH/CTH warning)). Race item `multiClass`
+  (combinations "fighter/mage", from build-race-data.py `multi_class_combinations`). Every class item counts; the
+  primary one uses `level`/`xp`, the others `system.multiClass.classes` [{ identifier, level, xp }]; derived
+  `system.multi` (null unless on and 2+ classes) { classes [{ item, identifier, group, primary, level, xp, xpNext,
+  levelLimit, atLimit, hitDice, bonus }], others, allowed }. Best saves/THAC0 over `multi.others`; abilities and spells
+  of the others join the dual-class extras (not `old`; `spells.extra`, `spells.castingLevels` by kind); `#multiThiefLimit`
+  (`info.armorLimited`). Actor `levelUp(classId)` (asks when null), `rollFirstLevelHitPoints`, awards split per class.
+  Sheet `#askMultiClass` on class drop (creation only); Race & Class tab class rows. Owner's rulings: one kit fitting any
+  class (warning for CFH/CTH kits), level limits and prime requisite bonus per class.
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with

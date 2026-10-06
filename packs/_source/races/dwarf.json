@@ -48,6 +48,10 @@
       "fighter": 15,
       "thief": 12
     },
+    "multiClass": [
+      "fighter/cleric",
+      "fighter/thief"
+    ],
     "url": "https://adnd2e.fandom.com/wiki/Dwarf_(PHB)",
     "notes": ""
   },

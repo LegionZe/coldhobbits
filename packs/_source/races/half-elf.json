@@ -62,6 +62,19 @@
       "enchanter": 12,
       "transmuter": 12
     },
+    "multiClass": [
+      "cleric/mage",
+      "cleric/ranger",
+      "druid/mage",
+      "druid/ranger",
+      "fighter/cleric",
+      "fighter/druid",
+      "fighter/mage",
+      "fighter/mage/cleric",
+      "fighter/mage/druid",
+      "fighter/thief",
+      "thief/mage"
+    ],
     "url": "https://adnd2e.fandom.com/wiki/Half-Elf_(PHB)",
     "notes": ""
   },

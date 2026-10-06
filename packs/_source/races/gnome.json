@@ -50,6 +50,14 @@
       "cleric": 9,
       "illusionist": 15
     },
+    "multiClass": [
+      "cleric/illusionist",
+      "cleric/thief",
+      "fighter/cleric",
+      "fighter/illusionist",
+      "fighter/thief",
+      "illusionist/thief"
+    ],
     "url": "https://adnd2e.fandom.com/wiki/Gnome_(PHB)",
     "notes": ""
   },

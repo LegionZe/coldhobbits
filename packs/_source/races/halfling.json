@@ -48,6 +48,9 @@
       "fighter": 9,
       "thief": 15
     },
+    "multiClass": [
+      "fighter/thief"
+    ],
     "url": "https://adnd2e.fandom.com/wiki/Halfling_(PHB)",
     "notes": ""
   },
