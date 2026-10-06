@@ -1,0 +1,202 @@
+<section class="ad2e-manual-layout">
+  <nav class="ad2e-manual-nav">
+    {{#each sections as |s|}}
+    <button type="button" data-action="section" data-section="{{s.id}}" class="{{#if s.active}}active{{/if}}">{{s.label}}</button>
+    {{/each}}
+    <p class="ad2e-note">{{localize "AD2E.Manual.Version"}} {{version}}</p>
+  </nav>
+  <div class="ad2e-manual-body">
+
+  {{#if is.start}}
+  <h2>Getting started</h2>
+  <p>This system runs the mechanics of AD&amp;D 2nd Edition: characters, monsters, combat, spells, treasure and the optional
+  rules listed under <em>Optional rules</em>. It holds no rulebook text: item sheets link to the source page instead, so keep
+  the books (or the AD&amp;D 2e wiki) at hand.</p>
+  <h3>First steps for a new world</h3>
+  <ol>
+    <li>Check the world settings (<em>Settings</em> section): death rule, initiative method, encumbrance rule and the optional rules.</li>
+    <li>Import the monsters you need (<em>GM tools</em> &gt; Import monsters). Their pictures are copied into the world folder <code>ad2e-monsters</code>.</li>
+    <li>Import spells beyond the 12 examples (<em>GM tools</em> &gt; Import spells); they go into the world compendium "Imported Spells".</li>
+    <li>Create characters: drag a race, then a class, then a kit from the compendiums onto the sheet (<em>Characters</em> section).</li>
+    <li>After a system update that changes imported data, run <em>Update existing monsters</em> and <em>Update existing spells</em>.</li>
+  </ol>
+  <h3>Compendiums of this system</h3>
+  <ul class="ad2e-manual-columns">
+    {{#each packs as |p|}}<li>{{p.label}} <span class="ad2e-weapon-meta">({{p.type}})</span></li>{{/each}}
+  </ul>
+  {{/if}}
+
+  {{#if is.tools}}
+  <h2>GM tools</h2>
+  {{#unless isGM}}<p class="ad2e-unmet">{{localize "AD2E.Manual.GmOnly"}}</p>{{/unless}}
+  <div class="ad2e-manual-tools">
+    <div><button type="button" data-action="tool" data-tool="importMonsters"><i class="fa-solid fa-dragon"></i> Import monsters</button>
+      <p>Choose a setting and source book from completecompendium.com, select stat blocks and import them as Monster / NPC
+      actors (stat block, link to the page, picture as portrait and token; token size from the size letter: T ½, S and M 1,
+      L 2, H 3, G 4 squares). Importing the same stat block again updates the actor.</p></div>
+    <div><button type="button" data-action="tool" data-tool="updateMonsters"><i class="fa-solid fa-rotate"></i> Update existing monsters</button>
+      <p>Re-reads the page of every imported monster in the world and in unlocked world compendiums. Names, current hit
+      points, pictures and token sizes you set, and attack elements you chose stay; tokens already placed on scenes get the
+      new picture and size if they still had the old one.</p></div>
+    <div><button type="button" data-action="tool" data-tool="importSpells"><i class="fa-solid fa-wand-sparkles"></i> Import spells</button>
+      <p>Choose a source book from the AD&amp;D 2e wiki, filter by class and level, and import the spells' statistics and links
+      into the world compendium "Imported Spells" (folders by class and level). Material components are linked to the Spell
+      Components compendium, and damage or healing dice are read for the spell's Damage button.</p></div>
+    <div><button type="button" data-action="tool" data-tool="updateSpells"><i class="fa-solid fa-rotate"></i> Update existing spells</button>
+      <p>Refreshes every spell in the Items directory, on characters and in "Imported Spells" from its wiki page; memorization,
+      learned status and notes stay.</p></div>
+    <div><button type="button" data-action="tool" data-tool="awardXp"><i class="fa-solid fa-star"></i> Award experience</button>
+      <p>Divides an experience award equally among the chosen characters; each share gets that character's prime requisite bonus. A single
+      character's award is the "+" next to XP on the sheet.</p></div>
+    <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
+      <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
+      its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
+      button, prefilled from the stat block.</p></div>
+    <div><button type="button" data-action="tool" data-tool="rollReaction"><i class="fa-solid fa-comments"></i> Encounter reaction</button>
+      <p>Rolls the encounter reaction table with the speaker's Charisma and kit reaction modifiers. Monster sheets have the
+      same button.</p></div>
+    <div><button type="button" data-action="tool" data-tool="settings"><i class="fa-solid fa-gears"></i> Configure Settings</button>
+      <p>Foundry's settings window; this system's settings are under its own tab.</p></div>
+  </div>
+  {{/if}}
+
+  {{#if is.settings}}
+  <h2>Settings</h2>
+  <p>Current values in this world. World settings apply to everyone and only the GM changes them; client settings are per
+  user and browser. Change them in Configure Settings.</p>
+  <p><button type="button" data-action="tool" data-tool="settings"><i class="fa-solid fa-gears"></i> Configure Settings</button></p>
+  <table class="ad2e-manual-table">
+    <thead><tr><th>Setting</th><th>Value</th><th>What it does</th></tr></thead>
+    <tbody>
+    {{#each settings as |s|}}
+    <tr><td><strong>{{s.name}}</strong><br><span class="ad2e-weapon-meta">{{s.scope}}{{#if s.reload}}, {{localize "AD2E.Manual.Reload"}}{{/if}}</span></td>
+      <td>{{s.value}}</td><td>{{s.hint}}</td></tr>
+    {{/each}}
+    </tbody>
+  </table>
+  <h3>Setting menus</h3>
+  <ul>
+    {{#each menus as |m|}}
+    <li><button type="button" data-action="menu" data-menu="{{m.key}}"><i class="{{m.icon}}"></i> {{m.name}}</button> {{m.hint}}</li>
+    {{/each}}
+  </ul>
+  {{/if}}
+
+  {{#if is.characters}}
+  <h2>Characters</h2>
+  <h3>Creating a character</h3>
+  <ol>
+    <li>Enter the rolled ability scores on the Abilities panel, or use its dice button (PHB Methods II-VI; exceptional
+    Strength for warriors with 18).</li>
+    <li>Drag a race from "Races (PHB)". Racial adjustments are added to the rolled scores; the race limits the classes.</li>
+    <li>Drag a class from "Classes (PHB)". Minimums, alignment and racial level limits are checked on the Class tab.</li>
+    <li>Optionally drag a kit from "Class Kits". A kit that does not fit the class or race is refused or flagged. Kit bonus
+    proficiencies are added free; required ones use slots. Kit modifiers apply automatically, or as tick boxes in the roll
+    dialogs when they depend on the situation.</li>
+    <li>Drag proficiencies from "Proficiencies". Slots used and available are shown; extra slots on a nonweapon proficiency
+    add +1 each. Traits and disadvantages (Skills &amp; Powers) are optional; traits must be paid for with disadvantages.</li>
+    <li>Equip weapons, armour and gear from the equipment compendiums (Equipped tick box). Coins are items; containers carry items.</li>
+    <li>Spellcasters: drop spells on the sheet. Wizards and bards roll to learn; the Spells tab shows slots by level, Memorize
+    (-/+), Cast and Rest. The Spells tab is hidden for characters without spells.</li>
+  </ol>
+  <h3>Advancing</h3>
+  <p>"Level Up" rolls hit points; saving throws, THAC0, slots, thief skills and spells follow the level. Thief and bard skill
+  points are spent on the Class Abilities tab. Henchmen: drag an actor onto the sheet (Bio tab). Mounts, pack animals and
+  pets: drag the animal actor onto the sheet; they are listed on the Equipment tab with their load, and "Riding" marks the
+  one the character rides (its load then includes the rider).</p>
+  <h3>Not supported</h3>
+  <p>Multi-class and dual-class characters (one class and at most one kit per character).</p>
+  {{/if}}
+
+  {{#if is.combat}}
+  <h2>Combat</h2>
+  <ul>
+    <li><strong>Initiative</strong>: 1d10, lowest first. Rolling one combatant from the tracker asks for its action (weapon
+    speed, spell casting time, magical item, natural weapons) and situation; Roll All uses each combatant's weapon in hand.
+    The world setting chooses individual, group or standard (one roll per side; sides are token dispositions).</li>
+    <li><strong>Attacks</strong>: from the Combat tab (characters) or the Attacks table (monsters). Target tokens first: the
+    target's AC fills in, and status icons tick the combat modifiers (prone, stunned, invisible, held or asleep). Two
+    weapons, unarmed attacks (punch, wrestle, overbear), mounted combat and missile ranges are options in the dialogs.</li>
+    <li><strong>Damage</strong>: rolled automatically on a hit (client setting), or with the Damage button. The GM applies it
+    with the buttons under the chat message (to the roll's targets, the GM's targets or the selected tokens) or the message's
+    right-click menu. Elemental mages and gens adjust damage of their element there.</li>
+    <li><strong>Hit points and death</strong>: the world death rule chooses death at 0 or the "death's door" option
+    (unconscious at 0, bleeding each round until wounds are bound, dead at -10). Sheet buttons: Damage, Heal, Rest,
+    Bind wounds, Raise. Punching damage and temporary damage return on their own.</li>
+    <li><strong>Surprise, morale, reactions</strong>: Surprise on the character sheet and the eye button on monster
+    sheets; morale and reaction buttons on monster sheets.</li>
+    <li><strong>Modifiers</strong>: every roll dialog has a modifier and reason for anything the system does not track.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.monsters}}
+  <h2>Monsters, hirelings, mounts and familiars</h2>
+  <ul>
+    <li><strong>Monster / NPC actors</strong> hold a stat block: Hit Dice as written (with HP rolls), THAC0 from the DMG,
+    saving throws by Hit Dice, morale, natural attacks plus owned weapons and armour. "Monsters &amp; NPCs (prototypes)"
+    has an orc, a riding horse and a mercenary as examples.</li>
+    <li><strong>Hirelings &amp; Mounts</strong> compendium: DMG soldiers with their equipment and wages, civilian
+    specialists, horses, camels, an elephant, pack animals and familiars.</li>
+    <li><strong>Mounts</strong>: a rider's load is checked against the mount's capacity; the Push button pushes a mount
+    beyond its normal pace. With the world setting on, a rider's and mount's tokens move together.</li>
+    <li><strong>Familiars</strong>: Find Familiar is rolled by the GM from the character sheet; the familiar's death and
+    separation are tracked. Sha'ir characters summon and send their gen from the sheet.</li>
+    <li><strong>Importing</strong>: see <em>GM tools</em>. Pictures are not shipped with the system; the importer copies
+    them into the world (setting "Store imported monster pictures in the world").</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.items}}
+  <h2>Items, treasure and identification</h2>
+  <ul>
+    <li>Weapons, ammunition, armour, equipment, coins, gems, jewellery and magical items are items on the Equipment tab
+    (monsters: Inventory tab). Carried items count toward encumbrance (world setting chooses the encumbrance rule).</li>
+    <li><strong>Containers</strong>: drag an item's row onto a container in the Containers list (or choose "In container"
+    on the item sheet); contents count while the container is carried, and its capacity is checked.</li>
+    <li><strong>Ammunition</strong>: firing a launcher asks which ammunition and spends one.</li>
+    <li><strong>Magical items</strong>: "Magical Items (DMG)" lists the DMG tables with XP values and links; wands, rods
+    and staves roll their charges; "Use" spends a charge or one potion or scroll.</li>
+    <li><strong>Identification</strong>: treasure arrives unidentified. Players see a generic name and no values; only the
+    GM ticks Identified on the item sheet. Bonuses still apply.</li>
+    <li><strong>Spell components</strong>: with the world setting on, casting a spell uses up its consumed material
+    components from the caster's items.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.optional}}
+  <h2>Optional rules</h2>
+  <p>Each is a world setting (see <em>Settings</em>); all are off unless noted.</p>
+  <ul>
+    <li><strong>Skills &amp; Powers weapon rules</strong>: weapon groups, fighting styles, armour and shield proficiencies,
+    weapon of choice, expertise, specialization for every class and mastery. Character points are not used: costs are
+    paid with weapon slots.</li>
+    <li><strong>Skills &amp; Powers nonweapon proficiency ratings</strong>: Table 45 ratings with the Table 44 ability
+    modifier instead of the PHB check; extra slots add +1, up to 16 before ability modifiers.</li>
+    <li><strong>Skills &amp; Powers kits and traits</strong> are always available as items (no setting): the Skills &amp; Powers
+    kits folder and the "Traits &amp; Disadvantages" compendium.</li>
+    <li><strong>Combat &amp; Tactics weapons</strong> are items in the weapon compendiums (misfires, knockdown dice, firearms
+    powder and matches).</li>
+    <li><strong>Al-Qadim</strong>: kits, sha'ir and gens, elemental mages; the heat penalty for heavy armour is a setting.</li>
+    <li><strong>Spell components</strong>, <strong>maximum spells per level</strong> and the <strong>initiative question</strong>
+    are settings too.</li>
+  </ul>
+  {{/if}}
+
+  {{#if is.macros}}
+  <h2>Macros</h2>
+  <p>Every GM tool can also be run from a Script macro:</p>
+  <table class="ad2e-manual-table">
+    <tbody>
+      <tr><td><code>game.ad2e.manual()</code></td><td>Open this manual.</td></tr>
+      <tr><td><code>game.ad2e.importMonsters()</code></td><td>Monster importer.</td></tr>
+      <tr><td><code>game.ad2e.updateMonsters()</code></td><td>Update existing monsters.</td></tr>
+      <tr><td><code>game.ad2e.importSpells()</code></td><td>Spell importer.</td></tr>
+      <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
+      <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
+      <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
+      <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
+    </tbody>
+  </table>
+  {{/if}}
+  </div>
+</section>

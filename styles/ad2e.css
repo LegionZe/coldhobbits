@@ -186,3 +186,18 @@ body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="
 body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="items"] { --ad2e-tab-colour: #56B4E9; }
 body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="journal"] { --ad2e-tab-colour: #F0E442; }
 body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="compendium"] { --ad2e-tab-colour: #CC79A7; }
+
+/* GM manual (module/apps/manual.mjs): the system's own markup only. */
+.ad2e.ad2e-manual .ad2e-manual-layout { display: flex; gap: 0.75rem; height: 100%; }
+.ad2e-manual-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 0 0 11rem; }
+.ad2e-manual-nav button { text-align: left; justify-content: flex-start; }
+.ad2e-manual-nav button.active { font-weight: bold; text-decoration: underline; }
+.ad2e-manual-body { flex: 1; overflow-y: auto; padding-right: 0.5rem; }
+.ad2e-manual-body h2 { margin-top: 0; }
+.ad2e-manual-body li { margin-bottom: 0.3rem; }
+.ad2e-manual-tools > div { margin-bottom: 0.6rem; }
+.ad2e-manual-tools > div > p { margin: 0.2rem 0 0 0.5rem; }
+.ad2e-manual-table { width: 100%; border-collapse: collapse; }
+.ad2e-manual-table td, .ad2e-manual-table th { vertical-align: top; padding: 0.2rem 0.4rem; text-align: left; }
+.ad2e-manual-columns { columns: 2; }
+.ad2e-manual-button { width: 100%; margin-top: 0.5rem; }

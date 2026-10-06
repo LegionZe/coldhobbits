@@ -141,6 +141,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `foundry.utils.fromUuidSync(uuid, { strict: false })`.
   Buttons: `module/documents/chat-message.mjs` (CONFIG.ChatMessage.documentClass) overrides `renderHTML` like dnd5e's
   ChatMessage5e and calls `damageButtons` (GM only); buttons and context menu share `applyFromMessage`.
+- GM manual: `module/apps/manual.mjs` (`Manual`, ApplicationV2; `registerManual`: settings menu `ad2e.manual` and a
+  `renderSettings` hook adding a GM-only button after the sidebar's `.info` section, as dnd5e 6.0.5 `settings/sidebar.mjs`;
+  `game.ad2e.manual()`), template `templates/apps/manual.hbs` (English procedures, no rulebook text; keep it in step with
+  new features), `systemSettings` / `systemMenus` read `game.settings.settings` / `menus` (namespace ad2e), `MANUAL_TOOLS`.
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with
