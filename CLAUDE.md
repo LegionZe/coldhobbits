@@ -192,6 +192,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `updatePlacedTokens` (scene tokens of updated world actors with a replaceable picture). GIFs fail as canvas textures on
   core 14.368 ("Invalid Asset" from `foundry.canvas.loadTexture`, owner's diagnostic; PNG of the same picture loads):
   `toCanvasImage` stores GIFs as WebP (PNG fallback) via createImageBitmap + OffscreenCanvas#convertToBlob.
+  Token footprint: `cc.tokenSquares` (first size letter: T 0.5, S/M 1, L 2, H 3, G 4; owner's ruling) on prototypeToken
+  width/height; `monsterUpdate` and `updatePlacedTokens(changes, sizes)` change only tokens still at 1x1.
 - Spells: `module/importers/adnd2e-wiki.mjs` (shared infobox parser; MediaWiki API with `origin=*`) used by
   `module/apps/spell-importer.mjs` and by `tools/build-spell-data.py` (via `tools/spell-items.mjs`), which also GENERATES
   `module/rules/spell-tables.mjs` (Tables 21, 24, 17, 32) and the example spells in `packs/_source/spells`.
