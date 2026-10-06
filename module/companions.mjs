@@ -10,10 +10,12 @@ import { familiarDead } from "./familiars.mjs";
  *  - Rider: one bonded mount (Table 43: d6 for the group, d8 for the mount). "Each will know the general state of health of
  *    the other, the direction the other is in, and the distance": shown on the sheet (distance and direction when both
  *    tokens are on the viewed scene). Its death: 2d6 damage to the rider; by negligence also a saving throw vs. spells or
- *    feeblemind for 2d6 hours (a chat note). Neglect may make it flee: no empathic rapport with an animal again.
+ *    feeblemind for 2d6 hours. Neglect may make it flee: no empathic rapport with an animal again.
+ *    [Owner's rulings: a failed save sets `system.bond.feebleUntil` (world time) and the status FEEBLE_STATUS; casting asks
+ *    to confirm while it lasts; the active GM ends it when world time passes, or the GM ends it early (sheet button).]
  *  - Cavalier and Noble "must purchase a mount": a warning while the character owns no mount.
  * Character data: `system.bond` { companion, mount (actor UUIDs, also in `system.animals.actors`), barred (species:
- * actor identifiers), rapportLost }. Owner's rulings: generated stat blocks, bond with GM buttons, mount warning.
+ * actor identifiers), rapportLost, feebleUntil }. Owner's rulings: generated stat blocks, bond with GM buttons, mount warning.
  */
 export const COMPANIONS = COMPANION_TABLES;
 export const BOND_KITS = { companion: "animal-master-posp", mount: "rider-posp" };
@@ -136,6 +138,42 @@ export function rollBondTable(kind, die = n => Math.ceil(Math.random() * n), hom
   return { kind, group, rolls: [g, roll], row: COMPANIONS.mounts[group].find(r => r.roll === roll) };
 }
 
+/** Token status for a feebleminded rider (registered in init; the icon ships with the system). */
+export const FEEBLE_STATUS = { id: "ad2e-feeblemind", name: "AD2E.Bond.Feeblemind", img: "systems/ad2e/styles/icons/feeblemind.svg" };
+
+/** Whether the character is feebleminded at world time `now`. */
+export function feeblemindActive(character, now = game.time?.worldTime ?? 0) {
+  const until = character?.system?.bond?.feebleUntil;
+  return until !== null && until !== undefined && now < until;
+}
+
+/** Add the token status to CONFIG.statusEffects (an array in core; an object is handled too). */
+export function registerFeebleStatus() {
+  const list = CONFIG.statusEffects;
+  if (Array.isArray(list)) { if (!list.some(e => e.id === FEEBLE_STATUS.id)) list.push({ ...FEEBLE_STATUS }); }
+  else if (list && !list[FEEBLE_STATUS.id]) list[FEEBLE_STATUS.id] = { ...FEEBLE_STATUS };
+}
+
+async function setFeebleStatus(character, active) {
+  if (typeof character.toggleStatusEffect !== "function" || !!character.statuses?.has?.(FEEBLE_STATUS.id) === active) return;
+  await character.toggleStatusEffect(FEEBLE_STATUS.id, { active });
+}
+
+/** The rider is feebleminded for `hours` hours from now. */
+export async function applyFeeblemind(character, hours) {
+  const until = (game.time?.worldTime ?? 0) + hours * 3600;
+  await character.update({ "system.bond.feebleUntil": until });
+  await setFeebleStatus(character, true);
+  return ChatMessage.create({ speaker: speaker(character), content: `<p>${esc(i18n("AD2E.Bond.FeebleStart", { name: character.name, hours }))}</p>` });
+}
+
+/** End the feeblemind (world time passed, or the GM ends it early, e.g. a heal spell). */
+export async function endFeeblemind(character, early = false) {
+  await character.update({ "system.bond.feebleUntil": null });
+  await setFeebleStatus(character, false);
+  return ChatMessage.create({ speaker: speaker(character), content: `<p>${esc(i18n(early ? "AD2E.Bond.FeebleEndedGM" : "AD2E.Bond.FeebleEnded", { name: character.name }))}</p>` });
+}
+
 const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
 const speaker = actor => ChatMessage.getSpeaker({ actor });
@@ -190,14 +228,18 @@ export async function mountDied(character, negligent) {
   await character.update({ "system.bond.mount": "" });
   await character.applyDamage?.(dmg.total, { single: true });
   let note = "";
+  let hours = null;
   if (negligent) {
-    const hours = await new Roll(COMPANIONS.rules.negligence.hours).evaluate();
+    hours = await new Roll(COMPANIONS.rules.negligence.hours).evaluate();
     note = ` ${i18n("AD2E.Bond.Negligent", { hours: hours.total })}`;
   }
   await ChatMessage.create({ speaker: speaker(character), rolls: [dmg],
     content: `<p>${esc(i18n("AD2E.Bond.MountDied", { name: character.name, mount: name, damage: dmg.total }) + note)}</p>` });
-  if (negligent) return character.rollSave?.(COMPANIONS.rules.negligence.save);
-  return null;
+  if (!negligent) return null;
+  const msg = await character.rollSave?.(COMPANIONS.rules.negligence.save);
+  const result = msg?.flags?.ad2e?.save;
+  if (result && !result.success) await applyFeeblemind(character, hours.total);
+  return msg;
 }
 
 /** GM: the mount fled from neglect: no empathic rapport with an animal again. */
@@ -209,6 +251,14 @@ export async function mountFled(character) {
 
 /** The active GM is told when a bonded mount or companion dies (the GM then uses the sheet's buttons). */
 export function registerCompanions() {
+  registerFeebleStatus();
+  // The active GM ends feeblemind when world time passes its end.
+  Hooks.on("updateWorldTime", now => {
+    if (!game.user?.isActiveGM) return;
+    for (const character of game.actors?.filter(a => a.type === "character" && a.system.bond?.feebleUntil != null) ?? []) {
+      if (!feeblemindActive(character, now)) endFeeblemind(character);
+    }
+  });
   Hooks.on("updateActor", (actor, changes) => {
     if (!game.user?.isActiveGM || actor.type !== "monster" || changes?.system?.hp?.value === undefined || !familiarDead(actor)) return;
     for (const character of game.actors?.filter(a => a.type === "character") ?? []) {

@@ -14,7 +14,7 @@ import { dualClassOn, dualEligibility } from "../dual-class.mjs";
 import { multiClassOn, multiEligibility, multiEntries, SINGLE_CLASS_KITS } from "../multi-class.mjs";
 import { kitSpecial, meditate, meditationActive, rollSocialRank, weaponMasterDisplay } from "../kit-features.mjs";
 import { sideOf } from "../initiative.mjs";
-import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
+import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, endFeeblemind, feeblemindActive, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
 
@@ -246,6 +246,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       display: CharacterSheet.#onDisplay,
       bondSet: CharacterSheet.#onBondSet,
       bondClear: CharacterSheet.#onBondClear,
+      endFeeblemind: CharacterSheet.#onEndFeeblemind,
       companionLost: CharacterSheet.#onCompanionLost,
       mountDied: CharacterSheet.#onMountDied,
       mountFled: CharacterSheet.#onMountFled,
@@ -1380,7 +1381,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       isCompanion: info.kind === "companion", isMount: info.kind === "mount",
       current: info.kind ? (info.kind === "companion" ? row(info.companion) : row(info.mount)) : null,
       barredText: info.barred.join(", "),
+      feeble: feeblemindActive(this.document) ? game.i18n.format("AD2E.Bond.FeebleNote", { minutes: Math.ceil(
+        ((this.document.system.bond.feebleUntil ?? 0) - (game.time?.worldTime ?? 0)) / 60) }) : "",
       rule: info.kind ? i18n(info.kind === "companion" ? "AD2E.Bond.CompanionRule" : "AD2E.Bond.MountRule") : "" };
+  }
+
+  static #onEndFeeblemind() {
+    if (!game.user?.isGM) return null;
+    return endFeeblemind(this.actor, true);
   }
 
   static #onSocialRank() {

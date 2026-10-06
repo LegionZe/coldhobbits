@@ -49,6 +49,7 @@
     {{/if}}
     {{#if b.barredText}}<p class="ad2e-note">{{localize "AD2E.Bond.Barred"}}: {{b.barredText}}</p>{{/if}}
     {{#if b.rapportLost}}<p class="ad2e-unmet">{{localize "AD2E.Bond.RapportLost"}}</p>{{/if}}
+    {{#if b.feeble}}<p class="ad2e-unmet">{{b.feeble}}{{#if b.isGM}} <button type="button" data-action="endFeeblemind">{{localize "AD2E.Bond.FeebleEnd"}}</button>{{/if}}</p>{{/if}}
     {{#if b.isGM}}<div class="ad2e-prof-summary">
       <button type="button" data-action="bondRoll" data-tooltip="{{localize 'AD2E.Bond.RollHint'}}"><i class="fa-solid fa-dice"></i> {{#if b.isCompanion}}{{localize "AD2E.Bond.CompanionTable"}}{{else}}{{localize "AD2E.Bond.MountTable"}}{{/if}}</button>
       {{#if b.current.actor}}{{#if b.isCompanion}}

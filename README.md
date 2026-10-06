@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.131)
+## Status (v0.0.132)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -641,8 +641,10 @@ Node only until confirmed.
   mountains, underground, coast and sea pick one of their Table 43 entries with equal chance, "Any" rolls Table 43 as
   printed; owner's choice, `MOUNT_HOMELANDS` in build-hireling-data.py), "Companion died" (no penalty), "Companion lost carelessly" (-10% of the current experience,
   every class of a multi-class character, and "he loses his affinity to that species": that species is refused), "Mount
-  died" (2d6 damage to the rider; by negligence a save vs. spells is rolled and the card names the 2d6 hours of
-  feeblemind on a failure, not applied) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
+  died" (2d6 damage to the rider; by negligence a save vs. spells; on a failure the rider is
+  feebleminded for the 2d6 hours (0.0.132, owner's rulings: `system.bond.feebleUntil`, token status `ad2e-feeblemind`
+  with the system's own icon `styles/icons/feeblemind.svg`, casting asks to confirm, the active GM ends it when world
+  time passes, GM "End feeblemind" button on the Biography tab for an early end such as a heal spell)) and "Mount fled" (no bonded mount again). The GM is told in chat when a bonded
   animal dies. "All animal companions should be size S (small)": a companion of size M or larger is bonded with a
   warning (owner's ruling; T, S or no size pass; every Table 42 creature passes). Cavalier and Noble "must purchase a mount": the Race & Class tab warns while the character owns no mount
   (owner's rulings: generated stat blocks, bond and GM buttons, warning).
