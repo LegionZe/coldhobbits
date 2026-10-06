@@ -231,6 +231,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         })),
         zero: new BooleanField({ initial: false })
       }),
+      // Age in years (blank = not recorded); Restoration ages caster and recipient (module/level-drain.mjs).
+      age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       biography: new HTMLField()
     };
   }

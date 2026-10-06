@@ -10,7 +10,7 @@ import { clearFetched, isShair, retributionNotice } from "../shair.mjs";
 import { genWardProvince } from "../gens.mjs";
 import { gainsHitPoints, penalizedAward, undoDual } from "../dual-class.mjs";
 import { firstLevelHitPoints, levelHitPoints, multiAward, multiEntries } from "../multi-class.mjs";
-import { drainedXp, drainTarget, minimumXp, pendingDrain, restorationInTime } from "../level-drain.mjs";
+import { drainedXp, drainTarget, excessPlan, forgetMemorized, minimumXp, pendingDrain, RESTORATION_AGE, restorationInTime, UNDEAD_RISE } from "../level-drain.mjs";
 import { SHAIR } from "../rules/shair-tables.mjs";
 
 /** Label of a spell damage option: its own label, or "Damage 2 (per round): 2d4". */
@@ -26,6 +26,7 @@ const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
 import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
+import { armsTrapped, LASSO, monsterScores, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -279,6 +280,8 @@ export default class AD2EActor extends Actor {
     });
     const max = Math.max(this.system.hp.max - hpLost, 1);
     Object.assign(update, { "system.hp.max": max, "system.hp.value": Math.min(this.system.hp.value, max) });
+    // Drained again at 0-level: slain (an explicit death).
+    if (slain) update["system.hp.dead"] = true;
     await this.update(update);
     // Wizard spells above the highest level the character can now cast are no longer understood (roll again to relearn).
     const sp = this.system.spells;
@@ -293,10 +296,63 @@ export default class AD2EActor extends Actor {
         lines.push(game.i18n.format("AD2E.Drain.Forgotten", { n: forget.length, level: maxLevel }));
       }
     }
-    if (slain) lines.push(game.i18n.format("AD2E.Drain.Slain", { name: this.name }));
+    if (slain) {
+      lines.push(game.i18n.format("AD2E.Drain.Slain", { name: this.name }));
+      // "he returns as an undead of the same type as his slayer in 2d4 days" (GM only).
+      const rise = await new Roll(UNDEAD_RISE).evaluate();
+      await ChatMessage.create({ speaker, rolls: [rise], whisper: ChatMessage.getWhisperRecipients?.("GM") ?? [],
+        content: `<p>${esc(game.i18n.format("AD2E.Drain.Undead", { name: this.name, days: rise.total }))}</p>` });
+    } else {
+      lines.push(...await this.#forgetExcessSpells());
+    }
     lines.push(game.i18n.format("AD2E.Drain.HpMax", { lost: hpLost, max }));
     return ChatMessage.create({ speaker, rolls, content: `<p><strong>${esc(game.i18n.format("AD2E.Drain.ChatTitle", { name: this.name, n }))}</strong></p>`
-      + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul><p class="ad2e-note">${esc(i18n("AD2E.Drain.SpellsNote"))}</p>` });
+      + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+  }
+
+  /**
+   * Energy drain: "The character must instantly forget any spells that are in excess of those allowed for his new level"
+   * (Special Damage (DMG)). Owner's ruling: the GM picks; uncast memorizations are proposed first (level-drain.mjs
+   * excessPlan). Returns chat lines.
+   */
+  async #forgetExcessSpells() {
+    const sp = this.system.spells;
+    if (!sp || sp.shair) return [];
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const plan = excessPlan((sp.levels ?? []).filter(l => l.level >= 1).map(l => {
+      const kind = l.kind ?? sp.kind;
+      return { level: l.level, kind, slots: l.slots, spells: l.spells.filter(i => i.system.kind === kind && i.system.learned !== false)
+        .map(i => ({ id: i.id, name: i.name, prepared: i.system.prepared ?? 0, cast: i.system.cast ?? 0 })) };
+    }));
+    if (!plan.length) return [];
+    const kindName = k => game.i18n.localize(AD2E.spellKinds[k] ?? k);
+    const content = `<p class="ad2e-note">${esc(game.i18n.localize("AD2E.Drain.ForgetHint"))}</p>` + plan.map(l => `<fieldset><legend>${esc(game.i18n.format("AD2E.Drain.ForgetLevel",
+      { kind: kindName(l.kind), level: l.level, memorized: l.memorized, slots: l.slots, excess: l.excess }))}</legend>`
+      + l.spells.map(s => `<div class="form-group"><label>${esc(s.name)} (${esc(game.i18n.format("AD2E.Drain.ForgetCount", { prepared: s.prepared, cast: s.cast }))})</label>`
+        + `<input type="number" name="f-${l.kind}-${s.id}" value="${s.forget}" min="0" max="${s.prepared}" step="1"></div>`).join("") + "</fieldset>").join("");
+    const chosen = await DialogV2.prompt({
+      window: { title: `${this.name}: ${game.i18n.localize("AD2E.Drain.ForgetTitle")}` }, content,
+      ok: { label: game.i18n.localize("AD2E.Drain.Forget"), callback: (event, button) => Object.fromEntries(plan.flatMap(l => l.spells.map(s =>
+        [s.id, Math.min(Math.max(Math.floor(Number(button.form.elements[`f-${l.kind}-${s.id}`].value) || 0), 0), s.prepared)]))) },
+      rejectClose: false
+    });
+    if (!chosen) return [game.i18n.localize("AD2E.Drain.ForgetSkipped")];
+    const lines = [];
+    const updates = [];
+    for (const l of plan) {
+      let total = 0;
+      for (const s of l.spells) {
+        const f = chosen[s.id] ?? 0;
+        if (!f) continue;
+        total += f;
+        const after = forgetMemorized(s.prepared, s.cast, f);
+        updates.push({ _id: s.id, "system.prepared": after.prepared, "system.cast": after.cast });
+        lines.push(game.i18n.format("AD2E.Drain.ForgotSpell", { name: s.name, n: f }));
+      }
+      if (total < l.excess) lines.push(game.i18n.format("AD2E.Drain.StillOver", { kind: kindName(l.kind), level: l.level, n: l.excess - total }));
+    }
+    if (updates.length) await this.updateEmbeddedDocuments("Item", updates);
+    return lines;
   }
 
   /**
@@ -320,14 +376,21 @@ export default class AD2EActor extends Actor {
       window: { title: `${this.name}: ${i18n("AD2E.Drain.Restore")}` },
       content: `<p>${esc(entry ? game.i18n.format("AD2E.Drain.RestoreQuestion", { class: entry.name, level: entry.level, hp: entry.hp,
         days: restorationInTime(entry.at, now, 0).days }) : i18n("AD2E.Drain.RestoreZero"))}</p>`
+        + `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Drain.Caster", { n: RESTORATION_AGE }))}</label><select name="casterActor">`
+        + `<option value="">${esc(i18n("AD2E.Drain.CasterNone"))}</option>`
+        + (game.actors?.filter(a => a.type === "character" && a.id !== this.id) ?? []).map(a => `<option value="${a.id}">${esc(a.name)}</option>`).join("")
+        + `</select></div>`
         + `<div class="form-group"><label>${i18n("AD2E.Drain.CasterLevel")}</label><input type="number" name="caster" value="13" min="1" step="1"></div>`,
-      ok: { label: i18n("AD2E.Drain.Restore"), callback: (event, button) => ({ caster: Math.max(Math.floor(Number(button.form.elements.caster.value) || 1), 1) }) },
+      ok: { label: i18n("AD2E.Drain.Restore"), callback: (event, button) => ({ caster: Math.max(Math.floor(Number(button.form.elements.caster.value) || 1), 1),
+        casterActor: button.form.elements.casterActor?.value ?? "" }) },
       rejectClose: false
     });
     if (!input) return null;
     if (!entry) {
       await this.update({ "system.drain.zero": false });
-      return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Drain.ZeroRestored", { name: this.name }))}</p>` });
+      const aged = await this.#restorationAges(input.casterActor);
+      return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Drain.ZeroRestored", { name: this.name }))}</p>`
+        + `<p>${esc(aged)}</p>` });
     }
     const timing = restorationInTime(entry.at, now, input.caster);
     if (!timing.ok) {
@@ -346,8 +409,22 @@ export default class AD2EActor extends Actor {
     else update["system.dualClass.previous"] = sys.dualClass.previous.map(p => ({ ...p, prime: [...(p.prime ?? [])],
       ...(p.identifier === c.identifier ? { level, xp } : {}) }));
     await this.update(update);
+    const aged = await this.#restorationAges(input.casterActor);
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Drain.Restored",
-      { name: this.name, class: c.name, level, xp, hp: entry.hp }))}</p>` });
+      { name: this.name, class: c.name, level, xp, hp: entry.hp }))}</p><p>${esc(aged)}</p>` });
+  }
+
+  /** Restoration "ages both the caster and the recipient by two years": recorded ages go up; returns the chat line. */
+  async #restorationAges(casterId) {
+    const people = [this, casterId ? game.actors?.get(casterId) : null].filter(Boolean);
+    const parts = [];
+    for (const a of people) {
+      const age = a.system.age;
+      if (age === null || age === undefined) { parts.push(game.i18n.format("AD2E.Drain.AgeUnknown", { name: a.name })); continue; }
+      await a.update({ "system.age": age + RESTORATION_AGE });
+      parts.push(game.i18n.format("AD2E.Drain.AgeNew", { name: a.name, from: age, to: age + RESTORATION_AGE }));
+    }
+    return game.i18n.format("AD2E.Drain.Ages", { n: RESTORATION_AGE, list: parts.join(", ") });
   }
 
   /**
@@ -592,6 +669,8 @@ export default class AD2EActor extends Actor {
    */
   async rollWeaponAttack(itemId, use = "melee") {
     const item = this.items.get(itemId);
+    // The lasso is only used with called shots (Weapon Descriptions (POCT)): its own dialog.
+    if (item?.system.identifier === "lasso" && this.type === "character") return this.rollLasso(itemId);
     const entry = this.#weaponEntry(itemId);
     const attack = entry?.attack?.[use];
     if (!item || !attack) return;
@@ -906,6 +985,115 @@ export default class AD2EActor extends Actor {
   }
 
   /* ---------------------------------------- Targets (applying damage from chat: module/health.mjs) */
+
+  /**
+   * Lasso (module/lasso.mjs, Weapon Descriptions and Attack Options (POCT)): a called shot at the legs (pull/trip), the
+   * arms (trap) or a rider (unhorse), or a pull/trip by spurring the mount; the opposed rolls are made here with the
+   * first target's numbers (editable).
+   */
+  async rollLasso(itemId) {
+    const item = this.items.get(itemId);
+    const entry = this.#weaponEntry(itemId);
+    const attack = entry?.attack?.missile ?? entry?.attack?.melee;
+    if (!item || !attack) return null;
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const targets = AD2EActor.#targetsNow();
+    const resolve = uuid => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(uuid, { strict: false }) ?? null;
+    const tdoc = targets[0] ? resolve(targets[0].uuid) : null;
+    const def = tdoc?.actor ?? (tdoc?.documentName === "Actor" ? tdoc : null);
+    const ds = def?.system ?? {};
+    const mon = def?.type === "monster" ? monsterScores(ds.size, ds.hitDice, ds.movement?.base) : null;
+    const dSize = def?.type === "monster" ? (String(ds.size ?? "").trim().charAt(0).toUpperCase() || "M") : (ds.sizeCategory ?? "M");
+    const defaults = { str: mon ? mon.str : (ds.abilities?.str?.total ?? 10), dex: mon ? mon.dex : (ds.abilities?.dex?.total ?? 10),
+      thac0: ds.thac0?.value ?? 20, size: LASSO.sizes.includes(dSize) ? dSize : "M" };
+    const mount = this.system.animals?.riding ? resolve(this.system.animals.riding) : null;
+    const mountSize = String(mount?.system?.size ?? "").trim().charAt(0).toUpperCase();
+    const field = (label, html) => `<div class="form-group"><label>${esc(label)}</label>${html}</div>`;
+    const box = (name, label, checked = false) => `<div class="form-group"><label>${esc(label)}</label><input type="checkbox" name="${name}"${checked ? " checked" : ""}></div>`;
+    const sizeSelect = (name, value) => `<select name="${name}">${LASSO.sizes.map(s => `<option value="${s}"${s === value ? " selected" : ""}>${s}</option>`).join("")}</select>`;
+    const content = `<p class="ad2e-note">${esc(i18n("AD2E.Lasso.Hint"))}</p>`
+      + field(i18n("AD2E.Lasso.Mode"), `<select name="mode">${["legs", "arms", "unhorse", "spur"].map(m => `<option value="${m}">${esc(i18n(`AD2E.Lasso.Modes.${m}`))}</option>`).join("")}</select>`)
+      + field(game.i18n.format("AD2E.Lasso.CalledShot", { n: LASSO.calledShot, init: LASSO.calledShotInit }), `<input type="number" name="called" value="${LASSO.calledShot}">`)
+      + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets, true)}">`)
+      + field(i18n("AD2E.Lasso.Range"), `<select name="range">${["short", "medium", "long"].map(r => `<option value="${r}">${esc(i18n(`AD2E.Weapon.${r[0].toUpperCase()}${r.slice(1)}`))}</option>`).join("")}</select>`)
+      + `<fieldset><legend>${esc(game.i18n.format("AD2E.Lasso.Defender", { name: def?.name ?? i18n("AD2E.Lasso.NoTarget") }))}</legend>`
+      + field(i18n("AD2E.Lasso.DefStr"), `<input type="number" name="dStr" value="${defaults.str}">`)
+      + field(i18n("AD2E.Lasso.DefDex"), `<input type="number" name="dDex" value="${defaults.dex}">`)
+      + field(i18n("AD2E.Lasso.DefThac0"), `<input type="number" name="dThac0" value="${defaults.thac0}">`)
+      + field(i18n("AD2E.Lasso.DefSize"), sizeSelect("dSize", defaults.size))
+      + box("fourLegs", game.i18n.format("AD2E.Lasso.FourLegs", { n: LASSO.pullTrip.fourLegs }))
+      + box("unaware", game.i18n.format("AD2E.Lasso.Unaware", { n: LASSO.pullTrip.unaware }))
+      + box("stationary", game.i18n.format("AD2E.Lasso.Stationary", { n: LASSO.pullTrip.stationary }))
+      + box("riderMoving", i18n("AD2E.Lasso.RiderMoving")) + box("tiedSolid", i18n("AD2E.Lasso.TiedSolid")) + `</fieldset>`
+      + (mount ? box("tiedSaddle", game.i18n.format("AD2E.Lasso.TiedSaddle", { mount: mount.name, size: mountSize || "?" }), true) : "")
+      + modifierFields();
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${item.name}` }, content,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const el = button.form.elements;
+        const num = n => Number(el[n]?.value) || 0;
+        return { mode: el.mode.value, called: num("called"), ac: num("ac"), range: el.range.value, dStr: num("dStr"), dDex: num("dDex"),
+          dThac0: num("dThac0"), dSize: el.dSize.value, fourLegs: !!el.fourLegs?.checked, unaware: !!el.unaware?.checked,
+          stationary: !!el.stationary?.checked, riderMoving: !!el.riderMoving?.checked, tiedSolid: !!el.tiedSolid?.checked,
+          tiedSaddle: !!el.tiedSaddle?.checked, ...readModifier(button.form) };
+      } },
+      rejectClose: false
+    });
+    if (!input) return null;
+    const rolls = [];
+    const lines = [];
+    const d20 = async () => { const r = await new Roll("1d20").evaluate(); rolls.push(r); return r.total; };
+    const thac0 = this.system.thac0.value;
+    const adj = attack.hit + (AD2E.rangeModifiers[input.range] ?? 0) + input.called + input.mod;
+    const fmtAdj = n => `${n >= 0 ? "+" : ""}${n}`;
+    // The called shot attack roll (not for a pull/trip by spurring, nor for the arms' opposed roll).
+    let hit = input.mode === "spur";
+    if (input.mode === "legs" || input.mode === "unhorse") {
+      const r = await d20();
+      const need = thac0 - input.ac;
+      hit = r + adj >= need;
+      lines.push(game.i18n.format("AD2E.Lasso.AttackLine", { roll: r, adj: fmtAdj(adj), total: r + adj, ac: input.ac, need,
+        result: i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") }));
+    }
+    const aStr = this.system.abilities.str.total;
+    const oppStr = async (aScore, dScore) => {
+      const ar = await d20(), dr = await d20();
+      const res = opposedCheck(aScore, ar, dScore, dr);
+      lines.push(game.i18n.format("AD2E.Lasso.StrLine", { a: aScore, ar, d: dScore, dr }));
+      return res;
+    };
+    if ((input.mode === "legs" || input.mode === "spur") && hit) {
+      const own = this.system.sizeCategory ?? "M";
+      const size = input.tiedSaddle && mountSize ? mountSize : own;
+      const pt = pullTripScore(aStr, { attackerSize: size, defenderSize: input.dSize, lasso: true, fourLegs: input.fourLegs,
+        unaware: input.unaware, stationary: input.stationary });
+      lines.push(game.i18n.format("AD2E.Lasso.StrParts", { str: aStr, parts: pt.parts.map(([k, v]) => `${i18n(`AD2E.Lasso.Part.${k}`)} ${fmtAdj(v)}`).join(", ") || "—",
+        score: pt.score, def: Math.max(input.dStr, input.dDex) }));
+      const res = await oppStr(pt.score, Math.max(input.dStr, input.dDex));
+      lines.push(i18n(`AD2E.Lasso.Trip.${res}`));
+    } else if (input.mode === "arms") {
+      const aNeed = thac0 - LASSO.armsAc - adj;
+      const dNeed = input.dThac0 - LASSO.defenderAc;
+      const ar = await d20(), dr = await d20();
+      const res = opposedAttack(aNeed, ar, dNeed, dr);
+      lines.push(game.i18n.format("AD2E.Lasso.ArmsLine", { ar, aNeed, aAc: LASSO.armsAc, dr, dNeed, dAc: LASSO.defenderAc }));
+      if (res.result === "attacker") {
+        const both = armsTrapped(res.margin) === 2;
+        const arm = both ? "" : ((await d20()) % 2 ? i18n("AD2E.Lasso.Left") : i18n("AD2E.Lasso.Right"));
+        lines.push(both ? i18n("AD2E.Lasso.BothArms") : game.i18n.format("AD2E.Lasso.OneArm", { arm }));
+      } else lines.push(i18n(res.result === "tie" ? "AD2E.Lasso.Tie" : "AD2E.Lasso.ArmsFail"));
+    } else if (input.mode === "unhorse" && hit) {
+      if (input.riderMoving && input.tiedSolid) lines.push(i18n("AD2E.Lasso.UnhorsedAuto"));
+      else {
+        const res = await oppStr(aStr, input.dStr);
+        lines.push(i18n(res === "attacker" ? "AD2E.Lasso.Unhorsed" : (res === "tie" ? "AD2E.Lasso.Tie" : "AD2E.Lasso.NotUnhorsed")));
+      }
+    }
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls,
+      content: `<p><strong>${esc(item.name)}: ${esc(i18n(`AD2E.Lasso.Modes.${input.mode}`))}</strong>${esc(AD2EActor.#targetText(targets))}`
+        + `${modifierText(input.mod, input.note)}</p><ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+  }
 
   /** Tokens the current user targets: [{ uuid, name }] (`game.user.targets`). */
   static #targetsNow() {

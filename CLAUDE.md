@@ -196,7 +196,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `restorationInTime`; `minimumXp` from dual-class.mjs). Character `system.drain` { lost [{ key "main" | "multi:<id>" |
   "prev:<id>", identifier, name, level, hp, at }], zero }, `drainLevels()` keys, derived `drainInfo` { pending, zero, any }
   (computed after multi, before dual; dual `restricted`/`drained` while pending). Actor GM `drainLevels(n)` / `restoreLevel()`
-  (Main tab buttons), `#drainRegained` prunes on Level Up; 0-level blocks Level Up.
+  (Main tab buttons), `#drainRegained` prunes on Level Up; 0-level blocks Level Up. `excessPlan`/`forgetMemorized`
+  (`#forgetExcessSpells` dialog, owner's ruling: GM picks), slain = `hp.dead` + `UNDEAD_RISE` 2d4 whisper,
+  `RESTORATION_AGE` on character `system.age` (recipient + caster chosen in the Restoration dialog).
+- Lasso: `module/lasso.mjs` (pure: `pullTripScore`, `opposedCheck`, `opposedAttack`, `armsTrapped`, `monsterScores`) and
+  `AD2EActor#rollLasso` (rollWeaponAttack redirects identifier "lasso"); figures `COMBAT_TABLES.lasso` (build-combat-tables.py,
+  regex-checked against Weapon Descriptions / Attack Options (POCT)).
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with

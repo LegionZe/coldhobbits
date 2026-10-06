@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v0.0.133)
+## Status (v0.0.134)
 Characters (classes, kits, races, proficiencies, spells, class abilities, encumbrance), monsters, hirelings, mounts and
 familiars, combat (initiative, attacks, damage, death and healing), treasure and magical items, Al-Qadim kits (sha'ir
 and gen, elemental mages, sorcerers), the Skills & Powers kits, and the optional Skills & Powers proficiency ratings and Skills & Powers and Combat & Tactics weapon rules. The features
@@ -490,6 +490,16 @@ Node only until confirmed.
   two-handed, weapon and shield, two-weapon, missile, thrown, horse archery) with their bonuses in the attack and damage
   dialogs; the missile and thrown styles give -1 to hit for attackers' missiles the round the specialist shoots, and the
   horse archer fires from a moving mount without penalty up to half speed (-2 faster).
+- Lasso (0.0.134; module/lasso.mjs, figures in combat-tables.mjs `lasso` from build-combat-tables.py, regex-checked against
+  Weapon Descriptions (POCT) rev 74770 and Attack Options (POCT) rev 250488): attacking with a lasso opens its own dialog
+  (it "cannot be used for normal attacks"): called shot -4 (+1 initiative), legs = pull/trip (opposed Strength, +4 for the
+  lasso, 4 per size step, -2 four legs, +3 unaware, -6 stationary; the mount's size when tied to the saddle; knocked down,
+  fails, or a tie and both fall), arms = opposed attack roll against AC 10 for the lasso user and AC 4 for the defender
+  (as Disarm; the text's "instead of AC 2" names no defender AC, implementation choice): one random arm, both when won by
+  4 or more or when the defender fails his roll (implementation choice), unhorse (automatic for a moving rider with the
+  lasso tied to something solid, else opposed Strength), and the pull/trip by spurring with no attack roll. Defender
+  numbers come from the first target (monsters: Dexterity = movement, Strength = 3.5 per size + Hit Dice with sizes
+  T = 1 to G = 6, implementation choice) and can be edited.
 - Combat & Tactics weapons (Master Weapon List (POCT), Equipment Groups (POCT); folders "Weapon Proficiencies (POCT)" and
   "Weapons (POCT)"): 53 weapon proficiencies and their items for the Skills & Powers weapon groups without a PHB item
   (every culture's price kept; firearms one item per lock type). Footnotes are rules: two hands regardless of size;
@@ -619,13 +629,17 @@ Node only until confirmed.
   classes, as when gained; a dual-class level that gave no hit points takes none, implementation choice), and sets that
   class's experience "halfway between the minimum needed for his new (post-drain) level and the minimum needed for the
   next level". Below 1st level the character is 0-level (no Level Up until a restoration or wish); drained again, the
-  chat card says the character is slain (hit points are not changed automatically). Wizard spells above the highest
+  character is slain (marked dead) and the GM is whispered a 2d4 roll: the days until the character "returns as an undead of
+  the same type as his slayer". Wizard spells above the highest
   level the character can now cast are marked not understood (roll to learn again). Drained levels are listed until
   regained by Level Up; while any are pending a dual-class character's restrictions apply (the PHB's "Using abilities of
   the other class then subjects him to the experience penalties"; the per-adventure class choice is not tracked).
   Restoration brings back the most recent drained level with "exactly the number of experience points necessary" and
-  the hit points it cost, if within one day per level of the priest (the dialog asks the priest's level); the aging is
-  not tracked. Excess memorized spells are flagged on the Spells tab, not removed.
+  the hit points it cost, if within one day per level of the priest (the dialog asks the priest's level). "Casting this
+  spell ages both the caster and the recipient by two years": character `system.age` (Biography tab, blank = not
+  recorded) goes up by 2 for the recipient and the casting priest chosen in the dialog (0.0.134). "The character must
+  instantly forget any spells that are in excess of those allowed for his new level": after the drain a dialog lists each
+  spell level over its slots (owner's ruling: the GM picks; uncast memorizations are proposed first, `excessPlan`).
 - Animal companions and mounts (Skills & Powers kits Animal Master and Rider; Animal Master - POSP rev 271658, Rider -
   POSP rev 271694): 48 creatures in the Hirelings & Mounts compendium, folder "Animal Companions & Mounts (POSP)",
   generated from their Monstrous Manual pages (owner's choices for ambiguous names: dog = Wild Dog, snake = Poison
