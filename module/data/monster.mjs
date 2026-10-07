@@ -55,6 +55,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),
+      // Magic resistance lowered at will (module/magic-resistance.mjs): no roll against spells.
+      mrLowered: new BooleanField({ initial: false }),
       morale: new SchemaField({ value: int(10, 0), text: text() }),
       xp: int(0, 0),
       initiative: new SchemaField({ mod: int(0) }),

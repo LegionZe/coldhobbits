@@ -242,6 +242,14 @@
     movement halved, no healing). Advance game time (the round count in combat does it) for the onset to come. The sheet
     shows pending poison; your "Neutralize poison" button ends it (hit points already lost stay lost). A GM must be
     connected for saves to be recorded. Coated weapons lose their dose on each damage roll (implementation choice).</li>
+    <li><strong>Spells, magic resistance and saves</strong>: a caster targets the creatures, then clicks Cast. Each target
+    with magic resistance rolls d100 at once (resisted at or below its value; monsters use the first percentage in
+    their Magic Resistance text, characters the field next to their saves; "Lowered" skips the roll). No caster-level
+    adjustment is applied. If the spell's Save entry is not None, the card asks the remaining targets for a save
+    (the category is the spell sheet's "Save vs.", spell by default): owners click Save, or you roll them all. The
+    spell's Damage roll then goes to those who failed or did not roll, half to those who saved ("1/2"), nothing for
+    "Neg.", and for other entries a separate full-damage message for those who saved, to apply as the spell says.
+    Area spells: target every creature in the area.</li>
     <li><strong>Class weapons</strong>: weapons outside the class's list are marked in red and the attack dialog warns;
     the attack is still allowed (your ruling).</li>
   </ul>

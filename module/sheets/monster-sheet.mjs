@@ -1,3 +1,4 @@
+import { parseMagicResistance } from "../magic-resistance.mjs";
 import { neutralizePoison, POISON, poisonContext, poisonLabel } from "../poison.mjs";
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
@@ -88,6 +89,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.trap = trapContext(this.document);
     // Poison taking effect (module/poison.mjs) and the Table 51 classes for natural attacks.
     context.poisonState = poisonContext(this.document);
+    context.mrValue = parseMagicResistance(sys.magicResistance);
     context.poisonClasses = Object.fromEntries(Object.keys(POISON.classes).map(k => [k, poisonLabel(k)]));
     context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };

@@ -39,6 +39,8 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       damage: new ArrayField(new SchemaField({ label: text(), formula: text(), kind: new StringField({ initial: "damage" }),
         perRound: new BooleanField({ initial: false }) })),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
+      // Saving throw category asked of the targets when the spell allows a save (module/save-requests.mjs).
+      saveType: new StringField({ required: true, initial: "sp", choices: ["par", "rsw", "pet", "br", "sp"] }),
       sources: new ArrayField(new StringField()),
       // Wizard spells: understood and in the spell book (module/learn-spells.mjs); a failed roll records the level
       // ("they cannot check that spell again until they advance to the next level", Intelligence (PHB)).

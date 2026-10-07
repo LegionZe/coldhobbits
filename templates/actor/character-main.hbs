@@ -67,6 +67,11 @@
         <input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">
       </div>
       {{/each}}
+      <div class="ad2e-save ad2e-mr-field" data-tooltip="{{localize 'AD2E.MR.Hint'}}">
+        <span>{{localize "AD2E.MR.Label"}}</span>
+        <span><input type="number" name="system.magicResistance.value" value="{{system.magicResistance.value}}" min="0" max="100" step="1">%</span>
+        <label class="ad2e-check"><input type="checkbox" name="system.magicResistance.lowered" {{checked system.magicResistance.lowered}}> {{localize "AD2E.MR.LoweredLabel"}}</label>
+      </div>
     </fieldset>
   </div>
 </section>

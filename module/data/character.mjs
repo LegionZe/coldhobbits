@@ -235,6 +235,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }),
       // Poison taking effect (module/poison.mjs).
       poison: poisonStateField(),
+      // Magic resistance from items or special abilities (module/magic-resistance.mjs): percentage, lowered at will.
+      magicResistance: new SchemaField({ value: int(0, 0, 100), lowered: new BooleanField({ initial: false }) }),
       // Age in years (blank = not recorded); Restoration ages caster and recipient (module/level-drain.mjs).
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       biography: new HTMLField()

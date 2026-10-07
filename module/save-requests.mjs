@@ -37,11 +37,11 @@ export function groupResults(request) {
 }
 
 /** Post a save request for `targets` ([{ uuid, name }]). */
-export async function createSaveRequest({ speaker, key = "sp", kind = "", title = "", content = "", targets = [], data = {} }) {
+export async function createSaveRequest({ speaker, key = "sp", kind = "", title = "", content = "", targets = [], data = {}, rolls = [], flags = {} }) {
   return ChatMessage.create({
-    speaker, content: `<p><strong>${esc(title)}</strong></p>${content}`
+    speaker, rolls, content: `${title ? `<p><strong>${esc(title)}</strong></p>` : ""}${content}`
       + (targets.length ? "" : `<p class="ad2e-note">${esc(i18n("AD2E.SaveRequest.NoTargets"))}</p>`),
-    flags: { ad2e: { saveRequest: { key, kind, title, targets, results: {}, data } } }
+    flags: { ad2e: { ...flags, saveRequest: { key, kind, title, targets, results: {}, data } } }
   });
 }
 

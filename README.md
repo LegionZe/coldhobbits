@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.10)
+## Status (v1.0.11)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -30,7 +30,7 @@ Confirmed in Foundry 14.368 by the owner up to 0.0.88, and since then feature by
 confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbarian and Mystic features, social ranks
 and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
 (0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
-the net (0.0.135), and poison (1.0.10). The features are listed under "Verify before use" below.
+the net (0.0.135), poison (1.0.10), and magic resistance and spell save requests (1.0.11). The features are listed under "Verify before use" below.
 
 ## Known limitations
 - Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
@@ -131,6 +131,18 @@ the net (0.0.135), and poison (1.0.10). The features are listed under "Verify be
   the "Debilitated (poison)" status; healing is refused while debilitated). The sheets show pending poison; the GM's
   "Neutralize poison" button ends it without restoring hit points ("the neutralize poison spell doesn't recover hit
   points already lost"). Slow poison and herbalism are left to the GM (e.g. advance or neutralize).
+- Magic resistance (1.0.11; owner's ruling: monsters and a character field, rolled automatically on casting):
+  "Magic Resistance (DMG)" rev 71210 / "Magic Resistance (PHB)" rev 70416: "If the roll is equal to or less than the
+  creature's magic resistance, the spell has no effect on the creature"; "Creatures, however, can lower their magic
+  resistance at will" (tick box "Lowered"); "If a magic resistance roll fails ... the target can make all saving throws
+  normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
+  the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
+  (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Spell save requests (1.0.11; owner's ruling: Save buttons plus a GM roll-all): when the spell's Save entry is not
+  None, the cast card asks the unresisted targets to save vs. the spell's "Save vs." category (new spell field
+  `saveType`, default spell; it is not read from the spell page). The Damage roll splits by the recorded saves:
+  failed or unrolled saves take full damage, successful saves half ("1/2"), none ("Neg."), or a separate full-damage
+  message marked for the GM ("Neg. or 1/2" and other entries); resisted targets take none.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

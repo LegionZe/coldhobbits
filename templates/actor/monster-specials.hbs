@@ -10,6 +10,8 @@
   <fieldset>
     <legend>{{localize "AD2E.Monster.Field.magicResistance"}}</legend>
     <input type="text" name="system.magicResistance" value="{{system.magicResistance}}">
+    <p class="ad2e-note">{{localize "AD2E.MR.Rolled" value=mrValue}}</p>
+    <label class="ad2e-check" data-tooltip="{{localize 'AD2E.MR.Hint'}}"><input type="checkbox" name="system.mrLowered" {{checked system.mrLowered}}> {{localize "AD2E.MR.LoweredLabel"}}</label>
   </fieldset>
   {{#if system.url}}<p class="ad2e-note">{{localize "AD2E.Monster.SeeSource"}} <a href="{{system.url}}" target="_blank" rel="noopener">{{system.url}}</a></p>{{/if}}
 </section>
