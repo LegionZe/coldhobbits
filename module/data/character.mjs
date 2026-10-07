@@ -16,7 +16,7 @@ import { applyMeditation, kitSpecial, meditationActive, weaponTypeConflicts } fr
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
 
-const { ArrayField, BooleanField, SchemaField, NumberField, StringField, HTMLField } = foundry.data.fields;
+const { ArrayField, BooleanField, SchemaField, NumberField, ObjectField, StringField, HTMLField } = foundry.data.fields;
 
 const int = (initial, min = null, max = null) =>
   new NumberField({ required: true, integer: true, initial, min, max, nullable: false });
@@ -165,7 +165,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       followers: new SchemaField({ actors: new ArrayField(new StringField()), rolled: new ArrayField(new StringField()),
         stronghold: new SchemaField({ name: new StringField({ initial: "" }),
           kind: new StringField({ required: true, blank: true, initial: "", choices: ["castle", "worship", "hideout", "tower"] }),
-          built: new BooleanField({ initial: false }) }) }),
+          built: new BooleanField({ initial: false }),
+          // Construction project (module/construction.mjs `projectOf` fills the defaults): site, modules, workers,
+          // helpers, and once started the frozen plan and progress.
+          project: new ObjectField() }) }),
       // Mounts and pack animals (module/animals.mjs): monster actor UUIDs and the one ridden; body weight (lb, PHB
       // Table 10) counts toward a ridden animal's load.
       animals: new SchemaField({ actors: new ArrayField(new StringField()), riding: new StringField({ required: true, blank: true, initial: "" }) }),
