@@ -26,7 +26,7 @@ import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } 
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp from "./apps/award-xp.mjs";
-import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, WeaponCreator } from "./apps/creators.mjs";
+import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
 import AD2EChatMessage from "./documents/chat-message.mjs";
@@ -80,6 +80,7 @@ Hooks.once("init", () => {
     createMagicItem: () => new MagicItemCreator().render({ force: true }),
     createPatron: () => new PatronCreator().render({ force: true }),
     createSpell: () => new SpellCreator().render({ force: true }),
+    createTrap: () => new TrapCreator().render({ force: true }),
     rollReaction: creature => rollEncounterReaction(creature),
     rollTreasure: actor => rollTreasureDialog(actor ?? null)
   };
@@ -138,7 +139,8 @@ Hooks.once("init", () => {
     "ad2e.weapon-list": "systems/ad2e/templates/actor/parts/weapon-list.hbs",
     "ad2e.armor-list": "systems/ad2e/templates/actor/parts/armor-list.hbs",
     "ad2e.class-abilities": "systems/ad2e/templates/actor/parts/class-abilities.hbs",
-    "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs"
+    "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs",
+    "ad2e.trap-fields": "systems/ad2e/templates/actor/parts/trap-fields.hbs"
   });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;

@@ -30,6 +30,7 @@
     <label>{{localize "AD2E.Item.url"}} <input type="text" name="system.url" value="{{system.url}}"></label>
   </div>
   <p class="ad2e-note">{{summary}}</p>
+  {{#if trap}}{{> "ad2e.trap-fields" trap=trap}}{{/if}}
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
 </section>

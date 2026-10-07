@@ -1,0 +1,35 @@
+<section class="ad2e-creator">
+  <div class="ad2e-creator-body">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Trap.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Trap.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Trap.FormLabel"}}</label><select data-field="form">{{#each forms as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Trap.Trigger"}}</label><input type="text" data-field="trigger" value="{{s.trigger}}" placeholder="{{localize 'AD2E.Creator.Trap.TriggerHint'}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Trap.Effect"}}</label><input type="text" data-field="effect" value="{{s.effect}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Trap.Reset"}}</label><input type="text" data-field="reset" value="{{s.reset}}" placeholder="{{localize 'AD2E.Creator.Trap.ResetHint'}}"></div>
+    {{#unless isItem}}
+    <div class="form-group"><label>AC</label><input type="number" data-field="ac" value="{{s.ac}}" min="-10" max="10" step="1"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Trap.Hp"}}</label><input type="number" data-field="hp" value="{{s.hp}}" min="1" step="1"></div>
+    {{/unless}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Trap.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Trap.Mode"}}</label><select data-field="mode">{{#each modes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    {{#if thac0Mode}}
+    <div class="form-group"><label>THAC0</label><input type="number" data-field="thac0" value="{{s.thac0}}" min="1" max="25" step="1"><span class="ad2e-weapon-meta">{{localize "AD2E.Creator.Trap.HitsAc5"}} {{hitsAc5}}+</span></div>
+    {{else}}
+    <div class="form-group"><label>{{localize "AD2E.Trap.Save"}}</label><select data-field="save">{{#each saves as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Trap.OnSave"}}</label><select data-field="onSave">{{#each onSaves as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></div>
+    {{/if}}
+    <div class="form-group"><label>{{localize "AD2E.Trap.DamageLabel"}}</label><input type="text" data-field="damage" value="{{s.damage}}" placeholder="2d6"></div>
+    <div class="form-group"><label>{{localize "AD2E.Trap.Modifier"}}</label><input type="number" data-field="modifier" value="{{s.modifier}}" min="-{{maxMod}}" max="{{maxMod}}" step="5"></div>
+    <p class="ad2e-note">{{localize "AD2E.Creator.Trap.ModifierHint"}}</p>
+  </fieldset>
+  {{#each issues as |i|}}<p class="ad2e-unmet">{{i}}</p>{{/each}}
+  </div>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>

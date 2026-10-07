@@ -2,6 +2,7 @@ import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import { mountTrained } from "../combat-options.mjs";
 import { pushMount, pushText } from "../animals.mjs";
+import { springTrap, trapContext } from "../traps.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { AD2E, armorSummary, equipmentSummary } from "../config.mjs";
@@ -25,6 +26,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollSave: MonsterSheet.onRollSave,
       pushMount: MonsterSheet.onPushMount,
       breakFreeNet: MonsterSheet.onBreakFreeNet,
+      springTrap: MonsterSheet.onSpringTrap,
       rollAttack: MonsterSheet.onRollAttack,
       rollDamage: MonsterSheet.onRollDamage,
       rollMorale: MonsterSheet.onRollMorale,
@@ -81,6 +83,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.isMount = this.document.system.role === "mount";
     // Pushing a mount or pack animal (module/animals.mjs): the button and its current state.
     context.canPush = ["mount", "pack"].includes(this.document.system.role);
+    context.trap = trapContext(this.document);
     context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
     context.trainedAuto = game.i18n.localize(mountTrained(this.document) ? "AD2E.Mounted.Trained.autoYes" : "AD2E.Mounted.Trained.autoNo");
@@ -175,6 +178,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollSave(event, target) { return this.document.rollSave(target.dataset.save); }
 
   static onPushMount() { return pushMount(this.document); }
+  static onSpringTrap() { return game.user?.isGM ? springTrap(this.document) : null; }
   static onBreakFreeNet() { return this.document.breakFreeNet(); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }

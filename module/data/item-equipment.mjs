@@ -1,4 +1,5 @@
 import { AD2E } from "../config.mjs";
+import { trapField } from "./trap-fields.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -27,6 +28,8 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
         scarcity: new StringField({ initial: "" }), laboratory: new BooleanField({ initial: false }),
         perishable: new BooleanField({ initial: false }) }),
       container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
+      // Category "trap" (module/traps.mjs): a trap set on an object, e.g. a chest's poisoned needle.
+      trap: trapField(),
       source: new StringField({ initial: "" }),
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })

@@ -1,0 +1,18 @@
+{{#with trap as |t|}}
+<fieldset class="ad2e-trap">
+  <legend>{{localize "AD2E.Trap.Legend"}}</legend>
+  <p class="ad2e-note">{{localize "AD2E.Trap.Hint"}}</p>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Trap.Mode"}} <select name="system.trap.mode">{{#each t.modes as |m|}}<option value="{{m.key}}" {{#if m.selected}}selected{{/if}}>{{m.label}}</option>{{/each}}</select></label>
+    {{#if t.thac0Mode}}<label>THAC0 <input type="number" name="system.trap.thac0" value="{{t.data.thac0}}" min="1" max="25" step="1"></label>
+    {{else}}<label>{{localize "AD2E.Trap.Save"}} <select name="system.trap.save">{{#each t.saves as |s|}}<option value="{{s.key}}" {{#if s.selected}}selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>
+    <label>{{localize "AD2E.Trap.OnSave"}} <select name="system.trap.onSave">{{#each t.onSaves as |s|}}<option value="{{s.key}}" {{#if s.selected}}selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>{{/if}}
+    <label>{{localize "AD2E.Trap.DamageLabel"}} <input type="text" name="system.trap.damage" value="{{t.data.damage}}" placeholder="2d6"></label>
+    <label>{{localize "AD2E.Trap.Modifier"}} <input type="number" name="system.trap.modifier" value="{{t.data.modifier}}" min="-30" max="30" step="5"></label>
+    <label>{{localize "AD2E.Trap.Trigger"}} <input type="text" name="system.trap.trigger" value="{{t.data.trigger}}"></label>
+    <label>{{localize "AD2E.Trap.Effect"}} <input type="text" name="system.trap.effect" value="{{t.data.effect}}"></label>
+    <label>{{localize "AD2E.Trap.Reset"}} <input type="text" name="system.trap.reset" value="{{t.data.reset}}"></label>
+  </div>
+  {{#if t.canSpring}}<button type="button" data-action="springTrap" data-tooltip="{{localize 'AD2E.Trap.SpringHint'}}"><i class="fa-solid fa-burst"></i> {{localize "AD2E.Trap.Spring"}}</button>{{/if}}
+</fieldset>
+{{/with}}

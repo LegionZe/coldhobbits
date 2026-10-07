@@ -26,6 +26,7 @@ const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
 import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
+import { targetedTraps, TRAP } from "../traps.mjs";
 import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
 
 export default class AD2EActor extends Actor {
@@ -1937,15 +1938,26 @@ export default class AD2EActor extends Actor {
     const ranger = (info.skillClassId ?? info.classId) === "ranger";
     if (info.old?.skills) await this.markOldClassUse(name);
     const kitOptions = this.#kitOptions("skill", key);
+    // Find/Remove Traps (module/traps.mjs): the targeted trap's difficulty (up to +/-30%, CTH) and a silent attempt (-10%,
+    // a click on 01-10). Open Locks may also be silent.
+    const traps = key === "rt" ? targetedTraps() : [];
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const trapField = traps.length ? `<div class="form-group"><label>${i18n("AD2E.Trap.Which")}</label><select name="trap">`
+      + traps.map((t, i) => `<option value="${i}">${esc(t.name)} (${t.modifier >= 0 ? "+" : ""}${t.modifier}%)</option>`).join("") + "</select></div>" : "";
+    const silentField = ["rt", "ol"].includes(key) ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Trap.Silent", { n: TRAP.silent, noise: TRAP.silentNoise }))}</label><input type="checkbox" name="silent"></div>` : "";
     const input = await DialogV2.prompt({
       window: { title: name },
-      content: (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
+      content: trapField + silentField + (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
         + modifierFields({ unit: "%", autofocus: true })
         + this.#kitFields(kitOptions, "%"),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const kit = AD2EActor.#kitPicked(button.form, kitOptions);
         const m = readModifier(button.form);
-        return { mod: m.mod + kit.sum, halved: !!button.form.elements.halved?.checked, kitText: kit.text, manual: m };
+        const trap = traps[Number(button.form.elements.trap?.value ?? -1)] ?? null;
+        const silent = !!button.form.elements.silent?.checked;
+        return { mod: m.mod + kit.sum + (trap?.modifier ?? 0) + (silent ? TRAP.silent : 0), halved: !!button.form.elements.halved?.checked,
+          kitText: [kit.text, trap ? `${trap.name} ${trap.modifier >= 0 ? "+" : ""}${trap.modifier}%` : "", silent ? i18n("AD2E.Trap.SilentShort") : ""].filter(Boolean).join("; "),
+          manual: m, silent };
       } },
       rejectClose: false
     });
@@ -1955,11 +1967,13 @@ export default class AD2EActor extends Actor {
     const roll = await new Roll("1d100").evaluate();
     const success = roll.total <= target;
     const trap = key === "rt" && roll.total >= AD2E.trapSpringRoll;
+    const noise = input.silent && roll.total <= TRAP.silentNoise;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${name} (${i18n("AD2E.Roll.RollUnder")} ${target}%${input.halved ? `, ${i18n("AD2E.Skill.Halved")}` : ""}${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.manual?.mod, input.manual?.note, "%")}: `
         + i18n(success ? "AD2E.Skill.Success" : "AD2E.Skill.Failure")
         + (trap ? ` — ${i18n("AD2E.Skill.TrapSprung")}` : "")
+        + (noise ? ` — ${i18n("AD2E.Trap.Noise")}` : "")
     });
   }
 

@@ -1,5 +1,6 @@
 import { AD2E, creatureHitDice, lookup } from "../config.mjs";
 import { hpState } from "../health.mjs";
+import { trapField } from "./trap-fields.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { loadBand, riderOf, riderWeight } from "../animals.mjs";
 
@@ -56,6 +57,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional(), other: optional() }),
       url: text(),
       cost: text(), // hirelings: wage (DMG Tables 64/65); mounts: price (PHB Table 44)
+      // Role "trap" (module/traps.mjs): a trap placed as a token, e.g. a pit or a deadfall.
+      trap: trapField(),
       notes: new HTMLField()
     };
   }

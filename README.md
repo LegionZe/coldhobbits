@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.7)
+## Status (v1.0.8)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -90,6 +90,16 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   character: a wizard's chance to learn the spell (with specialization and the other learning limits), a priest's
   Wisdom check; a researched spell can be added to that character when created. Material component links and
   elemental provinces are set on the spell sheet afterwards.
+- Create trap (GM manual > GM tools, or `game.ad2e.createTrap()`; 1.0.8; owner's rulings): a trap actor (Monster / NPC
+  actor, new role "Trap", placed as a token: pits, deadfalls) or a trap item (equipment, new category "Trap", put on the
+  object it guards: a chest's needle). Each hits either by an attack at its THAC0 against the victim's AC or by the
+  victim's saving throw (avoided or halved on a success), chosen per trap; damage dice, trigger, effect, reset, and a
+  find/remove modifier up to +/-30% ("A device can be listed with a modifier of + or - up to 30%", Advanced Locks and
+  Traps (CTH) rev 134844, regex-checked). Both sheets have an editable Trap section and a GM "Spring" button
+  (module/traps.mjs): the targeted tokens are attacked or roll their saves, one damage roll goes to those hit (and half
+  to those who saved for half), with the usual apply buttons. Find/Remove Traps offers the targeted trap's modifier
+  (trap actors and trap items on targeted actors) and a silent attempt: "-10% ... quietly on any roll except 01-10%"
+  (CTH; Open Locks too); a roll of 96-100 still springs the trap (Thief Skill Explanations (PHB)).
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by
