@@ -23,6 +23,7 @@
       {{#if system.url}}<a class="ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{system.url}}"><i class="fa-solid fa-book-open"></i> {{sourceLabel}}</a>{{/if}}
     </div>
   </div>
+  {{#if trap}}{{> "ad2e.trap-fields" trap=trap}}{{/if}}
   <dl class="ad2e-monster-summary">
     {{#each summary as |s|}}<div class="ad2e-summary-cell"><dt>{{s.label}}</dt><dd {{#if s.tooltip}}data-tooltip="{{s.tooltip}}"{{/if}}>{{s.value}}</dd></div>{{/each}}
   </dl>

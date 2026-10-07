@@ -1,3 +1,4 @@
+import { springTrap, trapContext } from "../traps.mjs";
 import { SP } from "../sp-weapons.mjs";
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
 import { identifyContext } from "../identify.mjs";
@@ -257,7 +258,7 @@ export class CoinSheet extends AD2EItemSheet {
 }
 
 export class EquipmentSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["equipment"] };
+  static DEFAULT_OPTIONS = { classes: ["equipment"], actions: { springTrap: EquipmentSheet.#onSpringTrap } };
   static PARTS = { body: { template: "systems/ad2e/templates/item/equipment-sheet.hbs", scrollable: [""] } };
 
   async _prepareContext(options) {
@@ -265,7 +266,12 @@ export class EquipmentSheet extends AD2EItemSheet {
     context.categories = AD2E.equipmentCategories;
     context.summary = equipmentSummary(this.document.system);
     context.isComponent = this.document.system.category === "component";
+    context.trap = trapContext(this.document);
     return context;
+  }
+
+  static #onSpringTrap() {
+    return game.user?.isGM ? springTrap(this.document) : null;
   }
 }
 

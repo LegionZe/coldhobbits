@@ -186,7 +186,7 @@ AD2E.coinsPerPound = COINS_PER_POUND;
 /** Equipment item categories (PHB Table 44 lists). */
 AD2E.equipmentCategories = { gear: "AD2E.Gear.gear", clothing: "AD2E.Gear.clothing", provisions: "AD2E.Gear.provisions",
   lodging: "AD2E.Gear.lodging", tack: "AD2E.Gear.tack", animal: "AD2E.Gear.animal", transport: "AD2E.Gear.transport",
-  service: "AD2E.Gear.service", component: "AD2E.Gear.component" };
+  service: "AD2E.Gear.service", component: "AD2E.Gear.component", trap: "AD2E.Gear.trap" };
 
 /** "2 gp · 2 lb each · holds 50 lb (3'×2'×1')" / animal "carries 180 / 270 / 360 lb" for an equipment item. */
 export function equipmentSummary(sys) {
@@ -220,7 +220,8 @@ export function strengthKey(score, exceptional = 0) {
 /** Monster actor roles (the monster sheet also serves hirelings, mounts and pets). */
 AD2E.monsterRoles = { monster: "AD2E.Monster.Role.monster", hireling: "AD2E.Monster.Role.hireling",
   mount: "AD2E.Monster.Role.mount", pack: "AD2E.Monster.Role.pack", pet: "AD2E.Monster.Role.pet",
-  familiar: "AD2E.Monster.Role.familiar", patron: "AD2E.Monster.Role.patron" };
+  familiar: "AD2E.Monster.Role.familiar", patron: "AD2E.Monster.Role.patron",
+  trap: "AD2E.Monster.Role.trap" };
 /** DMG Table 39 (generated): index 0 = less than one Hit Die, index n = n Hit Dice, last = 16 and more. */
 AD2E.creatureThac0 = CREATURE_THAC0;
 

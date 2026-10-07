@@ -460,6 +460,7 @@
     "transport": "Transport",
     "service": "Services",
     "component": "Spell components",
+    "trap": "Traps",
     "CompGroup": "Table 16 group",
     "Acquisition": "Acquisition",
     "AcquisitionHint": "POSM Table 16: FS field search, TM town or market, SO special order, Auto found by anyone who looks.",
@@ -498,7 +499,8 @@
       "pack": "Pack / draft animal",
       "pet": "Pet",
       "familiar": "Familiar",
-      "patron": "Patron"
+      "patron": "Patron",
+      "trap": "Trap"
     },
     "HitDice": "Hit Dice",
     "HitDiceHint": "As written in the Monstrous Manual: 3, 3+3, 1-1, 1/2, 2-8 hp. Hit Dice are d8.",
@@ -645,6 +647,31 @@
     "BardKitNeeded": "Complete Bard's Handbook combination: the bard needs one of these kits: {kits} (True Bard also without a kit).",
     "ThiefArmor": "Multi-class: in armour not allowed to thieves only open locks and detect noise can be used (no armour adjustment)."
   },
+  "AD2E.Trap": {
+    "Legend": "Trap",
+    "Hint": "Choose how it hits: an attack at its THAC0 against the victim's AC, or the victim's saving throw. The modifier (up to +/-30%) changes a thief's Find/Remove Traps chance when the trap (or the object holding it) is targeted.",
+    "Mode": "Hits by",
+    "Modes": { "thac0": "Attack roll (THAC0)", "save": "Saving throw" },
+    "Save": "Saving throw vs.",
+    "OnSave": "A successful save",
+    "OnSaves": { "none": "avoids it", "half": "halves the damage" },
+    "DamageLabel": "Damage",
+    "Modifier": "Find/remove modifier (%)",
+    "Trigger": "Trigger",
+    "Effect": "Effect",
+    "Reset": "Reset",
+    "Spring": "Spring",
+    "SpringHint": "GM: spring the trap on the targeted tokens: attack or saving throws, then damage with the apply buttons.",
+    "Sprung": "{name} is sprung!",
+    "AttackLine": "{name}: {roll} vs AC {ac} (needs {need}): {result}",
+    "SaveLine": "{name}: save vs. {save} {roll} (needs {need}): {result}",
+    "Damage": "{name}: {damage} damage to {who}.",
+    "HalfDamage": "{name}: {damage} damage (half, saved) to {who}.",
+    "Which": "Trap",
+    "Silent": "Silent attempt ({n}%; a click on 01-{noise})",
+    "SilentShort": "silent",
+    "Noise": "the attempt makes a sharp click"
+  },
   "AD2E.Creator": {
     "World": "World (Actors / Items directory)",
     "Destination": "Create in",
@@ -652,6 +679,26 @@
     "Created": "Created {name}.",
     "NeedName": "Enter a name first.",
     "Custom": "Custom (creator)",
+    "Trap": {
+      "Title": "Create trap",
+      "Hint": "A trap as an actor (placed as a token: pits, deadfalls, scything blades) or as an item put on the object it guards (a chest's poisoned needle, a door's gas). It hits by an attack at its THAC0 or by the victim's saving throw; the GM springs it from its sheet at the targeted tokens.",
+      "Unnamed": "New trap",
+      "Step1": "1. The trap",
+      "Step2": "2. How it hits",
+      "FormLabel": "Kind",
+      "Form": { "actor": "Trap actor (a token on the map)", "item": "Trap item (on a chest, door or other object)" },
+      "TriggerHint": "e.g. opening the lid, stepping on the flagstone",
+      "ResetHint": "e.g. automatic, manual, none",
+      "Hp": "Hit points (to break it)",
+      "HitsAc5": "hits AC 5 on",
+      "ModifierHint": "Complete Thief's Handbook: up to +/-30% for the trap maker's skill, the materials and its purpose (as for locks: +15% a simple latch, -30% a major vault). A thief targeting the trap or its object gets it in the Find/Remove Traps roll.",
+      "Issue": {
+        "badDamage": "Damage must be dice such as 2d6 or 1d6+1.",
+        "noEffect": "Enter damage or an effect.",
+        "badModifier": "The modifier is at most 30% either way.",
+        "badThac0": "THAC0 from 1 to 25."
+      }
+    },
     "Spell": {
       "Title": "Create spell",
       "Hint": "A new wizard or priest spell. The DMG's spell research guidelines are applied as advice: the level for its damage dice, research time and cost. A researching character can roll the research check here; a researched spell can go straight into that character's spells.",

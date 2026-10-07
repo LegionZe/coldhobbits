@@ -80,6 +80,13 @@
       spell research section: the level for the damage dice, research time (two weeks per level, a week more per failed
       check) and cost (100-1,000 gp per level). Choose the researching character to roll the research check (a wizard's
       chance to learn the spell, a priest's Wisdom check); once researched the spell can go straight into their spells.</p></div>
+    <div><button type="button" data-action="tool" data-tool="createTrap"><i class="fa-solid fa-burst"></i> Create trap</button>
+      <p>A trap actor (a token on the map: pits, deadfalls) or a trap item (put on the chest, door or other object it
+      guards). It hits by an attack at its THAC0 against the victim's AC, or by the victim's saving throw (avoided or halved
+      on a success); damage, trigger, effect and reset; and a find/remove modifier up to 30% either way. The trap's sheet
+      (or the item's) has a GM "Spring" button: target the victims' tokens first; the attack or saves are rolled and the
+      damage comes with the usual apply buttons. A thief's Find/Remove Traps roll offers the targeted trap's modifier and a
+      silent attempt (-10%, a click on 01-10).</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -296,6 +303,7 @@
       <tr><td><code>game.ad2e.createMagicItem()</code></td><td>Magic item creator.</td></tr>
       <tr><td><code>game.ad2e.createPatron()</code></td><td>Patron creator.</td></tr>
       <tr><td><code>game.ad2e.createSpell()</code></td><td>Spell creator.</td></tr>
+      <tr><td><code>game.ad2e.createTrap()</code></td><td>Trap creator.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>

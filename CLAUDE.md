@@ -226,8 +226,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `game.ad2e.createPatron`, `createPatron`; monster role "patron"): `rollTraits` (DMG Table 70, `CREATOR_TABLES.patron`),
   `npcNumbers` (hitDiceAt / thac0At by class group), appearance `looks`. Spell creator (`SpellCreator`,
   `game.ad2e.createSpell`, `createSpell`): `CREATOR_TABLES.spell` (PHB schools/spheres, DMG research figures), `maxSpellLevel`,
-  `levelAdvice`, `researchCost`, research check via `learnChance` (wizard) or Wisdom (priest). Owner's order for the next
-  creators: trap; then automatic encounter XP.
+  `levelAdvice`, `researchCost`, research check via `learnChance` (wizard) or Wisdom (priest). Trap creator (`TrapCreator`,
+  `game.ad2e.createTrap`, `createTrap`): trap actor (monster role "trap") or trap item (equipment category "trap"), shared
+  `system.trap` (`module/data/trap-fields.mjs`); `module/traps.mjs` (`trapOf`, `targetedTraps`, `trapOutcome`, `springTrap`,
+  `trapContext` for the `ad2e.trap-fields` partial on the monster and equipment sheets); CTH figures `CREATOR_TABLES.trap`;
+  rollClassSkill rt/ol: trap modifier select and silent attempt. Next: automatic encounter XP.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

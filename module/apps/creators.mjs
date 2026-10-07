@@ -3,6 +3,7 @@ import { CREATOR_TABLES } from "../rules/creator-tables.mjs";
 import { TREASURE_ROLLS } from "../rules/treasure-tables.mjs";
 import { SP_WEAPONS } from "../rules/sp-weapon-tables.mjs";
 import { learnChance } from "../learn-spells.mjs";
+import { TRAP } from "../traps.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -979,6 +980,93 @@ export class SpellCreator extends HandlebarsApplicationMixin(ApplicationV2) {
     const actor = s.researched && s.addToResearcher ? game.actors?.get(s.researcher) : null;
     if (actor) await actor.createEmbeddedDocuments?.("Item", [data]);
     ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }) + (actor ? ` ${game.i18n.format("AD2E.Creator.Spell.Added", { name: actor.name })}` : ""));
+    doc.sheet?.render(true);
+    return doc;
+  }
+}
+
+/**
+ * Trap creator (owner's rulings): a trap actor (monster role "trap", placed as a token: pits, deadfalls, blades) or a
+ * trap item (equipment category "trap", put on the object it guards: a chest's needle, a door's gas). Each hits by an
+ * attack at its THAC0 or by the victim's saving throw (none or half on a save); damage dice, trigger, effect, reset, and
+ * the find/remove modifier up to +/-30% (CTH). Springing and the thief's modifier: module/traps.mjs.
+ */
+export class TrapCreator extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-trap-creator",
+    classes: ["ad2e", "creator"],
+    window: { title: "AD2E.Creator.Trap.Title", icon: "fa-solid fa-burst", resizable: true },
+    position: { width: 600, height: 680 },
+    actions: { create: TrapCreator.#onCreate }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/trap-creator.hbs", scrollable: [".ad2e-creator-body"] } };
+
+  state = { name: "", form: "actor", mode: "save", thac0: 15, save: "par", onSave: "none", damage: "", effect: "", trigger: "",
+    reset: "", modifier: 0, ac: 10, hp: 1, destination: "" };
+
+  /** Problems (keys of AD2E.Creator.Trap.Issue). */
+  static issues(s) {
+    const out = [];
+    if (s.damage && !DICE(s.damage)) out.push("badDamage");
+    if (!s.damage && !s.effect) out.push("noEffect");
+    if (Math.abs(s.modifier) > TRAP.modifierMax) out.push("badModifier");
+    if (s.mode === "thac0" && !(s.thac0 >= 1 && s.thac0 <= 25)) out.push("badThac0");
+    return out;
+  }
+
+  /** The trap data and the document to create (pure). */
+  static docData(s) {
+    const trap = { mode: s.mode, thac0: s.thac0, save: s.save, onSave: s.onSave, damage: s.damage, effect: s.effect, trigger: s.trigger,
+      reset: s.reset, modifier: s.modifier };
+    const name = s.name || game.i18n.localize("AD2E.Creator.Trap.Unnamed");
+    if (s.form === "item") return { name, type: "equipment", img: "icons/svg/item-bag.svg", system: { identifier: slugify(name),
+      category: "trap", quantity: 1, carried: true, trap, source: game.i18n.localize("AD2E.Creator.Custom") } };
+    return { name, type: "monster", system: { role: "trap", hitDice: "1", hp: { value: s.hp, max: s.hp }, ac: { base: s.ac, text: String(s.ac) },
+      movement: { base: 0, text: "0" }, morale: { value: 20, text: "" }, attacks: [], xp: 0, intelligence: "Non- (0)", trap } };
+  }
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    const s = this.state;
+    const i18n = k => game.i18n.localize(k);
+    const type = s.form === "item" ? "Item" : "Actor";
+    const packs = [...(game.packs ?? [])].filter(pk => pk.documentName === type && pk.metadata?.packageType === "world" && !pk.locked);
+    const opt = (keys, value, label) => keys.map(k => ({ key: k, label: label(k), selected: k === value }));
+    return {
+      ...context, s, isItem: s.form === "item", thac0Mode: s.mode === "thac0",
+      forms: opt(["actor", "item"], s.form, k => i18n(`AD2E.Creator.Trap.Form.${k}`)),
+      modes: opt(["thac0", "save"], s.mode, k => i18n(`AD2E.Trap.Modes.${k}`)),
+      saves: opt(["par", "rsw", "pet", "br", "sp"], s.save, k => i18n(`AD2E.Save.${k}`)),
+      onSaves: opt(["none", "half"], s.onSave, k => i18n(`AD2E.Trap.OnSaves.${k}`)),
+      hitsAc5: s.mode === "thac0" ? Math.max(s.thac0 - 5, 1) : null, maxMod: TRAP.modifierMax,
+      issues: TrapCreator.issues(s).map(k => i18n(`AD2E.Creator.Trap.Issue.${k}`)),
+      destinations: [{ key: "", label: i18n("AD2E.Creator.World"), selected: !s.destination },
+        ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))]
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element.querySelectorAll("[data-field]")) input.addEventListener("change", ev => {
+      const t = ev.currentTarget;
+      const f = t.dataset.field;
+      this.state[f] = t.type === "number" ? (t.value === "" ? 0 : Number(t.value)) : t.value;
+      if (f === "form") this.state.destination = "";
+      this.render();
+    });
+  }
+
+  static async #onCreate() {
+    const s = this.state;
+    if (!s.name) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.NeedName"));
+    const issues = TrapCreator.issues(s);
+    if (issues.length) return ui.notifications.warn(issues.map(k => game.i18n.localize(`AD2E.Creator.Trap.Issue.${k}`)).join(" "));
+    const data = TrapCreator.docData(s);
+    const cls = s.form === "item" ? Item.implementation : Actor.implementation;
+    const doc = await cls.create(data, s.destination ? { pack: s.destination } : {});
+    if (!doc) return null;
+    ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }));
     doc.sheet?.render(true);
     return doc;
   }
