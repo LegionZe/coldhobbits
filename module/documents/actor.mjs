@@ -34,6 +34,7 @@ import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs"
 import { table52ForTarget, table52Text } from "../armor-types.mjs";
 import { attackOptionsOn, AO, disarmPossible, maneuversFor, OPPOSED, opposedAcs, rushScore, sapChance, shieldOf } from "../attack-options.mjs";
 import { chartKey, CRIT, targetKind } from "../criticals.mjs";
+import { TRAVEL } from "../rules/travel-tables.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 
 export default class AD2EActor extends Actor {
@@ -2001,7 +2002,9 @@ export default class AD2EActor extends Actor {
     const t52 = table52ForTarget(attack.type, AD2EActor.#targetActor(targets));
     const maneuverNotes = [];
     const maneuverHit = this.#maneuverModifier(input, targets, maneuverNotes);
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit, mod: input.mod }).evaluate();
+    // Force marching: -1 per day to all attack rolls (module/travel.mjs).
+    const march = TRAVEL.march.attackPerDay * (this.system.march?.days ?? 0) || 0;
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
@@ -2022,6 +2025,7 @@ export default class AD2EActor extends Actor {
         + (input.mountedMelee?.text ? ` [${input.mountedMelee.text}]` : "") + modifierText(input.mod, input.note)
         + (crit ? ` [${criticalText(crit)}]` : "")
         + (maneuverNotes.length ? ` [${maneuverNotes.join("; ")}]` : "")
+        + (march ? ` [${game.i18n.format("AD2E.Travel.MarchNote", { n: march })}]` : "")
     });
     if (crit) await postCriticalCard(this, crit, targets);
     if (hit && AD2EActor.#autoDamageOn()) {

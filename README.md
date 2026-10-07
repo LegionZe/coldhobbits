@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.17)
+## Status (v1.0.18)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -480,6 +480,30 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   equipment without an item, such as lances, polearm choices or mounts, as notes). Table 19 creatures use the Hirelings &
   Mounts actors where one exists, else a placeholder with the wiki link. The stronghold is a record only (owner's ruling:
   no construction costs or time). Multi-class characters get each class's followers.
+- Weather and travel (GM tool "Weather and travel": Configure Settings, the GM manual, or `game.ad2e.travel()`;
+  `python3 tools/build-travel-tables.py`, every table parsed and every rule regex-checked against "Movement (PHB)",
+  "Movement (DMG)", "Terrain Obstacles and Hindrances (DMG)", "Movement on Water (DMG)", "Aerial Movement (DMG)" and
+  "Getting Lost (DMG)"). The DMG has no general weather generator; the day's weather uses the two procedures it gives
+  (owner's ruling): Table 79 ("roll 2d6", by season; "Hurricanes occur only if the previous day's weather was gale"),
+  adverse winds ("rolling 1d6. On a 5 or 6, the winds are unfavorable") and precipitation ("During summer and winter, a
+  6 on the die indicates rain or snow. In spring and fall, a 5 or 6 is rain"; storms and hurricanes always). It is kept
+  as the world's weather (editable). The planner takes the selected tokens (the slowest member sets the pace; a rider
+  uses the mount's rate) and works out the day:
+  - on foot "twice his movement rate in miles", force march "2 1/2 times"; mounts "a number of miles per day equal to
+    their movement rate"; hitched animals at half rate; vehicles stop on terrain costing more than 1 without a road or trail;
+  - Table 74 points per mile per terrain leg, trails half ("Trails through settled farmland offer no improvement"),
+    roads 1/2 point on level or rolling ground and as trails in mountains, Table 75 obstacles (added points, then
+    multipliers; the weather ticks rain/snow/gale entries: implementation choice);
+  - boats (Table 76, current added or subtracted, sail triples the "*" boats) and ships (Tables 77/78, adverse winds,
+    seaworthiness checks, off course at storm strength) for the hours set (10 by default: implementation choice);
+  - flying (clear sky as clear terrain, Table 80 multipliers, cumulative; no flight in a hurricane);
+  - getting lost (Tables 81/82, one blind d100 for the GM; "If the die roll is less than the percentage, the characters
+    are lost"; the worked example's 15% is asserted).
+  Force march: at the end of the day a Constitution check (creatures: save vs. death) with -1 per earlier consecutive day
+  (counted as the mount push: implementation choice); a failure stops force marching until rested; each day gives -1 to
+  all attack rolls, cumulative (character and monster attacks), and "Rest" removes one day per half day. Table 73
+  (optional, one round in difficult terrain) is listed in the character sheet's movement line. The day's card has an
+  "End day" button (GM) that advances world time by the travel hours (owner's ruling).
 - Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
   `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
   characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,
@@ -869,5 +893,6 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
+- Stronghold construction costs and building time (owner's request, later; 1.0.17 records the stronghold only).
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).

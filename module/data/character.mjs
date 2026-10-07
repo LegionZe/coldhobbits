@@ -1,3 +1,4 @@
+import { TRAVEL } from "../rules/travel-tables.mjs";
 import { hpState } from "../health.mjs";
 import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
 import { canFightTwoWeapons, characterSize, needsTwoHands, twoWeaponRate } from "../combat-options.mjs";
@@ -156,6 +157,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }),
       // Henchmen (module/henchmen.mjs): actor UUIDs, and former henchmen counted toward the Charisma lifetime limit.
       henchmen: new SchemaField({ actors: new ArrayField(new StringField()), lost: int(0, 0) }),
+      // Force marching (module/travel.mjs): days of penalty (-1 to attack rolls each), the consecutive streak, the last
+      // world day marched and whether a failed check stops further force marching until rested.
+      march: new SchemaField({ days: new NumberField({ integer: true, min: 0, initial: 0 }), streak: new NumberField({ integer: true, min: 0, initial: 0 }),
+        lastDay: new NumberField({ integer: true, nullable: true, initial: null }), blocked: new BooleanField({ initial: false }) }),
       // Name-level followers (module/followers.mjs): unit actors (UUIDs), classes already rolled, and the stronghold record.
       followers: new SchemaField({ actors: new ArrayField(new StringField()), rolled: new ArrayField(new StringField()),
         stronghold: new SchemaField({ name: new StringField({ initial: "" }),
@@ -336,8 +341,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.mods.encumbranceHit = encHit;
     // Al-Qadim heat (optional world setting): worn armour better than AC 7 hinders attacks and checks.
     this.mods.heat = heatRuleOn() ? heatPenalty(this.armor.body, this.armor.shield) : 0;
-    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.kitMods.total("attack");
-    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.kitMods.total("attack");
+    // Force marching: -1 to all attack rolls per day, cumulative (Cross-Country Movement (PHB), module/travel.mjs).
+    this.mods.march = TRAVEL.march.attackPerDay * (this.march?.days ?? 0) || 0;
+    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.mods.march + this.kitMods.total("attack");
+    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.mods.march + this.kitMods.total("attack");
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -893,8 +900,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const kitHit = this.kitMods?.total("attack") ?? 0;
     const kitDmg = this.kitMods?.total("damage") ?? 0;
     const heat = this.mods.heat ?? 0; // Al-Qadim heat penalty (aq-rules.mjs)
-    const hit = this.mods.hit + encumbranceHit + heat + kitHit;
-    const missile = dexMissile + encumbranceHit + heat + kitHit;
+    const march = this.mods.march ?? 0; // force marching (module/travel.mjs)
+    const hit = this.mods.hit + encumbranceHit + heat + march + kitHit;
+    const missile = dexMissile + encumbranceHit + heat + march + kitHit;
     const spec = AD2E.specialization;
     const out = { melee: null, missile: null };
     if (w.melee) {
@@ -1236,9 +1244,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       thac0: this.thac0.value,
       // Initiative is 1d10 + @init, lowest first: a kit's initiative bonus lowers the roll.
       init: this.initiative.mod - (this.kitMods?.total("initiative") ?? 0),
-      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0),
+      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0),
       dmg: this.mods.dmg,
-      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0),
+      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0),
       move: this.encumbrance.info?.rate ?? null
     };
   }
