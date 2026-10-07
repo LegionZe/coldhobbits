@@ -5,6 +5,7 @@
     {{#if system.url}}<a class="ad2e-item-link ad2e-source-link" href="{{system.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}: {{system.url}}"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Item.Source"}}</a>{{/if}}
   </header>
   <div class="ad2e-item-fields">
+    {{> "ad2e.item-material"}}
     {{#if containerOptions}}<label>{{localize "AD2E.Container.InContainer"}}
       <select name="system.container">{{#each containerOptions as |o|}}<option value="{{o.id}}" {{#if o.selected}}selected{{/if}}>{{o.name}}</option>{{/each}}</select></label>{{/if}}
     {{#unless hidden}}<label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>{{/unless}}

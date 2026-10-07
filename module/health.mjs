@@ -197,7 +197,8 @@ export async function applyFromMessage(message, scope, heal = false) {
     // A familiar touching its wizard: no damage from a special attack it saved against, half if it failed (Find Familiar).
     const dealt = await familiarContactDamage(actor, warded ?? amount);
     if (dealt === null) continue;
-    await actor.applyDamage(dealt, { single: true, kind: message.getFlag("ad2e", "damageKind") ?? "normal",
+    // A fall (module/item-saves.mjs, `notAttack`) is not "a single attack": no massive-damage check.
+    await actor.applyDamage(dealt, { single: !message.getFlag("ad2e", "notAttack"), kind: message.getFlag("ad2e", "damageKind") ?? "normal",
       temp: message.getFlag("ad2e", "temp") ?? 0 });
   }
 }

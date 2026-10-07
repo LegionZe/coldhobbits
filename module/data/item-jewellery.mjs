@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { AD2E, gemBaseValue } from "../config.mjs";
 
 const { BooleanField, NumberField, StringField } = foundry.data.fields;
@@ -12,6 +13,8 @@ export default class JewelleryData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
       kind: new StringField({ required: true, initial: "gem", choices: AD2E.treasureKinds }),
       // blank (no class: jewellery, objects of art) must be explicit when choices are given.
       gemClass: new StringField({ initial: "", blank: true, choices: AD2E.gemClasses }),

@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { poisonCoatField } from "./poison-fields.mjs";
 import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
 
@@ -15,6 +16,8 @@ export default class AmmunitionData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
       launchers: new SetField(new StringField()),
       size: text(),
       type: text(),

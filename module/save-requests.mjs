@@ -1,3 +1,5 @@
+import { itemSaveDialog } from "./item-saves.mjs";
+
 /**
  * Saving throw requests in chat (owner's ruling: a Save button for each target's owner and a GM button that rolls every
  * save left). A request message carries `flags.ad2e.saveRequest` { key (save category), kind ("poison" | "spell" | ...),
@@ -66,7 +68,10 @@ export function saveRequestButtons(message, html) {
   let open = 0;
   box.innerHTML = `<ul>${request.targets.map((t, i) => {
     const r = request.results?.[i];
-    if (r) return `<li>${esc(t.name)}: ${esc(save)} ${r.roll ?? ""} — ${esc(i18n(r.success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure"))}</li>`;
+    // A failed save: the GM may roll the character's item saves (owner's ruling; module/item-saves.mjs).
+    if (r) return `<li>${esc(t.name)}: ${esc(save)} ${r.roll ?? ""} — ${esc(i18n(r.success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure"))}`
+      + (!r.success && game.user?.isGM ? ` <button type="button" data-ad2e-itemsave="${i}" data-tooltip="${esc(i18n("AD2E.ItemSave.FromFailedHint"))}"><i class="fa-solid fa-flask"></i> ${esc(i18n("AD2E.ItemSave.Button"))}</button>` : "")
+      + "</li>";
     open += 1;
     const actor = targetActor(t);
     return `<li>${esc(t.name)}: ${actor?.isOwner ? `<button type="button" data-ad2e-save="${i}"><i class="fa-solid fa-shield-halved"></i> ${esc(save)}</button>`
@@ -78,6 +83,13 @@ export function saveRequestButtons(message, html) {
       ev.preventDefault();
       ev.stopPropagation();
       rollFor(message, saveRequestOf(message), Number(b.dataset.ad2eSave), false);
+    });
+  }
+  for (const b of box.querySelectorAll("button[data-ad2e-itemsave]")) {
+    b.addEventListener("click", ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      itemSaveDialog(targetActor(saveRequestOf(message).targets[Number(b.dataset.ad2eItemsave)]));
     });
   }
   box.querySelector("button[data-ad2e-save-all]")?.addEventListener("click", async ev => {

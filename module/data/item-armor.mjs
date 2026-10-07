@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { AD2E } from "../config.mjs";
 import { containerPreUpdate } from "../containers.mjs";
 import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
@@ -15,6 +16,8 @@ export default class ArmorData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
       kind: new StringField({ required: true, initial: "body", choices: AD2E.armorKinds }),
       ac: new NumberField({ integer: true, min: -10, max: 10, nullable: true, initial: null }),
       shield: new SchemaField({
