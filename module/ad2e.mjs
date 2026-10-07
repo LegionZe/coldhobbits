@@ -24,6 +24,8 @@ import { rollTreasureDialog } from "./treasure.mjs";
 import { registerSaveRequests } from "./save-requests.mjs";
 import { poisonTargetsDialog, registerPoison } from "./poison.mjs";
 import { fallingDialog, itemSavesTool } from "./item-saves.mjs";
+import { registerTable52 } from "./armor-types.mjs";
+import { registerAging } from "./aging.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } from "./apps/monster-importer.mjs";
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
@@ -137,6 +139,8 @@ Hooks.once("init", () => {
   registerAwardXp();
   registerSaveRequests();
   registerPoison();
+  registerTable52();
+  registerAging();
   registerMultiClass();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
   // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).

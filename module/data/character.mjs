@@ -9,6 +9,7 @@ import { better, dualClassOn, dualRestriction } from "../dual-class.mjs";
 import { bardKitFits, bardKitRule, combinationAllowed, comboKey, multiClassOn, multiSlots, primaryClass } from "../multi-class.mjs";
 import { pendingDrain } from "../level-drain.mjs";
 import { poisonStateField } from "./poison-fields.mjs";
+import { agingInfo, applyAging } from "../aging.mjs";
 import { debilitated, halveAbilities } from "../poison.mjs";
 import { applyMeditation, kitSpecial, meditationActive, weaponTypeConflicts } from "../kit-features.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
@@ -239,6 +240,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       magicResistance: new SchemaField({ value: int(0, 0, 100), lowered: new BooleanField({ initial: false }) }),
       // Age in years (blank = not recorded); Restoration ages caster and recipient (module/level-drain.mjs).
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      // Maximum age (PHB Table 11), rolled by the GM and shown to the GM only (module/aging.mjs).
+      maxAge: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       biography: new HTMLField()
     };
   }
@@ -276,6 +279,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       const ab = this.abilities[mod.key];
       ab.total = mod.max !== null && mod.max !== undefined ? Math.max(ab.total, Math.min(ab.total + v, mod.max)) : ab.total + v;
     }
+    // Ageing (PHB Table 12, module/aging.mjs): cumulative changes from the Age and race (owner's ruling: automatic).
+    this.ageInfo = agingInfo(this.raceInfo.raceItem?.system.identifier, this.age);
+    if (this.ageInfo) this.ageInfo.changes = this.ageInfo.index >= 0 ? applyAging(this.abilities, this.ageInfo.index) : {};
     // Mystic meditation (module/kit-features.mjs): +2 to one score (18/xx Strength: +20%) while the boost lasts.
     const medRule = kitSpecial(this.parent).meditation;
     this.meditationInfo = medRule && meditationActive(this.meditation, game.time?.worldTime ?? 0)

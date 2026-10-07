@@ -51,7 +51,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
         // (module/elemental.mjs, module/gens.mjs), e.g. a fire breath or a salamander's touch.
         element: new StringField({ initial: "" }),
         // DMG Table 51 poison class of the attack ("" = none; module/poison.mjs), e.g. a giant centipede's bite.
-        poison: poisonClassField()
+        poison: poisonClassField(),
+        // Damage type for PHB Table 52 (S, P, B; "" = none; module/armor-types.mjs): claws slash, a bite pierces, a tail bludgeons.
+        type: new StringField({ required: true, blank: true, initial: "", choices: ["S", "P", "B"] })
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),

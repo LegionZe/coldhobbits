@@ -31,6 +31,7 @@ import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedA
 import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
 import { createSaveRequest, groupResults, targetActor } from "../save-requests.mjs";
 import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs";
+import { table52ForTarget, table52Text } from "../armor-types.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -875,6 +876,9 @@ export default class AD2EActor extends Actor {
     if (vsUnarmed) notes.push(game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed }));
     const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
     if (t51.text) notes.push(t51.text);
+    // PHB Table 52 (optional, module/armor-types.mjs): the weapon's (or missile's) best type against the target's armour.
+    const t52 = table52ForTarget(ammo?.system.type || item.system.weapon?.type, AD2EActor.#targetActor(targets));
+    if (t52) notes.push(table52Text(t52));
     // A bow made for exceptional Strength, used without it: bend bars/lift gates roll to string or use it (Weapons (PHB)).
     if (use === "missile" && attack.bowBendBars !== null && attack.bowBendBars !== undefined) {
       notes.push(game.i18n.format("AD2E.Weapon.BowBendBars", { rating: attack.bowStrength, chance: attack.bowBendBars }));
@@ -920,7 +924,8 @@ export default class AD2EActor extends Actor {
     // Backstab: +4 for the rear attack (Thief Skill Explanations (PHB)); shield and Dexterity bonuses of the
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
-      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee;
+      + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee
+      + (t52?.mod ?? 0);
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     // A misfire (Combat & Tactics footnotes 3, 5, 7, 9): a natural roll at or below the weapon's number (wet if ticked).
@@ -1518,6 +1523,12 @@ export default class AD2EActor extends Actor {
   }
 
   /** Actors of the targets the current user may see (observer or owner). */
+  /** The first target's actor (any permission; Table 52 reads its armour), or null. */
+  static #targetActor(targets) {
+    const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
+    return targets?.length ? resolve?.(targets[0].uuid, { strict: false })?.actor ?? null : null;
+  }
+
   static #visibleTargetActors(targets) {
     const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
     return targets.map(t => resolve?.(t.uuid, { strict: false })?.actor)
@@ -1692,11 +1703,12 @@ export default class AD2EActor extends Actor {
   monsterAttacks() {
     if (this.type !== "monster") return [];
     const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
-      damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "", poison: a.poison ?? "" }));
+      damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "", poison: a.poison ?? "",
+      type: a.type ?? "" }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
       melee: !!i.system.weapon?.melee, element: PROVINCES.includes(i.system.element) ? i.system.element : "",
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
-      dmgBonus: i.system.bonus.dmg, poisonItem: i }));
+      dmgBonus: i.system.bonus.dmg, poisonItem: i, type: i.system.weapon?.type ?? "" }));
     return [...natural, ...weapons];
   }
 
@@ -1724,7 +1736,9 @@ export default class AD2EActor extends Actor {
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     input.t51 ??= { sum: 0, auto: false, text: "" };
     const mountedMelee = input.mountedMelee?.value ?? 0;
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee, mod: input.mod }).evaluate();
+    // PHB Table 52 (optional): the attack's type (a natural attack's select, a weapon's type) against the target's armour.
+    const t52 = table52ForTarget(attack.type, AD2EActor.#targetActor(targets));
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0), mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
@@ -1732,6 +1746,7 @@ export default class AD2EActor extends Actor {
         + i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "")
+        + (t52 ? ` [${foundry.utils.escapeHTML?.(table52Text(t52)) ?? table52Text(t52)}]` : "")
         + (input.mountedMelee?.text ? ` [${input.mountedMelee.text}]` : "") + modifierText(input.mod, input.note)
     });
     if (hit && AD2EActor.#autoDamageOn()) {

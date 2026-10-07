@@ -2584,5 +2584,30 @@
     "NoTargets": "No tokens targeted or selected: the damage is rolled without targets.",
     "Flavor": "Fall of {distance} feet: {n}d6 → {names}",
     "NoDamage": "A fall of {distance} feet causes no damage (1d6 per full 10 feet)."
+  },
+  "AD2E.Aging": {
+    "RollStart": "Roll",
+    "RollMax": "Roll",
+    "MaxAge": "Maximum age (GM)",
+    "MaxHint": "PHB Table 11 maximum age (base maximum + dice), rolled by the GM and seen by the GM only. You are notified when the character reaches it.",
+    "NoRace": "The character needs a race from the Races compendium for the age tables.",
+    "StartFlavor": "{name}: starting age ({formula})",
+    "MaxFlavor": "{name}: maximum age ({formula})",
+    "MaxReached": "{name} has reached the maximum age ({age} of {max}): death by old age, unless magic intervenes.",
+    "ElfMigrates": "{name} has reached the maximum age ({age} of {max}): an elf does not die but feels compelled to leave the world of men.",
+    "HalfExceptional": "exceptional Strength halved",
+    "Limits": "Middle age {middle}, old {old}, venerable {venerable}",
+    "Category": {
+      "young": "Young adult",
+      "middle": "Middle age",
+      "old": "Old",
+      "venerable": "Venerable"
+    }
+  },
+  "AD2E.Table52": {
+    "Setting": "Weapon type vs. armour (PHB Table 52)",
+    "SettingHint": "Optional rule: attacks against a target wearing body armour from Table 52 add the modifier for the weapon's best damage type (slashing, piercing, bludgeoning). Not used against a natural Armor Class.",
+    "Note": "Table 52 ({armor}, {type}): {mod}",
+    "TypeHint": "Damage type for PHB Table 52 (optional rule): claws slash, a bite pierces, a tail bludgeons."
   }
 }
