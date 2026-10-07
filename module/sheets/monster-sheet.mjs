@@ -90,6 +90,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Poison taking effect (module/poison.mjs) and the Table 51 classes for natural attacks.
     context.poisonState = poisonContext(this.document);
     context.mrValue = parseMagicResistance(sys.magicResistance);
+    // PHB Table 52 damage type of a natural attack (module/armor-types.mjs).
+    context.attackTypes = { S: "S", P: "P", B: "B" };
     context.poisonClasses = Object.fromEntries(Object.keys(POISON.classes).map(k => [k, poisonLabel(k)]));
     context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
@@ -126,7 +128,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
       hit: i.system.hidden ? "" : i.system.bonus.hit, inside: insideText(inv, i),
       element: i.system.element ? i18n(`AD2E.Elemental.Province.${i.system.element}`) : "",
-      poison: i.system.poison?.class && i.system.poison.doses > 0 ? `${i.system.poison.class} (${i.system.poison.doses})` : "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
+      poison: i.system.poison?.class && i.system.poison.doses > 0 ? `${i.system.poison.class} (${i.system.poison.doses})` : "",
+      type: i.system.weapon?.type ?? "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       equipped: i.system.equipped, summary: armorSummary(i.system), inside: insideText(inv, i) }));

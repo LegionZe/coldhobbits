@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.13)
+## Status (v1.0.14)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -30,8 +30,8 @@ Confirmed in Foundry 14.368 by the owner up to 0.0.88, and since then feature by
 confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbarian and Mystic features, social ranks
 and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
 (0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
-the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.0.11), and item saving throws and falling damage
-(1.0.13). The features are listed under "Verify before use" below.
+the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.0.11), item saving throws and falling damage
+(1.0.13), and ageing and PHB Table 52 (1.0.14). The features are listed under "Verify before use" below.
 
 ## Known limitations
 - Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
@@ -156,6 +156,18 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Falling damage (1.0.13): "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6" (Special Damage (DMG)
   rev 238117; per full 10 feet). GM tool `game.ad2e.falling()`; the damage message carries `notAttack`, so applying it
   makes no massive-damage check (that rule is for "a single attack"; implementation choice).
+- Ageing (1.0.14; owner's rulings: automatic, starting age roll, GM maximum age): PHB Tables 11 and 12 ("Character Race
+  Tables (PHB)" rev 167919) are generated into `module/rules/aging-tables.mjs` by `python3 tools/build-aging-tables.py`;
+  the Table 12 footnotes are parsed and asserted, Table 12 ages are checked against 1/2, 2/3 and all of the Table 11 base
+  maximum, and "Other Characteristics (PHB)" rev 70537 is regex-checked for the 18/xx Strength rule ("half of his
+  exceptional Strength rating"; "all his exceptional Strength and 1 point more") and "All ageing adjustments are
+  cumulative". The changes apply to the effective scores from `system.age` and the race (after kit score bonuses);
+  half of an exceptional rating is rounded down (implementation choice). GM-only `system.maxAge` with a whisper when reached.
+- Weapon type vs. armour (1.0.14; owner's rulings: world setting, automatic, monster attack type): PHB Table 52 ("Weapon
+  Types vs. Armor Modifiers (PHB)" rev 70322) in `module/rules/armor-type-tables.mjs` (`python3 tools/build-armor-type-tables.py`;
+  values "applied to the attacker's THAC0", i.e. subtracted from the attack roll; chain mail includes bronze plate,
+  leather includes padded and hide; armour identifiers asserted). The first target's worn body armour; the weapon's (or
+  missile's) best type; none against a natural Armor Class or armour outside the table (e.g. lamellar).
 - Spell importer check (1.0.12, owner's request): after an import the "Imported Spells" compendium is read back from the
   server; a missing compendium or imported pages without a spell show an error (and the console lists them) instead of
   the success message. Import errors are reported the same way. Reason: an import on 14.368 reported "created" while

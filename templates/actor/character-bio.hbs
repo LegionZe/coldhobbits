@@ -89,6 +89,10 @@
   </fieldset>
   {{/with}}
   <div class="form-group ad2e-age"><label>{{localize "AD2E.Character.age"}}</label>
-    <input type="number" name="system.age" value="{{system.age}}" min="0" step="1" placeholder="—"></div>
+    <input type="number" name="system.age" value="{{system.age}}" min="0" step="1" placeholder="—">
+    {{#if aging.canRollStart}}<button type="button" data-action="rollStartingAge" data-tooltip="{{aging.startFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollStart"}}</button>{{/if}}
+    {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
+    {{#if aging.isGM}}<label data-tooltip="{{localize 'AD2E.Aging.MaxHint'}}">{{localize "AD2E.Aging.MaxAge"}} <input type="number" name="system.maxAge" value="{{system.maxAge}}" min="0" step="1" placeholder="—"></label>
+    {{#if aging.maxFormula}}<button type="button" data-action="rollMaxAge" data-tooltip="{{aging.maxFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollMax"}}</button>{{/if}}{{/if}}</div>
   <textarea class="ad2e-biography" name="system.biography">{{system.biography}}</textarea>
 </section>

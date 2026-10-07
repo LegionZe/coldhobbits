@@ -1,3 +1,4 @@
+import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
 import { neutralizePoison, poisonContext } from "../poison.mjs";
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
@@ -226,6 +227,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       hpHeal: CharacterSheet.onHpHeal,
       recoverTemp: CharacterSheet.onRecoverTemp,
       neutralizePoison: CharacterSheet.onNeutralizePoison,
+      rollStartingAge: CharacterSheet.onRollStartingAge,
+      rollMaxAge: CharacterSheet.onRollMaxAge,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
       raiseDead: CharacterSheet.onRaiseDead,
@@ -398,6 +401,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.drain = { isGM: !!game.user?.isGM, any: !!drain?.any, zero: !!drain?.zero,
       pending: (drain?.pending ?? []).map(e => game.i18n.format("AD2E.Drain.PendingRow", { class: e.name, level: e.level })).join(", ") };
     context.poisonState = poisonContext(this.document);
+    // Ageing (PHB Tables 11/12, module/aging.mjs): category and changes; starting age roll; GM maximum age.
+    {
+      const raceId = sys.raceInfo?.raceItem?.system.identifier ?? "";
+      const info = sys.ageInfo;
+      const abbr = k => game.i18n.localize(`AD2E.Ability.${k}`);
+      const changes = info?.changes ? Object.entries(info.changes).map(([k, v]) => k === "strExceptional"
+        ? game.i18n.localize("AD2E.Aging.HalfExceptional") : `${abbr(k)} ${v > 0 ? "+" : ""}${v}`).join(", ") : "";
+      context.aging = { canRollStart: this.isEditable && (sys.age === null || sys.age === undefined) && !!startingAgeFormula(raceId),
+        startFormula: startingAgeFormula(raceId) ?? "", isGM: !!game.user?.isGM, maxFormula: maxAgeFormula(raceId) ?? "",
+        category: info ? game.i18n.localize(`AD2E.Aging.Category.${info.key}`) : "", changes,
+        limits: info ? game.i18n.format("AD2E.Aging.Limits", { middle: info.limits[0], old: info.limits[1], venerable: info.limits[2] }) : "" };
+    }
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
       bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
       knockedOut: st.knockedOut, temporary: temporaryHp(sys.hp),
@@ -1258,6 +1273,10 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRecoverTemp() { return this.actor.recoverTemporary(); }
 
   static onNeutralizePoison() { return neutralizePoison(this.actor); }
+
+  static onRollStartingAge() { return rollStartingAge(this.actor); }
+
+  static onRollMaxAge() { return rollMaxAge(this.actor); }
 
   static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
 
