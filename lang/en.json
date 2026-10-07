@@ -2609,5 +2609,42 @@
     "SettingHint": "Optional rule: attacks against a target wearing body armour from Table 52 add the modifier for the weapon's best damage type (slashing, piercing, bludgeoning). Not used against a natural Armor Class.",
     "Note": "Table 52 ({armor}, {type}): {mod}",
     "TypeHint": "Damage type for PHB Table 52 (optional rule): claws slash, a bite pierces, a tail bludgeons."
+  },
+  "AD2E.Critical": {
+    "Setting": "Critical hits (Combat & Tactics)",
+    "SettingHint": "A natural 18 or higher that hits by 5 or more. System I: double damage dice. System II: also hit location and severity on the nine charts (linked to the wiki), with a save vs. death against the injury; severity 13+ triples the damage dice.",
+    "Mode": {
+      "off": "Off",
+      "system1": "System I (double damage)",
+      "system2": "System II (location and severity)"
+    },
+    "Double": "Critical hit: double damage dice",
+    "Triple": "Critical hit: triple damage dice",
+    "Title": "Critical hit",
+    "Card": "{chart}: {location}, severity {severity} ({sev})",
+    "LocationRoll": "location roll {n}",
+    "TripleNote": "Severity 13+: triple damage dice, even if the save succeeds.",
+    "ChartLink": "Open the chart for the effect",
+    "SaveHint": "A failed save vs. death means the chart's injury for this location and severity; a success means only the extra damage dice.",
+    "Severity": {
+      "smaller": "minor",
+      "equal": "major",
+      "larger": "severe",
+      "twoLarger": "mortal"
+    },
+    "DamageLabel": "Critical hit",
+    "Damage": {
+      "none": "No",
+      "double": "Double damage dice",
+      "triple": "Triple damage dice"
+    },
+    "BodyType": "Critical hit chart",
+    "BodyTypeHint": "Target type on the Combat & Tactics critical hit charts: humanoid (two arms and two legs), animal, or monster (anything else; the default).",
+    "Body": {
+      "default": "Monster (default)",
+      "humanoid": "Humanoid",
+      "animal": "Animal",
+      "monster": "Monster"
+    }
   }
 }

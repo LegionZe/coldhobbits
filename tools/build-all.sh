@@ -29,6 +29,7 @@ python3 tools/build-hireling-data.py      # Hirelings & Mounts: DMG Tables 64/65
 python3 tools/build-trait-data.py         # Traits & Disadvantages (POSP Tables 46, 47)
 python3 tools/build-aging-tables.py       # PHB Tables 11/12 ageing
 python3 tools/build-armor-type-tables.py  # PHB Table 52 weapon type vs. armour (after build-armor-data.py)
+python3 tools/build-critical-tables.py    # Combat & Tactics critical hits (Systems I and II; location charts)
 python3 tools/build-item-save-tables.py  # DMG Table 29 item saving throws, falling damage
 python3 tools/build-creator-tables.py   # GM creators: DMG Tables 31/32 XP, MM size/intelligence/morale bands
 rm -rf tools/__pycache__

@@ -92,6 +92,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.mrValue = parseMagicResistance(sys.magicResistance);
     // PHB Table 52 damage type of a natural attack (module/armor-types.mjs).
     context.attackTypes = { S: "S", P: "P", B: "B" };
+    // Critical hit target type (module/criticals.mjs).
+    context.bodyTypes = { humanoid: "AD2E.Critical.Body.humanoid", animal: "AD2E.Critical.Body.animal", monster: "AD2E.Critical.Body.monster" };
     context.poisonClasses = Object.fromEntries(Object.keys(POISON.classes).map(k => [k, poisonLabel(k)]));
     context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
