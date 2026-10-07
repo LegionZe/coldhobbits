@@ -32,6 +32,7 @@ import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
 import { createSaveRequest, groupResults, targetActor } from "../save-requests.mjs";
 import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs";
 import { table52ForTarget, table52Text } from "../armor-types.mjs";
+import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -935,6 +936,14 @@ export default class AD2EActor extends Actor {
     const misfire = !!misfireAt && natural !== null && natural <= misfireAt;
     if (misfire) notes.push(game.i18n.format("AD2E.Firearm.Misfire", { n: natural, at: misfireAt }));
     const hit = !misfire && (t51.auto || roll.total >= needed);
+    // Critical hit (Combat & Tactics, world setting "criticalHits"; module/criticals.mjs): a natural 18+ hitting by 5 or more.
+    let crit = null;
+    if (hit && criticalMode() !== "off" && isCritical(natural, roll.total, needed)) {
+      crit = await rollCritical({ typeText: t52?.type || ammo?.system.type || item.system.weapon?.type, attackerSize: sizeOfActor(this),
+        weaponSize: weaponCritSize(item, sizeOfActor(this)), target: AD2EActor.#targetActor(targets), calledLocation: input.calledLocation ?? "" });
+      notes.push(criticalText(crit));
+    }
+    AD2EActor.#rememberCrit(this, itemId, crit);
     // Use up the piece fired or thrown.
     let spent = "";
     if (powder) {
@@ -960,15 +969,40 @@ export default class AD2EActor extends Actor {
         + (notes.length ? ` [${notes.join("; ")}]` : "")
         + (input.kitText ? ` [${input.kitText}]` : "") + modifierText(input.manual?.mod, input.manual?.note)
     });
+    if (crit) await postCriticalCard(this, crit, targets);
     // A missile or thrown style specialist shooting this round: +1 AC against missiles (attackers' dialogs, below).
     if (use === "missile" && input.missileStyle) await this.#markShotThisRound();
     // A hit rolls its damage at once (client setting "autoDamage"), with the attack's choices: the ammunition fired,
     // backstab, non-lethal, the armed-defender bonus, and the first target's size.
     if (hit && AD2EActor.#autoDamageOn()) {
       await this.rollWeaponDamage(itemId, use, { size: AD2EActor.#targetSizeKey(targets), backstab: !!a.backstab,
-        nonlethal: !!a.nonlethal, vsUnarmed: !!input.vsUnarmed, pointBlank: input.range === "pointBlank" });
+        nonlethal: !!a.nonlethal, vsUnarmed: !!input.vsUnarmed, pointBlank: input.range === "pointBlank", critical: crit });
     }
     return message;
+  }
+
+  /** The last attack's critical hit per actor and weapon/attack key (the damage roll uses it once). */
+  static #lastCrit = new Map();
+
+  static #rememberCrit(actor, key, crit) {
+    const k = `${actor.uuid ?? actor.id}.${key}`;
+    if (crit) AD2EActor.#lastCrit.set(k, crit); else AD2EActor.#lastCrit.delete(k);
+  }
+
+  /** The critical to apply to a damage roll (preset, else the last attack's), forgotten once used. */
+  static #takeCrit(actor, key, preset) {
+    const k = `${actor.uuid ?? actor.id}.${key}`;
+    const crit = preset?.critical ?? AD2EActor.#lastCrit.get(k) ?? null;
+    AD2EActor.#lastCrit.delete(k);
+    return crit;
+  }
+
+  /** Critical hit select for damage dialogs (shown when critical hits are on). */
+  static #critField(crit) {
+    if (criticalMode() === "off") return "";
+    const v = crit ? crit.extra : 0;
+    const opt = (n, k) => `<option value="${n}"${n === v ? " selected" : ""}>${game.i18n.localize(`AD2E.Critical.Damage.${k}`)}</option>`;
+    return `<div class="form-group"><label>${game.i18n.localize("AD2E.Critical.DamageLabel")}</label><select name="critical">${opt(0, "none")}${opt(1, "double")}${opt(2, "triple")}</select></div>`;
   }
 
   /** Client setting "autoDamage" (default on): roll damage automatically when an attack hits. */
@@ -1292,6 +1326,7 @@ export default class AD2EActor extends Actor {
       + `<label>${i18n(`AD2E.Firearm.${k}`)}</label><input type="checkbox" name="${k}"></div>`).join("") : "";
     const kitOptions = this.#kitOptions("damage");
     const targets = this.#damageTargets(itemId);
+    const lastCrit = AD2EActor.#takeCrit(this, itemId, preset);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
@@ -1309,6 +1344,7 @@ export default class AD2EActor extends Actor {
     const input = preset ? { option: 0, size: preset.size ?? "sm", mod: 0, backstab: !!(preset.backstab && mult),
       nonlethal: !!(preset.nonlethal && use === "melee" && nonlethalAllowed(item.system.weapon)), kitText: "",
       manual: { mod: 0, note: "" }, vsUnarmed: !!(preset.vsUnarmed && use === "melee"), pointBlank: !!(preset.pointBlank && pbDmg),
+      critical: lastCrit?.extra ?? 0,
       auto: true } : await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
@@ -1316,6 +1352,7 @@ export default class AD2EActor extends Actor {
         + backstabField + nonlethalField + pbField + chargeFields
         + (use === "melee" ? AD2EActor.#armedDefenderField() : "")
         + elementField
+        + AD2EActor.#critField(lastCrit)
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -1327,7 +1364,7 @@ export default class AD2EActor extends Actor {
           return { option: Number(f.option?.value ?? 0), size: f.size.value, mod: m.mod + kit.sum,
             backstab: !!f.backstab?.checked, nonlethal: !!f.nonlethal?.checked, kitText: kit.text, manual: m,
             vsUnarmed: !!f.vsUnarmed?.checked, elementAttack: !!f.elementAttack?.checked, pointBlank: !!f.pointBlank?.checked,
-            charge: !!f.setCharge?.checked || !!f.mountedCharge?.checked };
+            charge: !!f.setCharge?.checked || !!f.mountedCharge?.checked, critical: Number(f.critical?.value ?? 0) || 0 };
         }
       },
       rejectClose: false
@@ -1337,7 +1374,9 @@ export default class AD2EActor extends Actor {
     const dice = option[input.size] ?? option.sm ?? option.l;
     // Backstab: "The weapon's standard damage is multiplied by the value given in Table 30. Then Strength and magical
     // weapon bonuses are added" (Thief Skill Explanations (PHB)).
-    const times = (input.backstab && mult ? mult : 1) * (input.charge ? 2 : 1);
+    // A critical adds one set of damage dice (two when tripled) to any multiplier: "do not double the multiplied damage; add
+    // it instead" (Critical Hits: System I (POCT)).
+    const times = (input.backstab && mult ? mult : 1) * (input.charge ? 2 : 1) + (input.critical ?? 0);
     const formula = times > 1 ? `(${dice}) * ${times} + @adj + @mod` : `${dice} + @adj + @mod`;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     // Elemental mage, attack using its province: +1 per damage die (the dice in the weapon's damage).
@@ -1384,6 +1423,7 @@ export default class AD2EActor extends Actor {
         + (pointBlank ? ` [${game.i18n.format("AD2E.SP.PointBlankDamage", { n: pointBlank })}]` : "")
         + (twoHandStyle ? ` [${game.i18n.format("AD2E.SP.TwoHandedDamage", { n: twoHandStyle })}]` : "")
         + (input.charge ? ` [${i18n("AD2E.Firearm.ChargeDouble")}]` : "")
+        + (input.critical ? ` [${i18n(input.critical > 1 ? "AD2E.Critical.Triple" : "AD2E.Critical.Double")}]` : "")
         + (knockRolls.length ? ` [${game.i18n.format("AD2E.Firearm.Knockdown", { rolls: knockRolls.join(", "), n: knock })}]` : "")
         + (elementDice ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${element}`), n: elementDice })}]` : "")
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
@@ -1740,6 +1780,15 @@ export default class AD2EActor extends Actor {
     const t52 = table52ForTarget(attack.type, AD2EActor.#targetActor(targets));
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0), mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
+    // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
+    let crit = null;
+    if (hit && criticalMode() !== "off" && isCritical(roll.dice?.[0]?.total ?? null, roll.total, needed)) {
+      const weaponItem = attack.poisonItem ?? null;
+      crit = await rollCritical({ typeText: t52?.type || attack.type, attackerSize: sizeOfActor(this),
+        weaponSize: weaponItem ? weaponCritSize(weaponItem, sizeOfActor(this)) : sizeOfActor(this), target: AD2EActor.#targetActor(targets),
+        calledLocation: input.calledLocation ?? "" });
+    }
+    AD2EActor.#rememberCrit(this, key, crit);
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${attack.name} vs AC ${input.ac}${AD2EActor.#targetText(targets)} (THAC0 ${thac0}, ${i18n("AD2E.Roll.Needs")} ${needed}+): `
@@ -1748,9 +1797,11 @@ export default class AD2EActor extends Actor {
         + (input.t51.text ? ` [${foundry.utils.escapeHTML?.(input.t51.text) ?? input.t51.text}]` : "")
         + (t52 ? ` [${foundry.utils.escapeHTML?.(table52Text(t52)) ?? table52Text(t52)}]` : "")
         + (input.mountedMelee?.text ? ` [${input.mountedMelee.text}]` : "") + modifierText(input.mod, input.note)
+        + (crit ? ` [${criticalText(crit)}]` : "")
     });
+    if (crit) await postCriticalCard(this, crit, targets);
     if (hit && AD2EActor.#autoDamageOn()) {
-      await this.rollMonsterDamage(key, { size: AD2EActor.#targetSizeKey(targets), vsUnarmed: !!input.vsUnarmed });
+      await this.rollMonsterDamage(key, { size: AD2EActor.#targetSizeKey(targets), vsUnarmed: !!input.vsUnarmed, critical: crit });
     }
     return message;
   }
@@ -1760,12 +1811,14 @@ export default class AD2EActor extends Actor {
     if (!attack || !attack.damage.length) return;
     const i18n = k => game.i18n.localize(k);
     const targets = this.#damageTargets(key);
+    const lastCrit = AD2EActor.#takeCrit(this, key, preset);
     let formula = attack.damage[0].formula;
     let label = "";
     // A weapon: choose the damage option and the target size; any attack: a situational modifier.
     const options = attack.damage;
     const weapon = !formula;
     const input = preset ? { option: 0, size: preset.size ?? "sm", vsUnarmed: !!(preset.vsUnarmed && attack.melee), mod: 0, note: "",
+      critical: lastCrit?.extra ?? 0,
       auto: true } : await DialogV2.prompt({
       window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: (weapon && options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
@@ -1773,10 +1826,12 @@ export default class AD2EActor extends Actor {
         + (weapon ? `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
           + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>` : "")
         + (attack.melee ? AD2EActor.#armedDefenderField() : "")
+        + AD2EActor.#critField(lastCrit)
         + modifierFields({ autofocus: !weapon }),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         option: Number(button.form.elements.option?.value ?? 0), size: button.form.elements.size?.value ?? "sm",
-        vsUnarmed: !!button.form.elements.vsUnarmed?.checked, ...readModifier(button.form) }) },
+        vsUnarmed: !!button.form.elements.vsUnarmed?.checked, critical: Number(button.form.elements.critical?.value ?? 0) || 0,
+        ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
@@ -1786,6 +1841,8 @@ export default class AD2EActor extends Actor {
       label = `${opt.label ? ` (${opt.label})` : ""} vs ${i18n(input.size === "sm" ? "AD2E.Weapon.SM" : "AD2E.Weapon.L")}`;
     }
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
+    // Critical: one more set of damage dice (two when tripled), before the bonuses (module/criticals.mjs).
+    if (input.critical) formula = multiplyDice(formula, 1 + input.critical);
     const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus + vsUnarmed, mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     // An elemental attack: its dice for elemental mages and gens of that province (module/elemental.mjs, module/gens.mjs).
@@ -1797,6 +1854,7 @@ export default class AD2EActor extends Actor {
         + `${AD2EActor.#targetText(targets)}` + (total > roll.total ? `: ${total} (${i18n("AD2E.Weapon.Minimum")})` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
+        + (input.critical ? ` [${i18n(input.critical > 1 ? "AD2E.Critical.Triple" : "AD2E.Critical.Double")}]` : "")
         + modifierText(input.mod, input.note)
     });
     // Poison (module/poison.mjs): a venomous natural attack (its own method), or a coated weapon (one dose, injected).

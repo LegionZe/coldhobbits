@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.14)
+## Status (v1.0.15)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -31,7 +31,7 @@ confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbar
 and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
 (0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
 the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.0.11), item saving throws and falling damage
-(1.0.13), and ageing and PHB Table 52 (1.0.14). The features are listed under "Verify before use" below.
+(1.0.13), ageing and PHB Table 52 (1.0.14), and critical hits (1.0.15). The features are listed under "Verify before use" below.
 
 ## Known limitations
 - Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
@@ -168,6 +168,16 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   values "applied to the attacker's THAC0", i.e. subtracted from the attack roll; chain mail includes bronze plate,
   leather includes padded and hide; armour identifiers asserted). The first target's worn body armour; the weapon's (or
   missile's) best type; none against a natural Armor Class or armour outside the table (e.g. lamellar).
+- Critical hits (1.0.15; owner's rulings: world setting Off / System I / System II, System II charts linked, not
+  copied): `module/rules/critical-tables.mjs` by `python3 tools/build-critical-tables.py` from "Critical Hits: System I
+  (POCT)" rev 74684 ("natural 18 or higher and hits the target by a margin of 5 or more"; "double damage dice, calculated
+  before adjustments"; "do not double the multiplied damage; add it instead", the lance's 3d6 asserted), "Critical Hits:
+  System II (POCT)" rev 74686 (save vs. death; chart by weapon type and humanoid / animal / monster, "If in doubt ... call
+  it a monster"; location d10, d6 low, 1d6+4 high; called shots keep their location; severity 1d6 / 2d4 / 2d6 / 2d8 by
+  weapon size vs. target size; 13+ triple dice even on a save; arrows and bolts M, heavy crossbow bolts L) and the nine
+  Hit Location Charts of "Critical Hit Tables (POCT)" rev 178184 (ranges and location names only). Implementation
+  choices: monster natural attacks count as weapons of the monster's size; a weapon of several types uses the first type
+  (or the Table 52 type); monster `bodyType` ("" = monster).
 - Spell importer check (1.0.12, owner's request): after an import the "Imported Spells" compendium is read back from the
   server; a missing compendium or imported pages without a spell show an error (and the console lists them) instead of
   the success message. Import errors are reported the same way. Reason: an import on 14.368 reported "created" while

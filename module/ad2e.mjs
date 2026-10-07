@@ -25,6 +25,7 @@ import { registerSaveRequests } from "./save-requests.mjs";
 import { poisonTargetsDialog, registerPoison } from "./poison.mjs";
 import { fallingDialog, itemSavesTool } from "./item-saves.mjs";
 import { registerTable52 } from "./armor-types.mjs";
+import { registerCriticals } from "./criticals.mjs";
 import { registerAging } from "./aging.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } from "./apps/monster-importer.mjs";
@@ -140,6 +141,7 @@ Hooks.once("init", () => {
   registerSaveRequests();
   registerPoison();
   registerTable52();
+  registerCriticals();
   registerAging();
   registerMultiClass();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time

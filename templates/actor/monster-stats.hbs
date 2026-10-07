@@ -14,6 +14,7 @@
         <label>{{localize "AD2E.Monster.Morale"}}</label><input type="number" name="system.morale.value" value="{{system.morale.value}}">
         <label>{{localize "AD2E.Monster.Field.moraleText"}}</label><input type="text" name="system.morale.text" value="{{system.morale.text}}">
         <label>{{localize "AD2E.Character.initMod"}}</label><input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}">
+        <label data-tooltip="{{localize 'AD2E.Critical.BodyTypeHint'}}">{{localize "AD2E.Critical.BodyType"}}</label><select name="system.bodyType">{{selectOptions bodyTypes selected=system.bodyType blank=(localize "AD2E.Critical.Body.default") localize=true}}</select>
       </div>
     </fieldset>
 
