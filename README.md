@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.18)
+## Status (v1.0.19)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -504,6 +504,23 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   all attack rolls, cumulative (character and monster attacks), and "Rest" removes one day per half day. Table 73
   (optional, one round in difficult terrain) is listed in the character sheet's movement line. The day's card has an
   "End day" button (GM) that advances world time by the travel hours (owner's ruling).
+- Random encounters (GM tool "Random encounters": Configure Settings, the GM manual, or `game.ad2e.encounters()`;
+  `python3 tools/build-encounter-check-tables.py`, tables parsed and rules regex-checked against "DMing Encounters (DMG)",
+  "DMG Table 56", "Random Encounters (DMG)", "Creating Encounter Tables (DMG)", "DMG Table 54", "DMG Table 55" and
+  "Encounter Distance (DMG)"). Checks: Table 56 chance ("the number or less that must be rolled on 1d10"), +1 "patrolled
+  or sparsely settled", +2 "heavily populated", dungeons "every hour, with an encounter occurring on a roll of 1 on 1d10"
+  or "once per turn" in dangerous parts, plus the DM's own modifier. Owner's rulings: checks from the GM's button, the
+  travel card's "End day" (the day's terrain), and automatically when world time passes (optional; at the marked times
+  of day, or each hour/turn underground; not during a combat; stopping at the first encounter); encounter tables are
+  RollTables, built by the tool from creatures dragged in and text entries in the DMG's 2-20 layout ("adding the roll of
+  1d8 to that of 1d12", Table 54 positions, repeated or doubled entries) or percentile layout (70% / 20% / 7% / 3%
+  divided among each frequency's entries); a table level lowers frequencies by Table 55 levels ("each level of
+  difference between creature and table decreases the frequency of appearance by one"); unique creatures are refused
+  ("should never be used on random encounter tables"). An encounter rolls the table and the number appearing (the
+  stat block's range read as dice) and whispers the GM a card with buttons for Table 58 distance, surprise (the
+  creature, or each selected token: the existing Table 57 dialog) and reaction (Table 59). Implementation choices:
+  travel terrain to Table 56 rows (`TRAVEL_TERRAIN`), terrain to Table 58 cover, percentile rounding (largest remainder,
+  at least 1%), 2-20 filling (nearest frequency for an empty one; more than twice the positions are left out and listed).
 - Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
   `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
   characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,
