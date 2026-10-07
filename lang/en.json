@@ -1801,6 +1801,13 @@
     "NotSurprised": "Not surprised"
   },
   "AD2E.Xp": {
+    "AutoSetting": "Experience window when a combat ends",
+    "AutoSettingHint": "When the GM ends a combat with monsters in it, the Award Experience window opens with the defeated monsters ticked and the combat's characters as recipients.",
+    "Calculated": "calculated",
+    "CalculatedHint": "No XP value on the monster: DMG Table 31 for its Hit Dice (Table 32 special abilities are not counted; set the value on the monster to include them).",
+    "ClassAward": "Class award",
+    "ClassAwardHint": "DMG Table 34 (optional individual awards): warriors 10 XP and bards 5 XP per Hit Die of the creatures defeated (the ticked monsters). Added to that character's share.",
+    "ClassAwardShort": "class award {n}",
     "Title": "Award experience",
     "Open": "Award experience",
     "MenuHint": "Divide a group experience award equally among the party (Experience Point Awards, DMG), with each character's prime requisite bonus. Also game.ad2e.awardExperience().",

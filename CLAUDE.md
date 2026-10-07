@@ -230,7 +230,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `game.ad2e.createTrap`, `createTrap`): trap actor (monster role "trap") or trap item (equipment category "trap"), shared
   `system.trap` (`module/data/trap-fields.mjs`); `module/traps.mjs` (`trapOf`, `targetedTraps`, `trapOutcome`, `springTrap`,
   `trapContext` for the `ad2e.trap-fields` partial on the monster and equipment sheets); CTH figures `CREATOR_TABLES.trap`;
-  rollClassSkill rt/ol: trap modifier select and silent attempt. Next: automatic encounter XP.
+  rollClassSkill rt/ol: trap modifier select and silent attempt. Encounter XP (award-xp.mjs): `registerAwardXp` (world setting
+  `xpOnCombatEnd`, deleteCombat hook for the active GM opens `new AwardXp({ combat })`, kept in a private field),
+  `monsterRow` (unset XP -> `monsterXp` from Hit Dice, `calculated`), `classAwardRate` / `classAwardMap` (DMG Table 34,
+  `CREATOR_TABLES.classAwards`), `shares(total, actors, kind, extra)`.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

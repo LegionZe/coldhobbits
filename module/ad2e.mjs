@@ -25,7 +25,7 @@ import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } from "./apps/monster-importer.mjs";
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
-import AwardXp from "./apps/award-xp.mjs";
+import AwardXp, { registerAwardXp } from "./apps/award-xp.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -128,6 +128,7 @@ Hooks.once("init", () => {
   registerDualClass();
   registerCompanions();
   registerKitFeatures();
+  registerAwardXp();
   registerMultiClass();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
   // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).
