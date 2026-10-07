@@ -24,6 +24,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
     return {
       identifier: text(),
       role: new StringField({ required: true, initial: "monster", choices: AD2E.monsterRoles }),
+      // Role "follower" (module/followers.mjs): one actor per unit; the number of figures it stands for (null = one).
+      unitSize: new NumberField({ integer: true, min: 1, nullable: true, initial: null }),
       // Mounts: trained for combat ("" = by default war mounts, "yes", "no"; module/combat-options.mjs mountTrained).
       combatTrained: new StringField({ initial: "" }),
       // Pushing (module/animals.mjs pushMount): last day pushed (world day), consecutive days at double speed, and a

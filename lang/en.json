@@ -501,7 +501,8 @@
       "pet": "Pet",
       "familiar": "Familiar",
       "patron": "Patron",
-      "trap": "Trap"
+      "trap": "Trap",
+      "follower": "Follower unit"
     },
     "HitDice": "Hit Dice",
     "HitDiceHint": "As written in the Monstrous Manual: 3, 3+3, 1-1, 1/2, 2-8 hp. Hit Dice are d8.",
@@ -2744,5 +2745,44 @@
     },
     "RushStay": "Missed: Dexterity check {roll} vs {dex}: you keep your feet.",
     "RushFall": "Missed: Dexterity check {roll} vs {dex}: you fall down."
+  },
+  "AD2E.Followers": {
+    "Title": "Followers & stronghold",
+    "Stronghold": "Stronghold",
+    "Built": "Built",
+    "BuiltHint": "Tick once the stronghold (or, for a cleric, the place of worship) is built; fighters and bards attract followers only then.",
+    "Kind": {
+      "castle": "Castle / keep",
+      "worship": "Place of worship",
+      "hideout": "Hideout / guild house",
+      "tower": "Tower"
+    },
+    "StatusLine": "{cls}: followers from level {level}",
+    "Attract": "Attract followers",
+    "AskGM": "Ready: the GM rolls the followers.",
+    "Confirm": "Roll the {cls} followers now? Followers appear only once; the units are created as actors and linked here.",
+    "NotReady": {
+      "level": "Level not reached yet.",
+      "stronghold": "Needs a built stronghold.",
+      "worship": "Needs a built place of worship (stronghold kind \"Place of worship\").",
+      "rolled": "Followers already rolled."
+    },
+    "Line16": "{part} (d100 {roll}): {text}",
+    "Part": {
+      "leader": "Leader",
+      "troops": "Troops",
+      "elite": "Elite unit"
+    },
+    "Count": "Number of followers: {n} ({formula})",
+    "LevelN": "level {n}",
+    "Soldiers": "0-level soldiers",
+    "SoldiersNote": "Troop types and equipment are set by the GM.",
+    "Placeholder": "No compendium statistics: enter them from the linked page.",
+    "Card": "{name}: {cls} followers",
+    "Created": "{n} follower actors created and linked on the character's Bio tab.",
+    "Remove": "Remove from the followers list (the actor is kept)",
+    "DropHint": "No followers. Follower units (role \"Follower unit\") dropped on the sheet are listed here.",
+    "UnitSize": "Figures in unit",
+    "UnitSizeHint": "Number of figures this follower actor stands for; its hit points are those of one figure."
   }
 }

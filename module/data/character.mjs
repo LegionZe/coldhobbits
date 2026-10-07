@@ -156,6 +156,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       }),
       // Henchmen (module/henchmen.mjs): actor UUIDs, and former henchmen counted toward the Charisma lifetime limit.
       henchmen: new SchemaField({ actors: new ArrayField(new StringField()), lost: int(0, 0) }),
+      // Name-level followers (module/followers.mjs): unit actors (UUIDs), classes already rolled, and the stronghold record.
+      followers: new SchemaField({ actors: new ArrayField(new StringField()), rolled: new ArrayField(new StringField()),
+        stronghold: new SchemaField({ name: new StringField({ initial: "" }),
+          kind: new StringField({ required: true, blank: true, initial: "", choices: ["castle", "worship", "hideout", "tower"] }),
+          built: new BooleanField({ initial: false }) }) }),
       // Mounts and pack animals (module/animals.mjs): monster actor UUIDs and the one ridden; body weight (lb, PHB
       // Table 10) counts toward a ridden animal's load.
       animals: new SchemaField({ actors: new ArrayField(new StringField()), riding: new StringField({ required: true, blank: true, initial: "" }) }),
