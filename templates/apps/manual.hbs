@@ -41,7 +41,9 @@
     <div><button type="button" data-action="tool" data-tool="importSpells"><i class="fa-solid fa-wand-sparkles"></i> Import spells</button>
       <p>Choose a source book from the AD&amp;D 2e wiki, filter by class and level, and import the spells' statistics and links
       into the world compendium "Imported Spells" (folders by class and level). Material components are linked to the Spell
-      Components compendium, and damage or healing dice are read for the spell's Damage button.</p></div>
+      Components compendium, and damage or healing dice are read for the spell's Damage button. After each import the
+      compendium is read back from the server: if it is missing or lacks any imported spell, an error replaces the success
+      message (details in the browser console, F12).</p></div>
     <div><button type="button" data-action="tool" data-tool="updateSpells"><i class="fa-solid fa-rotate"></i> Update existing spells</button>
       <p>Refreshes every spell in the Items directory, on characters and in "Imported Spells" from its wiki page; memorization,
       learned status and notes stay.</p></div>

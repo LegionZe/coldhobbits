@@ -1259,7 +1259,10 @@
     "Updated": "Spells updated: {updated}; without a wiki page: {skipped}; page not found or not a spell: {failed}.",
     "GmOnly": "Only a GM can update spells.",
     "Locked": "The compendium {pack} is locked: unlock it to import spells.",
-    "ClassFolder": "{kind} Spells"
+    "ClassFolder": "{kind} Spells",
+    "Failed": "Spell import failed: {error} (details in the browser console, F12).",
+    "CheckNoPack": "Spell import check: the compendium {pack} does not exist after the import. Nothing was saved; see the browser console (F12).",
+    "CheckMissing": "Spell import check: {n} of {total} spells are not in {pack} after the import (e.g. {list}). See the browser console (F12)."
   },
   "AD2E.Skill": {
     "pp": "Pick Pockets",
