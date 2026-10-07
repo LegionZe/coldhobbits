@@ -6,6 +6,7 @@ import AbilityRoller from "../apps/ability-roller.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty, twoWeaponStyle } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
+import { attractFollowers, followersContext } from "../followers.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
@@ -237,6 +238,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       openHenchman: CharacterSheet.onOpenHenchman,
       learnSpell: CharacterSheet.onLearnSpell,
       removeHenchman: CharacterSheet.onRemoveHenchman,
+      attractFollowers: CharacterSheet.onAttractFollowers,
+      removeFollower: CharacterSheet.onRemoveFollower,
       henchmanMorale: CharacterSheet.onHenchmanMorale,
       awardXp: CharacterSheet.onAwardXp,
       takeOut: CharacterSheet.onTakeOut,
@@ -383,6 +386,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
     context.henchmen = this._henchmenContext();
+    context.followers = followersContext(this.actor);
     context.familiar = this._familiarContext();
     context.bond = this._bondContext();
     context.weaponMasterDisplay = !!kitSpecial(this.document).display;
@@ -1343,6 +1347,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }
       return animal;
     }
+    // Follower units (module/followers.mjs) join the followers list.
+    if (actor.system?.role === "follower") {
+      const unit = actor.pack ? await CharacterSheet.#importToWorld(actor) : actor;
+      const units = this.actor.system.followers?.actors ?? [];
+      if (unit && !units.includes(unit.uuid)) await this.actor.update({ "system.followers.actors": [...units, unit.uuid] });
+      return unit;
+    }
     const list = this.actor.system.henchmen?.actors ?? [];
     if (list.includes(actor.uuid)) return null;
     await this.actor.update({ "system.henchmen.actors": [...list, actor.uuid] });
@@ -1503,6 +1514,16 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static async onRemoveHenchman(event, target) {
     const list = (this.actor.system.henchmen?.actors ?? []).filter(u => u !== target.dataset.uuid);
     return this.actor.update({ "system.henchmen.actors": list });
+  }
+
+  /** GM: roll a class's name-level followers (module/followers.mjs). */
+  static async onAttractFollowers(event, target) {
+    return attractFollowers(this.actor, target.dataset.class);
+  }
+
+  static async onRemoveFollower(event, target) {
+    const list = (this.actor.system.followers?.actors ?? []).filter(u => u !== target.dataset.uuid);
+    return this.actor.update({ "system.followers.actors": list });
   }
 
   static async onHenchmanMorale(event, target) {

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.16)
+## Status (v1.0.17)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -466,6 +466,20 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   ever equal or surpass the PC's level, the henchman leaves forever"). Morale button: 2d10 at or under the rating, with
   the DMG Table 50 situations as tick boxes; monster sheets' Morale uses the same tick boxes. Tables from
   `python3 tools/build-encounter-tables.py`.
+- Followers and strongholds ("Fighter (PHB)", "Ranger (PHB)", "Cleric (PHB)", "Thief (PHB)", "Bard (PHB)", "Paladin (PHB)",
+  "Warrior Tables (PHB)" Tables 16/19, "Rogue Tables (PHB)" Table 31, "Followers (PHB)"; `python3 tools/build-follower-tables.py`,
+  every rule regex-checked): the Bio tab records the stronghold (name, kind, built) and shows each class's follower level.
+  Fighter 9th ("the fighter must have a castle or stronghold"), bard 9th with a stronghold ("The bard attracts 10d6
+  0th-level soldiers"), cleric 8th with "a place of worship" ("The cleric attracts 20 to 200 of these followers"; rolled
+  2d10 x 10 with the troop types set by the GM: owner's ruling), ranger 10th ("a ranger attracts 2d6 followers", Table 19,
+  "*" results rerolled when already present), thief 10th ("The thief attracts 4d6 of these fellows", Table 31, levels
+  rolled); "A paladin does not attract a body of followers". The GM's "Attract followers" button rolls once per class
+  ("Followers appear only once.") and creates one Monster / NPC actor per unit (owner's ruling: role "Follower unit",
+  `unitSize` = figures, hit points of one figure; levelled followers use the class group's hit dice, THAC0 and saves,
+  0-level soldiers the Mercenary stat block), with the Table 16 equipment from the compendiums (magical bonuses applied;
+  equipment without an item, such as lances, polearm choices or mounts, as notes). Table 19 creatures use the Hirelings &
+  Mounts actors where one exists, else a placeholder with the wiki link. The stronghold is a record only (owner's ruling:
+  no construction costs or time). Multi-class characters get each class's followers.
 - Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"): the speech-bubble button on monster sheets (or
   `game.ad2e.rollReaction()` in a macro) rolls 2d10, lower is friendlier, and reads the column for how the player
   characters behave (friendly, indifferent, threatening, hostile): flight, friendly, indifferent, cautious,

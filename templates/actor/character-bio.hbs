@@ -88,6 +88,34 @@
     {{/each}}
   </fieldset>
   {{/with}}
+  {{#with followers as |f|}}
+  <fieldset class="ad2e-prof-list">
+    <legend>{{localize "AD2E.Followers.Title"}}</legend>
+    <div class="ad2e-prof-summary">
+      <label>{{localize "AD2E.Followers.Stronghold"}} <input type="text" name="system.followers.stronghold.name" value="{{f.stronghold.name}}" placeholder="—" {{#unless @root.editable}}disabled{{/unless}}></label>
+      <select name="system.followers.stronghold.kind" {{#unless @root.editable}}disabled{{/unless}}><option value="">—</option>{{#each f.kinds as |k|}}<option value="{{k.key}}" {{#if k.selected}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
+      <label data-tooltip="{{localize 'AD2E.Followers.BuiltHint'}}"><input type="checkbox" name="system.followers.stronghold.built" {{checked f.stronghold.built}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Followers.Built"}}</label>
+    </div>
+    {{#each f.status as |s|}}
+    <div class="ad2e-prof-summary">
+      <span>{{s.label}}</span>
+      {{#if s.ready}}{{#if f.isGM}}<button type="button" data-action="attractFollowers" data-class="{{s.id}}"><i class="fa-solid fa-flag"></i> {{localize "AD2E.Followers.Attract"}}</button>{{else}}<span class="ad2e-weapon-meta">{{localize "AD2E.Followers.AskGM"}}</span>{{/if}}
+      {{else}}<span class="ad2e-weapon-meta">{{s.reasonText}}</span>{{/if}}
+    </div>
+    {{/each}}
+    {{#each f.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
+        <span class="ad2e-weapon-meta">{{r.detail}}</span>
+      </div>
+      {{#if @root.editable}}<a data-action="removeFollower" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Followers.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Followers.DropHint"}}</p>
+    {{/each}}
+  </fieldset>
+  {{/with}}
   <div class="form-group ad2e-age"><label>{{localize "AD2E.Character.age"}}</label>
     <input type="number" name="system.age" value="{{system.age}}" min="0" step="1" placeholder="—">
     {{#if aging.canRollStart}}<button type="button" data-action="rollStartingAge" data-tooltip="{{aging.startFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollStart"}}</button>{{/if}}
