@@ -1,7 +1,7 @@
 import MonsterImporter, { updateExistingMonsters } from "./monster-importer.mjs";
 import SpellImporter, { updateExistingSpells } from "./spell-importer.mjs";
 import AwardXp from "./award-xp.mjs";
-import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, WeaponCreator } from "./creators.mjs";
+import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, WeaponCreator } from "./creators.mjs";
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 
@@ -22,6 +22,7 @@ export const MANUAL_TOOLS = {
   createItem: () => new ItemCreator().render({ force: true }),
   createMagicItem: () => new MagicItemCreator().render({ force: true }),
   createPatron: () => new PatronCreator().render({ force: true }),
+  createSpell: () => new SpellCreator().render({ force: true }),
   rollTreasure: () => rollTreasureDialog(null),
   rollReaction: () => rollEncounterReaction(null),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })

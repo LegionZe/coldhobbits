@@ -224,8 +224,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `createMagicItem`): modes item / arms; `chargesFor` (CREATOR_TABLES.magic.charges from build-magic-item-data.py `CHARGES`),
   `armsXp` (TREASURE_ROLLS.arms), `isSword` (SP "swords" group), `armsData`, `itemData`. Patron creator (`PatronCreator`,
   `game.ad2e.createPatron`, `createPatron`; monster role "patron"): `rollTraits` (DMG Table 70, `CREATOR_TABLES.patron`),
-  `npcNumbers` (hitDiceAt / thac0At by class group), appearance `looks`. Owner's order for the next creators: spell, trap;
-  then automatic encounter XP.
+  `npcNumbers` (hitDiceAt / thac0At by class group), appearance `looks`. Spell creator (`SpellCreator`,
+  `game.ad2e.createSpell`, `createSpell`): `CREATOR_TABLES.spell` (PHB schools/spheres, DMG research figures), `maxSpellLevel`,
+  `levelAdvice`, `researchCost`, research check via `learnChance` (wizard) or Wisdom (priest). Owner's order for the next
+  creators: trap; then automatic encounter XP.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

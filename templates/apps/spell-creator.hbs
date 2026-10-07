@@ -1,0 +1,52 @@
+<section class="ad2e-creator">
+  <div class="ad2e-creator-body">
+  <p class="ad2e-note">{{localize "AD2E.Creator.Spell.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Spell.Step1"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Weapon.StartFrom"}}</label><select data-field="source">
+      <option value="">{{localize "AD2E.Creator.Spell.Blank"}}</option>
+      {{#each sourceOptions as |o|}}<option value="{{o.uuid}}" {{#if o.selected}}selected{{/if}}>{{o.name}} ({{o.origin}})</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.Name"}}</label><input type="text" data-field="name" value="{{s.name}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Item.identifier"}}</label><input type="text" data-field="identifier" value="{{s.identifier}}" placeholder="{{ident}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Kind"}}</label><select data-field="kind">{{#each kinds as |k|}}<option value="{{k.key}}" {{#if k.selected}}selected{{/if}}>{{k.label}}</option>{{/each}}</select></div>
+    <div class="form-group"><label>{{localize "AD2E.Character.level"}}</label><input type="number" data-field="level" value="{{s.level}}" min="1" max="{{maxLevel}}" step="1"></div>
+    <div class="form-group"><label>{{#if isPriest}}{{localize "AD2E.Creator.Spell.Spheres"}}{{else}}{{localize "AD2E.Creator.Spell.Schools"}}{{/if}}</label></div>
+    <div class="ad2e-check-grid">{{#each groupOptions as |g|}}<label><input type="checkbox" data-field="group" data-key="{{g.key}}" {{#if g.checked}}checked{{/if}}> {{g.key}}</label>{{/each}}</div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Other"}}</label><input type="text" data-field="otherSchools" value="{{s.otherSchools}}" placeholder="{{localize 'AD2E.Creator.Spell.OtherHint'}}"></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Spell.Step2"}}</legend>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Components"}}</label>
+      <label><input type="checkbox" data-field="verbal" {{#if s.verbal}}checked{{/if}}> V</label>
+      <label><input type="checkbox" data-field="somatic" {{#if s.somatic}}checked{{/if}}> S</label>
+      <label><input type="checkbox" data-field="material" {{#if s.material}}checked{{/if}}> M</label>
+      <label><input type="checkbox" data-field="reversible" {{#if s.reversible}}checked{{/if}}> {{localize "AD2E.Creator.Spell.Reversible"}}</label></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Range"}}</label><input type="text" data-field="range" value="{{s.range}}" placeholder="10 yds./level"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Area"}}</label><input type="text" data-field="area" value="{{s.area}}"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.CastingTime"}}</label><input type="text" data-field="castingTime" value="{{s.castingTime}}" placeholder="3"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Duration"}}</label><input type="text" data-field="duration" value="{{s.duration}}" placeholder="1 rd./level"></div>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Save"}}</label><input type="text" data-field="save" value="{{s.save}}" placeholder="½, Neg., None"></div>
+    {{#each damageRows as |d|}}
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Option"}} {{d.n}}</label>
+      <input type="text" data-field="damage" data-index="{{d.i}}" data-part="label" value="{{d.label}}" placeholder="{{localize 'AD2E.Creator.Weapon.DamageLabel'}}">
+      <input type="text" data-field="damage" data-index="{{d.i}}" data-part="formula" value="{{d.formula}}" placeholder="(min(@level, 10))d6">
+      <select data-field="damage" data-index="{{d.i}}" data-part="kind"><option value="damage" {{#unless d.healing}}selected{{/unless}}>{{localize "AD2E.Creator.Spell.Damage"}}</option><option value="healing" {{#if d.healing}}selected{{/if}}>{{localize "AD2E.Creator.Spell.Healing"}}</option></select></div>
+    {{/each}}
+    {{#if advice}}<p class="{{#if adviceOff}}ad2e-unmet{{else}}ad2e-note{{/if}}">{{localize "AD2E.Creator.Spell.AdviceLabel"}}: {{advice.dice}} {{localize "AD2E.Creator.Spell.Dice"}} → {{advice.min}}–{{advice.max}}</p>{{/if}}
+    <div class="form-group"><label>{{localize "AD2E.Item.notes"}}</label><textarea data-field="notes" rows="3">{{s.notes}}</textarea></div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Creator.Spell.Step3"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Creator.Spell.ResearchHint"}}</p>
+    <p>{{localize "AD2E.Creator.Spell.ResearchTime"}}: {{research.weeks}} · {{localize "AD2E.Creator.Spell.ResearchCost"}}: {{research.min}}–{{research.max}} gp</p>
+    <div class="form-group"><label>{{localize "AD2E.Creator.Spell.Researcher"}}</label><select data-field="researcher">{{#each researchers as |r|}}<option value="{{r.id}}" {{#if r.selected}}selected{{/if}}>{{r.name}}</option>{{/each}}</select>
+      <button type="button" data-action="research"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Creator.Spell.RollResearch"}}</button></div>
+    {{#if s.researched}}<p>{{localize "AD2E.Creator.Spell.Researched"}} <label><input type="checkbox" data-field="addToResearcher" {{#if s.addToResearcher}}checked{{/if}}> {{localize "AD2E.Creator.Spell.AddToResearcher"}}</label></p>{{/if}}
+  </fieldset>
+  {{#each issues as |i|}}<p class="ad2e-unmet">{{i}}</p>{{/each}}
+  </div>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |d|}}<option value="{{d.key}}" {{#if d.selected}}selected{{/if}}>{{d.label}}</option>{{/each}}</select></label>
+    <button type="button" data-action="create"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Creator.Create"}}</button>
+  </div>
+</section>

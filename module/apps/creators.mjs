@@ -2,6 +2,7 @@ import { AD2E, creatureHitDice, hitDiceAt, thac0At } from "../config.mjs";
 import { CREATOR_TABLES } from "../rules/creator-tables.mjs";
 import { TREASURE_ROLLS } from "../rules/treasure-tables.mjs";
 import { SP_WEAPONS } from "../rules/sp-weapon-tables.mjs";
+import { learnChance } from "../learn-spells.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -788,5 +789,197 @@ export class PatronCreator extends HandlebarsApplicationMixin(ApplicationV2) {
     ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: actor.name }));
     actor.sheet?.render(true);
     return actor;
+  }
+}
+
+/**
+ * Spell creator: a wizard or priest spell item with the fields the spell sheet cannot set (schools from the PHB's nine,
+ * spheres from its sixteen, plus any others typed; damage or healing options), checked against the DMG's spell research
+ * guidelines (CREATOR_TABLES.spell from "Spell Research (DMG)", regex-checked): "a spell which inflicts 5d6 points of
+ * damage should be about 3rd to 5th level" (the first damage option's dice count gives the advice), the highest spell
+ * level of the group (Tables 21/24), research "two weeks per spell level", "100-1,000 gp per spell level". The research
+ * check: wizards use their chance to learn the spell (module/learn-spells.mjs, specialization included), priests a
+ * Wisdom check; a failure costs "another week in study before making another check".
+ */
+export const SPELLS = CREATOR_TABLES.spell;
+
+/** Highest spell level a group can cast (from the spell progression tables). */
+export function maxSpellLevel(kind) {
+  const rows = Object.values(AD2E.spellProgression?.[kind === "priest" ? "priest" : "wizard"] ?? {});
+  return rows.reduce((n, r) => Math.max(n, r.slots.length), 0) || (kind === "priest" ? 7 : 9);
+}
+
+/** Suggested levels for a damage formula's dice count ("5d6 ... about 3rd to 5th level"), or null. */
+export function levelAdvice(formula, kind = "wizard") {
+  const m = String(formula ?? "").replace(/\s/g, "").match(/^(\d+)d\d+/i);
+  if (!m) return null;
+  const n = Number(m[1]);
+  const max = maxSpellLevel(kind);
+  return { dice: n, min: Math.min(Math.max(n - SPELLS.research.damageLevelsBelowDice, 1), max), max: Math.min(n, max) };
+}
+
+/** Research time (weeks: two per level plus one per failed check) and cost range (gp). */
+export function researchCost(level, failures = 0) {
+  const r = SPELLS.research;
+  return { weeks: r.weeksPerLevel * level + r.retryWeeks * failures, min: r.costPerLevel[0] * level, max: r.costPerLevel[1] * level };
+}
+
+export class SpellCreator extends HandlebarsApplicationMixin(ApplicationV2) {
+  static DEFAULT_OPTIONS = {
+    id: "ad2e-spell-creator",
+    classes: ["ad2e", "creator"],
+    window: { title: "AD2E.Creator.Spell.Title", icon: "fa-solid fa-wand-sparkles", resizable: true },
+    position: { width: 640, height: 720 },
+    actions: { create: SpellCreator.#onCreate, research: SpellCreator.#onResearch }
+  };
+
+  static PARTS = { main: { template: "systems/ad2e/templates/apps/spell-creator.hbs", scrollable: [".ad2e-creator-body"] } };
+
+  static blank() {
+    return { source: "", name: "", identifier: "", kind: "wizard", level: 1, schools: [], spheres: [], otherSchools: "", reversible: false,
+      verbal: true, somatic: true, material: false, range: "", area: "", castingTime: "", duration: "", save: "None", notes: "",
+      damage: [0, 1, 2].map(() => ({ label: "", formula: "", kind: "damage", perRound: false })),
+      destination: "", researcher: "", failures: 0, researched: false, addToResearcher: true };
+  }
+
+  state = SpellCreator.blank();
+  sources = null;
+
+  async #loadSources() {
+    const out = [];
+    for (const pack of game.packs ?? []) {
+      if (pack.documentName !== "Item") continue;
+      for (const e of await pack.getIndex({ fields: ["type"] })) if (e.type === "spell") out.push({ uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, name: e.name, origin: pack.metadata.label });
+    }
+    for (const i of game.items?.filter(x => x.type === "spell") ?? []) out.push({ uuid: i.uuid, name: i.name, origin: game.i18n.localize("AD2E.Creator.World") });
+    this.sources = out.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  /** Copy a spell into the state. */
+  static fromItem(item) {
+    const s = SpellCreator.blank();
+    const sys = item.system;
+    const known = sys.kind === "priest" ? SPELLS.spheres : SPELLS.schools;
+    const list = sys.kind === "priest" ? (sys.spheres ?? []) : (sys.schools ?? []);
+    const damage = (sys.damage ?? []).slice(0, 3).map(d => ({ label: d.label ?? "", formula: d.formula ?? "", kind: d.kind ?? "damage", perRound: !!d.perRound }));
+    while (damage.length < 3) damage.push({ label: "", formula: "", kind: "damage", perRound: false });
+    Object.assign(s, { name: `${item.name} (copy)`, kind: sys.kind, level: sys.level, reversible: !!sys.reversible,
+      verbal: !!sys.components?.verbal, somatic: !!sys.components?.somatic, material: !!sys.components?.material,
+      range: sys.range ?? "", area: sys.area ?? "", castingTime: sys.castingTime ?? "", duration: sys.duration ?? "", save: sys.save ?? "",
+      notes: sys.notes ?? "", damage,
+      [sys.kind === "priest" ? "spheres" : "schools"]: list.filter(x => known.includes(x)),
+      otherSchools: list.filter(x => !known.includes(x)).join(", ") });
+    return s;
+  }
+
+  /** The schools or spheres chosen, with the typed extra ones. */
+  static groups(s) {
+    const chosen = s.kind === "priest" ? s.spheres : s.schools;
+    return [...chosen, ...String(s.otherSchools ?? "").split(",").map(x => x.trim()).filter(Boolean)];
+  }
+
+  /** Item data (pure). */
+  static itemData(s) {
+    const groups = SpellCreator.groups(s);
+    return { name: s.name, type: "spell", img: s.kind === "priest" ? "icons/svg/sun.svg" : "icons/svg/book.svg", system: {
+      identifier: s.identifier || slugify(s.name), kind: s.kind, level: s.level, schools: s.kind === "wizard" ? groups : [],
+      spheres: s.kind === "priest" ? groups : [], reversible: !!s.reversible,
+      components: { verbal: !!s.verbal, somatic: !!s.somatic, material: !!s.material },
+      damage: s.damage.filter(d => d.formula).map(d => ({ label: d.label, formula: d.formula, kind: d.kind, perRound: !!d.perRound })),
+      range: s.range, area: s.area, castingTime: s.castingTime, duration: s.duration, save: s.save,
+      sources: [game.i18n.localize("AD2E.Creator.Custom")], learned: true, prepared: 0, cast: 0, notes: s.notes } };
+  }
+
+  /** Problems (localization keys of AD2E.Creator.Spell.Issue). */
+  static issues(s) {
+    const out = [];
+    if (s.level < 1 || s.level > maxSpellLevel(s.kind)) out.push("badLevel");
+    if (!SpellCreator.groups(s).length) out.push(s.kind === "priest" ? "noSphere" : "noSchool");
+    for (const d of s.damage) if (d.formula && !/^[\d()d+\-*/@a-z,\s.]+$/i.test(d.formula)) out.push("badFormula");
+    return [...new Set(out)];
+  }
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    if (!this.sources) await this.#loadSources();
+    const s = this.state;
+    const i18n = k => game.i18n.localize(k);
+    const advice = levelAdvice(s.damage.find(d => d.formula && d.kind === "damage")?.formula, s.kind);
+    const research = researchCost(s.level, s.failures);
+    const packs = [...(game.packs ?? [])].filter(pk => pk.documentName === "Item" && pk.metadata?.packageType === "world" && !pk.locked);
+    const researchers = game.actors?.filter(a => a.type === "character" && a.system.spells?.kind === s.kind) ?? [];
+    return {
+      ...context, s, ident: s.identifier || slugify(s.name), isPriest: s.kind === "priest", maxLevel: maxSpellLevel(s.kind),
+      sourceOptions: this.sources.map(x => ({ ...x, selected: x.uuid === s.source })),
+      kinds: ["wizard", "priest"].map(k => ({ key: k, label: i18n(AD2E.spellKinds[k]), selected: k === s.kind })),
+      groupOptions: (s.kind === "priest" ? SPELLS.spheres : SPELLS.schools).map(g => ({ key: g, checked: (s.kind === "priest" ? s.spheres : s.schools).includes(g) })),
+      damageRows: s.damage.map((d, i) => ({ ...d, i, n: i + 1, healing: d.kind === "healing" })),
+      advice, adviceOff: advice && (s.level < advice.min || s.level > advice.max),
+      research, researchers: [{ id: "", name: "—" }, ...researchers.map(a => ({ id: a.id, name: a.name }))].map(r => ({ ...r, selected: r.id === s.researcher })),
+      issues: SpellCreator.issues(s).map(k => i18n(`AD2E.Creator.Spell.Issue.${k}`)),
+      destinations: [{ key: "", label: i18n("AD2E.Creator.World"), selected: !s.destination },
+        ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))]
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+    for (const input of this.element.querySelectorAll("[data-field]")) input.addEventListener("change", async ev => {
+      const t = ev.currentTarget;
+      const f = t.dataset.field;
+      const value = t.type === "checkbox" ? t.checked : (t.type === "number" ? (t.value === "" ? 0 : Number(t.value)) : t.value);
+      const destination = this.state.destination;
+      if (f === "source") {
+        const item = value ? await fromUuid(value) : null;
+        this.state = Object.assign(item ? SpellCreator.fromItem(item) : SpellCreator.blank(), { source: value, destination });
+      } else if (f === "group") {
+        const key = this.state.kind === "priest" ? "spheres" : "schools";
+        const set = new Set(this.state[key]);
+        if (t.checked) set.add(t.dataset.key); else set.delete(t.dataset.key);
+        this.state[key] = [...set];
+      } else if (f === "damage") this.state.damage[Number(t.dataset.index)][t.dataset.part] = value;
+      else if (f === "kind") Object.assign(this.state, { kind: value, schools: [], spheres: [], researcher: "", failures: 0, researched: false,
+        level: Math.min(this.state.level, maxSpellLevel(value)) });
+      else if (f === "researcher" || f === "level") Object.assign(this.state, { [f]: value, failures: 0, researched: false });
+      else this.state[f] = value;
+      this.render();
+    });
+  }
+
+  /** One research check for the chosen character: wizard = chance to learn the spell (d100), priest = Wisdom check (d20). */
+  static async #onResearch() {
+    const s = this.state;
+    const actor = game.actors?.get(s.researcher);
+    if (!actor) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.Spell.NeedResearcher"));
+    const data = SpellCreator.itemData(s);
+    let roll, target, ok;
+    if (s.kind === "wizard") {
+      const { chance, blocked } = learnChance(actor, { name: data.name, system: data.system });
+      if (blocked) return ui.notifications.warn(game.i18n.format(`AD2E.Learn.Blocked.${blocked}`, { name: data.name, level: "" }));
+      roll = await new Roll("1d100").evaluate(); target = chance; ok = roll.total <= chance;
+    } else {
+      roll = await new Roll("1d20").evaluate(); target = actor.system.abilities.wis.total; ok = roll.total <= target;
+    }
+    if (ok) s.researched = true; else s.failures += 1;
+    const time = researchCost(s.level, s.failures);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    await roll.toMessage?.({ speaker: ChatMessage.getSpeaker({ actor }), flavor: esc(game.i18n.format(ok ? "AD2E.Creator.Spell.ResearchOk" : "AD2E.Creator.Spell.ResearchFail",
+      { name: actor.name, spell: data.name || "?", target, weeks: time.weeks, min: time.min, max: time.max })) });
+    this.render();
+  }
+
+  static async #onCreate() {
+    const s = this.state;
+    if (!s.name) return ui.notifications.warn(game.i18n.localize("AD2E.Creator.NeedName"));
+    const issues = SpellCreator.issues(s);
+    if (issues.length) return ui.notifications.warn(issues.map(k => game.i18n.localize(`AD2E.Creator.Spell.Issue.${k}`)).join(" "));
+    const data = SpellCreator.itemData(s);
+    const doc = await Item.implementation.create(data, s.destination ? { pack: s.destination } : {});
+    if (!doc) return null;
+    const actor = s.researched && s.addToResearcher ? game.actors?.get(s.researcher) : null;
+    if (actor) await actor.createEmbeddedDocuments?.("Item", [data]);
+    ui.notifications.info(game.i18n.format("AD2E.Creator.Created", { name: doc.name }) + (actor ? ` ${game.i18n.format("AD2E.Creator.Spell.Added", { name: actor.name })}` : ""));
+    doc.sheet?.render(true);
+    return doc;
   }
 }
