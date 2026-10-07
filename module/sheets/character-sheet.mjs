@@ -7,6 +7,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty, twoWeaponStyle } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { attractFollowers, followersContext } from "../followers.mjs";
+import { constructionContext, projectOf, startConstruction, stopConstruction } from "../construction.mjs";
 import { roundRate, TR as TRAVEL_RULES } from "../travel.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
@@ -241,6 +242,15 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       removeHenchman: CharacterSheet.onRemoveHenchman,
       attractFollowers: CharacterSheet.onAttractFollowers,
       removeFollower: CharacterSheet.onRemoveFollower,
+      castleAddModule: CharacterSheet.onCastleAddModule,
+      castleRemoveModule: CharacterSheet.onCastleRemoveModule,
+      castleAddTokens: CharacterSheet.onCastleAddTokens,
+      castleAddItem: CharacterSheet.onCastleAddItem,
+      castleAddOther: CharacterSheet.onCastleAddOther,
+      castleRemoveHelper: CharacterSheet.onCastleRemoveHelper,
+      castleResolve: CharacterSheet.onCastleResolve,
+      castleStart: CharacterSheet.onCastleStart,
+      castleStop: CharacterSheet.onCastleStop,
       henchmanMorale: CharacterSheet.onHenchmanMorale,
       awardXp: CharacterSheet.onAwardXp,
       takeOut: CharacterSheet.onTakeOut,
@@ -301,6 +311,19 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }
     // Multi-class: level and experience of the classes other than the main one (no form name: the whole array is
     // written at once, module/multi-class.mjs multiEntries).
+    // Stronghold construction fields (module/construction.mjs): nameless inputs writing the project record.
+    for (const input of this.element?.querySelectorAll?.(".ad2e-castle-field") ?? []) {
+      input.addEventListener("change", event => {
+        const el = event.currentTarget;
+        const path = el.dataset.castle;
+        const p = foundry.utils.deepClone(projectOf(this.actor.system));
+        let value = el.value;
+        if (el.type === "number") value = el.value === "" ? null : Math.max(Math.floor(Number(el.value) || 0), 0);
+        if (path === "tech") value = Number(value) || 8;
+        foundry.utils.setProperty(p, path, value);
+        this.actor.update({ "system.followers.stronghold.project": p });
+      });
+    }
     for (const input of this.element?.querySelectorAll?.("input.ad2e-multi-field") ?? []) {
       input.addEventListener("change", event => {
         const el = event.currentTarget;
@@ -388,6 +411,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.profTab = this._proficiencyTabContext(sys);
     context.henchmen = this._henchmenContext();
     context.followers = followersContext(this.actor);
+    context.castle = constructionContext(this.actor);
     context.familiar = this._familiarContext();
     context.bond = this._bondContext();
     context.weaponMasterDisplay = !!kitSpecial(this.document).display;
@@ -1528,6 +1552,76 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static async onRemoveFollower(event, target) {
     const list = (this.actor.system.followers?.actors ?? []).filter(u => u !== target.dataset.uuid);
     return this.actor.update({ "system.followers.actors": list });
+  }
+
+  /** Stronghold construction (module/construction.mjs): planning edits write the whole project record. */
+  async #castleEdit(fn) {
+    const p = foundry.utils.deepClone(projectOf(this.actor.system));
+    if (p.status) return null;
+    fn(p);
+    return this.actor.update({ "system.followers.stronghold.project": p });
+  }
+
+  #castleInput(key) {
+    return this.element?.querySelector(`[data-castle-new="${key}"]`) ?? null;
+  }
+
+  static async onCastleAddModule() {
+    const key = this.#castleInput("module")?.value;
+    const count = Math.max(Math.floor(Number(this.#castleInput("count")?.value) || 1), 1);
+    if (!key) return null;
+    return this.#castleEdit(p => {
+      const same = p.modules.find(m => m.key === key && (m.style || "normal") === "normal");
+      if (same) same.count = (Number(same.count) || 0) + count; else p.modules.push({ key, count, style: "normal" });
+    });
+  }
+
+  static async onCastleRemoveModule(event, target) {
+    return this.#castleEdit(p => p.modules.splice(Number(target.dataset.index), 1));
+  }
+
+  static async onCastleAddTokens() {
+    const actors = (globalThis.canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
+    if (!actors.length) return ui.notifications.warn(game.i18n.localize("AD2E.Castle.SelectTokens"));
+    return this.#castleEdit(p => {
+      for (const a of actors) if (!p.helpers.some(h => h.uuid === a.uuid)) {
+        p.helpers.push({ uuid: a.uuid, name: a.name, kind: a.type === "character" ? "character" : "monster", suit: "good", men: null });
+      }
+    });
+  }
+
+  static async onCastleAddItem() {
+    const item = this.actor.items.get(this.#castleInput("item")?.value);
+    if (!item) return null;
+    return this.#castleEdit(p => { if (!p.helpers.some(h => h.uuid === item.uuid)) p.helpers.push({ uuid: item.uuid, name: item.name, kind: "item", suit: "some", men: null }); });
+  }
+
+  static async onCastleAddOther() {
+    const name = String(this.#castleInput("otherName")?.value ?? "").trim();
+    const men = Math.max(Math.floor(Number(this.#castleInput("otherMen")?.value) || 0), 0);
+    if (!name || !men) return null;
+    return this.#castleEdit(p => p.helpers.push({ uuid: null, name, kind: "other", suit: "", men }));
+  }
+
+  static async onCastleRemoveHelper(event, target) {
+    return this.#castleEdit(p => p.helpers.splice(Number(target.dataset.index), 1));
+  }
+
+  static async onCastleResolve(event, target) {
+    if (!game.user.isGM) return null;
+    const p = foundry.utils.deepClone(projectOf(this.actor.system));
+    p.problems = (p.problems ?? []).filter(k => k !== target.dataset.key);
+    return this.actor.update({ "system.followers.stronghold.project": p });
+  }
+
+  static async onCastleStart() {
+    return startConstruction(this.actor);
+  }
+
+  static async onCastleStop() {
+    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Castle.Title") },
+      content: `<p>${foundry.utils.escapeHTML(game.i18n.localize("AD2E.Castle.StopConfirm"))}</p>`, rejectClose: false });
+    return ok ? stopConstruction(this.actor) : null;
   }
 
   static async onHenchmanMorale(event, target) {

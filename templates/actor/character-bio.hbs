@@ -96,6 +96,70 @@
       <select name="system.followers.stronghold.kind" {{#unless @root.editable}}disabled{{/unless}}><option value="">—</option>{{#each f.kinds as |k|}}<option value="{{k.key}}" {{#if k.selected}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
       <label data-tooltip="{{localize 'AD2E.Followers.BuiltHint'}}"><input type="checkbox" name="system.followers.stronghold.built" {{checked f.stronghold.built}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Followers.Built"}}</label>
     </div>
+    {{#with @root.castle as |c|}}
+    <details class="ad2e-castle" {{#if c.building}}open{{/if}}>
+      <summary>{{localize "AD2E.Castle.Title"}}{{#if c.building}} — {{c.progressPct}}%{{/if}}{{#if c.done}} — {{localize "AD2E.Castle.Finished"}}{{/if}}</summary>
+      <p class="ad2e-note">{{localize "AD2E.Castle.Hint"}}</p>
+      <div class="ad2e-check-grid">
+        {{#each c.site as |st|}}<label{{#if st.gmOnly}} data-tooltip="{{localize 'AD2E.Castle.GmOnly'}}"{{/if}}>{{st.label}} <select class="ad2e-castle-field" data-castle="site.{{st.key}}" {{#if st.disabled}}disabled{{/if}}>{{#each st.options as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/each}}
+        <label>{{localize "AD2E.Castle.Tech"}} <select class="ad2e-castle-field" data-castle="tech" {{#unless c.editable}}disabled{{/unless}}>{{#each c.techs as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      </div>
+      <table class="ad2e-race-table">
+        <thead><tr><th>{{localize "AD2E.Castle.Module"}}</th><th>{{localize "AD2E.Castle.Count"}}</th><th>{{localize "AD2E.Castle.StyleLabel"}}</th><th></th></tr></thead>
+        <tbody>
+          {{#each c.modules as |m|}}<tr><th>{{m.label}}</th>
+            <td><input type="number" class="ad2e-castle-field" data-castle="modules.{{m.index}}.count" value="{{m.count}}" min="0" step="1" {{#unless c.editable}}disabled{{/unless}}></td>
+            <td><select class="ad2e-castle-field" data-castle="modules.{{m.index}}.style" {{#unless c.editable}}disabled{{/unless}}>{{#each m.styles as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></td>
+            <td>{{#if c.editable}}<a data-action="castleRemoveModule" data-index="{{m.index}}"><i class="fa-solid fa-trash"></i></a>{{/if}}</td></tr>
+          {{else}}<tr><td colspan="4" class="ad2e-placeholder">{{localize "AD2E.Castle.NoModulesYet"}}</td></tr>{{/each}}
+        </tbody>
+      </table>
+      {{#if c.editable}}<div class="ad2e-prof-summary">
+        <select data-castle-new="module">{{#each c.moduleOptions as |o|}}<option value="{{o.key}}">{{o.label}}</option>{{/each}}</select>
+        <input type="number" data-castle-new="count" value="1" min="1" step="1">
+        <button type="button" data-action="castleAddModule"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Castle.AddModule"}}</button>
+      </div>{{/if}}
+      <table class="ad2e-race-table">
+        <thead><tr><th>{{localize "AD2E.Castle.Helper"}}</th><th>{{localize "AD2E.Castle.SuitLabel"}}</th><th>{{localize "AD2E.Castle.Men"}}</th><th></th></tr></thead>
+        <tbody>
+          {{#each c.helpers as |h|}}<tr><th>{{h.name}}</th>
+            <td>{{#if h.showSuit}}<select class="ad2e-castle-field" data-castle="helpers.{{h.index}}.suit" {{#unless c.editable}}disabled{{/unless}}>{{#each h.suits as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}</td>
+            <td>{{h.men}}</td>
+            <td>{{#if c.editable}}<a data-action="castleRemoveHelper" data-index="{{h.index}}"><i class="fa-solid fa-trash"></i></a>{{/if}}</td></tr>
+          {{else}}<tr><td colspan="4" class="ad2e-placeholder">{{localize "AD2E.Castle.NoHelpers"}}</td></tr>{{/each}}
+        </tbody>
+      </table>
+      {{#if c.editable}}<div class="ad2e-prof-summary">
+        <button type="button" data-action="castleAddTokens" data-tooltip="{{localize 'AD2E.Castle.AddTokensHint'}}"><i class="fa-solid fa-users"></i> {{localize "AD2E.Castle.AddTokens"}}</button>
+        {{#if c.items.length}}<select data-castle-new="item">{{#each c.items as |o|}}<option value="{{o.id}}">{{o.name}}</option>{{/each}}</select>
+        <button type="button" data-action="castleAddItem"><i class="fa-solid fa-wand-sparkles"></i> {{localize "AD2E.Castle.AddItem"}}</button>{{/if}}
+        <input type="text" data-castle-new="otherName" placeholder="{{localize 'AD2E.Castle.OtherName'}}">
+        <input type="number" data-castle-new="otherMen" value="0" min="0" step="1">
+        <button type="button" data-action="castleAddOther"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Castle.AddOther"}}</button>
+      </div>{{/if}}
+      {{#with c.plan as |pl|}}
+      <div class="ad2e-prof-summary">
+        <label>{{localize "AD2E.Castle.Hired"}} <input type="number" class="ad2e-castle-field" data-castle="hired" value="{{pl.hired}}" min="0" step="1" {{#unless c.editable}}disabled{{/unless}}></label>
+        <span>{{localize "AD2E.Castle.Standard" n=pl.standard}}</span>
+        <span>{{localize "AD2E.Castle.PM" pm=pl.pm}}</span>
+      </div>
+      <p>{{localize "AD2E.Castle.Summary" base=pl.base.gold overhead=pl.overheadGold gold=pl.gold hire=pl.hireCost total=pl.totalCost manWeeks=pl.manWeeks}}</p>
+      <p>{{#if pl.weeks}}{{localize "AD2E.Castle.Timing" workers=pl.effective helpers=pl.helpers weeks=pl.weeks perYear=pl.workWeeks calendar=pl.calendarWeeks}}{{else}}<span class="ad2e-unmet">{{localize "AD2E.Castle.TooFew"}}</span>{{/if}}</p>
+      {{#if pl.aboveTech.length}}<p class="ad2e-unmet">{{localize "AD2E.Castle.AboveTech"}} {{#each pl.aboveTech as |t|}}{{t}}{{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
+      {{/with}}
+      {{#if c.building}}
+      <p><progress value="{{c.progressPct}}" max="100"></progress> {{localize "AD2E.Castle.Progress" done=c.p.progress remaining=c.remaining extra=c.p.extraWeeks cost=c.p.extraCost lost=c.p.lost}}</p>
+      {{#if c.halted}}<p class="ad2e-unmet">{{localize "AD2E.Castle.Halted"}}</p>{{/if}}
+      {{#each c.problems as |pr|}}<p class="ad2e-unmet">{{pr.label}}{{#if c.isGM}} <a data-action="castleResolve" data-key="{{pr.key}}">{{localize "AD2E.Castle.Choice.resolve"}}</a>{{/if}}</p>{{/each}}
+      {{/if}}
+      {{#if c.log.length}}<ul class="ad2e-note">{{#each c.log as |l|}}<li>{{l.text}}</li>{{/each}}</ul>{{/if}}
+      {{#if c.isGM}}<div class="ad2e-prof-summary">
+        {{#unless c.p.status}}<button type="button" data-action="castleStart"><i class="fa-solid fa-hammer"></i> {{localize "AD2E.Castle.Start"}}</button>{{/unless}}
+        {{#if c.p.status}}<button type="button" data-action="castleStop"><i class="fa-solid fa-rotate-left"></i> {{localize "AD2E.Castle.Stop"}}</button>{{/if}}
+      </div>{{/if}}
+      <p class="ad2e-note"><a href="{{c.urls.site}}" target="_blank" rel="noopener">The Construction Site (TCG)</a> · <a href="{{c.urls.design}}" target="_blank" rel="noopener">Castle Design (TCG)</a> · <a href="{{c.urls.work}}" target="_blank" rel="noopener">The Work Force (TCG)</a> · <a href="{{c.urls.events}}" target="_blank" rel="noopener">Monthly Events (TCG)</a></p>
+    </details>
+    {{/with}}
     {{#each f.status as |s|}}
     <div class="ad2e-prof-summary">
       <span>{{s.label}}</span>

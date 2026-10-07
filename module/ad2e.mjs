@@ -37,6 +37,7 @@ import TravelPlanner from "./apps/travel-planner.mjs";
 import { registerTravel } from "./travel.mjs";
 import EncounterTool from "./apps/encounter-tools.mjs";
 import { registerEncounters } from "./encounters.mjs";
+import { registerConstruction } from "./construction.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -85,6 +86,8 @@ Hooks.once("init", () => {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
   });
   registerEncounters();
+  // Stronghold construction progress with world time (module/construction.mjs).
+  registerConstruction();
   // GM manual (Configure Settings, the Settings sidebar tab, or game.ad2e.manual()).
   registerManual();
   game.ad2e = {

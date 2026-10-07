@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.19)
+## Status (v1.0.20)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -478,8 +478,27 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   `unitSize` = figures, hit points of one figure; levelled followers use the class group's hit dice, THAC0 and saves,
   0-level soldiers the Mercenary stat block), with the Table 16 equipment from the compendiums (magical bonuses applied;
   equipment without an item, such as lances, polearm choices or mounts, as notes). Table 19 creatures use the Hirelings &
-  Mounts actors where one exists, else a placeholder with the wiki link. The stronghold is a record only (owner's ruling:
-  no construction costs or time). Multi-class characters get each class's followers.
+  Mounts actors where one exists, else a placeholder with the wiki link. The stronghold record gained construction in 1.0.20 (below). Multi-class characters get each class's followers.
+- Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
+  Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
+  tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"
+  example is recomputed and asserted: PM 2.81, 838,650 gp, 51,322 man/weeks, 987 workers, 470,860 gp for 1,811 more
+  workers over 26 weeks, 21 work weeks a year). On the Bio tab (Followers & stronghold, "Construction"):
+  - the site's seven production modifiers ("multiply all of the PMs ... round off your figure to two decimal places"),
+    the tech level (TL 1-8), the castle modules (count, ornate "+50%" or spartan "25% less" each), 10% overhead, all times
+    the PM;
+  - the work force: the standard is "construction time ... divide it by 52"; hiring more or fewer at 10 gp a week (twice
+    the force 75% of the time, four times 50%; 75% of it double the time, half four times; below half refused);
+    helpers: characters ("one man for every level" plus "one man for each spell level that they can cast in a given
+    day"), magical items and monsters (5% or 1% of their XP, suitability set per helper);
+  - work weeks a year = 52 / (climate PM x ground cover PM).
+  Owner's rulings: the owner plans and the GM starts it (worker skill and morale are the GM's); work accrues with world
+  time and the finished castle ticks "Built"; the d100 monthly events are rolled automatically and whispered to the GM
+  with their figures applied (weeks lost or added, half speed, workers lost, costs) and buttons for the choices (pay or
+  refuse a labour dispute, a raid fought out or resolved abstractly, gold or troops for a call to arms or civil war,
+  stop or ignore bad omens, a disaster averted) and for problems resolved in play; costs are recorded, not taken from
+  coins. Implementation choices: time factor by the book's steps only, durations rounded up to whole weeks, work weeks
+  spread evenly through the year, a month = four weeks, choice events wait for the GM.
 - Weather and travel (GM tool "Weather and travel": Configure Settings, the GM manual, or `game.ad2e.travel()`;
   `python3 tools/build-travel-tables.py`, every table parsed and every rule regex-checked against "Movement (PHB)",
   "Movement (DMG)", "Terrain Obstacles and Hindrances (DMG)", "Movement on Water (DMG)", "Aerial Movement (DMG)" and
@@ -910,6 +929,5 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Stronghold construction costs and building time (owner's request, later; 1.0.17 records the stronghold only).
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).
