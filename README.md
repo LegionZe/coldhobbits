@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.11)
+## Status (v1.0.12)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -143,6 +143,10 @@ the net (0.0.135), poison (1.0.10), and magic resistance and spell save requests
   `saveType`, default spell; it is not read from the spell page). The Damage roll splits by the recorded saves:
   failed or unrolled saves take full damage, successful saves half ("1/2"), none ("Neg."), or a separate full-damage
   message marked for the GM ("Neg. or 1/2" and other entries); resisted targets take none.
+- Spell importer check (1.0.12, owner's request): after an import the "Imported Spells" compendium is read back from the
+  server; a missing compendium or imported pages without a spell show an error (and the console lists them) instead of
+  the success message. Import errors are reported the same way. Reason: an import on 14.368 reported "created" while
+  the compendium did not exist afterwards; the cause was not found (a later import worked).
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by

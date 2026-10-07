@@ -232,10 +232,43 @@ export default class SpellImporter extends HandlebarsApplicationMixin(Applicatio
         create.push(data);
       }
     }
-    if (create.length) await Item.createDocuments(create, { pack: pack.collection });
-    if (update.length) await Item.updateDocuments(update, { pack: pack.collection });
+    try {
+      if (create.length) await Item.createDocuments(create, { pack: pack.collection });
+      if (update.length) await Item.updateDocuments(update, { pack: pack.collection });
+    } catch (err) {
+      console.error("AD2E | Spell import failed", err);
+      return ui.notifications.error(game.i18n.format("AD2E.SpellImporter.Failed", { error: err?.message ?? err }));
+    }
+    // Check the result (owner's request, 1.0.12): the compendium must still exist and hold every imported page.
+    const missing = await SpellImporter.#missingAfterImport(pack.collection, chosen.map(e => e.id));
+    if (missing) {
+      console.error("AD2E | Spell import check failed", missing);
+      return ui.notifications.error(missing.pack
+        ? game.i18n.format("AD2E.SpellImporter.CheckNoPack", { pack: pack.collection })
+        : game.i18n.format("AD2E.SpellImporter.CheckMissing", { n: missing.titles.length, total: chosen.length, pack: pack.title,
+          list: missing.titles.slice(0, 5).join(", ") }), { permanent: true });
+    }
     ui.notifications.info(game.i18n.format("AD2E.SpellImporter.Done", { created: create.length, updated: update.length, pack: pack.title }));
   }
+
+  /**
+   * After an import: null when the compendium exists and its index (read again from the server) holds a spell for every
+   * imported wiki page; else { pack: true } (compendium gone) or { titles } (pages without a spell).
+   */
+  static async #missingAfterImport(collection, titles) {
+    const pack = game.packs.get(collection);
+    if (!pack) return { pack: true };
+    const index = await pack.getIndex({ fields: ["flags.ad2e.wiki.title", "type"] });
+    return missingTitles(index, titles);
+  }
+}
+
+/** Wiki page titles of `titles` without a spell in a compendium index (pure); null when none is missing. */
+export function missingTitles(index, titles) {
+  const entries = typeof index?.values === "function" ? [...index.values()] : [...(index ?? [])];
+  const have = new Set(entries.filter(i => i.type === "spell").map(i => i.flags?.ad2e?.wiki?.title));
+  const gone = titles.filter(t => !have.has(t));
+  return gone.length ? { titles: gone } : null;
 }
 
 /** Wiki page title of a spell: its import flag, or the last part of its wiki link. */
