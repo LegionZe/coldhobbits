@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.6)
+## Status (v1.0.7)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -80,6 +80,16 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   major trait, percentile dice for characteristics" (Personality (DMG) rev 71256, regex-checked), so the specific trait
   may come from another group as in the DMG's example; appearance words (age, height, build, hair, speech, face) from the
   same page, chosen or rolled.
+- Create spell (GM manual > GM tools, or `game.ad2e.createSpell()`; 1.0.7): a wizard or priest spell with the fields the
+  spell sheet cannot set: schools (the PHB's nine, "The Schools of Magic (PHB)" rev 70614) or spheres (its sixteen,
+  "Priest (PHB)" rev 281481), plus typed ones; up to three damage or healing options. Level, components, range, area,
+  casting time, duration, save and notes too. Advice from "Spell Research (DMG)" rev 71310 (regex-checked): the
+  suggested level for the first damage option's dice ("a spell which inflicts 5d6 points of damage should be about 3rd
+  to 5th level", read as dice - 2 to dice), the group's highest spell level (9 / 7), research time ("two weeks per spell
+  level", plus "another week" per failed check) and cost ("100-1,000 gp per spell level"). The research check for a chosen
+  character: a wizard's chance to learn the spell (with specialization and the other learning limits), a priest's
+  Wisdom check; a researched spell can be added to that character when created. Material component links and
+  elemental provinces are set on the spell sheet afterwards.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by
