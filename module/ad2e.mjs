@@ -33,6 +33,8 @@ import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } 
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
 import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp, { registerAwardXp } from "./apps/award-xp.mjs";
+import TravelPlanner from "./apps/travel-planner.mjs";
+import { registerTravel } from "./travel.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -71,6 +73,11 @@ Hooks.once("init", () => {
   game.settings.registerMenu("ad2e", "awardXp", {
     name: "AD2E.Xp.Title", label: "AD2E.Xp.Open", hint: "AD2E.Xp.MenuHint", icon: "fa-solid fa-star", type: AwardXp, restricted: true
   });
+  // GM tool: weather and overland travel (Configure Settings, or game.ad2e.travel(); module/travel.mjs).
+  game.settings.registerMenu("ad2e", "travel", {
+    name: "AD2E.Travel.Title", label: "AD2E.Travel.Open", hint: "AD2E.Travel.MenuHint", icon: "fa-solid fa-route", type: TravelPlanner, restricted: true
+  });
+  registerTravel();
   // GM manual (Configure Settings, the Settings sidebar tab, or game.ad2e.manual()).
   registerManual();
   game.ad2e = {
@@ -92,7 +99,8 @@ Hooks.once("init", () => {
     rollTreasure: actor => rollTreasureDialog(actor ?? null),
     poisonTargets: () => poisonTargetsDialog(),
     itemSaves: () => itemSavesTool(),
-    falling: () => fallingDialog()
+    falling: () => fallingDialog(),
+    travel: () => new TravelPlanner().render({ force: true })
   };
 
   game.settings.register("ad2e", "encumbrance", {

@@ -1,0 +1,91 @@
+<section class="ad2e-award-xp ad2e-travel">
+  <p class="ad2e-note">{{localize "AD2E.Travel.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.Weather"}}</legend>
+    <div class="ad2e-importer-controls">
+      <label>{{localize "AD2E.Travel.SeasonLabel"}} <select data-field="season">{{#each seasons as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <button type="button" data-action="rollWeather" data-tooltip="{{localize 'AD2E.Travel.RollWeatherHint'}}"><i class="fa-solid fa-cloud-sun-rain"></i> {{localize "AD2E.Travel.RollWeather"}}</button>
+    </div>
+    <p><strong>{{weatherText}}</strong></p>
+    <div class="ad2e-importer-controls">
+      <label>{{localize "AD2E.Travel.WindLabel"}} <select data-field="wind"><option value="">—</option>{{#each winds as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check"><input type="checkbox" data-field="adverse" {{#if s.weather.adverse}}checked{{/if}}> {{localize "AD2E.Travel.Adverse"}}</label>
+      <label class="ad2e-check"><input type="checkbox" data-field="precipitation" {{#if s.weather.precipitation}}checked{{/if}}> {{localize "AD2E.Travel.Precipitation"}}</label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.Party"}}</legend>
+    <div class="ad2e-importer-controls">
+      <button type="button" data-action="useTokens"><i class="fa-solid fa-users"></i> {{localize "AD2E.Travel.UseTokens"}}</button>
+      <label>{{localize "AD2E.Travel.ModeLabel"}} <select data-field="mode">{{#each modes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      {{#if isFoot}}<label>{{localize "AD2E.Travel.PaceLabel"}} <select data-field="pace"><option value="normal" {{#unless forceSelected}}selected{{/unless}}>{{localize "AD2E.Travel.Normal"}}</option><option value="force" {{#if forceSelected}}selected{{/if}}>{{localize "AD2E.Travel.ForceMarch"}}</option></select></label>{{/if}}
+      <label>{{localize "AD2E.Travel.Hours"}} <input type="number" data-field="hours" value="{{s.hours}}" min="1" step="1"></label>
+    </div>
+    <table class="ad2e-race-table">
+      <thead><tr><th>{{localize "AD2E.Travel.Member"}}</th><th>{{localize "AD2E.Travel.Rate"}}</th><th>{{localize "AD2E.Travel.ForceMarch"}}</th></tr></thead>
+      <tbody>
+        {{#each members as |m|}}<tr class="{{#if m.slowest}}ad2e-unmet{{/if}}"><th>{{m.name}}{{#if m.mount}} ({{m.mount}}){{/if}}</th><td>{{m.rate}}</td><td>{{#if m.march}}-{{m.march}}{{/if}}{{#if m.blocked}} {{localize "AD2E.Travel.MarchStopped"}}{{/if}}</td></tr>
+        {{else}}<tr><td colspan="3" class="ad2e-placeholder">{{localize "AD2E.Travel.NoMembers"}}</td></tr>{{/each}}
+      </tbody>
+    </table>
+    <div class="ad2e-importer-controls">
+      <label>{{localize "AD2E.Travel.RestDays"}} <input type="number" data-field="restDays" value="{{s.restDays}}" min="1" step="1"></label>
+      <button type="button" data-action="rest" data-tooltip="{{localize 'AD2E.Travel.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Travel.Rest"}}</button>
+    </div>
+  </fieldset>
+  {{#if isLand}}
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.Legs"}}</legend>
+    {{#each legs as |l|}}
+    <div class="ad2e-importer-controls">
+      <select data-field="leg" data-index="{{l.index}}" data-part="terrain">{{#each l.terrains as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <select data-field="leg" data-index="{{l.index}}" data-part="route">{{#each l.routes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <label>{{localize "AD2E.Travel.Miles"}} <input type="number" data-field="leg" data-index="{{l.index}}" data-part="miles" value="{{l.miles}}" min="0" step="0.5" placeholder="{{localize 'AD2E.Travel.Rest'}}"></label>
+      <span>{{localize "AD2E.Travel.CostShort" cost=l.cost}} → <strong class="{{#if l.short}}ad2e-unmet{{/if}}">{{l.got}} mi</strong></span>
+      <a data-action="removeLeg" data-index="{{l.index}}" data-tooltip="{{localize 'AD2E.Travel.RemoveLeg'}}"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    <details><summary>{{localize "AD2E.Travel.Obstacles"}}{{#if l.obstacleText}}: {{l.obstacleText}}{{/if}}</summary>
+      {{#each l.obstacles as |o|}}<label class="ad2e-check"><input type="checkbox" data-field="leg" data-index="{{l.index}}" data-part="obstacle" data-key="{{o.key}}" {{#if o.checked}}checked{{/if}}> {{o.label}}</label>{{/each}}
+    </details>
+    {{/each}}
+    <button type="button" data-action="addLeg"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Travel.AddLeg"}}</button>
+  </fieldset>
+  {{/if}}
+  {{#if isBoat}}
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.Mode.boat"}}</legend>
+    <div class="ad2e-importer-controls">
+      <select data-field="boat.key">{{#each boats as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <label>{{localize "AD2E.Travel.Current"}} <input type="number" data-field="boat.current" value="{{s.boat.current}}" min="0" step="0.5"></label>
+      <label class="ad2e-check"><input type="checkbox" data-field="boat.downstream" {{#if s.boat.downstream}}checked{{/if}}> {{localize "AD2E.Travel.Downstream"}}</label>
+      <label class="ad2e-check"><input type="checkbox" data-field="boat.sail" {{#if s.boat.sail}}checked{{/if}}> {{localize "AD2E.Travel.Sail"}}</label>
+    </div>
+  </fieldset>
+  {{/if}}
+  {{#if isShip}}
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.Mode.ship"}}</legend>
+    <div class="ad2e-importer-controls">
+      <select data-field="ship.key">{{#each ships as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <label class="ad2e-check"><input type="checkbox" data-field="ship.rowing" {{#if s.ship.rowing}}checked{{/if}}> {{localize "AD2E.Travel.Rowing"}}</label>
+      <label class="ad2e-check"><input type="checkbox" data-field="ship.emergency" {{#if s.ship.emergency}}checked{{/if}}> {{localize "AD2E.Travel.Emergency"}}</label>
+    </div>
+  </fieldset>
+  {{/if}}
+  <fieldset>
+    <legend>{{localize "AD2E.Travel.LostTitle"}}</legend>
+    <div class="ad2e-importer-controls">
+      <label class="ad2e-check"><input type="checkbox" data-field="lost.check" {{#if lost.check}}checked{{/if}}> {{localize "AD2E.Travel.LostCheckBox"}}</label>
+      <select data-field="lost.surroundings">{{#each lost.surroundings as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <label data-tooltip="{{localize 'AD2E.Travel.VariableHint'}}">{{localize "AD2E.Travel.Variable"}} <input type="number" data-field="lost.variable" value="{{lost.variable}}" step="5"></label>
+      <span>{{localize "AD2E.Travel.LostPct" pct=lost.pct}}</span>
+    </div>
+    {{#each lost.mods as |m|}}<label class="ad2e-check"><input type="checkbox" data-field="lostMod" data-key="{{m.key}}" {{#if m.checked}}checked{{/if}}> {{m.label}}</label>{{/each}}
+  </fieldset>
+  <p>{{localize "AD2E.Travel.Total"}}: <strong>{{plan.miles}} mi</strong>{{#if plan.points}} ({{localize "AD2E.Travel.Points" used=plan.used points=plan.points}}){{/if}}</p>
+  {{#each plan.notes as |n|}}<p class="ad2e-unmet">{{n}}</p>{{/each}}
+  <p class="ad2e-note"><a href="{{urls.phb}}" target="_blank" rel="noopener">Movement (PHB)</a> · <a href="{{urls.dmg}}" target="_blank" rel="noopener">Movement (DMG)</a> · <a href="{{urls.obstacles}}" target="_blank" rel="noopener">Terrain Obstacles (DMG)</a> · <a href="{{urls.water}}" target="_blank" rel="noopener">Movement on Water (DMG)</a> · <a href="{{urls.air}}" target="_blank" rel="noopener">Aerial Movement (DMG)</a> · <a href="{{urls.lost}}" target="_blank" rel="noopener">Getting Lost (DMG)</a></p>
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <button type="button" data-action="post"><i class="fa-solid fa-route"></i> {{localize "AD2E.Travel.Post"}}</button>
+  </div>
+</section>

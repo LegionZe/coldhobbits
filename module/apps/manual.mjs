@@ -6,6 +6,7 @@ import AwardXp from "./award-xp.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./creators.mjs";
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
+import TravelPlanner from "./travel-planner.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -31,6 +32,7 @@ export const MANUAL_TOOLS = {
   itemSaves: () => itemSavesTool(),
   falling: () => fallingDialog(),
   rollReaction: () => rollEncounterReaction(null),
+  travel: () => new TravelPlanner().render({ force: true }),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })
 };
 

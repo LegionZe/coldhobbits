@@ -27,6 +27,7 @@ python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17
 python3 tools/build-monster-data.py      # Table 39 creature THAC0; prototype monster, mount, hireling actors
 python3 tools/build-hireling-data.py      # Hirelings & Mounts: DMG Tables 64/65 hirelings, MM horses/camels/elephant
 python3 tools/build-follower-tables.py   # name-level followers (PHB Tables 16, 19, 31; class texts; after build-hireling-data.py)
+python3 tools/build-travel-tables.py     # weather and travel (DMG Tables 73-82, PHB cross-country movement)
 python3 tools/build-trait-data.py         # Traits & Disadvantages (POSP Tables 46, 47)
 python3 tools/build-aging-tables.py       # PHB Tables 11/12 ageing
 python3 tools/build-armor-type-tables.py  # PHB Table 52 weapon type vs. armour (after build-armor-data.py)

@@ -13,6 +13,8 @@
     <a data-action="rollJump" data-jump="standingBroad">{{m.jump.standingBroad}}</a> / {{m.jump.standingHigh}}
     {{else}}—{{/if}}</span>
   <span class="ad2e-move-item" data-tooltip="{{localize 'AD2E.Move.MarchHint'}}"><strong>{{localize "AD2E.Move.March"}}</strong> {{m.march}} / {{m.forceMarch}} mi</span>
+  <span class="ad2e-move-item" data-tooltip="{{m.terrain}}"><strong>{{localize "AD2E.Travel.RoundTerrain"}}</strong> <i class="fa-solid fa-circle-info"></i></span>
+  {{#if m.marchDays}}<span class="ad2e-move-item ad2e-unmet" data-tooltip="{{localize 'AD2E.Travel.MarchFooterHint'}}"><strong>{{localize "AD2E.Travel.ForceMarch"}}</strong> {{localize "AD2E.Travel.MarchFooter" days=m.marchDays}}{{#if m.marchBlocked}} · {{localize "AD2E.Travel.MarchStopped"}}{{/if}}</span>{{/if}}
   {{#if m.mounted}}<span class="ad2e-move-item {{#if m.mounted.over}}ad2e-unmet{{/if}}" data-tooltip="{{m.mounted.hint}}"><strong>{{localize "AD2E.Move.Mounted"}}</strong> {{m.mounted.name}}: {{m.mounted.rate}}{{#if m.mounted.band}} ({{m.mounted.band}}){{/if}} · {{m.mounted.round}} yd · {{m.mounted.day}} / {{m.mounted.pushed}} mi</span>{{/if}}
   {{/with}}
 </footer>

@@ -1,6 +1,7 @@
 import { damageButtons } from "../health.mjs";
 import { treasureButtons } from "../treasure.mjs";
 import { saveRequestButtons } from "../save-requests.mjs";
+import { travelButtons } from "../travel.mjs";
 
 /**
  * Chat messages: damage rolls get buttons to apply the damage (module/health.mjs). The buttons are added to the
@@ -13,6 +14,7 @@ export default class AD2EChatMessage extends ChatMessage {
     damageButtons(this, html);
     treasureButtons(this, html);
     saveRequestButtons(this, html);
+    travelButtons(this, html);
     return html;
   }
 }

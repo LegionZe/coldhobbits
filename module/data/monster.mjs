@@ -71,6 +71,10 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       cost: text(), // hirelings: wage (DMG Tables 64/65); mounts: price (PHB Table 44)
       // Role "trap" (module/traps.mjs): a trap placed as a token, e.g. a pit or a deadfall.
       trap: trapField(),
+      // Force marching (module/travel.mjs): days of penalty (-1 to attack rolls each), the consecutive streak, the last
+      // world day marched and whether a failed check stops further force marching until rested.
+      march: new SchemaField({ days: new NumberField({ integer: true, min: 0, initial: 0 }), streak: new NumberField({ integer: true, min: 0, initial: 0 }),
+        lastDay: new NumberField({ integer: true, nullable: true, initial: null }), blocked: new BooleanField({ initial: false }) }),
       // Poison taking effect (module/poison.mjs).
       poison: poisonStateField(),
       notes: new HTMLField()

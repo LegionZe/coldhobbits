@@ -7,6 +7,7 @@ import { promptHitPoints, temporaryHp } from "../health.mjs";
 import { canFightTwoWeapons, twoWeaponExempt, twoWeaponPenalty, twoWeaponStyle } from "../combat-options.mjs";
 import { henchmenInfo, rollHenchmanMorale } from "../henchmen.mjs";
 import { attractFollowers, followersContext } from "../followers.mjs";
+import { roundRate, TR as TRAVEL_RULES } from "../travel.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
@@ -533,6 +534,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return {
       sneak: m * 10, walk: m * 10, combat: m * 10, jog: m * 20, run3: m * 30, run4: m * 40, run5: m * 50,
       march: m * 2, forceMarch: m * 2.5,
+      // Table 73 (optional, Movement (DMG)): the rate for one round in difficult terrain; force march penalty (module/travel.mjs).
+      terrain: TRAVEL_RULES.round.map(r => `${game.i18n.localize(`AD2E.Travel.Round.${r.key}`)}: ${roundRate(m, [r.key])}${r.faster ? "*" : ""}`).join(" · "),
+      marchDays: sys.march?.days ?? 0, marchBlocked: !!sys.march?.blocked,
       combatHint: fmt("AD2E.Move.CombatHint", { close: m * 5, withdraw: Math.floor(m * 10 / 3), charge: Math.floor(m * 15) }),
       jogHint: fmt("AD2E.Move.JogHint", { rounds: sys.abilities.con.total }),
       canJump,
