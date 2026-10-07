@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.8)
+## Status (v1.0.9)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -100,6 +100,14 @@ the net (0.0.135). The features are listed under "Verify before use" below.
   to those who saved for half), with the usual apply buttons. Find/Remove Traps offers the targeted trap's modifier
   (trap actors and trap items on targeted actors) and a silent attempt: "-10% ... quietly on any roll except 01-10%"
   (CTH; Open Locks too); a roll of 96-100 still springs the trap (Thief Skill Explanations (PHB)).
+- Automatic encounter XP (1.0.9; owner's rulings): when the GM ends a combat with monsters in it, the Award Experience
+  window opens (world setting "Experience window when a combat ends", default on) with the dead monsters ticked and the
+  combat's characters as recipients (otherwise the player-owned characters). A monster with no XP value gets DMG Table 31
+  for its Hit Dice (marked "calculated"; Table 32 abilities need the value set on the monster). DMG Table 34 individual
+  class awards (Experience Tables (DMG) rev 249158: warriors "10 XP/level" per Hit Die of creature defeated, read as 10
+  per Hit Die; bards 5; "Individual awards are optional", Experience Point Awards (DMG), both regex-checked): a tick box
+  per warrior or bard (multi-class: the larger rate), for the Hit Dice of the ticked monsters, added to that character's
+  share before the prime requisite bonus and the dual-class rules.
 
 ## Verify before use
 - Ability tables (PHB Tables 1-6, scores 1-25, STR 18/01-18/00) are generated into `module/rules/ability-tables.mjs` by
