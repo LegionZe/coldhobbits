@@ -35,6 +35,8 @@ import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp, { registerAwardXp } from "./apps/award-xp.mjs";
 import TravelPlanner from "./apps/travel-planner.mjs";
 import { registerTravel } from "./travel.mjs";
+import EncounterTool from "./apps/encounter-tools.mjs";
+import { registerEncounters } from "./encounters.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -78,6 +80,11 @@ Hooks.once("init", () => {
     name: "AD2E.Travel.Title", label: "AD2E.Travel.Open", hint: "AD2E.Travel.MenuHint", icon: "fa-solid fa-route", type: TravelPlanner, restricted: true
   });
   registerTravel();
+  // GM tool: random encounter checks and encounter tables (Configure Settings, or game.ad2e.encounters(); module/encounters.mjs).
+  game.settings.registerMenu("ad2e", "encounters", {
+    name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
+  });
+  registerEncounters();
   // GM manual (Configure Settings, the Settings sidebar tab, or game.ad2e.manual()).
   registerManual();
   game.ad2e = {
@@ -100,7 +107,8 @@ Hooks.once("init", () => {
     poisonTargets: () => poisonTargetsDialog(),
     itemSaves: () => itemSavesTool(),
     falling: () => fallingDialog(),
-    travel: () => new TravelPlanner().render({ force: true })
+    travel: () => new TravelPlanner().render({ force: true }),
+    encounters: () => new EncounterTool().render({ force: true })
   };
 
   game.settings.register("ad2e", "encumbrance", {

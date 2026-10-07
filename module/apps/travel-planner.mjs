@@ -2,6 +2,7 @@ import {
   aerialFactor, boatSpeed, currentWeather, dayOf, dayPoints, forceMarchChecks, isLost, lostChance, marchState, memberRates,
   MODES, planDay, restFromMarch, rollDailyWeather, ROUTES, SEASONS, shipSpeed, TR, weatherLostMods, weatherObstacles, weatherText
 } from "../travel.mjs";
+import { TRAVEL_TERRAIN } from "../encounters.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -85,6 +86,15 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     Object.assign(out, { miles: p.miles, points: p.points, used: p.used, legs: p.legs });
     if (p.vehicleBlocked) out.notes.push(i18n("AD2E.Travel.VehicleBlocked"));
     return out;
+  }
+
+  /** Table 56 terrain of the day for encounter checks: ships the ocean, land travel the leg with the most miles. */
+  static terrain56(state, plan) {
+    if (state.mode === "ship") return "ocean";
+    if (!["foot", "mounted", "vehicle"].includes(state.mode)) return null;
+    let best = null;
+    plan.legs.forEach((l, i) => { if (!best || l.miles > best.miles) best = { miles: l.miles, terrain: state.legs[i]?.terrain }; });
+    return TRAVEL_TERRAIN[best?.terrain] ?? null;
   }
 
   #actors() {
@@ -209,7 +219,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     }
     const content = `<p><strong>${esc(i18n("AD2E.Travel.Card", { mode: i18n(`AD2E.Travel.Mode.${s.mode}`), miles: plan.miles }))}</strong></p>`
       + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}${marchLines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>`;
-    await ChatMessage.create({ content, rolls, speaker: { alias: i18n("AD2E.Travel.Title") }, flags: { ad2e: { travel: { hours: s.hours, miles: plan.miles } } } });
+    await ChatMessage.create({ content, rolls, speaker: { alias: i18n("AD2E.Travel.Title") }, flags: { ad2e: { travel: { hours: s.hours, miles: plan.miles, terrain56: TravelPlanner.terrain56(s, plan) } } } });
     // Getting lost: one blind check per day off roads, rivers and trails, for the GM only.
     if (s.lost.check && ["foot", "mounted", "vehicle", "ship", "air"].includes(s.mode)) {
       const pct = lostChance(s.lost.surroundings, s.lost.mods, s.lost.variable);

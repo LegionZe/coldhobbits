@@ -2902,5 +2902,102 @@
       "waistDeep": "Waist-deep water or snow",
       "shoulderDeep": "Shoulder-deep water or snow"
     }
+  },
+  "AD2E.Encounter": {
+    "Title": "Random encounters",
+    "Open": "Open the encounter tool",
+    "MenuHint": "Encounter checks (DMG Table 56, dungeons hourly or each turn), encounter tables (2-20 or percentile) and the encounter card.",
+    "Hint": "Checks and results are whispered to the GM. Drag creatures from the sidebar or a compendium onto this window to add them to the table builder.",
+    "Area": "Area",
+    "Kind": {
+      "wilderness": "Wilderness",
+      "dungeon": "Dungeon"
+    },
+    "Population": {
+      "wild": "Unpopulated",
+      "sparse": "Patrolled or sparsely settled",
+      "dense": "Heavily populated"
+    },
+    "Dangerous": "Dangerous part (check each turn)",
+    "DangerousHint": "Checks once per turn (10 minutes) instead of every hour.",
+    "Extra": "Extra",
+    "ExtraHint": "The DM's own modifier to the chance (noise, an alarm...).",
+    "Table": "Encounter table",
+    "Auto": "Automatic",
+    "AutoHint": "Roll the checks due whenever world time passes (active GM; not during a combat).",
+    "ChanceShort": "{chance} or less on 1d10",
+    "Check": "Check now",
+    "Force": "Encounter now",
+    "ForceHint": "The DM declares an encounter: no check roll.",
+    "Builder": "Encounter table builder",
+    "BuilderHint": "Common 70%, uncommon 20%, rare 7%, very rare 3%. 2-20: 1d8+1d12 positions as Table 54; percentile: each frequency's share divided among its entries.",
+    "AddTokens": "Add selected tokens",
+    "TextPlaceholder": "Text entry (e.g. shrieks in the distance)",
+    "AddText": "Add",
+    "DropHint": "No entries: drag creatures here, add the selected tokens or a text entry.",
+    "LevelN": "level {n}",
+    "Freq": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "veryRare": "Very rare"
+    },
+    "Layout": {
+      "twoTwenty": "2-20 table (1d8+1d12)",
+      "percentile": "Percentile table (d100)"
+    },
+    "TableLevel": "Table level",
+    "TableLevelHint": "Dungeon table level (Table 55); each level of difference lowers a creature's frequency one step (0 = none).",
+    "Name": "Name",
+    "DefaultName": "Encounter table",
+    "Create": "Create RollTable",
+    "Created": "RollTable \"{name}\" created and chosen for the area.",
+    "Dropped": "Left out: {names}",
+    "Unique": "{name} is unique: unique creatures are never used on random encounter tables.",
+    "SelectTokens": "Select tokens first.",
+    "CheckTitle": "Encounter check:",
+    "DungeonHour": "Dungeon (hourly)",
+    "DungeonTurn": "Dungeon (each turn)",
+    "Rolls": "1d10: {rolls}",
+    "None": "No encounter ({n} checks).",
+    "Found": "Encounter",
+    "At": "at {hour}:00",
+    "Appearing": "no. appearing {text}",
+    "TwoOnRoll": "two entries, one picked",
+    "NoResult": "no table result for the roll",
+    "NoTable": "no encounter table chosen",
+    "ManualReason": "GM check",
+    "ForceReason": "declared by the GM",
+    "TimeReason": "time passed",
+    "TravelReason": "travel day",
+    "Button": {
+      "distance": "Distance",
+      "surpriseCreature": "Surprise (creature)",
+      "surpriseParty": "Surprise (selected)",
+      "reaction": "Reaction"
+    },
+    "SelectParty": "Select the party's tokens to roll their surprise.",
+    "DistanceTitle": "Encounter distance (Table 58)",
+    "Surprised": "Surprise",
+    "SurpriseKind": {
+      "none": "No surprise",
+      "one": "One group surprised",
+      "both": "Both groups surprised"
+    },
+    "Terrain": "Terrain",
+    "Fog": "Smoke or heavy fog",
+    "Night": "Night or dungeon",
+    "LimitOfSight": "Encounter distance: the limit of sight.",
+    "DistanceFlavor": "Encounter distance in feet ({key})",
+    "Distance": {
+      "both": "both surprised",
+      "one": "one surprised",
+      "fog": "smoke or fog",
+      "jungle": "jungle or dense forest",
+      "lightForest": "light forest",
+      "scrub": "scrub, brush or bush",
+      "grassland": "grassland, little cover",
+      "night": "night or dungeon"
+    }
   }
 }

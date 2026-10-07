@@ -7,6 +7,7 @@ import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCrea
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import TravelPlanner from "./travel-planner.mjs";
+import EncounterTool from "./encounter-tools.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -33,6 +34,7 @@ export const MANUAL_TOOLS = {
   falling: () => fallingDialog(),
   rollReaction: () => rollEncounterReaction(null),
   travel: () => new TravelPlanner().render({ force: true }),
+  encounters: () => new EncounterTool().render({ force: true }),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })
 };
 

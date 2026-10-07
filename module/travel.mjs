@@ -1,5 +1,6 @@
 import { TRAVEL } from "./rules/travel-tables.mjs";
 import { animalsInfo } from "./animals.mjs";
+import { travelDayChecks, travelDayRoll } from "./encounters.mjs";
 
 /**
  * Weather and overland travel (module/rules/travel-tables.mjs from tools/build-travel-tables.py; Cross-Country Movement
@@ -272,8 +273,13 @@ export function travelButtons(message, html) {
     box.querySelector("button").addEventListener("click", async ev => {
       ev.preventDefault();
       ev.stopPropagation();
+      // Random encounters (module/encounters.mjs): the day's Table 56 terrain becomes the area; the checks due in the
+      // travel hours are rolled by the time hook (automatic checks) or here.
+      const from = game.time.worldTime;
+      const area = t.terrain56 ? await travelDayChecks(t.terrain56) : null;
       await game.time.advance(Number(t.hours) * 3600);
       await message.setFlag("ad2e", "travel", { ...t, ended: true });
+      if (area) await travelDayRoll(area, from, from + Number(t.hours) * 3600);
     });
   }
   (html.querySelector(".message-content") ?? html).append(box);

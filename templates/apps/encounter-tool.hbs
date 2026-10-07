@@ -1,0 +1,58 @@
+<section class="ad2e-award-xp ad2e-encounter-drop">
+  <p class="ad2e-note">{{localize "AD2E.Encounter.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Encounter.Area"}}</legend>
+    <div class="ad2e-importer-controls">
+      <select data-area="kind">{{#each kinds as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      {{#if isDungeon}}
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Encounter.DangerousHint'}}"><input type="checkbox" data-area="dangerous" {{#if area.dangerous}}checked{{/if}}> {{localize "AD2E.Encounter.Dangerous"}}</label>
+      {{else}}
+      <select data-area="terrain">{{#each terrains as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <select data-area="population">{{#each populations as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      {{/if}}
+      <label data-tooltip="{{localize 'AD2E.Encounter.ExtraHint'}}">{{localize "AD2E.Encounter.Extra"}} <input type="number" data-area="extra" value="{{area.extra}}" step="1"></label>
+    </div>
+    <div class="ad2e-importer-controls">
+      <label>{{localize "AD2E.Encounter.Table"}} <select data-area="table">{{#each tables as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Encounter.AutoHint'}}"><input type="checkbox" data-area="auto" {{#if area.auto}}checked{{/if}}> {{localize "AD2E.Encounter.Auto"}}</label>
+      <span>{{localize "AD2E.Encounter.ChanceShort" chance=chance}}</span>
+    </div>
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="check"><i class="fa-solid fa-dice-d10"></i> {{localize "AD2E.Encounter.Check"}}</button>
+      <button type="button" data-action="force" data-tooltip="{{localize 'AD2E.Encounter.ForceHint'}}"><i class="fa-solid fa-dragon"></i> {{localize "AD2E.Encounter.Force"}}</button>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Encounter.Builder"}}</legend>
+    <p class="ad2e-note">{{localize "AD2E.Encounter.BuilderHint"}}</p>
+    <div class="ad2e-importer-controls">
+      <button type="button" data-action="addTokens"><i class="fa-solid fa-users"></i> {{localize "AD2E.Encounter.AddTokens"}}</button>
+      <input type="text" name="encText" placeholder="{{localize 'AD2E.Encounter.TextPlaceholder'}}">
+      <select name="encTextFreq">{{#each textFreqs as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <button type="button" data-action="addText"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Encounter.AddText"}}</button>
+    </div>
+    <table class="ad2e-race-table">
+      <tbody>
+        {{#each entries as |e|}}
+        <tr><th>{{e.name}}{{#if e.level}} <span class="ad2e-note">({{localize "AD2E.Encounter.LevelN" n=e.level}})</span>{{/if}}</th>
+          <td><select data-builder="frequency" data-index="{{e.index}}">{{#each e.freqs as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></td>
+          <td><a data-action="removeEntry" data-index="{{e.index}}"><i class="fa-solid fa-trash"></i></a></td></tr>
+        {{else}}<tr><td class="ad2e-placeholder">{{localize "AD2E.Encounter.DropHint"}}</td></tr>{{/each}}
+      </tbody>
+    </table>
+    <div class="ad2e-importer-controls">
+      <select data-builder="layout">{{#each layouts as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <label data-tooltip="{{localize 'AD2E.Encounter.TableLevelHint'}}">{{localize "AD2E.Encounter.TableLevel"}} <input type="number" data-builder="level" value="{{builder.level}}" min="0" max="10" step="1"></label>
+      <label>{{localize "AD2E.Encounter.Name"}} <input type="text" data-builder="name" value="{{builder.name}}"></label>
+    </div>
+    {{#if preview.length}}
+    <p class="ad2e-note">{{formula}}</p>
+    <table class="ad2e-race-table"><tbody>{{#each preview as |r|}}<tr><th>{{r.range}}</th><td>{{r.names}}</td></tr>{{/each}}</tbody></table>
+    {{/if}}
+    {{#if dropped}}<p class="ad2e-unmet">{{localize "AD2E.Encounter.Dropped" names=dropped}}</p>{{/if}}
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="create" {{#unless canCreate}}disabled{{/unless}}><i class="fa-solid fa-table-list"></i> {{localize "AD2E.Encounter.Create"}}</button>
+    </div>
+  </fieldset>
+  <p class="ad2e-note"><a href="{{urls.checks}}" target="_blank" rel="noopener">DMing Encounters (DMG)</a> · <a href="{{urls.table56}}" target="_blank" rel="noopener">Table 56</a> · <a href="{{urls.tables}}" target="_blank" rel="noopener">Creating Encounter Tables (DMG)</a> · <a href="{{urls.distance}}" target="_blank" rel="noopener">Encounter Distance (DMG)</a></p>
+</section>
