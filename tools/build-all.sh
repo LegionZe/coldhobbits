@@ -27,5 +27,6 @@ python3 tools/build-spell-data.py        # spell progressions (Tables 21, 24, 17
 python3 tools/build-monster-data.py      # Table 39 creature THAC0; prototype monster, mount, hireling actors
 python3 tools/build-hireling-data.py      # Hirelings & Mounts: DMG Tables 64/65 hirelings, MM horses/camels/elephant
 python3 tools/build-trait-data.py         # Traits & Disadvantages (POSP Tables 46, 47)
+python3 tools/build-item-save-tables.py  # DMG Table 29 item saving throws, falling damage
 python3 tools/build-creator-tables.py   # GM creators: DMG Tables 31/32 XP, MM size/intelligence/morale bands
 rm -rf tools/__pycache__

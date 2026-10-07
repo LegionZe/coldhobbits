@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { weaponField } from "./weapon-fields.mjs";
 import { containerPreUpdate } from "../containers.mjs";
 import { poisonCoatField } from "./poison-fields.mjs";
@@ -16,6 +17,8 @@ export default class WeaponData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
       proficiency: new StringField({ required: true, blank: true, initial: "" }),
       weapon: weaponField(),
       cost: new StringField({ initial: "" }),

@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+"""Generate module/rules/item-save-tables.mjs: DMG Table 29 Item Saving Throws and the falling damage rule.
+
+Sources (AD&D 2e fandom wiki, MediaWiki API):
+  - "Damaging Equipment (DMG)": Table 29 (13 materials x 9 attack forms; "—" = no number, read as unaffected:
+    implementation choice), the rules regex-checked: carried items save "only when ... a character fails his saving
+    throw against the same attack"; magical bonuses ("Items with a plus ... gain that plus as a bonus", "an extra plus for
+    each" special ability, "A potion would have a +1 while a miscellaneous magical item could have a +5 or +6", "+2 is
+    allowed" against an attack the item was designed to counter); falls ("greater than five feet", soft surface +5, -1 per
+    five feet beyond the first); cold changing gradually +2.
+  - "Special Damage (DMG)": "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6".
+Run from the repo root:  python3 tools/build-item-save-tables.py
+"""
+import importlib.util
+import json
+import re
+
+_spec = importlib.util.spec_from_file_location("classdata", "tools/build-class-data.py")
+classdata = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(classdata)
+
+FORMS = ["acid", "crushing", "disintegration", "fall", "magicalFire", "normalFire", "cold", "lightning", "electricity"]
+HEADERS = ["Item", "Acid", "Crushing Blow", "Disinte-gration", "Fall", "Magical Fire", "Normal Fire", "Cold", "Lightning",
+           "Electricity"]
+MATERIALS = {"Bone or Ivory": "bone", "Cloth": "cloth", "Glass": "glass", "Leather": "leather", "Metal": "metal",
+             "Oils": "oils", "Paper, etc.": "paper", "Potions": "potions", "Pottery": "pottery", "Rock, crystal": "rock",
+             "Rope": "rope", "Wood, thick": "woodThick", "Wood, thin": "woodThin"}
+
+
+def need(text, pattern, what):
+    assert re.search(pattern, text), f"rule changed: {what}"
+
+
+def table29(wiki):
+    t = wiki[wiki.index("Table 29: Item Saving Throws"):]
+    t = t[:t.index("\n|}")]
+    chunks = re.split(r"\n\|-", t)
+    head = [re.sub(r"\{\{br\}\}", " ", h.strip().lstrip("!").strip()) for h in chunks[1].strip().split("\n") if h.startswith("!")]
+    assert head == HEADERS, head
+    rows = {}
+    for chunk in chunks[2:]:
+        cells = [c.lstrip("|").strip() for c in chunk.strip().split("\n") if c.startswith("|")]
+        if not cells:
+            continue
+        assert len(cells) == 10, cells
+        name = cells[0].rstrip("*")
+        key = MATERIALS[name]
+        rows[key] = {f: (None if v in ("—", "-") else int(v.rstrip("*"))) for f, v in zip(FORMS, cells[1:])}
+    assert list(rows) == list(MATERIALS.values()), list(rows)
+    # Spot checks against the table as printed.
+    assert rows["metal"]["lightning"] == 12 and rows["potions"]["acid"] == 15 and rows["cloth"]["fall"] is None
+    assert rows["glass"]["crushing"] == 20 and rows["woodThin"]["magicalFire"] == 11
+    return rows
+
+
+def build():
+    wiki, revid, _ = classdata.page("Damaging Equipment (DMG)")
+    flat = re.sub(r"\s+", " ", wiki)
+    need(flat, r"only when the item is not being carried by a character or when a character fails his saving throw against the same attack", "carried items")
+    need(flat, r"Items with a plus \(a sword \+1, for example\) gain that plus as a bonus to the die roll", "plus bonus")
+    need(flat, r"it should have an extra plus for each of these", "special abilities")
+    need(flat, r"A potion would have a \+1 while a miscellaneous magical item could have a \+5 or \+6", "no stated plus")
+    need(flat, r"an additional bonus of \+2 is allowed", "designed to counter")
+    need(flat, r"Falls'''? \(Fall\) must be greater than five feet", "fall minimum")
+    need(flat, r"If the surface is soft, give a \+5 bonus", "soft surface")
+    need(flat, r"For every five feet fallen beyond the first, apply a -1 penalty", "fall penalty")
+    need(flat, r"If the temperature change is gradual, a \+2 bonus", "gradual cold")
+    rows = table29(wiki)
+    dw, drev, _ = classdata.page("Special Damage (DMG)")
+    fall = re.search(r"suffers (\d+)d(\d+) points of damage for every (\d+) feet fallen, to a maximum of (\d+)d\2", re.sub(r"\s+", " ", dw))
+    assert fall, "falling damage rule"
+    return {
+        "forms": FORMS, "materials": list(MATERIALS.values()), "table": rows,
+        "bonus": {"potion": 1, "miscellaneous": 5, "designedToCounter": 2},
+        "fall": {"minimum": 5, "soft": 5, "perFive": -1}, "coldGradual": 2,
+        "fragile": ["potions", "oils", "paper", "glass", "pottery"],
+        "falling": {"dice": int(fall.group(1)), "die": int(fall.group(2)), "per": int(fall.group(3)), "maxDice": int(fall.group(4))},
+        "url": classdata.url("Damaging Equipment (DMG)"), "fallUrl": classdata.url("Special Damage (DMG)")
+    }, revid, drev
+
+
+if __name__ == "__main__":
+    data, revid, drev = build()
+    with open("module/rules/item-save-tables.mjs", "w") as f:
+        f.write("// GENERATED by tools/build-item-save-tables.py from the AD&D 2e fandom wiki (MediaWiki API): do not edit.\n")
+        f.write(f"// Sources: Damaging Equipment (DMG) (revision {revid}), Table 29; Special Damage (DMG) (revision {drev}), Falling.\n")
+        f.write(f"export const ITEM_SAVES = {json.dumps(data, ensure_ascii=False)};\n")
+    print(f"{len(data['table'])} materials, falling {data['falling']}")

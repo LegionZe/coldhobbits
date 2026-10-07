@@ -1,0 +1,4 @@
+{{#if material}}
+<label data-tooltip="{{localize 'AD2E.ItemSave.MaterialHint'}}">{{localize "AD2E.ItemSave.MaterialLabel"}} <select name="system.material">{{#each material.options as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+{{#if material.isMagic}}<label data-tooltip="{{localize 'AD2E.ItemSave.BonusHint'}}">{{localize "AD2E.ItemSave.SaveBonus"}} <input type="number" name="system.saveBonus" value="{{material.saveBonus}}" placeholder="{{material.bonusPlaceholder}}" step="1"></label>{{/if}}
+{{/if}}

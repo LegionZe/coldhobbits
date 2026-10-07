@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.12)
+## Status (v1.0.13)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -30,7 +30,8 @@ Confirmed in Foundry 14.368 by the owner up to 0.0.88, and since then feature by
 confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbarian and Mystic features, social ranks
 and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
 (0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
-the net (0.0.135), poison (1.0.10), and magic resistance and spell save requests (1.0.11). The features are listed under "Verify before use" below.
+the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.0.11), and item saving throws and falling damage
+(1.0.13). The features are listed under "Verify before use" below.
 
 ## Known limitations
 - Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
@@ -143,6 +144,18 @@ the net (0.0.135), poison (1.0.10), and magic resistance and spell save requests
   `saveType`, default spell; it is not read from the spell page). The Damage roll splits by the recorded saves:
   failed or unrolled saves take full damage, successful saves half ("1/2"), none ("Neg."), or a separate full-damage
   message marked for the GM ("Neg. or 1/2" and other entries); resisted targets take none.
+- Item saving throws (1.0.13; owner's rulings: material guessed and editable, GM tool + button on failed saves + after a
+  fall, fragile items ticked, failed items marked destroyed): DMG Table 29 ("Damaging Equipment (DMG)" rev 249885) is
+  generated into `module/rules/item-save-tables.mjs` by `python3 tools/build-item-save-tables.py`, which regex-checks the
+  rules used: carried items save "only when ... a character fails his saving throw against the same attack"; "Items with
+  a plus ... gain that plus as a bonus"; "A potion would have a +1 while a miscellaneous magical item could have a +5 or
+  +6" (+5 used; magical item field "Item save bonus"); "+2 is allowed" when designed to counter (tick box); falls "greater
+  than five feet", soft +5, -1 per five feet beyond the first; gradual cold +2. A "—" in the table is read as unaffected
+  (implementation choice). Item `system.material` ("" = guessed from type, category and name; `module/item-saves.mjs`).
+  A failed item is renamed "(destroyed)", flagged `ad2e.destroyed`, unequipped and no longer carried.
+- Falling damage (1.0.13): "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6" (Special Damage (DMG)
+  rev 238117; per full 10 feet). GM tool `game.ad2e.falling()`; the damage message carries `notAttack`, so applying it
+  makes no massive-damage check (that rule is for "a single attack"; implementation choice).
 - Spell importer check (1.0.12, owner's request): after an import the "Imported Spells" compendium is read back from the
   server; a missing compendium or imported pages without a spell show an error (and the console lists them) instead of
   the success message. Import errors are reported the same way. Reason: an import on 14.368 reported "created" while

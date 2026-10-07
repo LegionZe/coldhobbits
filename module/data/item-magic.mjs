@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { AD2E } from "../config.mjs";
 import { containerPreUpdate } from "../containers.mjs";
 import { applyIdentification, identifyFields } from "../identify.mjs";
@@ -18,6 +19,10 @@ export default class MagicItemData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
+      // Item saving throw bonus (null = +1 potions, +5 other magical items; Damaging Equipment (DMG)).
+      saveBonus: new NumberField({ integer: true, nullable: true, initial: null }),
       category: new StringField({ required: true, initial: "potion", choices: AD2E.magicCategories }),
       quantity: new NumberField({ required: true, integer: true, min: 0, initial: 1, nullable: false }),
       weight: optional(),

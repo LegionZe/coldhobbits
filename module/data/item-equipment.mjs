@@ -1,3 +1,4 @@
+import { materialField } from "./material-field.mjs";
 import { AD2E } from "../config.mjs";
 import { trapField } from "./trap-fields.mjs";
 import { poisonClassField } from "./poison-fields.mjs";
@@ -16,6 +17,8 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       identifier: new StringField({ required: true, blank: true, initial: "" }),
+      // DMG Table 29 material for item saving throws ("" = guessed; module/item-saves.mjs).
+      material: materialField(),
       category: new StringField({ required: true, initial: "gear", choices: AD2E.equipmentCategories }),
       cost: new StringField({ initial: "" }),
       weight: optional(),

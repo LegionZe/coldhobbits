@@ -23,6 +23,7 @@ import { registerTokenRiders } from "./token-riders.mjs";
 import { rollTreasureDialog } from "./treasure.mjs";
 import { registerSaveRequests } from "./save-requests.mjs";
 import { poisonTargetsDialog, registerPoison } from "./poison.mjs";
+import { fallingDialog, itemSavesTool } from "./item-saves.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } from "./apps/monster-importer.mjs";
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
@@ -85,7 +86,9 @@ Hooks.once("init", () => {
     createTrap: () => new TrapCreator().render({ force: true }),
     rollReaction: creature => rollEncounterReaction(creature),
     rollTreasure: actor => rollTreasureDialog(actor ?? null),
-    poisonTargets: () => poisonTargetsDialog()
+    poisonTargets: () => poisonTargetsDialog(),
+    itemSaves: () => itemSavesTool(),
+    falling: () => fallingDialog()
   };
 
   game.settings.register("ad2e", "encumbrance", {
@@ -148,7 +151,8 @@ Hooks.once("init", () => {
     "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs",
     "ad2e.trap-fields": "systems/ad2e/templates/actor/parts/trap-fields.hbs",
     "ad2e.poison-state": "systems/ad2e/templates/actor/parts/poison-state.hbs",
-    "ad2e.poison-coat": "systems/ad2e/templates/item/parts/poison-coat.hbs"
+    "ad2e.poison-coat": "systems/ad2e/templates/item/parts/poison-coat.hbs",
+    "ad2e.item-material": "systems/ad2e/templates/item/parts/item-material.hbs"
   });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;

@@ -1,3 +1,4 @@
+import { guessMaterial, ITEM_TYPES, itemSaveBonus, SAVES } from "../item-saves.mjs";
 import { coatWithPoison, POISON, poisonLabel } from "../poison.mjs";
 import { springTrap, trapContext } from "../traps.mjs";
 import { SP } from "../sp-weapons.mjs";
@@ -30,6 +31,14 @@ class AD2EItemSheet extends HandlebarsApplicationMixin(ItemSheetV2) {
     context.minimums = system.min ? AD2E.abilities.map(key => ({
       key, label: game.i18n.localize(`AD2E.Ability.${key}`), value: system.min[key] ?? ""
     })) : [];
+    // Item saving throw material (module/item-saves.mjs): blank = the guess, shown as the first choice.
+    if (ITEM_TYPES.includes(this.document.type)) {
+      const guess = guessMaterial(this.document);
+      context.material = { isMagic: this.document.type === "magic", saveBonus: system.saveBonus,
+        bonusPlaceholder: itemSaveBonus({ type: this.document.type, system: { ...system, saveBonus: null } }),
+        options: [{ key: "", label: game.i18n.format("AD2E.ItemSave.Guess", { material: guess ? game.i18n.localize(`AD2E.ItemSave.Material.${guess}`) : "—" }), selected: !system.material },
+          ...SAVES.materials.map(m => ({ key: m, label: game.i18n.localize(`AD2E.ItemSave.Material.${m}`), selected: m === system.material }))] };
+    }
     // Container (module/containers.mjs): an owned physical item can be put into one of its actor's containers.
     const actor = this.document.parent;
     if (actor?.items && PHYSICAL_TYPES.includes(this.document.type)) {
