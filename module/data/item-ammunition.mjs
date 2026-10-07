@@ -1,3 +1,4 @@
+import { poisonCoatField } from "./poison-fields.mjs";
 import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
 
 const { NumberField, SchemaField, StringField, SetField } = foundry.data.fields;
@@ -25,6 +26,8 @@ export default class AmmunitionData extends foundry.abstract.TypeDataModel {
         hit: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
       }),
+      // Poison on the missiles (module/poison.mjs): DMG Table 51 class and poisoned missiles left.
+      poison: poisonCoatField(),
       container: new StringField({ required: true, blank: true, initial: "" }), // id of the container item it is in (module/containers.mjs)
       // Unidentified magical ammunition (module/identify.mjs).
       ...identifyFields(),

@@ -1,0 +1,8 @@
+{{#if poisonState.any}}
+<div class="ad2e-poison-state">
+  {{#each poisonState.pending as |p|}}<p class="ad2e-unmet"><i class="fa-solid fa-skull-crossbones"></i> {{localize "AD2E.Poison.PendingLine" cls=p.cls effect=p.effect}}{{#if p.source}} ({{p.source}}){{/if}}{{#if @root.poisonState.gm}} — {{localize "AD2E.Poison.InMinutes" n=p.minutes}}{{/if}}</p>{{/each}}
+  {{#if poisonState.paralyzed}}<p class="ad2e-unmet">{{localize "AD2E.Poison.ParalyzedLine" n=poisonState.paralyzed}}</p>{{/if}}
+  {{#if poisonState.debilitated}}<p class="ad2e-unmet">{{localize "AD2E.Poison.DebilitatedLine" n=poisonState.debilitated}}</p>{{/if}}
+  {{#if poisonState.gm}}<button type="button" data-action="neutralizePoison" data-tooltip="{{localize 'AD2E.Poison.NeutralizeHint'}}"><i class="fa-solid fa-flask-vial"></i> {{localize "AD2E.Poison.Neutralize"}}</button>{{/if}}
+</div>
+{{/if}}

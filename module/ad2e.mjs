@@ -21,6 +21,8 @@ import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
 import { registerTokenRiders } from "./token-riders.mjs";
 import { rollTreasureDialog } from "./treasure.mjs";
+import { registerSaveRequests } from "./save-requests.mjs";
+import { poisonTargetsDialog, registerPoison } from "./poison.mjs";
 import { registerFamiliarHooks } from "./familiars.mjs";
 import MonsterImporter, { registerMonsterImageSetting, updateExistingMonsters } from "./apps/monster-importer.mjs";
 import Manual, { PlayerGuide, registerManual } from "./apps/manual.mjs";
@@ -82,7 +84,8 @@ Hooks.once("init", () => {
     createSpell: () => new SpellCreator().render({ force: true }),
     createTrap: () => new TrapCreator().render({ force: true }),
     rollReaction: creature => rollEncounterReaction(creature),
-    rollTreasure: actor => rollTreasureDialog(actor ?? null)
+    rollTreasure: actor => rollTreasureDialog(actor ?? null),
+    poisonTargets: () => poisonTargetsDialog()
   };
 
   game.settings.register("ad2e", "encumbrance", {
@@ -129,6 +132,8 @@ Hooks.once("init", () => {
   registerCompanions();
   registerKitFeatures();
   registerAwardXp();
+  registerSaveRequests();
+  registerPoison();
   registerMultiClass();
   // "A round is approximately one minute long. Ten combat rounds equal a turn" (The Combat Round (PHB)): world time
   // advances one minute per combat round (dnd5e sets its own 6 seconds the same way).
@@ -141,7 +146,9 @@ Hooks.once("init", () => {
     "ad2e.armor-list": "systems/ad2e/templates/actor/parts/armor-list.hbs",
     "ad2e.class-abilities": "systems/ad2e/templates/actor/parts/class-abilities.hbs",
     "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs",
-    "ad2e.trap-fields": "systems/ad2e/templates/actor/parts/trap-fields.hbs"
+    "ad2e.trap-fields": "systems/ad2e/templates/actor/parts/trap-fields.hbs",
+    "ad2e.poison-state": "systems/ad2e/templates/actor/parts/poison-state.hbs",
+    "ad2e.poison-coat": "systems/ad2e/templates/item/parts/poison-coat.hbs"
   });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;

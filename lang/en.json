@@ -461,6 +461,7 @@
     "service": "Services",
     "component": "Spell components",
     "trap": "Traps",
+    "poison": "Poison",
     "CompGroup": "Table 16 group",
     "Acquisition": "Acquisition",
     "AcquisitionHint": "POSM Table 16: FS field search, TM town or market, SO special order, Auto found by anyone who looks.",
@@ -2426,5 +2427,76 @@
     "Effects": "Applied in rolls (tick boxes when conditional):",
     "SheetHint": "Traits are balanced by disadvantages on the character sheet (no character points, owner's ruling). Ambidexterity (two-weapon penalties 0 / -2) and Fast Healer (2 hit points a day of normal rest) are applied by the system; other effects are listed above or left to the GM (see the description).",
     "AmbidexterityNote": "ambidextrous"
+  },
+  "AD2E.Poison": {
+    "Poison": "Poison",
+    "Class": "Poison class",
+    "Delivery": "Delivered by",
+    "OwnMethod": "Its own method",
+    "Source": "Source",
+    "Targets": "Targets",
+    "Post": "Post save request",
+    "ToolTitle": "Poison the targeted tokens",
+    "Method": {
+      "injected": "injected",
+      "ingested": "ingested",
+      "contact": "contact"
+    },
+    "Kind": {
+      "paralytic": "paralytic",
+      "debilitating": "debilitating"
+    },
+    "Unit": {
+      "60": "minutes",
+      "3600": "hours",
+      "86400": "days"
+    },
+    "Effect": {
+      "damage": "damage",
+      "death": "death",
+      "paralysis": "paralysis",
+      "debilitation": "debilitation"
+    },
+    "Death": "death",
+    "Request": "{source}: poison class {cls}. Save vs. poison.",
+    "Strength": {
+      "half": "Given by {delivery}: half effect (the saved damage on a failed save, nothing on a success).",
+      "none": "Given by {delivery}: no effect."
+    },
+    "RaceBonus": "race vs. poison +{n}",
+    "NoEffect": "{name}: the poison has no effect.",
+    "Onset": "{name} is poisoned (class {cls}): the effect comes in {n} {unit}.",
+    "Takes": "{name} suffers the poison ({label}): {n} damage",
+    "Killed": "{name} dies of the poison ({label}).",
+    "Paralyzed": "{name} is paralyzed by the poison ({label}) for {n} hours",
+    "DebilitatedFor": "{name} is debilitated by the poison ({label}) for {n} days: ability scores and movement halved, no healing",
+    "ParalysisEnds": "{name} can move again (the poison's paralysis has ended).",
+    "DebilitationEnds": "{name} is no longer debilitated by poison.",
+    "Neutralized": "{name}: the poison is neutralized (no further effect; hit points already lost stay lost).",
+    "Neutralize": "Neutralize poison",
+    "NeutralizeHint": "Neutralize poison (spell, herbalism or the GM's ruling): pending effects, paralysis and debilitation end. Hit points already lost are not restored.",
+    "Debilitated": "Debilitated (poison)",
+    "NoHealing": "{name} is debilitated by poison and cannot heal until it is neutralized or the debilitation ends.",
+    "PendingLine": "Poisoned (class {cls}, {effect} pending)",
+    "InMinutes": "in {n} min",
+    "ParalyzedLine": "Paralyzed by poison ({n} min left)",
+    "DebilitatedLine": "Debilitated by poison ({n} min left): ability scores and movement halved, no healing",
+    "AttackHint": "DMG Table 51 poison class of the attack (e.g. a giant centipede's bite). A damage roll with it posts a save request vs. poison for the targets.",
+    "Doses": "Doses",
+    "DosesHint": "Damage rolls the poison lasts for (one dose each; implementation choice).",
+    "Missiles": "Poisoned missiles",
+    "MissilesHint": "How many of these missiles are poisoned; each damage roll with them uses one.",
+    "Coat": "Coat with poison",
+    "CoatTitle": "Coat {name} with poison",
+    "CoatHint": "Uses one dose of an owned poison item per weapon or missile. Each damage roll with it uses one dose and posts a save request vs. poison (injected).",
+    "Coated": "{name} coated with poison class {cls} ({n}).",
+    "AlreadyCoated": "{name} already carries this poison.",
+    "NoneOwned": "{name} owns no poison item (Poisons (DMG) compendium).",
+    "ItemHint": "Quantity = doses. Coat a weapon or missiles from its sheet (Coat with poison) while both are owned."
+  },
+  "AD2E.SaveRequest": {
+    "NoTargets": "No targets: target tokens before rolling, or roll the saves from the sheets.",
+    "Waiting": "waiting for the save",
+    "RollAll": "Roll every remaining save"
   }
 }

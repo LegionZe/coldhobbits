@@ -1,0 +1,38 @@
+{
+  "_id": "AFTTj8CS4iEJAO7v",
+  "_key": "!items!AFTTj8CS4iEJAO7v",
+  "name": "Poison, Class L (contact)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "poison-class-l",
+    "category": "poison",
+    "cost": "",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "poison": {
+      "class": "L"
+    },
+    "source": "Dungeon Master Guide, Table 51",
+    "url": "https://adnd2e.fandom.com/wiki/Poison_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 110,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

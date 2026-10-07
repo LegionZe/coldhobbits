@@ -24,6 +24,7 @@
     <label data-tooltip="{{localize 'AD2E.Identify.NameHint'}}">{{localize "AD2E.Identify.Name"}} <input type="text" name="system.unidentifiedName" value="{{system.unidentifiedName}}"></label>{{else}}{{#unless system.identified}}<p class="ad2e-note">{{localize "AD2E.Magic.Unidentified"}}</p>{{/unless}}{{/if}}
   </div>
   {{#if linked}}<p class="ad2e-note">{{linked}}</p>{{/if}}
+  {{> "ad2e.poison-coat"}}
   <fieldset class="ad2e-weapon-details">
     <legend>{{localize "AD2E.Weapon.Details"}}</legend>
     <dl class="ad2e-weapon-stats">

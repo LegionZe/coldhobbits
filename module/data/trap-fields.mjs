@@ -1,3 +1,5 @@
+import { POISON_DELIVERY, poisonClassField } from "./poison-fields.mjs";
+
 const { NumberField, SchemaField, StringField } = foundry.data.fields;
 
 /**
@@ -17,6 +19,9 @@ export function trapField() {
     effect: new StringField({ initial: "" }),
     trigger: new StringField({ initial: "" }),
     reset: new StringField({ initial: "" }),
+    // Poison (module/poison.mjs): DMG Table 51 class and how the trap delivers it.
+    poison: poisonClassField(),
+    poisonDelivery: new StringField({ required: true, initial: "injected", choices: POISON_DELIVERY }),
     modifier: new NumberField({ required: true, integer: true, initial: 0, min: -30, max: 30, nullable: false })
   });
 }

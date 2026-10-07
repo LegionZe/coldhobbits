@@ -1,6 +1,8 @@
 import { AD2E, creatureHitDice, lookup } from "../config.mjs";
 import { hpState } from "../health.mjs";
 import { trapField } from "./trap-fields.mjs";
+import { poisonClassField, poisonStateField } from "./poison-fields.mjs";
+import { debilitated } from "../poison.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { loadBand, riderOf, riderWeight } from "../animals.mjs";
 
@@ -47,7 +49,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
         bonus: int(0),
         // Elemental province of the attack ("" | flame | sand | sea | wind): its damage dice reach elemental mages and gens
         // (module/elemental.mjs, module/gens.mjs), e.g. a fire breath or a salamander's touch.
-        element: new StringField({ initial: "" })
+        element: new StringField({ initial: "" }),
+        // DMG Table 51 poison class of the attack ("" = none; module/poison.mjs), e.g. a giant centipede's bite.
+        poison: poisonClassField()
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),
@@ -59,6 +63,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       cost: text(), // hirelings: wage (DMG Tables 64/65); mounts: price (PHB Table 44)
       // Role "trap" (module/traps.mjs): a trap placed as a token, e.g. a pit or a deadfall.
       trap: trapField(),
+      // Poison taking effect (module/poison.mjs).
+      poison: poisonStateField(),
       notes: new HTMLField()
     };
   }
@@ -115,7 +121,10 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
     const riderActor = riderOf(this.parent);
     const rider = riderActor ? { uuid: riderActor.uuid, name: riderActor.name, ...riderWeight(riderActor) } : null;
     const weight = Math.round((own + (rider?.total ?? 0)) * 10) / 10;
-    const { band, rate } = loadBand(this.load, weight, this.movement.base);
+    const { band, rate: loadRate } = loadBand(this.load, weight, this.movement.base);
+    // Debilitating poison (module/poison.mjs): half movement while it lasts (Poison (DMG)).
+    this.debilitated = debilitated(this.poison, globalThis.game?.time?.worldTime ?? 0);
+    const rate = this.debilitated && Number.isFinite(loadRate) ? Math.floor(loadRate / 2) : loadRate;
     this.encumbrance = { weight, own, rider, band, rate, inventory: inv };
   }
 

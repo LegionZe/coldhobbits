@@ -28,6 +28,7 @@ import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
 import { targetedTraps, TRAP } from "../traps.mjs";
 import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
+import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -607,8 +608,12 @@ export default class AD2EActor extends Actor {
     });
   }
 
-  /** Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. */
-  async rollSave(key) {
+  /**
+   * Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. `poison`: a save against
+   * poison also adds the race's Constitution bonus vs. poison; `request` / `target`: the chat save request it answers
+   * (module/save-requests.mjs); `quick`: no dialog (the GM's roll-all).
+   */
+  async rollSave(key, { request = null, target: requestTarget = null, poison = false, quick = false } = {}) {
     // Gen protection (module/gens.mjs): +2 to saving throws against the gen's element.
     const province = genWardProvince(this);
     const genField = province ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Gen.SaveWard",
@@ -620,8 +625,9 @@ export default class AD2EActor extends Actor {
     const masterField = masterSave ? `<div class="form-group"><label>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Familiar.MasterSave",
       { name: master.name, n: masterSave.value })) ?? ""}</label><input type="checkbox" name="masterSave"${familiarContact(this, master) ? " checked" : ""}></div>` : "";
     const oldSave = this.type === "character" ? (this.system.dual?.saveOptions?.[key] ?? null) : null;
-    const input = await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "",
-      genField + masterField + this.#dualField(oldSave));
+    const input = quick ? { mod: 0, note: "", kit: 0, kitText: "" }
+      : await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "",
+        genField + masterField + this.#dualField(oldSave));
     if (!input) return;
     const genBonus = input.genWard && province ? SHAIR.genWard.save : 0;
     if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
@@ -631,11 +637,14 @@ export default class AD2EActor extends Actor {
     const useOld = !useMaster && !!(input.dualOld && oldSave !== null);
     if (useOld) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatSave", { save: game.i18n.localize(`AD2E.Save.${key}`) }));
     const target = useMaster ? masterSave.value : (useOld ? oldSave : this.system.saves[key].value);
-    const bonus = useMaster ? (masterSave.bonus ?? 0) : this.system.saves[key].bonus;
+    // PHB Table 9: the Constitution bonus "vs. poison" (dwarves, halflings) counts on saves against poison only.
+    const poisonBonus = poison && key === "par" && !useMaster && this.type === "character" ? (this.system.raceInfo?.poisonBonus ?? 0) : 0;
+    if (poisonBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Poison.RaceBonus", { n: poisonBonus })].filter(Boolean).join("; ");
+    const bonus = (useMaster ? (masterSave.bonus ?? 0) : this.system.saves[key].bonus) + poisonBonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
     return roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this }), flags: { ad2e: { save: { key, success } } },
+      speaker: ChatMessage.getSpeaker({ actor: this }), flags: { ad2e: { save: { key, success, roll: roll.total, ...(request ? { request, target: requestTarget } : {}) } } },
       flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (useMaster ? ` (${game.i18n.localize(success ? "AD2E.Familiar.SpecialNone" : "AD2E.Familiar.SpecialHalf")})` : "")
@@ -1354,7 +1363,7 @@ export default class AD2EActor extends Actor {
     // Non-lethal ("Attacking Without Killing (PHB)"): 50% of normal damage (rounded down, at least 1), half of it
     // temporary (rounded down).
     const total = input.nonlethal ? Math.max(Math.floor(full * COMBAT_TABLES.nonlethal.damage), 1) : full;
-    return roll.toMessage({
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
       flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets,
@@ -1375,6 +1384,11 @@ export default class AD2EActor extends Actor {
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
           : (total > roll.total ? `: ${total}${roll.total + knock < 1 ? ` (${i18n("AD2E.Weapon.Minimum")})` : ""}` : ""))
     });
+    // Poison on the missile or weapon (module/poison.mjs): one dose, a save request vs. poison for the targets (injected).
+    const carrier = owned.length ? (owned[input.option] ?? owned[0]) : item;
+    const poisonClass = await usePoisonDose(carrier);
+    if (poisonClass) await requestPoisonSaves({ speaker: ChatMessage.getSpeaker({ actor: this }), cls: poisonClass, delivery: "injected", source: carrier.name, targets });
+    return message;
   }
 
   /**
@@ -1676,11 +1690,11 @@ export default class AD2EActor extends Actor {
   monsterAttacks() {
     if (this.type !== "monster") return [];
     const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
-      damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "" }));
+      damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "", poison: a.poison ?? "" }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
       melee: !!i.system.weapon?.melee, element: PROVINCES.includes(i.system.element) ? i.system.element : "",
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
-      dmgBonus: i.system.bonus.dmg }));
+      dmgBonus: i.system.bonus.dmg, poisonItem: i }));
     return [...natural, ...weapons];
   }
 
@@ -1759,7 +1773,7 @@ export default class AD2EActor extends Actor {
     const total = Math.max(roll.total, 1);
     // An elemental attack: its dice for elemental mages and gens of that province (module/elemental.mjs, module/gens.mjs).
     const element = attack.element ? { element: elementFlag(roll, [attack.element], 0, total - roll.total) } : {};
-    return roll.toMessage({
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flags: { ad2e: { damage: total, targets, ...element } },
       flavor: `${attack.name}${label} ${i18n("AD2E.Weapon.Damage")}${attack.element ? ` (${i18n(`AD2E.Elemental.Province.${attack.element}`)})` : ""}`
@@ -1768,6 +1782,13 @@ export default class AD2EActor extends Actor {
         + (input.auto ? ` [${i18n("AD2E.Weapon.AutoDamage")}]` : "")
         + modifierText(input.mod, input.note)
     });
+    // Poison (module/poison.mjs): a venomous natural attack (its own method), or a coated weapon (one dose, injected).
+    const poisonClass = attack.poisonItem ? await usePoisonDose(attack.poisonItem) : attack.poison;
+    if (poisonClass) {
+      await requestPoisonSaves({ speaker: ChatMessage.getSpeaker({ actor: this }), cls: poisonClass,
+        delivery: attack.poisonItem ? "injected" : "", source: attack.name, targets });
+    }
+    return message;
   }
 
   /** Morale check (Morale (DMG)): 2d10 + modifier; the creature stands if the total is at most its morale. */
@@ -2271,6 +2292,12 @@ export default class AD2EActor extends Actor {
     const fmt = (k, d) => game.i18n.format(k, d);
     if (st.state === "dead") {
       ui.notifications.warn(fmt("AD2E.Health.NoHealingDead", { name: this.name }));
+      return;
+    }
+    // Debilitating poison: "cannot heal by normal or magical means until the poison is neutralized or the duration of
+    // the debilitation is elapsed" (Poison (DMG)).
+    if (this.system.debilitated) {
+      ui.notifications.warn(fmt("AD2E.Poison.NoHealing", { name: this.name }));
       return;
     }
     if (!natural && hp.feeble) {

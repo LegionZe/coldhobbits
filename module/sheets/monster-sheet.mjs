@@ -1,3 +1,4 @@
+import { neutralizePoison, POISON, poisonContext, poisonLabel } from "../poison.mjs";
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import { mountTrained } from "../combat-options.mjs";
@@ -47,7 +48,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollUnarmed: MonsterSheet.onRollUnarmed,
       rollReaction: MonsterSheet.onRollReaction,
       rollTreasure: MonsterSheet.onRollTreasure,
-      takeOut: MonsterSheet.onTakeOut
+      takeOut: MonsterSheet.onTakeOut,
+      neutralizePoison: MonsterSheet.onNeutralizePoison
     }
   };
 
@@ -84,6 +86,9 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Pushing a mount or pack animal (module/animals.mjs): the button and its current state.
     context.canPush = ["mount", "pack"].includes(this.document.system.role);
     context.trap = trapContext(this.document);
+    // Poison taking effect (module/poison.mjs) and the Table 51 classes for natural attacks.
+    context.poisonState = poisonContext(this.document);
+    context.poisonClasses = Object.fromEntries(Object.keys(POISON.classes).map(k => [k, poisonLabel(k)]));
     context.pushText = pushText(this.document);
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
     context.trainedAuto = game.i18n.localize(mountTrained(this.document) ? "AD2E.Mounted.Trained.autoYes" : "AD2E.Mounted.Trained.autoNo");
@@ -118,7 +123,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const inv = sys.encumbrance.inventory;
     context.weapons = items.filter(i => i.type === "weapon").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url, key: `w${i.id}`,
       hit: i.system.hidden ? "" : i.system.bonus.hit, inside: insideText(inv, i),
-      element: i.system.element ? i18n(`AD2E.Elemental.Province.${i.system.element}`) : "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
+      element: i.system.element ? i18n(`AD2E.Elemental.Province.${i.system.element}`) : "",
+      poison: i.system.poison?.class && i.system.poison.doses > 0 ? `${i.system.poison.class} (${i.system.poison.doses})` : "", summary: i.system.weapon.damage.filter(d => d.sm || d.l)
         .map(d => `${d.label ? `${d.label}: ` : ""}${d.sm ?? "—"} / ${d.l ?? "—"}`).join("; ") }));
     context.armor = items.filter(i => i.type === "armor").map(i => ({ id: i.id, name: i.name, img: i.img, url: i.system.url,
       equipped: i.system.equipped, summary: armorSummary(i.system), inside: insideText(inv, i) }));
@@ -215,6 +221,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onHpHeal() { return promptHitPoints(this.actor, true); }
 
   static onRecoverTemp() { return this.actor.recoverTemporary(); }
+
+  static onNeutralizePoison() { return neutralizePoison(this.actor); }
 
   static onRollSurprise() { return this.actor.rollSurprise(); }
   static onRollReaction() { return rollEncounterReaction(this.actor); }

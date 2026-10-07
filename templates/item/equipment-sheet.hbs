@@ -31,6 +31,9 @@
   </div>
   <p class="ad2e-note">{{summary}}</p>
   {{#if trap}}{{> "ad2e.trap-fields" trap=trap}}{{/if}}
+  {{#if poisonItem}}<fieldset><legend>{{localize "AD2E.Poison.Poison"}}</legend><div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Poison.Class"}} <select name="system.poison.class">{{#each poisonItem as |c|}}<option value="{{c.key}}" {{#if c.selected}}selected{{/if}}>{{c.label}}</option>{{/each}}</select></label></div>
+    <p class="ad2e-note">{{localize "AD2E.Poison.ItemHint"}}</p></fieldset>{{/if}}
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
 </section>
