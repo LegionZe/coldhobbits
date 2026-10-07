@@ -1,5 +1,6 @@
 import { weaponField } from "./weapon-fields.mjs";
 import { containerPreUpdate } from "../containers.mjs";
+import { poisonCoatField } from "./poison-fields.mjs";
 import { applyIdentification, baseName, identifyFields } from "../identify.mjs";
 
 const { BooleanField, NumberField, SchemaField, StringField } = foundry.data.fields;
@@ -31,6 +32,8 @@ export default class WeaponData extends foundry.abstract.TypeDataModel {
         hit: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
       }),
+      // Poison coating (module/poison.mjs): DMG Table 51 class and doses left.
+      poison: poisonCoatField(),
       container: new StringField({ required: true, blank: true, initial: "" }),
       // Unidentified magical weapon/armour (module/identify.mjs): shown by its unidentified (or base) name.
       ...identifyFields(), // id of the container item it is in (module/containers.mjs)

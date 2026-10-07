@@ -1,3 +1,4 @@
+import { neutralizePoison, poisonContext } from "../poison.mjs";
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
 import { modifierText, promptModifier } from "../roll-modifiers.mjs";
 import AbilityRoller from "../apps/ability-roller.mjs";
@@ -224,6 +225,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       hpDamage: CharacterSheet.onHpDamage,
       hpHeal: CharacterSheet.onHpHeal,
       recoverTemp: CharacterSheet.onRecoverTemp,
+      neutralizePoison: CharacterSheet.onNeutralizePoison,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
       raiseDead: CharacterSheet.onRaiseDead,
@@ -395,6 +397,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const drain = this.document.system.drainInfo;
     context.drain = { isGM: !!game.user?.isGM, any: !!drain?.any, zero: !!drain?.zero,
       pending: (drain?.pending ?? []).map(e => game.i18n.format("AD2E.Drain.PendingRow", { class: e.name, level: e.level })).join(", ") };
+    context.poisonState = poisonContext(this.document);
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
       bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
       knockedOut: st.knockedOut, temporary: temporaryHp(sys.hp),
@@ -1253,6 +1256,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollSurprise() { return this.actor.rollSurprise(); }
 
   static onRecoverTemp() { return this.actor.recoverTemporary(); }
+
+  static onNeutralizePoison() { return neutralizePoison(this.actor); }
 
   static onRollUnarmed(event, target) { return this.actor.rollUnarmed(target.dataset.form); }
 

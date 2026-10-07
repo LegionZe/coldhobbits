@@ -1,3 +1,4 @@
+import { coatWithPoison, POISON, poisonLabel } from "../poison.mjs";
 import { springTrap, trapContext } from "../traps.mjs";
 import { SP } from "../sp-weapons.mjs";
 import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mjs";
@@ -174,14 +175,28 @@ function weaponStats(w) {
   };
 }
 
+/** Poison fields of a weapon or ammunition item (module/poison.mjs): class, doses, and the coat button on an actor. */
+function poisonCoatContext(item, editable) {
+  const p = item.system.poison ?? {};
+  const missiles = item.type === "ammunition";
+  return { classes: [{ key: "", label: "—", selected: !p.class }, ...Object.keys(POISON.classes).map(k => ({ key: k, label: poisonLabel(k), selected: k === p.class }))],
+    doses: p.doses ?? 0, canCoat: !!item.actor && editable,
+    dosesLabel: missiles ? "AD2E.Poison.Missiles" : "AD2E.Poison.Doses", dosesHint: missiles ? "AD2E.Poison.MissilesHint" : "AD2E.Poison.DosesHint" };
+}
+
 export class WeaponSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["weapon"] };
+  static DEFAULT_OPTIONS = { classes: ["weapon"], actions: { coatPoison: WeaponSheet.#onCoatPoison } };
+
+  static #onCoatPoison() {
+    return coatWithPoison(this.document);
+  }
   static PARTS = { body: { template: "systems/ad2e/templates/item/weapon-sheet.hbs", scrollable: [""] } };
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const sys = this.document.system;
     context.weapon = weaponStats(sys.weapon);
+    context.poisonCoat = poisonCoatContext(this.document, this.isEditable);
     // Bows only: the Strength the bow is made for (Strength 3-25 and the 18/xx bands of PHB Table 1).
     context.isBow = sys.weapon?.family === "bow";
     if (context.isBow) {
@@ -209,12 +224,17 @@ export class WeaponSheet extends AD2EItemSheet {
 }
 
 export class AmmunitionSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["ammunition"] };
+  static DEFAULT_OPTIONS = { classes: ["ammunition"], actions: { coatPoison: AmmunitionSheet.#onCoatPoison } };
+
+  static #onCoatPoison() {
+    return coatWithPoison(this.document);
+  }
   static PARTS = { body: { template: "systems/ad2e/templates/item/ammunition-sheet.hbs", scrollable: [""] } };
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.launchersText = [...this.document.system.launchers].join(", ");
+    context.poisonCoat = poisonCoatContext(this.document, this.isEditable);
     return context;
   }
 
@@ -267,6 +287,9 @@ export class EquipmentSheet extends AD2EItemSheet {
     context.summary = equipmentSummary(this.document.system);
     context.isComponent = this.document.system.category === "component";
     context.trap = trapContext(this.document);
+    const cls = this.document.system.poison?.class ?? "";
+    context.poisonItem = this.document.system.category === "poison"
+      ? [{ key: "", label: "—", selected: !cls }, ...Object.keys(POISON.classes).map(k => ({ key: k, label: poisonLabel(k), selected: k === cls }))] : null;
     return context;
   }
 

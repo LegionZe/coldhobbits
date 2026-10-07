@@ -1,0 +1,10 @@
+{{#with poisonCoat as |p|}}
+<fieldset class="ad2e-poison-coat">
+  <legend>{{localize "AD2E.Poison.Poison"}}</legend>
+  <div class="ad2e-item-fields">
+    <label>{{localize "AD2E.Poison.Class"}} <select name="system.poison.class">{{#each p.classes as |c|}}<option value="{{c.key}}" {{#if c.selected}}selected{{/if}}>{{c.label}}</option>{{/each}}</select></label>
+    <label data-tooltip="{{localize p.dosesHint}}">{{localize p.dosesLabel}} <input type="number" name="system.poison.doses" value="{{p.doses}}" min="0" step="1"></label>
+    {{#if p.canCoat}}<button type="button" data-action="coatPoison" data-tooltip="{{localize 'AD2E.Poison.CoatHint'}}"><i class="fa-solid fa-flask"></i> {{localize "AD2E.Poison.Coat"}}</button>{{/if}}
+  </div>
+</fieldset>
+{{/with}}

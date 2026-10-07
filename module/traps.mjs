@@ -1,4 +1,6 @@
 import { CREATOR_TABLES } from "./rules/creator-tables.mjs";
+import { POISON_DELIVERY } from "./data/poison-fields.mjs";
+import { poisonLabel, POISON, requestPoisonSaves } from "./poison.mjs";
 
 /**
  * Traps (owner's rulings: a trap actor (monster role "trap", e.g. a pit, placed as a token) and a trap item (equipment
@@ -57,7 +59,7 @@ export async function springTrap(doc, tokens = [...(game.user?.targets ?? [])]) 
   if (!trap) return null;
   const speaker = ChatMessage.getSpeaker({ actor: doc.documentName === "Actor" ? doc : doc.parent ?? null });
   const lines = [];
-  const full = [], half = [];
+  const full = [], half = [], noDamage = [];
   const rolls = [];
   for (const t of tokens) {
     const victim = t.actor ?? t.document?.actor;
@@ -68,7 +70,7 @@ export async function springTrap(doc, tokens = [...(game.user?.targets ?? [])]) 
     const ac = victim.system?.ac?.total ?? victim.system?.ac?.value ?? 10;
     const saveTarget = victim.system?.saves?.[trap.save]?.value ?? 20;
     const out = trapOutcome(trap, r.total, { ac, saveTarget });
-    if (out.damage === "full") full.push(ref); else if (out.damage === "half") half.push(ref);
+    if (out.damage === "full") full.push(ref); else if (out.damage === "half") half.push(ref); else noDamage.push(ref);
     lines.push(trap.mode === "thac0"
       ? i18n("AD2E.Trap.AttackLine", { name: ref.name, roll: r.total, need: out.need, ac, result: i18n(out.success ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") })
       : i18n("AD2E.Trap.SaveLine", { name: ref.name, roll: r.total, need: out.need, save: i18n(`AD2E.Save.${trap.save}`),
@@ -91,6 +93,12 @@ export async function springTrap(doc, tokens = [...(game.user?.targets ?? [])]) 
         content: `<p>${esc(i18n("AD2E.Trap.HalfDamage", { name: doc.name, damage: h, who: half.map(f => f.name).join(", ") }))}</p>` }));
     }
   }
+  // Poison (module/poison.mjs): victims hit (THAC0 mode), or every victim (save mode: the trap's save is for its damage),
+  // get a save request vs. poison, delivered as the trap says.
+  if (trap.poison) {
+    const victims = trap.mode === "thac0" ? full : [...full, ...half, ...noDamage];
+    if (victims.length || !tokens.length) messages.push(await requestPoisonSaves({ speaker, cls: trap.poison, delivery: trap.poisonDelivery, source: doc.name, targets: victims }));
+  }
   return messages;
 }
 
@@ -102,5 +110,7 @@ export function trapContext(doc) {
   return { data: t, thac0Mode: t.mode === "thac0", canSpring: !!game.user?.isGM,
     modes: opt(["thac0", "save"], t.mode, k => i18n(`AD2E.Trap.Modes.${k}`)),
     saves: opt(["par", "rsw", "pet", "br", "sp"], t.save, k => i18n(`AD2E.Save.${k}`)),
-    onSaves: opt(["none", "half"], t.onSave, k => i18n(`AD2E.Trap.OnSaves.${k}`)) };
+    onSaves: opt(["none", "half"], t.onSave, k => i18n(`AD2E.Trap.OnSaves.${k}`)),
+    poisons: [{ key: "", label: "—", selected: !t.poison }, ...Object.keys(POISON.classes).map(k => ({ key: k, label: poisonLabel(k), selected: k === t.poison }))],
+    deliveries: opt(POISON_DELIVERY, t.poisonDelivery, k => i18n(`AD2E.Poison.Method.${k}`)) };
 }

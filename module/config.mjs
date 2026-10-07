@@ -186,7 +186,7 @@ AD2E.coinsPerPound = COINS_PER_POUND;
 /** Equipment item categories (PHB Table 44 lists). */
 AD2E.equipmentCategories = { gear: "AD2E.Gear.gear", clothing: "AD2E.Gear.clothing", provisions: "AD2E.Gear.provisions",
   lodging: "AD2E.Gear.lodging", tack: "AD2E.Gear.tack", animal: "AD2E.Gear.animal", transport: "AD2E.Gear.transport",
-  service: "AD2E.Gear.service", component: "AD2E.Gear.component", trap: "AD2E.Gear.trap" };
+  service: "AD2E.Gear.service", component: "AD2E.Gear.component", trap: "AD2E.Gear.trap", poison: "AD2E.Gear.poison" };
 
 /** "2 gp · 2 lb each · holds 50 lb (3'×2'×1')" / animal "carries 180 / 270 / 360 lb" for an equipment item. */
 export function equipmentSummary(sys) {

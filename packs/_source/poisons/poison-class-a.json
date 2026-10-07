@@ -1,0 +1,38 @@
+{
+  "_id": "HkVGX00lSKMTBNpb",
+  "_key": "!items!HkVGX00lSKMTBNpb",
+  "name": "Poison, Class A (injected)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "poison-class-a",
+    "category": "poison",
+    "cost": "",
+    "weight": null,
+    "quantity": 1,
+    "carried": true,
+    "container": "",
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "poison": {
+      "class": "A"
+    },
+    "source": "Dungeon Master Guide, Table 51",
+    "url": "https://adnd2e.fandom.com/wiki/Poison_(DMG)",
+    "notes": ""
+  },
+  "effects": [],
+  "folder": null,
+  "sort": 0,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

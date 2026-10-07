@@ -24,6 +24,7 @@
     </div>
   </div>
   {{#if trap}}{{> "ad2e.trap-fields" trap=trap}}{{/if}}
+  {{> "ad2e.poison-state"}}
   <dl class="ad2e-monster-summary">
     {{#each summary as |s|}}<div class="ad2e-summary-cell"><dt>{{s.label}}</dt><dd {{#if s.tooltip}}data-tooltip="{{s.tooltip}}"{{/if}}>{{s.value}}</dd></div>{{/each}}
   </dl>

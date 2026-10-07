@@ -91,6 +91,10 @@
       (or the item's) has a GM "Spring" button: target the victims' tokens first; the attack or saves are rolled and the
       damage comes with the usual apply buttons. A thief's Find/Remove Traps roll offers the targeted trap's modifier and a
       silent attempt (-10%, a click on 01-10).</p></div>
+    <div><button type="button" data-action="tool" data-tool="poisonTargets"><i class="fa-solid fa-skull-crossbones"></i> Poison targets</button>
+      <p>Gives a poison (DMG Table 51 class A-P) to the targeted tokens: a drugged drink, a contact poison on a door handle.
+      Choose how it is given: a poison given another way than its own works at half strength (injected or ingested
+      swapped), and injected or ingested poisons do nothing by contact. A save request goes to chat (see Combat, Poison).</p></div>
     <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
       <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
       its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
@@ -229,6 +233,15 @@
     counts only Dexterity and magic, so enter any magical protection), loop the rope round (the victim breaks free at -4),
     pull/trip, or fold the net (2 rounds; after the first throw it is at -4 to hit until folded). A netted character or
     monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength check.</li>
+    <li><strong>Poison</strong>: a monster's natural attack can carry a DMG Table 51 poison class (Attacks table, Poison
+    column); weapons and missiles are coated from their sheet with a poison item (compendium "Poisons (DMG)", one dose per
+    weapon or missile); traps have a poison class and how they deliver it. A damage roll with a poisoned attack posts a
+    save request vs. poison: each target's owner clicks Save, or you roll them all (dwarves and halflings add their
+    Constitution bonus vs. poison). Once a save is in, the system rolls the onset (whispered to you) and applies the
+    effect when game time reaches it: damage, death, paralysis (2d6 hours) or debilitation (1d3 days: ability scores and
+    movement halved, no healing). Advance game time (the round count in combat does it) for the onset to come. The sheet
+    shows pending poison; your "Neutralize poison" button ends it (hit points already lost stay lost). A GM must be
+    connected for saves to be recorded. Coated weapons lose their dose on each damage roll (implementation choice).</li>
     <li><strong>Class weapons</strong>: weapons outside the class's list are marked in red and the attack dialog warns;
     the attack is still allowed (your ruling).</li>
   </ul>
@@ -308,6 +321,7 @@
       <tr><td><code>game.ad2e.createPatron()</code></td><td>Patron creator.</td></tr>
       <tr><td><code>game.ad2e.createSpell()</code></td><td>Spell creator.</td></tr>
       <tr><td><code>game.ad2e.createTrap()</code></td><td>Trap creator.</td></tr>
+      <tr><td><code>game.ad2e.poisonTargets()</code></td><td>Give a poison to the targeted tokens.</td></tr>
       <tr><td><code>game.ad2e.rollTreasure(actor)</code></td><td>Treasure dialog (prefilled from a monster actor, optional).</td></tr>
       <tr><td><code>game.ad2e.rollReaction(actor)</code></td><td>Encounter reaction (for a monster actor, optional).</td></tr>
     </tbody>

@@ -21,6 +21,7 @@
       <div class="ad2e-field"><span>{{localize "AD2E.HP.HitDice"}}</span><strong>{{system.hitDice.label}}</strong></div>
       <div class="ad2e-field ad2e-hp-status"><span data-tooltip="{{hpStatus.rule}}">{{localize "AD2E.Health.Status"}}</span>
         <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{#if hpStatus.label}}{{hpStatus.label}}{{#if hpStatus.bleeding}} ({{localize "AD2E.Health.BleedingNote"}}){{/if}}{{#if hpStatus.stable}} ({{localize "AD2E.Health.StableNote"}}){{/if}}{{else}}{{localize "AD2E.Health.State.ok"}}{{/if}}{{#if hpStatus.feeble}} · {{localize "AD2E.Health.State.feeble"}}{{/if}}{{#if hpStatus.knockedOut}} ({{localize "AD2E.Health.KnockedOut"}}){{/if}}</strong></div>
+      {{> "ad2e.poison-state"}}
       {{#if hpStatus.temporary}}<div class="ad2e-field"><span data-tooltip="{{localize 'AD2E.Health.RecoverHint'}}">{{localize "AD2E.Health.Temporary"}}</span><strong>{{hpStatus.temporary}}</strong></div>{{/if}}
       {{#if editable}}
       <div class="ad2e-buttons">

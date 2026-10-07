@@ -1,3 +1,4 @@
+import { poisonTargetsDialog } from "../poison.mjs";
 import MonsterImporter, { updateExistingMonsters } from "./monster-importer.mjs";
 import SpellImporter, { updateExistingSpells } from "./spell-importer.mjs";
 import AwardXp from "./award-xp.mjs";
@@ -25,6 +26,7 @@ export const MANUAL_TOOLS = {
   createSpell: () => new SpellCreator().render({ force: true }),
   createTrap: () => new TrapCreator().render({ force: true }),
   rollTreasure: () => rollTreasureDialog(null),
+  poisonTargets: () => poisonTargetsDialog(),
   rollReaction: () => rollEncounterReaction(null),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })
 };

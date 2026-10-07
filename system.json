@@ -2,7 +2,7 @@
   "id": "ad2e",
   "title": "Advanced Dungeons & Dragons 2nd Edition (Unofficial)",
   "description": "Mechanics-only implementation of AD&D 2nd Edition rules. Contains no copyrighted rule text. Code generated with Claude Code (Anthropic).",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "compatibility": {
     "minimum": "14.368",
     "verified": "14.368"
@@ -152,6 +152,17 @@
       }
     },
     {
+      "name": "poisons",
+      "label": "Poisons (DMG)",
+      "system": "ad2e",
+      "path": "packs/poisons",
+      "type": "Item",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
       "name": "aq-equipment",
       "label": "Al-Qadim Equipment (AA)",
       "system": "ad2e",
@@ -243,6 +254,7 @@
         "armor",
         "equipment",
         "components",
+        "poisons",
         "aq-equipment",
         "magic-items",
         "gems",

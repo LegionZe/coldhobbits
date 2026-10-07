@@ -22,6 +22,7 @@
     {{#if isGM}}<label class="ad2e-check" data-tooltip="{{localize 'AD2E.Identify.Hint'}}"><input type="checkbox" name="system.identified" {{checked system.identified}}> {{localize "AD2E.Magic.Identified"}}</label>
     <label data-tooltip="{{localize 'AD2E.Identify.NameHint'}}">{{localize "AD2E.Identify.Name"}} <input type="text" name="system.unidentifiedName" value="{{system.unidentifiedName}}"></label>{{else}}{{#unless system.identified}}<p class="ad2e-note">{{localize "AD2E.Magic.Unidentified"}}</p>{{/unless}}{{/if}}
   </div>
+  {{> "ad2e.poison-coat"}}
   <p class="ad2e-note">{{localize "AD2E.Ammo.LaunchersHint"}}</p>
   <label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>
