@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.15)
+## Status (v1.0.16)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -31,7 +31,7 @@ confirmed in Foundry (tested in Node only): the Skills & Powers Pugilist, Barbar
 and the Weapon Master Display button (0.0.129), the race and alignment fit warnings for companions and mounts
 (0.0.133), the energy drain details (forgetting excess spells, death below 0-level, age) and the lasso (0.0.134), and
 the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.0.11), item saving throws and falling damage
-(1.0.13), ageing and PHB Table 52 (1.0.14), and critical hits (1.0.15). The features are listed under "Verify before use" below.
+(1.0.13), ageing and PHB Table 52 (1.0.14), critical hits (1.0.15), and attack options (1.0.16). The features are listed under "Verify before use" below.
 
 ## Known limitations
 - Subabilities and character points are not used (owner's decision); Skills & Powers costs are paid in slots.
@@ -178,6 +178,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Hit Location Charts of "Critical Hit Tables (POCT)" rev 178184 (ranges and location names only). Implementation
   choices: monster natural attacks count as weapons of the monster's size; a weapon of several types uses the first type
   (or the Table 52 type); monster `bodyType` ("" = monster).
+- Called shots and attack options (1.0.16; owner's rulings: world setting, all options, defender rolled automatically):
+  `module/rules/attack-option-tables.mjs` by `python3 tools/build-attack-option-tables.py` from "Hitting a Specific Target
+  (DMG)" rev 71148 ("+1 penalty to his initiative", "-4 penalty") and "Attack Options (POCT)" rev 250488 (called shot -6/-8;
+  block vs. AC 4; disarm / grab / trap "against AC 0 ... against an AC 4", two-handed +4, no disarming a weapon two sizes
+  larger, "falls 1-10 feet away"; grab -3 Strength one-handed; sap -4 / -8 helmet, Small or Medium, 5% per point (max 40%),
+  10% (max 80%) against a helpless victim, 3d10 rounds, 25% real; shield-punch and shield-rush tables and modifiers;
+  the pull/trip weapon list mapped to identifiers, polearms from the Skills & Powers group). Implementation choices: the
+  defender's THAC0 without adjustments; the body shield is "Large"; the disarmed weapon's direction a d8 compass point.
+  Monsters: called shot, disarm, grab, trap, block.
 - Spell importer check (1.0.12, owner's request): after an import the "Imported Spells" compendium is read back from the
   server; a missing compendium or imported pages without a spell show an error (and the console lists them) instead of
   the success message. Import errors are reported the same way. Reason: an import on 14.368 reported "created" while
