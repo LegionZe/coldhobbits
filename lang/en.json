@@ -1157,6 +1157,16 @@
   "AD2E.Sheet.Jewellery": "AD&D 2e Gem or Jewellery",
   "AD2E.Sheet.Trait": "AD&D 2e Trait or Disadvantage",
   "AD2E.Spell": {
+    "Targets": "Targets",
+    "SaveAsk": "Save vs. {save} ({effect}).",
+    "SaveEffect": {"negates": "a success negates it", "half": "a success halves the damage", "special": "special: see the spell"},
+    "ResistedNote": "resisted: {names}",
+    "UnrolledNote": "save not rolled, full damage: {names}",
+    "NegatedNote": "saved, no effect: {names}",
+    "SavedHalf": "{name}: half damage {damage} for those who saved: {names}",
+    "SavedSpecial": "{name}: {damage} damage for those who saved ({names}); the spell's save is special: apply as the spell says.",
+    "SaveType": "Save vs.",
+    "SaveTypeHint": "Saving throw asked of the targets when the spell allows a save (the Save entry is not None).",
     "ArmorWarning": "Casting a wizard spell in armour ({armor}): multi-class wizards' and bards' spells are restricted in armour (elves in elven chain excepted). Cast anyway?",
     "Provinces": "Elemental provinces",
     "ProvincesHint": "Al-Qadim provinces of the spell: flame, sand, sea, wind (Wizard Spells by Province (AA); set at import). Comma separated.",
@@ -2498,5 +2508,15 @@
     "NoTargets": "No targets: target tokens before rolling, or roll the saves from the sheets.",
     "Waiting": "waiting for the save",
     "RollAll": "Roll every remaining save"
+  },
+  "AD2E.MR": {
+    "Label": "Magic resistance",
+    "LoweredLabel": "Lowered",
+    "Hint": "Percentage chance that a spell cast at this creature has no effect on it (d100 at or below). Rolled automatically when a targeting caster casts a spell; tick Lowered when the creature lowers it at will.",
+    "Rolled": "Rolled against spells: {value}% (the first percentage in the text; Nil = 0).",
+    "Line": "{name}: magic resistance {roll} vs {value}% — {result}",
+    "Resisted": "resists: no effect",
+    "Affected": "affected",
+    "Lowered": "{name}: magic resistance lowered (no roll)"
   }
 }

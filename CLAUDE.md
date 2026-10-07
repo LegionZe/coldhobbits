@@ -248,6 +248,13 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `registerSaveHandler(kind, fn)`, `groupResults`); `AD2EActor#rollSave(key, { request, target, poison, quick })` flags
   `save { key, success, roll, request, target }`; the active GM's createChatMessage hook records results on the request
   (`flags.ad2e.saveRequest.results.<index>`) and runs the kind's handler once per target.
+- Magic resistance and spell saves: `module/magic-resistance.mjs` (pure: `parseMagicResistance` (first percentage),
+  `magicResistanceOf` (monster text + `mrLowered`; character `system.magicResistance` { value, lowered }), `resists`,
+  `saveEffect` (spell Save entry -> none | negates | half | special)). `AD2EActor#castSpell` -> `#castAtTargets`: d100 per
+  targeted creature with resistance, then `createSaveRequest` (kind "spell", key = spell `saveType`) for the others when the
+  effect is not none; the card carries `flags.ad2e.spellCast` { spell, actor (uuid), effect, targets, resisted }.
+  `rollSpellDamage` reads the latest cast (`#lastCast`) and splits by `groupResults` (full to failed + unrolled, a second
+  message for saved: half, or full marked "special"; negated listed).
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

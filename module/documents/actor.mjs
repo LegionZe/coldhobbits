@@ -29,6 +29,8 @@ import { kitSpecial } from "../kit-features.mjs";
 import { targetedTraps, TRAP } from "../traps.mjs";
 import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
 import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
+import { createSaveRequest, groupResults, targetActor } from "../save-requests.mjs";
+import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -1877,7 +1879,54 @@ export default class AD2EActor extends Actor {
       + (comp.used.length ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Components.Used", { list: comp.used.join(", ") }))}</p>` : "")
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
-    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content });
+    return this.#castAtTargets(spell, content);
+  }
+
+  /**
+   * The spell card for the targeted tokens: magic resistance rolled for each target that has it (module/magic-resistance.mjs;
+   * "lowered" skips it), then, when the spell allows a save, a save request for the others (module/save-requests.mjs;
+   * owner's ruling: Save buttons and a GM roll-all). The card carries `flags.ad2e.spellCast` { spell, actor, effect,
+   * targets, resisted } for the spell's damage roll (rollSpellDamage).
+   */
+  async #castAtTargets(spell, card) {
+    const speaker = ChatMessage.getSpeaker({ actor: this });
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const targets = AD2EActor.#targetsNow();
+    const effect = saveEffect(spell.system.save);
+    const rolls = [], lines = [], resisted = [], affected = [];
+    for (const t of targets) {
+      const mr = magicResistanceOf(targetActor(t));
+      if (mr.value > 0 && !mr.lowered) {
+        const r = await new Roll("1d100").evaluate();
+        rolls.push(r);
+        const res = resists(mr.value, r.total);
+        lines.push(game.i18n.format("AD2E.MR.Line", { name: t.name, roll: r.total, value: mr.value,
+          result: game.i18n.localize(res ? "AD2E.MR.Resisted" : "AD2E.MR.Affected") }));
+        (res ? resisted : affected).push(t);
+      } else {
+        if (mr.value > 0) lines.push(game.i18n.format("AD2E.MR.Lowered", { name: t.name }));
+        affected.push(t);
+      }
+    }
+    const spellCast = { spell: spell.id, actor: this.uuid, effect, targets, resisted };
+    const html = card + (targets.length ? `<p class="ad2e-note">${esc(game.i18n.localize("AD2E.Spell.Targets"))}: ${esc(targets.map(t => t.name).join(", "))}</p>` : "")
+      + (lines.length ? `<ul class="ad2e-mr">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` : "");
+    if (affected.length && effect !== "none") {
+      return createSaveRequest({ speaker, key: spell.system.saveType ?? "sp", kind: "spell", rolls, targets: affected, data: { effect },
+        content: html + `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Spell.SaveAsk", { save: game.i18n.localize(`AD2E.Save.${spell.system.saveType ?? "sp"}`),
+          effect: game.i18n.localize(`AD2E.Spell.SaveEffect.${effect}`) }))}</p>`, flags: { spellCast } });
+    }
+    return ChatMessage.create({ speaker, rolls, content: html, flags: { ad2e: { spellCast } } });
+  }
+
+  /** The latest chat card of this actor casting `spell` (flags.ad2e.spellCast), or null. */
+  #lastCast(spell) {
+    const list = game.messages?.contents ?? [];
+    for (let i = list.length - 1; i >= 0; i--) {
+      const sc = list[i].getFlag?.("ad2e", "spellCast");
+      if (sc?.spell === spell.id && sc.actor === this.uuid) return list[i];
+    }
+    return null;
   }
 
   /**
@@ -1912,8 +1961,27 @@ export default class AD2EActor extends Actor {
     const per = healing ? 0 : dieBonus(this, provinces);
     const bonus = per * diceCount(roll);
     const total = Math.max(roll.total + bonus, 0);
-    const targets = AD2EActor.#targetsNow();
-    return roll.toMessage({
+    // The last casting's targets (#castAtTargets): those who resisted take nothing; with a save request, failed and
+    // unrolled saves take the full damage and successful saves half ("1/2"), none ("Neg.") or the full damage marked
+    // for the GM ("special").
+    const cast = healing ? null : this.#lastCast(spell);
+    const sc = cast?.getFlag("ad2e", "spellCast");
+    let targets = AD2EActor.#targetsNow();
+    let split = null;
+    if (sc?.targets?.length) {
+      const request = cast.getFlag("ad2e", "saveRequest");
+      const resistedIds = new Set((sc.resisted ?? []).map(t => t.uuid));
+      const groups = request ? groupResults(request) : { saved: [], failed: [], open: sc.targets.filter(t => !resistedIds.has(t.uuid)) };
+      const ref = t => ({ uuid: t.uuid, name: t.name });
+      targets = [...groups.failed, ...groups.open].map(ref);
+      split = { effect: sc.effect, saved: groups.saved.map(ref), open: groups.open.map(ref), resisted: sc.resisted ?? [] };
+    }
+    const notes = split ? [
+      split.resisted.length ? game.i18n.format("AD2E.Spell.ResistedNote", { names: split.resisted.map(t => t.name).join(", ") }) : "",
+      split.open.length && cast.getFlag("ad2e", "saveRequest") ? game.i18n.format("AD2E.Spell.UnrolledNote", { names: split.open.map(t => t.name).join(", ") }) : "",
+      split.saved.length && split.effect === "negates" ? game.i18n.format("AD2E.Spell.NegatedNote", { names: split.saved.map(t => t.name).join(", ") }) : ""
+    ].filter(Boolean) : [];
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flags: { ad2e: { damage: total, targets, ...(healing ? { healing: true } : {}),
         ...(provinces.length ? { element: elementFlag(roll, provinces, per, bonus) } : {}) } },
@@ -1924,7 +1992,17 @@ export default class AD2EActor extends Actor {
         + (targets.length ? ` vs ${esc(targets.map(t => t.name).join(", "))}` : "")
         + modifierText(input.mod, input.note)
         + (bonus ? ` [${game.i18n.format("AD2E.Elemental.DieBonusNote", { province: i18n(`AD2E.Elemental.Province.${elementOf(this)}`), n: bonus })}]: ${total}` : "")
+        + (notes.length ? ` [${esc(notes.join("; "))}]` : "")
     });
+    // Saved targets: half damage, or the full damage marked "special" for the GM's ruling.
+    if (split?.saved.length && (split.effect === "half" || split.effect === "special")) {
+      const amount = split.effect === "half" ? Math.floor(total / 2) : total;
+      await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
+        flags: { ad2e: { damage: amount, targets: split.saved, ...(provinces.length ? { element: elementFlag(roll, provinces, per, bonus) } : {}) } },
+        content: `<p>${esc(game.i18n.format(split.effect === "half" ? "AD2E.Spell.SavedHalf" : "AD2E.Spell.SavedSpecial",
+          { name: spell.name, damage: amount, names: split.saved.map(t => t.name).join(", ") }))}</p>` });
+    }
+    return message;
   }
 
 

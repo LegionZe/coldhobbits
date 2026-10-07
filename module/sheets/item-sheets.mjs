@@ -357,6 +357,7 @@ export class SpellSheet extends AD2EItemSheet {
     context.spheresText = sys.spheres.join(", ");
     context.sourcesText = sys.sources.join(", ");
     context.provincesText = (sys.provinces ?? []).join(", ");
+    context.saveTypes = ["par", "rsw", "pet", "br", "sp"].map(key => ({ key, label: game.i18n.localize(`AD2E.Save.${key}`), selected: key === (sys.saveType ?? "sp") }));
     // Material component links (module/importers/spell-components.mjs).
     context.materials = (sys.materials ?? []).map((m, index) => ({ ...m, index }));
     context.materialChoices = sys.components.material ? await SpellSheet.catalog() : [];
