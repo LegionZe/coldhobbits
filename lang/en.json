@@ -2646,5 +2646,103 @@
       "animal": "Animal",
       "monster": "Monster"
     }
+  },
+  "AD2E.Maneuver": {
+    "Setting": "Called shots and attack options",
+    "SettingHint": "Adds a maneuver to attack dialogs: called shot (-4, +1 initiative), sap, disarm, grab, trap, block, pull/trip and shield-punch/rush (Combat & Tactics). The defender's side of opposed rolls is rolled from the target's numbers.",
+    "Legend": "Maneuver",
+    "Label": "Maneuver",
+    "Kind": {
+      "normal": "Normal attack",
+      "calledShot": "Called shot",
+      "sap": "Sap (knock out)",
+      "disarm": "Disarm",
+      "grab": "Grab an item",
+      "trap": "Trap the weapon",
+      "block": "Block",
+      "pullTrip": "Pull / trip",
+      "shieldPunch": "Shield-punch",
+      "shieldRush": "Shield-rush"
+    },
+    "CalledPenalty": "Called shot penalty (initiative +{init})",
+    "Location": "Aimed at (critical hit location)",
+    "SapHelmet": "Target wears a helmet (sap {n})",
+    "SapHelpless": "Victim surprised, asleep, restrained or held (sap knockout x2)",
+    "Hint": "Called shots and saps are announced before initiative (+1). Disarm, grab, trap and block are opposed rolls; pull/trip and shield attacks roll an attack first.",
+    "CalledNote": "Called shot {n}, initiative +{init}",
+    "SapNote": "Sap {n}",
+    "SapTooBig": "only Small or Medium creatures can be sapped",
+    "SapOut": "Sap: knockout chance {chance}%, roll {roll}: {name} is knocked out for {rounds} rounds.",
+    "SapAwake": "Sap: knockout chance {chance}%, roll {roll}: {name} stays conscious.",
+    "Help": {
+      "disarm": "Opposed attack rolls: you against AC 0, the defender against AC 4 (a two-handed weapon makes its side's AC 4 worse). The lowest successful roll wins.",
+      "grab": "Opposed attack rolls as for a disarm; if you win, an opposed Strength check for the item (-3 for a one-handed hold). The defender gets an attack of opportunity if you are threatened.",
+      "trap": "Opposed attack rolls as for a disarm; if you win, the weapon is pinned: opposed Strength checks at the end of each round free it.",
+      "block": "You roll against AC 4, the opponent rolls an attack against your AC: the strike is blocked if your successful roll is lower.",
+      "pullTrip": "An attack roll, then opposed Strength (yours, with the modifiers) against the defender's better of Strength and Dexterity.",
+      "shieldPunch": "An attack with your shield (Strength and situation only); a substitute attack has no penalty, an extra one -4 (and -2 for your weapon this round).",
+      "shieldRush": "An attack with your shield after 10 feet of running; on a hit, opposed Strength with the shield's knockdown bonus; on a miss, a Dexterity check to stay on your feet."
+    },
+    "YourAc": "Your Armor Class",
+    "YouTwoHanded": "You use a two-handed weapon (+4 to your target AC)",
+    "DefTwoHanded": "Defender uses a two-handed weapon (+4 to its target AC)",
+    "DefWeaponSize": "Defender's weapon size",
+    "YouOneHand": "You grab with one hand (-3 Strength)",
+    "DefOneHand": "Defender holds it with one hand (-3 Strength)",
+    "PunchMode": "Shield-punch",
+    "PunchSubstitute": "Instead of your attack (no penalty)",
+    "PunchExtra": "Extra attack ({punch}; your weapon {primary} this round)",
+    "DisarmTooBig": "A weapon two sizes larger than yours cannot be disarmed.",
+    "OpposedLine": "You: {you} (needs {youNeed} vs AC {youAc}, {adj}) — defender: {them} (needs {themNeed} vs AC {themAc})",
+    "Result": {
+      "disarm": {
+        "attacker": "Disarmed!",
+        "defender": "The disarm fails.",
+        "tie": "Tie: the contest goes on next round."
+      },
+      "grab": {
+        "attacker": "You get a hold of the item.",
+        "defender": "The grab fails.",
+        "tie": "Tie: the item may be dropped or broken (GM)."
+      },
+      "trap": {
+        "attacker": "The weapon is trapped (opposed Strength at the end of the round to free it).",
+        "defender": "The trap fails; the normal attack follows.",
+        "tie": "Tie: the contest goes on next round."
+      },
+      "block": {
+        "attacker": "Blocked!",
+        "defender": "Not blocked: the attack hits if it succeeded.",
+        "tie": "Tie: the contest goes on next round."
+      }
+    },
+    "DisarmFalls": "The weapon falls {feet} feet away to the {dir}.",
+    "Dir": {
+      "1": "north",
+      "2": "north-east",
+      "3": "east",
+      "4": "south-east",
+      "5": "south",
+      "6": "south-west",
+      "7": "west",
+      "8": "north-west"
+    },
+    "GrabStr": {
+      "attacker": "You take the item.",
+      "defender": "The defender keeps the item.",
+      "tie": "Tie: the struggle goes on.",
+      "bothFail": "Neither gains control: the struggle goes on."
+    },
+    "PunchPrimaryNote": "Your weapon attacks this round at {n}.",
+    "KnockdownDie": "Knockdown die {die}: {n}",
+    "RushStr": "Strength: you {a} (roll {ar}, knockdown {bonus} if successful), defender {d} (roll {dr})",
+    "Rush": {
+      "attacker": "The defender is knocked down.",
+      "defender": "You fall down.",
+      "tie": "Tie: both keep their feet.",
+      "bothFail": "Both fall down."
+    },
+    "RushStay": "Missed: Dexterity check {roll} vs {dex}: you keep your feet.",
+    "RushFall": "Missed: Dexterity check {roll} vs {dex}: you fall down."
   }
 }

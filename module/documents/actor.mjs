@@ -32,6 +32,8 @@ import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
 import { createSaveRequest, groupResults, targetActor } from "../save-requests.mjs";
 import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs";
 import { table52ForTarget, table52Text } from "../armor-types.mjs";
+import { attackOptionsOn, AO, disarmPossible, maneuversFor, OPPOSED, opposedAcs, rushScore, sapChance, shieldOf } from "../attack-options.mjs";
+import { chartKey, CRIT, targetKind } from "../criticals.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 
 export default class AD2EActor extends Actor {
@@ -782,10 +784,13 @@ export default class AD2EActor extends Actor {
     // Class weapon limits (owner's ruling: a warning only; CharacterData weaponRestriction).
     const restriction = this.type === "character" ? this.system.weapons?.find(e => e.item.id === item.id)?.restriction : "";
     const restrictionNote = restriction ? `<p class="ad2e-unmet">${i18n(`AD2E.Weapon.Restrict.${restriction}`)}</p>` : "";
+    // Called shots and attack options (world setting "attackOptions", module/attack-options.mjs).
+    const maneuverField = this.type === "character" && attackOptionsOn()
+      ? this.#maneuverField(maneuversFor({ item, use, items: this.items }), targets, item.system.weapon?.type) : "";
     const input = await DialogV2.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: restrictionNote + `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
-        + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
+        + maneuverField + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField + this.#dualField(this.system.dual?.thac0Option)
         + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
@@ -803,12 +808,17 @@ export default class AD2EActor extends Actor {
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
             mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
             untrainedMount: !!f.untrainedMount?.checked, mountedMelee: use === "melee" ? AD2EActor.#mountedMeleePicked(f) : null,
-            dualOld: !!f.dualOld?.checked };
+            dualOld: !!f.dualOld?.checked, ...AD2EActor.#maneuverPicked(f) };
         }
       },
       rejectClose: false
     });
     if (!input) return;
+    // Opposed maneuvers, pull/trip and shield attacks have their own resolution (module/attack-options.mjs).
+    if (["disarm", "grab", "trap", "block", "pullTrip", "shieldPunch", "shieldRush"].includes(input.maneuver)) {
+      return this.rollManeuver(input.maneuver, { item, attack, use, targets, ac: input.ac, mod: input.mod,
+        thac0: this.system.thac0.value });
+    }
     const ammo = input.ammo ? this.items.get(input.ammo) : null;
     if (ammoList && !ammo) return;
     // Dual-class: the earlier class's THAC0, or its backstab, while restricted (module/dual-class.mjs).
@@ -880,6 +890,7 @@ export default class AD2EActor extends Actor {
     // PHB Table 52 (optional, module/armor-types.mjs): the weapon's (or missile's) best type against the target's armour.
     const t52 = table52ForTarget(ammo?.system.type || item.system.weapon?.type, AD2EActor.#targetActor(targets));
     if (t52) notes.push(table52Text(t52));
+    const maneuverHit = this.#maneuverModifier(input, targets, notes);
     // A bow made for exceptional Strength, used without it: bend bars/lift gates roll to string or use it (Weapons (PHB)).
     if (use === "missile" && attack.bowBendBars !== null && attack.bowBendBars !== undefined) {
       notes.push(game.i18n.format("AD2E.Weapon.BowBendBars", { rating: attack.bowStrength, chance: attack.bowBendBars }));
@@ -926,7 +937,7 @@ export default class AD2EActor extends Actor {
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
       + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee
-      + (t52?.mod ?? 0);
+      + (t52?.mod ?? 0) + maneuverHit;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     // A misfire (Combat & Tactics footnotes 3, 5, 7, 9): a natural roll at or below the weapon's number (wet if ticked).
@@ -944,6 +955,7 @@ export default class AD2EActor extends Actor {
       notes.push(criticalText(crit));
     }
     AD2EActor.#rememberCrit(this, itemId, crit);
+    AD2EActor.#lastSap.set(`${this.uuid ?? this.id}.${itemId}`, input.maneuver === "sap" ? { helpless: !!input.sapHelpless } : null);
     // Use up the piece fired or thrown.
     let spent = "";
     if (powder) {
@@ -976,7 +988,205 @@ export default class AD2EActor extends Actor {
     // backstab, non-lethal, the armed-defender bonus, and the first target's size.
     if (hit && AD2EActor.#autoDamageOn()) {
       await this.rollWeaponDamage(itemId, use, { size: AD2EActor.#targetSizeKey(targets), backstab: !!a.backstab,
-        nonlethal: !!a.nonlethal, vsUnarmed: !!input.vsUnarmed, pointBlank: input.range === "pointBlank", critical: crit });
+        nonlethal: !!a.nonlethal, vsUnarmed: !!input.vsUnarmed, pointBlank: input.range === "pointBlank", critical: crit,
+        sap: input.maneuver === "sap" ? { helpless: !!input.sapHelpless } : null });
+    }
+    return message;
+  }
+
+  /* ---------------------------------------- Attack options (module/attack-options.mjs) */
+
+  /** The sap of the last attack per actor and weapon (the damage roll uses it once). */
+  static #lastSap = new Map();
+
+  /** Maneuver fields for attack dialogs: the maneuver, a called shot's penalty and location, sap helmet / helpless ticks. */
+  #maneuverField(maneuvers, targets, typeText) {
+    const i18n = k => game.i18n.localize(k);
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const target = AD2EActor.#targetActor(targets);
+    const helmet = !!target?.items?.some?.(i => i.type === "armor" && i.system?.equipped && i.system?.kind === "helmet");
+    const crit = criticalMode() === "system2" ? chartKey(typeText, targetKind(target)) : null;
+    const locs = crit ? [...new Set(CRIT.charts[crit].locations.map(l => l.label))] : [];
+    const statuses = new Set(target?.statuses ?? []);
+    const helpless = ["sleep", "paralysis", "restrain", "unconscious"].some(s => statuses.has(s));
+    const opt = (v, label, sel = false) => `<option value="${esc(v)}"${sel ? " selected" : ""}>${esc(label)}</option>`;
+    return `<fieldset><legend>${esc(i18n("AD2E.Maneuver.Legend"))}</legend>`
+      + `<div class="form-group"><label>${esc(i18n("AD2E.Maneuver.Label"))}</label><select name="maneuver">${maneuvers.map(m => opt(m, i18n(`AD2E.Maneuver.Kind.${m}`))).join("")}</select></div>`
+      + `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Maneuver.CalledPenalty", { init: AO.calledShot.init }))}</label><select name="calledPenalty">`
+      + [AO.calledShot.hit, ...AO.calledShot.harder].map(n => opt(n, String(n))).join("") + "</select></div>"
+      + (locs.length ? `<div class="form-group"><label>${esc(i18n("AD2E.Maneuver.Location"))}</label><select name="calledLocation">${opt("", "—")}${locs.map(l => opt(l, l)).join("")}</select></div>` : "")
+      + (maneuvers.includes("sap") ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Maneuver.SapHelmet", { n: AO.sap.helmet }))}</label><input type="checkbox" name="sapHelmet"${helmet ? " checked" : ""}></div>`
+        + `<div class="form-group"><label>${esc(i18n("AD2E.Maneuver.SapHelpless"))}</label><input type="checkbox" name="sapHelpless"${helpless ? " checked" : ""}></div>` : "")
+      + `<p class="ad2e-note">${esc(i18n("AD2E.Maneuver.Hint"))}</p></fieldset>`;
+  }
+
+  static #maneuverPicked(f) {
+    return { maneuver: f.maneuver?.value ?? "normal", calledPenalty: Number(f.calledPenalty?.value ?? AO.calledShot.hit) || AO.calledShot.hit,
+      calledLocation: f.maneuver?.value === "calledShot" ? (f.calledLocation?.value ?? "") : "",
+      sapHelmet: !!f.sapHelmet?.checked, sapHelpless: !!f.sapHelpless?.checked };
+  }
+
+  /** Attack roll modifier of a called shot or sap (notes added for chat). */
+  #maneuverModifier(input, targets, notes) {
+    const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
+    if (input.maneuver === "calledShot") {
+      notes.push(i18n("AD2E.Maneuver.CalledNote", { n: input.calledPenalty, init: AO.calledShot.init })
+        + (input.calledLocation ? ` (${input.calledLocation})` : ""));
+      return input.calledPenalty;
+    }
+    if (input.maneuver === "sap") {
+      const n = input.sapHelmet ? AO.sap.helmet : AO.sap.hit;
+      notes.push(i18n("AD2E.Maneuver.SapNote", { n }));
+      const target = AD2EActor.#targetActor(targets);
+      if (target && !AO.sap.sizes.includes(AD2EActor.#sizeOf(target))) notes.push(`⚠ ${i18n("AD2E.Maneuver.SapTooBig")}`);
+      return n;
+    }
+    return 0;
+  }
+
+  /** Sap knockout: 5% per point of damage (10% against a helpless victim), unconscious 3d10 rounds. */
+  async #sapKnockout(damage, sap, targets) {
+    const chance = sapChance(damage, sap.helpless);
+    const roll = await new Roll("1d100").evaluate();
+    const out = roll.total <= chance;
+    const rounds = out ? await new Roll(AO.sap.rounds).evaluate() : null;
+    return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls: [roll, rounds].filter(Boolean),
+      content: `<p>${foundry.utils.escapeHTML?.(game.i18n.format(out ? "AD2E.Maneuver.SapOut" : "AD2E.Maneuver.SapAwake",
+        { chance, roll: roll.total, rounds: rounds?.total ?? 0, name: targets?.[0]?.name ?? "—" })) ?? ""}</p>` });
+  }
+
+  /**
+   * Opposed maneuvers (disarm, grab, trap, block), pull/trip and shield attacks: a dialog with the defender's numbers
+   * (from the first target, editable), then the rolls (the defender's rolled automatically: owner's ruling) and a chat card.
+   * `attack` = { hit } adjustment; `thac0`; `item` the weapon used.
+   */
+  async rollManeuver(kind, { item = null, attack = { hit: 0 }, use = "melee", targets = [], ac = 10, mod = 0, thac0 = 20 } = {}) {
+    const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
+    const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const def = AD2EActor.#targetActor(targets);
+    const ds = def?.system ?? {};
+    const mon = def?.type === "monster" ? monsterScores(ds.size, ds.hitDice, ds.movement?.base) : null;
+    const dSize = def ? AD2EActor.#sizeOf(def) : "M";
+    const size = AD2EActor.#sizeOf(this);
+    const defWeapon = def?.items?.find?.(i => i.type === "weapon" && (def.type !== "character" || i.system?.equipped) && i.system?.weapon?.melee);
+    const twoH = (w, s) => !!w && needsTwoHands(w.system.weapon, s);
+    const field = (label, html) => `<div class="form-group"><label>${esc(label)}</label>${html}</div>`;
+    const num = (name, v) => `<input type="number" name="${name}" value="${v}">`;
+    const box = (name, label, on = false) => field(label, `<input type="checkbox" name="${name}"${on ? " checked" : ""}>`);
+    const sizes = ["T", "S", "M", "L", "H", "G"];
+    const sizeSel = (name, v) => `<select name="${name}">${sizes.map(s => `<option value="${s}"${s === v ? " selected" : ""}>${s}</option>`).join("")}</select>`;
+    const dStr = mon ? mon.str : (ds.abilities?.str?.total ?? 10);
+    const dDex = mon ? mon.dex : (ds.abilities?.dex?.total ?? 10);
+    let content = `<p class="ad2e-note">${esc(i18n(`AD2E.Maneuver.Help.${kind}`))}</p>`
+      + `<fieldset><legend>${esc(i18n("AD2E.Lasso.Defender", { name: def?.name ?? i18n("AD2E.Lasso.NoTarget") }))}</legend>`;
+    if (OPPOSED.includes(kind)) {
+      content += field(i18n("AD2E.Lasso.DefThac0"), num("dThac0", ds.thac0?.value ?? 20));
+      if (kind === "block") content += field(i18n("AD2E.Maneuver.YourAc"), num("myAc", this.system.ac?.total ?? this.system.ac?.value ?? 10));
+      else {
+        content += box("aTwo", i18n("AD2E.Maneuver.YouTwoHanded"), twoH(item, size)) + box("dTwo", i18n("AD2E.Maneuver.DefTwoHanded"), twoH(defWeapon, dSize));
+        if (kind === "disarm") content += field(i18n("AD2E.Maneuver.DefWeaponSize"), sizeSel("dWeaponSize", defWeapon?.system?.weapon?.size || dSize));
+        if (kind === "grab") content += field(i18n("AD2E.Lasso.DefStr"), num("dStr", dStr)) + box("aOne", i18n("AD2E.Maneuver.YouOneHand"), true)
+          + box("dOne", i18n("AD2E.Maneuver.DefOneHand"), true);
+      }
+    } else if (kind === "pullTrip" || kind === "shieldRush") {
+      content += field(i18n("AD2E.Lasso.DefStr"), num("dStr", dStr)) + (kind === "pullTrip" ? field(i18n("AD2E.Lasso.DefDex"), num("dDex", dDex)) : "")
+        + field(i18n("AD2E.Lasso.DefSize"), sizeSel("dSize", sizes.includes(dSize) ? dSize : "M"))
+        + box("fourLegs", i18n("AD2E.Lasso.FourLegs", { n: kind === "pullTrip" ? LASSO.pullTrip.fourLegs : AO.shieldRush.fourLegs }))
+        + box("unaware", i18n("AD2E.Lasso.Unaware", { n: kind === "pullTrip" ? LASSO.pullTrip.unaware : AO.shieldRush.unaware }))
+        + (kind === "pullTrip" ? box("stationary", i18n("AD2E.Lasso.Stationary", { n: LASSO.pullTrip.stationary })) : "");
+    }
+    content += "</fieldset>";
+    if (kind === "shieldPunch") content += field(i18n("AD2E.Maneuver.PunchMode"), `<select name="punchMode"><option value="substitute">${esc(i18n("AD2E.Maneuver.PunchSubstitute"))}</option>`
+      + `<option value="extra">${esc(i18n("AD2E.Maneuver.PunchExtra", { punch: AO.shieldPunch.punch, primary: AO.shieldPunch.primary }))}</option></select>`);
+    const input = await DialogV2.prompt({
+      window: { title: `${this.name}: ${i18n(`AD2E.Maneuver.Kind.${kind}`)}` }, content,
+      ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
+        const el = button.form.elements;
+        const n = k => Number(el[k]?.value) || 0;
+        return { dThac0: n("dThac0") || 20, myAc: n("myAc"), aTwo: !!el.aTwo?.checked, dTwo: !!el.dTwo?.checked, dWeaponSize: el.dWeaponSize?.value ?? "M",
+          dStr: n("dStr"), dDex: n("dDex"), aOne: !!el.aOne?.checked, dOne: !!el.dOne?.checked, dSize: el.dSize?.value ?? "M",
+          fourLegs: !!el.fourLegs?.checked, unaware: !!el.unaware?.checked, stationary: !!el.stationary?.checked, punchMode: el.punchMode?.value ?? "substitute" };
+      } },
+      rejectClose: false
+    });
+    if (!input) return null;
+    const rolls = [], lines = [];
+    const d20 = async () => { const r = await new Roll("1d20").evaluate(); rolls.push(r); return r.total; };
+    const signed = v => `${v >= 0 ? "+" : ""}${v}`;
+    const myStr = this.type === "character" ? this.system.abilities.str.total : (monsterScores(this.system.size, this.system.hitDice, this.system.movement?.base).str);
+    const myDex = this.type === "character" ? this.system.abilities.dex.total : (monsterScores(this.system.size, this.system.hitDice, this.system.movement?.base).dex);
+    const oppStr = async (aScore, dScore) => {
+      const ar = await d20(), dr = await d20();
+      lines.push(i18n("AD2E.Lasso.StrLine", { a: aScore, ar, d: dScore, dr }));
+      return { res: opposedCheck(aScore, ar, dScore, dr), ar, dr };
+    };
+    let damage = null;
+    if (OPPOSED.includes(kind)) {
+      if (kind === "disarm" && !disarmPossible(item?.system?.weapon?.size || size, input.dWeaponSize)) {
+        return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(i18n("AD2E.Maneuver.DisarmTooBig"))}</p>` });
+      }
+      const acs = opposedAcs(kind, { attackerTwoHanded: input.aTwo, defenderTwoHanded: input.dTwo, blockerAc: input.myAc });
+      const adj = (attack.hit ?? 0) + mod;
+      const aNeed = thac0 - acs.attackerAc - adj;
+      const dNeed = input.dThac0 - acs.defenderAc;
+      const ar = await d20(), dr = await d20();
+      const res = opposedAttack(aNeed, ar, dNeed, dr);
+      lines.push(i18n("AD2E.Maneuver.OpposedLine", { you: ar, youNeed: aNeed, youAc: acs.attackerAc, adj: signed(adj), them: dr, themNeed: dNeed, themAc: acs.defenderAc }));
+      lines.push(i18n(`AD2E.Maneuver.Result.${kind}.${res.result}`));
+      if (kind === "disarm" && res.result === "attacker") {
+        const feet = await new Roll(AO.disarm.falls).evaluate(), dir = await new Roll("1d8").evaluate();
+        rolls.push(feet, dir);
+        lines.push(i18n("AD2E.Maneuver.DisarmFalls", { feet: feet.total, dir: i18n(`AD2E.Maneuver.Dir.${dir.total}`) }));
+      }
+      if (kind === "grab" && res.result === "attacker") {
+        const r = await oppStr(myStr + (input.aOne ? AO.grab.oneHand : 0), input.dStr + (input.dOne ? AO.grab.oneHand : 0));
+        lines.push(i18n(`AD2E.Maneuver.GrabStr.${r.res}`));
+      }
+    } else if (kind === "pullTrip" || kind === "shieldPunch" || kind === "shieldRush") {
+      const shield = shieldOf(this.items);
+      const extra = kind === "shieldPunch" && input.punchMode === "extra";
+      const adj = kind === "pullTrip" ? (attack.hit ?? 0) + mod : (this.system.mods?.meleeAttack ?? 0) + mod + (extra ? AO.shieldPunch.punch : 0);
+      const need = thac0 - ac;
+      const r = await d20();
+      const hit = r + adj >= need;
+      lines.push(i18n("AD2E.Lasso.AttackLine", { roll: r, adj: signed(adj), total: r + adj, ac, need, result: i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") }));
+      if (extra) lines.push(i18n("AD2E.Maneuver.PunchPrimaryNote", { n: AO.shieldPunch.primary }));
+      if (kind === "pullTrip" && hit) {
+        const pt = pullTripScore(myStr, { attackerSize: size, defenderSize: input.dSize, lasso: false, fourLegs: input.fourLegs,
+          unaware: input.unaware, stationary: input.stationary });
+        const o = await oppStr(pt.score, Math.max(input.dStr, input.dDex));
+        lines.push(i18n(`AD2E.Lasso.Trip.${o.res}`));
+      }
+      if ((kind === "shieldPunch" || kind === "shieldRush") && shield) {
+        const table = kind === "shieldPunch" ? AO.shieldPunch.shields[shield.id] : AO.shieldRush.shields[shield.id];
+        if (hit) {
+          damage = await new Roll(`${table.damage} + @str`, { str: this.system.mods?.dmg ?? 0 }).evaluate();
+          if (kind === "shieldPunch") {
+            const kd = await new Roll(`1${table.knockdown}`).evaluate();
+            rolls.push(kd);
+            lines.push(i18n("AD2E.Maneuver.KnockdownDie", { die: table.knockdown, n: kd.total }));
+          } else {
+            const aScore = rushScore(myStr, { attackerSize: size, defenderSize: input.dSize, unaware: input.unaware, fourLegs: input.fourLegs });
+            const ar = await d20(), dr = await d20();
+            const aOk = ar <= aScore, dOk = dr <= input.dStr;
+            const aTotal = aOk ? ar + table.knockdown : ar;
+            const res = !aOk && !dOk ? "bothFail" : aOk && !dOk ? "attacker" : !aOk ? "defender" : aTotal > dr ? "attacker" : aTotal < dr ? "defender" : "tie";
+            lines.push(i18n("AD2E.Maneuver.RushStr", { a: aScore, ar, bonus: signed(table.knockdown), d: input.dStr, dr }));
+            lines.push(i18n(`AD2E.Maneuver.Rush.${res}`));
+          }
+        } else if (kind === "shieldRush") {
+          const dx = await d20();
+          lines.push(i18n(dx <= myDex ? "AD2E.Maneuver.RushStay" : "AD2E.Maneuver.RushFall", { roll: dx, dex: myDex }));
+        }
+      }
+    }
+    const message = await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls,
+      content: `<p><strong>${esc(i18n(`AD2E.Maneuver.Kind.${kind}`))}</strong>${item ? ` (${esc(item.name)})` : ""}${AD2EActor.#targetText(targets)}</p>`
+        + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+    if (damage) {
+      const total = Math.max(damage.total, 1);
+      await damage.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this }), flags: { ad2e: { damage: total, targets } },
+        flavor: `${i18n(`AD2E.Maneuver.Kind.${kind}`)} ${i18n("AD2E.Weapon.Damage")}${AD2EActor.#targetText(targets)}` });
     }
     return message;
   }
@@ -1327,6 +1537,10 @@ export default class AD2EActor extends Actor {
     const kitOptions = this.#kitOptions("damage");
     const targets = this.#damageTargets(itemId);
     const lastCrit = AD2EActor.#takeCrit(this, itemId, preset);
+    // A sap (attack options): punching damage (25% lasting) and a knockout chance (module/attack-options.mjs).
+    const sapKey = `${this.uuid ?? this.id}.${itemId}`;
+    const sap = preset?.sap ?? AD2EActor.#lastSap.get(sapKey) ?? null;
+    AD2EActor.#lastSap.delete(sapKey);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
@@ -1412,7 +1626,7 @@ export default class AD2EActor extends Actor {
     const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       // Chat context menu: apply to selected tokens (module/health.mjs); non-lethal: half of it is temporary.
-      flags: { ad2e: { ...(input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets,
+      flags: { ad2e: { ...(sap ? { damage: total, damageKind: "punch" } : input.nonlethal ? { damage: total, damageKind: "nonlethal", temp: Math.floor(total / 2) } : { damage: total }), targets,
         // the dice of an elemental attack, for an elemental mage target of the same province (not with backstab)
         ...(elementDice && !(input.backstab && mult) ? { element: elementFlag(roll, [element], 1, total - roll.total) }
           : (weaponElement && !(input.backstab && mult) ? { element: elementFlag(roll, [weaponElement], 0, total - roll.total) } : {})) } },
@@ -1431,6 +1645,7 @@ export default class AD2EActor extends Actor {
         + (input.nonlethal ? `: ${game.i18n.format("AD2E.Nonlethal.DamageResult", { total, temp: Math.floor(total / 2) })}`
           : (total > roll.total ? `: ${total}${roll.total + knock < 1 ? ` (${i18n("AD2E.Weapon.Minimum")})` : ""}` : ""))
     });
+    if (sap) await this.#sapKnockout(total, sap, targets);
     // Poison on the missile or weapon (module/poison.mjs): one dose, a save request vs. poison for the targets (injected).
     const carrier = owned.length ? (owned[input.option] ?? owned[0]) : item;
     const poisonClass = await usePoisonDose(carrier);
@@ -1761,16 +1976,22 @@ export default class AD2EActor extends Actor {
     const input = await DialogV2.prompt({
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
+        // Called shots and opposed maneuvers (world setting "attackOptions", module/attack-options.mjs).
+        + (attackOptionsOn() ? this.#maneuverField(["normal", "calledShot", "disarm", "grab", "trap", ...(attack.melee ? ["block"] : [])], targets, attack.type) : "")
         + (attack.melee ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + AD2EActor.#combatModFields(targets, !attack.melee, attack.element)
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked,
         t51: AD2EActor.#combatModPicked(button.form), mountedMelee: attack.melee ? AD2EActor.#mountedMeleePicked(button.form.elements) : null,
-        ...readModifier(button.form) }) },
+        ...AD2EActor.#maneuverPicked(button.form.elements), ...readModifier(button.form) }) },
       rejectClose: false
     });
     if (!input) return;
+    if (OPPOSED.includes(input.maneuver)) {
+      return this.rollManeuver(input.maneuver, { item: attack.poisonItem ?? null, attack: { hit: attack.hit }, targets, ac: input.ac,
+        mod: input.mod, thac0: this.system.thac0.value });
+    }
     const thac0 = this.system.thac0.value;
     const needed = thac0 - input.ac;
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
@@ -1778,7 +1999,9 @@ export default class AD2EActor extends Actor {
     const mountedMelee = input.mountedMelee?.value ?? 0;
     // PHB Table 52 (optional): the attack's type (a natural attack's select, a weapon's type) against the target's armour.
     const t52 = table52ForTarget(attack.type, AD2EActor.#targetActor(targets));
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0), mod: input.mod }).evaluate();
+    const maneuverNotes = [];
+    const maneuverHit = this.#maneuverModifier(input, targets, maneuverNotes);
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
@@ -1798,6 +2021,7 @@ export default class AD2EActor extends Actor {
         + (t52 ? ` [${foundry.utils.escapeHTML?.(table52Text(t52)) ?? table52Text(t52)}]` : "")
         + (input.mountedMelee?.text ? ` [${input.mountedMelee.text}]` : "") + modifierText(input.mod, input.note)
         + (crit ? ` [${criticalText(crit)}]` : "")
+        + (maneuverNotes.length ? ` [${maneuverNotes.join("; ")}]` : "")
     });
     if (crit) await postCriticalCard(this, crit, targets);
     if (hit && AD2EActor.#autoDamageOn()) {
