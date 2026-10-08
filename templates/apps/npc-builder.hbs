@@ -1,0 +1,31 @@
+<section class="ad2e-award-xp ad2e-npc-builder">
+  <p class="ad2e-note">{{localize "AD2E.Npc.Hint"}}</p>
+  <div class="ad2e-check-grid">
+    <label>{{localize "AD2E.Npc.PurposeLabel"}} <select data-field="purpose">{{#each purposes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label>{{localize "AD2E.Npc.Race"}} <select data-field="race">{{#each races as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label>{{localize "AD2E.Npc.Class"}} <select data-field="cls">{{#each classes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label data-tooltip="{{localize 'AD2E.Npc.LevelHint'}}">{{localize "AD2E.Npc.Level"}} <input type="text" data-field="level" value="{{s.level}}" placeholder="{{levelDefault}}"></label>
+    <label>{{localize "AD2E.Npc.SexLabel"}} <select data-field="sex">{{#each sexes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    {{#if isTownsfolk}}<label>{{localize "AD2E.Npc.Profession"}} <select data-field="profession">{{#each professions as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    {{#if isSoldier}}<label>{{localize "AD2E.Npc.Soldier"}} <select data-field="soldier">{{#each soldiers as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    {{#if isOfficial}}<label>{{localize "AD2E.Npc.CultureLabel"}} <select data-field="culture">{{#each cultures as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label>{{localize "AD2E.Npc.Column"}} <select data-field="column">{{#each columns as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    {{#if isSage}}<label>{{localize "AD2E.Npc.Field"}} <select data-field="field">{{#each fields as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
+    <label>{{localize "AD2E.Npc.Name"}} <input type="text" data-field="name" value="{{s.name}}" placeholder="{{localize 'AD2E.Npc.NameHint'}}"></label>
+    <label>{{localize "AD2E.Creator.Destination"}} <select data-field="destination">{{#each destinations as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+  </div>
+  {{#with preview as |p|}}
+  <fieldset>
+    <legend>{{p.name}}</legend>
+    <p><strong>{{p.race}} {{p.cls}}</strong>, {{localize "AD2E.Npc.LevelN" n=p.level}} · {{p.sex}} · {{localize "AD2E.Npc.AgeN" n=p.age}} · {{p.alignment}}</p>
+    <p>{{#each p.abilities as |a|}}{{a.key}} {{a.value}}{{a.exceptional}}{{#unless @last}} · {{/unless}}{{/each}}</p>
+    <p>{{localize "AD2E.Npc.HpXp" hp=p.hp xp=p.xp}} · {{p.role}}</p>
+    <p class="ad2e-note">{{p.traits}} — {{p.looks}}</p>
+  </fieldset>
+  {{/with}}
+  <div class="ad2e-importer-controls ad2e-importer-actions">
+    <button type="button" data-action="roll"><i class="fa-solid fa-dice"></i> {{#if preview}}{{localize "AD2E.Npc.Reroll"}}{{else}}{{localize "AD2E.Npc.Roll"}}{{/if}}</button>
+    <button type="button" data-action="create"><i class="fa-solid fa-user-plus"></i> {{localize "AD2E.Npc.Create"}}</button>
+  </div>
+  <p class="ad2e-note"><a href="{{urls.professions}}" target="_blank" rel="noopener">Hirelings (DMG)</a> · <a href="{{urls.soldiers}}" target="_blank" rel="noopener">Soldiers (DMG)</a> · <a href="{{urls.titles}}" target="_blank" rel="noopener">Officials and Social Rank (DMG)</a> · <a href="{{urls.sages}}" target="_blank" rel="noopener">Sages (DMG)</a> · <a href="{{urls.personality}}" target="_blank" rel="noopener">Personality (DMG)</a></p>
+</section>

@@ -127,7 +127,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       classNotes: new StringField({ initial: "" }),
       classGroup: new StringField({ initial: "warrior", choices: Object.keys(AD2E.classGroups) }),
       alignment: new StringField({ initial: "n", choices: Object.keys(AD2E.alignments) }),
-      level: int(1, 1, 30),
+      // 0 = a 0-level NPC without a class (module/npc-builder.mjs: THAC0 20, the 0-level warrior saves).
+      level: int(1, 0, 30),
       xp: int(0, 0),
       abilities: new SchemaField(abilities),
       // stable: wounds bound (Death's Door); feeble: restored to 1 hp by a cure, until a day of rest; dead: explicit death
