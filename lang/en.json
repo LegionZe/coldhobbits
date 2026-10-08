@@ -3101,5 +3101,68 @@
       "unrest": "Local unrest (half speed)",
       "troops": "Troops sent away (half speed)"
     }
+  },
+  "AD2E.Npc": {
+    "Title": "Random NPC",
+    "Open": "Open the NPC builder",
+    "MenuHint": "Roll a random NPC as a character actor by purpose: townsfolk, soldier, adventurer, official, sage, spellcaster, spy or assassin.",
+    "Hint": "Leave a choice on Random to roll it. The level may be a number or dice (e.g. 1d4); 0 = no class.",
+    "PurposeLabel": "Purpose",
+    "Purpose": {
+      "townsfolk": "Townsfolk (profession)",
+      "soldier": "Soldier",
+      "adventurer": "Adventurer / henchman",
+      "official": "Official / noble",
+      "sage": "Sage",
+      "caster": "Spellcaster for hire",
+      "spy": "Spy",
+      "assassin": "Assassin"
+    },
+    "Race": "Race",
+    "Class": "Class",
+    "Level": "Level",
+    "LevelHint": "A number or dice; empty = the purpose's default.",
+    "SexLabel": "Sex",
+    "Sex": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "Profession": "Profession",
+    "Soldier": "Troop type",
+    "CultureLabel": "Titles",
+    "Culture": {
+      "european": "European (Table 66)",
+      "oriental": "Oriental (Table 67)",
+      "religious": "Religious (Table 68)"
+    },
+    "Column": "Column",
+    "Field": "Field of study",
+    "Name": "Name",
+    "NameHint": "Race and role if empty",
+    "Random": "Random",
+    "Roll": "Roll",
+    "Reroll": "Roll again",
+    "Create": "Create",
+    "NoClass": "(no class)",
+    "LevelN": "level {n}",
+    "AgeN": "age {n}",
+    "HpXp": "{hp} hp, {xp} XP",
+    "MoraleText": "base {hireling} as a hireling, {henchman} as a henchman",
+    "ProfessionProf": "proficiency for the trade added",
+    "WageText": "{wage} a month",
+    "Note": {
+      "purpose": "Purpose",
+      "role": "Role",
+      "traits": "Personality",
+      "looks": "Looks",
+      "size": "Height and weight",
+      "morale": "Morale",
+      "profession": "Profession",
+      "wage": "Wage",
+      "title": "Title",
+      "field": "Field of study",
+      "sageAbility": "Sage ability (d20 at or under)",
+      "costs": "Spell costs for hire (DMG Table 69 minimums)"
+    }
   }
 }

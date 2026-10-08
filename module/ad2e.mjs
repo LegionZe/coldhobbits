@@ -38,6 +38,7 @@ import { registerTravel } from "./travel.mjs";
 import EncounterTool from "./apps/encounter-tools.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
+import NpcBuilder from "./apps/npc-builder.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -86,6 +87,10 @@ Hooks.once("init", () => {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
   });
   registerEncounters();
+  // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
+  game.settings.registerMenu("ad2e", "npcBuilder", {
+    name: "AD2E.Npc.Title", label: "AD2E.Npc.Open", hint: "AD2E.Npc.MenuHint", icon: "fa-solid fa-user-plus", type: NpcBuilder, restricted: true
+  });
   // Stronghold construction progress with world time (module/construction.mjs).
   registerConstruction();
   // GM manual (Configure Settings, the Settings sidebar tab, or game.ad2e.manual()).
@@ -111,7 +116,8 @@ Hooks.once("init", () => {
     itemSaves: () => itemSavesTool(),
     falling: () => fallingDialog(),
     travel: () => new TravelPlanner().render({ force: true }),
-    encounters: () => new EncounterTool().render({ force: true })
+    encounters: () => new EncounterTool().render({ force: true }),
+    createNpc: () => new NpcBuilder().render({ force: true })
   };
 
   game.settings.register("ad2e", "encumbrance", {

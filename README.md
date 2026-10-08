@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.20)
+## Status (v1.0.21)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -479,6 +479,22 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   0-level soldiers the Mercenary stat block), with the Table 16 equipment from the compendiums (magical bonuses applied;
   equipment without an item, such as lances, polearm choices or mounts, as notes). Table 19 creatures use the Hirelings &
   Mounts actors where one exists, else a placeholder with the wiki link. The stronghold record gained construction in 1.0.20 (below). Multi-class characters get each class's followers.
+- Random NPC builder (GM tool "Random NPC": Configure Settings, the GM manual, or `game.ad2e.createNpc()`;
+  `python3 tools/build-npc-tables.py`: DMG Table 60 professions, Table 64 military occupations, Table 61 sage fields
+  ("Sage ability is equal to 14 plus 1d6"), Tables 66-68 titles, Table 69 spell costs, base morale ("The base morale for
+  henchmen is 12 and the base for a hireling is 10"), PHB Table 10 heights). The DMG gives no tables for NPC numbers ("the
+  physical appearance and abilities should be determined by the needs of the story"), so the builder follows the
+  owner's rulings: a character actor (race and class items, abilities, level, hit points, equipment), purposes
+  townsfolk / soldier / adventurer / official / sage / spellcaster for hire / spy / assassin, abilities 3d6 in order
+  raised to the race's and class's minimums, levels from a formula per purpose (townsfolk, soldiers, officials and sages
+  0, i.e. no class: THAC0 20 and the 0-level warrior saves; the character level may now be 0). Race, class, level, sex,
+  profession, troop type, title culture and column, and sage field can be chosen or left random. Implementation choices:
+  a random race allows the class; the alignment is one the class allows; age from PHB Table 11, height and weight from
+  Table 10; hit points per Hit Die with the Constitution adjustment (at least 1 a die; 1d6 at level 0); experience the
+  minimum for the level; a basic weapon and armour set per class (`CLASS_GEAR`), a soldier's equipment from his Table 64
+  hireling, a tradesman's nonweapon proficiency for the trade (`PROFESSION_PROFS`); personality (Table 70) and looks
+  (Personality (DMG)) as for patrons; the rest (title, wage, sage ability, base morale, Table 69 costs for casters) in
+  the Bio tab notes. Spells are not chosen.
 - Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
   Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
   tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"
@@ -929,5 +945,6 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
+- Al-Qadim station for characters ("Station in Life (AA)"; owner's request, next).
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).
