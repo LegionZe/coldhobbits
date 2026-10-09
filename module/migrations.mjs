@@ -64,3 +64,46 @@ export async function migrateKitMechanics() {
     }
   }
 }
+
+/**
+ * 1.0.27 filled the weapon limits of the "Classes" and "Class Kits" compendiums (tools/build-kit-weapons.py). Class and
+ * kit items copied into the world or onto characters before that have empty lists: fill them once from the compendium
+ * item with the same identifier (only items whose weapon lists are all empty; world setting `weaponLimitsMigrated`).
+ */
+const KIT_WEAPON_KEYS = ["allowedWeapons", "extraWeapons", "forbiddenWeapons", "initialWeapons", "initialForbiddenWeapons"];
+
+export function weaponLimitPatch(item, src) {
+  if (!src) return null;
+  const keys = item.type === "kit" ? KIT_WEAPON_KEYS : ["allowedWeapons"];
+  if (keys.some(k => (item.system[k] ?? []).length)) return null;
+  if (!keys.some(k => (src[k] ?? []).length)) return null;
+  const update = { _id: item.id };
+  for (const k of keys) update[`system.${k}`] = [...(src[k] ?? [])];
+  if (item.type === "kit") Object.assign(update, { "system.weaponsWithinClass": !!src.weaponsWithinClass, "system.weaponNote": src.weaponNote ?? "" });
+  return update;
+}
+
+export async function migrateWeaponLimits() {
+  let done = false;
+  try { done = game.settings.get("ad2e", "weaponLimitsMigrated"); } catch { return; }
+  if (done) return;
+  const sources = new Map();
+  for (const [pack, type] of [["ad2e.classes", "class"], ["ad2e.kits", "kit"]]) {
+    for (const d of (await game.packs.get(pack)?.getDocuments()) ?? []) sources.set(`${type}:${d.system.identifier}`, d.system);
+  }
+  const patch = i => (["class", "kit"].includes(i.type) ? weaponLimitPatch(i, sources.get(`${i.type}:${i.system.identifier}`)) : null);
+  const world = game.items.map(patch).filter(Boolean);
+  if (world.length) await Item.updateDocuments(world);
+  for (const actor of game.actors) {
+    const updates = actor.items.map(patch).filter(Boolean);
+    if (updates.length) {
+      await actor.updateEmbeddedDocuments("Item", updates);
+      console.log(`AD2E | Added class and kit weapon limits to ${actor.name}`);
+    }
+  }
+  await game.settings.set("ad2e", "weaponLimitsMigrated", true);
+}
+
+export function registerMigrationSettings() {
+  game.settings.register("ad2e", "weaponLimitsMigrated", { scope: "world", config: false, type: Boolean, default: false });
+}

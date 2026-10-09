@@ -99,7 +99,32 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "arquebus",
+      "blowgun",
+      "short-bow",
+      "composite-short-bow",
+      "long-bow",
+      "composite-long-bow",
+      "hand-crossbow",
+      "light-crossbow",
+      "heavy-crossbow",
+      "pellet-bow",
+      "cho-ku-no",
+      "harpoon",
+      "mancatcher",
+      "scourge",
+      "sling",
+      "staff-sling",
+      "whip"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

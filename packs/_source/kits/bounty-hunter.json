@@ -77,7 +77,16 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "*"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": "non-thief weapons: two slots"
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

@@ -98,7 +98,32 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "blowgun",
+      "short-bow",
+      "composite-short-bow",
+      "long-bow",
+      "composite-long-bow",
+      "dagger-or-dirk",
+      "dart",
+      "hand-or-throwing-axe",
+      "javelin",
+      "knife",
+      "quarterstaff",
+      "sling",
+      "spear",
+      "staff-sling",
+      "long-sword",
+      "short-sword",
+      "trident"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

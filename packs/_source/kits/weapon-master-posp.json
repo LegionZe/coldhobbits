@@ -88,7 +88,14 @@
         "rank": "upper",
         "title": ""
       }
-    ]
+    ],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

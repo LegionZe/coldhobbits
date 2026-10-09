@@ -91,7 +91,20 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "short-bow",
+      "composite-short-bow",
+      "long-bow",
+      "composite-long-bow",
+      "dart"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": true,
+    "weaponNote": "used only in competition"
   },
   "effects": [],
   "folder": "7D8JcDig9FfaAQzQ",

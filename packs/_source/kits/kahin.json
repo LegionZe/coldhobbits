@@ -80,7 +80,23 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "club",
+      "dart",
+      "spear",
+      "light-horse-lance",
+      "jambiya",
+      "scimitar",
+      "sling",
+      "quarterstaff"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "InEiVfQCHSnHco4F",

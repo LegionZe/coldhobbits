@@ -88,7 +88,19 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [
+      "stiletto",
+      "main-gauche",
+      "rapier",
+      "sabre"
+    ],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

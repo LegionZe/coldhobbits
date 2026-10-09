@@ -26,7 +26,17 @@
     "opposition": "",
     "races": [],
     "url": "https://adnd2e.fandom.com/wiki/Druid_(PHB)",
-    "notes": ""
+    "notes": "",
+    "allowedWeapons": [
+      "club",
+      "sickle",
+      "dart",
+      "spear",
+      "dagger-or-dirk",
+      "scimitar",
+      "sling",
+      "quarterstaff"
+    ]
   },
   "effects": [],
   "folder": "luHzNVcLUreJFOIC",

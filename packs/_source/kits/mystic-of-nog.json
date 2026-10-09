@@ -88,7 +88,21 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [
+      "sling",
+      "dart",
+      "quarterstaff",
+      "dagger-or-dirk",
+      "jambiya",
+      "knife"
+    ],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": "more weapons with level, as the DM decides"
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",
