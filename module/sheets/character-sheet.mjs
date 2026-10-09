@@ -1,3 +1,4 @@
+import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
 import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
 import { neutralizePoison, poisonContext } from "../poison.mjs";
 import { AD2E, armorSummary, equipmentSummary, schoolStems } from "../config.mjs";
@@ -232,6 +233,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       neutralizePoison: CharacterSheet.onNeutralizePoison,
       rollStartingAge: CharacterSheet.onRollStartingAge,
       rollHeightWeight: CharacterSheet.onRollHeightWeight,
+      addLanguage: CharacterSheet.onAddLanguage,
+      removeLanguage: CharacterSheet.onRemoveLanguage,
       rollMaxAge: CharacterSheet.onRollMaxAge,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
@@ -325,6 +328,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         this.actor.update({ "system.followers.stronghold.project": p });
       });
     }
+    // Languages (module/languages.mjs): nameless fields writing the whole `known` array.
+    for (const input of this.element?.querySelectorAll?.(".ad2e-language-field") ?? []) {
+      input.addEventListener("change", event => {
+        const el = event.currentTarget;
+        const known = [...(this.actor.system.languages?.known ?? [])].map(k => ({ ...k }));
+        const entry = known[Number(el.dataset.index)];
+        if (!entry) return;
+        entry[el.dataset.field] = el.type === "checkbox" ? el.checked : el.value;
+        this.actor.update({ "system.languages.known": known });
+      });
+    }
     for (const input of this.element?.querySelectorAll?.("input.ad2e-multi-field") ?? []) {
       input.addEventListener("change", event => {
         const el = event.currentTarget;
@@ -410,6 +424,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
+    context.languages = this._languagesContext(sys);
     context.henchmen = this._henchmenContext();
     context.followers = followersContext(this.actor);
     context.castle = constructionContext(this.actor);
@@ -1321,6 +1336,44 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollStartingAge() { return rollStartingAge(this.actor); }
 
   static onRollHeightWeight() { return rollBodyWeight(this.actor, { height: true }); }
+
+  /** Add the language typed in the Languages section (module/languages.mjs; GM only when the world says "learn"). */
+  static onAddLanguage(event, target) {
+    const box = target.closest(".ad2e-languages");
+    const input = box?.querySelector(".ad2e-language-new");
+    const name = input?.value.trim();
+    if (!name) return null;
+    const kind = box.querySelector(".ad2e-language-kind")?.value === "ancient" ? "ancient" : "modern";
+    const known = [...(this.actor.system.languages?.known ?? [])].map(k => ({ ...k }));
+    known.push({ name, kind, literate: false });
+    return this.actor.update({ "system.languages.known": known });
+  }
+
+  static onRemoveLanguage(event, target) {
+    const index = Number(target.dataset.index);
+    const known = [...(this.actor.system.languages?.known ?? [])].map(k => ({ ...k }));
+    known.splice(index, 1);
+    return this.actor.update({ "system.languages.known": known });
+  }
+
+  /** Languages section of the Proficiencies tab (module/languages.mjs). */
+  _languagesContext(sys) {
+    const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
+    const settings = languageSettings();
+    const raceId = sys.raceInfo?.raceItem?.system.identifier ?? "";
+    const st = languageStatus(sys, this.actor.items, raceId, settings);
+    const canChange = this.isEditable && (settings.start === "start" || !!game.user?.isGM);
+    const count = (key, c) => ({ text: i18n(`AD2E.Language.Count.${key}`, { used: c.used, allowed: c.allowed }), over: c.used > c.allowed });
+    return {
+      native: st.native, common: st.common, canChange, editable: this.isEditable,
+      rows: st.rows.map(r => ({ ...r, kindLabel: i18n(`AD2E.Language.Kind.${r.kind}`),
+        literateLabel: i18n(r.kind === "ancient" ? "AD2E.Language.ReadsAncient" : "AD2E.Language.Literate") })),
+      modern: count(settings.mode === "table4" ? "table4" : "modern", st.modern), ancient: count("ancient", st.ancient),
+      literate: count("literate", st.literate), duplicate: st.issues.includes("duplicate"),
+      learn: settings.start === "learn", suggestions: languageSuggestions(raceId, settings),
+      nativePlaceholder: st.native.set ? "" : st.native.name
+    };
+  }
 
   static onRollMaxAge() { return rollMaxAge(this.actor); }
 

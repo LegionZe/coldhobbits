@@ -1,3 +1,4 @@
+import { languageSettings } from "../languages.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
 import { hpState } from "../health.mjs";
 import { heatPenalty, heatRuleOn } from "../aq-rules.mjs";
@@ -261,6 +262,18 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       // Maximum age (PHB Table 11), rolled by the GM and shown to the GM only (module/aging.mjs).
       maxAge: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      // Languages (module/languages.mjs): native (blank = the race's own tongue or the common language), literacy ticks for
+      // the native and the world's common language, and the other languages known (modern or ancient).
+      languages: new SchemaField({
+        native: new StringField({ required: true, blank: true, initial: "" }),
+        nativeLiterate: new BooleanField({ initial: false }),
+        commonLiterate: new BooleanField({ initial: false }),
+        known: new ArrayField(new SchemaField({
+          name: new StringField({ required: true, blank: true, initial: "" }),
+          kind: new StringField({ required: true, initial: "modern", choices: ["modern", "ancient"] }),
+          literate: new BooleanField({ initial: false })
+        }))
+      }),
       biography: new HTMLField()
     };
   }
@@ -719,7 +732,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
 
   /**
    * Proficiency slots (PHB Table 34): initial + one per level evenly divisible by the rate, plus kit
-   * bonus slots; nonweapon slots also add the Intelligence "number of languages" (Table 4). Owned
+   * bonus slots; nonweapon slots also add the Intelligence "number of languages" (Table 4) unless the world setting
+   * `languageMode` is "table4". Owned
    * proficiency items use slots unless granted by a kit (`grantedBy`); a nonweapon proficiency from a
    * group outside the class's Table 38 groups costs one additional slot.
    * Skills & Powers (world setting "spWeapons"): costs, validity and the group, style, armour and shield kinds come from
@@ -834,7 +848,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     }
     const available = {
       weapon: base.weapon + (kit?.bonusSlots.weapon ?? 0),
-      nonweapon: base.nonweapon + (this.abilityData.int.languages ?? 0) + (kit?.bonusSlots.nonweapon ?? 0)
+      // Table 4 languages add nonweapon slots unless the world counts languages by Table 4 (module/languages.mjs).
+      nonweapon: base.nonweapon + (languageSettings().mode === "table4" ? 0 : (this.abilityData.int.languages ?? 0)) + (kit?.bonusSlots.nonweapon ?? 0)
     };
     // Skills & Powers effects of the valid purchases.
     const valid = kind => sp ? entries.filter(e => e.item.system.kind === kind && !e.invalid.length) : [];

@@ -3178,5 +3178,39 @@
     "Height": "Height (in)",
     "Roll": "Roll (Table 10)",
     "RollHint": "Roll height and body weight on PHB Table 10 (base for the race and column plus the modifier dice)."
+  },
+  "AD2E.Language": {
+    "Section": "Languages",
+    "SectionHint": "Native language free; further modern languages by Table 4 or Languages, Modern slots (world setting); ancient languages by Languages, Ancient slots; reading and writing by Reading/Writing slots (one language per slot).",
+    "Native": "Native",
+    "NativeHint": "Spoken free (Intelligence (PHB)). Empty: the race's own tongue, or the common language.",
+    "CommonFree": "common language (free)",
+    "CommonRowHint": "The world's common language (Configure Settings); every character speaks it free.",
+    "Literate": "Reads/writes",
+    "ReadsAncient": "Reads/writes (not spoken)",
+    "Kind": { "modern": "Modern", "ancient": "Ancient" },
+    "Outside": "not a racial initial language",
+    "OutsideHint": "Not in the race's initial list (PHB race page) or the campaign list: allowed only if the DM agrees.",
+    "Duplicate": "A language is listed twice (or repeats the native or common language): the copy is not counted.",
+    "Remove": "Remove the language",
+    "Add": "Add",
+    "AddPlaceholder": "Language (type or pick)",
+    "LearnNote": "learned in play: the GM adds them",
+    "Count": {
+      "modern": "Modern: {used} / {allowed} (Languages, Modern slots)",
+      "table4": "Modern: {used} / {allowed} (Table 4)",
+      "ancient": "Ancient: {used} / {allowed} (Languages, Ancient slots)",
+      "literate": "Literate: {used} / {allowed} (Reading/Writing slots)"
+    },
+    "ModeSetting": "Languages: counting",
+    "ModeHint": "Proficiency slots: Intelligence Table 4 adds nonweapon slots and each modern language beyond the native (and common) one takes a Languages, Modern slot. Table 4: the Table 4 number of additional languages is free and adds no slots. Reload needed.",
+    "Mode": { "slots": "Proficiency slots (Table 4 adds nonweapon slots)", "table4": "Table 4 number of languages (no extra slots)" },
+    "StartSetting": "Languages: when chosen",
+    "StartHint": "Intelligence (PHB) leaves it to the DM: known at the start (players pick them) or only a maximum learned in play (only the GM adds or removes them).",
+    "Start": { "start": "Known at the start", "learn": "Maximum learned in play (GM adds)" },
+    "CommonSetting": "Languages: common language",
+    "CommonHint": "Spoken by every character free of charge (e.g. Common, or Midani for Al-Qadim). Empty: none.",
+    "ListSetting": "Languages: campaign list",
+    "ListHint": "The campaign's languages, separated by commas; offered when adding a language (besides the race's initial languages and Midani)."
   }
 }
