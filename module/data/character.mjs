@@ -174,6 +174,11 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       // Table 10) counts toward a ridden animal's load.
       animals: new SchemaField({ actors: new ArrayField(new StringField()), riding: new StringField({ required: true, blank: true, initial: "" }) }),
       bodyWeight: new NumberField({ min: 0, nullable: true, initial: null }),
+      // Gender (owner's ruling, 1.0.23: male, female, non-binary, agender) and the PHB Table 10 column used for base
+      // height and weight ("" = the male or female column for those genders, else asked when rolling); height in inches.
+      gender: new StringField({ required: true, blank: true, initial: "", choices: ["", "male", "female", "non-binary", "agender"] }),
+      build: new StringField({ required: true, blank: true, initial: "", choices: ["", "male", "female"] }),
+      height: new NumberField({ min: 0, nullable: true, initial: null }),
       // Elemental mage kit (Al-Qadim): the chosen province (module/elemental.mjs).
       element: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
       // Sorcerer kit (Al-Qadim): the second chosen province (the first is `element`).

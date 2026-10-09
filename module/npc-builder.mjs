@@ -155,11 +155,8 @@ export function npcNotes(spec, t = (k, d) => k) {
   const line = (k, v) => (v || v === 0 ? `${t(`AD2E.Npc.Note.${k}`)}: ${v}` : null);
   return [
     line("purpose", t(`AD2E.Npc.Purpose.${spec.purpose}`)), line("role", spec.role),
-    spec.gender ? line("gender", t(`AD2E.Npc.Gender.${spec.gender}`)) : null,
     line("traits", `${spec.traits.general}, ${spec.traits.specific}`),
     line("looks", Object.values(spec.looks).join(", ")),
-    line("size", [spec.height ? `${Math.floor(spec.height / 12)}' ${spec.height % 12}"` : "", spec.weight ? `${spec.weight} lb` : ""].filter(Boolean).join(", ")
-      + (spec.build && (spec.height || spec.weight) ? ` (${t(`AD2E.Npc.Build.${spec.build}`)})` : "")),
     line("morale", t("AD2E.Npc.MoraleText", { hireling: NPC.morale.hireling, henchman: NPC.morale.henchman })),
     spec.profession?.prof ? line("profession", t("AD2E.Npc.ProfessionProf")) : null,
     spec.soldier ? line("wage", t("AD2E.Npc.WageText", { wage: spec.soldier.wage })) : null,
@@ -182,5 +179,6 @@ export function npcActorData(spec, docs, t) {
   const abilities = Object.fromEntries(ABILITIES.map(k => [k, k === "str" ? { value: spec.abilities[k], exceptional: spec.exceptional } : { value: spec.abilities[k] }]));
   return { name: spec.name, type: "character", items,
     system: { level: spec.level, xp: spec.xp, alignment: spec.alignment, abilities, age: spec.age, bodyWeight: spec.weight,
+      gender: spec.gender ?? "", build: spec.build ?? "", height: spec.height,
       hp: { value: spec.hp, max: spec.hp }, biography: npcNotes(spec, t) } };
 }

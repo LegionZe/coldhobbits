@@ -12,7 +12,7 @@ import { roundRate, TR as TRAVEL_RULES } from "../travel.mjs";
 import { learnChance, rollLearnSpell } from "../learn-spells.mjs";
 import { isElementalMage, isSorcerer, PROVINCES } from "../elemental.mjs";
 import { daysSinceAttempt, familiarDeath, familiarInfo, findFamiliar, FAMILIAR, isFamiliar } from "../familiars.mjs";
-import { animalsInfo, isAnimal, pushText, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
+import { animalsInfo, feetInches, isAnimal, pushText, raceHeight, raceWeight, refreshAnimals, rollBodyWeight } from "../animals.mjs";
 import { containerContext, dragItemRow, dropOnContainer, guardDraggableInputs, inContainer, insideText } from "./containers-ui.mjs";
 import { SP, weaponFamiliarity } from "../sp-weapons.mjs";
 import { dualClassOn, dualEligibility } from "../dual-class.mjs";
@@ -231,6 +231,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       recoverTemp: CharacterSheet.onRecoverTemp,
       neutralizePoison: CharacterSheet.onNeutralizePoison,
       rollStartingAge: CharacterSheet.onRollStartingAge,
+      rollHeightWeight: CharacterSheet.onRollHeightWeight,
       rollMaxAge: CharacterSheet.onRollMaxAge,
       hpRest: CharacterSheet.onHpRest,
       bindWounds: CharacterSheet.onBindWounds,
@@ -441,6 +442,17 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         startFormula: startingAgeFormula(raceId) ?? "", isGM: !!game.user?.isGM, maxFormula: maxAgeFormula(raceId) ?? "",
         category: info ? game.i18n.localize(`AD2E.Aging.Category.${info.key}`) : "", changes,
         limits: info ? game.i18n.format("AD2E.Aging.Limits", { middle: info.limits[0], old: info.limits[1], venerable: info.limits[2] }) : "" };
+    }
+    // Gender and PHB Table 10 column (owner's ruling, 1.0.23), height and body weight (module/animals.mjs).
+    {
+      const raceId = sys.raceInfo?.raceItem?.system.identifier ?? "";
+      const i18n = k => game.i18n.localize(k);
+      context.body = {
+        genders: { "": "—", ...Object.fromEntries(["male", "female", "non-binary", "agender"].map(k => [k, i18n(`AD2E.Gender.${k}`)])) },
+        builds: { "": i18n("AD2E.Gender.BuildAuto"), male: i18n("AD2E.Gender.Build.male"), female: i18n("AD2E.Gender.Build.female") },
+        feet: feetInches(sys.height), weight: sys.bodyWeight ?? "",
+        canRoll: this.isEditable && !!(raceHeight(raceId) || raceWeight(raceId))
+      };
     }
     context.hpStatus = { state: st.state, label: st.state && st.state !== "ok" ? game.i18n.localize(`AD2E.Health.State.${st.state}`) : "",
       bleeding: st.bleeding, stable: sys.hp.stable && st.state === "unconscious", feeble: sys.hp.feeble, dead: st.state === "dead",
@@ -1307,6 +1319,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onNeutralizePoison() { return neutralizePoison(this.actor); }
 
   static onRollStartingAge() { return rollStartingAge(this.actor); }
+
+  static onRollHeightWeight() { return rollBodyWeight(this.actor, { height: true }); }
 
   static onRollMaxAge() { return rollMaxAge(this.actor); }
 

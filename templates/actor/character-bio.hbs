@@ -186,5 +186,14 @@
     {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
     {{#if aging.isGM}}<label data-tooltip="{{localize 'AD2E.Aging.MaxHint'}}">{{localize "AD2E.Aging.MaxAge"}} <input type="number" name="system.maxAge" value="{{system.maxAge}}" min="0" step="1" placeholder="—"></label>
     {{#if aging.maxFormula}}<button type="button" data-action="rollMaxAge" data-tooltip="{{aging.maxFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollMax"}}</button>{{/if}}{{/if}}</div>
+  {{#with body as |b|}}
+  <div class="form-group ad2e-body"><label>{{localize "AD2E.Gender.Label"}}</label>
+    <select name="system.gender">{{selectOptions b.genders selected=@root.system.gender}}</select>
+    <label data-tooltip="{{localize 'AD2E.Gender.BuildHint'}}">{{localize "AD2E.Gender.BuildLabel"}} <select name="system.build">{{selectOptions b.builds selected=@root.system.build}}</select></label>
+    <label>{{localize "AD2E.Gender.Height"}} <input type="number" name="system.height" value="{{@root.system.height}}" min="0" step="1" placeholder="—"></label>
+    {{#if b.feet}}<span class="ad2e-weapon-meta">{{b.feet}}</span>{{/if}}
+    <span class="ad2e-weapon-meta" data-tooltip="{{localize 'AD2E.Animal.BodyWeightHint'}}">{{localize "AD2E.Animal.BodyWeight"}}: {{#if b.weight}}{{b.weight}}{{else}}—{{/if}}</span>
+    {{#if b.canRoll}}<button type="button" data-action="rollHeightWeight" data-tooltip="{{localize 'AD2E.Gender.RollHint'}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Gender.Roll"}}</button>{{/if}}</div>
+  {{/with}}
   <textarea class="ad2e-biography" name="system.biography">{{system.biography}}</textarea>
 </section>
