@@ -55,8 +55,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   race-tables.mjs (build-race-data.py). Pack animals (role "pack") are `PACK` in build-hireling-data.py.
   Gender / Table 10 column / height (owner's ruling, 1.0.23): character `system.gender` ("" | male | female | non-binary |
   agender), `system.build` ("" | male | female: the Table 10 column; "" = the gender's when male/female), `system.height`
-  (inches); `tableColumn`, `raceHeight` (NPC_TABLES.heights), `feetInches`, `rollBodyWeight(actor, { height })` (asks the
-  column when unset) in animals.mjs; Bio tab row (`context.body`, action `rollHeightWeight`); lang block `AD2E.Gender`.
+  (inches); `tableColumn`, `raceHeight` (NPC_TABLES.heights), `feetInches`, `rollBodyWeight(actor, { height })` (always asks
+  the column, owner's ruling 1.0.24; recorded column = default button, choice saved to `build`) in animals.mjs; Bio tab row (`context.body`, action `rollHeightWeight`); lang block `AD2E.Gender`.
   Pushing a mount (Movement (DMG)): `MOUNT_PUSH` in movement-tables.mjs (build-movement-tables.py `build_push`, regex-checked);
   `pushMount` (monster sheet button, roles mount/pack), `pushStatus`, `pushModifier`, `pushText` in animals.mjs; monster
   `system.push` { lastDay, streak, status: "" | lame | spent | dead, until (world time) }.
