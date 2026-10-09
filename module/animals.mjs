@@ -42,13 +42,17 @@ export function riderWeight(character) {
   return { body, gear, total: round((body ?? 0) + gear), missingBody: body === null };
 }
 
-/** The character riding a monster actor (world actors), or null. */
+/**
+ * The character riding a monster actor (world actors), or null. Only mounts, pack animals and pets (`isAnimal`) are
+ * looked up, and the collection is walked without copying (1.0.28: every monster's preparation scanned every actor).
+ */
 export function riderOf(monster, actors) {
+  if (!monster?.uuid || !isAnimal(monster)) return null;
   let list = actors;
   try { list ??= game.actors; } catch { list = null; }
-  const uuid = monster?.uuid;
-  if (!uuid || !list) return null;
-  return [...list].find(a => a?.type === "character" && a.system?.animals?.riding === uuid) ?? null;
+  if (!list) return null;
+  for (const a of list) if (a?.type === "character" && a.system?.animals?.riding === monster.uuid) return a;
+  return null;
 }
 
 /** Display data for a character's animals: load (own + this character when it rides the animal), band and movement. */
