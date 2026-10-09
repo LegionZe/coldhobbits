@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.22)
+## Status (v1.0.23)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -156,6 +156,12 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Falling damage (1.0.13): "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6" (Special Damage (DMG)
   rev 238117; per full 10 feet). GM tool `game.ad2e.falling()`; the damage message carries `notAttack`, so applying it
   makes no massive-damage check (that rule is for "a single attack"; implementation choice).
+- Gender, height and weight (1.0.23; owner's ruling): the Bio tab has Gender (male, female, non-binary, agender), the
+  PHB Table 10 column used for base height and weight (male or female; "Automatic" uses the column of a male or female
+  gender, and for other genders the roll asks), Height in inches (shown in feet and inches) and the body weight (entered
+  on the Equipment tab). "Roll (Table 10)" rolls height and weight: base for the race and column plus the race's
+  modifier dice (Table 10 heights from build-npc-tables.py, weights from build-race-data.py). The NPC builder fills these
+  fields on the actors it creates.
 - Ageing (1.0.14; owner's rulings: automatic, starting age roll, GM maximum age): PHB Tables 11 and 12 ("Character Race
   Tables (PHB)" rev 167919) are generated into `module/rules/aging-tables.mjs` by `python3 tools/build-aging-tables.py`;
   the Table 12 footnotes are parsed and asserted, Table 12 ages are checked against 1/2, 2/3 and all of the Table 11 base
@@ -378,7 +384,7 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   animal the character rides (one at a time): its load then includes the rider, "When calculating a mount's load, be
   sure to include the weight of the rider!" (Encumbrance (PHB)), i.e. the character's body weight plus everything the
   character carries (encumbrance load, clothing included). Body weight is entered on the Equipment tab or rolled on PHB
-  Table 10 (base for the race and sex plus the modifier dice; generated into race-tables.mjs). Animals are loaded with
+  Table 10 (base for the race and the character's Table 10 column plus the modifier dice; generated into race-tables.mjs). Animals are loaded with
   items as before (saddle bags and other containers count while carried); "up to a maximum of twice their normal load",
   beyond which the animal cannot move. The animal's own sheet shows its rider. While riding, the sheet footer and the
   movement figure show the mount's movement with the rider in its load, per round (tens of yards outdoors) and per day:

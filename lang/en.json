@@ -2017,12 +2017,14 @@
     "BodyWeight": "Body weight (lb)",
     "BodyWeightHint": "The character's own weight (PHB Table 10). It counts toward the load of an animal the character rides.",
     "RollBodyWeight": "Roll (Table 10)",
-    "RollHint": "PHB Table 10: base weight for the race and sex plus the modifier dice.",
+    "RollHint": "PHB Table 10: base weight for the race and the character's Table 10 column (Bio tab) plus the modifier dice.",
     "BodyWeightTitle": "Body weight (PHB Table 10)",
     "BodyWeightText": "{race}: base {male} lb (male) or {female} lb (female), plus {dice}.",
     "BodyWeightChat": "Body weight (PHB Table 10): {name}, {sex}",
-    "Male": "Male",
-    "Female": "Female",
+    "HeightText": "{race}: base height {male} in (male) or {female} in (female), plus {dice}.",
+    "HeightWeightTitle": "Height and weight (PHB Table 10)",
+    "ColumnAsk": "Which Table 10 column? (Set it on the Bio tab to skip this question.)",
+    "HeightChat": "Height (PHB Table 10): {name}, {sex}: {result}",
     "NoRaceWeight": "No PHB Table 10 weight for this race: enter the body weight by hand.",
     "RiderWeight": "Weight as a rider",
     "RiderParts": "body {body} + gear {gear} lb",
@@ -3122,20 +3124,7 @@
     "Class": "Class",
     "Level": "Level",
     "LevelHint": "A number or dice; empty = the purpose's default.",
-    "GenderLabel": "Gender",
-    "Gender": {
-      "male": "Male",
-      "female": "Female",
-      "non-binary": "Non-binary",
-      "agender": "Agender"
-    },
-    "BuildLabel": "Height & weight",
     "BuildHint": "PHB Table 10 column for the race's base height and weight. Automatic: the male or female column for those genders, otherwise rolled 50/50.",
-    "BuildAuto": "Automatic",
-    "Build": {
-      "male": "male column",
-      "female": "female column"
-    },
     "Profession": "Profession",
     "Soldier": "Troop type",
     "CultureLabel": "Titles",
@@ -3162,10 +3151,8 @@
     "Note": {
       "purpose": "Purpose",
       "role": "Role",
-      "gender": "Gender",
       "traits": "Personality",
       "looks": "Looks",
-      "size": "Height and weight",
       "morale": "Morale",
       "profession": "Profession",
       "wage": "Wage",
@@ -3174,5 +3161,22 @@
       "sageAbility": "Sage ability (d20 at or under)",
       "costs": "Spell costs for hire (DMG Table 69 minimums)"
     }
+  },
+  "AD2E.Gender": {
+    "Label": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "non-binary": "Non-binary",
+    "agender": "Agender",
+    "BuildLabel": "Height & weight",
+    "BuildHint": "PHB Table 10 column for the race's base height and weight (the table has male and female columns). Automatic: the male or female column for those genders; for others the roll asks.",
+    "BuildAuto": "Automatic",
+    "Build": {
+      "male": "male column",
+      "female": "female column"
+    },
+    "Height": "Height (in)",
+    "Roll": "Roll (Table 10)",
+    "RollHint": "Roll height and body weight on PHB Table 10 (base for the race and column plus the modifier dice)."
   }
 }

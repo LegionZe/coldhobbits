@@ -10,6 +10,7 @@
  */
 import { RACE_WEIGHT } from "./rules/race-tables.mjs";
 import { MOUNT_PUSH } from "./rules/movement-tables.mjs";
+import { NPC_TABLES } from "./rules/npc-tables.mjs";
 
 const resolve = uuid => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(uuid, { strict: false }) ?? null;
 const round = n => Math.round(n * 10) / 10;
@@ -195,26 +196,62 @@ export function raceWeight(raceId) {
   return RACE_WEIGHT[raceId] ?? null;
 }
 
-/** Roll body weight on PHB Table 10 (base for the chosen sex + the race's modifier dice) and store it. */
-export async function rollBodyWeight(actor) {
-  const raceId = actor.system.raceInfo?.raceItem?.system.identifier;
-  const row = raceWeight(raceId);
-  if (!row) {
+/** PHB Table 10 heights for a race (inches): { male, female, dice } or null. */
+export function raceHeight(raceId) {
+  return NPC_TABLES.heights[raceId] ?? null;
+}
+
+/** The PHB Table 10 column of a character (pure): the chosen one, else a male or female gender's, else null. */
+export function tableColumn(sys) {
+  if (sys?.build === "male" || sys?.build === "female") return sys.build;
+  return sys?.gender === "male" || sys?.gender === "female" ? sys.gender : null;
+}
+
+/** Height in inches as feet and inches (pure). */
+export function feetInches(inches) {
+  if (!(inches > 0)) return "";
+  const n = Math.round(inches);
+  return `${Math.floor(n / 12)}' ${n % 12}"`;
+}
+
+/**
+ * Roll body weight (and with `height`, height) on PHB Table 10: the base for the character's Table 10 column
+ * (`tableColumn`; asked when not set) plus the race's modifier dice, and store them.
+ */
+export async function rollBodyWeight(actor, { height = false } = {}) {
+  const race = actor.system.raceInfo?.raceItem;
+  const raceId = race?.system.identifier;
+  const row = raceWeight(raceId), hrow = height ? raceHeight(raceId) : null;
+  if (!row && !hrow) {
     ui.notifications.warn(game.i18n.localize("AD2E.Animal.NoRaceWeight"));
     return null;
   }
   const i18n = k => game.i18n.localize(k);
-  const sex = await foundry.applications.api.DialogV2.wait({
-    window: { title: i18n("AD2E.Animal.BodyWeightTitle") },
-    content: `<p>${game.i18n.format("AD2E.Animal.BodyWeightText", { race: actor.system.raceInfo.raceItem.name, male: row.male,
-      female: row.female, dice: row.dice })}</p>`,
-    buttons: [{ action: "male", label: i18n("AD2E.Animal.Male"), default: true }, { action: "female", label: i18n("AD2E.Animal.Female") }],
-    rejectClose: false
-  });
-  if (!sex) return null;
-  const roll = await new Roll(`${row[sex]} + ${row.dice}`).evaluate();
-  await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }),
-    flavor: game.i18n.format("AD2E.Animal.BodyWeightChat", { name: actor.name, sex: i18n(`AD2E.Animal.${sex === "male" ? "Male" : "Female"}`) }) });
-  await actor.update({ "system.bodyWeight": roll.total });
-  return roll.total;
+  let column = tableColumn(actor.system);
+  if (!column) {
+    const text = [row ? game.i18n.format("AD2E.Animal.BodyWeightText", { race: race.name, male: row.male, female: row.female, dice: row.dice }) : "",
+      hrow ? game.i18n.format("AD2E.Animal.HeightText", { race: race.name, male: hrow.male, female: hrow.female, dice: hrow.dice }) : ""]
+      .filter(Boolean).map(x => `<p>${x}</p>`).join("");
+    column = await foundry.applications.api.DialogV2.wait({
+      window: { title: i18n(height ? "AD2E.Animal.HeightWeightTitle" : "AD2E.Animal.BodyWeightTitle") },
+      content: `${text}<p>${i18n("AD2E.Animal.ColumnAsk")}</p>`,
+      buttons: [{ action: "male", label: i18n("AD2E.Gender.Build.male"), default: true }, { action: "female", label: i18n("AD2E.Gender.Build.female") }],
+      rejectClose: false
+    });
+  }
+  if (!column) return null;
+  const update = {};
+  const speaker = ChatMessage.getSpeaker({ actor }), col = i18n(`AD2E.Gender.Build.${column}`);
+  if (hrow) {
+    const r = await new Roll(`${hrow[column]} + ${hrow.dice}`).evaluate();
+    update["system.height"] = r.total;
+    await r.toMessage({ speaker, flavor: game.i18n.format("AD2E.Animal.HeightChat", { name: actor.name, sex: col, result: feetInches(r.total) }) });
+  }
+  if (row) {
+    const r = await new Roll(`${row[column]} + ${row.dice}`).evaluate();
+    update["system.bodyWeight"] = r.total;
+    await r.toMessage({ speaker, flavor: game.i18n.format("AD2E.Animal.BodyWeightChat", { name: actor.name, sex: col }) });
+  }
+  await actor.update(update);
+  return update["system.bodyWeight"] ?? null;
 }
