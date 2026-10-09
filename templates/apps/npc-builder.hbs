@@ -5,7 +5,8 @@
     <label>{{localize "AD2E.Npc.Race"}} <select data-field="race">{{#each races as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label>{{localize "AD2E.Npc.Class"}} <select data-field="cls">{{#each classes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label data-tooltip="{{localize 'AD2E.Npc.LevelHint'}}">{{localize "AD2E.Npc.Level"}} <input type="text" data-field="level" value="{{s.level}}" placeholder="{{levelDefault}}"></label>
-    <label>{{localize "AD2E.Npc.SexLabel"}} <select data-field="sex">{{#each sexes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label>{{localize "AD2E.Npc.GenderLabel"}} <select data-field="gender">{{#each genders as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    <label data-tooltip="{{localize 'AD2E.Npc.BuildHint'}}">{{localize "AD2E.Npc.BuildLabel"}} <select data-field="build">{{#each builds as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     {{#if isTownsfolk}}<label>{{localize "AD2E.Npc.Profession"}} <select data-field="profession">{{#each professions as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
     {{#if isSoldier}}<label>{{localize "AD2E.Npc.Soldier"}} <select data-field="soldier">{{#each soldiers as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>{{/if}}
     {{#if isOfficial}}<label>{{localize "AD2E.Npc.CultureLabel"}} <select data-field="culture">{{#each cultures as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
@@ -17,9 +18,9 @@
   {{#with preview as |p|}}
   <fieldset>
     <legend>{{p.name}}</legend>
-    <p><strong>{{p.race}} {{p.cls}}</strong>, {{localize "AD2E.Npc.LevelN" n=p.level}} · {{p.sex}} · {{localize "AD2E.Npc.AgeN" n=p.age}} · {{p.alignment}}</p>
+    <p><strong>{{p.race}} {{p.cls}}</strong>, {{localize "AD2E.Npc.LevelN" n=p.level}} · {{p.gender}} · {{localize "AD2E.Npc.AgeN" n=p.age}} · {{p.alignment}}</p>
     <p>{{#each p.abilities as |a|}}{{a.key}} {{a.value}}{{a.exceptional}}{{#unless @last}} · {{/unless}}{{/each}}</p>
-    <p>{{localize "AD2E.Npc.HpXp" hp=p.hp xp=p.xp}} · {{p.role}}</p>
+    <p>{{localize "AD2E.Npc.HpXp" hp=p.hp xp=p.xp}} · {{p.role}}{{#if p.size}} · {{p.size}} ({{p.build}}){{/if}}</p>
     <p class="ad2e-note">{{p.traits}} — {{p.looks}}</p>
   </fieldset>
   {{/with}}

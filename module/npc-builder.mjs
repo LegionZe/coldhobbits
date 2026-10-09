@@ -14,11 +14,14 @@ import { simpleDice } from "./construction.mjs";
  * titles), sages (Table 61), spellcasters for hire (Table 69 costs in the notes), spies and assassins; abilities 3d6 in
  * order raised to the race's and class's minimums (and lowered to the race's maximums); levels from a GM formula per
  * purpose (0 for townsfolk, soldiers, officials and sages).
+ * Owner's rulings (1.0.22): gender male, female, non-binary or agender; the PHB Table 10 column (male or female base
+ * height and weight) is a separate choice.
  * Implementation choices: a random race is one allowing the class; a random class one of the purpose's classes allowed
- * for the race; the alignment one the class allows; age = the race's starting age (PHB Table 11), height and weight
- * from PHB Table 10; hit points rolled per Hit Die with the Constitution adjustment (at least 1 per die), 1d6 at level 0;
+ * for the race; the alignment one the class allows; a random gender is one of the four with equal chance; the Table 10
+ * column follows a male or female gender unless chosen, and is 50/50 for the others; age = the race's starting age
+ * (PHB Table 11), height and weight from PHB Table 10; hit points rolled per Hit Die with the Constitution adjustment (at least 1 per die), 1d6 at level 0;
  * experience = the minimum for the level; 0-level NPCs have no class item (THAC0 20, the 0-level warrior saves);
- * equipment: a basic set per class (`gear`), a soldier's from his Table 64 hireling, a tradesman's proficiency for his
+ * equipment: a basic set per class (`gear`), a soldier's from their Table 64 hireling, a tradesman's proficiency for his
  * profession; Table 70 traits and appearance words (Personality (DMG)) as for patrons; the name is "<race> <role>"
  * unless given.
  */
@@ -40,6 +43,10 @@ export const PURPOSES = {
   assassin: { level: "1d6 + 1", classes: ["thief", "fighter"] }
 };
 export const PURPOSE_KEYS = Object.keys(PURPOSES);
+
+/** Genders offered by the builder, and the PHB Table 10 columns (base height and weight). */
+export const GENDERS = ["male", "female", "non-binary", "agender"];
+export const BUILDS = ["male", "female"];
 
 const pick = (list, random) => list[Math.floor(random() * list.length)];
 
@@ -78,7 +85,8 @@ export function rollAbilities(race, cls, random = Math.random) {
 }
 
 /**
- * Build an NPC (pure with `random`): options { purpose, race, cls, level (formula or number), sex, profession, soldier,
+ * Build an NPC (pure with `random`): options { purpose, race, cls, level (formula or number), gender, build (Table 10
+ * column: male | female), profession, soldier,
  * culture, column, field, name }, item lists { races, classes } ({ name, system }).
  */
 export function buildNpc(opts, { races, classes }, random = Math.random) {
@@ -102,7 +110,8 @@ export function buildNpc(opts, { races, classes }, random = Math.random) {
     if (!race) race = pick(races.filter(r => cls && fits(r, cls.system.identifier)), random) ?? pick(races, random);
   } else if (!race) race = pick(races, random);
   const raceId = race?.system.identifier ?? "human";
-  const sex = opts.sex || (random() < 0.5 ? "male" : "female");
+  const gender = GENDERS.includes(opts.gender) ? opts.gender : pick(GENDERS, random);
+  const build = BUILDS.includes(opts.build) ? opts.build : BUILDS.includes(gender) ? gender : pick(BUILDS, random);
   const abilities = rollAbilities(race, cls, random);
   const group = cls?.system.group ?? null;
   const exceptional = group === "warrior" && abilities.str + (race?.system.adjust?.str ?? 0) === 18 ? simpleDice("1d100", random) : 0;
@@ -116,12 +125,12 @@ export function buildNpc(opts, { races, classes }, random = Math.random) {
   const ageRow = AGING.age?.[raceId];
   const age = ageRow ? simpleDice(`${ageRow.base} + ${ageRow.variable}`, random) : null;
   const h = NPC.heights[raceId], w = RACE_WEIGHT[raceId];
-  const height = h ? h[sex] + simpleDice(h.dice, random) : null;
-  const weight = w ? w[sex] + simpleDice(w.dice, random) : null;
+  const height = h ? h[build] + simpleDice(h.dice, random) : null;
+  const weight = w ? w[build] + simpleDice(w.dice, random) : null;
   const general = pick(PATRON.traits, random);
   const traits = { general: general.trait, specific: pick(general.specific, random).trait };
   const looks = Object.fromEntries(Object.entries(PATRON.looks).filter(([k]) => k !== "age").map(([k, words]) => [k, pick(words, random)]));
-  const spec = { purpose, level, race, cls, sex, abilities, exceptional, hp, xp, alignment, age, height, weight, traits, looks, notes: [] };
+  const spec = { purpose, level, race, cls, gender, build, abilities, exceptional, hp, xp, alignment, age, height, weight, traits, looks, notes: [] };
   if (purpose === "townsfolk") spec.profession = NPC.professions.find(p => p.name === opts.profession) ?? pick(NPC.professions, random);
   if (purpose === "soldier") spec.soldier = NPC.soldiers.find(s => s.name === opts.soldier) ?? pick(NPC.soldiers, random);
   if (purpose === "official") {
@@ -146,9 +155,11 @@ export function npcNotes(spec, t = (k, d) => k) {
   const line = (k, v) => (v || v === 0 ? `${t(`AD2E.Npc.Note.${k}`)}: ${v}` : null);
   return [
     line("purpose", t(`AD2E.Npc.Purpose.${spec.purpose}`)), line("role", spec.role),
+    spec.gender ? line("gender", t(`AD2E.Npc.Gender.${spec.gender}`)) : null,
     line("traits", `${spec.traits.general}, ${spec.traits.specific}`),
     line("looks", Object.values(spec.looks).join(", ")),
-    line("size", [spec.height ? `${Math.floor(spec.height / 12)}' ${spec.height % 12}"` : "", spec.weight ? `${spec.weight} lb` : ""].filter(Boolean).join(", ")),
+    line("size", [spec.height ? `${Math.floor(spec.height / 12)}' ${spec.height % 12}"` : "", spec.weight ? `${spec.weight} lb` : ""].filter(Boolean).join(", ")
+      + (spec.build && (spec.height || spec.weight) ? ` (${t(`AD2E.Npc.Build.${spec.build}`)})` : "")),
     line("morale", t("AD2E.Npc.MoraleText", { hireling: NPC.morale.hireling, henchman: NPC.morale.henchman })),
     spec.profession?.prof ? line("profession", t("AD2E.Npc.ProfessionProf")) : null,
     spec.soldier ? line("wage", t("AD2E.Npc.WageText", { wage: spec.soldier.wage })) : null,

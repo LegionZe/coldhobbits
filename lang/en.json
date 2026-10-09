@@ -3122,10 +3122,19 @@
     "Class": "Class",
     "Level": "Level",
     "LevelHint": "A number or dice; empty = the purpose's default.",
-    "SexLabel": "Sex",
-    "Sex": {
+    "GenderLabel": "Gender",
+    "Gender": {
       "male": "Male",
-      "female": "Female"
+      "female": "Female",
+      "non-binary": "Non-binary",
+      "agender": "Agender"
+    },
+    "BuildLabel": "Height & weight",
+    "BuildHint": "PHB Table 10 column for the race's base height and weight. Automatic: the male or female column for those genders, otherwise rolled 50/50.",
+    "BuildAuto": "Automatic",
+    "Build": {
+      "male": "male column",
+      "female": "female column"
     },
     "Profession": "Profession",
     "Soldier": "Troop type",
@@ -3153,6 +3162,7 @@
     "Note": {
       "purpose": "Purpose",
       "role": "Role",
+      "gender": "Gender",
       "traits": "Personality",
       "looks": "Looks",
       "size": "Height and weight",
