@@ -292,6 +292,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `#maneuverModifier` (called shot / sap in the normal attack), `#lastSap` -> rollWeaponDamage (punch damage kind,
   `#sapKnockout`), `rollManeuver(kind, { item, attack, targets, ac, mod, thac0 })` for disarm/grab/trap/block, pull/trip,
   shield-punch/rush (defender's numbers prefilled from the first target; lasso.mjs opposed helpers).
+- Release code bundle (1.0.28): `tools/build-code.mjs` (`npm run build:code`, esbuild pinned in package.json) bundles
+  module/ad2e.mjs into `ad2e.bundle.mjs` (+ .map, minified, `keepNames` so class names used by hooks survive; git-ignored);
+  the release workflow sets system.json `esmodules` to it and ships no module/ folder, so never load module files by path
+  at runtime (dynamic `import("./x.mjs")` is bundled). The repository's system.json keeps module/ad2e.mjs for development.
+  Smoke test: evaluate both entries with stub globals and compare hooks/registrations. One-time migrations are gated by
+  world settings (`kitMechanicsMigrated`, `weaponLimitsMigrated`; registerMigrationSettings).
 - Dialogs: open every dialog through `ad2eDialog.wait/prompt/confirm` (`module/dialogs.mjs`, owner's request 1.0.26:
   adds `window.resizable` and class "ad2e-dialog"), never `DialogV2` directly. `registerWindowFit` (renderApplicationV2)
   caps `app.window.content` to the viewport with `overflow-y: auto` for "ad2e-dialog" and non-sheet ".ad2e" windows and

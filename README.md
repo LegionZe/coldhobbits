@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.27)
+## Status (v1.0.28)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -156,6 +156,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Falling damage (1.0.13): "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6" (Special Damage (DMG)
   rev 238117; per full 10 feet). GM tool `game.ad2e.falling()`; the damage message carries `notAttack`, so applying it
   makes no massive-damage check (that rule is for "a single attack"; implementation choice).
+- Loading speed (1.0.28; owner's request): the release bundles and minifies the code (`npm run build:code`,
+  `tools/build-code.mjs`, esbuild 0.28.2): module/ad2e.mjs and the 118 files it imports (1.36 MB) become one
+  `ad2e.bundle.mjs` (about 740 KB, 220 KB compressed) with a source map, so the browser fetches one script instead of
+  following the import chain file by file; the release's system.json points `esmodules` at it. The kit-mechanics
+  migration now runs once per world (world setting `kitMechanicsMigrated`) instead of loading every kit at each GM
+  login, and preparing a monster looks for its rider only when it is a mount, pack animal or pet, without copying the
+  actor list (it scanned every world actor for every monster).
 - Windows and dialogs (1.0.26; owner's request): every dialog the system opens (attack, damage, saves, checks and the
   rest) can be resized, and the system's dialogs and tool windows are kept within the browser window with a scrolling
   content area, so the buttons at the bottom can always be reached (Foundry v14 API: window option `resizable`,

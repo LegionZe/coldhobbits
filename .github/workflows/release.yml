@@ -67,9 +67,17 @@ jobs:
           npm ci --no-audit --no-fund
           npm run build:packs
 
+      # One minified file instead of the module/ tree (owner's request, 1.0.28: faster loading; tools/build-code.mjs).
+      - name: Bundle the code
+        if: steps.ver.outputs.exists == 'false'
+        run: |
+          npm run build:code
+          jq '.esmodules = ["ad2e.bundle.mjs"]' system.json > system.tmp
+          mv system.tmp system.json
+
       - name: Build archive (files at zip root)
         if: steps.ver.outputs.exists == 'false'
-        run: zip -r ad2e.zip system.json module templates styles lang packs README.md -x "packs/_source/*"
+        run: zip -r ad2e.zip system.json ad2e.bundle.mjs ad2e.bundle.mjs.map templates styles lang packs README.md -x "packs/_source/*"
 
       - name: Publish release
         if: steps.ver.outputs.exists == 'false'

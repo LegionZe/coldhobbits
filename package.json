@@ -3,9 +3,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:packs": "node tools/compile-packs.mjs"
+    "build:packs": "node tools/compile-packs.mjs",
+    "build:code": "node tools/build-code.mjs"
   },
   "devDependencies": {
-    "@foundryvtt/foundryvtt-cli": "3.0.4"
+    "@foundryvtt/foundryvtt-cli": "3.0.4",
+    "esbuild": "0.28.2"
   }
 }

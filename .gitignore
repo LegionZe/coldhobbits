@@ -3,3 +3,5 @@ node_modules/
 packs/*
 !packs/_source/
 __pycache__/
+ad2e.bundle.mjs
+ad2e.bundle.mjs.map

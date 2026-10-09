@@ -40,6 +40,10 @@ export async function migrateCurrency() {
  * values a GM entered are kept.
  */
 export async function migrateKitMechanics() {
+  // Once per world (1.0.28: it loaded every kit document at each GM login).
+  let done = false;
+  try { done = game.settings.get("ad2e", "kitMechanicsMigrated"); } catch { return; }
+  if (done) return;
   const pack = game.packs.get("ad2e.kits");
   if (!pack) return;
   const docs = await pack.getDocuments();
@@ -63,6 +67,7 @@ export async function migrateKitMechanics() {
       console.log(`AD2E | Added kit mechanics to ${actor.name}`);
     }
   }
+  await game.settings.set("ad2e", "kitMechanicsMigrated", true);
 }
 
 /**
@@ -106,4 +111,5 @@ export async function migrateWeaponLimits() {
 
 export function registerMigrationSettings() {
   game.settings.register("ad2e", "weaponLimitsMigrated", { scope: "world", config: false, type: Boolean, default: false });
+  game.settings.register("ad2e", "kitMechanicsMigrated", { scope: "world", config: false, type: Boolean, default: false });
 }
