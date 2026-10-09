@@ -292,6 +292,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `#maneuverModifier` (called shot / sap in the normal attack), `#lastSap` -> rollWeaponDamage (punch damage kind,
   `#sapKnockout`), `rollManeuver(kind, { item, attack, targets, ac, mod, thac0 })` for disarm/grab/trap/block, pull/trip,
   shield-punch/rush (defender's numbers prefilled from the first target; lasso.mjs opposed helpers).
+- Dialogs: open every dialog through `ad2eDialog.wait/prompt/confirm` (`module/dialogs.mjs`, owner's request 1.0.26:
+  adds `window.resizable` and class "ad2e-dialog"), never `DialogV2` directly. `registerWindowFit` (renderApplicationV2)
+  caps `app.window.content` to the viewport with `overflow-y: auto` for "ad2e-dialog" and non-sheet ".ad2e" windows and
+  follows user resizes via the app's "position" event (API, no selectors); `contentLimit`, `fitsWindow` are pure.
 - Opaque windows: `module/opaque-windows.mjs` makes the computed window background of `.ad2e` applications fully opaque
   (renderApplicationV2 hook; client setting). Diagnosed on core 14.368: `form.application.sheet.ad2e` background
   rgba(11, 10, 19, 0.9) with backdrop-filter none under `body.performance-low`.

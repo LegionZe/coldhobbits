@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Skills & Powers kit features with figures (kit field `special` and `socialRanks`, written by
  * tools/build-kit-mechanics.py from the kit pages, each regex-checked). Owner's rulings in brackets.
@@ -138,7 +139,7 @@ export async function meditate(actor) {
   }
   const i18n = k => game.i18n.localize(k);
   const abilities = ["str", "dex", "con", "int", "wis", "cha"];
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: `${actor.name}: ${i18n("AD2E.KitFeature.Meditate")}` },
     content: `<p class="ad2e-note">${esc(i18n("AD2E.KitFeature.MeditateHint"))}</p>`
       + `<div class="form-group"><label>${i18n("AD2E.KitFeature.Hours")}</label><input type="number" name="hours" value="3" min="1" step="1"></div>`

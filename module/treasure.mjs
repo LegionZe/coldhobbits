@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Rolling treasure (DMG Appendix 1; tables generated in module/rules/treasure-tables.mjs TREASURE_ROLLS).
  *  - Table 84: each column of a treasure type is present on a d100 roll at or below its chance (no chance listed:
@@ -262,7 +263,7 @@ export async function rollTreasureDialog(actor = null) {
   const i18n = k => game.i18n.localize(k);
   if (!game.user.isGM) return ui.notifications.warn(i18n("AD2E.Treasure.GmOnly"));
   const letters = actor?.system?.treasure ? parseTreasureLetters(actor.system.treasure).map(l => (l.times > 1 ? `${l.letter} x${l.times}` : l.letter)).join(", ") : "";
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Treasure.Title") },
     content: `<div class="form-group"><label>${i18n("AD2E.Treasure.Letters")}</label><input type="text" name="letters" value="${esc(letters)}" placeholder="A, Q x5" autofocus></div>`
       + `<p class="ad2e-note">${esc(i18n("AD2E.Treasure.LettersHint"))}${actor?.system?.treasure ? ` ${esc(game.i18n.format("AD2E.Treasure.FromBlock", { text: actor.system.treasure }))}` : ""}</p>`

@@ -16,6 +16,7 @@ import JewelleryData from "./data/item-jewellery.mjs";
 import TraitData from "./data/item-trait.mjs";
 import { migrateCurrency, migrateKitMechanics } from "./migrations.mjs";
 import { registerOpaqueWindows } from "./opaque-windows.mjs";
+import { registerWindowFit } from "./dialogs.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
 import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
@@ -127,6 +128,7 @@ Hooks.once("init", () => {
   });
   // Ask for a situational modifier (and reason) when one combatant rolls initiative.
   registerOpaqueWindows();
+  registerWindowFit();
   registerSidebarColours();
   registerHealth();
   registerAnimalHooks();

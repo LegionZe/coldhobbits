@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"; table generated in module/rules/encounter-tables.mjs):
  * "roll 2d10 and add the numbers on the two dice. Increase or decrease this number by any modifiers in the creature
@@ -68,7 +69,7 @@ export async function rollEncounterReaction(creature = null) {
       + `<input type="checkbox" name="kitreact" value="${actor.id}.${m.index}"></div>`).join("")}</fieldset>` : "")
     + kitFeatureFields
     + modifierFields();
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     classes: ["ad2e"],
     window: { title: creature ? game.i18n.format("AD2E.Reaction.TitleFor", { name: creature.name }) : i18n("AD2E.Reaction.Title") },
     content,

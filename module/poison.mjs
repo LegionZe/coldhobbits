@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 import { POISON_TABLES } from "./rules/poison-tables.mjs";
 import { createSaveRequest, registerSaveHandler } from "./save-requests.mjs";
 
@@ -205,7 +206,7 @@ export async function coatWithPoison(item) {
     return;
   }
   const missiles = item.type === "ammunition";
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Poison.CoatTitle", { name: item.name }) },
     content: `<div class="form-group"><label>${esc(i18n("AD2E.Poison.Poison"))}</label><select name="poison">${poisons.map(p =>
       `<option value="${p.id}">${esc(p.name)} (${esc(poisonLabel(p.system.poison.class))}; ${p.system.quantity})</option>`).join("")}</select></div>`
@@ -236,7 +237,7 @@ export async function coatWithPoison(item) {
 export async function poisonTargetsDialog() {
   if (!game.user?.isGM) return;
   const targets = [...(game.user.targets ?? [])].map(t => ({ uuid: t.document?.uuid, name: t.document?.name ?? t.name })).filter(t => t.uuid);
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Poison.ToolTitle") },
     content: `<div class="form-group"><label>${esc(i18n("AD2E.Poison.Class"))}</label><select name="cls">${Object.keys(POISON.classes).map(c =>
       `<option value="${c}">${esc(poisonLabel(c))}</option>`).join("")}</select></div>`

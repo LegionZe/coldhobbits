@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Wizard familiars (Find Familiar (Wizard Spell); table and figures generated in module/rules/familiar-tables.mjs).
  *  - "A wizard can have only one familiar at a time": `system.familiar.uuid` (a monster actor with role "familiar").
@@ -78,7 +79,7 @@ export async function findFamiliar(character) {
   if (current.actor && !current.dead) return ui.notifications.warn(game.i18n.format("AD2E.Familiar.HasOne", { name: current.actor.name }));
   const days = daysSinceAttempt(character);
   const tooSoon = days !== null && days < 365;
-  const ok = await foundry.applications.api.DialogV2.confirm({
+  const ok = await ad2eDialog.confirm({
     window: { title: i18n("AD2E.Familiar.FindTitle") },
     content: `<p>${esc(game.i18n.format("AD2E.Familiar.FindText", { name: character.name, cost: FAMILIAR.rules.cost,
       time: FAMILIAR.rules.castingTime }))}</p>`
@@ -202,7 +203,7 @@ export async function familiarContactDamage(familiar, amount) {
   const i18n = k => game.i18n.localize(k);
   const half = Math.floor(amount * CONTACT_DAMAGE.failed);
   const none = Math.floor(amount * CONTACT_DAMAGE.saved);
-  const choice = await foundry.applications.api.DialogV2.wait({
+  const choice = await ad2eDialog.wait({
     window: { title: game.i18n.format("AD2E.Familiar.ContactTitle", { name: familiar.name }) },
     content: `<p>${esc(game.i18n.format("AD2E.Familiar.ContactText", { name: familiar.name, master: master.name }))}</p>`,
     buttons: [

@@ -1,3 +1,4 @@
+import { ad2eDialog } from "../dialogs.mjs";
 import { ABILITY_KEYS, METHODS, defaultAssignment, results, scores } from "../ability-methods.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -108,7 +109,7 @@ export default class AbilityRoller extends HandlebarsApplicationMixin(Applicatio
     const s = this.state;
     const { scores: sc, errors } = scores(s.method, s.res, s.assignment);
     if (!s.res.length || errors.length) return;
-    const ok = await foundry.applications.api.DialogV2.confirm({
+    const ok = await ad2eDialog.confirm({
       window: { title: game.i18n.localize("AD2E.AbilityRoll.Apply") },
       content: `<p>${game.i18n.localize("AD2E.AbilityRoll.ConfirmApply")}</p>`, rejectClose: false
     });

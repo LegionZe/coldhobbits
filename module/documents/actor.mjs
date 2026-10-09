@@ -1,3 +1,4 @@
+import { ad2eDialog } from "../dialogs.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
@@ -22,7 +23,6 @@ export function spellDamageLabel(d, i = 0) {
 import { canFightTwoWeapons, twoWeaponStyle, COMBAT_TABLES, halveRate, mountedFireIssues, mountedMeleeModifier, mountTrained, needsTwoHands, parseRate, stepDownRate, twoWeaponExempt, nonlethalAllowed, overbearModifier, punchWrestleResult, secondWeaponAllowed,
   twoWeaponPenalty, wrestlingArmor } from "../combat-options.mjs";
 
-const { DialogV2 } = foundry.applications.api;
 import { armorBlocksWizardCasting } from "../data/character.mjs";
 import { feeblemindActive } from "../companions.mjs";
 import { kitSpecial } from "../kit-features.mjs";
@@ -97,7 +97,7 @@ export default class AD2EActor extends Actor {
 
   /** Dialog with a situational modifier (and reason) and the conditional kit modifiers; null when cancelled. */
   async #promptRoll(title, options, unit = "", extra = "") {
-    return DialogV2.prompt({
+    return ad2eDialog.prompt({
       window: { title },
       content: extra + modifierFields({ unit, autofocus: !extra }) + this.#kitFields(options, unit),
       ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => {
@@ -243,7 +243,7 @@ export default class AD2EActor extends Actor {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     let n = count;
     if (!n) {
-      const input = await foundry.applications.api.DialogV2.prompt({
+      const input = await ad2eDialog.prompt({
         window: { title: `${this.name}: ${i18n("AD2E.Drain.Title")}` },
         content: `<div class="form-group"><label>${i18n("AD2E.Drain.Levels")}</label><input type="number" name="levels" value="1" min="1" step="1" autofocus></div>`
           + `<p class="ad2e-note">${i18n("AD2E.Drain.Explain")}</p>`,
@@ -339,7 +339,7 @@ export default class AD2EActor extends Actor {
       { kind: kindName(l.kind), level: l.level, memorized: l.memorized, slots: l.slots, excess: l.excess }))}</legend>`
       + l.spells.map(s => `<div class="form-group"><label>${esc(s.name)} (${esc(game.i18n.format("AD2E.Drain.ForgetCount", { prepared: s.prepared, cast: s.cast }))})</label>`
         + `<input type="number" name="f-${l.kind}-${s.id}" value="${s.forget}" min="0" max="${s.prepared}" step="1"></div>`).join("") + "</fieldset>").join("");
-    const chosen = await DialogV2.prompt({
+    const chosen = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${game.i18n.localize("AD2E.Drain.ForgetTitle")}` }, content,
       ok: { label: game.i18n.localize("AD2E.Drain.Forget"), callback: (event, button) => Object.fromEntries(plan.flatMap(l => l.spells.map(s =>
         [s.id, Math.min(Math.max(Math.floor(Number(button.form.elements[`f-${l.kind}-${s.id}`].value) || 0), 0), s.prepared)]))) },
@@ -381,7 +381,7 @@ export default class AD2EActor extends Actor {
       return null;
     }
     const now = game.time?.worldTime ?? 0;
-    const input = await foundry.applications.api.DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${i18n("AD2E.Drain.Restore")}` },
       content: `<p>${esc(entry ? game.i18n.format("AD2E.Drain.RestoreQuestion", { class: entry.name, level: entry.level, hp: entry.hp,
         days: restorationInTime(entry.at, now, 0).days }) : i18n("AD2E.Drain.RestoreZero"))}</p>`
@@ -450,7 +450,7 @@ export default class AD2EActor extends Actor {
     const current = this.items.find(i => i.type === "class");
     const fmt = { name: this.name, from: current?.name ?? "—", level: this.system.level, xp: this.system.xp ?? 0,
       to: undo.restore.name, toLevel: undo.level, toXp: undo.xp };
-    const ok = await foundry.applications.api.DialogV2.confirm({
+    const ok = await ad2eDialog.confirm({
       window: { title: i18n("AD2E.Dual.Undo") },
       content: `<p>${esc(game.i18n.format("AD2E.Dual.UndoQuestion", fmt))}</p>`
         + (undo.estimated ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Dual.UndoEstimated", fmt))}</p>` : "")
@@ -486,7 +486,7 @@ export default class AD2EActor extends Actor {
     const classes = this.system.multi.classes;
     let id = classId;
     if (!id) {
-      id = await foundry.applications.api.DialogV2.wait({
+      id = await ad2eDialog.wait({
         window: { title: `${this.name}: ${game.i18n.localize("AD2E.LevelUp")}` },
         content: `<p>${game.i18n.localize("AD2E.Multi.WhichClass")}</p>`,
         buttons: classes.map((c, i) => ({ action: c.identifier, label: `${c.name} ${c.level} → ${c.level + 1}`, default: i === 0 })),
@@ -545,7 +545,7 @@ export default class AD2EActor extends Actor {
       const options = entry.choice.filter(id => byId.has(id));
       if (options.length <= 1) return options[0];
       const buttons = options.map((id, i) => ({ action: id, label: byId.get(id).name, default: i === 0 }));
-      return foundry.applications.api.DialogV2.wait({
+      return ad2eDialog.wait({
         window: { title: `${kit.name}: ${game.i18n.localize(label)}` },
         content: `<p>${game.i18n.localize("AD2E.Prof.ChooseOne")}</p>`, buttons, rejectClose: false
       });
@@ -788,7 +788,7 @@ export default class AD2EActor extends Actor {
     // Called shots and attack options (world setting "attackOptions", module/attack-options.mjs).
     const maneuverField = this.type === "character" && attackOptionsOn()
       ? this.#maneuverField(maneuversFor({ item, use, items: this.items }), targets, item.system.weapon?.type) : "";
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: restrictionNote + `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
         + maneuverField + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
@@ -1099,7 +1099,7 @@ export default class AD2EActor extends Actor {
     content += "</fieldset>";
     if (kind === "shieldPunch") content += field(i18n("AD2E.Maneuver.PunchMode"), `<select name="punchMode"><option value="substitute">${esc(i18n("AD2E.Maneuver.PunchSubstitute"))}</option>`
       + `<option value="extra">${esc(i18n("AD2E.Maneuver.PunchExtra", { punch: AO.shieldPunch.punch, primary: AO.shieldPunch.primary }))}</option></select>`);
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${i18n(`AD2E.Maneuver.Kind.${kind}`)}` }, content,
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const el = button.form.elements;
@@ -1292,7 +1292,7 @@ export default class AD2EActor extends Actor {
       + box("riderMoving", i18n("AD2E.Lasso.RiderMoving")) + box("tiedSolid", i18n("AD2E.Lasso.TiedSolid")) + `</fieldset>`
       + (mount ? box("tiedSaddle", game.i18n.format("AD2E.Lasso.TiedSaddle", { mount: mount.name, size: mountSize || "?" }), true) : "")
       + modifierFields();
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${item.name}` }, content,
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const el = button.form.elements;
@@ -1395,7 +1395,7 @@ export default class AD2EActor extends Actor {
       + box("unaware", game.i18n.format("AD2E.Lasso.Unaware", { n: LASSO.pullTrip.unaware }))
       + box("stationary", game.i18n.format("AD2E.Lasso.Stationary", { n: LASSO.pullTrip.stationary })) + `</fieldset>`
       + modifierFields();
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${item.name}` }, content,
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const el = button.form.elements;
@@ -1449,7 +1449,7 @@ export default class AD2EActor extends Actor {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const str = this.type === "character" ? this.system.abilities.str.total
       : monsterScores(this.system.size, this.system.hitDice, this.system.movement?.base).str;
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${i18n("AD2E.Net.BreakFree")}` },
       content: `<p class="ad2e-note">${esc(i18n("AD2E.Net.BreakFreeHint"))}</p>`
         + `<div class="form-group"><label>${esc(i18n("AD2E.Net.Strength"))}</label><input type="number" name="str" value="${str}"></div>`
@@ -1560,7 +1560,7 @@ export default class AD2EActor extends Actor {
       nonlethal: !!(preset.nonlethal && use === "melee" && nonlethalAllowed(item.system.weapon)), kitText: "",
       manual: { mod: 0, note: "" }, vsUnarmed: !!(preset.vsUnarmed && use === "melee"), pointBlank: !!(preset.pointBlank && pbDmg),
       critical: lastCrit?.extra ?? 0,
-      auto: true } : await DialogV2.prompt({
+      auto: true } : await ad2eDialog.prompt({
       window: { title: `${item.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: choice + `<div class="form-group"><label>${i18n("AD2E.Weapon.TargetSize")}</label><select name="size">`
         + `<option value="sm">${i18n("AD2E.Weapon.SM")}</option><option value="l">${i18n("AD2E.Weapon.L")}</option></select></div>`
@@ -1693,7 +1693,7 @@ export default class AD2EActor extends Actor {
         + field(i18n("AD2E.Unarmed.Attackers"), `<input type="number" name="attackers" value="1" min="1" step="1">`)
         + field(i18n("AD2E.Unarmed.Down"), `<input type="checkbox" name="down">`);
     }
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${i18n(`AD2E.Unarmed.${form}`)}` },
       content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}`
         + `${monster ? ` ${i18n("AD2E.Unarmed.CreatureHint")}` : ""}</p>`
@@ -1974,7 +1974,7 @@ export default class AD2EActor extends Actor {
     const i18n = k => game.i18n.localize(k);
     const targets = AD2EActor.#targetsNow();
     this.#rememberTargets(key, targets);
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${attack.name}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus></div>`
         // Called shots and opposed maneuvers (world setting "attackOptions", module/attack-options.mjs).
@@ -2047,7 +2047,7 @@ export default class AD2EActor extends Actor {
     const weapon = !formula;
     const input = preset ? { option: 0, size: preset.size ?? "sm", vsUnarmed: !!(preset.vsUnarmed && attack.melee), mod: 0, note: "",
       critical: lastCrit?.extra ?? 0,
-      auto: true } : await DialogV2.prompt({
+      auto: true } : await ad2eDialog.prompt({
       window: { title: `${attack.name}: ${i18n("AD2E.Weapon.Damage")}` },
       content: (weapon && options.length > 1 ? `<div class="form-group"><label>${i18n("AD2E.Weapon.Ammo")}</label><select name="option">${
         options.map((d, i) => `<option value="${i}">${d.label} (${d.sm ?? "—"} / ${d.l ?? "—"})</option>`).join("")}</select></div>` : "")
@@ -2134,7 +2134,7 @@ export default class AD2EActor extends Actor {
     }
     // Rider feebleminded after a negligent mount death (module/companions.mjs; owner's ruling: confirm to cast).
     if (this.type === "character" && feeblemindActive(this)) {
-      const ok = await DialogV2.confirm({ window: { title: spell.name }, rejectClose: false,
+      const ok = await ad2eDialog.confirm({ window: { title: spell.name }, rejectClose: false,
         content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.localize("AD2E.Bond.FeebleCast")) ?? ""}</p>` });
       if (!ok) return;
     }
@@ -2144,7 +2144,7 @@ export default class AD2EActor extends Actor {
     if (this.type === "character" && sys.kind === "wizard") {
       const worn = this.items.filter(i => i.type === "armor" && i.system.equipped);
       if (worn.length && armorBlocksWizardCasting(worn, this.system.raceInfo?.raceItem?.system.identifier ?? "")) {
-        const ok = await DialogV2.confirm({ window: { title: spell.name },
+        const ok = await ad2eDialog.confirm({ window: { title: spell.name },
           content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Spell.ArmorWarning", { armor: worn.map(i => i.name).join(", ") })) ?? ""}</p>`,
           rejectClose: false });
         if (!ok) return;
@@ -2345,7 +2345,7 @@ export default class AD2EActor extends Actor {
     const trapField = traps.length ? `<div class="form-group"><label>${i18n("AD2E.Trap.Which")}</label><select name="trap">`
       + traps.map((t, i) => `<option value="${i}">${esc(t.name)} (${t.modifier >= 0 ? "+" : ""}${t.modifier}%)</option>`).join("") + "</select></div>" : "";
     const silentField = ["rt", "ol"].includes(key) ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Trap.Silent", { n: TRAP.silent, noise: TRAP.silentNoise }))}</label><input type="checkbox" name="silent"></div>` : "";
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: name },
       content: trapField + silentField + (ranger ? `<div class="form-group"><label>${i18n("AD2E.Skill.Halved")}</label><input type="checkbox" name="halved"></div>` : "")
         + modifierFields({ unit: "%", autofocus: true })
@@ -2389,7 +2389,7 @@ export default class AD2EActor extends Actor {
     const col = t.columns.findIndex(([lo, hi]) => level >= lo && level <= hi);
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: game.i18n.format("AD2E.Ability2.TurnRoll", { level }) },
       content: `<p class="ad2e-note">${i18n("AD2E.Ability2.TurnHint")}</p>`
         + `<div class="form-group"><label>${i18n("AD2E.Ability2.Undead")}</label><select name="row">${
@@ -2508,7 +2508,7 @@ export default class AD2EActor extends Actor {
     }).join("");
     const fixed = [dex ? `${i18n("AD2E.Surprise.Dex")} ${dex > 0 ? "+" : ""}${dex}` : "", kitAuto ? `${i18n("AD2E.Surprise.Kit")} ${kitAuto > 0 ? "+" : ""}${kitAuto}` : "",
       familiar ? `${i18n("AD2E.Familiar.Surprise")} +${familiar}` : ""].filter(Boolean).join(" · ");
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       // Class "ad2e": opaque background (module/opaque-windows.mjs). The situations scroll inside their own box so the
       // dialog stays within the screen and the Roll button visible.
       classes: ["ad2e"], position: { width: 520 },
@@ -2559,7 +2559,7 @@ export default class AD2EActor extends Actor {
       + `<option value="encounter"${game.combat ? " selected" : ""}>${i18n("AD2E.Dual.Kind.encounter")}</option>`
       + `<option value="adventure"${game.combat ? "" : " selected"}>${i18n("AD2E.Dual.Kind.adventure")}</option></select></div>`
       + (pen.encounter || pen.adventure ? `<p class="ad2e-note ad2e-unmet">${i18n("AD2E.Dual.PenaltyPending")}</p>` : "") : "";
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: `${this.name}: ${i18n("AD2E.Xp.AddTitle")}` },
       content: `<div class="form-group"><label>${i18n("AD2E.Xp.Amount")}</label><input type="number" name="amount" value="0" min="0" step="1" autofocus></div>`
         + `<div class="form-group"><label>${i18n("AD2E.Roll.ModifierNote")}</label><input type="text" name="reason" placeholder="${i18n("AD2E.Xp.ReasonHint")}"></div>`
@@ -2735,7 +2735,7 @@ export default class AD2EActor extends Actor {
    */
   async restHeal() {
     const i18n = k => game.i18n.localize(k);
-    const input = await DialogV2.prompt({
+    const input = await ad2eDialog.prompt({
       window: { title: game.i18n.format("AD2E.Health.RestTitle", { name: this.name }) },
       content: `<div class="form-group"><label>${i18n("AD2E.Health.Days")}</label><input type="number" name="days" value="1" min="1" step="1" autofocus></div>`
         + `<div class="form-group"><label>${i18n("AD2E.Health.BedRest")}</label><input type="checkbox" name="bed"></div>`
