@@ -97,6 +97,41 @@
     {{/each}}
   </fieldset>
 
+  {{#with @root.languages as |lg|}}
+  <fieldset class="ad2e-prof-list ad2e-languages">
+    <legend data-tooltip="{{localize 'AD2E.Language.SectionHint'}}">{{localize "AD2E.Language.Section"}}</legend>
+    <p class="ad2e-prof-summary"><span class="{{#if lg.modern.over}}ad2e-unmet{{/if}}">{{lg.modern.text}}</span> · <span class="{{#if lg.ancient.over}}ad2e-unmet{{/if}}">{{lg.ancient.text}}</span> · <span class="{{#if lg.literate.over}}ad2e-unmet{{/if}}">{{lg.literate.text}}</span>{{#if lg.learn}} · {{localize "AD2E.Language.LearnNote"}}{{/if}}</p>
+    {{#if lg.duplicate}}<p class="ad2e-note ad2e-unmet">{{localize "AD2E.Language.Duplicate"}}</p>{{/if}}
+    <div class="ad2e-prof-row">
+      <label class="ad2e-prof-name" data-tooltip="{{localize 'AD2E.Language.NativeHint'}}">{{localize "AD2E.Language.Native"}} <input type="text" name="system.languages.native" value="{{@root.system.languages.native}}" placeholder="{{lg.nativePlaceholder}}" {{#unless lg.editable}}disabled{{/unless}}></label>
+      <label class="ad2e-prof-check"><input type="checkbox" name="system.languages.nativeLiterate" {{#if lg.native.literate}}checked{{/if}} {{#unless lg.editable}}disabled{{/unless}}> {{localize "AD2E.Language.Literate"}}</label>
+    </div>
+    {{#if lg.common}}
+    <div class="ad2e-prof-row">
+      <span class="ad2e-prof-name" data-tooltip="{{localize 'AD2E.Language.CommonRowHint'}}">{{lg.common.name}}</span>
+      <span class="ad2e-weapon-meta">{{localize "AD2E.Language.CommonFree"}}</span>
+      <label class="ad2e-prof-check"><input type="checkbox" name="system.languages.commonLiterate" {{#if lg.common.literate}}checked{{/if}} {{#unless lg.editable}}disabled{{/unless}}> {{localize "AD2E.Language.Literate"}}</label>
+    </div>
+    {{/if}}
+    {{#each lg.rows as |r|}}
+    <div class="ad2e-prof-row">
+      {{#if lg.canChange}}<input type="text" class="ad2e-prof-name ad2e-language-field" data-index="{{r.index}}" data-field="name" value="{{r.name}}">{{else}}<span class="ad2e-prof-name">{{r.name}}</span>{{/if}}
+      <span class="ad2e-weapon-meta {{#if r.duplicate}}ad2e-unmet{{/if}}">{{r.kindLabel}}{{#if r.outside}} · <span data-tooltip="{{localize 'AD2E.Language.OutsideHint'}}">{{localize "AD2E.Language.Outside"}}</span>{{/if}}</span>
+      <label class="ad2e-prof-check"><input type="checkbox" class="ad2e-language-field" data-index="{{r.index}}" data-field="literate" {{#if r.literate}}checked{{/if}} {{#unless lg.editable}}disabled{{/unless}}> {{r.literateLabel}}</label>
+      {{#if lg.canChange}}<a data-action="removeLanguage" data-index="{{r.index}}" data-tooltip="{{localize 'AD2E.Language.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{/each}}
+    {{#if lg.canChange}}
+    <div class="ad2e-prof-row">
+      <input type="text" class="ad2e-prof-name ad2e-language-new" list="ad2e-language-suggestions-{{@root.actor.id}}" placeholder="{{localize 'AD2E.Language.AddPlaceholder'}}">
+      <datalist id="ad2e-language-suggestions-{{@root.actor.id}}">{{#each lg.suggestions as |n|}}<option value="{{n}}"></option>{{/each}}</datalist>
+      <select class="ad2e-language-kind"><option value="modern">{{localize "AD2E.Language.Kind.modern"}}</option><option value="ancient">{{localize "AD2E.Language.Kind.ancient"}}</option></select>
+      <button type="button" data-action="addLanguage"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Language.Add"}}</button>
+    </div>
+    {{/if}}
+  </fieldset>
+  {{/with}}
+
   {{#with pt.traits as |tr|}}
   <fieldset class="ad2e-prof-list">
     <legend data-tooltip="{{localize 'AD2E.Trait.SectionHint'}}">{{localize "AD2E.Trait.Section"}}</legend>

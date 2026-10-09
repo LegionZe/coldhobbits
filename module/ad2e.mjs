@@ -46,6 +46,7 @@ import AD2EChatMessage from "./documents/chat-message.mjs";
 import { registerAqRules } from "./aq-rules.mjs";
 import { registerSpWeapons } from "./sp-weapons.mjs";
 import { registerSpProficiencies } from "./sp-proficiencies.mjs";
+import { registerLanguages } from "./languages.mjs";
 import { registerDualClass } from "./dual-class.mjs";
 import { registerMultiClass } from "./multi-class.mjs";
 import { registerCompanions } from "./companions.mjs";
@@ -160,6 +161,7 @@ Hooks.once("init", () => {
   registerAqRules();
   registerSpWeapons();
   registerSpProficiencies();
+  registerLanguages();
   registerDualClass();
   registerCompanions();
   registerKitFeatures();

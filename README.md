@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.24)
+## Status (v1.0.25)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -156,6 +156,28 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Falling damage (1.0.13): "1d6 points of damage for every 10 feet fallen, to a maximum of 20d6" (Special Damage (DMG)
   rev 238117; per full 10 feet). GM tool `game.ad2e.falling()`; the damage message carries `notAttack`, so applying it
   makes no massive-damage check (that rule is for "a single attack"; implementation choice).
+- Languages (1.0.25; owner's rulings): a Languages section on the Proficiencies tab (native language, the world's common
+  language, the other languages known, modern or ancient, each with a "reads/writes" tick). Sources (AD&D 2e wiki,
+  regex-checked by `tools/build-language-tables.py`): Intelligence (PHB) ("Every character can speak their native
+  language, no matter what their intelligence is"; Table 4 is "the number of additional languages the character can speak
+  beyond their native language"; "This knowledge extends only to speaking the language; it does not include reading or
+  writing"; "The DM must decide if your character begins the game already knowing these additional languages or if the
+  number shows only how many languages your character can possibly learn"); the racial initial languages of Dwarf, Elf,
+  Gnome, Half-Elf and Halfling (PHB) (e.g. "The initial languages a dwarf can learn are common, dwarf, gnome, goblin,
+  kobold, orc, and any others your DM allows"; Human (PHB) names none); Languages, Modern / Ancient and Reading/Writing
+  (Proficiency) ("This proficiency enables the character to either read and write or speak the language (his choice)";
+  "The character can read and write a modern language he can speak"); Midani, Zakharan Common (The People of Zakhara
+  (AA), Glossary (AA); the only Al-Qadim language the wiki names). World settings (owner's rulings): counting (proficiency
+  slots: Table 4 adds nonweapon slots as before and each further modern language takes a Languages, Modern slot; or
+  Table 4: that many additional languages free and no extra nonweapon slots, per Proficiencies (PHB): "his Intelligence
+  of 11 gives him two additional proficiency slots (according to Table 4)"), when they are chosen (at the start by the
+  player, or learned in play: only the GM adds and removes them), a universal common language (default "Common", free
+  for all; blank = none) and the campaign's language list (offered with the racial ones and Midani; free text allowed).
+  Implementation choices: one language per proficiency slot (each copy plus its extra slots); ancient languages always
+  take Languages, Ancient slots; literacy in the native, common and modern languages counts against Reading/Writing
+  slots; a ticked ancient language is read and written, not spoken; a modern language outside the racial, campaign and
+  Al-Qadim lists is flagged "not a racial initial language" (not refused); a repeated language is not counted; the
+  native language defaults to the race's own tongue (none for half-elves and humans, who get the common language).
 - Gender, height and weight (1.0.23; owner's ruling): the Bio tab has Gender (male, female, non-binary, agender), the
   PHB Table 10 column last used for base height and weight (male or female; "Automatic" = the column of a male or
   female gender), Height in inches (shown in feet and inches) and the body weight (entered
