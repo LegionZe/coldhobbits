@@ -1,3 +1,4 @@
+import { ad2eDialog } from "../dialogs.mjs";
 import { modifierFields, modifierText, readModifier } from "../roll-modifiers.mjs";
 import { castingTimeModifier, defaultAction, initiativeActions, sideOf, STANDARD_MODIFIERS } from "../initiative.mjs";
 import { displayPenalty } from "../kit-features.mjs";
@@ -162,7 +163,7 @@ export default class AD2ECombat extends Combat {
       + (shown ? `<div class="form-group"><label>${esc(game.i18n.format("AD2E.KitFeature.SawDisplay", { name: shown.name, n: shown.value }))}</label>`
         + `<input type="checkbox" name="display" checked></div>` : "")
       + modifierFields();
-    return foundry.applications.api.DialogV2.prompt({
+    return ad2eDialog.prompt({
       classes: ["ad2e"],
       window: { title: game.i18n.format("AD2E.Init.Title", { name: combatant?.name ?? "" }) },
       content,

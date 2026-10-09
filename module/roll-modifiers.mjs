@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Situational modifiers for roll dialogs: a number and an optional reason (e.g. "ring of protection +1", "cover"),
  * entered by hand for magical items and other conditions the system does not track. The reason is shown in chat.
@@ -31,7 +32,7 @@ export function modifierText(mod, note, unit = "") {
  * { mod, note, ...read(form) } or null if cancelled.
  */
 export async function promptModifier(title, { unit = "", extra = "", read = null } = {}) {
-  const result = await foundry.applications.api.DialogV2.prompt({
+  const result = await ad2eDialog.prompt({
     window: { title },
     content: extra + modifierFields({ unit, autofocus: !extra }),
     ok: { label: game.i18n.localize("AD2E.Roll.Roll"), callback: (event, button) => ({ ...readModifier(button.form), ...(read?.(button.form) ?? {}) }) },

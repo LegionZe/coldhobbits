@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Sha'ir (Al-Qadim; Sha'ir (Character Kit)): "Sha'irs may not use any spells in the standard fashion of wizards"; a gen
  * (elemental familiar) fetches each spell (Requesting a Spell (AA); rules generated in module/rules/shair-tables.mjs by
@@ -124,7 +125,7 @@ export async function requestSpell(actor, itemId) {
   const unit = searchUnit({ shairLevel, spellLevel: st.level, ...st });
   const fail0 = raceFailure(actor.system.raceInfo?.raceItem?.system.identifier);
   const partText = c.parts.map(([k, v]) => `${i18n(`AD2E.Shair.Part.${k}`)} ${v >= 0 ? "+" : ""}${v}`).join(", ");
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: fmt("AD2E.Shair.RequestTitle", { name: item.name }) },
     content: `<p>${esc(fmt("AD2E.Shair.RequestText", { chance: c.chance, parts: partText }))}</p>`
       + `<p>${esc(fmt("AD2E.Shair.SearchText", { die: SHAIR.searchNative.die, level: st.level, extra: gen.replacements,

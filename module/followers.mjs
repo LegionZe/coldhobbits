@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 import { FOLLOWERS } from "./rules/follower-tables.mjs";
 import { npcNumbers } from "./apps/creators.mjs";
 import { creatureHitDice } from "./config.mjs";
@@ -136,7 +137,7 @@ export async function attractFollowers(actor, classId) {
   if (!game.user?.isGM) return null;
   const status = followerStatus(actor.system).find(s => s.id === classId);
   // "Followers appear only once" (Followers (PHB)): confirm before rolling.
-  if (status?.ready && !(await foundry.applications.api.DialogV2.confirm({ window: { title: i18n("AD2E.Followers.Title") },
+  if (status?.ready && !(await ad2eDialog.confirm({ window: { title: i18n("AD2E.Followers.Title") },
     content: `<p>${esc(i18n("AD2E.Followers.Confirm", { cls: className(classId) }))}</p>`, rejectClose: false }))) return null;
   if (!status?.ready) return ui.notifications.warn(i18n(`AD2E.Followers.NotReady.${status?.reason || "level"}`));
   const { units, lines, rolls } = await rollFollowerUnits(classId);

@@ -1,3 +1,4 @@
+import { ad2eDialog } from "../dialogs.mjs";
 import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
 import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
 import { neutralizePoison, poisonContext } from "../poison.mjs";
@@ -1005,7 +1006,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (elig.ok) buttons.push({ action: "dual", label: game.i18n.format("AD2E.Dual.Become", { from: current.name, to: next.name }), default: true });
     buttons.push({ action: "replace", label: game.i18n.format("AD2E.Dual.Replace", { from: current.name, to: next.name }) });
     buttons.push({ action: "cancel", label: i18n("Cancel") });
-    const choice = await foundry.applications.api.DialogV2.wait({
+    const choice = await ad2eDialog.wait({
       window: { title: i18n("AD2E.Dual.Title") },
       content: `<p>${esc(game.i18n.format("AD2E.Dual.Question", { from: current.name, to: next.name }))}</p>`
         + (elig.ok ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Dual.Explain", { from: current.name, to: next.name }))}</p>`
@@ -1044,7 +1045,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (elig.ok) buttons.push({ action: "multi", label: game.i18n.format("AD2E.Multi.Become", fmt), default: true });
     buttons.push({ action: "replace", label: game.i18n.format("AD2E.Dual.Replace", { from: names, to: next.name }) });
     buttons.push({ action: "cancel", label: i18n("Cancel") });
-    const choice = await foundry.applications.api.DialogV2.wait({
+    const choice = await ad2eDialog.wait({
       window: { title: i18n("AD2E.Multi.Title") },
       content: `<p>${esc(game.i18n.format("AD2E.Multi.Question", fmt))}</p>`
         + (combos ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Multi.Combinations", { race: fmt.race, list: combos }))}</p>` : "")
@@ -1102,7 +1103,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       }
       // A wizard spell found by a wizard (or bard): roll to learn it (Intelligence (PHB)), or add it without a roll.
       if (kinds.includes("wizard") && item.system.kind === "wizard") {
-        const choice = await foundry.applications.api.DialogV2.wait({
+        const choice = await ad2eDialog.wait({
           window: { title: game.i18n.format("AD2E.Learn.DropTitle", { name: item.name }) },
           content: `<p>${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Learn.DropText", { chance: learnChance(this.actor, item).chance })) ?? ""}</p>`,
           buttons: [{ action: "roll", label: game.i18n.localize("AD2E.Learn.Roll"), default: true },
@@ -1236,7 +1237,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static async onRollFirstLevelHp() {
     if (this.actor.system.level > 1) {
-      const ok = await foundry.applications.api.DialogV2.confirm({
+      const ok = await ad2eDialog.confirm({
         window: { title: game.i18n.localize("AD2E.HP.RollFirst") },
         content: `<p>${game.i18n.localize("AD2E.HP.ConfirmReset")}</p>`, rejectClose: false
       });
@@ -1304,7 +1305,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** Send the gen away: forced away, threatened, master on another plane or an elemental plane, an errand. */
   static async onGenAway() {
     const i18n = k => game.i18n.localize(k);
-    const reason = await foundry.applications.api.DialogV2.wait({ window: { title: i18n("AD2E.Gen.AwayTitle") },
+    const reason = await ad2eDialog.wait({ window: { title: i18n("AD2E.Gen.AwayTitle") },
       content: `<p>${i18n("AD2E.Gen.AwayText")}</p>`,
       buttons: ["forced", "threatened", "plane", "elemental", "errand"].map(k => ({ action: k, label: i18n(`AD2E.Gen.Away.${k}`) })), rejectClose: false });
     if (reason) return sendGenAway(this.actor, reason);
@@ -1433,7 +1434,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       const kind = bondKind(this.actor);
       const fits = kind && animal.system?.role === (kind === "companion" ? "pet" : "mount") && !this.actor.system.bond?.[kind];
       if (fits && !canBond(this.actor, animal, kind)) {
-        const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize(`AD2E.Bond.Title.${kind}`) },
+        const ok = await ad2eDialog.confirm({ window: { title: game.i18n.localize(`AD2E.Bond.Title.${kind}`) },
           content: `<p>${foundry.utils.escapeHTML(game.i18n.format(`AD2E.Bond.Ask.${kind}`, { name: animal.name }))}</p>`
             + (kind === "companion" && oversizeCompanion(animal) ? `<p class="ad2e-unmet">${foundry.utils.escapeHTML(game.i18n.format("AD2E.Bond.Oversize",
               { name: animal.name, size: animal.system.size }))}</p>` : "")
@@ -1545,7 +1546,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (kind !== "mount") return rollBondCreature(this.actor, kind);
     // Rider: the homeland's subtable or Table 43 as printed (module/companions.mjs, owner's choice).
     const lands = ["any", ...Object.keys(COMPANIONS.homelands ?? {})];
-    const homeland = await foundry.applications.api.DialogV2.prompt({
+    const homeland = await ad2eDialog.prompt({
       window: { title: game.i18n.localize("AD2E.Bond.MountTable") },
       content: `<div class="form-group"><label>${game.i18n.localize("AD2E.Bond.HomelandLabel")}</label><select name="homeland">`
         + lands.map(l => `<option value="${l}">${foundry.utils.escapeHTML(game.i18n.localize(`AD2E.Bond.Homeland.${l}`))}`
@@ -1572,7 +1573,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     if (!game.user?.isGM) return;
     const careless = target.dataset.careless === "true";
     if (careless) {
-      const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Bond.LostCareless") },
+      const ok = await ad2eDialog.confirm({ window: { title: game.i18n.localize("AD2E.Bond.LostCareless") },
         content: `<p>${game.i18n.localize("AD2E.Bond.CarelessConfirm")}</p>`, rejectClose: false });
       if (!ok) return;
     }
@@ -1581,7 +1582,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static async #onMountDied() {
     if (!game.user?.isGM) return;
-    const choice = await foundry.applications.api.DialogV2.wait({ window: { title: game.i18n.localize("AD2E.Bond.MountDiedTitle") },
+    const choice = await ad2eDialog.wait({ window: { title: game.i18n.localize("AD2E.Bond.MountDiedTitle") },
       content: `<p>${game.i18n.localize("AD2E.Bond.MountDiedQuestion")}</p>`,
       buttons: [{ action: "normal", label: game.i18n.localize("AD2E.Bond.NotNegligent"), default: true },
         { action: "negligent", label: game.i18n.localize("AD2E.Bond.WasNegligent") }, { action: "cancel", label: game.i18n.localize("Cancel") }],
@@ -1592,7 +1593,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   static async #onMountFled() {
     if (!game.user?.isGM) return;
-    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Bond.FledTitle") },
+    const ok = await ad2eDialog.confirm({ window: { title: game.i18n.localize("AD2E.Bond.FledTitle") },
       content: `<p>${game.i18n.localize("AD2E.Bond.FledConfirm")}</p>`, rejectClose: false });
     return ok ? mountFled(this.actor) : null;
   }
@@ -1686,7 +1687,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   static async onCastleStop() {
-    const ok = await foundry.applications.api.DialogV2.confirm({ window: { title: game.i18n.localize("AD2E.Castle.Title") },
+    const ok = await ad2eDialog.confirm({ window: { title: game.i18n.localize("AD2E.Castle.Title") },
       content: `<p>${foundry.utils.escapeHTML(game.i18n.localize("AD2E.Castle.StopConfirm"))}</p>`, rejectClose: false });
     return ok ? stopConstruction(this.actor) : null;
   }

@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 import { ENCOUNTER_CHECKS } from "./rules/encounter-check-tables.mjs";
 
 /**
@@ -302,7 +303,7 @@ export function encounterButtons(message, html) {
 
 /** Table 58: ask who was surprised (and fog / night), roll the distance in feet for the GM. */
 export async function encounterDistanceDialog(e = {}) {
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Encounter.DistanceTitle") },
     content: `<div class="form-group"><label>${esc(i18n("AD2E.Encounter.Surprised"))}</label><select name="surprise">`
       + ["none", "one", "both"].map(k => `<option value="${k}">${esc(i18n(`AD2E.Encounter.SurpriseKind.${k}`))}</option>`).join("") + `</select></div>`

@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Henchmen (Henchmen (PHB), Henchmen (DMG), Charisma (PHB) Table 6) and morale checks (Morale (DMG) Tables 49/50,
  * generated in module/rules/encounter-tables.mjs).
@@ -38,7 +39,7 @@ export function henchmenInfo(pc) {
 export async function promptMorale(title) {
   const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
   const boxes = MORALE.situations.map(m => `<label><input type="checkbox" name="t50-${m.key}"> ${esc(m.label)} (${m.value > 0 ? "+" : ""}${m.value})</label>`).join("");
-  return foundry.applications.api.DialogV2.prompt({
+  return ad2eDialog.prompt({
     classes: ["ad2e"],
     window: { title },
     content: `<p class="ad2e-note">${game.i18n.localize("AD2E.Henchmen.MoraleHint")}</p>`

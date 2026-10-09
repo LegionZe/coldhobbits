@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Hit points, death and healing.
  *  - Character Death (PHB, DMG): "When a character reaches 0 hit points, that character is slain."
@@ -244,7 +245,7 @@ export function damageButtons(message, html) {
 /** Ask for an amount of damage or healing and apply it to `actor` (sheet buttons). */
 export async function promptHitPoints(actor, heal) {
   const i18n = k => game.i18n.localize(k);
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: `${actor.name}: ${i18n(heal ? "AD2E.Health.Heal" : "AD2E.Health.Damage")}` },
     content: `<div class="form-group"><label>${i18n("AD2E.Health.Amount")}</label><input type="number" name="amount" value="1" min="0" step="1" autofocus></div>`
       + (heal ? "" : `<div class="form-group"><label>${i18n("AD2E.Health.SingleAttack")}</label><input type="checkbox" name="single" checked></div>`

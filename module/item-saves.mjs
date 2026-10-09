@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 import { ITEM_SAVES } from "./rules/item-save-tables.mjs";
 
 /**
@@ -123,7 +124,7 @@ export async function itemSaveDialog(actor, { form = "magicalFire", distance = 1
       + `<td><input type="number" name="bonus.${i.id}" value="${itemSaveBonus(i)}" step="1" style="width:4em"></td>`
       + `<td><input type="checkbox" name="counter.${i.id}"></td></tr>`;
   }).join("");
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.ItemSave.Title", { name: actor.name }) }, position: { width: 620 },
     content: `<div class="form-group"><label>${esc(i18n("AD2E.ItemSave.FormLabel"))}</label><select name="form">${formOptions(form)}</select></div>`
       + `<div class="form-group"><label>${esc(i18n("AD2E.ItemSave.Distance"))}</label><input type="number" name="distance" value="${distance}" min="0" step="5"></div>`
@@ -202,7 +203,7 @@ export async function fallingDialog() {
   const targets = [...(game.user.targets ?? [])];
   const tokens = targets.length ? targets : (canvas?.tokens?.controlled ?? []);
   const refs = tokens.map(t => ({ uuid: t.document?.uuid, name: t.document?.name ?? t.name, actor: t.actor })).filter(t => t.uuid);
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Falling.Title") },
     content: `<div class="form-group"><label>${esc(i18n("AD2E.Falling.Distance"))}</label><input type="number" name="distance" value="20" min="0" step="5" autofocus></div>`
       + `<div class="form-group"><label>${esc(i18n("AD2E.ItemSave.Soft"))}</label><input type="checkbox" name="soft"></div>`

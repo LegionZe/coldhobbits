@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Material components when casting (world setting "trackComponents", off by default: "There are some very good reasons
  * why you shouldn't use material components in play", Material Spell Components (POSM)).
@@ -32,7 +33,7 @@ export async function useComponents(actor, spell) {
   if (missing.length) {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     ui.notifications.warn(game.i18n.format("AD2E.Components.MissingWarn", { name: spell.name, list: missing.join(", ") }));
-    const ok = await foundry.applications.api.DialogV2.confirm({
+    const ok = await ad2eDialog.confirm({
       window: { title: game.i18n.format("AD2E.Components.MissingTitle", { name: spell.name }) },
       content: `<p>${esc(game.i18n.format("AD2E.Components.MissingText", { actor: actor.name, list: missing.join(", ") }))}</p>`,
       rejectClose: false

@@ -1,3 +1,4 @@
+import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Mounts and pack animals (Encumbrance (PHB), "Encumbrance and Mounts"; PHB Table 49, Carrying Capacities of Animals):
  *  - "The 'Base Move' column in Table 49 lists the maximum amount an animal can carry and maintain its normal movement
@@ -141,7 +142,7 @@ export async function pushMount(actor) {
   if (state.status) return ui.notifications.warn(fmt(`AD2E.Push.Blocked.${state.status}`, { name: actor.name }));
   const target = actor.system.saves?.[MOUNT_PUSH.save]?.value ?? 20;
   const dbl = pushModifier(actor, "double", now);
-  const input = await foundry.applications.api.DialogV2.prompt({
+  const input = await ad2eDialog.prompt({
     window: { title: fmt("AD2E.Push.Title", { name: actor.name }) },
     content: `<div class="form-group"><label>${i18n("AD2E.Push.Pace")}</label><select name="pace">`
       + `<option value="double">${esc(fmt("AD2E.Push.Double", { mod: dbl.total }))}</option>`
@@ -233,7 +234,7 @@ export async function rollBodyWeight(actor, { height = false } = {}) {
   const text = [row ? game.i18n.format("AD2E.Animal.BodyWeightText", { race: race.name, male: row.male, female: row.female, dice: row.dice }) : "",
     hrow ? game.i18n.format("AD2E.Animal.HeightText", { race: race.name, male: hrow.male, female: hrow.female, dice: hrow.dice }) : ""]
     .filter(Boolean).map(x => `<p>${x}</p>`).join("");
-  const column = await foundry.applications.api.DialogV2.wait({
+  const column = await ad2eDialog.wait({
     window: { title: i18n(height ? "AD2E.Animal.HeightWeightTitle" : "AD2E.Animal.BodyWeightTitle") },
     content: `${text}<p>${i18n("AD2E.Animal.ColumnAsk")}</p>`,
     buttons: ["male", "female"].map(k => ({ action: k, label: i18n(`AD2E.Gender.Build.${k}`), default: k === (preset ?? "male") })),
