@@ -1,4 +1,4 @@
-import { buildNpc, NPC, npcActorData, PURPOSE_KEYS, PURPOSES } from "../npc-builder.mjs";
+import { BUILDS, buildNpc, GENDERS, NPC, npcActorData, PURPOSE_KEYS, PURPOSES } from "../npc-builder.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -13,7 +13,7 @@ async function packDoc(pack, identifier) {
 
 /**
  * GM random NPC builder (module/npc-builder.mjs; Configure Settings, the GM manual, or game.ad2e.createNpc()): pick the
- * purpose and, if wanted, race, class, level formula, profession, troop type, title culture or sage field; "Roll"
+ * purpose and, if wanted, race, class, level formula, gender, Table 10 height/weight column, profession, troop type, title culture or sage field; "Roll"
  * shows the NPC, "Create" makes the character actor (in the world or an unlocked world compendium).
  */
 export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2) {
@@ -27,7 +27,7 @@ export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2
 
   static PARTS = { main: { template: "systems/ad2e/templates/apps/npc-builder.hbs" } };
 
-  state = { purpose: "townsfolk", race: "", cls: "", level: "", sex: "", profession: "", soldier: "", culture: "", column: "", field: "", name: "", destination: "" };
+  state = { purpose: "townsfolk", race: "", cls: "", level: "", gender: "", build: "", profession: "", soldier: "", culture: "", column: "", field: "", name: "", destination: "" };
 
   spec = null;
 
@@ -57,7 +57,9 @@ export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2
       purposes: PURPOSE_KEYS.map(k => ({ key: k, label: i18n(`AD2E.Npc.Purpose.${k}`), selected: k === s.purpose })),
       races: opt(races.map(r => ({ key: r.system.identifier, name: r.name })), s.race, r => r.name),
       classes: opt(classes.map(c => ({ key: c.system.identifier, name: c.name })), s.cls, c => c.name),
-      sexes: opt(["male", "female"], s.sex, k => i18n(`AD2E.Npc.Sex.${k}`)),
+      genders: opt(GENDERS, s.gender, k => i18n(`AD2E.Npc.Gender.${k}`)),
+      builds: [{ key: "", label: i18n("AD2E.Npc.BuildAuto"), selected: !s.build },
+        ...BUILDS.map(k => ({ key: k, label: i18n(`AD2E.Npc.Build.${k}`), selected: k === s.build }))],
       professions: opt(NPC.professions.map(p => p.name), s.profession),
       soldiers: opt(NPC.soldiers.map(x => x.name), s.soldier),
       cultures: opt(cultures, s.culture, k => i18n(`AD2E.Npc.Culture.${k}`)),
@@ -67,10 +69,11 @@ export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2
         ...packs.map(pk => ({ key: pk.collection, label: pk.metadata.label, selected: s.destination === pk.collection }))],
       preview: sp ? {
         name: sp.name, race: sp.race?.name ?? "", cls: sp.cls?.name ?? i18n("AD2E.Npc.NoClass"), level: sp.level, hp: sp.hp, xp: sp.xp,
-        sex: i18n(`AD2E.Npc.Sex.${sp.sex}`), age: sp.age, alignment: game.i18n.localize(CONFIG.AD2E?.alignments?.[sp.alignment] ?? sp.alignment),
+        gender: i18n(`AD2E.Npc.Gender.${sp.gender}`), build: i18n(`AD2E.Npc.Build.${sp.build}`), age: sp.age, alignment: game.i18n.localize(CONFIG.AD2E?.alignments?.[sp.alignment] ?? sp.alignment),
         abilities: Object.entries(sp.abilities).map(([k, v]) => ({ key: game.i18n.localize(`AD2E.Ability.${k}`), value: v + (sp.race?.system.adjust?.[k] ?? 0),
           exceptional: k === "str" && sp.exceptional ? `/${String(sp.exceptional % 100).padStart(2, "0")}` : "" })),
-        role: sp.role, traits: `${sp.traits.general}, ${sp.traits.specific}`, looks: Object.values(sp.looks).join(", ")
+        role: sp.role, traits: `${sp.traits.general}, ${sp.traits.specific}`, looks: Object.values(sp.looks).join(", "),
+        size: [sp.height ? `${Math.floor(sp.height / 12)}' ${sp.height % 12}"` : "", sp.weight ? `${sp.weight} lb` : ""].filter(Boolean).join(", ")
       } : null,
       urls: NPC.urls
     };

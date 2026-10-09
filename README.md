@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.21)
+## Status (v1.0.22)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -487,11 +487,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   owner's rulings: a character actor (race and class items, abilities, level, hit points, equipment), purposes
   townsfolk / soldier / adventurer / official / sage / spellcaster for hire / spy / assassin, abilities 3d6 in order
   raised to the race's and class's minimums, levels from a formula per purpose (townsfolk, soldiers, officials and sages
-  0, i.e. no class: THAC0 20 and the 0-level warrior saves; the character level may now be 0). Race, class, level, sex,
-  profession, troop type, title culture and column, and sage field can be chosen or left random. Implementation choices:
-  a random race allows the class; the alignment is one the class allows; age from PHB Table 11, height and weight from
+  0, i.e. no class: THAC0 20 and the 0-level warrior saves; the character level may now be 0). Race, class, level, gender
+  (male, female, non-binary or agender; owner's ruling, 1.0.22), the PHB Table 10 height and weight column (male or
+  female; owner's ruling: a separate choice), profession, troop type, title culture and column, and sage field can be chosen or left random. Implementation choices:
+  a random race allows the class; a random gender is one of the four with equal chance; the
+  Table 10 column follows a male or female gender unless chosen and is rolled 50/50 for the others; the alignment is one the class allows; age from PHB Table 11, height and weight from
   Table 10; hit points per Hit Die with the Constitution adjustment (at least 1 a die; 1d6 at level 0); experience the
-  minimum for the level; a basic weapon and armour set per class (`CLASS_GEAR`), a soldier's equipment from his Table 64
+  minimum for the level; a basic weapon and armour set per class (`CLASS_GEAR`), a soldier's equipment from their Table 64
   hireling, a tradesman's nonweapon proficiency for the trade (`PROFESSION_PROFS`); personality (Table 70) and looks
   (Personality (DMG)) as for patrons; the rest (title, wage, sage ability, base morale, Table 69 costs for casters) in
   the Bio tab notes. Spells are not chosen.
