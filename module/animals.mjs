@@ -216,7 +216,8 @@ export function feetInches(inches) {
 
 /**
  * Roll body weight (and with `height`, height) on PHB Table 10: the base for the character's Table 10 column
- * (`tableColumn`; asked when not set) plus the race's modifier dice, and store them.
+ * (always asked; the recorded column (`tableColumn`) is the default button and the choice is recorded in `system.build`)
+ * plus the race's modifier dice, and store them.
  */
 export async function rollBodyWeight(actor, { height = false } = {}) {
   const race = actor.system.raceInfo?.raceItem;
@@ -227,20 +228,19 @@ export async function rollBodyWeight(actor, { height = false } = {}) {
     return null;
   }
   const i18n = k => game.i18n.localize(k);
-  let column = tableColumn(actor.system);
-  if (!column) {
-    const text = [row ? game.i18n.format("AD2E.Animal.BodyWeightText", { race: race.name, male: row.male, female: row.female, dice: row.dice }) : "",
-      hrow ? game.i18n.format("AD2E.Animal.HeightText", { race: race.name, male: hrow.male, female: hrow.female, dice: hrow.dice }) : ""]
-      .filter(Boolean).map(x => `<p>${x}</p>`).join("");
-    column = await foundry.applications.api.DialogV2.wait({
-      window: { title: i18n(height ? "AD2E.Animal.HeightWeightTitle" : "AD2E.Animal.BodyWeightTitle") },
-      content: `${text}<p>${i18n("AD2E.Animal.ColumnAsk")}</p>`,
-      buttons: [{ action: "male", label: i18n("AD2E.Gender.Build.male"), default: true }, { action: "female", label: i18n("AD2E.Gender.Build.female") }],
-      rejectClose: false
-    });
-  }
+  // Always asked (owner's ruling, 1.0.24: the column need not follow the gender); the recorded column is the default.
+  const preset = tableColumn(actor.system);
+  const text = [row ? game.i18n.format("AD2E.Animal.BodyWeightText", { race: race.name, male: row.male, female: row.female, dice: row.dice }) : "",
+    hrow ? game.i18n.format("AD2E.Animal.HeightText", { race: race.name, male: hrow.male, female: hrow.female, dice: hrow.dice }) : ""]
+    .filter(Boolean).map(x => `<p>${x}</p>`).join("");
+  const column = await foundry.applications.api.DialogV2.wait({
+    window: { title: i18n(height ? "AD2E.Animal.HeightWeightTitle" : "AD2E.Animal.BodyWeightTitle") },
+    content: `${text}<p>${i18n("AD2E.Animal.ColumnAsk")}</p>`,
+    buttons: ["male", "female"].map(k => ({ action: k, label: i18n(`AD2E.Gender.Build.${k}`), default: k === (preset ?? "male") })),
+    rejectClose: false
+  });
   if (!column) return null;
-  const update = {};
+  const update = { "system.build": column };
   const speaker = ChatMessage.getSpeaker({ actor }), col = i18n(`AD2E.Gender.Build.${column}`);
   if (hrow) {
     const r = await new Roll(`${hrow[column]} + ${hrow.dice}`).evaluate();
