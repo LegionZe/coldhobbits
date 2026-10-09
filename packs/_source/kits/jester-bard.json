@@ -153,7 +153,27 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "blowgun",
+      "hand-crossbow",
+      "dagger-or-dirk",
+      "dart",
+      "hand-or-throwing-axe",
+      "javelin",
+      "knife",
+      "quarterstaff",
+      "scourge",
+      "sling",
+      "short-sword",
+      "whip"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

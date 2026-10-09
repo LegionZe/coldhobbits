@@ -37,7 +37,14 @@
       "elf"
     ],
     "url": "https://adnd2e.fandom.com/wiki/Specialist_Wizard_(PHB)",
-    "notes": ""
+    "notes": "",
+    "allowedWeapons": [
+      "dagger-or-dirk",
+      "quarterstaff",
+      "dart",
+      "knife",
+      "sling"
+    ]
   },
   "effects": [],
   "folder": "MUH98mRJu5U897md",

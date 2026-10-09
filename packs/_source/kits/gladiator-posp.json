@@ -108,7 +108,33 @@
         "rank": "upperMiddle",
         "title": ""
       }
-    ]
+    ],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [
+      "short-bow",
+      "composite-short-bow",
+      "long-bow",
+      "composite-long-bow",
+      "hand-crossbow",
+      "light-crossbow",
+      "heavy-crossbow",
+      "pellet-bow",
+      "cho-ku-no",
+      "arquebus",
+      "hand-gunne",
+      "caliver",
+      "musket",
+      "belt-pistol",
+      "horse-pistol",
+      "sling",
+      "staff-sling",
+      "blowgun"
+    ],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

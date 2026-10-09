@@ -102,7 +102,22 @@
         "rank": "lowerMiddle",
         "title": ""
       }
-    ]
+    ],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [
+      "quarterstaff",
+      "spear",
+      "short-bow",
+      "composite-short-bow",
+      "long-bow",
+      "composite-long-bow",
+      "club"
+    ],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "rcA6GiG2S1laSGYs",

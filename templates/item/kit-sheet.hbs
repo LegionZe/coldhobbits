@@ -12,7 +12,13 @@
     <label>{{localize "AD2E.Race.KitRaceLimits"}} <input type="text" name="raceLimitsText" value="{{raceLimitsText}}" data-tooltip="{{localize 'AD2E.Race.KitRaceLimitsHint'}}"></label>
     <label class="ad2e-checkbox"><input type="checkbox" name="system.raceOnly" {{#if system.raceOnly}}checked{{/if}}> {{localize "AD2E.Race.RaceOnly"}}</label>
     <label>{{localize "AD2E.Race.KitRacesBarred"}} <input type="text" name="racesBarredText" value="{{racesBarredText}}" data-tooltip="{{localize 'AD2E.Race.KitRacesBarredHint'}}"></label>
-    <label>{{localize "AD2E.Weapon.AllowedWeapons"}} <input type="text" name="allowedWeaponsText" value="{{allowedWeaponsText}}" data-tooltip="{{localize 'AD2E.Weapon.AllowedWeaponsHint'}}"></label>
+    <label>{{localize "AD2E.Weapon.AllowedWeapons"}} <input type="text" name="allowedWeaponsText" value="{{allowedWeaponsText}}" placeholder="{{localize 'AD2E.Weapon.ClassList'}}" data-tooltip="{{localize 'AD2E.Weapon.KitAllowedHint'}}"></label>
+    <label class="ad2e-checkbox" data-tooltip="{{localize 'AD2E.Weapon.WithinClassHint'}}"><input type="checkbox" name="system.weaponsWithinClass" {{#if system.weaponsWithinClass}}checked{{/if}}> {{localize "AD2E.Weapon.WithinClass"}}</label>
+    <label>{{localize "AD2E.Weapon.ExtraWeapons"}} <input type="text" name="extraWeaponsText" value="{{extraWeaponsText}}" data-tooltip="{{localize 'AD2E.Weapon.ExtraWeaponsHint'}}"></label>
+    <label>{{localize "AD2E.Weapon.ForbiddenWeapons"}} <input type="text" name="forbiddenWeaponsText" value="{{forbiddenWeaponsText}}" data-tooltip="{{localize 'AD2E.Weapon.ForbiddenWeaponsHint'}}"></label>
+    <label>{{localize "AD2E.Weapon.InitialWeapons"}} <input type="text" name="initialWeaponsText" value="{{initialWeaponsText}}" data-tooltip="{{localize 'AD2E.Weapon.InitialWeaponsHint'}}"></label>
+    <label>{{localize "AD2E.Weapon.InitialForbidden"}} <input type="text" name="initialForbiddenWeaponsText" value="{{initialForbiddenWeaponsText}}" data-tooltip="{{localize 'AD2E.Weapon.InitialForbiddenHint'}}"></label>
+    <label>{{localize "AD2E.Weapon.WeaponNote"}} <input type="text" name="system.weaponNote" value="{{system.weaponNote}}"></label>
     <label class="ad2e-checkbox" data-tooltip="{{localize 'AD2E.Class.MinStacksHint'}}"><input type="checkbox" name="system.minStacks" {{#if system.minStacks}}checked{{/if}}> {{localize "AD2E.Class.MinStacks"}}</label>
     <label class="ad2e-checkbox"><input type="checkbox" name="system.otherRequirements" {{#if system.otherRequirements}}checked{{/if}}> {{localize "AD2E.Item.otherRequirements"}}</label>
   </div>

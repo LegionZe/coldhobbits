@@ -14,7 +14,7 @@ import EquipmentData from "./data/item-equipment.mjs";
 import MagicItemData from "./data/item-magic.mjs";
 import JewelleryData from "./data/item-jewellery.mjs";
 import TraitData from "./data/item-trait.mjs";
-import { migrateCurrency, migrateKitMechanics } from "./migrations.mjs";
+import { migrateCurrency, migrateKitMechanics, migrateWeaponLimits, registerMigrationSettings } from "./migrations.mjs";
 import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerWindowFit } from "./dialogs.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
@@ -129,6 +129,7 @@ Hooks.once("init", () => {
   // Ask for a situational modifier (and reason) when one combatant rolls initiative.
   registerOpaqueWindows();
   registerWindowFit();
+  registerMigrationSettings();
   registerSidebarColours();
   registerHealth();
   registerAnimalHooks();
@@ -239,5 +240,6 @@ Hooks.once("ready", () => {
   if (game.user.isGM) {
     migrateCurrency();
     migrateKitMechanics();
+    migrateWeaponLimits();
   }
 });

@@ -95,7 +95,16 @@
       "bardFirst": 10
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [
+      "razor"
+    ],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "BVfipmiC4r0zp30k",

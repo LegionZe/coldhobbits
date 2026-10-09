@@ -94,7 +94,27 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "club",
+      "footman-s-flail",
+      "horseman-s-flail",
+      "footman-s-mace",
+      "horseman-s-mace",
+      "javelin",
+      "morning-star",
+      "quarterstaff",
+      "sling",
+      "spear",
+      "staff-sling",
+      "warhammer"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

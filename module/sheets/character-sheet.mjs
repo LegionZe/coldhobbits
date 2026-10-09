@@ -40,6 +40,21 @@ export function formatKitRecommended(ids) {
 }
 
 /** A kit's weapon specialization exception as text ("" when the class rule applies). */
+/** A kit's weapon limits as one line (tools/build-kit-weapons.py), "" when it has none. */
+export function formatKitWeapons(kit) {
+  if (!kit) return "";
+  const i18n = k => game.i18n.localize(k);
+  const list = l => (l ?? []).map(v => (v === "*" ? i18n("AD2E.Weapon.AnyWeapon") : v)).join(", ");
+  return [
+    kit.allowedWeapons?.length ? `${i18n("AD2E.Weapon.AllowedWeapons")}: ${list(kit.allowedWeapons)}${kit.weaponsWithinClass ? ` (${i18n("AD2E.Weapon.WithinClass")})` : ""}` : "",
+    kit.extraWeapons?.length ? `${i18n("AD2E.Weapon.ExtraWeapons")}: ${list(kit.extraWeapons)}` : "",
+    kit.forbiddenWeapons?.length ? `${i18n("AD2E.Weapon.ForbiddenWeapons")}: ${kit.forbiddenWeapons.includes("*") ? "*" : list(kit.forbiddenWeapons)}` : "",
+    kit.initialWeapons?.length ? `${i18n("AD2E.Weapon.InitialWeapons")}: ${list(kit.initialWeapons)}` : "",
+    kit.initialForbiddenWeapons?.length ? `${i18n("AD2E.Weapon.InitialForbidden")}: ${list(kit.initialForbiddenWeapons)}` : "",
+    kit.weaponNote ?? ""
+  ].filter(Boolean).join("; ");
+}
+
 export function formatKitSpecialization(spec) {
   if (!spec) return "";
   const title = id => id.split("-").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
@@ -539,6 +554,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       kitRequiredProfs: formatKitProficiencies(info.kitItem?.system.requiredProficiencies),
       kitRecommended: formatKitRecommended(info.kitItem?.system.recommendedProficiencies),
       kitSpecialization: formatKitSpecialization(info.kitItem?.system.specialization),
+      kitWeapons: formatKitWeapons(info.kitItem?.system),
       kitBonusSlots: info.kitItem ? [["weapon", "AD2E.Prof.Weapon"], ["nonweapon", "AD2E.Prof.Nonweapon"]]
         .filter(([k]) => info.kitItem.system.bonusSlots?.[k]).map(([k, l]) => `+${info.kitItem.system.bonusSlots[k]} ${game.i18n.localize(l)}`).join(", ") : "",
       overLevelLimit: !!info.levelLimit && sys.level > info.levelLimit,

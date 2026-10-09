@@ -105,7 +105,22 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "short-bow",
+      "light-crossbow",
+      "dagger-or-dirk",
+      "dart",
+      "knife",
+      "sling",
+      "short-sword"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "gvROogFNlKIj78r0",

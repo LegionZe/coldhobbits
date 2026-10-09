@@ -91,7 +91,21 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [
+      "club",
+      "dagger-or-dirk",
+      "dart",
+      "knife",
+      "sling",
+      "quarterstaff"
+    ],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "prVD0QJ4cOLuQTnl",

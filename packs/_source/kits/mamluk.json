@@ -87,7 +87,21 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [
+      "light-horse-lance",
+      "medium-horse-lance",
+      "heavy-horse-lance",
+      "jousting-lance",
+      "horseman-s-flail",
+      "horseman-s-mace"
+    ],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "AKpnHCDNvBQdGgBS",

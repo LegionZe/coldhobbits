@@ -403,6 +403,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   (warning on weapon rows and in the attack dialog, owner's ruling; multi-class: priest limits always, else most permissive;
   class/kit item `allowedWeapons` (names or identifiers, slug-matched) replaces a class's list, the kit's for its own class).
   Multi-class armour: druid (priest) limits always, others only when every class has them. Lasso: POCT `TARGETS`.
+  Class and kit weapon lists (owner's rulings 1.0.27) are GENERATED into the class/kit sources by `python3 tools/build-kit-weapons.py`
+  (class `allowedWeapons` from `CLASS_WEAPONS`; curated `KITS` with a `match` regex per kit page; `ALIAS`/`GROUPS` resolve
+  names; runs after build-aq-equipment-data.py). Kit fields `allowedWeapons` ("*" any), `extraWeapons`, `forbiddenWeapons`
+  ("*" none), `initialWeapons` / `initialForbiddenWeapons` (warn at level <= 1), `weaponsWithinClass`, `weaponNote`;
+  `weaponRestriction` entries { identifier, group, level, allowed (class item), kit } -> "" | notAllowed | notBludgeoning |
+  forbidden | notInitial; `formatKitWeapons` (Race & Class tab); `migrateWeaponLimits` / `weaponLimitPatch` (migrations.mjs, once).
 - Kit mechanics: `tools/build-kit-mechanics.py` (run after build-proficiency-data.py) writes `modifiers`, `skillAdjust`
   and `skillPoints` ({ first, perLevel, bardFirst }: barber bards 10) into the kit sources from the curated `KIT_MODIFIERS` / `KIT_SKILLS` / `KIT_POINTS`; each entry has
   a `match` regex that must occur in the current kit page (the script fails otherwise). Conditions are paraphrased.

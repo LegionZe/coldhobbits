@@ -117,7 +117,24 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "heavy-horse-lance",
+      "medium-horse-lance",
+      "awl-pike",
+      "bardiche",
+      "glaive-guisarme",
+      "spetum",
+      "long-sword",
+      "two-hand-sword",
+      "trident"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "iMNnNZAsoE1a8mBB",

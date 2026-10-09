@@ -62,6 +62,10 @@ export class ClassSheet extends AD2EItemSheet {
     context.prime = [...this.document.system.prime];
     context.alignmentList = [...this.document.system.alignments];
     context.allowedWeaponsText = (this.document.system.allowedWeapons ?? []).join(", ");
+    // The cleric's PHB limit is a weapon type (bludgeoning), kept in the generated rules rather than as a list.
+    const rule = AD2E.classTables?.classWeapons?.[this.document.system.identifier];
+    context.allowedWeaponsPlaceholder = rule?.type ? game.i18n.format("AD2E.Weapon.TypeRule", { type: rule.type })
+      : game.i18n.localize("AD2E.Weapon.AnyWeapon");
     return context;
   }
 
@@ -72,6 +76,9 @@ export class ClassSheet extends AD2EItemSheet {
 }
 
 /** Parse comma-separated `<name>Text` form fields into `system.<name>` arrays. */
+/** Kit weapon lists, edited as comma-separated text (tools/build-kit-weapons.py). */
+const KIT_WEAPON_FIELDS = ["allowedWeapons", "extraWeapons", "forbiddenWeapons", "initialWeapons", "initialForbiddenWeapons"];
+
 function parseClassesText(data, names = ["classes"]) {
   for (const name of names) {
     if (!(`${name}Text` in data)) continue;
@@ -102,7 +109,7 @@ export class KitSheet extends AD2EItemSheet {
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     context.classesText = [...this.document.system.classes].join(", ");
-    context.allowedWeaponsText = (this.document.system.allowedWeapons ?? []).join(", ");
+    for (const f of KIT_WEAPON_FIELDS) context[`${f}Text`] = (this.document.system[f] ?? []).join(", ");
     context.kitBonusProfs = formatKitProficiencies(this.document.system.bonusProficiencies);
     context.kitRecommended = formatKitRecommended(this.document.system.recommendedProficiencies);
     context.kitSpecialization = formatKitSpecialization(this.document.system.specialization);
@@ -123,7 +130,7 @@ export class KitSheet extends AD2EItemSheet {
 
   /** Class list and race limits are edited as comma-separated text. */
   _processFormData(event, form, formData) {
-    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData), ["classes", "racesBarred", "allowedWeapons"]));
+    return parseRaceLimits(parseClassesText(super._processFormData(event, form, formData), ["classes", "racesBarred", ...KIT_WEAPON_FIELDS]));
   }
 }
 

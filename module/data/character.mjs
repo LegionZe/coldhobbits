@@ -63,31 +63,43 @@ export function armorRestriction(classId, item) {
 }
 
 /**
- * Why a character's classes may not use a weapon item (AD2E.classTables.classWeapons; owner's ruling: a warning, the
- * roll is not blocked), or "" if allowed: "notBludgeoning" (standard clerics, Table 45 type B only) or "notAllowed".
+ * Why a character's classes may not use a weapon item (owner's ruling: a warning, the roll is not blocked), or "" if
+ * allowed: "notBludgeoning" (standard clerics, Table 45 type B only), "notAllowed", "forbidden" (a kit's forbidden
+ * weapons) or "notInitial" (a kit's 1st-level limits, owner's ruling 1.0.27).
+ * Per class: the class item's list (`allowed`; empty = AD2E.classTables.classWeapons) or a fitting kit's (`kit`:
+ * { allowed ("*" = any), extra, forbidden ("*" = none), initial, initialForbidden, within }, tools/build-kit-weapons.py).
  * Several classes (multi-class): "a multi-classed priest must abide by the weapon restrictions of his mythos"; otherwise
  * the most permissive class decides (warriors and bards: any weapon). Weapons without a proficiency are not checked.
- * @param {Array<{identifier: string, group: string}>} classes
+ * @param {Array<{identifier: string, group: string, level?: number, allowed?: string[], kit?: object}>} classes
  */
 export function weaponRestriction(classes, item) {
   const rules = AD2E.classTables?.classWeapons ?? {};
   const sys = item?.system ?? {};
   if (!sys.proficiency || !classes?.length) return "";
-  // A class or kit item's own list (e.g. a specialty priest's; names or identifiers) replaces the generated one.
   const slug = v => String(v ?? "").trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  const own = id => classes.find(c => c.identifier === id)?.allowed ?? [];
-  const allows = id => {
-    if (own(id).length) return own(id).map(slug).includes(slug(sys.proficiency));
-    const rule = rules[id];
-    if (!rule) return true;
-    if (rule.type) return (sys.weapon?.type ?? "") === rule.type;
-    return (rule.ids ?? []).includes(sys.proficiency);
+  const prof = slug(sys.proficiency);
+  const has = list => (list ?? []).some(v => v === "*" || slug(v) === prof);
+  const check = c => {
+    const kit = c.kit ?? null;
+    if (has(kit?.forbidden)) return "forbidden";
+    if ((c.level ?? 1) <= 1) {
+      if (has(kit?.initialForbidden)) return "notInitial";
+      if (kit?.initial?.length && !has(kit.initial)) return "notInitial";
+    }
+    if (has(kit?.extra)) return "";
+    const own = c.allowed ?? [];
+    const rule = rules[c.identifier];
+    const typeRule = !own.length && !!rule?.type;
+    const base = own.length ? has(own) : !rule ? true : rule.type ? (sys.weapon?.type ?? "") === rule.type : (rule.ids ?? []).includes(sys.proficiency);
+    const ok = kit?.allowed?.length ? has(kit.allowed) && (!kit.within || base) : base;
+    if (ok) return "";
+    return typeRule && (!kit?.allowed?.length || kit.within) ? "notBludgeoning" : "notAllowed";
   };
-  const reason = id => (!own(id).length && rules[id]?.type ? "notBludgeoning" : "notAllowed");
   const priests = classes.filter(c => c.group === "priest");
-  for (const p of priests) if (!allows(p.identifier)) return reason(p.identifier);
+  for (const p of priests) { const r = check(p); if (r) return r; }
   if (priests.length) return "";
-  return classes.some(c => allows(c.identifier)) ? "" : reason(classes[0].identifier);
+  const results = classes.map(check);
+  return results.includes("") ? "" : results[0];
 }
 
 /** Whether worn armour hinders casting wizard spells: any armour item, except elven chain worn by an elf. */
@@ -1001,10 +1013,13 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Class weapon limits (weaponRestriction): the current class, or every class of a multi-class character.
     // A fitting kit's or the class item's own weapon list replaces the class's (specialty priests, owner's ruling).
     const kit = this.classInfo.kitFits ? this.classInfo.kitItem?.system : null;
-    const withAllowed = (identifier, group, item) => ({ identifier, group,
-      allowed: (kit?.classes?.has(identifier) && kit.allowedWeapons?.length ? kit.allowedWeapons : item?.system.allowedWeapons) ?? [] });
-    const weaponClasses = this.multi ? this.multi.classes.map(c => withAllowed(c.identifier, c.group, c.item))
-      : (this.classInfo.classItem ? [withAllowed(this.classInfo.classItem.system.identifier, this.classInfo.classItem.system.group, this.classInfo.classItem)] : []);
+    const kitWeapons = kit ? { allowed: kit.allowedWeapons ?? [], extra: kit.extraWeapons ?? [], forbidden: kit.forbiddenWeapons ?? [],
+      initial: kit.initialWeapons ?? [], initialForbidden: kit.initialForbiddenWeapons ?? [], within: !!kit.weaponsWithinClass } : null;
+    const withAllowed = (identifier, group, item, level) => ({ identifier, group, level,
+      allowed: item?.system.allowedWeapons ?? [], kit: kit?.classes?.has(identifier) ? kitWeapons : null });
+    const weaponClasses = this.multi ? this.multi.classes.map(c => withAllowed(c.identifier, c.group, c.item, c.level))
+      : (this.classInfo.classItem ? [withAllowed(this.classInfo.classItem.system.identifier, this.classInfo.classItem.system.group,
+        this.classInfo.classItem, this.level)] : []);
     return items.map(item => {
       const w = item.system;
       const prof = profEntries.find(e => e.item.system.identifier === w.proficiency) ?? null;

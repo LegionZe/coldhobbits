@@ -124,7 +124,18 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "dagger-or-dirk",
+      "knife",
+      "short-sword"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": "knife from 2nd level, short sword from 5th"
   },
   "effects": [],
   "folder": "vXe9iAMfjaN8A52p",

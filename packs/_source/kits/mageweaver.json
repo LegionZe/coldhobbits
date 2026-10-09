@@ -67,7 +67,21 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [
+      "sling",
+      "dart",
+      "quarterstaff",
+      "dagger-or-dirk",
+      "jambiya",
+      "knife"
+    ],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "DCFEhIWLnnL5YaYc",

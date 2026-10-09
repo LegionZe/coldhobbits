@@ -154,7 +154,24 @@
       "bardFirst": null
     },
     "special": {},
-    "socialRanks": []
+    "socialRanks": [],
+    "allowedWeapons": [],
+    "extraWeapons": [],
+    "forbiddenWeapons": [],
+    "initialWeapons": [
+      "blowgun",
+      "long-bow",
+      "short-bow",
+      "club",
+      "dagger-or-dirk",
+      "javelin",
+      "knife",
+      "sling",
+      "spear"
+    ],
+    "initialForbiddenWeapons": [],
+    "weaponsWithinClass": false,
+    "weaponNote": ""
   },
   "effects": [],
   "folder": "hhFzw9yiuXoo74J8",

@@ -32,7 +32,21 @@
     "opposition": "",
     "races": [],
     "url": "https://adnd2e.fandom.com/wiki/Thief_(PHB)",
-    "notes": ""
+    "notes": "",
+    "allowedWeapons": [
+      "club",
+      "dagger-or-dirk",
+      "dart",
+      "hand-crossbow",
+      "knife",
+      "lasso",
+      "short-bow",
+      "sling",
+      "broad-sword",
+      "long-sword",
+      "short-sword",
+      "quarterstaff"
+    ]
   },
   "effects": [],
   "folder": "yEGupLH8uqVUD9VS",

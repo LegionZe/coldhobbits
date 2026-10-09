@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.26)
+## Status (v1.0.27)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -615,6 +615,23 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   proficiency (improvised) are not checked. Specialty priests and other special cases: a class or kit item's "Allowed
   weapons" field (weapon proficiency names or identifiers, comma separated) replaces the class's list for the warning
   (a kit's list applies to its own class; owner's ruling).
+  Filled in (1.0.27, `tools/build-kit-weapons.py`): the class items carry the PHB lists above (wizards, druid, thief; the
+  cleric's rule is a weapon type and stays generated, shown as the field's placeholder), and 57 kits carry their limits,
+  curated from each kit page's weapon proficiency text and regex-checked against it: own lists replacing the class's
+  (e.g. Kahin "Kahins are limited to the following weapons: club, dart, spear, light horse lance, jambiya, scimitar,
+  sling, and staff"), weapons added to the class's (Bandit: flail, mace, morning star and warhammer "in addition to
+  those normally permitted to thieves"), any weapon (Assassin, Bounty Hunter, Holy Slayer, Mystic (AA), Thug), forbidden
+  weapons (Gypsy-bard, Mamluk, Meistersinger, Gladiator (POSP), Seeker's swords, Witch: none at all), lists within the
+  class's (Pacifist Priest "only if his true priest-class allows them", Amazon (POSP)) and 1st-level limits (Beggar,
+  Beastmaster, Berserker, Mountain Man, Mystic of Nog, Savage, Seeker). Owner's rulings: 1st-level limits warn only while
+  the character is 1st level ("Not one of the kit's 1st-level weapons"); weapons a kit allows at an extra slot cost are
+  allowed, the cost shown as a note (kit sheet, Race & Class tab), not charged; forbidden and "any weapon" lists recorded.
+  Implementation choices: a kit's "Any." entry is no kit limit; text that only requires or recommends weapons or divides
+  slots (Blade, Charlatan, Skald, Giant Killer, Sharpshooter...) is not recorded; "bow (any)", "sword (any)", "axe (any)",
+  "lance (any)", "polearm (any)", "flails/maces (all)" expand to the system's items; hurled weapons (Jongleur) = dagger,
+  dart, hand axe, javelin, knife, spear, harpoon, trident, club, war hammer; the garrote has no item and is left out.
+  Class and kit copies made before 1.0.27 (world items and characters) are filled once from the compendiums when the GM
+  logs in (world setting `weaponLimitsMigrated`), only where all their weapon lists are empty.
 - Bows made for Strength: a bow item has "Bow made for Strength" (standard, 3-25 and the 18/xx bands). A standard bow
   applies Strength penalties only; a bow made for a Strength gives the user's Strength attack and damage bonuses up to
   that Strength, penalties always ("bows must be specially made to gain the bonus", Strength (PHB); "the attack roll and
