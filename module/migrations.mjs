@@ -111,5 +111,32 @@ export async function migrateWeaponLimits() {
 
 export function registerMigrationSettings() {
   game.settings.register("ad2e", "weaponLimitsMigrated", { scope: "world", config: false, type: Boolean, default: false });
+  game.settings.register("ad2e", "liquidsMigrated", { scope: "world", config: false, type: Boolean, default: false });
   game.settings.register("ad2e", "kitMechanicsMigrated", { scope: "world", config: false, type: Boolean, default: false });
+}
+
+/**
+ * 1.0.29 made the waterskin (Al-Qadim) and the wineskin (PHB) liquid containers (owner's ruling: 1 gallon, 9 lb full).
+ * Copies made before that in the world or on actors get the same figures once (only where no full weight is set).
+ */
+export const LIQUID_DEFAULTS = { "waterskin-1-gal": { volume: "1 gallon", fullWeight: 9 }, wineskin: { volume: "1 gallon", fullWeight: 9 } };
+
+export function liquidPatch(item) {
+  const d = item.type === "equipment" ? LIQUID_DEFAULTS[item.system.identifier] : null;
+  const l = item.system?.liquid;
+  if (!d || (l?.fullWeight !== null && l?.fullWeight !== undefined)) return null;
+  return { _id: item.id, "system.liquid.volume": d.volume, "system.liquid.fullWeight": d.fullWeight };
+}
+
+export async function migrateLiquids() {
+  let done = false;
+  try { done = game.settings.get("ad2e", "liquidsMigrated"); } catch { return; }
+  if (done) return;
+  const world = game.items.map(liquidPatch).filter(Boolean);
+  if (world.length) await Item.updateDocuments(world);
+  for (const actor of game.actors) {
+    const updates = actor.items.map(liquidPatch).filter(Boolean);
+    if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
+  }
+  await game.settings.set("ad2e", "liquidsMigrated", true);
 }

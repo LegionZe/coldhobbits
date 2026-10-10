@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.28)
+## Status (v1.0.29)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -294,6 +294,12 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   miscellaneous equipment (219 items, cost and weight as listed; "*" items weigh 1/10 lb, "**" none). Containers carry
   their Table 50 capacity and animals their Table 49 carrying capacity. Carried items count toward encumbrance (weight x
   quantity); animals, transport, services, lodging and tack start as not carried.
+- Liquid containers (1.0.29; owner's ruling: "waterskins can contain up to 1 gallon of fluid, a full waterskin will
+  weigh 9 lb"): equipment field `liquid` { volume, fullWeight, full }; a full one counts at its full weight per unit for
+  encumbrance (characters and animals), an empty one at its own weight. "Full"/"Empty" button on the Equipment tab row,
+  fields on the item sheet. Set on the Al-Qadim "Waterskin (1 gal.)" and, as the PHB lists no waterskin, on the PHB
+  wineskin (implementation choice; 1 gallon, 9 lb full). Copies already in a world are filled in once (setting
+  `liquidsMigrated`). Any equipment item can be made a liquid container on its sheet.
 - Items inside containers: any weapon, ammunition, armour, equipment, magical item, gem/jewellery or coin item can be put
   into a container on the same actor (drag its row onto the container in the Containers list, or choose "In container"
   on the item's sheet; "Take out" removes it). Containers are the Table 50 items (backpack, baskets, belt pouches, chests,

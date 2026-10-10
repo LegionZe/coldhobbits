@@ -22,7 +22,12 @@
     },
     "source": "Player's Handbook",
     "url": "https://adnd2e.fandom.com/wiki/Miscellaneous_Equipment_(PHB)",
-    "notes": ""
+    "notes": "",
+    "liquid": {
+      "volume": "1 gallon",
+      "fullWeight": 9,
+      "full": false
+    }
   },
   "effects": [],
   "folder": "faXqPLnTYGFkIwhf",

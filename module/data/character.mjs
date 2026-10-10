@@ -686,7 +686,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     try { rule = game.settings.get("ad2e", "encumbrance") ?? "basic"; } catch { /* setting not registered */ }
     const items = this.parent?.items ?? [];
     const weightOf = i => i.type === "coin" ? i.system.quantity / AD2E.coinsPerPound
-      : (i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1)
+      : (i.system.unitWeight ?? i.system.weight ?? 0) * (["weapon", "ammunition", "equipment", "magic", "jewellery"].includes(i.type) ? (i.system.quantity ?? 1) : 1)
         * (i.type === "armor" ? armorWeightFactor(i.system, this.sizeCategory) : 1);
     // Equipment, magical items and treasure count while carried (animals, transport, services and lodging default to
     // not carried); a dropped weapon does not count. Items in a container follow the container, and add no weight

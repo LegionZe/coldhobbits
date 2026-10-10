@@ -225,6 +225,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       pickUpWeapon: CharacterSheet.onPickUpWeapon,
       rollJump: CharacterSheet.onRollJump,
       toggleCarried: CharacterSheet.onToggleCarried,
+      toggleFull: CharacterSheet.onToggleFull,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
@@ -832,7 +833,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rows: gearItems.filter(i => i.system.category === key).map(i => ({
         id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
         summary: equipmentSummary(i.system), inside: insideText(inv, i), contained: inContainer(inv, i),
-        total: i.system.weight && i.system.quantity > 1 ? Math.round(i.system.weight * i.system.quantity * 10) / 10 : null
+        liquid: i.system.liquid?.fullWeight !== null && i.system.liquid?.fullWeight !== undefined, full: !!i.system.liquid?.full,
+        total: (i.system.unitWeight ?? i.system.weight) && i.system.quantity > 1
+          ? Math.round((i.system.unitWeight ?? i.system.weight) * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
     })).filter(g => g.rows.length);
     // Magical items (DMG Table 88 order) and gems, jewellery and objects of art with their gp value.
@@ -1745,6 +1748,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** Containers: take an item out (it is then carried loose). */
   static onTakeOut(event, target) {
     return this.actor.items.get(target.dataset.itemId)?.update({ "system.container": "" });
+  }
+
+  /** A liquid container (e.g. a waterskin): fill it or empty it; full, it weighs its full weight. */
+  static onToggleFull(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item?.update({ "system.liquid.full": !item.system.liquid?.full });
   }
 
   /** Carried equipment counts toward encumbrance. */

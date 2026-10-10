@@ -68,6 +68,11 @@ TABLE49 = {"Camel": ["Camel"], "Dog": ["Dog, guard", "Dog, hunting", "Dog, war"]
            "Ox": ["Ox"], "Yak": []}
 
 
+
+# Liquid containers (owner's ruling, 1.0.29: "waterskins can contain up to 1 gallon of fluid, a full waterskin will
+# weigh 9 lb"); the PHB lists no waterskin, so its wineskin is taken as the same skin (implementation choice).
+LIQUID = {"wineskin": {"volume": "1 gallon", "fullWeight": 9, "full": False}}
+
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
 
@@ -192,6 +197,8 @@ if __name__ == "__main__":
                   "load": it.get("load", {"full": None, "half": None, "quarter": None}),
                   "source": "Player's Handbook", "url": classdata.url(it["page"]),
                   "notes": f"Weight: {it['weightText']}" if it["weightText"] else ""}
+        if system["identifier"] in LIQUID:
+            system["liquid"] = dict(LIQUID[system["identifier"]])
         doc = classdata.item_doc("equipment", "e." + slug(it["name"]), it["name"], "icons/svg/item-bag.svg", system, i * 100)
         doc["folder"] = folders[it["category"]]["_id"]
         docs.append(doc)

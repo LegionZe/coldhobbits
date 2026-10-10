@@ -74,6 +74,11 @@ AA_WEAPONS = {
 }
 
 
+
+# Liquid containers (owner's ruling, 1.0.29: "waterskins can contain up to 1 gallon of fluid, a full waterskin will
+# weigh 9 lb"); the list names the waterskin's 1 gallon itself.
+LIQUID = {"waterskin-1-gal": {"volume": "1 gallon", "fullWeight": 9, "full": False}}
+
 def times(cost, n):
     """'15 gp' x 10 -> '150 gp'; '3sp/12' -> '30 sp/12'; '' -> ''."""
     m = re.match(r"\s*([\d,]+)\s*(cp|sp|gp|pp)\.?(.*)$", str(cost or ""))
@@ -195,6 +200,8 @@ if __name__ == "__main__":
                       "carried": carried, "capacity": {"weight": None, "volume": ""},
                       "load": {"full": None, "half": None, "quarter": None},
                       "source": SOURCE, "url": classdata.url(LISTS), "notes": " ".join(notes)}
+            if system["identifier"] in LIQUID:
+                system["liquid"] = dict(LIQUID[system["identifier"]])
             doc = classdata.item_doc("equipment", f"aq.e.{category}.{slug(name)}", name, "icons/svg/item-bag.svg", system, n * 100)
             doc["folder"] = folder["_id"]
             docs.append(doc)
