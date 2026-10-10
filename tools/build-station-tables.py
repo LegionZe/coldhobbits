@@ -30,7 +30,7 @@ RULES = {
     "money": r"For every 1,000 gold pieces spent each month in parties, gifts, sumptuous clothes, and other impressive displays, an individual's station is increased by 1 point",
     "criminal": r"Initial station is lost, replaced with a level of just 1 or 2 \(1d2\)",
     "penniless": r"Characters reduced to begging have a station of 3 immediately",
-    "pennilessEnd": r"has money equaling 500 gp per level",
+    "pennilessEnd": r"The penniless condition is reversed once such a .nouveau pauper. has cleared all outstanding bills or loans and has money equaling (500) gp per level\. Then former station is returned",
     "slave": r"Owner's station minus 1d6, or own station.whichever is lower",
     "freed": r"regain 1 point of station each month until they attain their former levels",
     "reaction": r"Individuals of higher station may modify the die roll 1 point in their favor for every 2 full points of difference in station",
@@ -46,8 +46,8 @@ def slug(s):
 def main():
     w, rev, _ = classdata.page(PAGE)
     t = re.sub(r"\s+", " ", w.replace("&mdash;", "—"))
-    for key, pattern in RULES.items():
-        need(t, pattern, key)
+    found = {key: need(t, pattern, key) for key, pattern in RULES.items()}
+    assert found["pennilessEnd"].group(1) == "500", found["pennilessEnd"].group(0)
     table = w[w.index("Table 1: Station"):]
     table = table[:table.index("\n|}")]
     kit_ids = {json.load(open(f)).get("system", {}).get("identifier") for f in glob.glob("packs/_source/kits/*.json")}

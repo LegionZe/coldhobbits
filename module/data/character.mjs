@@ -275,12 +275,14 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       // Maximum age (PHB Table 11), rolled by the GM and shown to the GM only (module/aging.mjs).
       maxAge: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
-      // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless, enslaved (station while a
+      // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless (+ debts), enslaved (station while a
       // slave), freed (station when freed and when), spending bonus (points until a world time).
       station: new SchemaField({
         base: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
         criminal: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
         penniless: new BooleanField({ initial: false }),
+        // Outstanding bills or loans (GM tick): while set, money alone does not end pennilessness.
+        debts: new BooleanField({ initial: false }),
         slave: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
         freed: new SchemaField({ from: new NumberField({ nullable: true, integer: true, initial: null }), at: new NumberField({ nullable: true, initial: null }) }),
         bonus: new SchemaField({ points: new NumberField({ integer: true, min: 0, initial: 0 }), until: new NumberField({ nullable: true, initial: null }) })
