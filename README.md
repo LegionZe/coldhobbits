@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.32)
+## Status (v1.0.33)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -302,8 +302,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   raises the station for a month of world time (owner's ruling; implementation choice: 30 days). "Station check" rolls
   d20 (under the station if 10 or less, over it if 11 or more). GM buttons: convict (1d2 replaces the initial station;
   owner's ruling: the level rule still applies), penniless (station 3; ends by itself, 1.0.32 owner's request, once the
-  character "has cleared all outstanding bills or loans and has money equaling 500 gp per level": coin items worth 500 gp x
-  the highest class level and the GM's "Outstanding bills or loans" tick clear; implementation choice: coins only), enslave (owner's station minus 1d6
+  character "has cleared all outstanding bills or loans and has money equaling 500 gp per level": coins, gems and jewellery (1.0.33,
+  owner's ruling; at their item value) worth 500 gp x the highest class level and the GM's "Outstanding bills or loans"
+  tick clear; implementation choice: objects of art and other goods do not count), enslave (owner's station minus 1d6
   or the slave's own, whichever is lower) / free (1 point a month back to the former station). NPC/monster actors have an
   optional station (stats panel: Table 1 role select and roll, owner's ruling); encounter reaction rolls add 1 point for
   every 2 full points of difference in favour of the higher station (speaker vs. creature). Implementation choice: a

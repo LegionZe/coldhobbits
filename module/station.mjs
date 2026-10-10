@@ -16,9 +16,11 @@ import { packData } from "./treasure.mjs";
  * station; 11 or more: over it).
  * Implementation choices: a month is 30 days; the single kit's entry stands for multi-class characters (one kit each).
  * Penniless ends by itself (owner's request, 1.0.32) once the character "has cleared all outstanding bills or loans and
- * has money equaling 500 gp per level": coin items (all, containers included) worth 500 gp x level and the GM's
- * "Outstanding bills or loans" tick clear (implementation choices: coins only, not gems or goods; level = the highest
- * class level). Checked by the active GM when coins, the level, the debts tick or the penniless state change.
+ * has money equaling 500 gp per level": coins, gems and jewellery (owner's ruling, 1.0.33; all, containers included)
+ * worth 500 gp x level and the GM's "Outstanding bills or loans" tick clear (implementation choices: gems and jewellery
+ * at their item value (a gem without one: its Table 85 class value), objects of art and other goods not counted, items
+ * of unknown value count 0; level = the highest class level). Checked by the active GM when coins, gems or jewellery,
+ * the level or the debts tick change.
  * Character `system.station` { base, criminal, penniless, debts, slave, freed { from, at }, bonus { points, until } }.
  */
 export const STATION = STATION_TABLES;
@@ -33,7 +35,7 @@ export function registerStation() {
   game.settings.register("ad2e", "stationRule", { name: "AD2E.Station.Setting", hint: "AD2E.Station.SettingHint", scope: "world",
     config: true, type: Boolean, default: false, requiresReload: false,
     onChange: () => { for (const a of game.actors ?? []) if (a.sheet?.rendered) a.sheet.render(); } });
-  const coinChange = item => { if (item?.type === "coin" && item.parent?.type === "character") checkPenniless(item.parent); };
+  const coinChange = item => { if (["coin", "jewellery"].includes(item?.type) && item.parent?.type === "character") checkPenniless(item.parent); };
   Hooks.on("createItem", coinChange);
   Hooks.on("updateItem", coinChange);
   Hooks.on("deleteItem", coinChange);
@@ -118,6 +120,16 @@ export function coinWorth(items) {
     .reduce((n, i) => n + (i.system?.quantity ?? 0) * (i.system?.value ?? COIN_VALUES[i.system?.denomination] ?? 0), 0);
 }
 
+/** Kinds of "jewellery" items that count as money for the penniless rule (owner's ruling: gems and jewellery). */
+export const MONEY_KINDS = ["gem", "jewellery"];
+
+/** Worth in copper of coins, gems and jewellery (pure; jewellery items use their `totalValue` in gp, null = 0). */
+export function moneyWorth(items) {
+  const valuables = [...(items ?? [])].filter(i => i.type === "jewellery" && MONEY_KINDS.includes(i.system?.kind))
+    .reduce((n, i) => n + Math.round((i.system?.totalValue ?? 0) * COIN_VALUES.gp), 0);
+  return coinWorth(items) + valuables;
+}
+
 /** The level used for the penniless rule: the highest class level (multi-class) or the character's level. */
 export function stationLevel(system) {
   return Math.max(system?.level ?? 0, ...(system?.multi?.classes ?? []).map(c => c.level ?? 0));
@@ -133,7 +145,7 @@ export function pennilessEnds(st, worthCp, level) {
 export async function checkPenniless(actor) {
   if (!actor || actor.type !== "character" || !stationRuleOn() || !game.users?.activeGM?.isSelf) return null;
   const level = stationLevel(actor.system);
-  if (!pennilessEnds(actor.system.station, coinWorth(actor.items), level)) return null;
+  if (!pennilessEnds(actor.system.station, moneyWorth(actor.items), level)) return null;
   await actor.update({ "system.station.penniless": false });
   return post(actor, i18n("AD2E.Station.PennilessEnded", { name: actor.name, gp: STATION.pennilessGpPerLevel * Math.max(level, 1) }));
 }
