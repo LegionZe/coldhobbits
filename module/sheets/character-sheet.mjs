@@ -1,3 +1,4 @@
+import { lightItem, lightSpec, putOut, turnsLeft } from "../lights.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
 import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
@@ -226,6 +227,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollJump: CharacterSheet.onRollJump,
       toggleCarried: CharacterSheet.onToggleCarried,
       toggleFull: CharacterSheet.onToggleFull,
+      toggleLight: CharacterSheet.onToggleLight,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
@@ -834,6 +836,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
         summary: equipmentSummary(i.system), inside: insideText(inv, i), contained: inContainer(inv, i),
         liquid: i.system.liquid?.fullWeight !== null && i.system.liquid?.fullWeight !== undefined, full: !!i.system.liquid?.full,
+        light: lightSpec(i) ? { lit: !!i.system.light?.lit, turns: turnsLeft(i, game.time?.worldTime ?? 0) } : null,
         total: (i.system.unitWeight ?? i.system.weight) && i.system.quantity > 1
           ? Math.round((i.system.unitWeight ?? i.system.weight) * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
@@ -1748,6 +1751,13 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** Containers: take an item out (it is then carried loose). */
   static onTakeOut(event, target) {
     return this.actor.items.get(target.dataset.itemId)?.update({ "system.container": "" });
+  }
+
+  /** A torch, candle or lantern (module/lights.mjs): light it (an empty lantern uses a flask of oil) or put it out. */
+  static onToggleLight(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    if (!item) return null;
+    return item.system.light?.lit ? putOut(this.actor, item) : lightItem(this.actor, item);
   }
 
   /** A liquid container (e.g. a waterskin): fill it or empty it; full, it weighs its full weight. */

@@ -17,6 +17,7 @@
     <label class="ad2e-check"><input type="checkbox" name="system.carried" {{checked system.carried}}> {{localize "AD2E.Gear.Carried"}}</label>
     <label>{{localize "AD2E.Gear.Capacity"}} <input type="number" name="system.capacity.weight" value="{{system.capacity.weight}}" min="0"></label>
     <label>{{localize "AD2E.Gear.Volume"}} <input type="text" name="system.capacity.volume" value="{{system.capacity.volume}}"></label>
+    {{#if isCandle}}<label data-tooltip="{{localize 'AD2E.Light.InchesHint'}}">{{localize "AD2E.Light.Inches"}} <input type="number" name="system.light.inches" value="{{system.light.inches}}" min="0" step="any" placeholder="6"></label>{{/if}}
     <label data-tooltip="{{localize 'AD2E.Gear.LiquidHint'}}">{{localize "AD2E.Gear.LiquidVolume"}} <input type="text" name="system.liquid.volume" value="{{system.liquid.volume}}"></label>
     <label data-tooltip="{{localize 'AD2E.Gear.LiquidHint'}}">{{localize "AD2E.Gear.FullWeight"}} <input type="number" name="system.liquid.fullWeight" value="{{system.liquid.fullWeight}}" min="0" step="any"></label>
     <label class="ad2e-check"><input type="checkbox" name="system.liquid.full" {{checked system.liquid.full}}> {{localize "AD2E.Gear.Full"}}</label>

@@ -3238,5 +3238,43 @@
     "CommonHint": "Spoken by every character free of charge (e.g. Common, or Midani for Al-Qadim). Empty: none.",
     "ListSetting": "Languages: campaign list",
     "ListHint": "The campaign's languages, separated by commas; offered when adding a language (besides the race's initial languages and Midani)."
+  },
+  "AD2E.Light": {
+    "Light": "Light",
+    "Out": "Put out",
+    "Lit": "Lit light sources",
+    "NoneLit": "Nothing is lit.",
+    "TurnsLeft": "{n} turns left",
+    "ToggleHint": "Light it or put it out. It burns with world time (PHB Table 63: torch 30 min. = 3 turns, lantern 2 hrs. a pint, candle 10 min. an inch) and lights your token; an empty lantern uses a flask of lamp oil.",
+    "BurntOut": "{actor}'s {name} has burnt out.",
+    "OutOfOil": "{actor}'s {name} is out of oil.",
+    "Inches": "Candle length (inches)",
+    "InchesHint": "PHB Table 63: a candle burns 10 minutes (one turn) an inch. Empty: 6 inches.",
+    "Cannot": {
+      "notLight": "{name} is not a light source.",
+      "none": "No {name} left to light.",
+      "noOil": "{name} is empty and there is no flask of lamp oil to fill it."
+    }
+  },
+  "AD2E.Dungeon": {
+    "Title": "Dungeon turns",
+    "Open": "Open the dungeon turn tracker",
+    "MenuHint": "Advance dungeon turns (10 minutes each), remind the party to rest one turn in six, and burn down torches, candles and lanterns.",
+    "Hint": "A turn is 10 minutes of world time; 6 turns are an hour. The party rests one turn in every six: each 6 turns without a rest give -1 to attack rolls and checks until it rests. Lights burn whenever world time passes.",
+    "Expedition": "Expedition",
+    "Inactive": "No expedition under way: start one to count turns and rests (lights burn either way).",
+    "Start": "Start expedition",
+    "End": "End expedition",
+    "Next": "Next turn",
+    "Rest": "Rest turn",
+    "Turns": "Turn {turns} ({hours} h {extra} turns)",
+    "SinceRest": "{n} turns since the last rest",
+    "RestIn": "Rest due in {n} turns",
+    "RestNow": "The next turn should be a rest turn.",
+    "RestDue": "Dungeon turns: the party has been active for 5 turns; the next turn should be spent resting.",
+    "Rested": "Dungeon turns: the party rested for a turn.",
+    "Missed": "Dungeon turns: the party has gone without its rest; -{n} to attack rolls and checks until it rests.",
+    "Penalty": "Missed rest: -{n} to attack rolls and checks until the party rests.",
+    "FatigueNote": "missed rest {n}"
   }
 }

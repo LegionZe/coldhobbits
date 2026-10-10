@@ -8,6 +8,7 @@ import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import TravelPlanner from "./travel-planner.mjs";
 import EncounterTool from "./encounter-tools.mjs";
+import DungeonTurnTracker from "./dungeon-turns.mjs";
 import NpcBuilder from "./npc-builder.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -36,6 +37,7 @@ export const MANUAL_TOOLS = {
   rollReaction: () => rollEncounterReaction(null),
   travel: () => new TravelPlanner().render({ force: true }),
   encounters: () => new EncounterTool().render({ force: true }),
+  dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
   createNpc: () => new NpcBuilder().render({ force: true }),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })
 };

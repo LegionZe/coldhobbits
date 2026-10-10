@@ -519,12 +519,13 @@ export default class AD2EActor extends Actor {
     const input = await this.#promptRoll(item.name, this.#kitOptions("proficiency", item.system.identifier));
     if (!input) return;
     const heat = this.system.mods?.heat ?? 0; // Al-Qadim heat penalty (module/aq-rules.mjs)
-    const target = entry.target + input.mod + input.kit + heat;
+    const fatigue = this.system.mods?.fatigue ?? 0; // missed rests (module/dungeon-turns.mjs)
+    const target = entry.target + input.mod + input.kit + heat + fatigue;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total < 20 && roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""})${modifierText(input.mod, input.note)}: `
+      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (roll.total === 20 ? ` (${game.i18n.localize("AD2E.Prof.TwentyFails")})` : "")
     });
@@ -579,13 +580,14 @@ export default class AD2EActor extends Actor {
     // effective score (racial adjustment included) + kit bonus to ability checks
     const kitAuto = this.type === "character" ? (this.system.kitMods?.total("ability", key) ?? 0) : 0;
     const heat = this.type === "character" ? (this.system.mods?.heat ?? 0) : 0; // Al-Qadim heat (module/aq-rules.mjs)
-    const target = this.system.abilities[key].total + kitAuto + input.mod + input.kit + heat;
+    const fatigue = this.type === "character" ? (this.system.mods?.fatigue ?? 0) : 0; // missed rests (module/dungeon-turns.mjs)
+    const target = this.system.abilities[key].total + kitAuto + input.mod + input.kit + heat + fatigue;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Ability.${key}`)} ${game.i18n.localize("AD2E.Roll.Check")} `
-        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""})${modifierText(input.mod, input.note)}: `
+        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }

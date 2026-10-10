@@ -57,6 +57,8 @@
       <label class="ad2e-spec" data-tooltip="{{#if r.contained}}{{localize 'AD2E.Container.CarriedHint'}}{{else}}{{localize 'AD2E.Gear.CarriedHint'}}{{/if}}">
         <input type="checkbox" data-action="toggleCarried" data-item-id="{{r.id}}" {{checked r.carried}} {{#if r.contained}}disabled{{else}}{{#unless @root.editable}}disabled{{/unless}}{{/if}}>
         {{localize "AD2E.Gear.Carried"}}</label>
+      {{#if r.light}}<button type="button" data-action="toggleLight" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Light.ToggleHint'}}" {{#unless @root.editable}}disabled{{/unless}}><i class="fa-solid fa-fire"></i> {{#if r.light.lit}}{{localize "AD2E.Light.Out"}}{{else}}{{localize "AD2E.Light.Light"}}{{/if}}</button>
+      <span class="ad2e-weapon-meta">{{localize "AD2E.Light.TurnsLeft" n=r.light.turns}}</span>{{/if}}
       {{#if r.liquid}}<button type="button" data-action="toggleFull" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Gear.ToggleFullHint'}}" {{#unless @root.editable}}disabled{{/unless}}>{{#if r.full}}{{localize "AD2E.Gear.Full"}}{{else}}{{localize "AD2E.Gear.Empty"}}{{/if}}</button>{{/if}}
       <span class="ad2e-qty" data-tooltip="{{localize 'AD2E.Weapon.Quantity'}}">
         {{#if @root.editable}}<a data-action="adjustQuantity" data-item-id="{{r.id}}" data-delta="-1"><i class="fa-solid fa-minus"></i></a>{{/if}}
