@@ -28,6 +28,9 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional() }),
       // A liquid container (owner's ruling 1.0.29: a waterskin holds up to 1 gallon and weighs 9 lb full): what it holds,
       // its weight when full (lb, per unit; null = not a liquid container) and whether it is full (`unitWeight`).
+      // A light source of PHB Table 63 burning down with world time (module/lights.mjs): lit, until (world time its fuel
+      // ends while lit), left (seconds of fuel while out; null = fresh torch or candle, empty lantern), inches (a candle).
+      light: new SchemaField({ lit: new BooleanField({ initial: false }), until: optional(), left: optional(), inches: optional() }),
       liquid: new SchemaField({ volume: new StringField({ initial: "" }), fullWeight: optional(), full: new BooleanField({ initial: false }) }),
       // Spell components (category "component", POSM Table 16): group, acquisition (FS / TM / SO / Auto), scarcity,
       // found in a wizard's laboratory, perishable.

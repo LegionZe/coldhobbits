@@ -37,6 +37,9 @@ import AwardXp, { registerAwardXp } from "./apps/award-xp.mjs";
 import TravelPlanner from "./apps/travel-planner.mjs";
 import { registerTravel } from "./travel.mjs";
 import EncounterTool from "./apps/encounter-tools.mjs";
+import DungeonTurnTracker from "./apps/dungeon-turns.mjs";
+import { registerDungeonTurns } from "./dungeon-turns.mjs";
+import { registerLights } from "./lights.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
 import NpcBuilder from "./apps/npc-builder.mjs";
@@ -89,6 +92,12 @@ Hooks.once("init", () => {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
   });
   registerEncounters();
+  // GM tool: dungeon turns, rest and burning light sources (game.ad2e.dungeonTurns(); module/dungeon-turns.mjs, lights.mjs).
+  game.settings.registerMenu("ad2e", "dungeonTurns", {
+    name: "AD2E.Dungeon.Title", label: "AD2E.Dungeon.Open", hint: "AD2E.Dungeon.MenuHint", icon: "fa-solid fa-hourglass-half", type: DungeonTurnTracker, restricted: true
+  });
+  registerDungeonTurns();
+  registerLights();
   // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
   game.settings.registerMenu("ad2e", "npcBuilder", {
     name: "AD2E.Npc.Title", label: "AD2E.Npc.Open", hint: "AD2E.Npc.MenuHint", icon: "fa-solid fa-user-plus", type: NpcBuilder, restricted: true
@@ -119,6 +128,7 @@ Hooks.once("init", () => {
     falling: () => fallingDialog(),
     travel: () => new TravelPlanner().render({ force: true }),
     encounters: () => new EncounterTool().render({ force: true }),
+    dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     createNpc: () => new NpcBuilder().render({ force: true })
   };
 

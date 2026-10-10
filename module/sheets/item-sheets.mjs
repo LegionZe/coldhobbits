@@ -1,3 +1,4 @@
+import { lightSpec } from "../lights.mjs";
 import { guessMaterial, ITEM_TYPES, itemSaveBonus, SAVES } from "../item-saves.mjs";
 import { coatWithPoison, POISON, poisonLabel } from "../poison.mjs";
 import { springTrap, trapContext } from "../traps.mjs";
@@ -302,6 +303,7 @@ export class EquipmentSheet extends AD2EItemSheet {
     context.categories = AD2E.equipmentCategories;
     context.summary = equipmentSummary(this.document.system);
     context.isComponent = this.document.system.category === "component";
+    context.isCandle = lightSpec(this.document)?.per === "inch";
     context.trap = trapContext(this.document);
     const cls = this.document.system.poison?.class ?? "";
     context.poisonItem = this.document.system.category === "poison"

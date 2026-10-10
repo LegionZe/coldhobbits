@@ -1,3 +1,4 @@
+import { fatigueFor } from "../dungeon-turns.mjs";
 import { languageSettings } from "../languages.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
 import { hpState } from "../health.mjs";
@@ -377,8 +378,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.mods.heat = heatRuleOn() ? heatPenalty(this.armor.body, this.armor.shield) : 0;
     // Force marching: -1 to all attack rolls per day, cumulative (Cross-Country Movement (PHB), module/travel.mjs).
     this.mods.march = TRAVEL.march.attackPerDay * (this.march?.days ?? 0) || 0;
-    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.mods.march + this.kitMods.total("attack");
-    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.mods.march + this.kitMods.total("attack");
+    // Dungeon turns (module/dungeon-turns.mjs, owner's ruling): -1 to attacks and checks per 6 turns without a rest.
+    this.mods.fatigue = fatigueFor(this.parent);
+    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.kitMods.total("attack");
+    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.kitMods.total("attack");
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -936,7 +939,7 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const kitHit = this.kitMods?.total("attack") ?? 0;
     const kitDmg = this.kitMods?.total("damage") ?? 0;
     const heat = this.mods.heat ?? 0; // Al-Qadim heat penalty (aq-rules.mjs)
-    const march = this.mods.march ?? 0; // force marching (module/travel.mjs)
+    const march = (this.mods.march ?? 0) + (this.mods.fatigue ?? 0); // force marching (travel.mjs), missed rests (dungeon-turns.mjs)
     const hit = this.mods.hit + encumbranceHit + heat + march + kitHit;
     const missile = dexMissile + encumbranceHit + heat + march + kitHit;
     const spec = AD2E.specialization;
@@ -1283,9 +1286,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       thac0: this.thac0.value,
       // Initiative is 1d10 + @init, lowest first: a kit's initiative bonus lowers the roll.
       init: this.initiative.mod - (this.kitMods?.total("initiative") ?? 0),
-      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0),
+      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0),
       dmg: this.mods.dmg,
-      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0),
+      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0),
       move: this.encumbrance.info?.rate ?? null
     };
   }

@@ -1,0 +1,33 @@
+<section class="ad2e-award-xp ad2e-dungeon-turns">
+  <p class="ad2e-note">{{localize "AD2E.Dungeon.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Dungeon.Expedition"}}</legend>
+    {{#if st.active}}
+    <p>{{localize "AD2E.Dungeon.Turns" turns=st.turns hours=hours extra=extra}} · {{localize "AD2E.Dungeon.SinceRest" n=st.sinceRest}}</p>
+    <p class="{{#if st.penalty}}ad2e-unmet{{/if}}">{{restText}}</p>
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="next"><i class="fa-solid fa-forward-step"></i> {{localize "AD2E.Dungeon.Next"}}</button>
+      <button type="button" data-action="rest"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Dungeon.Rest"}}</button>
+      <button type="button" data-action="end"><i class="fa-solid fa-door-open"></i> {{localize "AD2E.Dungeon.End"}}</button>
+    </div>
+    {{else}}
+    <p>{{localize "AD2E.Dungeon.Inactive"}}</p>
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="start"><i class="fa-solid fa-dungeon"></i> {{localize "AD2E.Dungeon.Start"}}</button>
+      <button type="button" data-action="next"><i class="fa-solid fa-forward-step"></i> {{localize "AD2E.Dungeon.Next"}}</button>
+    </div>
+    {{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Light.Lit"}}</legend>
+    {{#each lights as |l|}}
+    <div class="ad2e-prof-row">
+      <span class="ad2e-prof-name">{{l.bearer}}: {{l.name}}</span>
+      <span class="ad2e-weapon-meta">{{localize "AD2E.Light.TurnsLeft" n=l.turns}} · {{l.radius}} ft</span>
+      <button type="button" data-action="out" data-uuid="{{l.uuid}}">{{localize "AD2E.Light.Out"}}</button>
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Light.NoneLit"}}</p>
+    {{/each}}
+  </fieldset>
+  <p class="ad2e-note"><a href="{{urls.table63}}" target="_blank" rel="noopener">Vision and Light (PHB) Table 63</a> · <a href="{{urls.turn}}" target="_blank" rel="noopener">Time and Movement (PHB)</a></p>
+</section>
