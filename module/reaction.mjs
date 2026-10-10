@@ -1,3 +1,4 @@
+import { stationOf, stationReaction } from "./station.mjs";
 import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Encounter reactions (DMG Table 59, "Encounter Reactions (DMG)"; table generated in module/rules/encounter-tables.mjs):
@@ -88,7 +89,9 @@ export async function rollEncounterReaction(creature = null) {
   const chaDrop = pugilistCharisma(special.charismaByClass, input.npcClass);
   if (chaDrop) adj.cha = chaReaction((speaker.system.abilities?.cha?.total ?? 10) - chaDrop);
   const kitPicked = adj.options.filter(m => input.ticked.includes(`${speaker?.id}.${m.index}`));
-  const bonus = adj.cha + adj.kit + kitPicked.reduce((n, m) => n + m.current, 0);
+  // Al-Qadim station (world setting): 1 per 2 full points of difference for the higher station (Station in Life (AA)).
+  const st = speaker && creature ? stationReaction(stationOf(speaker), stationOf(creature)) : 0;
+  const bonus = adj.cha + adj.kit + st + kitPicked.reduce((n, m) => n + m.current, 0);
   // A bonus for the speaker lowers the roll (friendlier); the manual modifier is added as entered.
   const roll = await new Roll("2d10 - @bonus + @mod", { bonus, mod: input.mod }).evaluate();
   // Barbarian, first meeting: 8 or less -2 more, 14 or more +2 more.
@@ -99,6 +102,7 @@ export async function rollEncounterReaction(creature = null) {
     chaDrop ? game.i18n.format("AD2E.KitFeature.ChaDrop", { n: chaDrop, cls: i18n(`AD2E.KitFeature.Class.${input.npcClass}`) }) : null,
     total !== roll.total ? game.i18n.format("AD2E.KitFeature.Swing", { from: roll.total, to: total }) : null,
     adj.kit ? `${i18n("AD2E.Reaction.Kit")} ${signed(adj.kit)}` : null,
+    st ? `${game.i18n.format("AD2E.Station.ReactionNote", { a: stationOf(speaker), b: stationOf(creature) })} ${signed(st)}` : null,
     ...kitPicked.map(m => `${m.condition} ${signed(m.current)}`)].filter(Boolean);
   const flavor = `${creature ? game.i18n.format("AD2E.Reaction.TitleFor", { name: esc(creature.name) }) : i18n("AD2E.Reaction.Title")}`
     + ` (${i18n(`AD2E.Reaction.Column.${input.column}`)})${parts.length ? ` [${esc(parts.join("; "))}]` : ""}`

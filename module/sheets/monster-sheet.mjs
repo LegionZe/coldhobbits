@@ -1,3 +1,4 @@
+import { STATION, stationRuleOn } from "../station.mjs";
 import { parseMagicResistance } from "../magic-resistance.mjs";
 import { neutralizePoison, POISON, poisonContext, poisonLabel } from "../poison.mjs";
 import { rollEncounterReaction } from "../reaction.mjs";
@@ -32,6 +33,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollAttack: MonsterSheet.onRollAttack,
       rollDamage: MonsterSheet.onRollDamage,
       rollMorale: MonsterSheet.onRollMorale,
+      rollStationRole: MonsterSheet.onRollStationRole,
       rollHp: MonsterSheet.onRollHp,
       addAttack: MonsterSheet.onAddAttack,
       removeAttack: MonsterSheet.onRemoveAttack,
@@ -82,6 +84,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.actor = actor;
     context.system = sys;
     context.roles = AD2E.monsterRoles;
+    // Al-Qadim station of an NPC (module/station.mjs): shown while the world setting is on; Table 1 other roles to roll.
+    context.station = stationRuleOn() ? { roles: STATION.npcs.map((r, i) => ({ index: i, label: `${r.name} (${r.text})`, formula: r.formula })) } : null;
     // Mounts: trained for combat (riders of untrained mounts -2 to hit, Unusual Combat Situations (DMG)).
     context.isMount = this.document.system.role === "mount";
     // Pushing a mount or pack animal (module/animals.mjs): the button and its current state.
@@ -197,6 +201,15 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }
+  /** Al-Qadim station: roll the Table 1 entry picked for an NPC (plain dice only; relative roles are set by hand). */
+  static async onRollStationRole(event, target) {
+    const role = STATION.npcs[Number(target.closest("[data-station]")?.querySelector("select")?.value)];
+    if (!role?.formula) return null;
+    const roll = await new Roll(role.formula).evaluate();
+    await this.actor.update({ "system.station": Math.max(0, Math.min(20, roll.total)) });
+    return roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor: this.actor }), flavor: `${role.name} (${role.formula})` }, { rollMode: "gmroll" });
+  }
+
   static onRollMorale() { return this.document.rollMorale(); }
   /** GM: roll the stat block's treasure types (module/treasure.mjs). */
   static onRollTreasure() { return rollTreasureDialog(this.document); }

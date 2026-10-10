@@ -283,7 +283,7 @@ export async function rollTreasureDialog(actor = null) {
 }
 
 /** A compendium document's data by identifier (or name), or null. */
-async function packData(pack, { identifier, name }) {
+export async function packData(pack, { identifier, name }) {
   const p = game.packs.get(pack);
   if (!p) return null;
   const index = await p.getIndex({ fields: ["system.identifier"] });

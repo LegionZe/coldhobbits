@@ -1,3 +1,4 @@
+import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
 import { lightItem, lightSpec, putOut, turnsLeft } from "../lights.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
@@ -252,6 +253,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       neutralizePoison: CharacterSheet.onNeutralizePoison,
       rollStartingAge: CharacterSheet.onRollStartingAge,
       rollHeightWeight: CharacterSheet.onRollHeightWeight,
+      stationRoll: CharacterSheet.onStationRoll,
+      stationCheck: CharacterSheet.onStationCheck,
+      stationSpend: CharacterSheet.onStationSpend,
+      stationConvict: CharacterSheet.onStationConvict,
+      stationEnslave: CharacterSheet.onStationEnslave,
+      stationPenniless: CharacterSheet.onStationPenniless,
       addLanguage: CharacterSheet.onAddLanguage,
       removeLanguage: CharacterSheet.onRemoveLanguage,
       rollMaxAge: CharacterSheet.onRollMaxAge,
@@ -444,6 +451,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
     context.languages = this._languagesContext(sys);
+    context.station = stationContext(this.actor, this.isEditable);
     context.henchmen = this._henchmenContext();
     context.followers = followersContext(this.actor);
     context.castle = constructionContext(this.actor);
@@ -1359,6 +1367,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRollStartingAge() { return rollStartingAge(this.actor); }
 
   static onRollHeightWeight() { return rollBodyWeight(this.actor, { height: true }); }
+
+  /** Al-Qadim station (module/station.mjs). */
+  static onStationRoll() { return rollInitialStation(this.actor); }
+
+  static onStationCheck() { return rollStationCheck(this.actor); }
+
+  static onStationSpend(event, target) {
+    const n = target.closest(".ad2e-station")?.querySelector(".ad2e-station-spend")?.value;
+    return spendForStation(this.actor, n);
+  }
+
+  static onStationConvict() { return convict(this.actor, this.actor.system.station.criminal !== null); }
+
+  static onStationEnslave() { return enslave(this.actor); }
+
+  static onStationPenniless() { return this.actor.update({ "system.station.penniless": !this.actor.system.station.penniless }); }
 
   /** Add the language typed in the Languages section (module/languages.mjs; GM only when the world says "learn"). */
   static onAddLanguage(event, target) {

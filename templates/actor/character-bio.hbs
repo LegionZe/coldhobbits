@@ -186,6 +186,29 @@
     {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
     {{#if aging.isGM}}<label data-tooltip="{{localize 'AD2E.Aging.MaxHint'}}">{{localize "AD2E.Aging.MaxAge"}} <input type="number" name="system.maxAge" value="{{system.maxAge}}" min="0" step="1" placeholder="—"></label>
     {{#if aging.maxFormula}}<button type="button" data-action="rollMaxAge" data-tooltip="{{aging.maxFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollMax"}}</button>{{/if}}{{/if}}</div>
+  {{#with station as |s|}}
+  <fieldset class="ad2e-prof-list ad2e-station">
+    <legend data-tooltip="{{localize 'AD2E.Station.Hint'}}">{{localize "AD2E.Station.Label"}}</legend>
+    <div class="ad2e-prof-row">
+      <span class="ad2e-prof-name">{{#if s.set}}<strong>{{s.value}}</strong>{{else}}{{localize "AD2E.Station.NotSet"}}{{/if}}</span>
+      <span class="ad2e-weapon-meta">{{#if s.kitName}}{{s.kitName}}{{#if s.formula}} ({{s.formula}}){{/if}}{{/if}}{{#if s.state}} · {{s.state}}{{/if}}{{#if s.bonus}} · {{localize "AD2E.Station.BonusText" n=s.bonus days=s.bonusUntil}}{{/if}}</span>
+      {{#if s.canRoll}}<button type="button" data-action="stationRoll"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Station.Roll"}}</button>{{/if}}
+      {{#if s.set}}<button type="button" data-action="stationCheck" data-tooltip="{{localize 'AD2E.Station.CheckHint'}}">{{localize "AD2E.Station.Check"}}</button>{{/if}}
+    </div>
+    <div class="ad2e-prof-row">
+      {{#if s.isGM}}<label>{{localize "AD2E.Station.Initial"}} <input type="number" name="system.station.base" value="{{@root.system.station.base}}" min="0" max="20" step="1" placeholder="—"></label>{{/if}}
+      {{#if s.editable}}<label data-tooltip="{{localize 'AD2E.Station.SpendHint'}}">{{localize "AD2E.Station.Spend"}} <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
+      <button type="button" data-action="stationSpend"><i class="fa-solid fa-coins"></i> {{localize "AD2E.Station.SpendButton"}}</button>{{/if}}
+    </div>
+    {{#if s.isGM}}
+    <div class="ad2e-prof-row">
+      <button type="button" data-action="stationConvict">{{#if s.criminal}}{{localize "AD2E.Station.Pardon"}}{{else}}{{localize "AD2E.Station.Convict"}}{{/if}}</button>
+      <button type="button" data-action="stationPenniless">{{#if s.penniless}}{{localize "AD2E.Station.NotPenniless"}}{{else}}{{localize "AD2E.Station.Penniless"}}{{/if}}</button>
+      <button type="button" data-action="stationEnslave">{{#if s.slave}}{{localize "AD2E.Station.Free"}}{{else}}{{localize "AD2E.Station.Enslave"}}{{/if}}</button>
+    </div>
+    {{/if}}
+  </fieldset>
+  {{/with}}
   {{#with body as |b|}}
   <div class="form-group ad2e-body"><label>{{localize "AD2E.Gender.Label"}}</label>
     <select name="system.gender">{{selectOptions b.genders selected=@root.system.gender}}</select>
