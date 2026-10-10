@@ -40,6 +40,7 @@ import EncounterTool from "./apps/encounter-tools.mjs";
 import DungeonTurnTracker from "./apps/dungeon-turns.mjs";
 import { registerDungeonTurns } from "./dungeon-turns.mjs";
 import { registerLights } from "./lights.mjs";
+import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
 import NpcBuilder from "./apps/npc-builder.mjs";
@@ -98,6 +99,7 @@ Hooks.once("init", () => {
   });
   registerDungeonTurns();
   registerLights();
+  registerStation();
   // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
   game.settings.registerMenu("ad2e", "npcBuilder", {
     name: "AD2E.Npc.Title", label: "AD2E.Npc.Open", hint: "AD2E.Npc.MenuHint", icon: "fa-solid fa-user-plus", type: NpcBuilder, restricted: true

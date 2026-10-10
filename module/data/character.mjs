@@ -275,6 +275,16 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       // Maximum age (PHB Table 11), rolled by the GM and shown to the GM only (module/aging.mjs).
       maxAge: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless, enslaved (station while a
+      // slave), freed (station when freed and when), spending bonus (points until a world time).
+      station: new SchemaField({
+        base: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
+        criminal: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
+        penniless: new BooleanField({ initial: false }),
+        slave: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
+        freed: new SchemaField({ from: new NumberField({ nullable: true, integer: true, initial: null }), at: new NumberField({ nullable: true, initial: null }) }),
+        bonus: new SchemaField({ points: new NumberField({ integer: true, min: 0, initial: 0 }), until: new NumberField({ nullable: true, initial: null }) })
+      }),
       // Languages (module/languages.mjs): native (blank = the race's own tongue or the common language), literacy ticks for
       // the native and the world's common language, and the other languages known (modern or ancient).
       languages: new SchemaField({

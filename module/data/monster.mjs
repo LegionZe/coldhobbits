@@ -64,6 +64,8 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       // Magic resistance lowered at will (module/magic-resistance.mjs): no roll against spells.
       mrLowered: new BooleanField({ initial: false }),
       morale: new SchemaField({ value: int(10, 0), text: text() }),
+      // Al-Qadim station of an NPC (module/station.mjs; null = none, e.g. monsters and genies): used by reaction rolls.
+      station: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
       xp: int(0, 0),
       initiative: new SchemaField({ mod: int(0) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional(), other: optional() }),

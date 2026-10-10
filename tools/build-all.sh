@@ -33,6 +33,7 @@ python3 tools/build-encounter-check-tables.py # random encounter checks (DMG Tab
 python3 tools/build-construction-tables.py   # stronghold construction (The Castle Guide ch. 5; after build-travel-tables.py)
 python3 tools/build-npc-tables.py          # random NPC builder data (DMG Tables 60, 61, 64, 66-69; PHB Table 10 heights)
 python3 tools/build-light-tables.py        # PHB Table 63 light sources and the 10-minute turn
+python3 tools/build-station-tables.py      # Al-Qadim station (Station in Life (AA) Table 1, rules regex-checked; after build-class-data.py)
 python3 tools/build-language-tables.py     # character languages (PHB race initial languages, Intelligence / proficiency rules, Midani)
 python3 tools/build-trait-data.py         # Traits & Disadvantages (POSP Tables 46, 47)
 python3 tools/build-aging-tables.py       # PHB Tables 11/12 ageing
