@@ -15,7 +15,11 @@ import { packData } from "./treasure.mjs";
  * for every 2 full points of difference in favour of the higher station; station check d20 (10 or less: under the
  * station; 11 or more: over it).
  * Implementation choices: a month is 30 days; the single kit's entry stands for multi-class characters (one kit each).
- * Character `system.station` { base, criminal, penniless, slave, freed { from, at }, bonus { points, until } }.
+ * Penniless ends by itself (owner's request, 1.0.32) once the character "has cleared all outstanding bills or loans and
+ * has money equaling 500 gp per level": coin items (all, containers included) worth 500 gp x level and the GM's
+ * "Outstanding bills or loans" tick clear (implementation choices: coins only, not gems or goods; level = the highest
+ * class level). Checked by the active GM when coins, the level, the debts tick or the penniless state change.
+ * Character `system.station` { base, criminal, penniless, debts, slave, freed { from, at }, bonus { points, until } }.
  */
 export const STATION = STATION_TABLES;
 const MONTH = STATION.monthDays * 86400;
@@ -29,6 +33,14 @@ export function registerStation() {
   game.settings.register("ad2e", "stationRule", { name: "AD2E.Station.Setting", hint: "AD2E.Station.SettingHint", scope: "world",
     config: true, type: Boolean, default: false, requiresReload: false,
     onChange: () => { for (const a of game.actors ?? []) if (a.sheet?.rendered) a.sheet.render(); } });
+  const coinChange = item => { if (item?.type === "coin" && item.parent?.type === "character") checkPenniless(item.parent); };
+  Hooks.on("createItem", coinChange);
+  Hooks.on("updateItem", coinChange);
+  Hooks.on("deleteItem", coinChange);
+  Hooks.on("updateActor", (actor, changes) => {
+    const s = changes?.system;
+    if (s && ("level" in s || "multiClass" in s || s.station?.debts === false)) checkPenniless(actor);
+  });
 }
 
 /** The Table 1 formula of a kit identifier, or null. */
@@ -98,6 +110,32 @@ export function payPlan(coins, cost) {
     for (const d of ["gp", "sp", "cp"]) { change[d] = Math.floor(back / COIN_VALUES[d]); back -= change[d] * COIN_VALUES[d]; }
   }
   return { take, change };
+}
+
+/** Worth in copper of an actor's coin items (pure on any item list). */
+export function coinWorth(items) {
+  return [...(items ?? [])].filter(i => i.type === "coin")
+    .reduce((n, i) => n + (i.system?.quantity ?? 0) * (i.system?.value ?? COIN_VALUES[i.system?.denomination] ?? 0), 0);
+}
+
+/** The level used for the penniless rule: the highest class level (multi-class) or the character's level. */
+export function stationLevel(system) {
+  return Math.max(system?.level ?? 0, ...(system?.multi?.classes ?? []).map(c => c.level ?? 0));
+}
+
+/** Whether pennilessness ends (pure): penniless, no debts, coins worth 500 gp per level (at least level 1). */
+export function pennilessEnds(st, worthCp, level) {
+  if (!st?.penniless || st.debts) return false;
+  return worthCp >= STATION.pennilessGpPerLevel * Math.max(level, 1) * COIN_VALUES.gp;
+}
+
+/** Active GM: end an actor's pennilessness when the rule is met (chat note). */
+export async function checkPenniless(actor) {
+  if (!actor || actor.type !== "character" || !stationRuleOn() || !game.users?.activeGM?.isSelf) return null;
+  const level = stationLevel(actor.system);
+  if (!pennilessEnds(actor.system.station, coinWorth(actor.items), level)) return null;
+  await actor.update({ "system.station.penniless": false });
+  return post(actor, i18n("AD2E.Station.PennilessEnded", { name: actor.name, gp: STATION.pennilessGpPerLevel * Math.max(level, 1) }));
 }
 
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -195,7 +233,8 @@ export function stationContext(actor, editable) {
     set: !!v, value: v?.value ?? null, initial: v?.initial ?? null, bonus: v?.bonus ?? 0, state: v?.state ? i18n(`AD2E.Station.State.${v.state}`) : "",
     formula: kitFormula(kit?.system?.identifier), kitName: kit?.name ?? "", canRoll: editable && !!kitFormula(kit?.system?.identifier)
       && (st.base === null || st.base === undefined),
-    isGM: !!game.user?.isGM, criminal: st.criminal !== null && st.criminal !== undefined, penniless: !!st.penniless,
+    isGM: !!game.user?.isGM, criminal: st.criminal !== null && st.criminal !== undefined, penniless: !!st.penniless, debts: !!st.debts,
+    pennilessGp: STATION.pennilessGpPerLevel * Math.max(stationLevel(sys), 1),
     slave: st.slave !== null && st.slave !== undefined, editable,
     bonusUntil: v?.bonus ? Math.ceil((st.bonus.until - now) / 86400) : 0, url: STATION.url
   };

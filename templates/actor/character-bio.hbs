@@ -204,6 +204,7 @@
     <div class="ad2e-prof-row">
       <button type="button" data-action="stationConvict">{{#if s.criminal}}{{localize "AD2E.Station.Pardon"}}{{else}}{{localize "AD2E.Station.Convict"}}{{/if}}</button>
       <button type="button" data-action="stationPenniless">{{#if s.penniless}}{{localize "AD2E.Station.NotPenniless"}}{{else}}{{localize "AD2E.Station.Penniless"}}{{/if}}</button>
+      {{#if s.penniless}}<label data-tooltip="{{localize 'AD2E.Station.DebtsHint' gp=s.pennilessGp}}"><input type="checkbox" name="system.station.debts" {{#if s.debts}}checked{{/if}}> {{localize "AD2E.Station.Debts"}}</label>{{/if}}
       <button type="button" data-action="stationEnslave">{{#if s.slave}}{{localize "AD2E.Station.Free"}}{{else}}{{localize "AD2E.Station.Enslave"}}{{/if}}</button>
     </div>
     {{/if}}
