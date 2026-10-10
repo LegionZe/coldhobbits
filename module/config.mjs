@@ -193,6 +193,11 @@ export function equipmentSummary(sys) {
   const i18n = k => game.i18n.localize(k);
   const parts = [sys.cost];
   if (sys.weight !== null) parts.push(`${sys.weight} lb${sys.quantity > 1 ? ` ${i18n("AD2E.Gear.Each")}` : ""}`);
+  // A liquid container: what it holds, and its weight when full.
+  const l = sys.liquid;
+  if (l && l.fullWeight !== null && l.fullWeight !== undefined) {
+    parts.push(game.i18n.format(l.full ? "AD2E.Gear.LiquidFull" : "AD2E.Gear.LiquidEmpty", { volume: l.volume || "?", lb: l.fullWeight }));
+  }
   if (sys.capacity.weight !== null) {
     parts.push(game.i18n.format("AD2E.Gear.Holds", { lb: sys.capacity.weight })
       + (sys.capacity.volume ? ` (${sys.capacity.volume})` : ""));

@@ -26,6 +26,9 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
       carried: new BooleanField({ initial: true }),
       capacity: new SchemaField({ weight: optional(), volume: new StringField({ initial: "" }) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional() }),
+      // A liquid container (owner's ruling 1.0.29: a waterskin holds up to 1 gallon and weighs 9 lb full): what it holds,
+      // its weight when full (lb, per unit; null = not a liquid container) and whether it is full (`unitWeight`).
+      liquid: new SchemaField({ volume: new StringField({ initial: "" }), fullWeight: optional(), full: new BooleanField({ initial: false }) }),
       // Spell components (category "component", POSM Table 16): group, acquisition (FS / TM / SO / Auto), scarcity,
       // found in a wizard's laboratory, perishable.
       component: new SchemaField({ group: new StringField({ initial: "" }), acquisition: new StringField({ initial: "" }),
@@ -40,5 +43,11 @@ export default class EquipmentData extends foundry.abstract.TypeDataModel {
       url: new StringField({ initial: "" }),
       notes: new StringField({ initial: "" })
     };
+  }
+
+  /** Weight of one unit for encumbrance: the full weight of a filled liquid container, otherwise `weight`. */
+  get unitWeight() {
+    const l = this.liquid;
+    return l?.full && l.fullWeight !== null && l.fullWeight !== undefined ? l.fullWeight : this.weight;
   }
 }

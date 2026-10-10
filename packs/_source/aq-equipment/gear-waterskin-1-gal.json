@@ -22,7 +22,12 @@
     },
     "source": "Al-Qadim: Arabian Adventures",
     "url": "https://adnd2e.fandom.com/wiki/Equipment_Lists_(AA)",
-    "notes": "Asking 12 sp, bargain 6 sp (Arabian Adventures; bargain price with haggling)."
+    "notes": "Asking 12 sp, bargain 6 sp (Arabian Adventures; bargain price with haggling).",
+    "liquid": {
+      "volume": "1 gallon",
+      "fullWeight": 9,
+      "full": false
+    }
   },
   "effects": [],
   "folder": "87UblKJWOLbVfB2s",
