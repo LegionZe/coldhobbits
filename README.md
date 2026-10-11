@@ -332,7 +332,7 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Days fall in summer), fall 21 Riyah and winter 20 Saris. These are the Foundry calendar's seasons (replacing the single
   season of 1.0.44); with the calendar on the travel planner starts in today's season (the select still overrides it), and
   the calendar window shows the season and where each one starts. Implementation choice: the seasons start on the paired
-  day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 1-2 days).
+  day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 0-2 days: spring 1, summer 2, fall 2 (later), winter 0).
 - Party tracker (1.0.42; owner's request): a GM "Party" window (Configure Settings, the GM manual, `game.ad2e.party()`)
   lists the party's actors (world setting `party`, actor UUIDs): drag actors from the Actors sidebar, add the selected
   tokens or every player character, reorder or remove; rows show hit points and the henchmen, animals and mount that
