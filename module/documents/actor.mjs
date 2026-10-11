@@ -1489,12 +1489,12 @@ export default class AD2EActor extends Actor {
   }
 
   /**
-   * Armor Class field default: the first target's Armor Class (characters: front, or vs. missiles), if the user may see
-   * that actor (observer or owner); else 10.
+   * Armor Class field default: the first target's Armor Class (characters: front, or vs. missiles); else 10. Any user's
+   * targets count, whatever their permission on the target (owner's bug report, 1.0.34: players got 10).
    */
   static #targetAc(targets, missile = false) {
-    const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
-    if (!actor || !(actor.isOwner || actor.testUserPermission?.(game.user, "OBSERVER"))) return 10;
+    const actor = AD2EActor.#targetActor(targets);
+    if (!actor) return 10;
     const sys = actor.system;
     const ac = actor.type === "character" ? (missile ? sys.armor?.missile : sys.ac?.total) : sys.ac?.value;
     return Number.isFinite(ac) ? ac : 10;
@@ -1674,7 +1674,7 @@ export default class AD2EActor extends Actor {
     const C = COMBAT_TABLES;
     const kitOptions = monster ? [] : this.#kitOptions("attack");
     const targets = AD2EActor.#targetsNow();
-    const targetActors = AD2EActor.#visibleTargetActors(targets);
+    const targetActors = AD2EActor.#targetActors(targets);
     const field = (label, html) => `<div class="form-group"><label>${label}</label>${html}</div>`;
     const sizeSelect = (name, value) => `<select name="${name}">${C.overbear.sizes.map(z =>
       `<option value="${z}"${z === value ? " selected" : ""}>${i18n(`AD2E.Unarmed.Size.${z}`)}</option>`).join("")}</select>`;
@@ -1780,17 +1780,16 @@ export default class AD2EActor extends Actor {
     return ChatMessage.create({ speaker, flavor: flavor + (armedText ? ` [${esc(armedText)}]` : ""), rolls, flags: damageFlags });
   }
 
-  /** Actors of the targets the current user may see (observer or owner). */
   /** The first target's actor (any permission; Table 52 reads its armour), or null. */
   static #targetActor(targets) {
     const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
     return targets?.length ? resolve?.(targets[0].uuid, { strict: false })?.actor ?? null : null;
   }
 
-  static #visibleTargetActors(targets) {
+  /** Actors of the targets (any permission, as #targetAc). */
+  static #targetActors(targets) {
     const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
-    return targets.map(t => resolve?.(t.uuid, { strict: false })?.actor)
-      .filter(a => a && (a.isOwner || a.testUserPermission?.(game.user, "OBSERVER")));
+    return targets.map(t => resolve?.(t.uuid, { strict: false })?.actor).filter(Boolean);
   }
 
   /** Whether an actor holds a melee weapon: characters - equipped and not dropped; monsters - any not dropped. */
@@ -1840,11 +1839,6 @@ export default class AD2EActor extends Actor {
       }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>";
   }
 
-  /**
-   * Skills & Powers shield proficiency of the first target (a character with a valid shield proficiency for the shield
-   * it carries; module/sp-weapons.mjs): { name, type, ac (Table 51 bonus; the body shield's missile value against
-   * missiles), attackers }, or null. Only for a target the user may observe (as #targetAc).
-   */
   /** Record on this actor's combatant that it shot with its missile style this round (combatant flag ad2e.shot = round). */
   async #markShotThisRound() {
     const combat = game.combat;
@@ -1880,9 +1874,14 @@ export default class AD2EActor extends Actor {
       { name: targets[0].name ?? actor.name, province: game.i18n.localize(`AD2E.Elemental.Province.${province}`) }))} (${SHAIR.genWard.hit})</label>`;
   }
 
+  /**
+   * Skills & Powers shield proficiency of the first target (a character with a valid shield proficiency for the shield
+   * it carries; module/sp-weapons.mjs): { name, type, ac (Table 51 bonus; the body shield's missile value against
+   * missiles), attackers }, or null. Any permission, as #targetAc.
+   */
   static #targetShieldProficiency(targets, missile = false) {
-    const actor = targets.length ? (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(targets[0].uuid, { strict: false })?.actor : null;
-    if (!actor || actor.type !== "character" || !(actor.isOwner || actor.testUserPermission?.(game.user, "OBSERVER"))) return null;
+    const actor = AD2EActor.#targetActor(targets);
+    if (actor?.type !== "character") return null;
     const sys = actor.system;
     const type = shieldType(sys.armor?.shield?.system?.identifier);
     if (!type || !sys.proficiencies?.sp?.shields?.includes(type)) return null;
