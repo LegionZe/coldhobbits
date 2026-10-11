@@ -3,7 +3,7 @@
   <fieldset>
     <legend>{{localize "AD2E.Travel.Weather"}}</legend>
     <div class="ad2e-importer-controls">
-      <label>{{localize "AD2E.Travel.SeasonLabel"}} <select data-field="season">{{#each seasons as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Travel.SeasonLabel"}} <select data-field="season">{{#each seasons as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{#if calendarSeason}} <span class="ad2e-note" data-tooltip="{{localize 'AD2E.Calendar.SeasonHint'}}">{{localize "AD2E.Calendar.SeasonFromCalendar"}}</span>{{/if}}</label>
       <button type="button" data-action="rollWeather" data-tooltip="{{localize 'AD2E.Travel.RollWeatherHint'}}"><i class="fa-solid fa-cloud-sun-rain"></i> {{localize "AD2E.Travel.RollWeather"}}</button>
     </div>
     <p><strong>{{weatherText}}</strong></p>
