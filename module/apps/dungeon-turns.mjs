@@ -1,5 +1,6 @@
 import { advanceTurn, dungeonState, endExpedition, REST_EVERY, restState, startExpedition } from "../dungeon-turns.mjs";
 import { LIGHT, litSources, putOut } from "../lights.mjs";
+import { clockText, zakharanDate } from "../calendar.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -7,7 +8,7 @@ const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
 /**
  * GM dungeon turn tracker (module/dungeon-turns.mjs; Configure Settings, the GM manual, or game.ad2e.dungeonTurns()):
  * start or end the expedition, "Next turn" and "Rest turn" (10 minutes of world time each), turns since the last rest,
- * the fatigue penalty, and every lit torch, candle and lantern with its turns left (module/lights.mjs).
+ * the fatigue penalty, the Zakharan date and time of day when that calendar is on (module/calendar.mjs, 1.0.46), and every lit torch, candle and lantern with its turns left (module/lights.mjs).
  */
 export default class DungeonTurnTracker extends HandlebarsApplicationMixin(ApplicationV2) {
   static DEFAULT_OPTIONS = {
@@ -28,7 +29,7 @@ export default class DungeonTurnTracker extends HandlebarsApplicationMixin(Appli
     const now = game.time.worldTime;
     const st = restState(dungeonState(), now);
     return {
-      ...context, st, restEvery: REST_EVERY,
+      ...context, st, restEvery: REST_EVERY, date: zakharanDate(now), clock: clockText(now),
       hours: Math.floor(st.turns / 6), extra: st.turns % 6,
       restText: st.penalty ? i18n("AD2E.Dungeon.Penalty", { n: st.penalty })
         : st.due ? i18n("AD2E.Dungeon.RestNow") : i18n("AD2E.Dungeon.RestIn", { n: st.untilRest }),
