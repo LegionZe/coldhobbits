@@ -30,6 +30,7 @@ import { targetedTraps, TRAP } from "../traps.mjs";
 import { armsTrapped, breakFreeScore, LASSO, monsterScores, NET, netAc, opposedAttack, opposedCheck, pullTripScore } from "../lasso.mjs";
 import { requestPoisonSaves, usePoisonDose } from "../poison.mjs";
 import { createSaveRequest, groupResults, targetActor } from "../save-requests.mjs";
+import { THROW, throwObject, throwingFeet, throwingProficiency } from "../throwing.mjs";
 import { magicResistanceOf, resists, saveEffect } from "../magic-resistance.mjs";
 import { table52ForTarget, table52Text } from "../armor-types.mjs";
 import { attackOptionsOn, AO, disarmPossible, maneuversFor, OPPOSED, opposedAcs, rushScore, sapChance, shieldOf } from "../attack-options.mjs";
@@ -728,10 +729,18 @@ export default class AD2EActor extends Actor {
       return;
     }
     let rangeField = "";
+    // Throwing proficiency (Skills & Powers; module/throwing.mjs): +10 feet to each range category of a thrown weapon
+    // (+5 per extra slot) and +1 to the attack or the damage, chosen each throw.
+    const throwProf = this.type === "character" && this.#isThrownItem(item, use) ? throwingProficiency(this.items) : null;
+    const throwFeet = throwingFeet(throwProf);
+    const plusFeet = throwFeet ? ` + ${throwFeet} ft` : "";
+    const throwField = throwProf ? `<div class="form-group"><label>${game.i18n.format("AD2E.Throw.Proficiency", { ft: throwFeet, n: THROW.proficiency.bonus })}</label>`
+      + `<select name="throwBonus"><option value="hit">${game.i18n.format("AD2E.Throw.ProfHit", { n: THROW.proficiency.bonus })}</option>`
+      + `<option value="damage">${game.i18n.format("AD2E.Throw.ProfDamage", { n: THROW.proficiency.bonus })}</option></select></div>` : "";
     if (use === "missile") {
       const r = attack.range;
-      const opts = [["short", `${i18n("AD2E.Weapon.Short")} (${r.short})`], ["medium", `${i18n("AD2E.Weapon.Medium")} (${r.medium})`],
-        ["long", `${i18n("AD2E.Weapon.Long")} (${r.long})`]];
+      const opts = [["short", `${i18n("AD2E.Weapon.Short")} (${r.short}${plusFeet})`], ["medium", `${i18n("AD2E.Weapon.Medium")} (${r.medium}${plusFeet})`],
+        ["long", `${i18n("AD2E.Weapon.Long")} (${r.long}${plusFeet})`]];
       if (attack.pointBlank) opts.unshift(["pointBlank", `${i18n("AD2E.Weapon.PointBlank")} (${
         AD2E.specialization.pointBlankFeet[item.system.weapon.family]} ft)`]);
       rangeField = `<div class="form-group"><label>${i18n("AD2E.Weapon.Range")}</label><select name="range">${
@@ -793,7 +802,7 @@ export default class AD2EActor extends Actor {
     const input = await ad2eDialog.prompt({
       window: { title: `${item.name}: ${i18n(`AD2E.Weapon.${use}`)}` },
       content: restrictionNote + `<div class="form-group"><label>${i18n("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, use === "missile")}" autofocus></div>`
-        + maneuverField + ammoField + rangeField + wetField + moveField + backstabField + twoField + nonlethalField
+        + maneuverField + ammoField + rangeField + throwField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField + this.#dualField(this.system.dual?.thac0Option)
         + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
@@ -811,7 +820,7 @@ export default class AD2EActor extends Actor {
             vsUnarmed: !!f.vsUnarmed?.checked, styleAttack: !!f.styleAttack?.checked,
             mountMove: f.mountMove?.value ?? null, ownMove: f.ownMove?.value ?? null, missileStyle,
             untrainedMount: !!f.untrainedMount?.checked, mountedMelee: use === "melee" ? AD2EActor.#mountedMeleePicked(f) : null,
-            dualOld: !!f.dualOld?.checked, ...AD2EActor.#maneuverPicked(f) };
+            dualOld: !!f.dualOld?.checked, throwBonus: f.throwBonus?.value ?? "", ...AD2EActor.#maneuverPicked(f) };
         }
       },
       rejectClose: false
@@ -927,6 +936,8 @@ export default class AD2EActor extends Actor {
     const mountedMelee = input.mountedMelee?.value ?? 0;
     if (input.mountedMelee?.text) notes.push(input.mountedMelee.text);
     const styleHit = input.styleAttack && !a.hand ? SP.weaponShield.hit : 0;
+    const throwHit = input.throwBonus === "hit" ? THROW.proficiency.bonus : 0;
+    if (throwHit) notes.push(game.i18n.format("AD2E.Throw.ProfHit", { n: throwHit }));
     if (styleHit) notes.push(game.i18n.format("AD2E.SP.WeaponShieldNote", { n: styleHit }));
     // Skills & Powers mastery at point blank: +3 in place of the +2 at other ranges.
     const pbHit = input.range === "pointBlank" ? (attack.pointBlankHit ?? 0) : 0;
@@ -940,7 +951,7 @@ export default class AD2EActor extends Actor {
     // target are ignored, which the target AC entered should reflect.
     const adj = attack.hit + (ammo?.system.bonus.hit ?? 0) + (a.backstab ? AD2E.backstabHit : 0)
       + twoAdj + (a.nonlethal ? COMBAT_TABLES.nonlethal.hit : 0) + vsUnarmed + t51.sum + styleHit + mountMod + untrained + mountedMelee
-      + (t52?.mod ?? 0) + maneuverHit;
+      + (t52?.mod ?? 0) + maneuverHit + throwHit;
     const roll = await new Roll("1d20 + @adj + @range + @mod", { adj, range: rangeMod, mod: input.mod }).evaluate();
     // Defender sleeping or held: "the attack automatically hits" (Table 51).
     // A misfire (Combat & Tactics footnotes 3, 5, 7, 9): a natural roll at or below the weapon's number (wet if ticked).
@@ -959,6 +970,7 @@ export default class AD2EActor extends Actor {
     }
     AD2EActor.#rememberCrit(this, itemId, crit);
     AD2EActor.#lastSap.set(`${this.uuid ?? this.id}.${itemId}`, input.maneuver === "sap" ? { helpless: !!input.sapHelpless } : null);
+    AD2EActor.#throwDamage.set(`${this.uuid ?? this.id}.${itemId}`, input.throwBonus === "damage" ? THROW.proficiency.bonus : 0);
     // Use up the piece fired or thrown.
     let spent = "";
     if (powder) {
@@ -1001,6 +1013,9 @@ export default class AD2EActor extends Actor {
 
   /** The sap of the last attack per actor and weapon (the damage roll uses it once). */
   static #lastSap = new Map();
+
+  /** Throwing proficiency's +1 damage chosen at the last throw per actor and weapon (the damage roll uses it once). */
+  static #throwDamage = new Map();
 
   /** Maneuver fields for attack dialogs: the maneuver, a called shot's penalty and location, sap helmet / helpless ticks. */
   #maneuverField(maneuvers, targets, typeText) {
@@ -1471,6 +1486,21 @@ export default class AD2EActor extends Actor {
   }
 
   /** Tokens the current user targets: [{ uuid, name }] (`game.user.targets`). */
+  /** The current user's targets as [{ uuid, name }] (module/throwing.mjs). */
+  static targetsNow() {
+    return AD2EActor.#targetsNow();
+  }
+
+  /** The first target's AC for an attack dialog (module/throwing.mjs). */
+  static targetAcOf(targets, missile = false) {
+    return AD2EActor.#targetAc(targets, missile);
+  }
+
+  /** Throw an object (grenade-like missile; module/throwing.mjs). */
+  async throwObject() {
+    return throwObject(this);
+  }
+
   static #targetsNow() {
     return [...(game.user?.targets ?? [])].map(t => ({ uuid: t.document?.uuid, name: t.document?.name ?? t.name }))
       .filter(t => t.uuid);
@@ -1544,6 +1574,8 @@ export default class AD2EActor extends Actor {
     const sapKey = `${this.uuid ?? this.id}.${itemId}`;
     const sap = preset?.sap ?? AD2EActor.#lastSap.get(sapKey) ?? null;
     AD2EActor.#lastSap.delete(sapKey);
+    const throwDmg = use === "missile" ? (AD2EActor.#throwDamage.get(sapKey) ?? 0) : 0;
+    AD2EActor.#throwDamage.delete(sapKey);
     const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
       + `<input type="checkbox" name="backstab"></div>` : "";
     // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
@@ -1606,7 +1638,7 @@ export default class AD2EActor extends Actor {
     const twoHandStyle = use === "melee" && this.type === "character" && this.system.proficiencies?.sp?.styles?.twoHanded
       && needsTwoHands(item.system.weapon, this.system.sizeCategory ?? "M", option) && !needsTwoHands(item.system.weapon, this.system.sizeCategory ?? "M")
       ? SP.twoHanded.damage : 0;
-    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed + elementDice + pointBlank + twoHandStyle,
+    const roll = await new Roll(formula, { adj: attack.dmg + (option.dmg ?? 0) + vsUnarmed + elementDice + pointBlank + twoHandStyle + throwDmg,
       mod: input.mod }).evaluate();
     // Combat & Tactics footnote k: "If the knockdown roll ... is a 7 or higher, roll an additional damage die and add it
     // ... Roll another knockdown die, and if the result is another 7 or higher, repeat the damage."
@@ -1638,6 +1670,7 @@ export default class AD2EActor extends Actor {
         + (input.backstab && mult ? ` [${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}]` : "")
         + (vsUnarmed ? ` [${game.i18n.format("AD2E.Unarmed.VsUnarmedShort", { bonus: vsUnarmed })}]` : "")
         + (pointBlank ? ` [${game.i18n.format("AD2E.SP.PointBlankDamage", { n: pointBlank })}]` : "")
+        + (throwDmg ? ` [${game.i18n.format("AD2E.Throw.ProfDamage", { n: throwDmg })}]` : "")
         + (twoHandStyle ? ` [${game.i18n.format("AD2E.SP.TwoHandedDamage", { n: twoHandStyle })}]` : "")
         + (input.charge ? ` [${i18n("AD2E.Firearm.ChargeDouble")}]` : "")
         + (input.critical ? ` [${i18n(input.critical > 1 ? "AD2E.Critical.Triple" : "AD2E.Critical.Double")}]` : "")
