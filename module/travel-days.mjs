@@ -24,7 +24,8 @@ import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
  * (`system.henchmen.actors`), animals (`system.animals.actors`) and mount (`riding`). People (characters and monster
  * hirelings) eat rations and drink `waterPerDay`; mounts and pack animals (`isAnimal`) eat "Animal feed (per day)" (a
  * system addition, `FEED_ID`) unless the planner's "Animals graze today" is ticked, and drink the world setting
- * `animalWaterPerDay` (default 0: they drink at streams). Each eats from its own inventory first, then from its employer's
+ * `animalWaterPerDay` (default 0: they drink at streams), or the amount for their size in `animalWaterBySize` (owner's
+ * request 1.0.39; T/S/M/L/H/G from the monster's size text, unknown = M; a size left empty uses the general amount). Each eats from its own inventory first, then from its employer's
  * (the character it belongs to); members linked to no character fall back to the party's characters in order
  * (implementation choice). Player characters eat only their own. Monster actors have no Constitution: their days without
  * food and water are counted (monster `system.survival`) and reported to the GM, with no checks or losses.
@@ -264,6 +265,26 @@ export function addLogEntry(log, entry) {
 
 /* ---------------------------------------- settings */
 
+/** Monstrous Manual size letters, smallest first (an animal's water by size, owner's request 1.0.39). */
+export const ANIMAL_SIZES = ["T", "S", "M", "L", "H", "G"];
+
+/** An actor's size letter from its size text ("L (9' tall)" -> "L"; unknown -> "M"; pure). */
+export function animalSize(actor) {
+  const c = String(actor?.system?.size ?? "").trim().charAt(0).toUpperCase();
+  return ANIMAL_SIZES.includes(c) ? c : "M";
+}
+
+/** Gallons per size (world setting `animalWaterBySize`; a size left empty uses `animalWaterPerDay`). */
+export function animalWaterBySize() {
+  try { return { ...(game.settings.get("ad2e", "animalWaterBySize") ?? {}) }; } catch { return {}; }
+}
+
+/** An animal's water per day (pure with `bySize` and `base`): its size's amount, else the general amount. */
+export function animalWaterFor(actor, bySize = animalWaterBySize(), base = animalWaterPerDay()) {
+  const v = bySize?.[animalSize(actor)];
+  return v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? base : Math.max(Number(v), 0);
+}
+
 export function animalWaterPerDay() {
   try { return Math.max(Number(game.settings.get("ad2e", "animalWaterPerDay")) || 0, 0); } catch { return 0; }
 }
@@ -286,6 +307,7 @@ export function registerTravelDays() {
     scope: "world", config: true, type: Number, default: SURVIVAL.defaultWaterGallons, range: { min: 0, max: 4, step: 0.25 } });
   game.settings.register("ad2e", "animalWaterPerDay", { name: "AD2E.TravelDay.AnimalWaterSetting", hint: "AD2E.TravelDay.AnimalWaterSettingHint",
     scope: "world", config: true, type: Number, default: 0, range: { min: 0, max: 20, step: 0.5 } });
+  game.settings.register("ad2e", "animalWaterBySize", { scope: "world", config: false, type: Object, default: {} });
   game.settings.register("ad2e", "travelEvents", { scope: "world", config: false, type: Object, default: { source: "builtin", table: "", chance: 6 } });
   game.settings.register("ad2e", "travelLog", { scope: "world", config: false, type: Object, default: { entries: [] },
     onChange: () => { Hooks.callAll("ad2eTravelLog"); foundry.applications?.instances?.get?.("ad2e-travel-planner")?.render(); } });
@@ -430,11 +452,12 @@ export async function endTravelDay(t, { encounter = null } = {}) {
   const characters = members.filter(a => a.type === "character" && !a.system?.hp?.dead);
   const eaters = partyEaters(members, u => resolve?.(u, { strict: false })).filter(e => !e.actor.system?.hp?.dead);
   const gallons = waterPerDay();
-  const animalGallons = animalWaterPerDay();
+  const bySize = animalWaterBySize();
+  const animalBase = animalWaterPerDay();
   const supplies = [];
   if (t.supplies !== false) for (const e of eaters) {
     supplies.push(...await supplyEater(e.actor, { sources: supplySources(e, characters), animal: e.animal,
-      gallons: e.animal ? animalGallons : gallons, graze: !!t.graze }));
+      gallons: e.animal ? animalWaterFor(e.actor, bySize, animalBase) : gallons, graze: !!t.graze }));
   }
   const event = await rollTravelEvent(characters);
   const entry = { at: game.time.worldTime, date: dateText(game.time.worldTime), miles: t.miles ?? 0, mode: t.mode ?? "",
