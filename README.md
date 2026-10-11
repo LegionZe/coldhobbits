@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.36)
+## Status (v1.0.37)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -595,6 +595,21 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   stop or ignore bad omens, a disaster averted) and for problems resolved in play; costs are recorded, not taken from
   coins. Implementation choices: time factor by the book's steps only, durations rounded up to whole weeks, work weeks
   spread evenly through the year, a month = four weeks, choice events wait for the GM.
+- Travel days (1.0.37, owner's request; module/travel-days.mjs, rules in module/rules/survival-tables.mjs from
+  `tools/build-survival-tables.py`, regex-checked against Provisioning the Crew (CSH) rev 151527): the Weather and travel
+  planner's End day also (owner's rulings) feeds the party's characters from their own inventory: 1 day of rations (dry
+  rations "per week" = 7 days, opened packs tracked in `supply.left`) and the world setting "Water per traveller per day"
+  (1/2 gallon by default, changeable for other settings; the source says "Humans require a minimum of a gallon of water
+  each day") from filled waterskins (`liquid.left` = gallons left in the stack, weight in proportion). Without food or
+  water, the CSH rules: "A character can live without food for a number of days equal to half his Constitution score
+  without ill effects", then a daily Constitution check or -1 Strength and -1 Constitution; water: 3 days, then a check
+  every 6 hours; Constitution 0 = a save vs. death magic; no survival beyond a week without water; recovery 2 Strength
+  and 1 Constitution a day once fed, thirst losses 1 point an hour (all back on a watered day), a score that reached 0 by
+  starvation loses a point for good unless a System Shock roll. Travel events: none, a built-in d12 list (written for the
+  system, not rulebook text; spoiled rations, a leaking skin and a spring change inventories) or a world roll table, at
+  1 in N a day (default 6); "Copy built-in list to a table". A day log (last 60 days) in the planner and a GM card: date,
+  miles, mode, weather, the lost check, encounter, event and supplies. Implementation choices: a day's need not fully met
+  counts as a day without it; mounts and monsters are not fed.
 - Weather and travel (GM tool "Weather and travel": Configure Settings, the GM manual, or `game.ad2e.travel()`;
   `python3 tools/build-travel-tables.py`, every table parsed and every rule regex-checked against "Movement (PHB)",
   "Movement (DMG)", "Terrain Obstacles and Hindrances (DMG)", "Movement on Water (DMG)", "Aerial Movement (DMG)" and

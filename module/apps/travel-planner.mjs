@@ -3,6 +3,8 @@ import {
   MODES, planDay, restFromMarch, rollDailyWeather, ROUTES, SEASONS, shipSpeed, TR, weatherLostMods, weatherObstacles, weatherText
 } from "../travel.mjs";
 import { TRAVEL_TERRAIN } from "../encounters.mjs";
+import { ad2eDialog } from "../dialogs.mjs";
+import { createEventTable, eventSettings, foodDays, survivalLoss, travelLog, waterGallons, waterPerDay } from "../travel-days.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -22,7 +24,8 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     window: { title: "AD2E.Travel.Title", icon: "fa-solid fa-route", resizable: true },
     position: { width: 640, height: "auto" },
     actions: { rollWeather: TravelPlanner.#onRollWeather, useTokens: TravelPlanner.#onUseTokens, addLeg: TravelPlanner.#onAddLeg,
-      removeLeg: TravelPlanner.#onRemoveLeg, post: TravelPlanner.#onPost, rest: TravelPlanner.#onRest }
+      removeLeg: TravelPlanner.#onRemoveLeg, post: TravelPlanner.#onPost, rest: TravelPlanner.#onRest,
+      createEventTable: TravelPlanner.#onCreateEventTable, clearLog: TravelPlanner.#onClearLog }
   };
 
   static PARTS = { main: { template: "systems/ad2e/templates/apps/travel-planner.hbs" } };
@@ -40,7 +43,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
       legs: [TravelPlanner.newLeg(w)],
       boat: { key: TR.boats[0].key, current: 0, downstream: true, sail: false },
       ship: { key: TR.ships[0].key, rowing: false, emergency: false },
-      lost: { check: true, surroundings: "level", mods: weatherLostMods(w), variable: 0 }, restDays: 1
+      lost: { check: true, surroundings: "level", mods: weatherLostMods(w), variable: 0 }, restDays: 1, supplies: true
     };
   }
 
@@ -128,8 +131,39 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
         obstacleText: l.obstacles.map(k => TR.obstacles.find(o => o.key === k)?.label).filter(Boolean).join(", ") })),
       plan, lost: { ...s.lost, pct: lostPct, surroundings: opt(TR.lost, s.lost.surroundings, l => `${l.label} (${l.pct}%)`),
         mods: TR.lostMods.filter(m => m.mod !== null).map(m => ({ key: m.key, label: `${m.label} (${m.mod > 0 ? "+" : ""}${m.mod})`, checked: s.lost.mods.includes(m.key) })) },
+      supplies: TravelPlanner.suppliesContext(actors, s.supplies !== false), events: TravelPlanner.eventsContext(),
+      log: travelLog().slice(0, 10).map(TravelPlanner.logRow),
       urls: TR.urls
     };
+  }
+
+  /** The party's food and water (characters) for the planner. */
+  static suppliesContext(actors, on) {
+    const need = waterPerDay();
+    const rows = actors.filter(a => a.type === "character").map(a => {
+      const s = a.system.survival ?? {};
+      const lost = survivalLoss(s);
+      const water = Math.round(waterGallons(a.items) * 100) / 100;
+      const status = [s.food ? i18n("AD2E.TravelDay.DaysNoFood", { n: s.food }) : "", s.water ? i18n("AD2E.TravelDay.DaysNoWater", { n: s.water }) : "",
+        lost.str || lost.con ? i18n("AD2E.TravelDay.Lost", { str: lost.str, con: lost.con }) : ""].filter(Boolean).join(", ");
+      return { name: a.name, food: foodDays(a.items), water, short: water < need, status };
+    });
+    return { on, water: need, rows };
+  }
+
+  /** Event source, table and chance (world setting travelEvents). */
+  static eventsContext() {
+    const e = eventSettings();
+    return { ...e, isTable: e.source === "table",
+      sources: ["none", "builtin", "table"].map(k => ({ key: k, label: i18n(`AD2E.TravelDay.Source.${k}`), selected: e.source === k })),
+      tables: [...(game.tables ?? [])].map(t => ({ key: t.uuid, label: t.name, selected: t.uuid === e.table })) };
+  }
+
+  /** A day log entry for display. */
+  static logRow(e) {
+    const bits = [`${e.miles} mi`, e.mode, e.weather, e.lost === true ? i18n("AD2E.TravelDay.LogLost") : e.lost === false ? i18n("AD2E.TravelDay.LogNotLost") : "",
+      e.encounter === true ? i18n("AD2E.TravelDay.LogEncounter") : e.encounter === false ? i18n("AD2E.TravelDay.LogNoEncounter") : ""].filter(Boolean);
+    return { date: e.date, summary: bits.join("; "), details: [e.event ? `${i18n("AD2E.TravelDay.EventLabel")}: ${e.event}` : "", ...(e.supplies ?? [])].filter(Boolean) };
   }
 
   _onRender(context, options) {
@@ -154,6 +188,12 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
         s.weather = { ...(s.weather ?? { season: s.season }), [f]: value, season: s.season };
         if (f === "precipitation") s.weather.kind = value ? (s.season === "winter" ? "snow" : "rain") : "";
         if (game.user?.isGM) game.settings.set("ad2e", "weather", s.weather);
+      } else if (f === "waterPerDay") {
+        if (game.user?.isGM) return game.settings.set("ad2e", "waterPerDay", Math.max(Number(t.value) || 0, 0)).then(() => this.render());
+      } else if (f.startsWith("events.")) {
+        const key = f.slice(7);
+        const next = { ...eventSettings(), [key]: key === "chance" ? Math.max(Math.floor(Number(t.value) || 1), 1) : t.value };
+        if (game.user?.isGM) return game.settings.set("ad2e", "travelEvents", next).then(() => this.render());
       } else if (f === "season") {
         s.season = value;
         if (game.user?.isGM) game.settings.set("ad2e", "season", value);
@@ -189,6 +229,21 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     this.render();
   }
 
+  static async #onCreateEventTable() {
+    const table = await createEventTable();
+    if (!table) return;
+    await game.settings.set("ad2e", "travelEvents", { ...eventSettings(), source: "table", table: table.uuid });
+    ui.notifications.info(i18n("AD2E.TravelDay.TableCreated", { name: table.name }));
+    this.render();
+  }
+
+  static async #onClearLog() {
+    const ok = await ad2eDialog.confirm({ window: { title: i18n("AD2E.TravelDay.ClearLog") }, content: `<p>${esc(i18n("AD2E.TravelDay.ClearConfirm"))}</p>` });
+    if (!ok) return;
+    await game.settings.set("ad2e", "travelLog", { entries: [] });
+    this.render();
+  }
+
   static async #onRest() {
     const n = await restFromMarch(this.#actors(), this.state.restDays);
     ui.notifications.info(i18n("AD2E.Travel.Rested", { n, days: this.state.restDays }));
@@ -219,15 +274,21 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     }
     const content = `<p><strong>${esc(i18n("AD2E.Travel.Card", { mode: i18n(`AD2E.Travel.Mode.${s.mode}`), miles: plan.miles }))}</strong></p>`
       + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}${marchLines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>`;
-    await ChatMessage.create({ content, rolls, speaker: { alias: i18n("AD2E.Travel.Title") }, flags: { ad2e: { travel: { hours: s.hours, miles: plan.miles, terrain56: TravelPlanner.terrain56(s, plan) } } } });
-    // Getting lost: one blind check per day off roads, rivers and trails, for the GM only.
+    // Getting lost: one blind check per day off roads, rivers and trails, for the GM only (its result goes in the day log).
+    let lost = null;
+    let lostMessage = null;
     if (s.lost.check && ["foot", "mounted", "vehicle", "ship", "air"].includes(s.mode)) {
       const pct = lostChance(s.lost.surroundings, s.lost.mods, s.lost.variable);
       const roll = await new Roll("1d100").evaluate();
-      const lost = isLost(roll.total, pct);
-      await ChatMessage.create({ rolls: [roll], whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [], blind: true,
-        content: `<p>${esc(i18n("AD2E.Travel.LostCheck", { roll: roll.total, pct }))}: <strong>${esc(i18n(lost ? "AD2E.Travel.Lost" : "AD2E.Travel.NotLost"))}</strong></p>` });
+      lost = isLost(roll.total, pct);
+      lostMessage = { rolls: [roll], whisper: ChatMessage.getWhisperRecipients?.("GM")?.map(u => u.id) ?? [], blind: true,
+        content: `<p>${esc(i18n("AD2E.Travel.LostCheck", { roll: roll.total, pct }))}: <strong>${esc(i18n(lost ? "AD2E.Travel.Lost" : "AD2E.Travel.NotLost"))}</strong></p>` };
     }
+    // The card's "End day" also feeds the party and rolls the travel event (module/travel-days.mjs).
+    await ChatMessage.create({ content, rolls, speaker: { alias: i18n("AD2E.Travel.Title") }, flags: { ad2e: { travel: { hours: s.hours,
+      miles: plan.miles, terrain56: TravelPlanner.terrain56(s, plan), members: [...s.members], mode: i18n(`AD2E.Travel.Mode.${s.mode}`),
+      weather: weatherText(s.weather), lost, supplies: s.supplies !== false } } } });
+    if (lostMessage) await ChatMessage.create(lostMessage);
     this.render();
   }
 }
