@@ -5,6 +5,7 @@ import {
 import { TRAVEL_TERRAIN } from "../encounters.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { partyActors, partyDefined } from "../party.mjs";
+import { zakharanSeason } from "../calendar.mjs";
 import { ANIMAL_FEED_DEFAULTS, ANIMAL_SIZES, ANIMAL_WATER_DEFAULTS, animalFeedBySize, animalFeedFor, animalSize, animalWaterBySize, animalWaterFor, createEventTable, eventSettings, feedDays, foodDays, partyEaters, rationDays, supplySources, survivalLoss, travelLog,
   waterGallons, waterPerDay } from "../travel-days.mjs";
 
@@ -38,6 +39,9 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     const w = currentWeather();
     let season = "spring";
     try { season = game.settings.get("ad2e", "season") || "spring"; } catch { /* default */ }
+    // The Zakharan calendar's season for today, when it is on (module/calendar.mjs; the select still overrides it).
+    const zakharan = zakharanSeason();
+    if (zakharan) season = zakharan;
     const tokens = (globalThis.canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
     // The party tracker's list (module/party.mjs) first, then selected tokens, then player-owned characters.
     const party = partyDefined() ? partyActors() : (tokens.length ? tokens : partyActors());
@@ -117,7 +121,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     const opt = (list, sel, label) => list.map(k => ({ key: k.key ?? k, label: label(k), selected: (k.key ?? k) === sel }));
     const lostPct = lostChance(s.lost.surroundings, s.lost.mods, s.lost.variable);
     return {
-      ...context, s, weatherText: weatherText(s.weather),
+      ...context, s, weatherText: weatherText(s.weather), calendarSeason: zakharanSeason(),
       seasons: opt(SEASONS, s.season, k => i18n(`AD2E.Travel.Season.${k}`)),
       winds: opt(Object.keys(TR.sailing).filter(k => k !== "adverse"), s.weather?.wind ?? "", k => i18n(`AD2E.Travel.Wind.${k}`)),
       modes: opt(MODES, s.mode, k => i18n(`AD2E.Travel.Mode.${k}`)),

@@ -1,5 +1,5 @@
 import { CALENDAR_TABLES as CT } from "../rules/calendar-tables.mjs";
-import { constellations, dayParts, fromTime, HOLY_DAYS, MONTHS, PERIODS, setDate, zakharanDate, zakharanOn } from "../calendar.mjs";
+import { constellations, dayParts, fromTime, HOLY_DAYS, MONTHS, PERIODS, seasonOf, seasonStartsIn, setDate, zakharanDate, zakharanOn } from "../calendar.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -30,7 +30,8 @@ export default class ZakharanCalendar extends HandlebarsApplicationMixin(Applica
         .map(h => `${holy ? HOLY_DAYS[h.day - 1] : h.day}: ${translate(`AD2E.Calendar.Holiday.${h.key}`)}`);
       return { key: p.key, name: holy ? HOLY_DAYS.join(", ") : MONTHS.find(m => m.key === p.key).name,
         label: holy ? translate("AD2E.Calendar.HolyDays") : "", days: p.days, holidays: holidays.join("; "),
-        stars: constellations(p.key).join(", "), current: p.key === current };
+        stars: constellations(p.key).join(", "), current: p.key === current,
+        seasons: seasonStartsIn(p.key).map(x => translate("AD2E.Calendar.SeasonStarts", { season: translate(`AD2E.Travel.Season.${x.key}`), day: x.day })).join("; ") };
     });
   }
 
@@ -41,7 +42,7 @@ export default class ZakharanCalendar extends HandlebarsApplicationMixin(Applica
     const parts = dayParts(now.dayOfYear);
     return {
       ...context, on, isGM: !!game.user?.isGM, date: zakharanDate(), year: now.year, day: parts.day,
-      stars: constellations(parts.period).join(", "), rows: ZakharanCalendar.yearRows(parts.period),
+      stars: constellations(parts.period).join(", "), season: i18n(`AD2E.Travel.Season.${seasonOf(now.dayOfYear)}`), rows: ZakharanCalendar.yearRows(parts.period),
       periods: PERIODS.map(p => ({ key: p.key, label: p.key === "holy" ? i18n("AD2E.Calendar.HolyDays") : MONTHS.find(m => m.key === p.key).name,
         selected: p.key === parts.period })),
       urls: CT.urls

@@ -54,6 +54,20 @@ export function fromTime(t) {
 /** A world time from a year, day of the year and seconds into the day (pure). */
 export const toTime = (year, day, seconds = 0) => (year * YEAR_DAYS + day) * DAY + seconds;
 
+/** Travel seasons (module/travel.mjs SEASONS) with their first day of the year: the Harptos equinoxes and solstices on
+ * the paired Zakharan months (calendar-tables.mjs `seasons`, owner's request 1.0.45). */
+export const SEASON_STARTS = CT.seasons.map(s => ({ key: s.key, month: s.month, day: s.day, start: dayOfYear(s.month.toLowerCase(), s.day) }));
+
+/** The travel season of a day of the year (0-based; pure). */
+export function seasonOf(day) {
+  const d = ((Math.floor(day) % YEAR_DAYS) + YEAR_DAYS) % YEAR_DAYS;
+  const sorted = [...SEASON_STARTS].sort((a, b) => a.start - b.start);
+  return ([...sorted].reverse().find(s => s.start <= d) ?? sorted.at(-1)).key;
+}
+
+/** Seasons that start within a period: [{ key, day }] (pure). */
+export const seasonStartsIn = period => SEASON_STARTS.filter(s => s.month.toLowerCase() === period).map(s => ({ key: s.key, day: s.day }));
+
 /** The constellations fully visible in a period (Astrologer kit table; none listed for the High Holy Days). */
 export const constellations = period => MONTHS.find(m => m.key === period)?.constellations ?? [];
 
@@ -70,7 +84,8 @@ export function formatDate(t, i18n) {
 /** Foundry calendar configuration (CalendarConfig; names are lang keys, as dnd5e's calendars, because translations are not
  * loaded at init). The High Holy Days are a 5-day month with Safa's ordinal, as dnd5e's Greyhawk festivals (no intercalary
  * flag). Seasons: core 14.368 needs them ("this.seasons is null" in CalendarData#timeToComponents, owner's console log
- * 1.0.43, although the API docs type the field nullable); the sources name none, so one season spans the year. */
+ * 1.0.43, although the API docs type the field nullable): the four travel seasons from `SEASON_STARTS` (winter wraps
+ * the year's end, as dnd5e's Harptos seasons). */
 export function calendarConfig() {
   let ordinal = 0;
   return {
@@ -81,7 +96,8 @@ export function calendarConfig() {
       : { name: MONTHS.find(m => m.key === p.key).name, abbreviation: MONTHS.find(m => m.key === p.key).name.slice(0, 3), ordinal: ++ordinal, days: p.days })) },
     days: { values: Array.from({ length: 10 }, (_, i) => ({ name: `AD2E.Calendar.Weekday.${i + 1}`, ordinal: i + 1 })),
       daysPerYear: YEAR_DAYS, hoursPerDay: 24, minutesPerHour: 60, secondsPerMinute: 60 },
-    seasons: { values: [{ name: "AD2E.Calendar.Season", dayStart: 0, dayEnd: YEAR_DAYS - 1 }] }
+    seasons: { values: SEASON_STARTS.map((s, i, all) => ({ name: `AD2E.Travel.Season.${s.key}`, dayStart: s.start,
+      dayEnd: (all[(i + 1) % all.length].start + YEAR_DAYS - 1) % YEAR_DAYS })) }
   };
 }
 
@@ -93,6 +109,9 @@ const i18nNow = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
 
 /** The current (or given) world time as a Zakharan date, or null when the calendar is off. */
 export const zakharanDate = (t = game.time?.worldTime ?? 0) => (zakharanOn() ? formatDate(t, i18nNow) : null);
+
+/** The travel season of the current (or given) world time, or null when the calendar is off. */
+export const zakharanSeason = (t = game.time?.worldTime ?? 0) => (zakharanOn() ? seasonOf(fromTime(t).dayOfYear) : null);
 
 /** GM: set the date (year, period, day), keeping the time of day. */
 export async function setDate(year, period, day) {

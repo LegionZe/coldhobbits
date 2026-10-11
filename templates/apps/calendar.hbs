@@ -2,7 +2,7 @@
   {{#if on}}
   <fieldset>
     <legend>{{localize "AD2E.Calendar.Today"}}</legend>
-    <p><strong>{{date}}</strong></p>
+    <p><strong>{{date}}</strong> · {{localize "AD2E.Calendar.TravelSeason"}}: {{season}}</p>
     <p class="ad2e-note">{{localize "AD2E.Calendar.Stars"}}: {{#if stars}}{{stars}}{{else}}—{{/if}}</p>
     {{#if isGM}}
     <div class="ad2e-importer-controls">
@@ -17,14 +17,14 @@
   <fieldset>
     <legend>{{localize "AD2E.Calendar.TheYear"}}</legend>
     <table class="ad2e-race-table">
-      <thead><tr><th>{{localize "AD2E.Calendar.Month"}}</th><th>{{localize "AD2E.Calendar.Days"}}</th><th>{{localize "AD2E.Calendar.Holidays"}}</th><th>{{localize "AD2E.Calendar.Stars"}}</th></tr></thead>
+      <thead><tr><th>{{localize "AD2E.Calendar.Month"}}</th><th>{{localize "AD2E.Calendar.Days"}}</th><th>{{localize "AD2E.Calendar.Holidays"}}</th><th>{{localize "AD2E.Calendar.Seasons"}}</th><th>{{localize "AD2E.Calendar.Stars"}}</th></tr></thead>
       <tbody>
-        {{#each rows as |r|}}<tr class="{{#if r.current}}ad2e-unmet{{/if}}"><th>{{#if r.label}}{{r.label}}: {{/if}}{{r.name}}</th><td>{{r.days}}</td><td>{{r.holidays}}</td><td>{{r.stars}}</td></tr>{{/each}}
+        {{#each rows as |r|}}<tr class="{{#if r.current}}ad2e-unmet{{/if}}"><th>{{#if r.label}}{{r.label}}: {{/if}}{{r.name}}</th><td>{{r.days}}</td><td>{{r.holidays}}</td><td>{{r.seasons}}</td><td>{{r.stars}}</td></tr>{{/each}}
       </tbody>
     </table>
   </fieldset>
   {{else}}
   <p class="ad2e-placeholder">{{localize "AD2E.Calendar.Off"}}</p>
   {{/if}}
-  <p class="ad2e-note"><a href="{{urls.calendar}}" target="_blank" rel="noopener">Zakharan calendar</a> · <a href="{{urls.holidays}}" target="_blank" rel="noopener">Zakharan holidays</a> · <a href="{{urls.astrologer}}" target="_blank" rel="noopener">Astrologer (CShaH)</a></p>
+  <p class="ad2e-note"><a href="{{urls.calendar}}" target="_blank" rel="noopener">Zakharan calendar</a> · <a href="{{urls.holidays}}" target="_blank" rel="noopener">Zakharan holidays</a> · <a href="{{urls.astrologer}}" target="_blank" rel="noopener">Astrologer (CShaH)</a> · <a href="{{urls.harptos}}" target="_blank" rel="noopener">Calendar of Harptos (seasons)</a></p>
 </section>
