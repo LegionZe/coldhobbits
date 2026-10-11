@@ -1,4 +1,5 @@
 import { TRAVEL } from "./rules/travel-tables.mjs";
+import { endTravelDay } from "./travel-days.mjs";
 import { animalsInfo } from "./animals.mjs";
 import { travelDayChecks, travelDayRoll } from "./encounters.mjs";
 
@@ -279,7 +280,9 @@ export function travelButtons(message, html) {
       const area = t.terrain56 ? await travelDayChecks(t.terrain56) : null;
       await game.time.advance(Number(t.hours) * 3600);
       await message.setFlag("ad2e", "travel", { ...t, ended: true });
-      if (area) await travelDayRoll(area, from, from + Number(t.hours) * 3600);
+      const encounter = area ? await travelDayRoll(area, from, from + Number(t.hours) * 3600) : null;
+      // Supplies, the travel event and the day log (module/travel-days.mjs).
+      await endTravelDay(t, { encounter: area && !area.auto ? !!encounter : null });
     });
   }
   (html.querySelector(".message-content") ?? html).append(box);

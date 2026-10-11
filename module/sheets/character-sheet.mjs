@@ -1793,7 +1793,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** A liquid container (e.g. a waterskin): fill it or empty it; full, it weighs its full weight. */
   static onToggleFull(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
-    return item?.update({ "system.liquid.full": !item.system.liquid?.full });
+    return item?.update({ "system.liquid.full": !item.system.liquid?.full, "system.liquid.left": null });
   }
 
   /** Carried equipment counts toward encumbrance. */

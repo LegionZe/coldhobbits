@@ -82,6 +82,33 @@
     </div>
     {{#each lost.mods as |m|}}<label class="ad2e-check"><input type="checkbox" data-field="lostMod" data-key="{{m.key}}" {{#if m.checked}}checked{{/if}}> {{m.label}}</label>{{/each}}
   </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.TravelDay.SuppliesTitle"}}</legend>
+    <div class="ad2e-importer-controls">
+      <label class="ad2e-check"><input type="checkbox" data-field="supplies" {{#if supplies.on}}checked{{/if}}> {{localize "AD2E.TravelDay.UseSupplies"}}</label>
+      <label data-tooltip="{{localize 'AD2E.TravelDay.WaterSettingHint'}}">{{localize "AD2E.TravelDay.WaterPerDay"}} <input type="number" data-field="waterPerDay" value="{{supplies.water}}" min="0" step="0.25"></label>
+    </div>
+    <table class="ad2e-table">
+      <thead><tr><th>{{localize "AD2E.TravelDay.Member"}}</th><th>{{localize "AD2E.TravelDay.FoodDays"}}</th><th>{{localize "AD2E.TravelDay.WaterGallons"}}</th><th>{{localize "AD2E.TravelDay.Status"}}</th></tr></thead>
+      <tbody>{{#each supplies.rows as |r|}}<tr><td>{{r.name}}</td><td class="{{#unless r.food}}ad2e-unmet{{/unless}}">{{r.food}}</td><td class="{{#if r.short}}ad2e-unmet{{/if}}">{{r.water}}</td><td class="{{#if r.status}}ad2e-unmet{{/if}}">{{r.status}}</td></tr>{{/each}}</tbody>
+    </table>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.TravelDay.EventsTitle"}}</legend>
+    <div class="ad2e-importer-controls">
+      <select data-field="events.source">{{#each events.sources as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      {{#if events.isTable}}<select data-field="events.table"><option value="">—</option>{{#each events.tables as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}
+      <label>{{localize "AD2E.TravelDay.ChanceLabel"}} <input type="number" data-field="events.chance" value="{{events.chance}}" min="1" step="1"></label>
+      <button type="button" data-action="createEventTable" data-tooltip="{{localize 'AD2E.TravelDay.CreateTableHint'}}"><i class="fa-solid fa-table-list"></i> {{localize "AD2E.TravelDay.CreateTable"}}</button>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.TravelDay.LogTitle"}}</legend>
+    {{#if log.length}}
+    <ol class="ad2e-travel-log">{{#each log as |e|}}<li><strong>{{e.date}}</strong>: {{e.summary}}{{#if e.details.length}}<ul>{{#each e.details as |d|}}<li>{{d}}</li>{{/each}}</ul>{{/if}}</li>{{/each}}</ol>
+    <div class="ad2e-importer-controls"><button type="button" data-action="clearLog"><i class="fa-solid fa-eraser"></i> {{localize "AD2E.TravelDay.ClearLog"}}</button></div>
+    {{else}}<p class="ad2e-note">{{localize "AD2E.TravelDay.LogEmpty"}}</p>{{/if}}
+  </fieldset>
   <p>{{localize "AD2E.Travel.Total"}}: <strong>{{plan.miles}} mi</strong>{{#if plan.points}} ({{localize "AD2E.Travel.Points" used=plan.used points=plan.points}}){{/if}}</p>
   {{#each plan.notes as |n|}}<p class="ad2e-unmet">{{n}}</p>{{/each}}
   <p class="ad2e-note"><a href="{{urls.phb}}" target="_blank" rel="noopener">Movement (PHB)</a> · <a href="{{urls.dmg}}" target="_blank" rel="noopener">Movement (DMG)</a> · <a href="{{urls.obstacles}}" target="_blank" rel="noopener">Terrain Obstacles (DMG)</a> · <a href="{{urls.water}}" target="_blank" rel="noopener">Movement on Water (DMG)</a> · <a href="{{urls.air}}" target="_blank" rel="noopener">Aerial Movement (DMG)</a> · <a href="{{urls.lost}}" target="_blank" rel="noopener">Getting Lost (DMG)</a></p>

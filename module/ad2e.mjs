@@ -37,6 +37,7 @@ import SpellImporter, { updateExistingSpells } from "./apps/spell-importer.mjs";
 import AwardXp, { registerAwardXp } from "./apps/award-xp.mjs";
 import TravelPlanner from "./apps/travel-planner.mjs";
 import { registerTravel } from "./travel.mjs";
+import { registerTravelDays } from "./travel-days.mjs";
 import EncounterTool from "./apps/encounter-tools.mjs";
 import DungeonTurnTracker from "./apps/dungeon-turns.mjs";
 import { registerDungeonTurns } from "./dungeon-turns.mjs";
@@ -89,6 +90,7 @@ Hooks.once("init", () => {
     name: "AD2E.Travel.Title", label: "AD2E.Travel.Open", hint: "AD2E.Travel.MenuHint", icon: "fa-solid fa-route", type: TravelPlanner, restricted: true
   });
   registerTravel();
+  registerTravelDays();
   // GM tool: random encounter checks and encounter tables (Configure Settings, or game.ad2e.encounters(); module/encounters.mjs).
   game.settings.registerMenu("ad2e", "encounters", {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true

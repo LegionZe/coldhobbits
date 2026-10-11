@@ -14,6 +14,7 @@ import { pendingDrain } from "../level-drain.mjs";
 import { poisonStateField } from "./poison-fields.mjs";
 import { agingInfo, applyAging } from "../aging.mjs";
 import { debilitated, halveAbilities } from "../poison.mjs";
+import { survivalLoss } from "../travel-days.mjs";
 import { applyMeditation, kitSpecial, meditationActive, weaponTypeConflicts } from "../kit-features.mjs";
 import { AD2E, attackRate, conSaveBonus, formatRate, hitDiceAt, kitArmorMatches, kitKeyMatches, kitModifierValue, lookup, strengthKey,
   thac0At, thiefArmorColumn } from "../config.mjs";
@@ -275,6 +276,15 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       age: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
       // Maximum age (PHB Table 11), rolled by the GM and shown to the GM only (module/aging.mjs).
       maxAge: new NumberField({ required: false, nullable: true, integer: true, min: 0, initial: null }),
+      // Food and water on the road (module/travel-days.mjs, Provisioning the Crew (CSH), owner's ruling 1.0.37): days
+      // without food / water, Strength and Constitution lost to starvation and to thirst, scores that reached 0 while
+      // starving (permanent loss check on recovery).
+      survival: new SchemaField({
+        food: new NumberField({ integer: true, min: 0, initial: 0 }), water: new NumberField({ integer: true, min: 0, initial: 0 }),
+        starve: new SchemaField({ str: new NumberField({ integer: true, min: 0, initial: 0 }), con: new NumberField({ integer: true, min: 0, initial: 0 }) }),
+        thirst: new SchemaField({ str: new NumberField({ integer: true, min: 0, initial: 0 }), con: new NumberField({ integer: true, min: 0, initial: 0 }) }),
+        zero: new SchemaField({ str: new BooleanField({ initial: false }), con: new BooleanField({ initial: false }) })
+      }),
       // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless (+ debts), enslaved (station while a
       // slave), freed (station when freed and when), spending bonus (points until a world time).
       station: new SchemaField({
@@ -346,6 +356,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     // Debilitating poison (module/poison.mjs, Poison (DMG)): every ability score halved while it lasts.
     this.debilitated = debilitated(this.poison, globalThis.game?.time?.worldTime ?? 0);
     if (this.debilitated) halveAbilities(this.abilities);
+    // Starvation and thirst (module/travel-days.mjs): Strength and Constitution lost, down to 0.
+    const lost = survivalLoss(this.survival);
+    for (const key of ["str", "con"]) if (lost[key]) this.abilities[key].total = Math.max(this.abilities[key].total - lost[key], 0);
 
     const a = this.abilities;
     const T = AD2E.abilityTables;
