@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.40)
+## Status (v1.0.41)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -618,7 +618,12 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   real-world approximations rather than rulebook figures (no AD&D source gives them): T 0.1, S 0.5, M 5, L 10 ("An average
   size horse not in production will drink 10-12 gallons of water per day", horses.extension.org), H 50 (elephant care
   sources give about 18-60 gallons), G 100 (no real animal: twice H); S and T follow the veterinary rule of about 1 ounce
-  per pound of body weight a day for dogs. The GM can change each size in the planner. Each eats
+  per pound of body weight a day for dogs. The GM can change each size in the planner. Feed by size (1.0.41, owner's
+  request) in units of "Animal feed (per day)", 1 unit = a horse's day: T 0.02, S 0.05, M 0.5, L 1, H 5, G 10 (real-world
+  approximations: horses eat about 2% of body weight a day in forage, about 20 lb for a 1,000 lb horse (Alabama Extension
+  ANR-3153; Utah State "Equine nutrition: forages"); dogs about 2-3%; elephants 100-125 lb a day (Smithsonian's National
+  Zoo); G twice H). Parts of a unit are kept on the opened item (`supply.left`); an animal needs its whole amount from one
+  inventory, else it goes without that day. Each eats
   from its own inventory, then from its employer's or rider's (unlinked hirelings: the party's characters in order,
   implementation choice); player characters only from their own. Monster actors have no Constitution: days without food
   and water are counted and reported to the GM, with no checks.

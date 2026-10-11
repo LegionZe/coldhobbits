@@ -24,6 +24,7 @@ import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
  * (`system.henchmen.actors`), animals (`system.animals.actors`) and mount (`riding`). People (characters and monster
  * hirelings) eat rations and drink `waterPerDay`; mounts and pack animals (`isAnimal`) eat "Animal feed (per day)" (a
  * system addition, `FEED_ID`) unless the planner's "Animals graze today" is ticked, and drink the world setting
+ * (their size's feed units, owner's request 1.0.41: `ANIMAL_FEED_DEFAULTS`, changed per world in `animalFeedBySize`)
  * the amount for their size (owner's requests 1.0.39 / 1.0.40: `ANIMAL_WATER_DEFAULTS`, changed per world in
  * `animalWaterBySize`; T/S/M/L/H/G from the monster's size text, unknown = M), none on a day the planner's "Animals drink
  * on the way today" is ticked (travel flag `routeWater`). Each eats from its own inventory first, then from its employer's
@@ -100,7 +101,7 @@ export function foodDays(items, days = rationDays) {
 export function eatPlan(items, days = 1, perUnit = rationDays) {
   const foods = [...(items ?? [])].filter(i => perUnit(i) && (i.system?.quantity ?? 0) > 0)
     .sort((a, b) => (a.system?.supply?.left == null) - (b.system?.supply?.left == null));
-  if (foodDays(foods, perUnit) < days) return null;
+  if (foodDays(foods, perUnit) + 1e-9 < days) return null;
   const updates = [];
   let need = days;
   for (const item of foods) {
@@ -108,11 +109,12 @@ export function eatPlan(items, days = 1, perUnit = rationDays) {
     const per = perUnit(item);
     let q = item.system.quantity;
     let left = item.system?.supply?.left ?? per;
-    while (need > 0 && q > 0) {
+    // Fractions of a unit (animal feed by size) are kept in `supply.left`, rounded to 1/1000.
+    while (need > 1e-9 && q > 0) {
       const take = Math.min(left, need);
-      left -= take;
-      need -= take;
-      if (left <= 0) { q -= 1; left = per; }
+      left = Math.round((left - take) * 1000) / 1000;
+      need = Math.round((need - take) * 1000) / 1000;
+      if (left <= 1e-9) { q -= 1; left = per; }
     }
     updates.push({ _id: item.id, "system.quantity": q, "system.supply.left": left === per ? null : left });
   }
@@ -285,6 +287,27 @@ export function animalSize(actor) {
  */
 export const ANIMAL_WATER_DEFAULTS = { T: 0.1, S: 0.5, M: 5, L: 10, H: 50, G: 100 };
 
+/**
+ * Default feed per day by size, in units of "Animal feed (per day)" (owner's request 1.0.41; one unit = one day for a
+ * horse-sized animal). Real-world approximations, not rules: horses eat about 2% of body weight a day in forage, about 20 lb
+ * for a 1,000 lb horse (Alabama Extension ANR-3153; Utah State "Equine nutrition: forages") = 1 unit (L); M 0.5 (a 500 lb
+ * animal); dogs about 2-3% of body weight (S 0.05: about 1.25 lb for a 50 lb dog; T 0.02); elephants 100-125 lb a day
+ * (Smithsonian's National Zoo) = H 5; G 10 (no real animal: twice H).
+ */
+export const ANIMAL_FEED_DEFAULTS = { T: 0.02, S: 0.05, M: 0.5, L: 1, H: 5, G: 10 };
+
+/** Feed units per size set for the world (world setting `animalFeedBySize`; a size left empty uses its default). */
+export function animalFeedBySize() {
+  try { return { ...(game.settings.get("ad2e", "animalFeedBySize") ?? {}) }; } catch { return {}; }
+}
+
+/** An animal's feed per day in units (pure with `bySize`): the world's amount for its size, else the size's default. */
+export function animalFeedFor(actor, bySize = animalFeedBySize(), defaults = ANIMAL_FEED_DEFAULTS) {
+  const size = animalSize(actor);
+  const v = bySize?.[size];
+  return v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? defaults[size] : Math.max(Number(v), 0);
+}
+
 /** Gallons per size set for the world (world setting `animalWaterBySize`; a size left empty uses its default). */
 export function animalWaterBySize() {
   try { return { ...(game.settings.get("ad2e", "animalWaterBySize") ?? {}) }; } catch { return {}; }
@@ -314,6 +337,7 @@ export function registerTravelDays() {
   game.settings.register("ad2e", "waterPerDay", { name: "AD2E.TravelDay.WaterSetting", hint: "AD2E.TravelDay.WaterSettingHint",
     scope: "world", config: true, type: Number, default: SURVIVAL.defaultWaterGallons, range: { min: 0, max: 4, step: 0.25 } });
   game.settings.register("ad2e", "animalWaterBySize", { scope: "world", config: false, type: Object, default: {} });
+  game.settings.register("ad2e", "animalFeedBySize", { scope: "world", config: false, type: Object, default: {} });
   game.settings.register("ad2e", "travelEvents", { scope: "world", config: false, type: Object, default: { source: "builtin", table: "", chance: 6 } });
   game.settings.register("ad2e", "travelLog", { scope: "world", config: false, type: Object, default: { entries: [] },
     onChange: () => { Hooks.callAll("ad2eTravelLog"); foundry.applications?.instances?.get?.("ad2e-travel-planner")?.render(); } });
@@ -327,14 +351,15 @@ const roll = async f => (await new Roll(f).evaluate()).total;
  * Food and water for one traveller at the end of a travel day (`sources` = actors whose inventories it may use, in
  * order: itself, then its employer or the party's characters); returns the card lines.
  */
-export async function supplyEater(actor, { sources = [actor], animal = false, gallons = 0, graze = false } = {}) {
+export async function supplyEater(actor, { sources = [actor], animal = false, gallons = 0, graze = false, feed = 1 } = {}) {
   const out = [];
   const perUnit = animal ? feedDays : rationDays;
-  // Food: one day, from the first inventory that has it (grazing animals need none).
-  let fed = animal && graze;
+  // Food: one day (animals: their size's feed units), from the first inventory that has it all (grazing animals need none).
+  const meal = animal ? feed : 1;
+  let fed = (animal && graze) || meal <= 0;
   let from = null;
   if (!fed) for (const src of sources) {
-    const eat = eatPlan(src.items, 1, perUnit);
+    const eat = eatPlan(src.items, meal, perUnit);
     if (!eat) continue;
     if (eat.length) await src.updateEmbeddedDocuments("Item", eat);
     fed = true;
@@ -351,8 +376,9 @@ export async function supplyEater(actor, { sources = [actor], animal = false, ga
   }
   const watered = gallons <= 0 || drunk + 1e-9 >= gallons;
   const fromText = from && from !== actor ? i18n("AD2E.TravelDay.FromEmployer", { name: from.name }) : "";
-  const left = sources.reduce((n, a) => n + foodDays(a.items, perUnit), 0);
-  out.push(i18n(animal ? "AD2E.TravelDay.UsedAnimal" : "AD2E.TravelDay.Used", { name: actor.name, food: fed ? 1 : 0, water: drunk, need: gallons,
+  const left = Math.round(sources.reduce((n, a) => n + foodDays(a.items, perUnit), 0) * 100) / 100;
+  out.push(i18n(animal ? "AD2E.TravelDay.UsedAnimal" : "AD2E.TravelDay.Used", { name: actor.name,
+    food: fed && !(animal && graze) ? meal : 0, feedNeed: meal, water: drunk, need: gallons,
     foodLeft: left, waterLeft: Math.round(sources.reduce((n, a) => n + waterGallons(a.items), 0) * 100) / 100 })
     + (animal && graze ? ` ${i18n("AD2E.TravelDay.Grazed")}` : "") + (fromText ? ` ${fromText}` : ""));
   const sys = actor.system;
@@ -459,10 +485,12 @@ export async function endTravelDay(t, { encounter = null } = {}) {
   const eaters = partyEaters(members, u => resolve?.(u, { strict: false })).filter(e => !e.actor.system?.hp?.dead);
   const gallons = waterPerDay();
   const bySize = animalWaterBySize();
+  const feedBySize = animalFeedBySize();
   const supplies = [];
   if (t.supplies !== false) for (const e of eaters) {
     supplies.push(...await supplyEater(e.actor, { sources: supplySources(e, characters), animal: e.animal,
-      gallons: e.animal ? (t.routeWater ? 0 : animalWaterFor(e.actor, bySize)) : gallons, graze: !!t.graze }));
+      gallons: e.animal ? (t.routeWater ? 0 : animalWaterFor(e.actor, bySize)) : gallons, graze: !!t.graze,
+      feed: e.animal ? animalFeedFor(e.actor, feedBySize) : 1 }));
   }
   const event = await rollTravelEvent(characters);
   const entry = { at: game.time.worldTime, date: dateText(game.time.worldTime), miles: t.miles ?? 0, mode: t.mode ?? "",

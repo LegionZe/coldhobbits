@@ -4,7 +4,7 @@ import {
 } from "../travel.mjs";
 import { TRAVEL_TERRAIN } from "../encounters.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
-import { ANIMAL_SIZES, ANIMAL_WATER_DEFAULTS, animalSize, animalWaterBySize, animalWaterFor, createEventTable, eventSettings, feedDays, foodDays, partyEaters, rationDays, supplySources, survivalLoss, travelLog,
+import { ANIMAL_FEED_DEFAULTS, ANIMAL_SIZES, ANIMAL_WATER_DEFAULTS, animalFeedBySize, animalFeedFor, animalSize, animalWaterBySize, animalWaterFor, createEventTable, eventSettings, feedDays, foodDays, partyEaters, rationDays, supplySources, survivalLoss, travelLog,
   waterGallons, waterPerDay } from "../travel-days.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -146,6 +146,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
   static suppliesContext(actors, on, graze = false, routeWater = false) {
     const need = waterPerDay();
     const bySize = animalWaterBySize();
+    const feedBySize = animalFeedBySize();
     const resolve = u => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(u, { strict: false }) ?? null;
     const eaters = partyEaters(actors, resolve);
     const characters = actors.filter(a => a.type === "character");
@@ -156,18 +157,21 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
       const per = e.animal ? feedDays : rationDays;
       const water = Math.round(waterGallons(a.items) * 100) / 100;
       const sources = supplySources(e, characters).filter(x => x !== a);
-      const shared = sources.reduce((n, x) => n + foodDays(x.items, per), 0);
+      const shared = Math.round(sources.reduce((n, x) => n + foodDays(x.items, per), 0) * 100) / 100;
       const status = [s.food ? i18n("AD2E.TravelDay.DaysNoFood", { n: s.food }) : "", s.water ? i18n("AD2E.TravelDay.DaysNoWater", { n: s.water }) : "",
         lost.str || lost.con ? i18n("AD2E.TravelDay.Lost", { str: lost.str, con: lost.con }) : ""].filter(Boolean).join(", ");
-      const food = foodDays(a.items, per);
+      const food = Math.round(foodDays(a.items, per) * 100) / 100;
+      const meal = e.animal ? animalFeedFor(a, feedBySize) : 1;
       const daily = e.animal ? (routeWater ? 0 : animalWaterFor(a, bySize)) : need;
       const kind = e.animal ? i18n("AD2E.TravelDay.KindAnimalSize", { size: animalSize(a) })
         : i18n(a.type === "character" ? "AD2E.TravelDay.KindCharacter" : "AD2E.TravelDay.KindHireling");
-      return { name: a.name, kind, employer: e.employer?.name ?? "", food: e.animal && graze ? i18n("AD2E.TravelDay.Grazing") : food, shared,
-        noFood: !(e.animal && graze) && !food && !shared, water, daily, short: water < daily, status };
+      const grazing = e.animal && graze;
+      return { name: a.name, kind, employer: e.employer?.name ?? "", food: grazing ? i18n("AD2E.TravelDay.Grazing") : food, shared,
+        meal: grazing ? "" : meal, noFood: !grazing && meal > 0 && food + shared + 1e-9 < meal, water, daily, short: water < daily, status };
     });
     const sizes = ANIMAL_SIZES.map(k => ({ key: k, value: bySize[k] ?? "", placeholder: ANIMAL_WATER_DEFAULTS[k], label: i18n(`AD2E.TravelDay.Size.${k}`) }));
-    return { on, graze, routeWater, water: need, sizes, rows };
+    const feedSizes = ANIMAL_SIZES.map(k => ({ key: k, value: feedBySize[k] ?? "", placeholder: ANIMAL_FEED_DEFAULTS[k], label: i18n(`AD2E.TravelDay.Size.${k}`) }));
+    return { on, graze, routeWater, water: need, sizes, feedSizes, rows };
   }
 
   /** Event source, table and chance (world setting travelEvents). */
@@ -209,6 +213,11 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
         if (game.user?.isGM) game.settings.set("ad2e", "weather", s.weather);
       } else if (f === "waterPerDay") {
         if (game.user?.isGM) return game.settings.set("ad2e", "waterPerDay", Math.max(Number(t.value) || 0, 0)).then(() => this.render());
+      } else if (f.startsWith("animalFeed.")) {
+        const next = { ...animalFeedBySize() };
+        const key = f.slice(11);
+        if (t.value === "") delete next[key]; else next[key] = Math.max(Number(t.value) || 0, 0);
+        if (game.user?.isGM) return game.settings.set("ad2e", "animalFeedBySize", next).then(() => this.render());
       } else if (f.startsWith("animalSize.")) {
         const next = { ...animalWaterBySize() };
         const key = f.slice(11);
