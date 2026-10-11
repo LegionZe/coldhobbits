@@ -42,6 +42,8 @@ import EncounterTool from "./apps/encounter-tools.mjs";
 import DungeonTurnTracker from "./apps/dungeon-turns.mjs";
 import { registerDungeonTurns } from "./dungeon-turns.mjs";
 import { registerParty } from "./party.mjs";
+import { registerCalendar } from "./calendar.mjs";
+import ZakharanCalendar from "./apps/calendar.mjs";
 import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
 import { registerStation } from "./station.mjs";
@@ -108,6 +110,11 @@ Hooks.once("init", () => {
     name: "AD2E.Dungeon.Title", label: "AD2E.Dungeon.Open", hint: "AD2E.Dungeon.MenuHint", icon: "fa-solid fa-hourglass-half", type: DungeonTurnTracker, restricted: true
   });
   registerDungeonTurns();
+  // Zakharan (Al-Qadim) calendar as the world calendar (world setting, reload; module/calendar.mjs).
+  registerCalendar();
+  game.settings.registerMenu("ad2e", "calendar", {
+    name: "AD2E.Calendar.Name", label: "AD2E.Calendar.Open", hint: "AD2E.Calendar.MenuHint", icon: "fa-solid fa-moon", type: ZakharanCalendar, restricted: false
+  });
   registerLights();
   registerStation();
   // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
@@ -142,6 +149,7 @@ Hooks.once("init", () => {
     encounters: () => new EncounterTool().render({ force: true }),
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),
+    calendar: () => new ZakharanCalendar().render({ force: true }),
     createNpc: () => new NpcBuilder().render({ force: true })
   };
 

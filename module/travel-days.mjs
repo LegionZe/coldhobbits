@@ -1,3 +1,4 @@
+import { zakharanDate } from "./calendar.mjs";
 import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
 
 /**
@@ -511,6 +512,8 @@ export async function endTravelDay(t, { encounter = null } = {}) {
 
 /** A world time as the calendar's date, or "Day N". */
 export function dateText(t) {
+  const zakharan = zakharanDate(t);
+  if (zakharan) return zakharan;
   try {
     const c = game.time?.calendar;
     const comps = c?.timeToComponents?.(t);
