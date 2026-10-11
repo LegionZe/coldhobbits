@@ -87,12 +87,12 @@
     <div class="ad2e-importer-controls">
       <label class="ad2e-check"><input type="checkbox" data-field="supplies" {{#if supplies.on}}checked{{/if}}> {{localize "AD2E.TravelDay.UseSupplies"}}</label>
       <label data-tooltip="{{localize 'AD2E.TravelDay.WaterSettingHint'}}">{{localize "AD2E.TravelDay.WaterPerDay"}} <input type="number" data-field="waterPerDay" value="{{supplies.water}}" min="0" step="0.25"></label>
-      <label data-tooltip="{{localize 'AD2E.TravelDay.AnimalWaterSettingHint'}}">{{localize "AD2E.TravelDay.AnimalWaterPerDay"}} <input type="number" data-field="animalWaterPerDay" value="{{supplies.animalWater}}" min="0" step="0.5"></label>
       <label class="ad2e-check" data-tooltip="{{localize 'AD2E.TravelDay.GrazeHint'}}"><input type="checkbox" data-field="graze" {{#if supplies.graze}}checked{{/if}}> {{localize "AD2E.TravelDay.Graze"}}</label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.TravelDay.RouteWaterHint'}}"><input type="checkbox" data-field="routeWater" {{#if supplies.routeWater}}checked{{/if}}> {{localize "AD2E.TravelDay.RouteWater"}}</label>
     </div>
     <div class="ad2e-importer-controls" data-tooltip="{{localize 'AD2E.TravelDay.BySizeHint'}}">
       <span>{{localize "AD2E.TravelDay.BySize"}}</span>
-      {{#each supplies.sizes as |z|}}<label>{{z.label}} <input type="number" data-field="animalSize.{{z.key}}" value="{{z.value}}" placeholder="{{@root.supplies.animalWater}}" min="0" step="0.5" style="width: 4em"></label>{{/each}}
+      {{#each supplies.sizes as |z|}}<label>{{z.label}} <input type="number" data-field="animalSize.{{z.key}}" value="{{z.value}}" placeholder="{{z.placeholder}}" min="0" step="0.5" style="width: 4em"></label>{{/each}}
     </div>
     <table class="ad2e-table">
       <thead><tr><th>{{localize "AD2E.TravelDay.Member"}}</th><th>{{localize "AD2E.TravelDay.Kind"}}</th><th>{{localize "AD2E.TravelDay.FoodDays"}}</th><th>{{localize "AD2E.TravelDay.WaterGallons"}}</th><th>{{localize "AD2E.TravelDay.Status"}}</th></tr></thead>

@@ -24,8 +24,9 @@ import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
  * (`system.henchmen.actors`), animals (`system.animals.actors`) and mount (`riding`). People (characters and monster
  * hirelings) eat rations and drink `waterPerDay`; mounts and pack animals (`isAnimal`) eat "Animal feed (per day)" (a
  * system addition, `FEED_ID`) unless the planner's "Animals graze today" is ticked, and drink the world setting
- * `animalWaterPerDay` (default 0: they drink at streams), or the amount for their size in `animalWaterBySize` (owner's
- * request 1.0.39; T/S/M/L/H/G from the monster's size text, unknown = M; a size left empty uses the general amount). Each eats from its own inventory first, then from its employer's
+ * the amount for their size (owner's requests 1.0.39 / 1.0.40: `ANIMAL_WATER_DEFAULTS`, changed per world in
+ * `animalWaterBySize`; T/S/M/L/H/G from the monster's size text, unknown = M), none on a day the planner's "Animals drink
+ * on the way today" is ticked (travel flag `routeWater`). Each eats from its own inventory first, then from its employer's
  * (the character it belongs to); members linked to no character fall back to the party's characters in order
  * (implementation choice). Player characters eat only their own. Monster actors have no Constitution: their days without
  * food and water are counted (monster `system.survival`) and reported to the GM, with no checks or losses.
@@ -274,19 +275,26 @@ export function animalSize(actor) {
   return ANIMAL_SIZES.includes(c) ? c : "M";
 }
 
-/** Gallons per size (world setting `animalWaterBySize`; a size left empty uses `animalWaterPerDay`). */
+/**
+ * Default gallons per day by size (owner's request 1.0.40). No AD&D rulebook gives animal water needs: these are
+ * real-world approximations, not rules. L 10: "An average size horse not in production will drink 10-12 gallons of water
+ * per day" (horses.extension.org, "How much water does a horse need"). S 0.5: about 1 ounce per pound of body weight a day
+ * for dogs (veterinary rule of thumb), a 50-60 lb dog. M 5: half a horse (ponies, donkeys, mules about 500 lb at the
+ * horse's rate). T 0.1: the dog rule for a 10-15 lb animal. H 50: elephants, within the 18-60 gallons (70-225 litres) a
+ * day that elephant care sources give. G 100: no real animal; twice H (an extrapolation).
+ */
+export const ANIMAL_WATER_DEFAULTS = { T: 0.1, S: 0.5, M: 5, L: 10, H: 50, G: 100 };
+
+/** Gallons per size set for the world (world setting `animalWaterBySize`; a size left empty uses its default). */
 export function animalWaterBySize() {
   try { return { ...(game.settings.get("ad2e", "animalWaterBySize") ?? {}) }; } catch { return {}; }
 }
 
-/** An animal's water per day (pure with `bySize` and `base`): its size's amount, else the general amount. */
-export function animalWaterFor(actor, bySize = animalWaterBySize(), base = animalWaterPerDay()) {
-  const v = bySize?.[animalSize(actor)];
-  return v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? base : Math.max(Number(v), 0);
-}
-
-export function animalWaterPerDay() {
-  try { return Math.max(Number(game.settings.get("ad2e", "animalWaterPerDay")) || 0, 0); } catch { return 0; }
+/** An animal's water per day (pure with `bySize`): the world's amount for its size, else the size's default. */
+export function animalWaterFor(actor, bySize = animalWaterBySize(), defaults = ANIMAL_WATER_DEFAULTS) {
+  const size = animalSize(actor);
+  const v = bySize?.[size];
+  return v === null || v === undefined || v === "" || !Number.isFinite(Number(v)) ? defaults[size] : Math.max(Number(v), 0);
 }
 
 export function waterPerDay() {
@@ -305,8 +313,6 @@ export function travelLog() {
 export function registerTravelDays() {
   game.settings.register("ad2e", "waterPerDay", { name: "AD2E.TravelDay.WaterSetting", hint: "AD2E.TravelDay.WaterSettingHint",
     scope: "world", config: true, type: Number, default: SURVIVAL.defaultWaterGallons, range: { min: 0, max: 4, step: 0.25 } });
-  game.settings.register("ad2e", "animalWaterPerDay", { name: "AD2E.TravelDay.AnimalWaterSetting", hint: "AD2E.TravelDay.AnimalWaterSettingHint",
-    scope: "world", config: true, type: Number, default: 0, range: { min: 0, max: 20, step: 0.5 } });
   game.settings.register("ad2e", "animalWaterBySize", { scope: "world", config: false, type: Object, default: {} });
   game.settings.register("ad2e", "travelEvents", { scope: "world", config: false, type: Object, default: { source: "builtin", table: "", chance: 6 } });
   game.settings.register("ad2e", "travelLog", { scope: "world", config: false, type: Object, default: { entries: [] },
@@ -453,11 +459,10 @@ export async function endTravelDay(t, { encounter = null } = {}) {
   const eaters = partyEaters(members, u => resolve?.(u, { strict: false })).filter(e => !e.actor.system?.hp?.dead);
   const gallons = waterPerDay();
   const bySize = animalWaterBySize();
-  const animalBase = animalWaterPerDay();
   const supplies = [];
   if (t.supplies !== false) for (const e of eaters) {
     supplies.push(...await supplyEater(e.actor, { sources: supplySources(e, characters), animal: e.animal,
-      gallons: e.animal ? animalWaterFor(e.actor, bySize, animalBase) : gallons, graze: !!t.graze }));
+      gallons: e.animal ? (t.routeWater ? 0 : animalWaterFor(e.actor, bySize)) : gallons, graze: !!t.graze }));
   }
   const event = await rollTravelEvent(characters);
   const entry = { at: game.time.worldTime, date: dateText(game.time.worldTime), miles: t.miles ?? 0, mode: t.mode ?? "",
