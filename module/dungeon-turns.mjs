@@ -1,4 +1,5 @@
 import { LIGHT } from "./lights.mjs";
+import { inParty } from "./party.mjs";
 
 /**
  * Dungeon turns (owner's request, 1.0.30): a turn is 10 minutes ("A turn is equal to 10 minutes of game time", Time and
@@ -6,7 +7,8 @@ import { LIGHT } from "./lights.mjs";
  * time. Owner's rulings: the party rests one turn in every 6 — after 5 turns of activity the GM is reminded that the next
  * turn is a rest; every 6 turns without a rest give -1 to attack rolls and checks (ability and proficiency checks) until
  * the party rests. World setting `dungeonTurns` (config false): { active, started, lastRest, reminded, penalty } (world
- * times). Implementation choice: the party = player-owned characters.
+ * times). The party is the party tracker's list (module/party.mjs, 1.0.42; player-owned characters while it is empty);
+ * the penalty applies to its characters.
  */
 export const TURN = LIGHT.turnSeconds;
 export const REST_EVERY = 6;
@@ -26,9 +28,9 @@ export function restState(state, now) {
     untilRest: Math.max(REST_EVERY - 1 - sinceRest, 0) };
 }
 
-/** Fatigue modifier for an actor (pure with `state` and `now`): -penalty for player-owned characters, else 0. */
-export function fatigueFor(actor, state = dungeonState(), now = globalThis.game?.time?.worldTime ?? 0) {
-  if (actor?.type !== "character" || !actor.hasPlayerOwner) return 0;
+/** Fatigue modifier for an actor (pure with `state`, `now` and `member`): -penalty for the party's characters, else 0. */
+export function fatigueFor(actor, state = dungeonState(), now = globalThis.game?.time?.worldTime ?? 0, member = inParty(actor)) {
+  if (actor?.type !== "character" || !member) return 0;
   return -restState(state, now).penalty || 0;
 }
 
@@ -36,9 +38,9 @@ async function save(state) {
   await game.settings.set("ad2e", "dungeonTurns", state);
 }
 
-/** Re-prepare the party so the fatigue penalty shows at once. */
-function refreshParty() {
-  for (const a of game.actors ?? []) if (a.type === "character" && a.hasPlayerOwner) {
+/** Re-prepare the characters so the fatigue penalty shows (or goes) at once; `all` after the party list changes. */
+function refreshParty(all = false) {
+  for (const a of game.actors ?? []) if (a.type === "character" && (all || inParty(a))) {
     a.prepareData();
     if (a.sheet?.rendered) a.sheet.render();
   }
@@ -89,4 +91,5 @@ export function registerDungeonTurns() {
     if (dungeonState().active) refreshParty();
     if (game.users?.activeGM?.isSelf) dungeonTick();
   });
+  Hooks.on("ad2eParty", () => { if (dungeonState().active) refreshParty(true); });
 }

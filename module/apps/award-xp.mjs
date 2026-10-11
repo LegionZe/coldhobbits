@@ -1,3 +1,4 @@
+import { inParty } from "../party.mjs";
 import { dualClassOn, penalizedAward } from "../dual-class.mjs";
 import { multiAward } from "../multi-class.mjs";
 import { creatureHitDice } from "../config.mjs";
@@ -88,7 +89,7 @@ export default class AwardXp extends HandlebarsApplicationMixin(ApplicationV2) {
     const combatants = [...(combat?.combatants ?? [])];
     const chars = game.actors.filter(a => a.type === "character");
     const inCombat = chars.filter(a => combatants.some(c => c.actor?.id === a.id));
-    const party = chars.filter(a => a.hasPlayerOwner);
+    const party = chars.filter(a => inParty(a));
     const recipients = new Set((inCombat.length ? inCombat : (party.length ? party : chars)).filter(a => a.system.hpState?.state !== "dead").map(a => a.id));
     const monsters = combatants.filter(c => c.actor?.type === "monster").map(monsterRow);
     const classAwards = new Set(chars.filter(a => recipients.has(a.id) && classAwardRate(a) > 0).map(a => a.id));

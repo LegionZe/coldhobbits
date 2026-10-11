@@ -1,3 +1,4 @@
+import { partyActors } from "./party.mjs";
 import { stationOf, stationReaction } from "./station.mjs";
 import { ad2eDialog } from "./dialogs.mjs";
 /**
@@ -43,7 +44,7 @@ export function speakerAdjustment(actor) {
 export async function rollEncounterReaction(creature = null) {
   const i18n = k => game.i18n.localize(k);
   const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
-  const pcs = game.actors?.filter?.(a => a.type === "character" && a.hasPlayerOwner) ?? [];
+  const pcs = partyActors().filter(a => a.type === "character");
   const controlled = globalThis.canvas?.tokens?.controlled?.map(t => t.actor).find(a => a?.type === "character");
   const preferred = controlled ?? game.user?.character ?? null;
   const signed = n => `${n > 0 ? "+" : ""}${n}`;

@@ -16,6 +16,7 @@
   <fieldset>
     <legend>{{localize "AD2E.Travel.Party"}}</legend>
     <div class="ad2e-importer-controls">
+      <button type="button" data-action="useParty"><i class="fa-solid fa-people-group"></i> {{localize "AD2E.Party.Use"}}</button>
       <button type="button" data-action="useTokens"><i class="fa-solid fa-users"></i> {{localize "AD2E.Travel.UseTokens"}}</button>
       <label>{{localize "AD2E.Travel.ModeLabel"}} <select data-field="mode">{{#each modes as |o|}}<option value="{{o.key}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
       {{#if isFoot}}<label>{{localize "AD2E.Travel.PaceLabel"}} <select data-field="pace"><option value="normal" {{#unless forceSelected}}selected{{/unless}}>{{localize "AD2E.Travel.Normal"}}</option><option value="force" {{#if forceSelected}}selected{{/if}}>{{localize "AD2E.Travel.ForceMarch"}}</option></select></label>{{/if}}
