@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.43)
+## Status (v1.0.44)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -320,7 +320,11 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   dates of Golden Huzuz from its Zakharan holidays page (citing City of Delights pp. 18-19). A "Zakharan calendar"
   window (Configure Settings for every user, the GM manual, `game.ad2e.calendar()`) shows the date, holiday and
   constellations; the GM sets the date (time of day kept). Travel log dates use it. Implementation choices (not in the
-  sources): no leap day, years counted from 0 (the GM sets the year), a ten-day cycle of numbered weekdays.
+  sources): no leap day, years counted from 0 (the GM sets the year), a ten-day cycle of numbered weekdays, one season
+  spanning the year. 1.0.44 (owner's bug report: the world stopped loading with the setting on; console "this.seasons is
+  null" in core `CalendarData#timeToComponents`): the calendar now has that season and the High Holy Days are a plain
+  5-day month (as dnd5e's Greyhawk festivals); the configuration is built and tested at init, and if core rejects it the
+  core calendar stays in use and the GM is told, so the world always loads.
 - Party tracker (1.0.42; owner's request): a GM "Party" window (Configure Settings, the GM manual, `game.ad2e.party()`)
   lists the party's actors (world setting `party`, actor UUIDs): drag actors from the Actors sidebar, add the selected
   tokens or every player character, reorder or remove; rows show hit points and the henchmen, animals and mount that

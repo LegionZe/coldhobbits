@@ -4,7 +4,7 @@ import { CALENDAR_TABLES as CT } from "./rules/calendar-tables.mjs";
  * Zakharan (Al-Qadim) calendar (owner's request, 1.0.43; world setting `zakharanCalendar`, off by default, requires a
  * reload): twelve 30-day months and the five High Holy Days (Ahad, Atnen, Salas, Arba, Yasad) between Qawafil and Safa,
  * 365 days (module/rules/calendar-tables.mjs, tools/build-calendar-tables.py). When on, it becomes Foundry's world
- * calendar (`CONFIG.time.worldCalendarConfig`, as dnd5e's calendar setting), the High Holy Days an intercalary month.
+ * calendar (`CONFIG.time.worldCalendarConfig`, as dnd5e's calendar setting), the High Holy Days a 5-day month.
  * Implementation choices (not in the sources): no leap day; years counted from 0 (the GM sets the year in the calendar
  * window); a ten-day cycle of numbered weekdays (Foundry needs weekdays; the sources name none); 24-hour days.
  */
@@ -67,19 +67,21 @@ export function formatDate(t, i18n) {
   return i18n("AD2E.Calendar.Date", { date: name, year }) + (holidays.length ? ` (${holidays.join(", ")})` : "");
 }
 
-/** Foundry calendar configuration (CalendarConfig, core 14: intercalary months, weekday values; names are lang keys, as
- * dnd5e's calendars, because translations are not loaded at init). */
+/** Foundry calendar configuration (CalendarConfig; names are lang keys, as dnd5e's calendars, because translations are not
+ * loaded at init). The High Holy Days are a 5-day month with Safa's ordinal, as dnd5e's Greyhawk festivals (no intercalary
+ * flag). Seasons: core 14.368 needs them ("this.seasons is null" in CalendarData#timeToComponents, owner's console log
+ * 1.0.43, although the API docs type the field nullable); the sources name none, so one season spans the year. */
 export function calendarConfig() {
   let ordinal = 0;
   return {
     name: "AD2E.Calendar.Name", description: "AD2E.Calendar.Description",
     years: { yearZero: 0, firstWeekday: 0 },
     months: { values: PERIODS.map(p => (p.key === "holy"
-      ? { name: "AD2E.Calendar.HolyDays", abbreviation: "AD2E.Calendar.HolyDays", ordinal: ordinal + 1, days: p.days, intercalary: true }
+      ? { name: "AD2E.Calendar.HolyDays", abbreviation: "AD2E.Calendar.HolyDays", ordinal: ordinal + 1, days: p.days }
       : { name: MONTHS.find(m => m.key === p.key).name, abbreviation: MONTHS.find(m => m.key === p.key).name.slice(0, 3), ordinal: ++ordinal, days: p.days })) },
     days: { values: Array.from({ length: 10 }, (_, i) => ({ name: `AD2E.Calendar.Weekday.${i + 1}`, ordinal: i + 1 })),
       daysPerYear: YEAR_DAYS, hoursPerDay: 24, minutesPerHour: 60, secondsPerMinute: 60 },
-    seasons: null
+    seasons: { values: [{ name: "AD2E.Calendar.Season", dayStart: 0, dayEnd: YEAR_DAYS - 1 }] }
   };
 }
 
@@ -102,6 +104,19 @@ export async function setDate(year, period, day) {
   return true;
 }
 
+/** The error core raises for a calendar configuration, or null (builds it with `Cls` and decomposes a few times, among them
+ * a High Holy Day and the year's last second). */
+export function calendarProblem(config, Cls) {
+  if (!Cls) return null;
+  try {
+    const calendar = new Cls(foundry.utils?.deepClone ? foundry.utils.deepClone(config) : structuredClone(config));
+    for (const t of [0, toTime(0, 182, 3600), toTime(1367, YEAR_DAYS - 1, DAY - 1)]) calendar.timeToComponents(t);
+    return null;
+  } catch (err) {
+    return err;
+  }
+}
+
 /** World setting and, when on, the world calendar (called in init, before the world calendar is built). */
 export function registerCalendar() {
   game.settings.register("ad2e", "zakharanCalendar", {
@@ -109,7 +124,15 @@ export function registerCalendar() {
     default: false, requiresReload: true
   });
   if (!zakharanOn()) return false;
-  CONFIG.time.worldCalendarConfig = calendarConfig();
+  const config = calendarConfig();
+  // Build and use the calendar once here: if core rejects it, keep the core calendar so the world still loads.
+  const problem = calendarProblem(config, CONFIG.time.worldCalendarClass ?? foundry.data?.CalendarData);
+  if (problem) {
+    console.error("AD2E | Zakharan calendar not applied:", problem);
+    Hooks.once("ready", () => { if (game.user?.isGM) ui.notifications.error(game.i18n.format("AD2E.Calendar.Failed", { error: String(problem.message ?? problem) })); });
+    return false;
+  }
+  CONFIG.time.worldCalendarConfig = config;
   CONFIG.time.formatters ??= {};
   CONFIG.time.formatters.ad2eZakharan = (calendar, components) =>
     formatDate(toTime(components.year - (calendar.years?.yearZero ?? 0), components.day, components.hour * 3600 + components.minute * 60 + components.second), i18nNow);
