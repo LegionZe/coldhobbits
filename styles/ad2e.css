@@ -205,3 +205,11 @@ body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="
 .ad2e-manual-table td, .ad2e-manual-table th { vertical-align: top; padding: 0.2rem 0.4rem; text-align: left; }
 .ad2e-manual-columns { columns: 2; }
 .ad2e-manual-button { width: 100%; margin-top: 0.5rem; }
+
+/* Lighter tick boxes on the dark theme (module/light-checkboxes.mjs; core 14.369: the box is the input's ::before glyph
+   coloured by --checkbox-background-color, var(--color-cool-4) under body.theme-dark). Windows set to the light theme
+   (.theme-light) keep core's colours. */
+body.ad2e-light-checkboxes.theme-dark :is(.application.ad2e, .application.ad2e-dialog):not(.theme-light) input[type="checkbox"],
+body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).theme-dark input[type="checkbox"] {
+  --checkbox-background-color: var(--color-light-3, #e8e0d3);
+}

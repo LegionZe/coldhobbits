@@ -1744,6 +1744,10 @@
     "ExceptionalChat": "Exceptional Strength: 18/{value}",
     "DiceLeft": "Add every die to an ability."
   },
+  "AD2E.LightCheckboxes": {
+    "Setting": "Light tick boxes",
+    "SettingHint": "On the dark theme, draws unticked boxes in this system's sheets and dialogs in a light colour so they stand out from the window. Ticked boxes keep their orange colour."
+  },
   "AD2E.TabColours": {
     "Setting": "Colour-coded sidebar tabs",
     "SettingHint": "Colours the Combat, Scenes, Actors, Items, Journal and Compendium tab icons with a colour-blind-friendly palette (Okabe-Ito) and underlines the open one. Other tabs are unchanged."
