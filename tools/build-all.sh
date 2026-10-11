@@ -44,4 +44,5 @@ python3 tools/build-attack-option-tables.py # called shots and Combat & Tactics 
 python3 tools/build-critical-tables.py    # Combat & Tactics critical hits (Systems I and II; location charts)
 python3 tools/build-item-save-tables.py  # DMG Table 29 item saving throws, falling damage
 python3 tools/build-creator-tables.py   # GM creators: DMG Tables 31/32 XP, MM size/intelligence/morale bands
+python3 tools/build-calendar-tables.py    # Zakharan calendar (Astrologer kit months; FR wiki High Holy Days, holidays)
 rm -rf tools/__pycache__

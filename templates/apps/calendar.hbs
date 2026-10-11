@@ -1,0 +1,30 @@
+<section class="ad2e-award-xp ad2e-calendar">
+  {{#if on}}
+  <fieldset>
+    <legend>{{localize "AD2E.Calendar.Today"}}</legend>
+    <p><strong>{{date}}</strong></p>
+    <p class="ad2e-note">{{localize "AD2E.Calendar.Stars"}}: {{#if stars}}{{stars}}{{else}}—{{/if}}</p>
+    {{#if isGM}}
+    <div class="ad2e-importer-controls">
+      <label>{{localize "AD2E.Calendar.Year"}} <input type="number" name="year" value="{{year}}" min="0" step="1"></label>
+      <label>{{localize "AD2E.Calendar.Month"}} <select name="period">{{#each periods as |p|}}<option value="{{p.key}}" {{#if p.selected}}selected{{/if}}>{{p.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Calendar.Day"}} <input type="number" name="day" value="{{day}}" min="1" max="30" step="1"></label>
+      <button type="button" data-action="setDate"><i class="fa-solid fa-calendar-check"></i> {{localize "AD2E.Calendar.SetDate"}}</button>
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Calendar.SetHint"}}</p>
+    {{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Calendar.TheYear"}}</legend>
+    <table class="ad2e-race-table">
+      <thead><tr><th>{{localize "AD2E.Calendar.Month"}}</th><th>{{localize "AD2E.Calendar.Days"}}</th><th>{{localize "AD2E.Calendar.Holidays"}}</th><th>{{localize "AD2E.Calendar.Stars"}}</th></tr></thead>
+      <tbody>
+        {{#each rows as |r|}}<tr class="{{#if r.current}}ad2e-unmet{{/if}}"><th>{{#if r.label}}{{r.label}}: {{/if}}{{r.name}}</th><td>{{r.days}}</td><td>{{r.holidays}}</td><td>{{r.stars}}</td></tr>{{/each}}
+      </tbody>
+    </table>
+  </fieldset>
+  {{else}}
+  <p class="ad2e-placeholder">{{localize "AD2E.Calendar.Off"}}</p>
+  {{/if}}
+  <p class="ad2e-note"><a href="{{urls.calendar}}" target="_blank" rel="noopener">Zakharan calendar</a> · <a href="{{urls.holidays}}" target="_blank" rel="noopener">Zakharan holidays</a> · <a href="{{urls.astrologer}}" target="_blank" rel="noopener">Astrologer (CShaH)</a></p>
+</section>
