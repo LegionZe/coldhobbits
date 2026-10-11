@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.34)
+## Status (v1.0.35)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -722,6 +722,10 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Universal Design", https://jfly.uni-koeln.de/color/; Wong 2011, Nature Methods 8:441): combat vermillion, actors
   orange, scenes bluish green, items sky blue, journal yellow, compendium reddish purple; the open one is underlined in
   its colour. Other tabs (including those added by modules) are unchanged.
+- Light tick boxes (1.0.35, owner's request; client setting "Light tick boxes", on by default): on the dark theme the
+  unticked boxes in this system's sheets and dialogs are drawn light instead of core's dark grey (core 14.369 colours the
+  box glyph with `--checkbox-background-color`, `var(--color-cool-4)`, under the dark theme); ticked boxes stay orange.
+  Windows set to the light theme are unchanged.
 - Opaque windows: Foundry's dark theme gives windows a 90% opaque background and hides what is behind with a blur,
   which is off in low-performance mode, so text behind a sheet showed through. AD&D 2e sheets and windows now use the
   same colour fully opaque (client setting "Opaque sheet backgrounds", on by default).

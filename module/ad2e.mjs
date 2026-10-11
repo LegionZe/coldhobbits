@@ -18,6 +18,7 @@ import { migrateCurrency, migrateKitMechanics, migrateLiquids, migrateWeaponLimi
 import { registerOpaqueWindows } from "./opaque-windows.mjs";
 import { registerWindowFit } from "./dialogs.mjs";
 import { registerSidebarColours } from "./sidebar-colours.mjs";
+import { registerLightCheckboxes } from "./light-checkboxes.mjs";
 import { registerHealth } from "./health.mjs";
 import { registerAnimalHooks } from "./animals.mjs";
 import { registerTokenRiders } from "./token-riders.mjs";
@@ -143,6 +144,7 @@ Hooks.once("init", () => {
   registerWindowFit();
   registerMigrationSettings();
   registerSidebarColours();
+  registerLightCheckboxes();
   registerHealth();
   registerAnimalHooks();
   registerTokenRiders();
