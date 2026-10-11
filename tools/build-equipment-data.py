@@ -72,6 +72,11 @@ TABLE49 = {"Camel": ["Camel"], "Dog": ["Dog, guard", "Dog, hunting", "Dog, war"]
 # Liquid containers (owner's ruling, 1.0.29: "waterskins can contain up to 1 gallon of fluid, a full waterskin will
 # weigh 9 lb"); the PHB lists no waterskin, so its wineskin is taken as the same skin (implementation choice).
 LIQUID = {"wineskin": {"volume": "1 gallon", "fullWeight": 9, "full": False}}
+# System additions, not in the PHB lists (owner's ruling 1.0.38: carried feed for mounts and pack animals, eaten one a day
+# on the road by module/travel-days.mjs; the PHB lists only "Grain and stabling for horse (daily)", a lodging service).
+# Cost and weight are placeholder figures the owner accepted (5 sp, 10 lb), not rulebook values.
+ADDITIONS = [{"name": "Animal feed (per day)", "category": "provisions", "cost": "5 sp", "weight": 10.0, "carried": True,
+              "notes": "System addition (not in the Player's Handbook): one day's feed for a mount or pack animal; placeholder cost and weight."}]
 
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
@@ -200,6 +205,14 @@ if __name__ == "__main__":
         if system["identifier"] in LIQUID:
             system["liquid"] = dict(LIQUID[system["identifier"]])
         doc = classdata.item_doc("equipment", "e." + slug(it["name"]), it["name"], "icons/svg/item-bag.svg", system, i * 100)
+        doc["folder"] = folders[it["category"]]["_id"]
+        docs.append(doc)
+    for j, it in enumerate(ADDITIONS):
+        assert it["name"] not in names, it["name"]
+        system = {"identifier": slug(it["name"]), "category": it["category"], "cost": it["cost"], "weight": it["weight"], "quantity": 1,
+                  "carried": it["carried"], "capacity": {"weight": None, "volume": ""}, "load": {"full": None, "half": None, "quarter": None},
+                  "source": "ad2e system addition", "url": "", "notes": it["notes"]}
+        doc = classdata.item_doc("equipment", "e." + slug(it["name"]), it["name"], "icons/svg/item-bag.svg", system, (len(items) + j) * 100)
         doc["folder"] = folders[it["category"]]["_id"]
         docs.append(doc)
     classdata.write_docs("packs/_source/equipment", docs)

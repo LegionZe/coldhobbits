@@ -4,7 +4,8 @@ import {
 } from "../travel.mjs";
 import { TRAVEL_TERRAIN } from "../encounters.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
-import { createEventTable, eventSettings, foodDays, survivalLoss, travelLog, waterGallons, waterPerDay } from "../travel-days.mjs";
+import { animalWaterPerDay, createEventTable, eventSettings, feedDays, foodDays, partyEaters, rationDays, supplySources, survivalLoss, travelLog,
+  waterGallons, waterPerDay } from "../travel-days.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -43,7 +44,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
       legs: [TravelPlanner.newLeg(w)],
       boat: { key: TR.boats[0].key, current: 0, downstream: true, sail: false },
       ship: { key: TR.ships[0].key, rowing: false, emergency: false },
-      lost: { check: true, surroundings: "level", mods: weatherLostMods(w), variable: 0 }, restDays: 1, supplies: true
+      lost: { check: true, surroundings: "level", mods: weatherLostMods(w), variable: 0 }, restDays: 1, supplies: true, graze: false
     };
   }
 
@@ -131,24 +132,39 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
         obstacleText: l.obstacles.map(k => TR.obstacles.find(o => o.key === k)?.label).filter(Boolean).join(", ") })),
       plan, lost: { ...s.lost, pct: lostPct, surroundings: opt(TR.lost, s.lost.surroundings, l => `${l.label} (${l.pct}%)`),
         mods: TR.lostMods.filter(m => m.mod !== null).map(m => ({ key: m.key, label: `${m.label} (${m.mod > 0 ? "+" : ""}${m.mod})`, checked: s.lost.mods.includes(m.key) })) },
-      supplies: TravelPlanner.suppliesContext(actors, s.supplies !== false), events: TravelPlanner.eventsContext(),
+      supplies: TravelPlanner.suppliesContext(actors, s.supplies !== false, !!s.graze), events: TravelPlanner.eventsContext(),
       log: travelLog().slice(0, 10).map(TravelPlanner.logRow),
       urls: TR.urls
     };
   }
 
-  /** The party's food and water (characters) for the planner. */
-  static suppliesContext(actors, on) {
+  /**
+   * The party's food and water for the planner: members plus each character's henchmen, animals and mount
+   * (module/travel-days.mjs partyEaters); food = days of rations (feed for animals) in its own inventory, then what its
+   * employer could give.
+   */
+  static suppliesContext(actors, on, graze = false) {
     const need = waterPerDay();
-    const rows = actors.filter(a => a.type === "character").map(a => {
+    const animalNeed = animalWaterPerDay();
+    const resolve = u => (foundry.utils.fromUuidSync ?? globalThis.fromUuidSync)?.(u, { strict: false }) ?? null;
+    const eaters = partyEaters(actors, resolve);
+    const characters = actors.filter(a => a.type === "character");
+    const rows = eaters.map(e => {
+      const a = e.actor;
       const s = a.system.survival ?? {};
       const lost = survivalLoss(s);
+      const per = e.animal ? feedDays : rationDays;
       const water = Math.round(waterGallons(a.items) * 100) / 100;
+      const sources = supplySources(e, characters).filter(x => x !== a);
+      const shared = sources.reduce((n, x) => n + foodDays(x.items, per), 0);
       const status = [s.food ? i18n("AD2E.TravelDay.DaysNoFood", { n: s.food }) : "", s.water ? i18n("AD2E.TravelDay.DaysNoWater", { n: s.water }) : "",
         lost.str || lost.con ? i18n("AD2E.TravelDay.Lost", { str: lost.str, con: lost.con }) : ""].filter(Boolean).join(", ");
-      return { name: a.name, food: foodDays(a.items), water, short: water < need, status };
+      const food = foodDays(a.items, per);
+      return { name: a.name, kind: i18n(e.animal ? "AD2E.TravelDay.KindAnimal" : (a.type === "character" ? "AD2E.TravelDay.KindCharacter" : "AD2E.TravelDay.KindHireling")),
+        employer: e.employer?.name ?? "", food: e.animal && graze ? i18n("AD2E.TravelDay.Grazing") : food, shared,
+        noFood: !(e.animal && graze) && !food && !shared, water, short: water < (e.animal ? animalNeed : need), status };
     });
-    return { on, water: need, rows };
+    return { on, graze, water: need, animalWater: animalNeed, rows };
   }
 
   /** Event source, table and chance (world setting travelEvents). */
@@ -190,6 +206,8 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
         if (game.user?.isGM) game.settings.set("ad2e", "weather", s.weather);
       } else if (f === "waterPerDay") {
         if (game.user?.isGM) return game.settings.set("ad2e", "waterPerDay", Math.max(Number(t.value) || 0, 0)).then(() => this.render());
+      } else if (f === "animalWaterPerDay") {
+        if (game.user?.isGM) return game.settings.set("ad2e", "animalWaterPerDay", Math.max(Number(t.value) || 0, 0)).then(() => this.render());
       } else if (f.startsWith("events.")) {
         const key = f.slice(7);
         const next = { ...eventSettings(), [key]: key === "chance" ? Math.max(Math.floor(Number(t.value) || 1), 1) : t.value };
@@ -287,7 +305,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     // The card's "End day" also feeds the party and rolls the travel event (module/travel-days.mjs).
     await ChatMessage.create({ content, rolls, speaker: { alias: i18n("AD2E.Travel.Title") }, flags: { ad2e: { travel: { hours: s.hours,
       miles: plan.miles, terrain56: TravelPlanner.terrain56(s, plan), members: [...s.members], mode: i18n(`AD2E.Travel.Mode.${s.mode}`),
-      weather: weatherText(s.weather), lost, supplies: s.supplies !== false } } } });
+      weather: weatherText(s.weather), lost, supplies: s.supplies !== false, graze: !!s.graze } } } });
     if (lostMessage) await ChatMessage.create(lostMessage);
     this.render();
   }

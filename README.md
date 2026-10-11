@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.37)
+## Status (v1.0.38)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -608,8 +608,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   starvation loses a point for good unless a System Shock roll. Travel events: none, a built-in d12 list (written for the
   system, not rulebook text; spoiled rations, a leaking skin and a spring change inventories) or a world roll table, at
   1 in N a day (default 6); "Copy built-in list to a table". A day log (last 60 days) in the planner and a GM card: date,
-  miles, mode, weather, the lost check, encounter, event and supplies. Implementation choices: a day's need not fully met
-  counts as a day without it; mounts and monsters are not fed.
+  miles, mode, weather, the lost check, encounter, event and supplies. Implementation choice: a day's need not fully met
+  counts as a day without it.
+  Animals, hirelings and henchmen (1.0.38, owner's rulings): the party also includes each character's henchmen, animals
+  and mount. People eat rations and drink the water per day; mounts and pack animals eat the new "Animal feed (per day)"
+  item (Household Provisioning folder; a system addition, not in the PHB: placeholder 5 sp, 10 lb) unless "Animals graze
+  today" is ticked, and drink the world setting "Water per animal per day" (default 0: they drink on the way). Each eats
+  from its own inventory, then from its employer's or rider's (unlinked hirelings: the party's characters in order,
+  implementation choice); player characters only from their own. Monster actors have no Constitution: days without food
+  and water are counted and reported to the GM, with no checks.
 - Weather and travel (GM tool "Weather and travel": Configure Settings, the GM manual, or `game.ad2e.travel()`;
   `python3 tools/build-travel-tables.py`, every table parsed and every rule regex-checked against "Movement (PHB)",
   "Movement (DMG)", "Terrain Obstacles and Hindrances (DMG)", "Movement on Water (DMG)", "Aerial Movement (DMG)" and
