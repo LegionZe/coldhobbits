@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.38)
+## Status (v1.0.39)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -613,7 +613,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Animals, hirelings and henchmen (1.0.38, owner's rulings): the party also includes each character's henchmen, animals
   and mount. People eat rations and drink the water per day; mounts and pack animals eat the new "Animal feed (per day)"
   item (Household Provisioning folder; a system addition, not in the PHB: placeholder 5 sp, 10 lb) unless "Animals graze
-  today" is ticked, and drink the world setting "Water per animal per day" (default 0: they drink on the way). Each eats
+  today" is ticked, and drink the world setting "Water per animal per day" (default 0: they drink on the way) or, from
+  1.0.39 (owner's request), the amount set in the planner for their size (T, S, M, L, H, G, read from the creature's size
+  text; unknown = M; a size left empty uses the general amount; no rulebook figures: the GM sets them). Each eats
   from its own inventory, then from its employer's or rider's (unlinked hirelings: the party's characters in order,
   implementation choice); player characters only from their own. Monster actors have no Constitution: days without food
   and water are counted and reported to the GM, with no checks.
