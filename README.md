@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.45)
+## Status (v1.0.46)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -333,6 +333,7 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   season of 1.0.44); with the calendar on the travel planner starts in today's season (the select still overrides it), and
   the calendar window shows the season and where each one starts. Implementation choice: the seasons start on the paired
   day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 0-2 days: spring 1, summer 2, fall 2 (later), winter 0).
+  The dungeon turn tracker shows the Zakharan date and time of day when the calendar is on (1.0.46, owner's request).
 - Party tracker (1.0.42; owner's request): a GM "Party" window (Configure Settings, the GM manual, `game.ad2e.party()`)
   lists the party's actors (world setting `party`, actor UUIDs): drag actors from the Actors sidebar, add the selected
   tokens or every player character, reorder or remove; rows show hit points and the henchmen, animals and mount that

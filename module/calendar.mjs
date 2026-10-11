@@ -68,6 +68,12 @@ export function seasonOf(day) {
 /** Seasons that start within a period: [{ key, day }] (pure). */
 export const seasonStartsIn = period => SEASON_STARTS.filter(s => s.month.toLowerCase() === period).map(s => ({ key: s.key, day: s.day }));
 
+/** Time of day of a world time as "hh:mm" (pure; 24-hour days). */
+export function clockText(t) {
+  const s = fromTime(t).seconds;
+  return `${String(Math.floor(s / 3600)).padStart(2, "0")}:${String(Math.floor((s % 3600) / 60)).padStart(2, "0")}`;
+}
+
 /** The constellations fully visible in a period (Astrologer kit table; none listed for the High Holy Days). */
 export const constellations = period => MONTHS.find(m => m.key === period)?.constellations ?? [];
 
