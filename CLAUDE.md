@@ -145,7 +145,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
   Temporary damage: `hp.punch` (75% returns on deleteCombat) and `hp.temp` + `hp.tempUntil` (returns on updateWorldTime,
   one turn after the combat); chat flags `damageKind` ("punch" | "nonlethal") and `temp`.
-  Targets: attack/damage messages carry `flags.ad2e.targets` ([{ uuid, name }] from `game.user.targets` at roll time;
+  Targets: attack dialogs read the first target's AC, size, armed state and shield proficiency at any permission
+  (`#targetActor`, `#targetActors`; 1.0.34 owner's bug report: players got AC 10). Attack/damage messages carry `flags.ad2e.targets` ([{ uuid, name }] from `game.user.targets` at roll time;
   damage falls back to the last attack's targets per actor and weapon/attack key); the context menu resolves them with
   `foundry.utils.fromUuidSync(uuid, { strict: false })`.
   Buttons: `module/documents/chat-message.mjs` (CONFIG.ChatMessage.documentClass) overrides `renderHTML` like dnd5e's

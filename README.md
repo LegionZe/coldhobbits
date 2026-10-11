@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.33)
+## Status (v1.0.34)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -508,7 +508,8 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   `python3 tools/build-combat-tables.py`.
 - Targets: attack and damage rolls record the tokens the rolling user has targeted (shown as "→ name" in chat); a damage
   roll made with no target uses the targets of the same actor's last attack with that weapon. The attack dialog's
-  target AC is filled in from the first target (vs. missiles for missile attacks) when the user may see that actor.
+  target AC is filled in from the first target (vs. missiles for missile attacks) for every user, players included
+  (1.0.34 fix: players without observer permission on the target got AC 10).
   Damage messages show buttons for the GM under the roll: "Apply to: <targets of the roll>", "My targets" (the GM's
   current targets), "Selected" and "Heal selected"; the same actions are in the message's right-click menu (for players
   too). Only owners (the GM) can change a token's hit points; other users get a warning.
