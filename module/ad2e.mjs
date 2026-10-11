@@ -41,6 +41,8 @@ import { registerTravelDays } from "./travel-days.mjs";
 import EncounterTool from "./apps/encounter-tools.mjs";
 import DungeonTurnTracker from "./apps/dungeon-turns.mjs";
 import { registerDungeonTurns } from "./dungeon-turns.mjs";
+import { registerParty } from "./party.mjs";
+import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
 import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
@@ -96,6 +98,11 @@ Hooks.once("init", () => {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
   });
   registerEncounters();
+  // GM tool: the party's members (Configure Settings, or game.ad2e.party(); module/party.mjs).
+  game.settings.registerMenu("ad2e", "party", {
+    name: "AD2E.Party.Title", label: "AD2E.Party.Open", hint: "AD2E.Party.MenuHint", icon: "fa-solid fa-people-group", type: PartyTracker, restricted: true
+  });
+  registerParty();
   // GM tool: dungeon turns, rest and burning light sources (game.ad2e.dungeonTurns(); module/dungeon-turns.mjs, lights.mjs).
   game.settings.registerMenu("ad2e", "dungeonTurns", {
     name: "AD2E.Dungeon.Title", label: "AD2E.Dungeon.Open", hint: "AD2E.Dungeon.MenuHint", icon: "fa-solid fa-hourglass-half", type: DungeonTurnTracker, restricted: true
@@ -134,6 +141,7 @@ Hooks.once("init", () => {
     travel: () => new TravelPlanner().render({ force: true }),
     encounters: () => new EncounterTool().render({ force: true }),
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
+    party: () => new PartyTracker().render({ force: true }),
     createNpc: () => new NpcBuilder().render({ force: true })
   };
 

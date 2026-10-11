@@ -4,6 +4,7 @@ import {
 } from "../travel.mjs";
 import { TRAVEL_TERRAIN } from "../encounters.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
+import { partyActors, partyDefined } from "../party.mjs";
 import { ANIMAL_FEED_DEFAULTS, ANIMAL_SIZES, ANIMAL_WATER_DEFAULTS, animalFeedBySize, animalFeedFor, animalSize, animalWaterBySize, animalWaterFor, createEventTable, eventSettings, feedDays, foodDays, partyEaters, rationDays, supplySources, survivalLoss, travelLog,
   waterGallons, waterPerDay } from "../travel-days.mjs";
 
@@ -14,7 +15,7 @@ const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
 
 /**
  * GM travel planner (module/travel.mjs; Configure Settings, the GM manual, or game.ad2e.travel()): the day's weather,
- * the party (selected tokens; the slowest sets the pace), the travel mode, terrain legs (Table 74 with trails, roads and
+ * the party (the party tracker's list, else selected tokens, else player characters; the slowest sets the pace), the travel mode, terrain legs (Table 74 with trails, roads and
  * Table 75 obstacles), boats and ships (Tables 76-78), flying (Table 80), getting lost (Tables 81/82, a blind roll for
  * the GM) and force marching; "Post the day" writes the card whose "End day" button advances world time.
  */
@@ -24,7 +25,7 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     classes: ["ad2e", "travel-planner"],
     window: { title: "AD2E.Travel.Title", icon: "fa-solid fa-route", resizable: true },
     position: { width: 640, height: "auto" },
-    actions: { rollWeather: TravelPlanner.#onRollWeather, useTokens: TravelPlanner.#onUseTokens, addLeg: TravelPlanner.#onAddLeg,
+    actions: { rollWeather: TravelPlanner.#onRollWeather, useTokens: TravelPlanner.#onUseTokens, useParty: TravelPlanner.#onUseParty, addLeg: TravelPlanner.#onAddLeg,
       removeLeg: TravelPlanner.#onRemoveLeg, post: TravelPlanner.#onPost, rest: TravelPlanner.#onRest,
       createEventTable: TravelPlanner.#onCreateEventTable, clearLog: TravelPlanner.#onClearLog }
   };
@@ -38,7 +39,8 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
     let season = "spring";
     try { season = game.settings.get("ad2e", "season") || "spring"; } catch { /* default */ }
     const tokens = (globalThis.canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
-    const party = tokens.length ? tokens : game.actors.filter(a => a.type === "character" && a.hasPlayerOwner);
+    // The party tracker's list (module/party.mjs) first, then selected tokens, then player-owned characters.
+    const party = partyDefined() ? partyActors() : (tokens.length ? tokens : partyActors());
     this.state = {
       season, weather: w, mode: "foot", pace: "normal", members: party.map(a => a.uuid), hours: TR.march.hours,
       legs: [TravelPlanner.newLeg(w)],
@@ -248,6 +250,13 @@ export default class TravelPlanner extends HandlebarsApplicationMixin(Applicatio
   static #onUseTokens() {
     const actors = (globalThis.canvas?.tokens?.controlled ?? []).map(t => t.actor).filter(Boolean);
     if (!actors.length) return ui.notifications.warn(i18n("AD2E.Travel.SelectTokens"));
+    this.state.members = [...new Set(actors.map(a => a.uuid))];
+    this.render();
+  }
+
+  static #onUseParty() {
+    const actors = partyActors();
+    if (!actors.length) return ui.notifications.warn(i18n("AD2E.Party.None"));
     this.state.members = [...new Set(actors.map(a => a.uuid))];
     this.render();
   }

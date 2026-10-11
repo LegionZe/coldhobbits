@@ -1,0 +1,39 @@
+<section class="ad2e-award-xp ad2e-party-tracker">
+  <p class="ad2e-note">{{localize "AD2E.Party.Hint"}}</p>
+  <fieldset>
+    <legend>{{localize "AD2E.Party.Members"}}</legend>
+    {{#each rows as |r|}}
+    <div class="ad2e-prof-row">
+      <img src="{{r.img}}" alt="" width="28" height="28">
+      <span class="ad2e-prof-name">{{#if r.missing}}<span class="ad2e-unmet">{{localize "AD2E.Party.Missing"}}</span>{{else}}<a data-action="open" data-uuid="{{r.uuid}}">{{r.name}}</a>{{/if}}</span>
+      <span class="ad2e-weapon-meta">{{r.type}}{{#if r.hp}} · {{localize "AD2E.Party.Hp"}} {{r.hp}}{{/if}}{{#if r.dead}} · <span class="ad2e-unmet">{{localize "AD2E.Party.Dead"}}</span>{{/if}}{{#if r.along}} · {{localize "AD2E.Party.Along" names=r.along}}{{/if}}</span>
+      <button type="button" data-action="up" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Party.Up'}}" {{#if r.isFirst}}disabled{{/if}}><i class="fa-solid fa-arrow-up"></i></button>
+      <button type="button" data-action="down" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Party.Down'}}" {{#if r.isLast}}disabled{{/if}}><i class="fa-solid fa-arrow-down"></i></button>
+      <button type="button" data-action="remove" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Party.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    {{else}}
+    <p class="ad2e-placeholder">{{localize "AD2E.Party.Empty"}}</p>
+    {{#each fallback as |r|}}
+    <div class="ad2e-prof-row">
+      <img src="{{r.img}}" alt="" width="28" height="28">
+      <span class="ad2e-prof-name"><a data-action="open" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
+      <span class="ad2e-weapon-meta">{{r.type}}{{#if r.hp}} · {{localize "AD2E.Party.Hp"}} {{r.hp}}{{/if}}{{#if r.along}} · {{localize "AD2E.Party.Along" names=r.along}}{{/if}}</span>
+    </div>
+    {{/each}}
+    {{/each}}
+    <p class="ad2e-note">{{localize "AD2E.Party.Drop"}}</p>
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="addTokens"><i class="fa-solid fa-users"></i> {{localize "AD2E.Party.AddTokens"}}</button>
+      <button type="button" data-action="addPlayers"><i class="fa-solid fa-user-group"></i> {{localize "AD2E.Party.AddPlayers"}}</button>
+      {{#if defined}}<button type="button" data-action="clear"><i class="fa-solid fa-trash"></i> {{localize "AD2E.Party.Clear"}}</button>{{/if}}
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Party.Uses"}}</legend>
+    {{#if fatigue}}<p class="ad2e-unmet">{{fatigue}}</p>{{/if}}
+    <div class="ad2e-importer-controls ad2e-importer-actions">
+      <button type="button" data-action="travel"><i class="fa-solid fa-route"></i> {{localize "AD2E.Travel.Title"}}</button>
+      <button type="button" data-action="dungeon"><i class="fa-solid fa-hourglass-half"></i> {{localize "AD2E.Dungeon.Title"}}</button>
+    </div>
+  </fieldset>
+</section>

@@ -116,9 +116,17 @@
     <div><button type="button" data-action="tool" data-tool="rollReaction"><i class="fa-solid fa-comments"></i> Encounter reaction</button>
       <p>Rolls the encounter reaction table with the speaker's Charisma and kit reaction modifiers. Monster sheets have the
       same button.</p></div>
+    <div><button type="button" data-action="tool" data-tool="party"><i class="fa-solid fa-people-group"></i> Party</button>
+      <p>List who is in the party: drag actors from the Actors sidebar onto the window, or use "Add selected tokens" or
+      "Add player characters"; the arrows reorder the list and the cross removes a member (a deleted actor leaves it by
+      itself). Each row shows hit points and the henchmen, animals and mount that come along. The travel planner starts
+      with the party ("Use party" brings it back), the dungeon turn fatigue penalty applies to the party's characters, and
+      the group experience award (outside combat) and reaction rolls offer the party's characters. While the list is
+      empty every player-owned character counts as the party, as before.</p></div>
     <div><button type="button" data-action="tool" data-tool="travel"><i class="fa-solid fa-route"></i> Weather and travel</button>
       <p>Pick the season and roll the day's weather (2d6 wind by season, adverse winds, rain or snow); it is kept for the
-      world and can be changed by hand. Select the party's tokens: the slowest member sets the pace (a rider uses the
+      world and can be changed by hand. The planner starts with the party from the Party window (else the selected tokens,
+      else the player characters); "Use selected tokens" or "Use party" changes it: the slowest member sets the pace (a rider uses the
       mount's rate). Choose on foot (normal or force march), mounted, vehicle, boat, ship or flying, and add the day's
       terrain legs with trail or road and obstacles (the weather ticks its own); leave the last leg's miles empty to
       spend the rest of the day there. "Post the day" writes the card with the miles, rolls force-march checks
@@ -143,7 +151,7 @@
     <div><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
       <p>Start an expedition, then use "Next turn" and "Rest turn" (10 minutes of world time each; 6 turns are an hour).
       After 5 active turns you are whispered that the next turn should be a rest; every 6 turns without one give the
-      player characters -1 to attack rolls and checks until they rest. Torches, candles and lanterns lit on the Equipment
+      party's characters (the Party window; the player characters while it is empty) -1 to attack rolls and checks until they rest. Torches, candles and lanterns lit on the Equipment
       tab burn down whenever world time passes (PHB Table 63: torch 3 turns, lantern 12 turns a flask of oil, candle a turn
       an inch), are used up or run dry with a chat notice, and light their bearer's token; the tracker lists them with
       their turns left and can put them out.</p></div>
@@ -462,6 +470,7 @@
       <tr><td><code>game.ad2e.importSpells()</code></td><td>Spell importer.</td></tr>
       <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
+      <tr><td><code>game.ad2e.party()</code></td><td>Party tracker (who is in the party).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
       <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>
       <tr><td><code>game.ad2e.createItem()</code></td><td>Item creator (equipment, containers, armour, ammunition).</td></tr>
