@@ -19,8 +19,15 @@ import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
  *    the built-in list (`EVENTS`, written for this system, not rulebook text) or from a world RollTable the GM picks.
  *  - Day log (world setting `travelLog`): date, miles, mode, weather, lost check, encounter, event and supply lines.
  * Implementation choices: a day's need not fully met counts as a day without it (what there is is still used); thirst
- * losses all come back on a watered day; the party = the planner's members that are characters (mounts and monsters
- * are not fed: the GM handles feed).
+ * losses all come back on a watered day.
+ * Animals, hirelings and henchmen (owner's rulings 1.0.38): the party also takes in each character member's henchmen
+ * (`system.henchmen.actors`), animals (`system.animals.actors`) and mount (`riding`). People (characters and monster
+ * hirelings) eat rations and drink `waterPerDay`; mounts and pack animals (`isAnimal`) eat "Animal feed (per day)" (a
+ * system addition, `FEED_ID`) unless the planner's "Animals graze today" is ticked, and drink the world setting
+ * `animalWaterPerDay` (default 0: they drink at streams). Each eats from its own inventory first, then from its employer's
+ * (the character it belongs to); members linked to no character fall back to the party's characters in order
+ * (implementation choice). Player characters eat only their own. Monster actors have no Constitution: their days without
+ * food and water are counted (monster `system.survival`) and reported to the GM, with no checks or losses.
  */
 export const SURVIVAL = SURVIVAL_TABLES;
 export const LOG_LIMIT = 60;
@@ -63,10 +70,23 @@ export function rationDays(item) {
   return /per-week/.test(id) ? 7 : 1;
 }
 
-/** Days of food an actor's items hold (pure). */
-export function foodDays(items) {
+/** The system's animal feed item identifier (one day per unit). */
+export const FEED_ID = "animal-feed-per-day";
+
+/** Days of animal feed one unit holds: 1 for "Animal feed (per day)", else 0 (pure). */
+export function feedDays(item) {
+  return item?.type === "equipment" && item.system?.identifier === FEED_ID ? 1 : 0;
+}
+
+/** Whether an actor is a mount, pack animal or pet (as animals.mjs `isAnimal`; pure). */
+export function isAnimalActor(actor) {
+  return actor?.type === "monster" && (["mount", "pack", "pet"].includes(actor.system?.role) || (actor.system?.load?.full ?? null) !== null);
+}
+
+/** Days of food an actor's items hold (pure); `days` = rationDays (people) or feedDays (animals). */
+export function foodDays(items, days = rationDays) {
   return [...(items ?? [])].reduce((n, i) => {
-    const per = rationDays(i);
+    const per = days(i);
     const q = i.system?.quantity ?? 0;
     if (!per || q < 1) return n;
     const left = i.system?.supply?.left;
@@ -75,15 +95,15 @@ export function foodDays(items) {
 }
 
 /** Item updates eating `days` days of food, or null when there is not enough (pure; opened units first). */
-export function eatPlan(items, days = 1) {
-  const foods = [...(items ?? [])].filter(i => rationDays(i) && (i.system?.quantity ?? 0) > 0)
+export function eatPlan(items, days = 1, perUnit = rationDays) {
+  const foods = [...(items ?? [])].filter(i => perUnit(i) && (i.system?.quantity ?? 0) > 0)
     .sort((a, b) => (a.system?.supply?.left == null) - (b.system?.supply?.left == null));
-  if (foodDays(foods) < days) return null;
+  if (foodDays(foods, perUnit) < days) return null;
   const updates = [];
   let need = days;
   for (const item of foods) {
     if (need <= 0) break;
-    const per = rationDays(item);
+    const per = perUnit(item);
     let q = item.system.quantity;
     let left = item.system?.supply?.left ?? per;
     while (need > 0 && q > 0) {
@@ -202,6 +222,38 @@ export function survivalDay(s, { fed, watered, base, save = 20, shock = 0, d20, 
   return { survival: next, dead, incapacitated: current("str") <= 0, permanent, lines };
 }
 
+/**
+ * Who eats on a travel day (pure with `resolve(uuid)`): the members, then each character member's henchmen, animals and
+ * mount, once each: [{ actor, employer (character or null), animal }].
+ */
+export function partyEaters(members, resolve) {
+  const out = [];
+  const seen = new Set();
+  const add = (actor, employer) => {
+    const key = actor?.uuid ?? actor?.id;
+    if (!actor || seen.has(key)) return;
+    seen.add(key);
+    out.push({ actor, employer, animal: isAnimalActor(actor) });
+  };
+  for (const m of members) add(m, null);
+  for (const m of members) {
+    if (m?.type !== "character") continue;
+    const links = [...(m.system?.henchmen?.actors ?? []), ...(m.system?.animals?.actors ?? []), m.system?.animals?.riding].filter(Boolean);
+    for (const u of links) {
+      const a = resolve(u);
+      if (!a) continue;
+      // A linked actor already in the party gets this character as employer (never a player character, never itself).
+      const known = out.find(e => (e.actor.uuid ?? e.actor.id) === (a.uuid ?? a.id));
+      if (!known) add(a, m);
+      else if (!known.employer && known.actor !== m && !isPlayerCharacter(known.actor)) known.employer = m;
+    }
+  }
+  return out;
+}
+
+/** A character a player owns (eats only from its own inventory). */
+export const isPlayerCharacter = a => a?.type === "character" && a.hasPlayerOwner !== false;
+
 /** A travel event check (pure): the 1dN roll is 1. */
 export const eventHappens = (roll) => roll === 1;
 
@@ -211,6 +263,10 @@ export function addLogEntry(log, entry) {
 }
 
 /* ---------------------------------------- settings */
+
+export function animalWaterPerDay() {
+  try { return Math.max(Number(game.settings.get("ad2e", "animalWaterPerDay")) || 0, 0); } catch { return 0; }
+}
 
 export function waterPerDay() {
   try { return Math.max(Number(game.settings.get("ad2e", "waterPerDay")) || 0, 0); } catch { return SURVIVAL.defaultWaterGallons; }
@@ -228,6 +284,8 @@ export function travelLog() {
 export function registerTravelDays() {
   game.settings.register("ad2e", "waterPerDay", { name: "AD2E.TravelDay.WaterSetting", hint: "AD2E.TravelDay.WaterSettingHint",
     scope: "world", config: true, type: Number, default: SURVIVAL.defaultWaterGallons, range: { min: 0, max: 4, step: 0.25 } });
+  game.settings.register("ad2e", "animalWaterPerDay", { name: "AD2E.TravelDay.AnimalWaterSetting", hint: "AD2E.TravelDay.AnimalWaterSettingHint",
+    scope: "world", config: true, type: Number, default: 0, range: { min: 0, max: 20, step: 0.5 } });
   game.settings.register("ad2e", "travelEvents", { scope: "world", config: false, type: Object, default: { source: "builtin", table: "", chance: 6 } });
   game.settings.register("ad2e", "travelLog", { scope: "world", config: false, type: Object, default: { entries: [] },
     onChange: () => { Hooks.callAll("ad2eTravelLog"); foundry.applications?.instances?.get?.("ad2e-travel-planner")?.render(); } });
@@ -237,20 +295,51 @@ export function registerTravelDays() {
 
 const roll = async f => (await new Roll(f).evaluate()).total;
 
-/** Food and water for one character at the end of a travel day; returns the card lines. */
-export async function supplyCharacter(actor, gallons) {
+/**
+ * Food and water for one traveller at the end of a travel day (`sources` = actors whose inventories it may use, in
+ * order: itself, then its employer or the party's characters); returns the card lines.
+ */
+export async function supplyEater(actor, { sources = [actor], animal = false, gallons = 0, graze = false } = {}) {
   const out = [];
-  const eat = eatPlan(actor.items, 1);
-  if (eat?.length) await actor.updateEmbeddedDocuments("Item", eat);
-  const drink = drinkPlan(actor.items, gallons);
-  if (drink.updates.length) await actor.updateEmbeddedDocuments("Item", drink.updates);
-  const fed = !!eat;
-  const watered = gallons <= 0 || drink.drunk + 1e-9 >= gallons;
+  const perUnit = animal ? feedDays : rationDays;
+  // Food: one day, from the first inventory that has it (grazing animals need none).
+  let fed = animal && graze;
+  let from = null;
+  if (!fed) for (const src of sources) {
+    const eat = eatPlan(src.items, 1, perUnit);
+    if (!eat) continue;
+    if (eat.length) await src.updateEmbeddedDocuments("Item", eat);
+    fed = true;
+    from = src;
+    break;
+  }
+  // Water: from each inventory in turn until the day's need is met.
+  let drunk = 0;
+  for (const src of sources) {
+    if (drunk + 1e-9 >= gallons) break;
+    const plan = drinkPlan(src.items, gallons - drunk);
+    if (plan.updates.length) await src.updateEmbeddedDocuments("Item", plan.updates);
+    drunk = Math.round((drunk + plan.drunk) * 1000) / 1000;
+  }
+  const watered = gallons <= 0 || drunk + 1e-9 >= gallons;
+  const fromText = from && from !== actor ? i18n("AD2E.TravelDay.FromEmployer", { name: from.name }) : "";
+  const left = sources.reduce((n, a) => n + foodDays(a.items, perUnit), 0);
+  out.push(i18n(animal ? "AD2E.TravelDay.UsedAnimal" : "AD2E.TravelDay.Used", { name: actor.name, food: fed ? 1 : 0, water: drunk, need: gallons,
+    foodLeft: left, waterLeft: Math.round(sources.reduce((n, a) => n + waterGallons(a.items), 0) * 100) / 100 })
+    + (animal && graze ? ` ${i18n("AD2E.TravelDay.Grazed")}` : "") + (fromText ? ` ${fromText}` : ""));
   const sys = actor.system;
+  if (actor.type !== "character") {
+    // Monsters: days without are counted and reported (owner's ruling: no Constitution, no checks).
+    const s = { food: fed ? 0 : (sys.survival?.food ?? 0) + 1, water: watered ? 0 : (sys.survival?.water ?? 0) + 1 };
+    await actor.update({ "system.survival": s });
+    if (s.food) out.push(i18n("AD2E.TravelDay.MonsterNoFood", { name: actor.name, n: s.food }));
+    if (s.water) out.push(i18n("AD2E.TravelDay.MonsterNoWater", { name: actor.name, n: s.water }));
+    return out;
+  }
   const lost = survivalLoss(sys.survival);
   const base = { str: (sys.abilities?.str?.total ?? 10) + lost.str, con: (sys.abilities?.con?.total ?? 10) + lost.con };
   // Dice rolled with Foundry's Roll beforehand and read in order (at most 4 thirst checks, a starvation check, two saves).
-  const pool = async (f, n) => { const out = []; for (let i = 0; i < n; i++) out.push(await roll(f)); return out; };
+  const pool = async (f, n) => { const list = []; for (let i = 0; i < n; i++) list.push(await roll(f)); return list; };
   const d20s = await pool("1d20", 8);
   const d100s = await pool("1d100", 2);
   const d20 = () => d20s.shift() ?? 10;
@@ -261,13 +350,24 @@ export async function supplyCharacter(actor, gallons) {
   for (const k of r.permanent) update[`system.abilities.${k}.value`] = Math.max((sys.abilities[k].value ?? 1) - 1, 1);
   if (r.dead) update["system.hp.dead"] = true;
   await actor.update(update);
-  out.push(i18n("AD2E.TravelDay.Used", { name: actor.name, food: fed ? 1 : 0, water: drink.drunk, need: gallons,
-    foodLeft: foodDays(actor.items), waterLeft: Math.round(waterGallons(actor.items) * 100) / 100 }));
   for (const l of r.lines) out.push(i18n(`AD2E.TravelDay.Line.${l.key}`, { name: actor.name, ...l,
     label: l.label ? i18n(`AD2E.TravelDay.${l.label}`) : "", ability: l.ability ? i18n(`AD2E.Ability.${l.ability}`) : "" }));
   if (r.incapacitated && !r.dead) out.push(i18n("AD2E.TravelDay.Incapacitated", { name: actor.name }));
   if (r.dead) out.push(i18n("AD2E.TravelDay.Dead", { name: actor.name }));
   return out;
+}
+
+/** Food and water for a player character (its own inventory only). */
+export async function supplyCharacter(actor, gallons) {
+  return supplyEater(actor, { sources: [actor], gallons });
+}
+
+/** The inventories a traveller may use: its own, then its employer's, else (no employer, not a player character) the party's characters. */
+export function supplySources(entry, partyCharacters) {
+  const { actor, employer } = entry;
+  if (employer) return [actor, employer];
+  if (isPlayerCharacter(actor)) return [actor];
+  return [actor, ...partyCharacters.filter(c => c !== actor)];
 }
 
 /** Roll the day's travel event (built-in list or the GM's table); applies the built-in effects to the party. */
@@ -328,9 +428,14 @@ export async function endTravelDay(t, { encounter = null } = {}) {
   const resolve = foundry.utils.fromUuidSync ?? globalThis.fromUuidSync;
   const members = (t.members ?? []).map(u => resolve?.(u, { strict: false })).filter(Boolean);
   const characters = members.filter(a => a.type === "character" && !a.system?.hp?.dead);
+  const eaters = partyEaters(members, u => resolve?.(u, { strict: false })).filter(e => !e.actor.system?.hp?.dead);
   const gallons = waterPerDay();
+  const animalGallons = animalWaterPerDay();
   const supplies = [];
-  if (t.supplies !== false) for (const a of characters) supplies.push(...await supplyCharacter(a, gallons));
+  if (t.supplies !== false) for (const e of eaters) {
+    supplies.push(...await supplyEater(e.actor, { sources: supplySources(e, characters), animal: e.animal,
+      gallons: e.animal ? animalGallons : gallons, graze: !!t.graze }));
+  }
   const event = await rollTravelEvent(characters);
   const entry = { at: game.time.worldTime, date: dateText(game.time.worldTime), miles: t.miles ?? 0, mode: t.mode ?? "",
     weather: t.weather ?? "", lost: t.lost ?? null, encounter, event: event?.text ?? "", supplies };

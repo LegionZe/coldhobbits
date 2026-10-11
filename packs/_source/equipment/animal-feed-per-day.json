@@ -1,0 +1,34 @@
+{
+  "_id": "wVMcZFgWi45essgv",
+  "_key": "!items!wVMcZFgWi45essgv",
+  "name": "Animal feed (per day)",
+  "type": "equipment",
+  "img": "icons/svg/item-bag.svg",
+  "system": {
+    "identifier": "animal-feed-per-day",
+    "category": "provisions",
+    "cost": "5 sp",
+    "weight": 10.0,
+    "quantity": 1,
+    "carried": true,
+    "capacity": {
+      "weight": null,
+      "volume": ""
+    },
+    "load": {
+      "full": null,
+      "half": null,
+      "quarter": null
+    },
+    "source": "ad2e system addition",
+    "url": "",
+    "notes": "System addition (not in the Player's Handbook): one day's feed for a mount or pack animal; placeholder cost and weight."
+  },
+  "effects": [],
+  "folder": "JF1fEZ0FMImRXHrg",
+  "sort": 21900,
+  "ownership": {
+    "default": 0
+  },
+  "flags": {}
+}

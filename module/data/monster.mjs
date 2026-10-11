@@ -66,6 +66,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       morale: new SchemaField({ value: int(10, 0), text: text() }),
       // Al-Qadim station of an NPC (module/station.mjs; null = none, e.g. monsters and genies): used by reaction rolls.
       station: new NumberField({ required: false, nullable: true, integer: true, min: 0, max: 20, initial: null }),
+      // Days without food and without water on the road (module/travel-days.mjs, owner's ruling 1.0.38: counted and
+      // reported to the GM; monsters have no Constitution for the CSH checks).
+      survival: new SchemaField({ food: new NumberField({ integer: true, min: 0, initial: 0 }), water: new NumberField({ integer: true, min: 0, initial: 0 }) }),
       xp: int(0, 0),
       initiative: new SchemaField({ mod: int(0) }),
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional(), other: optional() }),
