@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.35)
+## Status (v1.0.36)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -41,6 +41,8 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   and the experience penalty are).
 - Net: its hand-to-hand block and disarm are not modelled; a trapped victim is described in chat, not marked.
 - Lasso and net dialogs are for characters; a monster attacking with either makes a normal attack.
+- Throwing objects: "Throw object" is for characters; where a missed object lands is described in chat (the GM moves
+  or marks it); splash damage is rolled for the GM to apply to the creatures within 3 ft.
 - Overland terrain movement is not modelled; psionics are not included; monster pictures are never shipped.
 
 ## GM creators
@@ -850,6 +852,25 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   two-handed, weapon and shield, two-weapon, missile, thrown, horse archery) with their bonuses in the attack and damage
   dialogs; the missile and thrown styles give -1 to hit for attackers' missiles the round the specialist shoots, and the
   horse archer fires from a moving mount without penalty up to half speed (-2 faster).
+- Throwing objects and the Throwing proficiency (1.0.36, owner's request; module/throwing.mjs, rules in
+  module/rules/throw-tables.mjs from `tools/build-throw-tables.py`, regex-checked against Missile Weapons in Combat (DMG)
+  rev 250445 and (PHB) rev 144809, Strength (PHB) rev 177331 and Throwing (Proficiency) rev 128790): "Throw object" on
+  the Combat tab throws an item (equipment or jewellery) or another object of a given weight as a grenade-like missile:
+  "A missile of five pounds or less can be thrown about 30 feet. Short range is 10 feet, medium range is 20 feet" (-2
+  medium, -5 long); heavier objects: "Just how far an object can be thrown is decided by the DM" (the GM picks the band);
+  "Exceptionally heavy items can be thrown only if the character rolls a successful bend bars/lift gates check" (tick box);
+  nothing heavier than the character's Maximum Press. A hit rolls DMG Table 45's direct damage (acid 2-8, holy water 2-7,
+  lit oil 2-12 then 1-6 next round, poison special) to the targets and its splash (within 3 ft; acid 1, holy water 2, oil
+  1-3) for the GM to apply; another object can be given a damage formula. A miss rolls the scatter: 1d10 on the Scatter
+  Diagram (directions read from the picture: 1 short towards the thrower, 2/3 left/right, 4/5 and 6/7 at 60° and 30° off
+  the line, 8-10 straight beyond) and 1d6 / 1d10 / 2d10 feet by range, doubled for a boulder. Contents default from the
+  item: lamp oil and Greek fire = lit oil, holy items = holy water, acids = acid; "used up" takes one from its quantity.
+  Throwing proficiency (Skills & Powers): "add 10' to each range category of thrown weapons, and increases the damage or
+  the attack roll by +1 each time they throw a weapon": thrown weapons' range labels show "+ 10 ft" and the attack dialog
+  asks +1 to hit or +1 damage (carried to the damage roll); each extra slot on the proficiency adds 5 ft ("For each
+  character point spent ... another 5'"; an extra slot counts as one point, as for Skills & Powers ratings). Implementation
+  choices: the proficiency also applies to thrown objects; objects have no non-proficiency penalty; the attack uses the
+  character's missile adjustment.
 - Lasso (0.0.134; module/lasso.mjs, figures in combat-tables.mjs `lasso` from build-combat-tables.py, regex-checked against
   Weapon Descriptions (POCT) rev 74770 and Attack Options (POCT) rev 250488): attacking with a lasso opens its own dialog
   (it "cannot be used for normal attacks"): called shot -4 (+1 initiative), legs = pull/trip (opposed Strength, +4 for the

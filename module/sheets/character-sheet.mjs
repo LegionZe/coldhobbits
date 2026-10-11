@@ -294,6 +294,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       meditate: CharacterSheet.#onMeditate,
       display: CharacterSheet.#onDisplay,
       breakFreeNet: CharacterSheet.#onBreakFreeNet,
+      throwObject: CharacterSheet.#onThrowObject,
       bondSet: CharacterSheet.#onBondSet,
       bondClear: CharacterSheet.#onBondClear,
       endFeeblemind: CharacterSheet.#onEndFeeblemind,
@@ -1581,6 +1582,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static #onBreakFreeNet() {
     return this.actor.breakFreeNet();
   }
+  /** Throw an object (grenade-like missile; module/throwing.mjs). */
+  static #onThrowObject() {
+    return this.actor.throwObject();
+  }
+
 
   static #onDisplay() {
     return weaponMasterDisplay(this.actor, sideOf);
