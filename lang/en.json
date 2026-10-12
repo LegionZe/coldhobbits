@@ -3566,5 +3566,11 @@
     "Automatic": "Automatic",
     "NotAvailable": "Sequencer or JB2A not active",
     "Mode": {"auto": "on each target (default)", "missile": "caster to each target", "cone": "caster towards the first target", "burst": "on the first target", "target": "on each target", "caster": "on the caster"}
+  },
+  "AD2E.Sound": {
+    "Setting": "Sound effects (PSFX)",
+    "SettingHint": "Play a sound from Peri's Sound Effects (PSFX) when a spell is cast or an attack is rolled (an impact on a hit). Needs the Sequencer and PSFX modules; without them nothing is played.",
+    "Volume": "Sound effects volume",
+    "VolumeHint": "Volume of the PSFX sounds (0 to 1)."
   }
 }

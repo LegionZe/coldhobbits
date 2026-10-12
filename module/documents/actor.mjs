@@ -40,6 +40,7 @@ import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard,
 import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
 import { playSpellAnimation } from "../spell-animations.mjs";
 import { playWeaponAnimation } from "../weapon-animations.mjs";
+import { playAttackSound, playSpellSound } from "../sound-effects.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -623,6 +624,12 @@ export default class AD2EActor extends Actor {
     });
   }
 
+  /** JB2A animation and PSFX sound of an attack (module/weapon-animations.mjs, module/sound-effects.mjs); neither throws. */
+  #attackEffects(attack, opts) {
+    playWeaponAnimation(this, attack, opts);
+    playAttackSound(attack, opts);
+  }
+
   /** A GM-set spell effect modifier (attack, damage, ac, save, check) summed over the actor's spell effects (module/spell-effects.mjs). */
   spellMod(key) {
     const mods = this.type === "character" ? this.system.mods?.spell : this.system.spellMods;
@@ -976,7 +983,7 @@ export default class AD2EActor extends Actor {
     if (misfire) notes.push(game.i18n.format("AD2E.Firearm.Misfire", { n: natural, at: misfireAt }));
     const hit = !misfire && (t51.auto || roll.total >= needed);
     // JB2A animation through Sequencer (module/weapon-animations.mjs; not awaited, never throws).
-    playWeaponAnimation(this, { kind: "weapon", name: item.name, identifier: item.system.identifier, type: item.system.weapon?.type,
+    this.#attackEffects({ kind: "weapon", name: item.name, identifier: item.system.identifier, type: item.system.weapon?.type,
       missile: use === "missile", thrown: this.#isThrownItem(item, use) }, { hit });
     // Critical hit (Combat & Tactics, world setting "criticalHits"; module/criticals.mjs): a natural 18+ hitting by 5 or more.
     let crit = null;
@@ -1797,7 +1804,7 @@ export default class AD2EActor extends Actor {
     if (dualThac0 !== null) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatThac0", { n: dualThac0 }));
     const needed = (dualThac0 ?? sys.thac0.value) - input.ac;
     const hit = input.t51.auto || roll.total >= needed;
-    playWeaponAnimation(this, { kind: "unarmed", name: form }, { hit }); // module/weapon-animations.mjs
+    this.#attackEffects({ kind: "unarmed", name: form }, { hit }); // module/weapon-animations.mjs
     const rolls = [roll];
     let result = i18n("AD2E.Roll.Miss");
     let damageFlags = {}; // chat context menu: apply to selected tokens (module/health.mjs)
@@ -2060,7 +2067,7 @@ export default class AD2EActor extends Actor {
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march + spellHit, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     // JB2A animation (module/weapon-animations.mjs): a weapon item by its fields, a natural attack by its name.
-    playWeaponAnimation(this, attack.poisonItem
+    this.#attackEffects(attack.poisonItem
       ? { kind: "weapon", name: attack.poisonItem.name, identifier: attack.poisonItem.system.identifier, type: attack.type,
         missile: !attack.melee, thrown: attack.poisonItem.system.weapon?.strength === "full" && !attack.melee }
       : { kind: "natural", name: attack.name, type: attack.type, missile: !attack.melee }, { hit });
@@ -2245,6 +2252,7 @@ export default class AD2EActor extends Actor {
     // JB2A animation through Sequencer when both are active and the setting is on (module/spell-animations.mjs); not
     // awaited, and it never throws.
     playSpellAnimation(this, spell);
+    playSpellSound(spell); // PSFX through Sequencer (module/sound-effects.mjs); not awaited, never throws
     // Spell effects (module/spell-effects.mjs): duration and recipients asked at cast; targets that resisted are left out.
     const cast = message?.getFlag?.("ad2e", "spellCast");
     const resisted = new Set((cast?.resisted ?? []).map(t => t.uuid));
@@ -2866,7 +2874,7 @@ export default class AD2EActor extends Actor {
     const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
     const roll = await new Roll("1d20 + @adj + @mod", { adj: adj + t51.sum, mod: input.mod }).evaluate();
     const hit = t51.auto || roll.total >= needed;
-    playWeaponAnimation(this, { kind: "plain", missile }, { hit }); // module/weapon-animations.mjs
+    this.#attackEffects({ kind: "plain", missile }, { hit }); // module/weapon-animations.mjs
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc}${AD2EActor.#targetText(targets)} `

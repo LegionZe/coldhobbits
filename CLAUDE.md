@@ -163,6 +163,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   type, missile, thrown, override })`; `playWeaponAnimation(actor, attack, { hit })` un-awaited after the hit is known in
   rollWeaponAttack, rollMonsterAttack, rollUnarmed, rollAttack; stretched with `missed(true)` on a miss, on-target hits only;
   uses spell-animations.mjs `jb2aAvailable` / `casterToken`).
+- Sound effects (owner's request 1.0.53): `module/sound-effects.mjs` (world settings `psfxSounds`, `psfxVolume`; `psfxAvailable` =
+  modules `sequencer` + `psfx` and Sequencer globals; pure `SPELL_SOUNDS` (by spell-animations.mjs `ANIMATIONS` id), `SPELL_FALLBACK`,
+  `HEAVY`, `WEAPON_SOUND`, `spellSounds(spell)`, `attackSounds(attack, hit)` (uses weapon-animations.mjs `weaponAnimation` ids);
+  `playSounds` = `sequence.sound().file().volume().delay()`, never throws; `playSpellSound` in castSpell, `playAttackSound` via
+  AD2EActor `#attackEffects` with the weapon animation). Paths verified against psfx 0.18.0 `scripts/psfx_sequencer.js`
+  (GitHub JimHPerry/psfx); use full paths (`psfx.weapon-swooshes.light` would also match `lightning` by prefix).
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

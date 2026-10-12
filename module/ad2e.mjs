@@ -49,6 +49,7 @@ import { registerLights } from "./lights.mjs";
 import { registerSpellEffects } from "./spell-effects.mjs";
 import { registerSpellAnimations } from "./spell-animations.mjs";
 import { registerWeaponAnimations } from "./weapon-animations.mjs";
+import { registerSoundEffects } from "./sound-effects.mjs";
 import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
@@ -122,6 +123,7 @@ Hooks.once("init", () => {
   registerSpellEffects();
   registerSpellAnimations();
   registerWeaponAnimations();
+  registerSoundEffects();
   registerStation();
   // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
   game.settings.registerMenu("ad2e", "npcBuilder", {
