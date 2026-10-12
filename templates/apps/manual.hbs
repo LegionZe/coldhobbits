@@ -174,7 +174,7 @@
       field; anything left on "Random" is rolled. "Roll" shows the NPC; "Create" makes a character actor with race and
       class items, abilities (3d6 in order, raised to the race's and class's minimums), hit points, basic equipment for
       the class (a soldier's from their troop type, a tradesman's proficiency), age, height and weight, personality traits
-      and looks; the notes on the Bio tab list the rest (title, sage field and ability, wage, base morale, spell costs for
+      and looks; the notes on the Character tab list the rest (title, sage field and ability, wage, base morale, spell costs for
       casters). Spells are not chosen: add them on the sheet. 0-level NPCs have no class.</p></div>
     <div><button type="button" data-action="tool" data-tool="encounters"><i class="fa-solid fa-dragon"></i> Random encounters</button>
       <p>Set the area: wilderness (terrain and population: patrolled or sparsely settled +1, heavily populated +2) or a
@@ -216,6 +216,18 @@
 
   {{#if is.characters}}
   <h2>Characters</h2>
+  <h3>The character sheet</h3>
+  <p>Six tabs, each control in one place: Main (abilities with their checks and tests, saving throws, health, Armour
+  Class and THAC0, movement), Combat (attacks and combat actions, weapons in hand), Inventory, Spells (casters only),
+  Skills &amp; Proficiencies (class skills and features, proficiencies, languages, traits) and Character (race, class and
+  kit, personal details, station, familiar, animals, henchmen, followers, biography). The Edit button in the header
+  switches between play mode and edit mode: rolled scores, maximum hit points, base AC, THAC0 and save overrides,
+  initiative and magic resistance, level, experience, alignment, kit choices, skill points, languages, personal details
+  and the bin icons appear only while editing (a new character without race or class opens in edit mode; the mode is
+  kept per open sheet, not saved). The <strong>GM</strong> section at the end of the Character tab is shown only to GMs:
+  energy drain and restore, the dual-class buttons, Find Familiar, the bonded animal's table and loss buttons, attracting
+  followers, the station controls (initial station, convict, penniless and debts, enslave) and the maximum age. The
+  construction start/stop and the gen's "Return now" stay beside their panels (GM only there too).</p>
   <h3>Creating a character</h3>
   <ol>
     <li>Enter the rolled ability scores on the Abilities panel, or use its dice button (PHB Methods II-VI; exceptional
@@ -232,8 +244,8 @@
     (-/+), Cast and Rest. The Spells tab is hidden for characters without spells.</li>
   </ol>
   <h3>Age</h3>
-  <p>On the Bio tab, "Roll" rolls the starting age (PHB Table 11: base + dice for the race); your own field "Maximum age
-  (GM)" and its Roll button are hidden from players, and you are whispered when the character reaches it (elves leave
+  <p>On the Character tab, "Roll" rolls the starting age (PHB Table 11: base + dice for the race); your own field "Maximum age
+  (GM)" and its Roll button are in the GM section (hidden from players), and you are whispered when the character reaches it (elves leave
   rather than die). The ageing changes of PHB Table 12 (middle age, old, venerable) are applied to the scores from the Age
   and race, cumulatively; exceptional Strength is halved at middle age and lost (with 1 point) when old. Magical
   longevity changes the maximum age, not the age.</p>
@@ -243,25 +255,25 @@
   languages free, with no extra nonweapon slots; reload after changing it), when they are chosen (at the start by the
   player, or learned in play: then only you can add or remove them on the sheet), the common language every character
   speaks free (e.g. Common, or Midani for Al-Qadim; empty for none) and your campaign's language list (comma-separated;
-  offered on the sheet with the race's initial languages and Midani). The Languages section on the Proficiencies tab shows
+  offered on the sheet with the race's initial languages and Midani). The Languages section on the Skills &amp; Proficiencies tab shows
   the counts against their limits in red when over, flags a modern language that is not in the race's or campaign's list
   (allowed if you agree) and ignores a repeated one. Ancient languages take Languages, Ancient slots and are either read
   and written (ticked) or spoken; literacy in other languages takes Reading/Writing slots, one language each.</p>
   <h3>Advancing</h3>
   <p>"Level Up" rolls hit points; saving throws, THAC0, slots, thief skills and spells follow the level. Thief and bard skill
-  points are spent on the Class Abilities tab. Henchmen: drag an actor onto the sheet (Bio tab). Mounts, pack animals and
-  pets: drag the animal actor onto the sheet; they are listed on the Equipment tab with their load, and "Riding" marks the
+  points are spent on the Skills &amp; Proficiencies tab. Henchmen: drag an actor onto the sheet (Character tab). Mounts, pack animals and
+  pets: drag the animal actor onto the sheet; they are listed on the Inventory tab with their load, and "Riding" marks the
   one the character rides (its load then includes the rider).</p>
   <h3>Followers and strongholds</h3>
-  <p>On the Bio tab, "Followers &amp; stronghold" records the stronghold (name, kind, Built). Each class with followers shows
+  <p>On the Character tab, "Followers &amp; stronghold" records the stronghold (name, kind, Built). Each class with followers shows
   the level it needs: fighter 9 and bard 9 (a built stronghold), cleric 8 (a built place of worship), ranger 10 and thief
-  10. When a class is ready, the GM's "Attract followers" button rolls once (Table 16, 19 or 31, or the number of
+  10. When a class is ready, the "Attract followers" button in the GM section rolls once (Table 16, 19 or 31, or the number of
   0-level soldiers; cleric 2d10 x 10), creates one Monster / NPC actor per unit (role "Follower unit", "Figures in unit"
   = how many it stands for, hit points of one figure) and posts a GM-only card. Equipment without a compendium item and
   creatures without statistics are noted on the actor with a link. Units dropped on the sheet join the list; removing one
   keeps the actor. Paladins attract no followers.</p>
   <h3>Stronghold construction</h3>
-  <p>On the Bio tab, "Construction" (inside Followers &amp; stronghold) plans the castle: the site's production modifiers
+  <p>On the Character tab, "Construction" (inside Followers &amp; stronghold) plans the castle: the site's production modifiers
   (worker skill and morale are yours to set), the tech level, the modules with count and style, hired workers (blank =
   the standard number) and helpers (selected tokens, the character's magical items with a suitability, or other help
   as a number of workers). The summary shows the cost, man/weeks, work weeks and calendar time. "Start construction"
@@ -274,19 +286,19 @@
   dual-class or replace the class (dual-class only for eligible humans: prime requisites 15+ in the current class and 17+
   in the new one, at least 2nd level). The earlier class stays with its abilities and spells at its last level. Until the
   new class's level is higher, the earlier class's abilities, THAC0 or saves can still be used but set the experience
-  penalty: experience awards then ask "encounter" (no experience) or "adventure" (half). The Race &amp; Class tab shows
-  the status and has buttons to clear the penalty, and "Undo dual-class" to correct a mistaken switch: the current class
+  penalty: experience awards then ask "encounter" (no experience) or "adventure" (half). The Character tab shows
+  the status; the GM section has buttons to clear the penalty, and "Undo dual-class" to correct a mistaken switch: the current class
   is removed and the earlier one comes back from the Classes compendium at its last level, with the experience it had at
   the switch (for switches made before 0.0.122, the minimum for that level). Hit points and the kit are not changed.</p>
   <h3>Multi-class characters</h3>
   <p>With the world setting "Multi-class characters" on, dropping another class on a demihuman asks whether to add it
   (multi-class) or replace the class. Adding is offered at creation only, for the race's combinations, with an allowed
   alignment and the class's minimums. Experience awards (individual and group) are divided between the classes, each
-  share with its class's prime requisite bonus. The Race &amp; Class tab lists the classes with a Level Up button each; a
+  share with its class's prime requisite bonus. The Character tab lists the classes with a Level Up button each; a
   class stops at its racial level limit. After adding the classes, roll 1st-level hit points again (the dice are
   averaged). One kit, open to any of the classes; kits from the Complete Fighter's and Thief's Handbooks show a
   single-class warning for you to rule on. Bard combinations from the Complete Bard's Handbook need one of the kits the
-  Race &amp; Class tab names. The other classes' levels and experience can be corrected in the class table. Weapons outside
+  Character tab names. The other classes' levels and experience can be corrected in the class table. Weapons outside
   a class's list are marked (a priest's list always applies to a multi-class priest; for a specialty priest fill in
   "Allowed weapons" on the class or kit item); a multi-class druid's armour limits always show; casting a wizard spell in armour
   asks for confirmation (elves in elven chain excepted).</p>
@@ -295,10 +307,10 @@
   their pages give: their own list, extra weapons, forbidden weapons, weapons only allowed at 1st level, and notes for
   weapons that cost extra slots (not charged). A weapon outside them is marked on the weapon row and in the attack dialog;
   nothing is blocked. Edit them on the class or kit item (comma-separated names or identifiers; * = any weapon in
-  "Allowed weapons", no weapon at all in "Forbidden weapons"); the Race &amp; Class tab shows the kit's limits. Class and
+  "Allowed weapons", no weapon at all in "Forbidden weapons"); the Character tab shows the kit's limits. Class and
   kit copies made before version 1.0.27 were filled in once from the compendiums.</p>
   <h3>Skills &amp; Powers kit features</h3>
-  <p>Social rank: Roll on the Race &amp; Class tab (the kit's 2d6 table). Encounter reactions ask the NPC's social class
+  <p>Social rank: Roll on the Character tab (the kit's 2d6 table). Encounter reactions ask the NPC's social class
   when a Pugilist is present and whether it is a first meeting with a Barbarian. A Weapon Master's "Display" (Combat
   tab, during combat) worsens the other side's initiative in rounds 1 and 2 (untick it in the dialog for anyone who did
   not see it). A Mystic's "Meditate" boosts one ability after the meditation for a third of its time; advance world time
@@ -306,21 +318,21 @@
   proficiencies of another weapon type are marked. With the Skills &amp; Powers weapon rules the chosen weapon is also
   the weapon of choice (+1 to hit) at no cost, and the weapon-of-choice box is hidden.</p>
   <h3>Animal companions and mounts (Skills &amp; Powers)</h3>
-  <p>Animal Masters and Riders have a bonded animal, shown on the Biography tab. Roll Table 42 or 43 with the button
+  <p>Animal Masters and Riders have a bonded animal, shown on the Character tab. Roll Table 42 or 43 with the button
   there (or let the player choose); for a Rider choose the homeland (settled lands, desert, jungle, forest, mountains,
   underground, coast) so the mount suits it, or "Any" for the whole table and drag the creature from the chat card's link onto the sheet: the sheet offers to
   bond it. The creatures are in Hirelings &amp; Mounts, folder "Animal Companions &amp; Mounts (POSP)". When the animal
   dies, chat tells you; then use "Companion died" or "Companion lost carelessly" (-10% experience, that species never
-  again), or "Mount died" (2d6 damage; for negligence a save vs. spells, on a failure the rider is feebleminded for the 2d6 hours: a status icon and a note on the Biography tab,
+  again), or "Mount died" (2d6 damage; for negligence a save vs. spells, on a failure the rider is feebleminded for the 2d6 hours: a status icon and a note on the Character tab,
   casting asks to confirm, it ends when world time passes or with "End feeblemind")
-  and "Mount fled" (no bonded mount again). A companion larger than size S is marked on the Biography tab (the kit asks
+  and "Mount fled" (no bonded mount again). A companion larger than size S is marked on the Character tab (the kit asks
   for small animals); you decide whether it stays. Warnings (yours to decide) also appear on the table roll, the
-  bonding prompt and the Biography tab when a mount is too big (gnome, halfling) or too small (medium races) for the
+  bonding prompt and the Character tab when a mount is too big (gnome, halfling) or too small (medium races) for the
   rider's race, when a companion is outside an Animal Master's race affinity (dwarf and gnome: burrowing animals; elf:
-  forest animals), or when its good/evil alignment opposes the master's. Cavaliers and Nobles without a mount get a warning on the Race &amp; Class
+  forest animals), or when its good/evil alignment opposes the master's. Cavaliers and Nobles without a mount get a warning on the Character
   tab.</p>
   <h3>Energy drain and restoration</h3>
-  <p>The Main tab of a character has two GM buttons. "Energy drain" asks how many levels are lost: each comes off the
+  <p>The GM section at the bottom of a character's Character tab (seen only by GMs) has two buttons for this. "Energy drain" asks how many levels are lost: each comes off the
   highest class (multi- and dual-class characters), reduces maximum hit points by that level's roll, and sets that
   class's experience halfway to the next level; wizard spells the character can no longer cast are marked not
   understood. If memorized spells exceed the new slots, a dialog asks which memorizations are forgotten (uncast ones
@@ -328,7 +340,7 @@
   character, and you are whispered how many days (2d4) until the character rises as an undead of its slayer's type.
   "Restoration" brings back the most recent drained level (with its hit points and the minimum experience for the
   level) if cast in time: one day per level of the priest, which the dialog asks for; choose the casting priest there
-  and both recorded ages (Biography tab) go up by two years. Drained levels are listed on the Main tab until
+  and both recorded ages (Character tab) go up by two years. Drained levels are listed on the Main tab until
   regained.</p>
   {{/if}}
 
@@ -408,7 +420,7 @@
   {{#if is.items}}
   <h2>Items, treasure and identification</h2>
   <ul>
-    <li>Weapons, ammunition, armour, equipment, coins, gems, jewellery and magical items are items on the Equipment tab
+    <li>Weapons, ammunition, armour, equipment, coins, gems, jewellery and magical items are items on the Inventory tab
     (monsters: Inventory tab). Carried items count toward encumbrance (world setting chooses the encumbrance rule).</li>
     <li><strong>Containers</strong>: drag an item's row onto a container in the Containers list (or choose "In container"
     on the item sheet); contents count while the container is carried, and its capacity is checked.</li>
@@ -457,9 +469,9 @@
     powder and matches).</li>
     <li><strong>Dual-class</strong> and <strong>multi-class characters</strong>: see <em>Characters</em>.</li>
     <li><strong>Al-Qadim</strong>: kits, sha'ir and gens, elemental mages; the heat penalty for heavy armour is a setting.</li>
-    <li><strong>Al-Qadim station</strong>: characters get a Station panel on the Biography tab. The player rolls the initial
-    station from the Al-Qadim kit; you can type it instead (Initial). Level raises it when higher; a dual-class character's
-    initial station is halved. "Spend" pays 1,000 gp a point from the character's coins for a month's bonus. Your buttons:
+    <li><strong>Al-Qadim station</strong>: characters get a Station panel on the Character tab. The player rolls the initial
+    station from the Al-Qadim kit; you can type it instead (Initial, in the GM section). Level raises it when higher; a dual-class character's
+    initial station is halved. "Spend" pays 1,000 gp a point from the character's coins for a month's bonus. Your buttons (GM section):
     Convict (1d2 replaces the initial station; level still raises it), Penniless (station 3; it ends by itself when the character's coins, gems and jewellery reach
     500 gp per level, unless you tick "Outstanding bills or loans", shown while penniless), Enslave (asks the owner's station) and Free (the station climbs back 1 point a month). Give
     NPC actors a station in their stats panel (pick a Table 1 role and roll, or type it; leave it empty for monsters):

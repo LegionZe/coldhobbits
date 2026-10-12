@@ -1,11 +1,18 @@
 <header class="ad2e-header ad2e-character-header">
   <img class="ad2e-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-tooltip="{{actor.name}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}}>
   <div class="ad2e-header-main">
-  <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
+  <div class="ad2e-name-row">
+    <input class="ad2e-name" type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'AD2E.Character.Name'}}" {{#unless editable}}disabled{{/unless}}>
+    {{#if editable}}<button type="button" class="ad2e-edit-toggle {{#if editMode}}active{{/if}}" data-action="toggleEditMode" aria-pressed="{{#if editMode}}true{{else}}false{{/if}}"
+      data-tooltip="{{#if editMode}}{{localize 'AD2E.Sheet.EditOnHint'}}{{else}}{{localize 'AD2E.Sheet.EditOffHint'}}{{/if}}">
+      <i class="fa-solid {{#if editMode}}fa-lock-open{{else}}fa-lock{{/if}}"></i> {{#if editMode}}{{localize "AD2E.Sheet.EditOn"}}{{else}}{{localize "AD2E.Sheet.EditOff"}}{{/if}}</button>{{/if}}
+  </div>
   <div class="ad2e-header-grid">
-    <label>{{localize "AD2E.Character.classGroup"}}
-      <select name="system.classGroup" {{#if classTab.classItem}}disabled data-tooltip="{{localize 'AD2E.Class.GroupFromClass'}}"{{/if}}>{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
-    </label>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">{{localize "AD2E.Character.race"}}</span>
+      {{#if classTab.raceItem}}<a data-action="openItem" data-item-id="{{classTab.raceItem.id}}">{{classTab.raceItem.name}}</a>
+      {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Race.DropRace"}}</span>{{/if}}
+    </div>
     <div class="ad2e-header-item">
       <span class="ad2e-header-label">{{localize "AD2E.Character.className"}}</span>
       {{#if classTab.classItem}}<a data-action="openItem" data-item-id="{{classTab.classItem.id}}">{{classTab.classItem.name}}</a>
@@ -16,19 +23,30 @@
       {{#if classTab.kitItem}}<a data-action="openItem" data-item-id="{{classTab.kitItem.id}}" class="{{#unless classTab.kitFits}}ad2e-unmet{{/unless}}">{{classTab.kitItem.name}}</a>
       {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Class.DropKit"}}</span>{{/if}}
     </div>
-    <div class="ad2e-header-item">
-      <span class="ad2e-header-label">{{localize "AD2E.Character.race"}}</span>
-      {{#if classTab.raceItem}}<a data-action="openItem" data-item-id="{{classTab.raceItem.id}}">{{classTab.raceItem.name}}</a>
-      {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Race.DropRace"}}</span>{{/if}}
-    </div>
+    {{#if editMode}}
+    {{#unless classTab.classItem}}<label>{{localize "AD2E.Character.classGroup"}}
+      <select name="system.classGroup">{{selectOptions classGroups selected=system.classGroup localize=true}}</select>
+    </label>{{/unless}}
     <label>{{localize "AD2E.Character.alignment"}}
       <select name="system.alignment">{{selectOptions alignments selected=system.alignment localize=true}}</select>
     </label>
     <div class="ad2e-header-pair">
       <label>{{localize "AD2E.Character.level"}} <input type="number" name="system.level" value="{{system.level}}"></label>
-      <label>{{localize "AD2E.Character.xp"}}{{#if editable}} <a class="ad2e-item-link" data-action="awardXp" data-tooltip="{{localize 'AD2E.Xp.AddTitle'}}"><i class="fa-solid fa-plus"></i></a>{{/if}} <input type="number" name="system.xp" value="{{system.xp}}"
+      <label>{{localize "AD2E.Character.xp"}} <input type="number" name="system.xp" value="{{system.xp}}"
         {{#if system.xpNext}}data-tooltip="{{localize 'AD2E.HP.NextLevel'}}: {{system.xpNext}}{{#if system.xpRestart}} ({{localize 'AD2E.HP.XpRestart'}}){{/if}}"{{/if}}></label>
     </div>
+    {{else}}
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">{{localize "AD2E.Character.alignment"}}</span>
+      <span>{{alignmentLabel}}</span>
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">{{localize "AD2E.Character.level"}} · {{localize "AD2E.Character.xp"}}</span>
+      <span><strong>{{system.level}}</strong> · {{system.xp}}{{#if system.xpNext}} / {{system.xpNext}}{{/if}}
+        {{#if editable}}<a class="ad2e-item-link" data-action="awardXp" data-tooltip="{{localize 'AD2E.Xp.AddTitle'}}"><i class="fa-solid fa-plus"></i></a>{{/if}}
+        {{#if levelUpReady}}{{#if editable}}<button type="button" class="ad2e-level-ready" data-action="levelUp"><i class="fa-solid fa-arrow-up"></i> {{localize "AD2E.HP.LevelUp"}}</button>{{/if}}{{/if}}</span>
+    </div>
+    {{/if}}
   </div>
   </div>
 </header>

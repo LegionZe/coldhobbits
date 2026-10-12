@@ -59,7 +59,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   Gender / Table 10 column / height (owner's ruling, 1.0.23): character `system.gender` ("" | male | female | non-binary |
   agender), `system.build` ("" | male | female: the Table 10 column; "" = the gender's when male/female), `system.height`
   (inches); `tableColumn`, `raceHeight` (NPC_TABLES.heights), `feetInches`, `rollBodyWeight(actor, { height })` (always asks
-  the column, owner's ruling 1.0.24; recorded column = default button, choice saved to `build`) in animals.mjs; Bio tab row (`context.body`, action `rollHeightWeight`); lang block `AD2E.Gender`.
+  the column, owner's ruling 1.0.24; recorded column = default button, choice saved to `build`) in animals.mjs; Character tab row (`context.body`, action `rollHeightWeight`); lang block `AD2E.Gender`.
   Pushing a mount (Movement (DMG)): `MOUNT_PUSH` in movement-tables.mjs (build-movement-tables.py `build_push`, regex-checked);
   `pushMount` (monster sheet button, roles mount/pack), `pushStatus`, `pushModifier`, `pushText` in animals.mjs; monster
   `system.push` { lastDay, streak, status: "" | lame | spent | dead, until (world time) }.
@@ -168,7 +168,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `ad2e.classes` pack. Actor `markOldClassUse(what)` (flags +
   note) in skills, turning, lay on hands, backstab, casting, `#dualField` tick box (`dualOld`) in saves and attacks;
   levelUp skips HP while restricted; awards (`awardExperience`, AwardXp `shares(total, actors, kind)`) use
-  `penalizedAward`. Switch: CharacterSheet `#askDualClass` on class drop; GM `clearDualPenalty` on the Race & Class tab.
+  `penalizedAward`. Switch: CharacterSheet `#askDualClass` on class drop; GM `clearDualPenalty` in the GM section.
   Owner's rulings: setting toggle, enforced penalty with encounter/adventure awards, old numbers by tick box while
   restricted and the better ones after, all old abilities kept.
 - Multi-class (world setting `multiClass`, off by default): `module/multi-class.mjs` (pure: `multiEligibility`,
@@ -180,7 +180,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   levelLimit, atLimit, hitDice, bonus }], others, allowed }. Best saves/THAC0 over `multi.others`; abilities and spells
   of the others join the dual-class extras (not `old`; `spells.extra`, `spells.castingLevels` by kind); `#multiThiefLimit`
   (`info.armorLimited`). Actor `levelUp(classId)` (asks when null), `rollFirstLevelHitPoints`, awards split per class.
-  Sheet `#askMultiClass` on class drop (creation only); Race & Class tab class rows. Owner's rulings: one kit fitting any
+  Sheet `#askMultiClass` on class drop (creation only); Character tab class rows. Owner's rulings: one kit fitting any
   class (warning for CFH/CTH kits), level limits and prime requisite bonus per class. CBH bards: race `multiClassKits`
   ({ "bard/fighter": [kit ids] }, build-race-data.py `bard_multi_class`), `bardKitRule`/`bardKitFits`, `multi.bard`.
   Non-main class level/XP inputs (`.ad2e-multi-field`, no name) write the array via `multiEntries`. Multi-class armour
@@ -193,7 +193,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   GM `companionLost`/`mountDied`/`mountFled`, `registerCompanions` death notice); character `system.bond` { companion,
   mount, barred, rapportLost, feebleUntil } (negligent mount death + failed save: `applyFeeblemind`, status `FEEBLE_STATUS`
   registered in init, `feeblemindActive` confirm in castSpell, `endFeeblemind` on updateWorldTime / GM button; rollSave
-  messages carry `flags.ad2e.save` { key, success }); Bio tab panel, drop prompt in `_onDropActor`; Cavalier/Noble `mountNeeded` on Race & Class.
+  messages carry `flags.ad2e.save` { key, success }); Character tab panel, drop prompt in `_onDropActor`; Cavalier/Noble `mountNeeded` on the Character tab.
 - S&P kit features: kit `special` (build-kit-mechanics.py `KIT_SPECIAL`, regex-checked) and `socialRanks` (`social_ranks`
   parses each POSP page's 2d6 table from the raw wikitext). `module/kit-features.mjs` (`kitSpecial`, `socialRankFor`,
   `barbarianReaction`, `pugilistCharisma`, `applyMeditation`/`meditationActive` (character `system.meditation` { ability,
@@ -206,7 +206,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `restorationInTime`; `minimumXp` from dual-class.mjs). Character `system.drain` { lost [{ key "main" | "multi:<id>" |
   "prev:<id>", identifier, name, level, hp, at }], zero }, `drainLevels()` keys, derived `drainInfo` { pending, zero, any }
   (computed after multi, before dual; dual `restricted`/`drained` while pending). Actor GM `drainLevels(n)` / `restoreLevel()`
-  (Main tab buttons), `#drainRegained` prunes on Level Up; 0-level blocks Level Up. `excessPlan`/`forgetMemorized`
+  (GM section buttons), `#drainRegained` prunes on Level Up; 0-level blocks Level Up. `excessPlan`/`forgetMemorized`
   (`#forgetExcessSpells` dialog, owner's ruling: GM picks), slain = `hp.dead` + `UNDEAD_RISE` 2d4 whisper,
   `RESTORATION_AGE` on character `system.age` (recipient + caster chosen in the Restoration dialog).
 - Throwing (owner's request 1.0.36): `module/rules/throw-tables.mjs` GENERATED by `python3 tools/build-throw-tables.py`
@@ -223,13 +223,20 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `ad2e.unfolded`), `breakFreeNet` (character Combat tab, monster header).
 - Spells tab: `system.spells.available` (slots at the level, sha'ir, or owned spells); CharacterSheet overrides
   `_getTabsConfig("primary")` (drops the tab) and `_prepareTabs` (an active Spells tab falls back to Main); the part still renders.
-- Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities}.hbs`, registered by name in init with
-  `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e); used by the Equipment, Class
-  Abilities and Combat tabs. Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with
-  `{{#with x as |x|}}` (class-abilities does).
+- Character sheet layout (owner's request 1.0.47): six play-first tabs (part ids kept: main, combat, weapons = Inventory,
+  spells, features = Skills & Proficiencies, bio = Character; `CharacterSheet.OLD_TABS` maps the removed class /
+  proficiencies / abilities ids). Each control appears once (attacks only on Combat; Turn Undead, Lay on Hands, Surprise
+  on Combat; ability tests on Main rows; animals and body weight on Character). Edit mode (`_editMode`, getter `editMode`,
+  action `toggleEditMode`, header button; default on without race or class; context `editMode`): setup inputs and
+  `deleteItem` icons only while editing (`{{#if @root.editMode}}`), play controls keep `@root.editable`. GM section
+  partial `ad2e.gm-controls` (context `gm`, GM only, end of the Character tab). CSS for these classes at the end of
+  styles/ad2e.css (own markup only).
+- Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities,proficiencies,race-class,gm-controls}.hbs`,
+  registered by name in init with `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e).
+  Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with `{{#with x as |x|}}`
+  (class-abilities does) or put the flag on the rows (weapon-list `r.inventory`, `r.combat`).
   A sheet is one form: an input name may appear only once across all tabs (a duplicate makes the form submit an array
-  and every update fails validation, e.g. "ac: misc: must be a number" in 0.0.51-0.0.52). The Combat tab passes
-  `combat=true` / `ft.combat` so the partials show those values as text.
+  and every update fails validation, e.g. "ac: misc: must be a number" in 0.0.51-0.0.52).
 - GM creators: `module/apps/creators.mjs` (guided ApplicationV2 windows, state + `data-field` change listeners; created in
   the world or an unlocked world compendium), tables in `module/rules/creator-tables.mjs` GENERATED by
   `python3 tools/build-creator-tables.py` (regex-checked). Monster creator (`MonsterCreator`, `game.ad2e.createMonster`,
@@ -284,7 +291,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `module/aging.mjs` (pure: `ageCategory` (-1 young .. 2 venerable), `applyAging` (cumulative, 18/xx rule from the starting
   score), `agingInfo`, `startingAgeFormula`, `maxAgeFormula`; `rollStartingAge`, GM `rollMaxAge` (gmroll), `registerAging`
   (updateActor whisper at `maxAge`)). Character `system.maxAge`; derived `system.ageInfo` { index, key, limits, changes },
-  applied in prepareDerivedData after kit score bonuses, before meditation. Bio tab age row (`context.aging`).
+  applied in prepareDerivedData after kit score bonuses, before meditation. Character tab age row (`context.aging`).
 - PHB Table 52: `module/rules/armor-type-tables.mjs` GENERATED by `python3 tools/build-armor-type-tables.py` (armour
   identifiers asserted). `module/armor-types.mjs` (world setting `weaponVsArmor`; pure `typeLetters`, `table52Modifier`
   (best type, roll modifier = -value); `wornBodyArmor`, `table52ForTarget`, `table52Text`); rollWeaponAttack (ammunition
@@ -328,14 +335,14 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `AD2EActor#rollSurprise`. Encounter reactions: Table 59 in the same file, `module/reaction.mjs` (`rollEncounterReaction`,
   monster sheet button, `game.ad2e.rollReaction()`; speaker's Charisma + kit reaction modifiers subtracted). Morale Tables 49/50
   (same file) and henchmen: `module/henchmen.mjs` (`system.henchmen` { actors: UUIDs, lost }, drop via
-  `CharacterSheet#_onDropActor`, Bio tab). Experience: `AD2EActor#awardExperience` (individual) and `module/apps/award-xp.mjs`
+  `CharacterSheet#_onDropActor`, Character tab). Experience: `AD2EActor#awardExperience` (individual) and `module/apps/award-xp.mjs`
   (group award, settings menu + `game.ad2e.awardExperience()`).
 - Followers (name level): `module/rules/follower-tables.mjs` GENERATED by `python3 tools/build-follower-tables.py` (Tables
   16/19/31 parsed, class rules regex-checked; Table 16 equipment -> compendium identifiers `ITEMS`, others `NOTES_ONLY`;
   after build-hireling-data.py). `module/followers.mjs` (pure `followerStatus`, `tableRow`, `classLevels`; `rollFollowerUnits`,
   `unitActorData`, GM `attractFollowers` (once per class, `system.followers.rolled`), `followersContext`); character
   `system.followers` { actors, rolled, stronghold { name, kind, built, project } } (construction: below); monster role
-  "follower" + `unitSize` (one actor per unit, owner's ruling); Bio tab panel, follower actors dropped join the list.
+  "follower" + `unitSize` (one actor per unit, owner's ruling); Character tab panel, follower actors dropped join the list.
 - Random NPC builder: `module/rules/npc-tables.mjs` GENERATED by `python3 tools/build-npc-tables.py` (DMG Tables 60/61/64/66-69,
   base morale, PHB Table 10 heights; curated `PROFESSION_PROFS`, `CLASS_GEAR`, `NO_HIRELING` asserted against the sources).
   `module/npc-builder.mjs` (pure `buildNpc(opts, { races, classes }, random)`, `rollAbilities`, `rollHitPoints`, `npcNotes`
@@ -349,7 +356,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   character.mjs drops Table 4 from nonweapon slots under table4), `languageStart` start | learn (learn: GM adds/removes),
   `commonLanguage`, `languageList`; pure `languageSettings`, `splitList`, `profLanguages` (copies + extraSlots),
   `defaultNative`, `languageSuggestions`, `languageStatus`). Character `system.languages` { native, nativeLiterate,
-  commonLiterate, known [{ name, kind modern | ancient, literate }] }; Proficiencies tab section (`context.languages`,
+  commonLiterate, known [{ name, kind modern | ancient, literate }] }; Skills & Proficiencies tab section (`context.languages`,
   nameless `.ad2e-language-field` inputs write the whole `known` array, actions addLanguage / removeLanguage, datalist id
   per actor).
 - Stronghold construction: `module/rules/construction-tables.mjs` GENERATED by `python3 tools/build-construction-tables.py`
@@ -358,7 +365,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `eventFor`, `speedAt`, `applyEvent`, `applyChoice`, `advanceProject`, `planFor`, `simpleDice` (Roll#evaluateSync skips dice);
   `constructionContext`; GM `startConstruction` / `stopConstruction`, `processConstruction` (updateWorldTime, active GM),
   `constructionButtons` (flag `ad2e.construction`)). Character `system.followers.stronghold.project` (ObjectField);
-  Bio tab `.ad2e-castle-field` nameless inputs (data-castle path) and `castle*` actions in CharacterSheet.
+  Character tab `.ad2e-castle-field` nameless inputs (data-castle path) and `castle*` actions in CharacterSheet.
 - Weather and travel: `module/rules/travel-tables.mjs` GENERATED by `python3 tools/build-travel-tables.py` (DMG Tables
   73-82 parsed, PHB cross-country rules regex-checked). `module/travel.mjs` (pure `rollWeather` (die injectable),
   `weatherObstacles`, `weatherLostMods`, `terrainCost`, `dayPoints`, `planDay`, `aerialFactor`, `boatSpeed`, `shipSpeed`,
@@ -489,7 +496,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   names; runs after build-aq-equipment-data.py). Kit fields `allowedWeapons` ("*" any), `extraWeapons`, `forbiddenWeapons`
   ("*" none), `initialWeapons` / `initialForbiddenWeapons` (warn at level <= 1), `weaponsWithinClass`, `weaponNote`;
   `weaponRestriction` entries { identifier, group, level, allowed (class item), kit } -> "" | notAllowed | notBludgeoning |
-  forbidden | notInitial; `formatKitWeapons` (Race & Class tab); `migrateWeaponLimits` / `weaponLimitPatch` (migrations.mjs, once).
+  forbidden | notInitial; `formatKitWeapons` (Character tab); `migrateWeaponLimits` / `weaponLimitPatch` (migrations.mjs, once).
 - Kit mechanics: `tools/build-kit-mechanics.py` (run after build-proficiency-data.py) writes `modifiers`, `skillAdjust`
   and `skillPoints` ({ first, perLevel, bardFirst }: barber bards 10) into the kit sources from the curated `KIT_MODIFIERS` / `KIT_SKILLS` / `KIT_POINTS`; each entry has
   a `match` regex that must occur in the current kit page (the script fails otherwise). Conditions are paraphrased.
@@ -525,7 +532,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   { moderate, severe }, severity, race adjustments, `modifiers` in the kit-modifier format, `valueFor(raceId)`);
   `packs/_source/traits` GENERATED by `python3 tools/build-trait-data.py` (`EFFECTS` regex-checked, `NO_DESCRIPTION`
   for the two missing wiki sections). Owner's ruling: no character points, traits balanced by disadvantages
-  (`CharacterData#computeTraits` -> `system.traits` { ids, rows, cost, points, over }; Proficiencies tab section,
+  (`CharacterData#computeTraits` -> `system.traits` { ids, rows, cost, points, over }; Skills & Proficiencies tab section,
   `toggleSeverity`). Trait modifiers join `#kitModifierList` with `origin`; Ambidexterity `twoWeaponStyle`
   (combat-options.mjs), Fast Healer `naturalHealing(..., perDay)`.
 - Skills & Powers nonweapon ratings (world setting `spProficiencies`, off by default): `module/sp-proficiencies.mjs`

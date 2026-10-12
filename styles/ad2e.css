@@ -213,3 +213,22 @@ body.ad2e-light-checkboxes.theme-dark :is(.application.ad2e, .application.ad2e-d
 body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).theme-dark input[type="checkbox"] {
   --checkbox-background-color: var(--color-light-3, #e8e0d3);
 }
+
+/* Character sheet layout (1.0.47, owner's request): play-first tabs, edit-mode toggle, GM section. These rules style only
+   this system's own markup (templates/actor/character-*.hbs and parts/), no core selectors. */
+.ad2e .ad2e-columns.ad2e-columns-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ad2e .ad2e-name-row { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e .ad2e-name-row .ad2e-name { flex: 1; min-width: 0; }
+.ad2e .ad2e-edit-toggle { flex: 0 0 auto; width: auto; white-space: nowrap; }
+.ad2e .ad2e-edit-toggle.active { font-weight: bold; }
+.ad2e .ad2e-ability .ad2e-ability-tests { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.ad2e .ad2e-ability .ad2e-ability-tests:empty { display: none; }
+.ad2e .ad2e-ability-tests button { width: auto; flex: 0 0 auto; line-height: 1.4; padding: 0 0.4rem; font-size: 0.85em; }
+.ad2e a.ad2e-roll { cursor: pointer; white-space: nowrap; }
+.ad2e a.ad2e-roll i { opacity: 0.7; margin-right: 0.15rem; }
+.ad2e a.ad2e-roll:hover i { opacity: 1; }
+.ad2e .ad2e-combat-summary { flex-wrap: wrap; }
+.ad2e .ad2e-level-ready { width: auto; margin-left: 0.4rem; }
+.ad2e .ad2e-gm-section { border-style: dashed; }
+.ad2e .ad2e-gm-section .ad2e-header-label { min-width: 7rem; }
+.ad2e .ad2e-move-details summary { cursor: pointer; }

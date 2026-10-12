@@ -15,19 +15,27 @@
   <p>Every window and roll dialog can be resized by dragging its bottom-right corner; when a dialog is taller than the
   screen, scroll inside it to reach its buttons.</p>
   <h3>The character sheet</h3>
+  <p>The header shows your race, class, kit, alignment, level and experience (the + adds experience; a Level Up
+  button appears there when you have enough). The <strong>Edit</strong> button in the header switches the sheet between
+  play mode (values and roll buttons) and edit mode, where you type rolled scores, maximum hit points, base AC and
+  overrides, level, experience and personal details, and where the bin icons delete items. A new character opens in edit
+  mode. Anything with a <i class="fa-solid fa-dice-d20"></i> die can be clicked to roll.</p>
   <ul>
-    <li><strong>Main</strong>: ability scores, saving throws, hit points (Damage, Heal, Rest, Bind wounds), experience
-    and Level Up.</li>
-    <li><strong>Combat</strong>: hit points, THAC0, movement, the weapons in hand with Attack and Damage, armour and
-    Armour Class, and your class abilities.</li>
-    <li><strong>Equipment</strong>: everything you own: weapons, armour, gear, coins, containers, magical items, and the
-    animals you own or ride.</li>
-    <li><strong>Race &amp; Class</strong>: race, class and kit, with their requirements, level limits and the kit's weapon limits (a weapon outside your class or kit list is marked on the weapon row and in the attack dialog).</li>
-    <li><strong>Class Abilities</strong>: thief, bard and ranger skills, backstab, turning undead, paladin powers.</li>
-    <li><strong>Proficiencies</strong>: weapon and nonweapon proficiencies and their checks; languages; traits and disadvantages.</li>
+    <li><strong>Main</strong>: ability scores (click one for a check; the buttons under it roll its tests such as bend
+    bars or system shock; hover the score for its table figures), saving throws, hit points (Damage, Heal, Rest, Bind
+    wounds), Armour Class, THAC0 and modifiers, and your movement rates and jumps.</li>
+    <li><strong>Combat</strong>: hit points, Armour Class, THAC0 and combat movement at a glance; Actions (Melee and
+    Missile attacks, Surprise, Throw object, Break free, Turn undead, Lay on hands, Display) and the weapons in hand with
+    Attack and Damage, Stow and Drop, and unarmed attacks.</li>
+    <li><strong>Inventory</strong>: everything you carry: load, weapons (tick Equipped to take one in hand), armour,
+    ammunition, magical items, gear, containers, coins and treasure.</li>
     <li><strong>Spells</strong>: your spells by level, memorization and casting (only shown if your character has spells).</li>
-    <li><strong>Abilities</strong>: the detailed ability tables, ability checks and tests such as bend bars.</li>
-    <li><strong>Biography</strong>: notes, age, gender, height and weight, henchmen, followers and stronghold, familiar, and an Animal Master's or Rider's bonded animal.</li>
+    <li><strong>Skills &amp; Proficiencies</strong>: thief, bard and ranger skills, turning and paladin powers, class and
+    kit features; weapon and nonweapon proficiencies and their checks; languages; traits and disadvantages.</li>
+    <li><strong>Character</strong>: race, class and kit with their requirements, level limits and the kit's weapon limits
+    (a weapon outside your class or kit list is marked on the weapon row and in the attack dialog); gender, height and
+    weight, age, station, familiar, a bonded animal, your mounts and pack animals, henchmen, followers and stronghold, and
+    your biography.</li>
   </ul>
   <p>Most things are added by dragging them from a compendium (the Compendium sidebar tab) onto the sheet. Every roll
   opens a dialog with a modifier and a reason for anything special your GM allows.</p>
@@ -37,59 +45,59 @@
   <h2>Creating a character</h2>
   <ol>
     <li><strong>Create the actor</strong>: Actors sidebar &gt; Create Actor &gt; type Character (or your GM makes one for you).</li>
-    <li><strong>Ability scores</strong>: type the rolled scores on the Main tab, or click the dice next to "Abilities"
+    <li><strong>Ability scores</strong>: type the rolled scores on the Main tab in edit mode (Edit in the header), or click the dice next to "Abilities"
     to roll with the method your GM chooses (Methods II-VI). Warriors with Strength 18 can roll exceptional Strength.</li>
     <li><strong>Race</strong>: drag a race from "Races (PHB)". Its adjustments are added to your scores; the sheet warns
     when a score is outside the race's limits.</li>
-    <li><strong>Age</strong>: on the Bio tab, "Roll" next to Age rolls your race's starting age. As your character grows
+    <li><strong>Age</strong>: on the Character tab, "Roll" next to Age rolls your race's starting age. As your character grows
     older, the middle age, old and venerable changes to the ability scores are applied for you (shown next to the
     age).</li>
-    <li><strong>Languages</strong>: on the Proficiencies tab. Your native language (empty = your race's own tongue) and
+    <li><strong>Languages</strong>: on the Skills &amp; Proficiencies tab. Your native language (empty = your race's own tongue) and
     the world's common language are free. Add further languages by typing a name or picking one (your race's initial
     languages come first): modern languages count against Intelligence Table 4 or your Languages, Modern slots (your GM
     decides which), ancient ones against Languages, Ancient slots. Tick "Reads/writes" for each language you can read;
     those count against Reading/Writing slots. If your GM has languages learned in play, only the GM adds them.</li>
-    <li><strong>Class</strong>: drag a class from "Classes (PHB)". The Race &amp; Class tab shows whether your scores meet
+    <li><strong>Class</strong>: drag a class from "Classes (PHB)". The Character tab shows whether your scores meet
     its minimums, the alignments allowed, your prime requisite bonus and your race's level limit.</li>
     <li><strong>Kit</strong> (optional, if your GM uses kits): drag a kit from "Class Kits". A kit that does not suit your
     class or race is refused or marked. Its bonus proficiencies are added for free (you may be asked to choose one);
     its bonuses and penalties are applied for you, or offered as tick boxes in the roll dialogs when they depend on the
     situation.</li>
     <li><strong>Alignment, name and picture</strong>: set them in the header; click the picture to change it.</li>
-    <li><strong>Hit points</strong>: "Roll 1st-Level HP" on the Main tab.</li>
+    <li><strong>Hit points</strong>: "Roll 1st-Level HP" on the Main tab (edit mode).</li>
     <li><strong>Proficiencies, equipment and spells</strong>: see the following sections.</li>
-    <li><strong>Gender, height and weight</strong>: on the Bio tab pick a gender (male, female, non-binary or agender) and,
+    <li><strong>Gender, height and weight</strong>: on the Character tab pick a gender (male, female, non-binary or agender) and,
     "Roll (Table 10)" there rolls height and body weight: it always asks whether to use the male or female base figures
     of PHB Table 10, whatever the gender, and records the choice (the "Height &amp; weight" column, used as the default next time). Body weight is needed when
-    riding; it can also be entered or rolled on the Equipment tab.</li>
+    riding; it can also be entered or rolled on the Inventory tab.</li>
   </ol>
   <p>Each character has at most one kit.</p>
   <h3>Skills &amp; Powers kits</h3>
-  <p>Roll your social rank on the Race &amp; Class tab. Weapon Masters specialize (or take expertise) in a melee weapon,
-  which becomes their chosen weapon on the Proficiencies tab (proficiencies of another weapon type are marked), and use
-  "Display" on the Combat tab when a fight starts; Mystics "Meditate" on the Race &amp; Class tab (the boost starts when
+  <p>Roll your social rank on the Character tab. Weapon Masters specialize (or take expertise) in a melee weapon,
+  which becomes their chosen weapon on the Skills &amp; Proficiencies tab (proficiencies of another weapon type are marked), and use
+  "Display" on the Combat tab when a fight starts; Mystics "Meditate" on the Character tab (the boost starts when
   the meditation ends). Pugilists and Barbarians are handled in your GM's reaction rolls and in unarmed attacks.</p>
   <h3>Multi-classing</h3>
   <p>If your GM allows multi-class characters, a dwarf, elf, gnome, halfling or half-elf can have two or three classes in
   the combinations the race allows. Drag the first class, then drag the second onto the sheet and choose "Multi-class"
   (the dialog lists your race's combinations). Do this before play: all classes start at 1st level. Then roll 1st-level
-  hit points. The Race &amp; Class tab lists your classes with their levels and experience; experience you earn is divided
+  hit points. The Character tab lists your classes with their levels and experience; experience you earn is divided
   between them, and each class has its own Level Up button. You use the best THAC0 and saving throws of your classes and
   all their abilities and spells. A kit must suit one of your classes; a bard combination (Complete Bard's Handbook) needs
-  one of the bard kits the Race &amp; Class tab lists. A multi-class priest keeps the priest's weapon limits, and casting
+  one of the bard kits the Character tab lists. A multi-class priest keeps the priest's weapon limits, and casting
   wizard spells in armour asks first (an elf in elven chain may cast freely).</p>
   <h3>Dual-classing</h3>
   <p>If your GM allows dual-class characters, a human with high enough scores can change class: drag the new class onto
   the sheet and choose "Dual-class". You start the new class at 1st level and keep your hit points; the old class's
   abilities and spells stay on the sheet. Until your new level is higher than the old one, using them (or ticking "Use the
   earlier class's number" in an attack or save dialog) costs you experience for that encounter and adventure, and Level Up
-  gives no hit points. The Race &amp; Class tab shows where you stand. A switch made by mistake can be undone by your GM.</p>
+  gives no hit points. The Character tab shows where you stand. A switch made by mistake can be undone by your GM.</p>
   {{/if}}
 
   {{#if is.proficiencies}}
   <h2>Proficiencies</h2>
   <ul>
-    <li>Drag weapon and nonweapon proficiencies from the "Proficiencies" compendium onto the sheet. The Proficiencies tab
+    <li>Drag weapon and nonweapon proficiencies from the "Proficiencies" compendium onto the sheet. The Skills &amp; Proficiencies tab
     shows the slots used and available; proficiencies outside your class's groups cost one slot more, and the count
     turns red if you spend too many.</li>
     <li><strong>Nonweapon checks</strong>: click the "≤ number" button to roll a d20 against it. To spend extra slots on a
@@ -114,9 +122,9 @@
     your GM allows.</li>
     <li><strong>Equipping</strong>: tick "Equipped" on a weapon to have it in hand, and on armour or a shield to wear
     it; your Armour Class and attacks follow. On the Combat tab, "Stow" puts a weapon away and "Drop" drops it
-    ("Pick up" on the Equipment tab).</li>
+    ("Pick up" on the Inventory tab).</li>
     <li><strong>Carried</strong>: untick "Carried" for things you leave behind (at the inn, on the horse); they stop
-    counting toward your encumbrance. The Equipment tab shows your load and movement.</li>
+    counting toward your encumbrance. The Inventory tab shows your load and movement.</li>
     <li><strong>Torches, lanterns and candles</strong>: "Light" on the item's row lights it and your token; it burns with
     game time (torch 3 turns, lantern 12 turns a flask of oil, candle a turn an inch) and the row shows the turns left.
     "Put out" keeps what is left. A lantern lit empty uses a flask of lamp oil.</li>
@@ -160,7 +168,7 @@
     <li><strong>Attacking</strong>: on the Combat tab, click a weapon's Attack button. The dialog offers range, two
     weapons, mounted combat and the situational modifiers; with automatic damage on, a hit rolls the damage too,
     otherwise click Damage.</li>
-    <li><strong>Unarmed</strong>: Punch, Wrestle and Overbear are in the weapon list (Combat and Equipment tabs).</li>
+    <li><strong>Unarmed</strong>: Punch, Wrestle and Overbear are in the weapon list (Combat and Inventory tabs).</li>
     <li><strong>Traps</strong> (thieves): target the trapped object or trap before Find/Remove Traps; the roll then offers
     the trap's difficulty and a silent attempt (-10%, a click on 01-10). A roll of 96-100 springs the trap.</li>
     <li><strong>Throw object</strong> (Combat tab): throw a flask of oil, holy water, acid, a rock or any other object;
@@ -186,8 +194,8 @@
     <li><strong>Initiative</strong>: when the GM starts combat, roll initiative from the combat tracker; you may be asked
     what you are doing this round (weapon, spell, item).</li>
     <li><strong>Saving throws and checks</strong>: saving throws on the Main tab; ability checks and tests on the
-    Abilities tab; jumping from the jump distances at the bottom of the sheet; thief skills and turning undead on the Class Abilities tab.</li>
-    <li><strong>Surprise</strong>: the Surprise button on the Main or Combat tab, when your GM asks for it.</li>
+    Main tab; jumping from the jump distances under Movement on the Main tab; thief skills on the Skills &amp; Proficiencies tab; turning undead on the Combat tab.</li>
+    <li><strong>Surprise</strong>: the Surprise button on the Combat tab, when your GM asks for it.</li>
     <li><strong>Hit points</strong>: Damage and Heal on the Main tab; "Bind wounds" after a fight; "Rest" for natural
     healing over days.</li>
   </ul>
@@ -197,7 +205,7 @@
   <h2>Mounts, pack animals and riding</h2>
   <ol>
     <li>Get the animal as an actor you own (your GM can give you one from "Hirelings &amp; Mounts").</li>
-    <li>Drag the animal's actor from the Actors sidebar onto your character sheet. It appears on the Equipment tab with
+    <li>Drag the animal's actor from the Actors sidebar onto your character sheet. It appears on the Inventory tab with
     its load and movement.</li>
     <li>Tick <strong>Riding</strong> next to the animal you ride (one at a time). Its load now includes you: your body
     weight plus everything you carry, so set your body weight first.</li>
@@ -207,12 +215,12 @@
     <li>Fighting from horseback: the attack dialog offers the mounted options (untrained mount, attacking a smaller
     creature, shooting from a moving mount).</li>
     <li>Pushing a mount beyond its normal pace is the "Push" button on the mount's sheet.</li>
-    <li><strong>Animal Master and Rider kits</strong>: your bonded companion or mount is on the Biography tab. Drag its
+    <li><strong>Animal Master and Rider kits</strong>: your bonded companion or mount is on the Character tab. Drag its
     actor onto your sheet and accept the bond; a Rider sees the mount's health and, when both tokens are on the map,
     how far away it is and in which direction. A mount too big or too small for your race, or a companion that does not
     suit your race or alignment, is marked for your GM to decide. If your mount dies through your negligence and you fail
-    the saving throw, you are feebleminded for some hours (shown on the Biography tab; casting asks first). Cavaliers and
-    Nobles must own a mount (the Race &amp; Class tab reminds you).</li>
+    the saving throw, you are feebleminded for some hours (shown on the Character tab; casting asks first). Cavaliers and
+    Nobles must own a mount (the Character tab reminds you).</li>
   </ol>
   {{/if}}
 
@@ -220,10 +228,10 @@
   <h2>Experience and advancing</h2>
   <ul>
     <li>Your GM awards experience; they are in the header (the + adds an award); hover over the field to see the amount needed for the next level.</li>
-    <li>When you have enough, click <strong>Level Up</strong> on the Main tab: it rolls the new hit points. Saving
+    <li>When you have enough, click <strong>Level Up</strong> beside your level in the sheet header (or on the Main tab in edit mode): it rolls the new hit points. Saving
     throws, THAC0, proficiency slots, spell slots and class abilities follow the new level.</li>
-    <li>Thieves and bards spend their new skill points on the Class Abilities tab.</li>
-    <li>Multi-class characters advance each class separately: use the class's Level Up button on the Race &amp; Class tab.</li>
+    <li>Thieves and bards spend their new skill points on the Skills &amp; Proficiencies tab.</li>
+    <li>Multi-class characters advance each class separately: use the class's Level Up button on the Character tab.</li>
     <li>Levels lost to energy drain (your GM applies them) are listed on the Main tab until you regain them with Level Up
     or a restoration spell (which ages you two years). Memorized spells beyond your new slots are forgotten: your GM
     chooses which with you.</li>
@@ -234,8 +242,8 @@
   {{#if is.more}}
   <h2>Henchmen, familiars and more</h2>
   <ul>
-    <li><strong>Henchmen</strong>: drag a character or NPC actor onto your sheet; it is listed on the Biography tab with
-    its morale and loyalty. (Animals dragged onto the sheet go to the Equipment tab instead.)</li>
+    <li><strong>Henchmen</strong>: drag a character or NPC actor onto your sheet; it is listed on the Character tab with
+    its morale and loyalty. (Animals dragged onto the sheet go to the Inventory tab instead.)</li>
     <li><strong>Travel</strong>: the movement line at the bottom of your sheet shows your daily march and force march
     in miles; the info icon lists your rate in difficult terrain for one round. After force marching, the days of
     penalty show there in red (your GM's travel card rolls the checks; resting removes them).</li>
@@ -244,18 +252,18 @@
     Constitution, which come back once you eat and drink again: carry enough and refill your waterskins. Your henchmen
     and animals eat from their own packs first, then from yours; carry "Animal feed (per day)" for mounts and pack animals
     where they cannot graze.</li>
-    <li><strong>Followers</strong>: the Biography tab records your stronghold; when your class reaches its level (and the
+    <li><strong>Followers</strong>: the Character tab records your stronghold; when your class reaches its level (and the
     stronghold or place of worship is marked built where needed), your GM rolls your followers once and they appear there. "Construction" there plans a castle (site, modules, workers,
     helpers) with its cost and building time; your GM starts the work and it progresses as game time passes.</li>
     <li><strong>Zakharan calendar</strong> (Al-Qadim games, if your GM turns it on): Configure Settings &gt; "Open the
     Zakharan calendar" shows today's date, the holidays of the year and the constellations fully visible this month
     (for astrologers), and today's season; dates in the travel log use it too.</li>
-    <li><strong>Familiars</strong> (wizards): "Find Familiar" on the Biography tab; your GM rolls the result.</li>
+    <li><strong>Familiars</strong> (wizards): "Find Familiar" on the Character tab; your GM rolls the result.</li>
     <li><strong>Sha'ir</strong> (Al-Qadim): your gen is summoned from the sheet and fetches your spells.</li>
-    <li><strong>Station</strong> (Al-Qadim, when your GM uses it): on the Biography tab "Roll station" rolls your kit's
+    <li><strong>Station</strong> (Al-Qadim, when your GM uses it): on the Character tab "Roll station" rolls your kit's
     initial station; your level raises it when higher. "Spend" pays 1,000 gp a point from your coins for +1 a month;
     "Station check" rolls d20 when you try to pass as someone of another station.</li>
-    <li><strong>Notes</strong>: write anything else on the Biography tab.</li>
+    <li><strong>Notes</strong>: write anything else on the Character tab.</li>
     <li>Ask your GM for the "AD&amp;D 2e GM manual", which lists the world's settings (death rule, initiative method,
     encumbrance and optional rules).</li>
   </ul>

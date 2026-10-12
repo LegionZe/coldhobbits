@@ -1,21 +1,30 @@
+{{!-- Combat tab (1.0.47): the numbers used every round, every combat action, backstab, and the weapons in hand. Armour is
+     worn on the Inventory tab; class skills are on the Skills & Proficiencies tab. --}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  <div class="ad2e-prof-summary">
+  <div class="ad2e-prof-summary ad2e-combat-summary">
     <span>{{localize "AD2E.Character.hp"}}: <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{system.hp.value}} / {{system.hp.max}}</strong>{{#if hpStatus.label}} ({{hpStatus.label}}){{/if}}</span>
+    {{#with weaponTab.ac as |ac|}}<span>{{localize "AD2E.Character.acTotal"}}: <strong>{{ac.front}}</strong></span>
+    <span data-tooltip="{{localize 'AD2E.Armor.RearHint'}}">{{localize "AD2E.Armor.Rear"}}: <strong>{{ac.rear}}</strong></span>
+    {{#if ac.missileDiffers}}<span>{{localize "AD2E.Armor.VsMissiles"}}: <strong>{{ac.missile}}</strong></span>{{/if}}{{/with}}
     <span>THAC0: <strong>{{system.thac0.value}}</strong></span>
-    <span>{{localize "AD2E.Move.Movement"}}: <strong>{{moveLabel}}</strong></span>
+    <span data-tooltip="{{movement.combatHint}}">{{localize "AD2E.Move.Combat"}}: <strong>{{movement.combat}} ft</strong></span>
     {{#if system.mods.heat}}<span class="ad2e-unmet" data-tooltip="{{localize 'AD2E.AQ.HeatSettingHint'}}">{{localize "AD2E.AQ.Heat"}}: <strong>{{system.mods.heat}}</strong></span>{{/if}}
-    {{#if editable}}
-    <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
-    <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>
-    <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
-    <button type="button" data-action="throwObject" data-tooltip="{{localize 'AD2E.Throw.Hint'}}"><i class="fa-solid fa-hand-fist"></i> {{localize "AD2E.Throw.Title"}}</button>
-    {{#if editable}}<button type="button" data-action="breakFreeNet" data-tooltip="{{localize 'AD2E.Net.BreakFreeHint'}}"><i class="fa-solid fa-border-all"></i> {{localize "AD2E.Net.BreakFree"}}</button>{{/if}}
-    {{#if weaponMasterDisplay}}<button type="button" data-action="display" data-tooltip="{{localize 'AD2E.KitFeature.DisplayHint'}}"><i class="fa-solid fa-khanda"></i> {{localize "AD2E.KitFeature.Display"}}</button>{{/if}}
-    {{/if}}
   </div>
+  {{#if editable}}
+  <fieldset class="ad2e-combat-actions">
+    <legend>{{localize "AD2E.Sheet.Actions"}}</legend>
+    <div class="ad2e-buttons">
+      <button type="button" data-action="rollAttack" data-missile="false"><i class="fa-solid fa-dice-d20"></i> {{localize "AD2E.Roll.Melee"}} ({{system.mods.meleeAttack}})</button>
+      <button type="button" data-action="rollAttack" data-missile="true"><i class="fa-solid fa-dice-d20"></i> {{localize "AD2E.Roll.Missile"}} ({{system.mods.missileAttack}})</button>
+      <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
+      <button type="button" data-action="throwObject" data-tooltip="{{localize 'AD2E.Throw.Hint'}}"><i class="fa-solid fa-hand-fist"></i> {{localize "AD2E.Throw.Title"}}</button>
+      <button type="button" data-action="breakFreeNet" data-tooltip="{{localize 'AD2E.Net.BreakFreeHint'}}"><i class="fa-solid fa-border-all"></i> {{localize "AD2E.Net.BreakFree"}}</button>
+      {{#if weaponMasterDisplay}}<button type="button" data-action="display" data-tooltip="{{localize 'AD2E.KitFeature.DisplayHint'}}"><i class="fa-solid fa-khanda"></i> {{localize "AD2E.KitFeature.Display"}}</button>{{/if}}
+      {{#if featureTab.turnLevel}}<button type="button" data-action="rollTurnUndead" data-tooltip="{{featureTab.turnLevel}}"><i class="fa-solid fa-cross"></i> {{localize "AD2E.Ability2.TurnUndead"}}</button>{{/if}}
+      {{#if featureTab.layOnHands}}<button type="button" data-action="layOnHands" {{#if featureTab.layOnHands.used}}disabled data-tooltip="{{localize 'AD2E.Ability2.LayOnHandsUsed'}}"{{else}}data-tooltip="{{featureTab.layOnHands.text}}"{{/if}}><i class="fa-solid fa-hand-holding-medical"></i> {{localize "AD2E.Ability2.LayOnHands"}}</button>{{/if}}
+    </div>
+    {{#if featureTab.backstab}}<p class="ad2e-note"><strong>{{localize "AD2E.Ability2.Backstab"}}</strong>: {{featureTab.backstab}}</p>{{/if}}
+  </fieldset>
+  {{/if}}
   {{> "ad2e.weapon-list" wt=weaponTab rows=weaponTab.combatRows note=weaponTab.combatNote}}
-  {{> "ad2e.armor-list" wt=weaponTab armor=weaponTab.combatArmor combat=true}}
-  {{#with combatFeatureTab as |ft|}}
-  {{#if ft.classItem}}{{> "ad2e.class-abilities" ft=ft}}{{/if}}
-  {{/with}}
 </section>

@@ -1,0 +1,890 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><style>body{font-family:sans-serif;font-size:13px;background:#ddd} .sheet{width:760px;background:#f4f0e8;padding:8px} fieldset{border:1px solid #999;margin:4px 0} input[type=number]{width:3.5rem} button{font-size:12px} .tab{display:block}</style><style>/* Selectors target only elements authored in templates/actor/*.hbs and templates/item/*.hbs (classes prefixed ad2e-)
+   and the sheet root classes set in CharacterSheet.DEFAULT_OPTIONS (.ad2e.character).
+   Foundry core selectors are intentionally not restyled. */
+.ad2e.character .ad2e-header { display: flex; flex-direction: column; gap: 0.25rem; padding-bottom: 0.25rem; }
+.ad2e-name { font-size: 1.5rem; width: 100%; }
+.ad2e-header-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-header-grid label { display: flex; flex-direction: column; }
+
+/* Tab bodies fill the window and scroll; inactive tabs are hidden. .window-content is the
+   core wrapper seen in the rendered sheet HTML; scoped to this sheet only. */
+.ad2e.character .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.ad2e.character .ad2e-tab { flex: 1; min-height: 0; overflow-y: auto; padding: 0.25rem 0.5rem; }
+.ad2e.character .ad2e-tab:not(.active) { display: none; }
+
+.ad2e-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 0.5rem; align-items: start; }
+.ad2e-ability { display: grid; grid-template-columns: 1fr 3.5rem 1.75rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-total { text-align: center; }
+.ad2e-adjusted { text-decoration: underline dotted; }
+.ad2e-save { display: grid; grid-template-columns: 1fr 2rem 2.5rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-save strong { text-align: center; }
+.ad2e-overridden { text-decoration: underline dotted; }
+.ad2e-field { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-pair { display: flex; align-items: center; gap: 0.25rem; }
+.ad2e-ability a, .ad2e-save a { cursor: pointer; }
+.ad2e.character input[type="number"] { width: 3.5rem; }
+.ad2e-buttons { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.4rem; }
+.ad2e-buttons button { flex: 1 1 auto; width: auto; }
+
+.ad2e-detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
+.ad2e-detail dl { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.5rem; margin: 0; }
+.ad2e-detail dt { font-weight: bold; }
+.ad2e-detail dd { margin: 0; text-align: right; }
+
+.ad2e-biography { width: 100%; height: 100%; min-height: 20rem; resize: vertical; }
+
+.ad2e-class-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+.ad2e-class h3, .ad2e-kit h3 { margin: 0 0 0.25rem; }
+.ad2e-facts { display: grid; grid-template-columns: auto 1fr; gap: 0.1rem 0.75rem; margin: 0; }
+.ad2e-facts dt { font-weight: bold; }
+.ad2e-facts dd { margin: 0; }
+.ad2e-requirements table { width: 100%; text-align: center; }
+.ad2e-requirements th:first-child { text-align: left; }
+.ad2e.character .ad2e-unmet { color: var(--color-level-error, #c33); }
+.ad2e-note { font-style: italic; }
+.ad2e-class-notes textarea { width: 100%; }
+
+.ad2e-header-item { display: flex; flex-direction: column; }
+.ad2e-header-item a { cursor: pointer; font-weight: bold; }
+.ad2e-placeholder { font-style: italic; opacity: 0.7; }
+.ad2e-header-pair { display: flex; gap: 0.5rem; }
+.ad2e-item-row { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e-item-row h3 { flex: 1; margin: 0; }
+.ad2e-item-row a { cursor: pointer; }
+
+.ad2e.item .ad2e-item-sheet { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem; overflow-y: auto; }
+.ad2e-item-header { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e-item-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-item-fields label { display: flex; flex-direction: column; }
+.ad2e-item-fields .ad2e-checkbox { flex-direction: row; align-items: center; gap: 0.25rem; }
+.ad2e-min-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-min-grid label { display: grid; grid-template-columns: 1fr 3.5rem; align-items: center; }
+.ad2e.item input[type="number"] { width: 3.5rem; }
+.ad2e-notes { display: flex; flex-direction: column; }
+.ad2e-save-bonus { font-size: 0.85em; white-space: nowrap; }
+.ad2e-race-table { width: 100%; text-align: center; }
+.ad2e-race-table th:first-child { text-align: left; }
+.ad2e.item .ad2e-race-table input[type="number"] { width: 3.5rem; }
+.ad2e-skill-table input[type="number"] { width: 3.5rem; }
+.ad2e-skill-table td, .ad2e-skill-table th { padding: 0.1rem 0.25rem; }
+.ad2e-prof-summary { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.25rem 0 0.5rem; }
+.ad2e-prof-row { display: grid; grid-template-columns: 24px 1fr auto auto 2.5rem auto; align-items: center; gap: 0.5rem; margin-bottom: 0.15rem; }
+.ad2e-prof-row-weapon { grid-template-columns: 24px minmax(8rem, 1fr) auto auto 2.5rem auto; }
+.ad2e-weapon-main { display: flex; flex-direction: column; min-width: 0; }
+.ad2e-weapon-meta { font-size: 0.8em; opacity: 0.8; }
+.ad2e-spec { display: flex; align-items: center; gap: 0.2rem; font-size: 0.85em; white-space: nowrap; }
+.ad2e-weapon-uses { display: flex; flex-direction: column; gap: 0.15rem; }
+.ad2e-weapon-use { display: flex; align-items: center; gap: 0.25rem; }
+.ad2e-weapon-use button { flex: 0 0 auto; width: auto; padding: 0 0.4rem; line-height: 1.6; }
+.ad2e-weapon-rate, .ad2e-weapon-pb { font-size: 0.85em; white-space: nowrap; }
+.ad2e-weapon-stats { display: grid; grid-template-columns: max-content 1fr; gap: 0.15rem 0.75rem; margin: 0.25rem 0; }
+.ad2e-weapon-stats dd { margin: 0; }
+.ad2e-check { display: flex; align-items: center; gap: 0.25rem; }
+.ad2e-weapon-row { grid-template-columns: 24px minmax(8rem, 1fr) auto auto auto auto; }
+.ad2e-ammo-row { grid-template-columns: 24px 1fr auto auto; }
+.ad2e-armor-row { grid-template-columns: 24px 1fr auto auto; }
+.ad2e-weapon-status { font-size: 0.85em; white-space: nowrap; }
+.ad2e-qty { display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
+.ad2e-prof-name { cursor: pointer; }
+.ad2e-prof-check { white-space: nowrap; opacity: 0.85; }
+.ad2e-prof-cost { text-align: center; }
+.ad2e-prof-roll { width: auto; min-width: 3.5rem; text-align: center; }
+
+/* Sheet footer: movement paces (always visible below the tabs). */
+.ad2e.character .ad2e-footer { display: flex; flex-wrap: wrap; gap: 0.25rem 0.9rem; padding: 0.35rem 0.5rem;
+  border-top: 1px solid var(--color-border, currentColor); font-size: 0.85em; flex: 0 0 auto; }
+.ad2e-move-item { white-space: nowrap; }
+.ad2e-move-item a { text-decoration: underline dotted; }
+.ad2e-coin-row { grid-template-columns: 24px 1fr 6rem auto auto; }
+.ad2e-coin-row input { width: 6rem; }
+.ad2e-coin-value { white-space: nowrap; font-size: 0.85em; }
+.ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
+.ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }
+/* Containers (templates/actor/parts/container-list.hbs): contents indented under their container. */
+.ad2e-container { margin-bottom: 0.3rem; }
+.ad2e-container-row { grid-template-columns: 24px 1fr; }
+.ad2e-content-row { grid-template-columns: 20px 1fr auto auto; margin-left: 1.5rem; font-size: 0.9em; }
+.ad2e-content-empty { margin-left: 1.5rem; }
+.ad2e-prof-row.draggable { cursor: grab; }
+
+/* Monster / NPC sheet: the same window/tab layout as the character sheet (from its rendered HTML), then the
+   elements authored in templates/actor/monster-*.hbs. */
+.ad2e.monster .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.ad2e.monster .ad2e-tab { flex: 1; min-height: 0; overflow-y: auto; padding: 0.25rem 0.5rem; }
+.ad2e.monster .ad2e-tab:not(.active) { display: none; }
+.ad2e-monster-header { display: grid; grid-template-columns: 96px 1fr; gap: 0.25rem 0.75rem; padding-bottom: 0.4rem; }
+.ad2e-monster-title { display: flex; flex-direction: column; gap: 0.3rem; min-width: 0; }
+.ad2e-monster-line { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 0.75rem; }
+.ad2e-monster-line input[type="number"] { width: 3.5rem; }
+.ad2e-monster-line button { flex: 0 0 auto; width: auto; }
+.ad2e-source-link { white-space: nowrap; text-decoration: underline; }
+.ad2e-monster-summary { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.25rem; margin: 0; }
+.ad2e-summary-cell { border: 1px solid currentColor; border-radius: 4px; padding: 0.15rem 0.35rem; opacity: 0.95; min-width: 0; }
+.ad2e-summary-cell dt { font-size: 0.75em; text-transform: uppercase; opacity: 0.8; }
+.ad2e-summary-cell dd { margin: 0; font-weight: bold; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ad2e-monster-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 0.5rem; align-items: start; }
+.ad2e-form-grid { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.25rem 0.6rem; align-items: center; }
+.ad2e-form-grid input, .ad2e-form-grid select { width: 100%; }
+.ad2e-monster-saves { width: 100%; border-collapse: collapse; margin-top: 0.3rem; }
+.ad2e-monster-saves td { padding: 0.15rem 0.25rem; }
+.ad2e-num { text-align: center; font-weight: bold; }
+.ad2e-monster-attacks { width: 100%; border-collapse: collapse; margin: 0.25rem 0; }
+.ad2e-monster-attacks th { text-align: left; font-size: 0.85em; }
+.ad2e-monster-attacks td { padding: 0.15rem 0.2rem; }
+.ad2e-monster-attacks td:nth-child(3) input { width: 3.5rem; }
+.ad2e-monster-buttons { white-space: nowrap; }
+.ad2e-monster-buttons button { width: auto; }
+.ad2e-monster-text { width: 100%; resize: vertical; }
+
+/* Monster importer */
+.ad2e.monster-importer .ad2e-importer { display: flex; flex-direction: column; gap: 0.5rem; height: 100%; }
+.ad2e-importer-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+.ad2e-importer-controls select { max-width: 22rem; }
+/* The list scrolls inside its own box (bounded by the viewport), so the controls above it stay reachable. */
+.ad2e-importer-list { overflow-y: auto; columns: 2; min-height: 10rem; max-height: 55vh; border: 1px solid currentColor; border-radius: 4px; padding: 0.25rem 0.4rem; }
+.ad2e-importer-actions { justify-content: space-between; }
+.ad2e-importer-entry { display: block; break-inside: avoid; }
+
+/* Spells tab (templates/actor/character-spells.hbs) */
+.ad2e-spell-row { grid-template-columns: 24px 1fr auto auto auto; }
+.ad2e-spell-row button { width: auto; }
+.ad2e-spell-unusable { opacity: 0.6; }
+.ad2e-spell-card dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.1rem 0.5rem; margin: 0.25rem 0; }
+.ad2e-spell-card dt { font-weight: bold; }
+.ad2e-spell-card dd { margin: 0; }
+.ad2e-kit-mods { margin: 0.25rem 0; padding-left: 1.25rem; }
+.ad2e-kit-status { font-size: 0.8em; padding: 0 0.3em; border: 1px solid currentColor; border-radius: 3px; opacity: 0.75; }
+.ad2e-kit-mod-inactive, .ad2e-kit-mod-armor { opacity: 0.6; }
+.ad2e-item-title { display: flex; align-items: center; gap: 0.35rem; min-width: 0; }
+.ad2e-item-link { opacity: 0.6; font-size: 0.85em; }
+.ad2e-item-link:hover { opacity: 1; }
+.ad2e-source-link { white-space: nowrap; }
+.ad2e.character .ad2e-character-header { flex-direction: row; align-items: flex-start; gap: 0.75rem; }
+.ad2e-header-main { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.ad2e-portrait { width: 96px; height: 96px; flex: 0 0 96px; object-fit: cover; border: 1px solid currentColor; border-radius: 4px; }
+.ad2e-portrait[data-action="editImage"] { cursor: pointer; }
+/* Long roll dialogs (surprise): the option list scrolls inside its own box; checkboxes in two columns. */
+.ad2e-dialog-scroll { max-height: min(55vh, calc(100vh - 20rem)); min-height: 8rem; overflow-y: auto; padding-right: 0.25rem; }
+.ad2e-check-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.15rem 0.75rem; }
+.ad2e-check-grid label { display: flex; align-items: center; gap: 0.3rem; }
+/* Damage chat messages: apply buttons (module/health.mjs damageButtons; own markup). */
+.ad2e-damage-buttons { display: flex; flex-wrap: wrap; gap: 0.25rem; align-items: center; margin-top: 0.35rem; }
+.ad2e-damage-buttons .ad2e-damage-amount { flex: 1 0 100%; font-weight: bold; }
+.ad2e-damage-buttons button { flex: 1 1 auto; width: auto; font-size: 0.85em; line-height: 1.6; }
+
+/* Colour-coded sidebar tabs (module/sidebar-colours.mjs; markup diagnosed on core 14.368). Okabe-Ito colours. */
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button.ui-control[data-action="tab"][data-group="primary"]:is([data-tab="combat"], [data-tab="actors"], [data-tab="scenes"], [data-tab="items"], [data-tab="journal"], [data-tab="compendium"]) {
+  color: var(--ad2e-tab-colour);
+}
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button.ui-control[data-action="tab"][data-group="primary"]:is([data-tab="combat"], [data-tab="actors"], [data-tab="scenes"], [data-tab="items"], [data-tab="journal"], [data-tab="compendium"]):is(.active, [aria-pressed="true"]) {
+  border-color: var(--ad2e-tab-colour);
+  box-shadow: inset 0 -3px 0 var(--ad2e-tab-colour);
+}
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="combat"] { --ad2e-tab-colour: #D55E00; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="actors"] { --ad2e-tab-colour: #E69F00; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="scenes"] { --ad2e-tab-colour: #009E73; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="items"] { --ad2e-tab-colour: #56B4E9; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="journal"] { --ad2e-tab-colour: #F0E442; }
+body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="compendium"] { --ad2e-tab-colour: #CC79A7; }
+
+/* GM creators (module/apps/creators.mjs): the body scrolls, the Create row stays at the bottom (as the sheets' tabs above). */
+.ad2e.creator .window-content { display: flex; flex-direction: column; overflow: hidden; }
+.ad2e-creator { display: flex; flex-direction: column; flex: 1; min-height: 0; gap: 0.5rem; }
+.ad2e-creator-body { flex: 1; min-height: 0; overflow-y: auto; padding-right: 0.5rem; }
+/* GM manual (module/apps/manual.mjs): the system's own markup only. */
+.ad2e.ad2e-manual .ad2e-manual-layout { display: flex; gap: 0.75rem; height: 100%; }
+.ad2e-manual-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 0 0 11rem; }
+.ad2e-manual-nav button { text-align: left; justify-content: flex-start; }
+.ad2e-manual-nav button.active { font-weight: bold; text-decoration: underline; }
+.ad2e-manual-body { flex: 1; overflow-y: auto; padding-right: 0.5rem; }
+.ad2e-manual-body h2 { margin-top: 0; }
+.ad2e-manual-body li { margin-bottom: 0.3rem; }
+.ad2e-manual-tools > div { margin-bottom: 0.6rem; }
+.ad2e-manual-tools > div > p { margin: 0.2rem 0 0 0.5rem; }
+.ad2e-manual-table { width: 100%; border-collapse: collapse; }
+.ad2e-manual-table td, .ad2e-manual-table th { vertical-align: top; padding: 0.2rem 0.4rem; text-align: left; }
+.ad2e-manual-columns { columns: 2; }
+.ad2e-manual-button { width: 100%; margin-top: 0.5rem; }
+
+/* Lighter tick boxes on the dark theme (module/light-checkboxes.mjs; core 14.369: the box is the input's ::before glyph
+   coloured by --checkbox-background-color, var(--color-cool-4) under body.theme-dark). Windows set to the light theme
+   (.theme-light) keep core's colours. */
+body.ad2e-light-checkboxes.theme-dark :is(.application.ad2e, .application.ad2e-dialog):not(.theme-light) input[type="checkbox"],
+body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).theme-dark input[type="checkbox"] {
+  --checkbox-background-color: var(--color-light-3, #e8e0d3);
+}
+
+/* Character sheet layout (1.0.47, owner's request): play-first tabs, edit-mode toggle, GM section. These rules style only
+   this system's own markup (templates/actor/character-*.hbs and parts/), no core selectors. */
+.ad2e .ad2e-columns.ad2e-columns-2 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.ad2e .ad2e-name-row { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e .ad2e-name-row .ad2e-name { flex: 1; min-width: 0; }
+.ad2e .ad2e-edit-toggle { flex: 0 0 auto; width: auto; white-space: nowrap; }
+.ad2e .ad2e-edit-toggle.active { font-weight: bold; }
+.ad2e .ad2e-ability .ad2e-ability-tests { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.ad2e .ad2e-ability .ad2e-ability-tests:empty { display: none; }
+.ad2e .ad2e-ability-tests button { width: auto; flex: 0 0 auto; line-height: 1.4; padding: 0 0.4rem; font-size: 0.85em; }
+.ad2e a.ad2e-roll { cursor: pointer; white-space: nowrap; }
+.ad2e a.ad2e-roll i { opacity: 0.7; margin-right: 0.15rem; }
+.ad2e a.ad2e-roll:hover i { opacity: 1; }
+.ad2e .ad2e-combat-summary { flex-wrap: wrap; }
+.ad2e .ad2e-level-ready { width: auto; margin-left: 0.4rem; }
+.ad2e .ad2e-gm-section { border-style: dashed; }
+.ad2e .ad2e-gm-section .ad2e-header-label { min-width: 7rem; }
+.ad2e .ad2e-move-details summary { cursor: pointer; }
+</style></head><body><div class="application sheet ad2e character"><header class="ad2e-header ad2e-character-header">
+  <img class="ad2e-portrait" src="x.png" alt="Test" data-tooltip="Test" data-action="editImage" data-edit="img">
+  <div class="ad2e-header-main">
+  <div class="ad2e-name-row">
+    <input class="ad2e-name" type="text" name="name" value="Test" placeholder="Name" >
+    <button type="button" class="ad2e-edit-toggle " data-action="toggleEditMode" aria-pressed="false"
+      data-tooltip="Play mode: values and roll buttons only. Click to edit the character&#x27;s setup (scores, overrides, level, details) and delete items.">
+      <i class="fa-solid fa-lock"></i> Edit</button>
+  </div>
+  <div class="ad2e-header-grid">
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">Race</span>
+      <a data-action="openItem" data-item-id="B6AAsnyPwPUVTFOo">Halfling</a>
+      
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">Class</span>
+      <a data-action="openItem" data-item-id="MEkv1KM33J2kaHYx">Thief</a>
+      
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">Class Kit</span>
+      <span class="ad2e-placeholder">Drag a Class Kit item here</span>
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">Alignment</span>
+      <span>Lawful Neutral</span>
+    </div>
+    <div class="ad2e-header-item">
+      <span class="ad2e-header-label">Level · XP</span>
+      <span><strong>1</strong> · 0 / 1250
+        <a class="ad2e-item-link" data-action="awardXp" data-tooltip="Add experience"><i class="fa-solid fa-plus"></i></a>
+        </span>
+    </div>
+  </div>
+  </div>
+</header>
+<h2 style="background:#333;color:#fff;margin:8px 0;padding:2px 6px">main</h2><div class="tab-wrap"><section class="tab ad2e-tab active active" data-group="primary" data-tab="main">
+  <div class="ad2e-columns ad2e-columns-2">
+    <fieldset class="ad2e-abilities">
+      <legend>Abilities</legend>
+      <p class="ad2e-note">Click an ability for a check; the buttons beside it roll its tests. Hover the score for its table figures.</p>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="str" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Strength</a>
+<span></span>
+        <strong class="ad2e-total ad2e-adjusted" data-tooltip="Hit Probability: 0
+Dmg. Adjust: 0
+Weight Allowance (lb.): 55
+Max. Press (lb.): 170
+Open Doors (locked): 8
+Bend Bars/Lift Gates: 7%">14</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"><button type="button" data-action="rollTest" data-test="openDoors" >Open Doors</button><button type="button" data-action="rollTest" data-test="openLocked" disabled>Open Locked Doors</button><button type="button" data-action="rollTest" data-test="bendBars" >Bend Bars</button></span>
+      </div>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="dex" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Dexterity</a>
+<span></span>
+        <strong class="ad2e-total ad2e-adjusted" data-tooltip="Reaction Adj.: +2
+Missile Attack Adj.: +2
+Defensive Adj.: -4">18</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"></span>
+      </div>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="con" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Constitution</a>
+<span></span>
+        <strong class="ad2e-total " data-tooltip="HP Adj. (warrior): +1
+System Shock: 90%
+Resurrection Survival: 94%
+Poison Save: 0
+Regeneration (HP/turns): —">15</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"><button type="button" data-action="rollTest" data-test="systemShock" >System Shock</button><button type="button" data-action="rollTest" data-test="resurrection" >Resurrection</button></span>
+      </div>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="int" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Intelligence</a>
+<span></span>
+        <strong class="ad2e-total " data-tooltip="Languages: 4
+Max. Spell Level: 7
+Chance to Learn Spell: 65%
+Max. Spells/Level: 11
+Illusion Immunity (level): —">15</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"><button type="button" data-action="rollTest" data-test="learnSpell" >Learn Spell</button></span>
+      </div>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="wis" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Wisdom</a>
+<span></span>
+        <strong class="ad2e-total " data-tooltip="Magic Defense Adj.: +1
+Bonus Spells (level): 2
+Spell Failure: 0%
+Spell Immunity: —">15</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"><button type="button" data-action="rollTest" data-test="spellFailure" >Spell Failure</button></span>
+      </div>
+      <div class="ad2e-ability">
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="cha" data-tooltip="Check"><i class="fa-solid fa-dice-d20"></i> Charisma</a>
+<span></span>
+        <strong class="ad2e-total " data-tooltip="Max. Henchmen: 7
+Loyalty Base: +3
+Reaction Adj.: +3">15</strong>
+        <span></span>
+        <span class="ad2e-ability-tests"></span>
+      </div>
+    </fieldset>
+
+    <fieldset class="ad2e-saves">
+      <legend>Saving Throws</legend>
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="par"><i class="fa-solid fa-dice-d20"></i> Paralyzation, Poison, Death Magic</a>
+        <strong class="">13</strong>
+        <span class="ad2e-save-bonus"><span data-tooltip="Racial CON bonus vs. poison only (Table 9)">+4&#x2620;</span></span>
+        <span></span>
+      </div>
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="rsw"><i class="fa-solid fa-dice-d20"></i> Rod, Staff, Wand</a>
+        <strong class="">14</strong>
+        <span class="ad2e-save-bonus"><span data-tooltip="Bonus added to the roll: racial Constitution bonus (PHB Table 9, vs. rod/staff/wand and spell) and paladin +2 (all saves)">+4</span></span>
+        <span></span>
+      </div>
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="pet"><i class="fa-solid fa-dice-d20"></i> Petrification, Polymorph</a>
+        <strong class="">12</strong>
+        <span class="ad2e-save-bonus"></span>
+        <span></span>
+      </div>
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="br"><i class="fa-solid fa-dice-d20"></i> Breath Weapon</a>
+        <strong class="">16</strong>
+        <span class="ad2e-save-bonus"></span>
+        <span></span>
+      </div>
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="sp"><i class="fa-solid fa-dice-d20"></i> Spell</a>
+        <strong class="">15</strong>
+        <span class="ad2e-save-bonus"><span data-tooltip="Bonus added to the roll: racial Constitution bonus (PHB Table 9, vs. rod/staff/wand and spell) and paladin +2 (all saves)">+4</span></span>
+        <span></span>
+      </div>
+      <div class="ad2e-save ad2e-mr-field" data-tooltip="Percentage chance that a spell cast at this creature has no effect on it (d100 at or below). Rolled automatically when a targeting caster casts a spell; tick Lowered when the creature lowers it at will.">
+        <span>Magic resistance</span>
+        <strong>—</strong>
+        <span></span>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="ad2e-columns ad2e-columns-2">
+    <fieldset class="ad2e-combat">
+      <legend>Health</legend>
+      <div class="ad2e-field"><span>HP</span>
+        <span class="ad2e-pair"><input type="number" name="system.hp.value" value="8" > / <strong>8</strong></span></div>
+      <div class="ad2e-field"><span>Hit Dice</span><strong>1d6</strong></div>
+      <div class="ad2e-field ad2e-hp-status"><span data-tooltip="Death rule: dead at 0 hit points">Condition</span>
+        <strong class="">Alive</strong></div>
+      
+      <div class="ad2e-buttons">
+        <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> Damage</button>
+        <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> Heal</button>
+        <button type="button" data-action="hpRest" data-tooltip="Natural healing (PHB): 1 hit point per day of rest; complete bed rest 3 per day, plus the Constitution bonus for each full week. Needs food, water and sleep."><i class="fa-solid fa-bed"></i> Rest</button>
+        
+        
+        
+      </div>
+      
+      
+    </fieldset>
+
+    <fieldset class="ad2e-combat">
+      <legend>Defence and attack</legend>
+      <div class="ad2e-field"><span>AC</span><strong data-tooltip="Rear 10 · vs. missiles 6">6</strong></div>
+      
+      <div class="ad2e-field"><span>THAC0</span><strong>20</strong></div>
+      
+      
+      <div class="ad2e-field"><span>Initiative mod</span><strong>0</strong></div>
+      <div class="ad2e-field"><span>Damage adj</span><strong>0</strong></div>
+      <div class="ad2e-field"><span>CON HP adj</span><strong>1/HD</strong></div>
+    </fieldset>
+  </div>
+
+  <fieldset class="ad2e-movement">
+    <legend>Movement</legend>
+    <div class="ad2e-prof-summary">
+      <span>Movement: <strong class="" data-tooltip="Movement rate: tens of feet per round in dungeons, tens of yards per round outdoors (Movement (PHB))">6 (Unencumbered)</strong></span>
+    </div>
+    <details class="ad2e-move-details">
+      <summary>Movement rates and jumps</summary>
+      <div class="ad2e-prof-summary">
+        <span data-tooltip="Cautious (dungeon) pace: movement rate in tens of feet per round (Movement (PHB)). Thief Move Silently is a separate skill."><strong>Sneak</strong> 60 ft</span>
+        <span data-tooltip="Walking pace: movement rate in tens of yards per round; at this pace in a dungeon, -1 to surprise rolls, +1 to others&#x27; chance of being surprised, and traps are not noticed (Movement (PHB))"><strong>Walk</strong> 60 yd</span>
+        <span data-tooltip="Combat round: movement x 10 ft. Close to melee and attack: 30 ft; withdraw: 20 ft; charge: 90 ft (+2 to hit, AC +1, no Dexterity bonus) (Movement in Combat (PHB))"><strong>Combat</strong> 60 ft</span>
+        <span data-tooltip="Double movement in yards; 15 rounds (Constitution), then a Constitution check each round (Movement (PHB))"><strong>Jog</strong> 120 yd</span>
+        <span data-tooltip="x3 with a Strength check, x4 with a Strength check at -4; Constitution check each round at -1 (x3) / -2 (x4) per round run, cumulative (Movement (PHB))"><strong>Run</strong> 180 / 240 yd</span>
+        <span data-tooltip="x5 with a Strength check at -8; Constitution check each round at -3 per round, cumulative (Movement (PHB))"><strong>Sprint</strong> 300 yd</span>
+        <span data-tooltip="Darkness: 4* · Heavy brush or forest: 2 · Ice: 4* · Rugged ground: 3 · Knee-deep sand or snow: 4 · Waist-deep water or snow: 3 · Shoulder-deep water or snow: 2"><strong>Terrain</strong> <i class="fa-solid fa-circle-info"></i></span>
+      </div>
+      <div class="ad2e-prof-summary">
+        <span data-tooltip="The PHB gives jump distances only for the Jumping proficiency"><strong>Jump</strong>
+—</span>
+      </div>
+    </details>
+  </fieldset>
+</section>
+</div><h2 style="background:#333;color:#fff;margin:8px 0;padding:2px 6px">combat</h2><div class="tab-wrap"><section class="tab ad2e-tab active " data-group="primary" data-tab="combat">
+  <div class="ad2e-prof-summary ad2e-combat-summary">
+    <span>HP: <strong class="">8 / 8</strong></span>
+    <span>AC: <strong>6</strong></span>
+    <span data-tooltip="Attacks from behind: no shield, no beneficial Dexterity adjustment">Rear: <strong>10</strong></span>
+    
+    <span>THAC0: <strong>20</strong></span>
+    <span data-tooltip="Combat round: movement x 10 ft. Close to melee and attack: 30 ft; withdraw: 20 ft; charge: 90 ft (+2 to hit, AC +1, no Dexterity bonus) (Movement in Combat (PHB))">Combat: <strong>60 ft</strong></span>
+    
+  </div>
+  <fieldset class="ad2e-combat-actions">
+    <legend>Actions</legend>
+    <div class="ad2e-buttons">
+      <button type="button" data-action="rollAttack" data-missile="false"><i class="fa-solid fa-dice-d20"></i> Melee (0)</button>
+      <button type="button" data-action="rollAttack" data-missile="true"><i class="fa-solid fa-dice-d20"></i> Missile (2)</button>
+      <button type="button" data-action="rollSurprise" data-tooltip="1d10: surprised on 1-3 (The Surprise Roll, PHB); a plus makes surprise less likely. Situations: DMG Table 57."><i class="fa-solid fa-eye"></i> Surprise</button>
+      <button type="button" data-action="throwObject" data-tooltip="Throw a flask of oil, holy water, acid, a rock or another object (grenade-like missile): attack roll, then damage and splash on a hit or where it lands on a miss."><i class="fa-solid fa-hand-fist"></i> Throw object</button>
+      <button type="button" data-action="breakFreeNet" data-tooltip="Netted: break free with a Strength check (roll at or under). Tick the box if the netter looped the rope round."><i class="fa-solid fa-border-all"></i> Break free (net)</button>
+      
+      
+      
+    </div>
+    <p class="ad2e-note"><strong>Backstab</strong>: +4 to hit from behind an unaware, roughly humanoid victim; damage ×2 (Table 30), first attack only.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Weapons in hand (THAC0 20)</legend>
+  <p class="ad2e-placeholder">No weapons.</p>
+    <div class="ad2e-prof-row ad2e-weapon-row">
+      <i class="fa-solid fa-hand-fist fa-fw" aria-hidden="true"></i>
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title">Unarmed</span>
+        <span class="ad2e-weapon-meta">Punching, wrestling, overbearing (Attacking Without Killing, PHB) · Two weapons: main 0, second -2 (one extra attack per round, shown in brackets after the attack rate)</span>
+      </div>
+      <div class="ad2e-weapon-uses">
+        <span class="ad2e-weapon-use">
+          <button type="button" data-action="rollUnarmed" data-form="punch">Punch 0</button>
+          <button type="button" data-action="rollUnarmed" data-form="wrestle">Wrestle</button>
+          <button type="button" data-action="rollUnarmed" data-form="overbear">Overbear</button>
+        </span>
+      </div>
+    </div>
+  </fieldset>
+</section>
+</div><h2 style="background:#333;color:#fff;margin:8px 0;padding:2px 6px">weapons</h2><div class="tab-wrap"><section class="tab ad2e-tab active " data-group="primary" data-tab="weapons">
+  <p class="ad2e-note">Weight of weapons, ammunition and armour counts toward encumbrance. Drag armour from the &quot;Armour (PHB)&quot; compendium and weapons and ammunition from the &quot;Weapons (PHB)&quot; compendium onto this sheet. A weapon uses the weapon proficiency with the same identifier; specialization is set on the proficiency. Firing a launcher uses one piece of the chosen ammunition; throwing a weapon uses one from its quantity.</p>
+  <fieldset class="ad2e-prof-list">
+    <legend>Encumbrance &amp; Movement</legend>
+    <div class="ad2e-prof-summary">
+      <span class="">Load: <strong>5 / 170 lb</strong></span>
+      <span>Category: <strong>Unencumbered</strong></span>
+      <span>Movement: <strong>6</strong> / 6 (60 ft · 60 yd per round)</span>
+      
+    </div>
+    <div class="ad2e-prof-summary">
+      <span>Items: 0 lb · Coins: 0 lb · Clothing: 5 lb</span>
+      
+    </div>
+    <p class="ad2e-note">Unencumbered ≤ 55 · Light ≤ 85 · Moderate ≤ 115 · Heavy ≤ 145 · Severe ≤ 170</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Weapons</legend>
+  <p class="ad2e-placeholder">No weapons.</p>
+    
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Armour</legend>
+    <div class="ad2e-prof-summary">
+      <span>AC: <strong>6</strong></span>
+      <span data-tooltip="Attacks from behind: no shield, no beneficial Dexterity adjustment">Rear: <strong>10</strong></span>
+      
+      <span>No armour (base AC)</span>
+      
+    </div>
+  <p class="ad2e-placeholder">No armour yet.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Ammunition</legend>
+<p class="ad2e-placeholder">No ammunition yet.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-magic">
+    <legend>Magical items</legend>
+<p class="ad2e-placeholder">No magical items. Drag magical items here.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-gear">
+    <legend>Gear</legend>
+<p class="ad2e-placeholder">No gear yet. Drag items from the &quot;Equipment (PHB)&quot; compendium.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-containers">
+    <legend>Containers</legend>
+    <p class="ad2e-note">Drag an item row onto a container to put it in, or choose the container on the item&#x27;s sheet. Contents count toward the load while the container is carried (PHB Table 50 gives each container&#x27;s capacity).</p>
+  <p class="ad2e-placeholder">No containers. Backpacks, sacks, pouches, baskets, chests and saddle bags (PHB Table 50) hold gear.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-coins">
+    <legend>Coins</legend>
+<p class="ad2e-placeholder">No coins yet. Drag coins from the &quot;Equipment (PHB)&quot; compendium; a dropped stack joins an owned stack of the same coin.</p>
+    <p class="ad2e-note" data-tooltip="Exchange (PHB Table 42): 1 pp &#x3D; 5 gp, 1 gp &#x3D; 2 ep &#x3D; 10 sp &#x3D; 100 cp. Coins of any metal weigh 50 to the pound (DMG) and count toward encumbrance.">Total value: 0 gp · 0 coins = 0 lb</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-treasure">
+    <legend>AD2E.Treasure.Treasure</legend>
+<p class="ad2e-placeholder">AD2E.Treasure.NoneYet</p>
+    <p class="ad2e-note">Coins, gems and art: {gp} gp.: 0 gp · AD2E.Treasure.Wealth: 0 gp</p>
+  </fieldset>
+</section>
+</div><h2 style="background:#333;color:#fff;margin:8px 0;padding:2px 6px">features</h2><div class="tab-wrap"><section class="tab ad2e-tab active " data-group="primary" data-tab="features">
+  
+  
+  
+  <fieldset class="ad2e-skills">
+    <legend>Thief skills</legend>
+    <div class="ad2e-prof-summary">
+      <span class="" data-tooltip="Thief: 60 at 1st level, +30 per level, no more than 30 on one skill at 1st level and 15 per level after. Bard: 20 at 1st level, +15 per level (PHB).">Discretionary points: 0 / 60</span>
+      <span>At most 30 points on one skill at this level</span>
+    </div>
+    
+    <table class="ad2e-race-table ad2e-skill-table">
+      <thead><tr><th></th><th>Base</th><th>Race</th><th>Dex</th>
+        <th>Armour</th><th>Kit</th>
+        <th>Points</th><th>Total</th><th></th></tr></thead>
+      <tbody>
+        <tr class="">
+          <th>Pick Pockets</th><td>15%</td><td>+5</td><td>+10</td>
+          <td>+5</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>35%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="pp" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Open Locks</th><td>10%</td><td>+5</td><td>+15</td>
+          <td>—</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>30%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="ol" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Find/Remove Traps</th><td>5%</td><td>+5</td><td>+5</td>
+          <td>—</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>15%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="rt" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Move Silently</th><td>10%</td><td>+10</td><td>+10</td>
+          <td>+10</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>40%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="ms" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Hide in Shadows</th><td>5%</td><td>+15</td><td>+10</td>
+          <td>+5</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>35%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="hs" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Detect Noise</th><td>15%</td><td>+5</td><td>—</td>
+          <td>—</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>20%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="dn" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="">
+          <th>Climb Walls</th><td>60%</td><td>-15</td><td>—</td>
+          <td>+10</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>55%</strong></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="cw" ><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+        <tr class="ad2e-unmet">
+          <th>Read Languages</th><td>0%</td><td>-5</td><td>—</td>
+          <td>—</td><td>—</td>
+          <td><span class="">0</span></td>
+          <td><strong>-5%</strong> <span data-tooltip="Below 1% after adjustments: spend points to raise it to at least 1% before it can be used (Thief, PHB)">!</span></td>
+          <td><button type="button" data-action="rollClassSkill" data-skill="rl" disabled><i class="fa-solid fa-dice-d20"></i> Roll</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="ad2e-note">No thief skill above 95% including all adjustments (Thief (PHB))</p>
+    <p class="ad2e-note">Removing a trap: a roll of 96-100 sets it off (Thief Skill Explanations (PHB)).</p>
+    
+  </fieldset>
+  
+  
+  <fieldset class="ad2e-features">
+    <legend>Class features</legend>
+    <dl class="ad2e-facts">
+      <dt class="">Thief skills <span class="ad2e-note">(from level 1)</span></dt>
+      <dd class="">Tables 26-29 plus discretionary points: see the skills table.</dd>
+      <dt class="">Backstab <span class="ad2e-note">(from level 1)</span></dt>
+      <dd class="">+4 to hit, damage multiplied by Table 30; first attack only.</dd>
+      <dt class="ad2e-placeholder">Followers <span class="ad2e-note">(from level 10)</span></dt>
+      <dd class="ad2e-placeholder">At 10th level attracts 4d6 followers (Table 31).</dd>
+      <dt class="ad2e-placeholder">Use scrolls <span class="ad2e-note">(from level 10)</span></dt>
+      <dd class="ad2e-placeholder">From 10th level; 25% chance to read the scroll wrongly (reversed effect).</dd>
+    </dl>
+    <p><a href="https://adnd2e.fandom.com/wiki/Thief_(PHB)" target="_blank" rel="noopener">Thief <i class="fa-solid fa-arrow-up-right-from-square"></i></a></p>
+  </fieldset>
+  
+    <p class="ad2e-note">Drag proficiencies from the &quot;Proficiencies&quot; compendium onto this sheet. Adding a Class Kit adds its bonus proficiencies (free) and required proficiencies (use slots); removing the kit removes its bonus proficiencies.</p>
+    <div class="ad2e-prof-summary">
+      <span class="">Weapon slots used / available: <strong>0 / 2</strong></span>
+      <span class="">Nonweapon slots used / available: <strong>0 / 7</strong></span>
+      <span>Non-proficiency penalty: <strong>-3</strong></span>
+      <span>Groups: Rogue, General</span>
+    </div>
+    
+    
+    
+  
+    <fieldset class="ad2e-prof-list">
+      <legend>Weapon Proficiencies</legend>
+      
+      
+  <p class="ad2e-placeholder">None yet.</p>
+    </fieldset>
+  
+  
+    <fieldset class="ad2e-prof-list">
+      <legend>Nonweapon Proficiencies</legend>
+  <p class="ad2e-placeholder">None yet.</p>
+    </fieldset>
+  
+    <fieldset class="ad2e-prof-list ad2e-languages">
+      <legend data-tooltip="Native language free; further modern languages by Table 4 or Languages, Modern slots (world setting); ancient languages by Languages, Ancient slots; reading and writing by Reading/Writing slots (one language per slot).">Languages</legend>
+      <p class="ad2e-prof-summary"><span class="">Modern: 0 / 0 (Languages, Modern slots)</span> · <span class="">Ancient: 0 / 0 (Languages, Ancient slots)</span> · <span class="">Literate: 0 / 0 (Reading/Writing slots)</span></p>
+      
+      <div class="ad2e-prof-row">
+        <label class="ad2e-prof-name" data-tooltip="Spoken free (Intelligence (PHB)). Empty: the race&#x27;s own tongue, or the common language.">Native <input type="text" name="system.languages.native" value="" placeholder="Halfling" disabled></label>
+        <label class="ad2e-prof-check"><input type="checkbox" name="system.languages.nativeLiterate"  disabled> Reads/writes</label>
+      </div>
+      <div class="ad2e-prof-row">
+        <span class="ad2e-prof-name" data-tooltip="The world&#x27;s common language (Configure Settings); every character speaks it free.">Common</span>
+        <span class="ad2e-weapon-meta">common language (free)</span>
+        <label class="ad2e-prof-check"><input type="checkbox" name="system.languages.commonLiterate"  disabled> Reads/writes</label>
+      </div>
+    </fieldset>
+  
+    <fieldset class="ad2e-prof-list">
+      <legend data-tooltip="Player&#x27;s Option: Skills &amp; Powers Tables 46 and 47. Without character points, traits are balanced by disadvantages: the traits&#x27; cost may not exceed the disadvantages&#x27; points. Drag them from the Traits &amp; Disadvantages (POSP) compendium.">Traits &amp; disadvantages</legend>
+      <p class="ad2e-prof-summary ">Traits 0 / disadvantages 0</p>
+      <p class="ad2e-placeholder">Drag traits and disadvantages here from the Traits &amp; Disadvantages (POSP) compendium.</p>
+    </fieldset>
+  
+</section>
+</div><h2 style="background:#333;color:#fff;margin:8px 0;padding:2px 6px">bio</h2><div class="tab-wrap"><section class="tab ad2e-tab active " data-group="primary" data-tab="bio">
+    <p class="ad2e-note">Drag a Race, a Class and then a Class Kit from the Items directory or the &quot;Races (PHB)&quot;, &quot;Classes (PHB)&quot; and &quot;Class Kits&quot; compendiums onto this sheet. Dropping a new one replaces the current one.</p>
+    <fieldset class="ad2e-race">
+      <legend>Race</legend>
+      <div class="ad2e-item-row">
+        <img src="icons/svg/mystery-man.svg" alt="" width="32" height="32">
+        <h3><a data-action="openItem" data-item-id="B6AAsnyPwPUVTFOo">Halfling</a></h3>
+        <a href="https://adnd2e.fandom.com/wiki/Halfling_(PHB)" target="_blank" rel="noopener" data-tooltip="Source page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+        
+      </div>
+      <dl class="ad2e-facts">
+        <dt>Infravision</dt><dd>by lineage (see source page)</dd>
+        <dt>Racial CON bonus (Table 9), added to the roll</dt><dd>+4</dd>
+        <dt>Racial CON bonus vs. poison only (Table 9)</dt><dd>+4</dd>
+      </dl>
+      
+      <table class="ad2e-race-table">
+        <thead><tr><th></th><th>Min.</th><th>Max.</th><th>Rolled</th><th>Adj.</th><th>Effective</th><th></th></tr></thead>
+        <tbody>
+          <tr class=""><th>Strength</th><td>7</td><td>18</td><td>15</td><td>-1</td><td>14</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+          <tr class=""><th>Dexterity</th><td>7</td><td>18</td><td>17</td><td>+1</td><td>18</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+          <tr class=""><th>Constitution</th><td>10</td><td>18</td><td>15</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+          <tr class=""><th>Intelligence</th><td>6</td><td>18</td><td>15</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+          <tr class=""><th>Wisdom</th><td>3</td><td>17</td><td>15</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+          <tr class=""><th>Charisma</th><td>3</td><td>18</td><td>15</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td></tr>
+        </tbody>
+      </table>
+    </fieldset>
+  
+    <div class="ad2e-class-grid">
+      <fieldset class="ad2e-class">
+        <legend>Class</legend>
+        <div class="ad2e-item-row">
+          <img src="icons/svg/book.svg" alt="" width="32" height="32">
+          <h3><a data-action="openItem" data-item-id="MEkv1KM33J2kaHYx">Thief</a></h3>
+          <a href="https://adnd2e.fandom.com/wiki/Thief_(PHB)" target="_blank" rel="noopener" data-tooltip="Source page"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          
+        </div>
+        <dl class="ad2e-facts">
+          <dt>Class Group</dt><dd>Rogue (d6)</dd>
+          <dt>Prime Requisites</dt><dd>Dexterity</dd>
+          <dt>Racial level limit</dt><dd class="">15</dd>
+          <dt>Hit Dice</dt><dd>1d6</dd>
+          <dt>Next level at</dt><dd>1250 XP</dd>
+          <dt>XP Bonus</dt><dd>+10%</dd>
+          <dt>Alignments Allowed</dt><dd class="">Neutral Good, Chaotic Good, Lawful Neutral, True Neutral, Chaotic Neutral, Lawful Evil, Neutral Evil, Chaotic Evil</dd>
+        </dl>
+      </fieldset>
+  
+      <fieldset class="ad2e-kit">
+        <legend>Class Kit</legend>
+        <p>Drag a Class Kit item here</p>
+      </fieldset>
+    </div>
+  
+    <fieldset class="ad2e-requirements">
+      <legend>Ability Requirements</legend>
+      <table>
+        <thead><tr><th></th><th>Class Min.</th><th>Kit Min.</th><th>Score</th><th></th></tr></thead>
+        <tbody>
+          <tr class="">
+            <th>Strength</th><td>—</td><td>—</td><td>14</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+          <tr class="">
+            <th>Dexterity</th><td>9</td><td>—</td><td>18</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+          <tr class="">
+            <th>Constitution</th><td>—</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+          <tr class="">
+            <th>Intelligence</th><td>—</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+          <tr class="">
+            <th>Wisdom</th><td>—</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+          <tr class="">
+            <th>Charisma</th><td>—</td><td>—</td><td>15</td>
+            <td><i class="fa-solid fa-check"></i></td>
+          </tr>
+        </tbody>
+      </table>
+    </fieldset>
+  
+    <fieldset class="ad2e-class-notes">
+      <legend>Class &amp; Kit Notes</legend>
+      <textarea name="system.classNotes" rows="4" ></textarea>
+    </fieldset>
+  
+  <div class="form-group ad2e-body"><label>Gender</label>
+    <strong>—</strong>
+    
+    <span class="ad2e-weapon-meta" data-tooltip="The character&#x27;s own weight (PHB Table 10). It counts toward the load of an animal the character rides.">Body weight (lb): —</span>
+    </div>
+  <div class="form-group ad2e-age"><label>Age (years)</label>
+    <strong>—</strong>
+    <button type="button" data-action="rollStartingAge" data-tooltip="20 + 3d4"><i class="fa-solid fa-dice"></i> Roll</button>
+    
+</div>
+  <fieldset class="ad2e-prof-list ad2e-station">
+    <legend data-tooltip="Station in Life (AA): rolled from the kit&#x27;s Table 1 entry; your level raises it when higher; a dual-class character&#x27;s initial station is halved; spending 1,000 gp a point raises it for a month.">Station</legend>
+    <div class="ad2e-prof-row">
+      <span class="ad2e-prof-name">Not rolled</span>
+      <span class="ad2e-weapon-meta"></span>
+      
+      
+    </div>
+    <div class="ad2e-prof-row">
+      <label data-tooltip="Parties, gifts and displays: +1 station for a month for every 1,000 gp, paid from your coins.">Spend (x 1,000 gp) <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
+      <button type="button" data-action="stationSpend"><i class="fa-solid fa-coins"></i> Spend</button>
+    </div>
+  </fieldset>
+  <fieldset class="ad2e-prof-list ad2e-animals">
+    <legend>Mounts &amp; pack animals</legend>
+    <div class="ad2e-prof-summary">
+      <span class="ad2e-unmet" data-tooltip="What a ridden animal carries for this character: body weight plus the encumbrance load (clothing included).">Weight as a rider: <strong>5 lb</strong> (body weight not set + gear 5 lb)</span>
+    </div>
+    
+<p class="ad2e-placeholder">Drag a mount, pack animal or pet actor onto this sheet (Hirelings &amp; Mounts compendium). A ridden animal&#x27;s load includes the rider and everything the rider carries (Encumbrance (PHB)).</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Henchmen</legend>
+    <div class="ad2e-prof-summary">
+      <span class="" data-tooltip="Charisma sets the most henchmen a character can ever have: &quot;This is a lifetime limit, not just a maximum possible at any given time&quot; (Henchmen, PHB). Current henchmen plus those lost.">Henchmen (lifetime): <strong>0 / 7</strong></span>
+      <label data-tooltip="Former henchmen (dead, departed): they still count toward the lifetime limit.">Lost <strong>0</strong></label>
+      <span data-tooltip="Charisma (PHB Table 6): added to the henchmen&#x27;s loyalty (morale) score.">Loyalty base: <strong>+3</strong></span>
+      <span>Henchman morale: <strong>18</strong></span>
+    </div>
+<p class="ad2e-placeholder">Drag an actor here to make it a henchman.</p>
+  </fieldset>
+  <fieldset class="ad2e-prof-list">
+    <legend>Followers &amp; stronghold</legend>
+    <div class="ad2e-prof-summary">
+      <label>Stronghold <input type="text" name="system.followers.stronghold.name" value="" placeholder="—" disabled></label>
+      <select name="system.followers.stronghold.kind" disabled><option value="">—</option><option value="castle" >Castle / keep</option><option value="worship" >Place of worship</option><option value="hideout" >Hideout / guild house</option><option value="tower" >Tower</option></select>
+      <label data-tooltip="Tick once the stronghold (or, for a cleric, the place of worship) is built; fighters and bards attract followers only then."><input type="checkbox" name="system.followers.stronghold.built"  disabled> Built</label>
+    </div>
+    <details class="ad2e-castle" >
+      <summary>Construction</summary>
+      <p class="ad2e-note">The Castle Guide: the site&#x27;s production modifier (PM) multiplies cost and time; overhead +10%; the standard work force builds it in 52 weeks. The owner plans, the GM starts it; work then accrues with world time.</p>
+      <div class="ad2e-check-grid">
+        <label>Climate <select class="ad2e-castle-field" data-castle="site.climate" ><option value="arctic" >Arctic (4.00)</option><option value="subArctic" >Sub-Arctic (2.50)</option><option value="temperate" >Temperate (1.25)</option><option value="moderate" selected>Moderate (1.00)</option><option value="subTropical" >Sub-Tropical (1.25)</option><option value="tropical" >Tropical (1.50)</option></select></label><label>Geography <select class="ad2e-castle-field" data-castle="site.geography" ><option value="highMountains" >High Mountains (4.00)</option><option value="moderateMountains" >Moderate Mountains (3.00)</option><option value="lowMountains" >Low Mountains (2.00)</option><option value="foothills" >Foothills (1.50)</option><option value="rollingHills" selected>Rolling Hills (1.00)</option><option value="plains" >Plains (0.75)</option></select></label><label>Ground cover <select class="ad2e-castle-field" data-castle="site.cover" ><option value="jungle" >Jungle (3.00)</option><option value="denseForest" >Dense Forest (2.00)</option><option value="lightForest" >Light Forest (1.50)</option><option value="scrub" selected>Scrub (1.00)</option><option value="grasslands" >Grasslands (0.75)</option><option value="barren" >Barren (1.50)</option><option value="desert" >Desert (2.00)</option><option value="swamp" >Swamp (2.00)</option></select></label><label>Resources <select class="ad2e-castle-field" data-castle="site.resources" ><option value="distantAndPoor" >Distant and Poor (2.00)</option><option value="distantAndGood" >Distant and Good (1.50)</option><option value="nearAndPoor" >Near and Poor (1.25)</option><option value="nearAndGood" selected>Near and Good (1.00)</option></select></label><label>Social structure <select class="ad2e-castle-field" data-castle="site.social" ><option value="nomadic" >Nomadic (2.50)</option><option value="semiNomadic" >Semi-Nomadic (1.75)</option><option value="primitiveAgricultural" >Primitive Agricultural (1.25)</option><option value="agricultural" selected>Agricultural (1.00)</option><option value="advancedAgricultural" >Advanced Agricultural (0.75)</option></select></label><label data-tooltip="Set by the GM.">Worker skill <select class="ad2e-castle-field" data-castle="site.skill" disabled><option value="veryPoor" >Very Poor (3.00)</option><option value="poor" >Poor (2.00)</option><option value="average" selected>Average (1.00)</option><option value="good" >Good (0.75)</option><option value="veryGood" >Very Good (0.50)</option></select></label><label data-tooltip="Set by the GM.">Worker morale <select class="ad2e-castle-field" data-castle="site.morale" disabled><option value="veryPoor" >Very Poor (3.00)</option><option value="poor" >Poor (2.00)</option><option value="average" selected>Average (1.00)</option><option value="high" >High (0.75)</option><option value="veryHigh" >Very High (0.50)</option></select></label>
+        <label>Tech level <select class="ad2e-castle-field" data-castle="tech" ><option value="1" >1: Early Wooden Construction</option><option value="2" >2: Advanced Wooden Construction</option><option value="3" >3: Early Stone Construction</option><option value="4" >4: Advanced Stone Construction</option><option value="5" >5: Early Gatekeeps &amp; Hoardings</option><option value="6" >6: Advanced Gatekeeps &amp; Machicolations</option><option value="7" >7: Grand Gatekeeps</option><option value="8" selected>8: Full Concentric Castles</option></select></label>
+      </div>
+      <table class="ad2e-race-table">
+        <thead><tr><th>Module</th><th>Count</th><th>Style</th><th></th></tr></thead>
+        <tbody>
+          <tr><td colspan="4" class="ad2e-placeholder">No modules yet.</td></tr>
+        </tbody>
+      </table>
+      <div class="ad2e-prof-summary">
+        <select data-castle-new="module"><option value="barbicanSmall">Barbican, Small (TL 4, 1665 mw, 28600 gp)</option><option value="barbicanMedium">Barbican, Medium (TL 5, 2050 mw, 35200 gp)</option><option value="barbicanLarge">Barbican, Large (TL 6, 2880 mw, 49500 gp)</option><option value="buildingSmallStone">Building, Small Stone (TL 6, 64 mw, 2000 gp)</option><option value="buildingMediumStone">Building, Medium Stone (TL 3, 96 mw, 3000 gp)</option><option value="buildingLargeStone">Building, Large Stone (TL 3, 144 mw, 4500 gp)</option><option value="buildingGreatStone">Building, Great Stone (TL 3, 300 mw, 10000 gp)</option><option value="buildingGrandStone">Building, Grand Stone (TL 4, 600 mw, 19000 gp)</option><option value="buildingSmallWooden">Building, Small Wooden (TL 1, 8 mw, 40 gp)</option><option value="buildingMediumWooden">Building, Medium Wooden (TL 1, 12 mw, 60 gp)</option><option value="buildingLargeWooden">Building, Large Wooden (TL 1, 18 mw, 90 gp)</option><option value="buildingGreatWooden">Building, Great Wooden (TL 2, 40 mw, 200 gp)</option><option value="buildingGrandWooden">Building, Grand Wooden (TL 2, 75 mw, 375 gp)</option><option value="ditch">Ditch (TL 1, 2 mw, 10 gp)</option><option value="drawbridge">Drawbridge (TL 2, 40 mw, 550 gp)</option><option value="gatekeepLesser">Gatekeep, Lesser (TL 5, 1950 mw, 33275 gp)</option><option value="gatekeepGreater">Gatekeep, Greater (TL 6, 4625 mw, 40620 gp)</option><option value="gatekeepGrand">Gatekeep, Grand (TL 7, 6410 mw, 110800 gp)</option><option value="moatChannel">Moat/Channel (TL 3, 6 mw, 30 gp)</option><option value="motte">Motte (TL 1, 2 mw, 10 gp)</option><option value="palisade">Palisade (TL 1, 1 mw, 5 gp)</option><option value="towerSmallRound">Tower, Small Round (TL 4, 720 mw, 12000 gp)</option><option value="towerMediumRound">Tower, Medium Round (TL 5, 900 mw, 15000 gp)</option><option value="towerLargeRound">Tower, Large Round (TL 6, 1260 mw, 21000 gp)</option><option value="towerSmallSquare">Tower, Small Square (TL 3, 840 mw, 14000 gp)</option><option value="towerMediumSquare">Tower, Medium Square (TL 4, 1080 mw, 18000 gp)</option><option value="towerLargeSquare">Tower, Large Square (TL 5, 1440 mw, 24000 gp)</option><option value="tunnel">Tunnel (TL 4, 25 mw, 100 gp)</option><option value="wallStone">Wall, Stone (TL 3, 30 mw, 500 gp)</option><option value="wallStoneAndHoarding">Wall, Stone &amp; Hoarding (TL 4, 36 mw, 600 gp)</option><option value="wallStoneAndGlacis">Wall, Stone &amp; Glacis (TL 5, 44 mw, 720 gp)</option><option value="wallStoneAndMachicolation">Wall, Stone &amp; Machicolation (TL 6, 53 mw, 864 gp)</option><option value="wallStoneAndPostern">Wall, Stone &amp; Postern (TL 4, 5 mw, 100 gp)</option><option value="wallWooden">Wall, Wooden (TL 1, 1 mw, 5 gp)</option></select>
+        <input type="number" data-castle-new="count" value="1" min="1" step="1">
+        <button type="button" data-action="castleAddModule"><i class="fa-solid fa-plus"></i> Add module</button>
+      </div>
+      <table class="ad2e-race-table">
+        <thead><tr><th>Helpers</th><th>Suitability</th><th>Workers</th><th></th></tr></thead>
+        <tbody>
+          <tr><td colspan="4" class="ad2e-placeholder">No helpers: characters count a worker per level plus a worker per spell level castable a day; magical items and monsters 5% or 1% of their XP.</td></tr>
+        </tbody>
+      </table>
+      <div class="ad2e-prof-summary">
+        <button type="button" data-action="castleAddTokens" data-tooltip="Characters and monsters of the selected tokens join as helpers."><i class="fa-solid fa-users"></i> Add selected tokens</button>
+        
+        <input type="text" data-castle-new="otherName" placeholder="Other helper">
+        <input type="number" data-castle-new="otherMen" value="0" min="0" step="1">
+        <button type="button" data-action="castleAddOther"><i class="fa-solid fa-plus"></i> Add</button>
+      </div>
+      <div class="ad2e-prof-summary">
+        <label>Hired workers <input type="number" class="ad2e-castle-field" data-castle="hired" value="1" min="0" step="1" ></label>
+        <span>standard 1</span>
+        <span>PM 1</span>
+      </div>
+      <p>Cost: modules 0 gp, with overhead 0 gp, times the PM 0 gp; workers above or below standard 0 gp; total 0 gp (0 man/weeks).</p>
+      <p>1 workers (helpers 0): 1 work weeks; 52 work weeks a year, about 1 calendar weeks.</p>
+      
+      
+      
+      <p class="ad2e-note"><a href="https://adnd2e.fandom.com/wiki/The_Construction_Site_(TCG)" target="_blank" rel="noopener">The Construction Site (TCG)</a> · <a href="https://adnd2e.fandom.com/wiki/Castle_Design_(TCG)" target="_blank" rel="noopener">Castle Design (TCG)</a> · <a href="https://adnd2e.fandom.com/wiki/The_Work_Force_(TCG)" target="_blank" rel="noopener">The Work Force (TCG)</a> · <a href="https://adnd2e.fandom.com/wiki/Monthly_Events_(TCG)" target="_blank" rel="noopener">Monthly Events (TCG)</a></p>
+    </details>
+    <div class="ad2e-prof-summary">
+      <span>Thief: followers from level 10</span>
+      <span class="ad2e-weapon-meta">Level not reached yet.</span>
+    </div>
+<p class="ad2e-placeholder">No followers. Follower units (role &quot;Follower unit&quot;) dropped on the sheet are listed here.</p>
+  </fieldset>
+  <fieldset class="ad2e-biography-field">
+    <legend>Biography</legend>
+    <textarea class="ad2e-biography" name="system.biography" ></textarea>
+  </fieldset>
+  
+</section>
+</div><footer class="ad2e-footer">
+  <span class="ad2e-move-item" data-tooltip="Movement rate: tens of feet per round in dungeons, tens of yards per round outdoors (Movement (PHB))"><strong>Movement</strong> 6 (Unencumbered)</span>
+  <span class="ad2e-move-item" data-tooltip="Miles per 10-hour day: march (x2) / force march (x2 1/2, Constitution check each day) (Movement (PHB))"><strong>March</strong> 12 / 15 mi</span>
+  
+  
+</footer>
+</div></body></html>

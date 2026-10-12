@@ -1,4 +1,4 @@
-<section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+{{!-- Race, class and kit (Character tab, 1.0.47; the Race & Class tab before). Dual-class GM buttons are in the GM section. --}}
   {{#with classTab as |ct|}}
   <p class="ad2e-note">{{localize "AD2E.Class.DragHint"}}</p>
   <fieldset class="ad2e-race">
@@ -8,7 +8,7 @@
       <img src="{{ct.raceItem.img}}" alt="" width="32" height="32">
       <h3><a data-action="openItem" data-item-id="{{ct.raceItem.id}}">{{ct.raceItem.name}}</a></h3>
       {{#if ct.race.url}}<a href="{{ct.race.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
-      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.raceItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{ct.raceItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     <dl class="ad2e-facts">
       <dt>{{localize "AD2E.Race.Infravision"}}</dt><dd>{{ct.infravision}}</dd>
@@ -39,7 +39,7 @@
         <img src="{{ct.classItem.img}}" alt="" width="32" height="32">
         <h3><a data-action="openItem" data-item-id="{{ct.classItem.id}}">{{ct.classItem.name}}</a></h3>
         {{#if ct.cls.url}}<a href="{{ct.cls.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
-        {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.classItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+        {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{ct.classItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
       </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Character.classGroup"}}</dt><dd>{{ct.groupLabel}} (d{{ct.hitDie}})</dd>
@@ -67,7 +67,7 @@
         <img src="{{ct.kitItem.img}}" alt="" width="32" height="32">
         <h3><a data-action="openItem" data-item-id="{{ct.kitItem.id}}">{{ct.kitItem.name}}</a></h3>
         {{#if ct.kit.url}}<a href="{{ct.kit.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.url'}}"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>{{/if}}
-        {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{ct.kitItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+        {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{ct.kitItem.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
       </div>
       <dl class="ad2e-facts">
         <dt>{{localize "AD2E.Class.Source"}}</dt><dd>{{ct.kit.source}}</dd>
@@ -81,8 +81,8 @@
         {{#if ct.kitRaceLimits}}<dt>{{localize "AD2E.Race.KitRaceLimits"}}</dt><dd>{{ct.kitRaceLimits}}{{#if ct.kit.raceOnly}} ({{localize "AD2E.Race.RaceOnly"}}){{/if}}</dd>{{/if}}
       </dl>
       {{#if ct.elementChoice}}<label data-tooltip="{{#if ct.sorcerer}}{{localize 'AD2E.Elemental.SorcererHint'}}{{else}}{{localize 'AD2E.Elemental.ProvinceHint'}}{{/if}}">{{#if ct.sorcerer}}{{localize "AD2E.Elemental.SorcererLabel"}}{{else}}{{localize "AD2E.Elemental.ProvinceLabel"}}{{/if}}
-        <select name="system.element" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.elementChoice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{#if ct.element2Choice}}
-        <select name="system.element2" {{#unless @root.editable}}disabled{{/unless}}>{{#each ct.element2Choice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}</label>{{/if}}
+        <select name="system.element" {{#unless @root.editMode}}disabled{{/unless}}>{{#each ct.elementChoice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{#if ct.element2Choice}}
+        <select name="system.element2" {{#unless @root.editMode}}disabled{{/unless}}>{{#each ct.element2Choice as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select>{{/if}}</label>{{/if}}
       {{#unless ct.kitFits}}<p class="ad2e-unmet">{{localize "AD2E.Class.KitDoesNotFit"}}</p>{{/unless}}
       {{#if ct.socialRank}}<p>{{localize "AD2E.KitFeature.SocialRank"}}: <strong>{{ct.socialRank.text}}</strong>
         {{#if @root.editable}}<button type="button" data-action="socialRank"><i class="fa-solid fa-dice"></i> {{localize "AD2E.KitFeature.RollRank"}}</button>{{/if}}</p>{{/if}}
@@ -123,8 +123,8 @@
         <tr>
           <th><a data-action="openItem" data-item-id="{{r.id}}">{{r.name}}</a>{{#if r.primary}} <span class="ad2e-note" data-tooltip="{{localize 'AD2E.Multi.PrimaryHint'}}">({{localize "AD2E.Multi.Primary"}})</span>{{/if}}</th>
           {{#if r.primary}}<td>{{r.level}}</td><td>{{r.xp}}</td>
-          {{else}}<td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="level" value="{{r.level}}" min="1" max="30" step="1" {{#unless @root.editable}}disabled{{/unless}}></td>
-          <td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="xp" value="{{r.xp}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></td>{{/if}}
+          {{else}}<td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="level" value="{{r.level}}" min="1" max="30" step="1" {{#unless @root.editMode}}disabled{{/unless}}></td>
+          <td><input type="number" class="ad2e-multi-field" data-class-id="{{r.identifier}}" data-field="xp" value="{{r.xp}}" min="0" step="1" {{#unless @root.editMode}}disabled{{/unless}}></td>{{/if}}
           <td>{{r.xpNext}}</td><td>{{r.hitDice}}</td>
           <td class="{{#if r.atLimit}}ad2e-unmet{{/if}}">{{r.limit}}</td><td>{{r.bonus}}</td>
           <td>{{#if @root.editable}}<button type="button" data-action="levelUp" data-class-id="{{r.identifier}}" {{#if r.atLimit}}disabled{{/if}}>{{#if r.canLevel}}<i class="fa-solid fa-arrow-up"></i> {{/if}}{{localize "AD2E.HP.LevelUp"}}</button>
@@ -145,17 +145,12 @@
       <dt>{{localize "AD2E.Dual.OldNumbers"}}</dt><dd>THAC0 {{ct.dual.oldThac0}}; {{ct.dual.oldSaves}}</dd>
     </dl>
     {{#if ct.dual.penaltyText}}<p class="ad2e-unmet">{{ct.dual.penaltyText}}</p>{{/if}}
-    {{#if ct.dual.isGM}}<div class="ad2e-buttons">
-      <button type="button" data-action="clearDualPenalty" data-kind="encounter" {{#unless ct.dual.encounter}}disabled{{/unless}}>{{localize "AD2E.Dual.ClearEncounter"}}</button>
-      <button type="button" data-action="clearDualPenalty" data-kind="all" {{#unless ct.dual.adventure}}disabled{{/unless}}>{{localize "AD2E.Dual.EndAdventure"}}</button>
-      <button type="button" data-action="undoDualClass" data-tooltip="{{localize 'AD2E.Dual.UndoHint'}}"><i class="fa-solid fa-rotate-left"></i> {{localize "AD2E.Dual.Undo"}}</button>
-    </div>{{/if}}
   </fieldset>
   {{/if}}
   {{/with}}
 
   <fieldset class="ad2e-class-notes">
     <legend>{{localize "AD2E.Class.Notes"}}</legend>
-    <textarea name="system.classNotes" rows="6">{{system.classNotes}}</textarea>
+    <textarea name="system.classNotes" rows="4" {{#unless @root.editable}}disabled{{/unless}}>{{system.classNotes}}</textarea>
   </fieldset>
-</section>
+

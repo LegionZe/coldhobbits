@@ -1,23 +1,49 @@
+{{!-- Main tab (1.0.47): abilities with their checks and tests, saves, health, defence and attack numbers, advancement and
+     movement. Setup inputs show only in edit mode (`editMode`); attacks and combat actions are on the Combat tab. --}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
-  <div class="ad2e-columns">
+  <div class="ad2e-columns ad2e-columns-2">
     <fieldset class="ad2e-abilities">
-      <legend>{{localize "AD2E.Character.abilities"}}{{#if editable}} <a class="ad2e-item-link" data-action="rollAbilityScores" data-tooltip="{{localize 'AD2E.AbilityRoll.Title'}}"><i class="fa-solid fa-dice"></i></a>{{/if}}</legend>
+      <legend>{{localize "AD2E.Character.abilities"}}{{#if editMode}} <a class="ad2e-item-link" data-action="rollAbilityScores" data-tooltip="{{localize 'AD2E.AbilityRoll.Title'}}"><i class="fa-solid fa-dice"></i></a>{{/if}}</legend>
+      <p class="ad2e-note">{{localize "AD2E.Sheet.AbilityHint"}}</p>
       {{#each abilities as |ab|}}
       <div class="ad2e-ability">
-        <a data-action="rollAbility" data-ability="{{ab.key}}" data-tooltip="{{localize 'AD2E.Roll.Check'}}">{{ab.label}}</a>
+        <a class="ad2e-roll" data-action="rollAbility" data-ability="{{ab.key}}" data-tooltip="{{localize 'AD2E.Roll.Check'}}"><i class="fa-solid fa-dice-d20"></i> {{ab.label}}</a>
+        {{#if @root.editMode}}
         <input type="number" name="system.abilities.{{ab.key}}.value" value="{{ab.value}}" data-tooltip="{{localize 'AD2E.Race.RolledScore'}}">
-        <strong class="ad2e-total {{#if ab.adjusted}}ad2e-adjusted{{/if}}" data-tooltip="{{localize 'AD2E.Race.EffectiveScore'}}">{{ab.total}}</strong>
-        {{#if ab.isStr}}
-        <input type="number" name="system.abilities.str.exceptional" value="{{ab.exceptional}}" data-tooltip="{{localize 'AD2E.Character.exceptional'}}" min="0" max="100">
         {{else}}<span></span>{{/if}}
+        <strong class="ad2e-total {{#if ab.adjusted}}ad2e-adjusted{{/if}}" data-tooltip="{{ab.stats}}">{{#if @root.editMode}}{{ab.total}}{{else}}{{ab.score}}{{/if}}</strong>
+        {{#if ab.isStr}}{{#if @root.editMode}}
+        <input type="number" name="system.abilities.str.exceptional" value="{{ab.exceptional}}" data-tooltip="{{localize 'AD2E.Character.exceptional'}}" min="0" max="100">
+        {{else}}<span></span>{{/if}}{{else}}<span></span>{{/if}}
+        <span class="ad2e-ability-tests">{{#each ab.tests as |t|}}<button type="button" data-action="rollTest" data-test="{{t.key}}" {{#if t.disabled}}disabled{{/if}}>{{t.label}}</button>{{/each}}</span>
       </div>
       {{/each}}
     </fieldset>
 
+    <fieldset class="ad2e-saves">
+      <legend>{{localize "AD2E.Character.saves"}}</legend>
+      {{#each saves as |sv|}}
+      <div class="ad2e-save">
+        <a class="ad2e-roll" data-action="rollSave" data-save="{{sv.key}}"><i class="fa-solid fa-dice-d20"></i> {{sv.label}}</a>
+        <strong class="{{#if sv.overridden}}ad2e-overridden{{/if}}">{{sv.value}}</strong>
+        <span class="ad2e-save-bonus">{{#if sv.bonus}}<span data-tooltip="{{localize 'AD2E.Save.RollBonus'}}">+{{sv.bonus}}</span>{{/if}}{{#if sv.poison}}<span data-tooltip="{{localize 'AD2E.Race.PoisonBonus'}}">+{{sv.poison}}&#x2620;</span>{{/if}}</span>
+        {{#if @root.editMode}}<input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">{{else}}<span></span>{{/if}}
+      </div>
+      {{/each}}
+      <div class="ad2e-save ad2e-mr-field" data-tooltip="{{localize 'AD2E.MR.Hint'}}">
+        <span>{{localize "AD2E.MR.Label"}}</span>
+        {{#if editMode}}<span><input type="number" name="system.magicResistance.value" value="{{system.magicResistance.value}}" min="0" max="100" step="1">%</span>
+        {{else}}<strong>{{#if system.magicResistance.value}}{{system.magicResistance.value}}%{{else}}—{{/if}}</strong>{{/if}}
+        {{#if system.magicResistance.value}}<label class="ad2e-check"><input type="checkbox" name="system.magicResistance.lowered" {{checked system.magicResistance.lowered}} {{#unless editable}}disabled{{/unless}}> {{localize "AD2E.MR.LoweredLabel"}}</label>{{else}}<span></span>{{/if}}
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="ad2e-columns ad2e-columns-2">
     <fieldset class="ad2e-combat">
-      <legend>{{localize "AD2E.Character.combat"}}</legend>
+      <legend>{{localize "AD2E.Sheet.Health"}}</legend>
       <div class="ad2e-field"><span>{{localize "AD2E.Character.hp"}}</span>
-        <span class="ad2e-pair"><input type="number" name="system.hp.value" value="{{system.hp.value}}"> / <input type="number" name="system.hp.max" value="{{system.hp.max}}"></span></div>
+        <span class="ad2e-pair"><input type="number" name="system.hp.value" value="{{system.hp.value}}" {{#unless editable}}disabled{{/unless}}> / {{#if editMode}}<input type="number" name="system.hp.max" value="{{system.hp.max}}">{{else}}<strong>{{system.hp.max}}</strong>{{/if}}</span></div>
       <div class="ad2e-field"><span>{{localize "AD2E.HP.HitDice"}}</span><strong>{{system.hitDice.label}}</strong></div>
       <div class="ad2e-field ad2e-hp-status"><span data-tooltip="{{hpStatus.rule}}">{{localize "AD2E.Health.Status"}}</span>
         <strong class="{{#if hpStatus.label}}ad2e-unmet{{/if}}">{{#if hpStatus.label}}{{hpStatus.label}}{{#if hpStatus.bleeding}} ({{localize "AD2E.Health.BleedingNote"}}){{/if}}{{#if hpStatus.stable}} ({{localize "AD2E.Health.StableNote"}}){{/if}}{{else}}{{localize "AD2E.Health.State.ok"}}{{/if}}{{#if hpStatus.feeble}} · {{localize "AD2E.Health.State.feeble"}}{{/if}}{{#if hpStatus.knockedOut}} ({{localize "AD2E.Health.KnockedOut"}}){{/if}}</strong></div>
@@ -27,51 +53,61 @@
       <div class="ad2e-buttons">
         <button type="button" data-action="hpDamage"><i class="fa-solid fa-heart-crack"></i> {{localize "AD2E.Health.Damage"}}</button>
         <button type="button" data-action="hpHeal"><i class="fa-solid fa-heart-pulse"></i> {{localize "AD2E.Health.Heal"}}</button>
-        <button type="button" data-action="rollSurprise" data-tooltip="{{localize 'AD2E.Surprise.Hint'}}"><i class="fa-solid fa-eye"></i> {{localize "AD2E.Surprise.Title"}}</button>
         <button type="button" data-action="hpRest" data-tooltip="{{localize 'AD2E.Health.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Health.Rest"}}</button>
         {{#if hpStatus.temporary}}<button type="button" data-action="recoverTemp" data-tooltip="{{localize 'AD2E.Health.RecoverHint'}}"><i class="fa-solid fa-rotate-left"></i> {{localize "AD2E.Health.Recover"}}</button>{{/if}}
         {{#if hpStatus.bleeding}}<button type="button" data-action="bindWounds"><i class="fa-solid fa-kit-medical"></i> {{localize "AD2E.Health.BindWounds"}}</button>{{/if}}
         {{#if hpStatus.dead}}<button type="button" data-action="raiseDead" data-tooltip="{{localize 'AD2E.Health.RaiseHint'}}"><i class="fa-solid fa-person-rays"></i> {{localize "AD2E.Health.Raise"}}</button>{{/if}}
       </div>
+      {{/if}}
+      {{#if drain.zero}}<p class="ad2e-unmet">{{localize "AD2E.Drain.ZeroNote"}}</p>{{/if}}
+      {{#if drain.pending}}<p class="ad2e-note" data-tooltip="{{localize 'AD2E.Drain.PendingHint'}}">{{localize "AD2E.Drain.Pending"}}: {{drain.pending}}</p>{{/if}}
+    </fieldset>
+
+    <fieldset class="ad2e-combat">
+      <legend>{{localize "AD2E.Sheet.Defence"}}</legend>
+      <div class="ad2e-field"><span>{{localize "AD2E.Character.acTotal"}}</span><strong data-tooltip="{{localize 'AD2E.Armor.Rear'}} {{system.armor.rear}} · {{localize 'AD2E.Armor.VsMissiles'}} {{system.armor.missile}}">{{system.ac.total}}</strong></div>
+      {{#if editMode}}<div class="ad2e-field"><span>{{localize "AD2E.Character.acBase"}}</span><input type="number" name="system.ac.base" value="{{system.ac.base}}"></div>{{/if}}
+      <div class="ad2e-field"><span>THAC0</span><strong>{{system.thac0.value}}</strong></div>
+      {{#if editMode}}<div class="ad2e-field"><span>{{localize "AD2E.Character.thac0Override"}}</span><input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}"></div>{{/if}}
+      {{#if system.mods.heat}}<div class="ad2e-field"><span data-tooltip="{{localize 'AD2E.AQ.HeatSettingHint'}}">{{localize "AD2E.AQ.Heat"}}</span><strong class="ad2e-unmet">{{system.mods.heat}}</strong></div>{{/if}}
+      <div class="ad2e-field"><span>{{localize "AD2E.Character.initMod"}}</span>{{#if editMode}}<input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}">{{else}}<strong>{{system.initiative.mod}}</strong>{{/if}}</div>
+      <div class="ad2e-field"><span>{{localize "AD2E.Character.dmgAdj"}}</span><strong>{{system.mods.dmg}}</strong></div>
+      <div class="ad2e-field"><span>{{localize "AD2E.Character.conHp"}}</span><strong>{{system.mods.conHp}}/HD</strong></div>
+      {{#if editMode}}
       <div class="ad2e-buttons">
         <button type="button" data-action="rollFirstLevelHp">{{localize "AD2E.HP.RollFirst"}}</button>
         <button type="button" data-action="levelUp">{{localize "AD2E.HP.LevelUp"}}</button>
-        {{#if drain.isGM}}<button type="button" data-action="drainLevels" data-tooltip="{{localize 'AD2E.Drain.Hint'}}"><i class="fa-solid fa-skull"></i> {{localize "AD2E.Drain.Title"}}</button>
-        {{#if drain.any}}<button type="button" data-action="restoreLevel" data-tooltip="{{localize 'AD2E.Drain.RestoreHint'}}"><i class="fa-solid fa-sun"></i> {{localize "AD2E.Drain.Restore"}}</button>{{/if}}{{/if}}
       </div>
-      {{#if drain.zero}}<p class="ad2e-unmet">{{localize "AD2E.Drain.ZeroNote"}}</p>{{/if}}
-      {{#if drain.pending}}<p class="ad2e-note" data-tooltip="{{localize 'AD2E.Drain.PendingHint'}}">{{localize "AD2E.Drain.Pending"}}: {{drain.pending}}</p>{{/if}}
       {{/if}}
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.acBase"}}</span><input type="number" name="system.ac.base" value="{{system.ac.base}}"></div>
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.acTotal"}}</span><strong data-tooltip="{{localize 'AD2E.Armor.Rear'}} {{system.armor.rear}} · {{localize 'AD2E.Armor.VsMissiles'}} {{system.armor.missile}}">{{system.ac.total}}</strong></div>
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.thac0Override"}}</span><input type="number" name="system.thac0.override" value="{{system.thac0.override}}" placeholder="{{system.thac0.computed}}"></div>
-      <div class="ad2e-field"><span>THAC0</span><strong>{{system.thac0.value}}</strong></div>
-      {{#if system.mods.heat}}<div class="ad2e-field"><span data-tooltip="{{localize 'AD2E.AQ.HeatSettingHint'}}">{{localize "AD2E.AQ.Heat"}}</span><strong class="ad2e-unmet">{{system.mods.heat}}</strong></div>{{/if}}
-      <div class="ad2e-field"><span>{{localize "AD2E.Move.Movement"}}</span><strong class="{{#if system.encumbrance.info.overMax}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Move.Hint'}}">{{moveLabel}}</strong></div>
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.initMod"}}</span><input type="number" name="system.initiative.mod" value="{{system.initiative.mod}}"></div>
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.dmgAdj"}}</span><strong>{{system.mods.dmg}}</strong></div>
-      <div class="ad2e-field"><span>{{localize "AD2E.Character.conHp"}}</span><strong>{{system.mods.conHp}}/HD</strong></div>
-      <div class="ad2e-buttons">
-        <button type="button" data-action="rollAttack" data-missile="false">{{localize "AD2E.Roll.Melee"}} ({{system.mods.meleeAttack}})</button>
-        <button type="button" data-action="rollAttack" data-missile="true">{{localize "AD2E.Roll.Missile"}} ({{system.mods.missileAttack}})</button>
-      </div>
-    </fieldset>
-
-    <fieldset class="ad2e-saves">
-      <legend>{{localize "AD2E.Character.saves"}}</legend>
-      {{#each saves as |sv|}}
-      <div class="ad2e-save">
-        <a data-action="rollSave" data-save="{{sv.key}}">{{sv.label}}</a>
-        <strong class="{{#if sv.overridden}}ad2e-overridden{{/if}}">{{sv.value}}</strong>
-        <span class="ad2e-save-bonus">{{#if sv.bonus}}<span data-tooltip="{{localize 'AD2E.Save.RollBonus'}}">+{{sv.bonus}}</span>{{/if}}{{#if sv.poison}}<span data-tooltip="{{localize 'AD2E.Race.PoisonBonus'}}">+{{sv.poison}}&#x2620;</span>{{/if}}</span>
-        <input type="number" name="system.saves.{{sv.key}}.override" value="{{sv.override}}" placeholder="{{sv.table}}" data-tooltip="{{localize 'AD2E.Save.OverrideHint'}}">
-      </div>
-      {{/each}}
-      <div class="ad2e-save ad2e-mr-field" data-tooltip="{{localize 'AD2E.MR.Hint'}}">
-        <span>{{localize "AD2E.MR.Label"}}</span>
-        <span><input type="number" name="system.magicResistance.value" value="{{system.magicResistance.value}}" min="0" max="100" step="1">%</span>
-        <label class="ad2e-check"><input type="checkbox" name="system.magicResistance.lowered" {{checked system.magicResistance.lowered}}> {{localize "AD2E.MR.LoweredLabel"}}</label>
-      </div>
     </fieldset>
   </div>
+
+  <fieldset class="ad2e-movement">
+    <legend>{{localize "AD2E.Move.Movement"}}</legend>
+    <div class="ad2e-prof-summary">
+      <span>{{localize "AD2E.Move.Movement"}}: <strong class="{{#if system.encumbrance.info.overMax}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Move.Hint'}}">{{moveLabel}}</strong></span>
+    </div>
+    <details class="ad2e-move-details">
+      <summary>{{localize "AD2E.Sheet.MoveDetails"}}</summary>
+      {{#with movement as |m|}}
+      <div class="ad2e-prof-summary">
+        <span data-tooltip="{{localize 'AD2E.Move.SneakHint'}}"><strong>{{localize "AD2E.Move.Sneak"}}</strong> {{m.sneak}} ft</span>
+        <span data-tooltip="{{localize 'AD2E.Move.WalkHint'}}"><strong>{{localize "AD2E.Move.Walk"}}</strong> {{m.walk}} yd</span>
+        <span data-tooltip="{{m.combatHint}}"><strong>{{localize "AD2E.Move.Combat"}}</strong> {{m.combat}} ft</span>
+        <span data-tooltip="{{m.jogHint}}"><strong>{{localize "AD2E.Move.Jog"}}</strong> {{m.jog}} yd</span>
+        <span data-tooltip="{{localize 'AD2E.Move.RunHint'}}"><strong>{{localize "AD2E.Move.Run"}}</strong> {{m.run3}} / {{m.run4}} yd</span>
+        <span data-tooltip="{{localize 'AD2E.Move.SprintHint'}}"><strong>{{localize "AD2E.Move.Sprint"}}</strong> {{m.run5}} yd</span>
+        <span data-tooltip="{{m.terrain}}"><strong>{{localize "AD2E.Travel.RoundTerrain"}}</strong> <i class="fa-solid fa-circle-info"></i></span>
+      </div>
+      <div class="ad2e-prof-summary">
+        <span data-tooltip="{{m.jumpHint}}"><strong>{{localize "AD2E.Move.Jump"}}</strong>
+          {{#if m.canJump}}
+          <a class="ad2e-roll" data-action="rollJump" data-jump="runningBroad">{{m.jump.runningBroad}}</a> /
+          <a class="ad2e-roll" data-action="rollJump" data-jump="runningHigh">{{m.jump.runningHigh}}</a> ·
+          <a class="ad2e-roll" data-action="rollJump" data-jump="standingBroad">{{m.jump.standingBroad}}</a> / {{m.jump.standingHigh}}
+          {{else}}—{{/if}}</span>
+      </div>
+      {{/with}}
+    </details>
+  </fieldset>
 </section>

@@ -1,5 +1,8 @@
+{{!-- Skills & Proficiencies tab (part id "features", 1.0.47): class abilities and skills, then proficiencies, languages
+     and traits. --}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with featureTab as |ft|}}
   {{> "ad2e.class-abilities" ft=ft}}
   {{/with}}
+  {{> "ad2e.proficiencies"}}
 </section>

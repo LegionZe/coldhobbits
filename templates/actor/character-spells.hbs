@@ -12,9 +12,9 @@
     <legend>{{localize "AD2E.Shair.Legend"}}</legend>
     <div class="ad2e-prof-summary">
       <label>{{localize "AD2E.Shair.GenKind"}}
-        <select name="system.gen.kind" {{#unless @root.editable}}disabled{{/unless}}>{{selectOptions st.gen.kinds selected=st.gen.kind blank="—" localize=true}}</select></label>
+        <select name="system.gen.kind" {{#unless @root.editMode}}disabled{{/unless}}>{{selectOptions st.gen.kinds selected=st.gen.kind blank="—" localize=true}}</select></label>
       <label data-tooltip="{{localize 'AD2E.Shair.ReplacementsHint'}}">{{localize "AD2E.Shair.Replacements"}}
-        <input type="number" name="system.gen.replacements" value="{{st.gen.replacements}}" min="0" {{#unless @root.editable}}disabled{{/unless}}></label>
+        <input type="number" name="system.gen.replacements" value="{{st.gen.replacements}}" min="0" {{#unless @root.editMode}}disabled{{/unless}}></label>
       <span>{{st.gen.status}}</span>
       {{#if st.gen.isGM}}{{#if st.gen.busy}}<button type="button" data-action="genReturnNow" data-tooltip="{{localize 'AD2E.Shair.ReturnNowHint'}}">{{localize "AD2E.Shair.ReturnNow"}}</button>{{/if}}{{/if}}
     </div>
@@ -70,9 +70,9 @@
         {{#if @root.editable}}<a data-action="adjustPrepared" data-item-id="{{r.id}}" data-delta="1"><i class="fa-solid fa-plus"></i></a>{{/if}}
       </span>
       {{/if}}
-      <button type="button" data-action="castSpell" data-item-id="{{r.id}}" {{#unless r.remaining}}disabled{{/unless}}>{{localize "AD2E.Spell.Cast"}}</button>
+      <button type="button" data-action="castSpell" data-item-id="{{r.id}}" {{#unless r.remaining}}disabled{{/unless}}><i class="fa-solid fa-wand-sparkles"></i> {{localize "AD2E.Spell.Cast"}}</button>
       {{#if r.damage}}<button type="button" data-action="rollSpellDamage" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Spell.DamageHint'}}"><i class="fa-solid fa-burst"></i></button>{{/if}}
-      {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Spell.NoneAtLevel"}}</p>
     {{/each}}
