@@ -3556,6 +3556,8 @@
     "SettingHint": "After a spell is cast, ask its length and recipients and create a timed Active Effect (removed when world time passes its end; a round is one minute)."
   },
   "AD2E.Animation": {
+    "WeaponSetting": "Weapon attack animations (JB2A)",
+    "WeaponSettingHint": "After an attack roll, the attacker's token strikes or shoots at each targeted token (a miss lands beside it). Needs the Sequencer module and a JB2A module; without them, a token or a target nothing is played.",
     "Setting": "Spell animations (JB2A)",
     "SettingHint": "When a spell is cast, play a JB2A animation from the caster's token to the targeted tokens. Needs the Sequencer module and a JB2A module (Patreon or free); without them nothing is played.",
     "File": "Animation",
