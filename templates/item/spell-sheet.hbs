@@ -39,6 +39,18 @@
     {{/each}}
     {{#if @root.editable}}<div class="ad2e-prof-summary"><button type="button" data-action="addDamage">{{localize "AD2E.Spell.AddDamage"}}</button></div>{{/if}}
   </fieldset>
+  {{#with effect as |fx|}}
+  <fieldset class="ad2e-spell-effect">
+    <legend>{{localize "AD2E.SpellEffect.Legend"}}</legend>
+    <p class="ad2e-note">{{fx.kind}}{{#if fx.preview}}: {{fx.preview}}{{/if}}</p>
+    <p class="ad2e-note">{{localize "AD2E.SpellEffect.ModsHint"}}</p>
+    <div class="ad2e-item-fields">
+      {{#each fx.mods as |m|}}
+      <label>{{m.label}} {{#if fx.gm}}<input type="number" name="system.effectMods.{{m.key}}" value="{{m.value}}" step="1">{{else}}<strong>{{m.value}}</strong>{{/if}}</label>
+      {{/each}}
+    </div>
+  </fieldset>
+  {{/with}}
   {{#if system.components.material}}
   <fieldset class="ad2e-materials">
     <legend>{{localize "AD2E.Spell.Materials"}}</legend>

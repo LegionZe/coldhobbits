@@ -37,6 +37,7 @@ import { attackOptionsOn, AO, disarmPossible, maneuversFor, OPPOSED, opposedAcs,
 import { chartKey, CRIT, targetKind } from "../criticals.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
+import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -521,12 +522,13 @@ export default class AD2EActor extends Actor {
     if (!input) return;
     const heat = this.system.mods?.heat ?? 0; // Al-Qadim heat penalty (module/aq-rules.mjs)
     const fatigue = this.system.mods?.fatigue ?? 0; // missed rests (module/dungeon-turns.mjs)
-    const target = entry.target + input.mod + input.kit + heat + fatigue;
+    const spellCheck = this.spellMod("check"); // spell effects (module/spell-effects.mjs)
+    const target = entry.target + input.mod + input.kit + heat + fatigue + spellCheck;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total < 20 && roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
-      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""})${modifierText(input.mod, input.note)}: `
+      flavor: `${item.name} (${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""}${spellCheck ? `; ${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellCheck })}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (roll.total === 20 ? ` (${game.i18n.localize("AD2E.Prof.TwentyFails")})` : "")
     });
@@ -582,13 +584,14 @@ export default class AD2EActor extends Actor {
     const kitAuto = this.type === "character" ? (this.system.kitMods?.total("ability", key) ?? 0) : 0;
     const heat = this.type === "character" ? (this.system.mods?.heat ?? 0) : 0; // Al-Qadim heat (module/aq-rules.mjs)
     const fatigue = this.type === "character" ? (this.system.mods?.fatigue ?? 0) : 0; // missed rests (module/dungeon-turns.mjs)
-    const target = this.system.abilities[key].total + kitAuto + input.mod + input.kit + heat + fatigue;
+    const spellCheck = this.spellMod("check"); // spell effects (module/spell-effects.mjs)
+    const target = this.system.abilities[key].total + kitAuto + input.mod + input.kit + heat + fatigue + spellCheck;
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total <= target;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize(`AD2E.Ability.${key}`)} ${game.i18n.localize("AD2E.Roll.Check")} `
-        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""})${modifierText(input.mod, input.note)}: `
+        + `(${game.i18n.localize("AD2E.Roll.RollUnder")} ${target}${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""}${spellCheck ? `; ${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellCheck })}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
     });
   }
@@ -618,6 +621,12 @@ export default class AD2EActor extends Actor {
     });
   }
 
+  /** A GM-set spell effect modifier (attack, damage, ac, save, check) summed over the actor's spell effects (module/spell-effects.mjs). */
+  spellMod(key) {
+    const mods = this.type === "character" ? this.system.mods?.spell : this.system.spellMods;
+    return Number(mods?.[key] ?? effectModTotals(this.effects)[key]) || 0;
+  }
+
   /**
    * Saving throw: d20 + racial bonus (PHB Table 9, where it applies) + modifier >= save target. `poison`: a save against
    * poison also adds the race's Constitution bonus vs. poison; `request` / `target`: the chat save request it answers
@@ -643,7 +652,10 @@ export default class AD2EActor extends Actor {
     if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
     const useMaster = !!(input.masterSave && masterSave);
     if (useMaster) input.kitText = [input.kitText, game.i18n.format("AD2E.Familiar.MasterSaveShort", { name: master.name })].filter(Boolean).join("; ");
-    const mod = input.mod + input.kit + genBonus;
+    // Spell effects (module/spell-effects.mjs): not with the master's saving throw.
+    const spellSave = useMaster ? 0 : this.spellMod("save");
+    if (spellSave) input.kitText = [input.kitText, game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellSave })].filter(Boolean).join("; ");
+    const mod = input.mod + input.kit + genBonus + spellSave;
     const useOld = !useMaster && !!(input.dualOld && oldSave !== null);
     if (useOld) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatSave", { save: game.i18n.localize(`AD2E.Save.${key}`) }));
     const target = useMaster ? masterSave.value : (useOld ? oldSave : this.system.saves[key].value);
@@ -2038,7 +2050,8 @@ export default class AD2EActor extends Actor {
     const maneuverHit = this.#maneuverModifier(input, targets, maneuverNotes);
     // Force marching: -1 per day to all attack rolls (module/travel.mjs).
     const march = TRAVEL.march.attackPerDay * (this.system.march?.days ?? 0) || 0;
-    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march, mod: input.mod }).evaluate();
+    const spellHit = this.spellMod("attack"); // spell effects (module/spell-effects.mjs)
+    const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march + spellHit, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
@@ -2060,6 +2073,7 @@ export default class AD2EActor extends Actor {
         + (crit ? ` [${criticalText(crit)}]` : "")
         + (maneuverNotes.length ? ` [${maneuverNotes.join("; ")}]` : "")
         + (march ? ` [${game.i18n.format("AD2E.Travel.MarchNote", { n: march })}]` : "")
+        + (spellHit ? ` [${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellHit })}]` : "")
     });
     if (crit) await postCriticalCard(this, crit, targets);
     if (hit && AD2EActor.#autoDamageOn()) {
@@ -2105,7 +2119,8 @@ export default class AD2EActor extends Actor {
     const vsUnarmed = input.vsUnarmed ? COMBAT_TABLES.armedDefender : 0;
     // Critical: one more set of damage dice (two when tripled), before the bonuses (module/criticals.mjs).
     if (input.critical) formula = multiplyDice(formula, 1 + input.critical);
-    const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus + vsUnarmed, mod: input.mod }).evaluate();
+    const spellDmg = this.spellMod("damage"); // spell effects (module/spell-effects.mjs)
+    const roll = await new Roll(`${formula} + @bonus + @mod`, { bonus: attack.dmgBonus + vsUnarmed + spellDmg, mod: input.mod }).evaluate();
     const total = Math.max(roll.total, 1);
     // An elemental attack: its dice for elemental mages and gens of that province (module/elemental.mjs, module/gens.mjs).
     const element = attack.element ? { element: elementFlag(roll, [attack.element], 0, total - roll.total) } : {};
@@ -2200,13 +2215,14 @@ export default class AD2EActor extends Actor {
     } else await spell.update({ "system.cast": sys.cast + 1 });
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    const castingLevel = oldCaster?.castingLevel ?? this.system.spells?.castingLevels?.[sys.kind] ?? this.system.spells?.castingLevel ?? this.system.level;
     const comps = ["verbal", "somatic", "material"].filter(c => sys.components[c]).map(c => c[0].toUpperCase()).join(", ");
     const rows = [
       [i18n("AD2E.Spell.Level"), `${sys.level} (${i18n(`AD2E.Spell.${sys.kind}`)})`],
       [i18n(sys.kind === "priest" ? "AD2E.Spell.Spheres" : "AD2E.Spell.Schools"), (sys.kind === "priest" ? sys.spheres : sys.schools).join(", ")],
       [i18n("AD2E.Spell.CastingTime"), sys.castingTime], [i18n("AD2E.Spell.Range"), sys.range],
       [i18n("AD2E.Spell.Area"), sys.area], [i18n("AD2E.Spell.Duration"), sys.duration], [i18n("AD2E.Spell.Save"), sys.save],
-      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), oldCaster?.castingLevel ?? this.system.spells?.castingLevels?.[sys.kind] ?? this.system.spells?.castingLevel ?? this.system.level]
+      [i18n("AD2E.Spell.Components"), comps], [i18n("AD2E.Spell.CastingLevel"), castingLevel]
     ].filter(([, v]) => v !== "" && v !== null && v !== undefined);
     const content = `<div class="ad2e-spell-card"><h3>${esc(spell.name)}${sys.reversible ? ` <em>(${i18n("AD2E.Spell.Reversible")})</em>` : ""}</h3>`
       + `<dl>${rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`
@@ -2214,7 +2230,13 @@ export default class AD2EActor extends Actor {
       + (comp.used.length ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Components.Used", { list: comp.used.join(", ") }))}</p>` : "")
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
-    return this.#castAtTargets(spell, content);
+    const message = await this.#castAtTargets(spell, content);
+    // Spell effects (module/spell-effects.mjs): duration and recipients asked at cast; targets that resisted are left out.
+    const cast = message?.getFlag?.("ad2e", "spellCast");
+    const resisted = new Set((cast?.resisted ?? []).map(t => t.uuid));
+    await askSpellEffect(this, spell, { level: Number(castingLevel) || 1,
+      targets: (cast?.targets ?? []).filter(t => !resisted.has(t.uuid)) });
+    return message;
   }
 
   /**

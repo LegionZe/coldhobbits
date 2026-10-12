@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.49)
+## Status (v1.0.50)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,20 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Spell effects (1.0.50; owner's rulings: a timer plus GM-set modifiers, asked at cast, removed with a notice): after a
+  cast (world setting "Spell effects at cast", on by default) a dialog shows the length read from the spell's Duration
+  at the casting level (`module/spell-effects.mjs` `parseDuration`: per-level terms such as "1 rd./level" and "1 rd./2
+  levels", ranges read as dice ("1-4" = 1d4), dice rolled, fractions, number words; checked on 4,378 Duration entries of
+  the AD&D 2e wiki: 2,506 timed, 475 instantaneous, 289 permanent, 18 concentration, 1,090 special or empty) and the
+  recipients (targeted creatures not resisting by magic resistance, the caster, or nobody). A round is one minute ("a
+  round is one minute", The Combat Round (PHB)) and a turn ten minutes (Time and Movement (PHB)); a month counts 30 days
+  and a year 365 (implementation choice). Each recipient gets an Active Effect (length in seconds from the cast's world
+  time; Foundry's own "rounds"/"turns" units are combat rounds and combatant turns, so they are not used); effects on
+  actors the caster does not own are created by the active GM. The active GM removes ended effects when world time
+  passes and whispers the GM, the recipient's owners and the caster's owners. Spell sheets have GM-only modifiers
+  (attack, damage, Armor Class (+1 = one point better), saving throws, checks); nothing is read from spell text. They
+  apply to character and monster attack and damage rolls, Armor Class, saving throws and ability/proficiency checks.
+  Active effects are listed on the Main tab (characters) and the header (monsters) with the time left and an end button.
 - Spell save requests (1.0.11; owner's ruling: Save buttons plus a GM roll-all): when the spell's Save entry is not
   None, the cast card asks the unresisted targets to save vs. the spell's "Save vs." category (new spell field
   `saveType`, default spell; it is not read from the spell page). The Damage roll splits by the recorded saves:

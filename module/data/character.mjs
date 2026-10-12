@@ -1,3 +1,4 @@
+import { effectModTotals } from "../spell-effects.mjs";
 import { fatigueFor } from "../dungeon-turns.mjs";
 import { languageSettings } from "../languages.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
@@ -391,7 +392,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.traits = this.#computeTraits();
     this.kitMods = this.#computeKitModifiers();
     const kitAc = this.kitMods.total("ac") + (this.ac.misc ?? 0);
-    for (const k of ["front", "missile", "rear"]) this.armor[k] -= kitAc;
+    // Spell effects (module/spell-effects.mjs): the GM-set modifiers of the actor's spell Active Effects; AC +1 = 1 better.
+    this.mods.spell = effectModTotals(this.parent?.effects);
+    for (const k of ["front", "missile", "rear"]) this.armor[k] -= kitAc + this.mods.spell.ac;
     this.encumbrance.info = this.#computeEncumbrance();
     // Debilitating poison: "one-half his normal movement rate" (Poison (DMG)).
     if (this.debilitated) this.encumbrance.info.rate = Math.floor(this.encumbrance.info.rate / 2);
@@ -405,8 +408,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     this.mods.march = TRAVEL.march.attackPerDay * (this.march?.days ?? 0) || 0;
     // Dungeon turns (module/dungeon-turns.mjs, owner's ruling): -1 to attacks and checks per 6 turns without a rest.
     this.mods.fatigue = fatigueFor(this.parent);
-    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.kitMods.total("attack");
-    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.kitMods.total("attack");
+    this.mods.meleeAttack = this.mods.hit + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.mods.spell.attack + this.kitMods.total("attack");
+    this.mods.missileAttack = this.mods.missile + encHit + this.mods.heat + this.mods.march + this.mods.fatigue + this.mods.spell.attack + this.kitMods.total("attack");
 
     const saveRow = lookup(AD2E.saveTable[this.classGroup], this.level);
     // Racial CON bonus (PHB Table 9) is a roll bonus vs. rod/staff/wand and spells; the poison
@@ -962,9 +965,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     const { dmg, missile: dexMissile, encumbranceHit } = this.mods;
     // Encumbrance attack penalty (Encumbrance (PHB)) applies to every attack roll.
     const kitHit = this.kitMods?.total("attack") ?? 0;
-    const kitDmg = this.kitMods?.total("damage") ?? 0;
+    const kitDmg = (this.kitMods?.total("damage") ?? 0) + (this.mods.spell?.damage ?? 0); // + spell effects (spell-effects.mjs)
     const heat = this.mods.heat ?? 0; // Al-Qadim heat penalty (aq-rules.mjs)
-    const march = (this.mods.march ?? 0) + (this.mods.fatigue ?? 0); // force marching (travel.mjs), missed rests (dungeon-turns.mjs)
+    // Force marching (travel.mjs), missed rests (dungeon-turns.mjs), spell effects (spell-effects.mjs).
+    const march = (this.mods.march ?? 0) + (this.mods.fatigue ?? 0) + (this.mods.spell?.attack ?? 0);
     const hit = this.mods.hit + encumbranceHit + heat + march + kitHit;
     const missile = dexMissile + encumbranceHit + heat + march + kitHit;
     const spec = AD2E.specialization;
@@ -1311,9 +1315,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       thac0: this.thac0.value,
       // Initiative is 1d10 + @init, lowest first: a kit's initiative bonus lowers the roll.
       init: this.initiative.mod - (this.kitMods?.total("initiative") ?? 0),
-      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0),
-      dmg: this.mods.dmg,
-      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0),
+      hit: this.mods.hit + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0) + (this.mods.spell?.attack ?? 0),
+      dmg: this.mods.dmg + (this.mods.spell?.damage ?? 0),
+      missile: this.mods.missile + (this.mods.encumbranceHit ?? 0) + (this.mods.heat ?? 0) + (this.mods.march ?? 0) + (this.mods.fatigue ?? 0) + (this.mods.spell?.attack ?? 0),
       move: this.encumbrance.info?.rate ?? null
     };
   }
