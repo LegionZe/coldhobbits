@@ -41,6 +41,12 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
       // Modifiers the GM sets for the spell's Active Effect (module/spell-effects.mjs; owner's ruling 1.0.50: nothing is
       // read from the spell text): attack and damage rolls, Armor Class (+1 = one point better), saving throws, checks.
+      // Animation when cast (module/spell-animations.mjs; JB2A through Sequencer): "" = automatic, "none" = no animation,
+      // else a Sequencer database path played in `mode`.
+      animation: new SchemaField({
+        file: text(),
+        mode: new StringField({ required: true, blank: true, initial: "", choices: ["", "missile", "cone", "burst", "target", "caster"] })
+      }),
       effectMods: new SchemaField({
         attack: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         damage: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),

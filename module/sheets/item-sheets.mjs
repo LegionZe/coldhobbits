@@ -8,6 +8,7 @@ import { identifyContext } from "../identify.mjs";
 import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { HOLY_ITEM } from "../importers/spell-components.mjs";
 import { durationSeconds, durationText, MOD_KEYS, parseDuration } from "../spell-effects.mjs";
+import { animationFor, jb2aAvailable, MODES } from "../spell-animations.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -389,6 +390,10 @@ export class SpellSheet extends AD2EItemSheet {
       gm: !!game.user?.isGM,
       mods: MOD_KEYS.map(key => ({ key, label: game.i18n.localize(`AD2E.SpellEffect.Mod.${key}`), value: sys.effectMods?.[key] ?? 0 })),
       kind: game.i18n.localize(`AD2E.SpellEffect.Kind.${parsed.kind}`),
+      animationAuto: (() => { const a = animationFor({ name: this.document.name, system: { ...sys, animation: {} } });
+        return a ? a.steps.map(s => `${game.i18n.localize(`AD2E.Animation.Mode.${s.mode}`)}: ${s.file}`).join(" → ") : ""; })(),
+      animationModes: Object.fromEntries(["", ...MODES].map(m => [m, m ? `AD2E.Animation.Mode.${m}` : "AD2E.Animation.Mode.auto"])),
+      animationReady: jb2aAvailable(),
       preview: parsed.terms.length ? [1, 5, 10].map(level => fmt("AD2E.SpellEffect.AtLevel", { level, length: durationText(durationSeconds(parsed, level), fmt) })).join(" · ") : ""
     };
     return context;

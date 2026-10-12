@@ -45,6 +45,11 @@
     <p class="ad2e-note">{{fx.kind}}{{#if fx.preview}}: {{fx.preview}}{{/if}}</p>
     <p class="ad2e-note">{{localize "AD2E.SpellEffect.ModsHint"}}</p>
     <div class="ad2e-item-fields">
+      <label data-tooltip="{{localize 'AD2E.Animation.FileHint'}}">{{localize "AD2E.Animation.File"}} <input type="text" name="system.animation.file" value="{{@root.system.animation.file}}" placeholder="{{localize 'AD2E.Animation.Automatic'}}"></label>
+      <label>{{localize "AD2E.Animation.ModeLabel"}} <select name="system.animation.mode">{{selectOptions fx.animationModes selected=@root.system.animation.mode localize=true}}</select></label>
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Animation.Automatic"}}: {{fx.animationAuto}}{{#unless fx.animationReady}} ({{localize "AD2E.Animation.NotAvailable"}}){{/unless}}</p>
+    <div class="ad2e-item-fields">
       {{#each fx.mods as |m|}}
       <label>{{m.label}} {{#if fx.gm}}<input type="number" name="system.effectMods.{{m.key}}" value="{{m.value}}" step="1">{{else}}<strong>{{m.value}}</strong>{{/if}}</label>
       {{/each}}

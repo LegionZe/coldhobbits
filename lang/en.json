@@ -3554,5 +3554,15 @@
     "Empty": "No spell effects.",
     "Setting": "Spell effects at cast",
     "SettingHint": "After a spell is cast, ask its length and recipients and create a timed Active Effect (removed when world time passes its end; a round is one minute)."
+  },
+  "AD2E.Animation": {
+    "Setting": "Spell animations (JB2A)",
+    "SettingHint": "When a spell is cast, play a JB2A animation from the caster's token to the targeted tokens. Needs the Sequencer module and a JB2A module (Patreon or free); without them nothing is played.",
+    "File": "Animation",
+    "FileHint": "Empty = automatic; \"none\" = no animation; or a Sequencer database path such as jb2a.magic_missile.purple.",
+    "ModeLabel": "Played",
+    "Automatic": "Automatic",
+    "NotAvailable": "Sequencer or JB2A not active",
+    "Mode": {"auto": "on each target (default)", "missile": "caster to each target", "cone": "caster towards the first target", "burst": "on the first target", "target": "on each target", "caster": "on the caster"}
   }
 }

@@ -150,6 +150,13 @@ The owner installs and updates from that manifest URL only (no shell access to t
   inputs on the spell sheet). Character `system.mods.spell` (attack in mods.meleeAttack/missileAttack, weapon hit, roll data;
   damage; ac on armor front/rear/missile), monster `system.spellMods` (ac.value); `AD2EActor#spellMod(key)` in saves, checks,
   monster attack/damage. Partial `ad2e.spell-effects` (context `spellEffects`).
+- Spell animations (owner's request 1.0.51): `module/spell-animations.mjs` (world setting `jb2aAnimations`; `jb2aAvailable` =
+  modules `sequencer` + `jb2a_patreon` or `JB2A_DnD5e` active and `globalThis.Sequence` / `Sequencer.Database`; pure
+  `ANIMATIONS` (curated name regexes -> steps { mode missile | cone | burst | target | caster, file, size, scale }),
+  `HEALING_FALLBACK`, `GENERIC_FALLBACK`, `normalizeName`, `animationFor` (spell `system.animation` { file, mode } override,
+  "none" = off), `animationSteps`; `playSpellAnimation(actor, spell)` called un-awaited by AD2EActor#castSpell, never throws,
+  `entryExists` per file, `new Sequence({ moduleName: "ad2e", softFail: true })`). Paths verified against jb2a_patreon 0.9.4
+  `scripts/jb2a_sequencer.js` (read from the release zip by byte range; the database registers on `sequencer.ready`).
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
