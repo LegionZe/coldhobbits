@@ -228,7 +228,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   proficiencies / abilities ids). Each control appears once (attacks only on Combat; Turn Undead, Lay on Hands, Surprise
   on Combat; ability tests on Main rows; animals and body weight on Character; movement figures and jumps in the footer,
   1.0.48). `_preparePartContext` sets `tab` to the part's tab or null (a dropped Spells part otherwise kept the previous
-  part's tab and showed inside Inventory, 1.0.48); character-spells.hbs renders only `{{#if tab}}`. Edit mode (`_editMode`, getter `editMode`,
+  part's tab and showed inside Inventory, 1.0.48); character-spells.hbs renders the tab `{{#if tab}}`, else one empty
+  hidden `<section data-tab="spells" hidden>`: every ApplicationV2 template part must render exactly one HTML element (core
+  14.369 throws "Template part ... must render a single HTML element"; 1.0.48 broke non-caster sheets). Edit mode (`_editMode`, getter `editMode`,
   action `toggleEditMode`, header button; default on without race or class; context `editMode`): setup inputs and
   `deleteItem` icons only while editing (`{{#if @root.editMode}}`), play controls keep `@root.editable`. GM section
   partial `ad2e.gm-controls` (context `gm`, GM only, end of the Character tab). CSS for these classes at the end of

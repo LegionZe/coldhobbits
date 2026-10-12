@@ -1,4 +1,6 @@
-{{!-- Spells tab: rendered only when the character has the tab (`tab` is null when it is dropped, 1.0.48). --}}
+{{!-- Spells tab. Foundry v14 requires every template part to render exactly one HTML element ("Template part "spells"
+     must render a single HTML element", owner's console log 1.0.48), so a character without the tab (`tab` null) gets an
+     empty hidden section (1.0.49). --}}
 {{#if tab}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with spellTab as |st|}}
@@ -83,4 +85,6 @@
   {{/each}}
   {{/with}}
 </section>
+{{else}}
+<section class="tab ad2e-tab" data-group="primary" data-tab="spells" hidden></section>
 {{/if}}
