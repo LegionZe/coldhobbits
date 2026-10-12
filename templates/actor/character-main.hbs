@@ -1,5 +1,5 @@
-{{!-- Main tab (1.0.47): abilities with their checks and tests, saves, health, defence and attack numbers, advancement and
-     movement. Setup inputs show only in edit mode (`editMode`); attacks and combat actions are on the Combat tab. --}}
+{{!-- Main tab (1.0.47): abilities with their checks and tests, saves, health, defence and attack numbers and advancement
+     (movement is in the footer). Setup inputs show only in edit mode (`editMode`); attacks and combat actions are on the Combat tab. --}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   <div class="ad2e-columns ad2e-columns-2">
     <fieldset class="ad2e-abilities">
@@ -82,32 +82,4 @@
     </fieldset>
   </div>
 
-  <fieldset class="ad2e-movement">
-    <legend>{{localize "AD2E.Move.Movement"}}</legend>
-    <div class="ad2e-prof-summary">
-      <span>{{localize "AD2E.Move.Movement"}}: <strong class="{{#if system.encumbrance.info.overMax}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Move.Hint'}}">{{moveLabel}}</strong></span>
-    </div>
-    <details class="ad2e-move-details">
-      <summary>{{localize "AD2E.Sheet.MoveDetails"}}</summary>
-      {{#with movement as |m|}}
-      <div class="ad2e-prof-summary">
-        <span data-tooltip="{{localize 'AD2E.Move.SneakHint'}}"><strong>{{localize "AD2E.Move.Sneak"}}</strong> {{m.sneak}} ft</span>
-        <span data-tooltip="{{localize 'AD2E.Move.WalkHint'}}"><strong>{{localize "AD2E.Move.Walk"}}</strong> {{m.walk}} yd</span>
-        <span data-tooltip="{{m.combatHint}}"><strong>{{localize "AD2E.Move.Combat"}}</strong> {{m.combat}} ft</span>
-        <span data-tooltip="{{m.jogHint}}"><strong>{{localize "AD2E.Move.Jog"}}</strong> {{m.jog}} yd</span>
-        <span data-tooltip="{{localize 'AD2E.Move.RunHint'}}"><strong>{{localize "AD2E.Move.Run"}}</strong> {{m.run3}} / {{m.run4}} yd</span>
-        <span data-tooltip="{{localize 'AD2E.Move.SprintHint'}}"><strong>{{localize "AD2E.Move.Sprint"}}</strong> {{m.run5}} yd</span>
-        <span data-tooltip="{{m.terrain}}"><strong>{{localize "AD2E.Travel.RoundTerrain"}}</strong> <i class="fa-solid fa-circle-info"></i></span>
-      </div>
-      <div class="ad2e-prof-summary">
-        <span data-tooltip="{{m.jumpHint}}"><strong>{{localize "AD2E.Move.Jump"}}</strong>
-          {{#if m.canJump}}
-          <a class="ad2e-roll" data-action="rollJump" data-jump="runningBroad">{{m.jump.runningBroad}}</a> /
-          <a class="ad2e-roll" data-action="rollJump" data-jump="runningHigh">{{m.jump.runningHigh}}</a> ·
-          <a class="ad2e-roll" data-action="rollJump" data-jump="standingBroad">{{m.jump.standingBroad}}</a> / {{m.jump.standingHigh}}
-          {{else}}—{{/if}}</span>
-      </div>
-      {{/with}}
-    </details>
-  </fieldset>
 </section>

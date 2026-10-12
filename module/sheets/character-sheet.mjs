@@ -430,7 +430,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   async _preparePartContext(partId, context, options) {
     context = await super._preparePartContext(partId, context, options);
-    if (context.tabs?.[partId]) context.tab = context.tabs[partId];
+    // Every part gets its own tab or none: a part whose tab is dropped (Spells for a character without spells) must not
+    // keep the previous part's tab and show inside it (owner's report 1.0.48: a Rest button on the Inventory tab).
+    context.tab = context.tabs?.[partId] ?? null;
     return context;
   }
 

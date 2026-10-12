@@ -226,7 +226,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
 - Character sheet layout (owner's request 1.0.47): six play-first tabs (part ids kept: main, combat, weapons = Inventory,
   spells, features = Skills & Proficiencies, bio = Character; `CharacterSheet.OLD_TABS` maps the removed class /
   proficiencies / abilities ids). Each control appears once (attacks only on Combat; Turn Undead, Lay on Hands, Surprise
-  on Combat; ability tests on Main rows; animals and body weight on Character). Edit mode (`_editMode`, getter `editMode`,
+  on Combat; ability tests on Main rows; animals and body weight on Character; movement figures and jumps in the footer,
+  1.0.48). `_preparePartContext` sets `tab` to the part's tab or null (a dropped Spells part otherwise kept the previous
+  part's tab and showed inside Inventory, 1.0.48); character-spells.hbs renders only `{{#if tab}}`. Edit mode (`_editMode`, getter `editMode`,
   action `toggleEditMode`, header button; default on without race or class; context `editMode`): setup inputs and
   `deleteItem` icons only while editing (`{{#if @root.editMode}}`), play controls keep `@root.editable`. GM section
   partial `ad2e.gm-controls` (context `gm`, GM only, end of the Character tab). CSS for these classes at the end of
