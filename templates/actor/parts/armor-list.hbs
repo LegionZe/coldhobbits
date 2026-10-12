@@ -8,7 +8,8 @@
     {{#if wt.ac.missileDiffers}}<span>{{localize "AD2E.Armor.VsMissiles"}}: <strong>{{wt.ac.missile}}</strong></span>{{/if}}
     <span>{{wt.ac.source}}{{#if wt.ac.shield}} + {{wt.ac.shield}}{{/if}}</span>
     {{#if combat}}{{#if @root.system.ac.misc}}<span data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}}: <strong>{{@root.system.ac.misc}}</strong></span>{{/if}}
-    {{else}}<label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>{{/if}}
+    {{else}}{{#if @root.editMode}}<label data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}} <input type="number" name="system.ac.misc" value="{{@root.system.ac.misc}}" step="1"></label>
+    {{else}}{{#if @root.system.ac.misc}}<span data-tooltip="{{localize 'AD2E.Armor.MiscHint'}}">{{localize "AD2E.Armor.Misc"}}: <strong>{{@root.system.ac.misc}}</strong></span>{{/if}}{{/if}}{{/if}}
   </div>
   {{#each armor as |a|}}
   <div class="ad2e-prof-row ad2e-armor-row draggable" data-item-id="{{a.id}}">
@@ -21,7 +22,7 @@
     {{#unless a.combat}}<label class="ad2e-spec {{#if a.unused}}ad2e-unmet{{/if}}" {{#if a.unused}}data-tooltip="{{localize 'AD2E.Armor.Unused'}}"{{/if}}>
       <input type="checkbox" data-action="toggleEquipped" data-item-id="{{a.id}}" {{checked a.equipped}} {{#unless @root.editable}}disabled{{/unless}}>
       {{localize "AD2E.Armor.Equipped"}}</label>
-    {{#if @root.editable}}<a data-action="deleteItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}{{/unless}}
+    {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{a.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}{{/unless}}
   </div>
   {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Armor.NoneYet"}}</p>
   {{/each}}

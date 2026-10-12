@@ -1,5 +1,5 @@
-{{!-- Class abilities (skills, backstab, turning, paladin powers): ft = featureTab (Class Abilities and Combat tabs). --}}
-{{!-- ft.combat (Combat tab): values as text, no form inputs (duplicate input names break the sheet form). --}}
+{{!-- Class abilities (skills, turning, paladin powers, features, kit): ft = featureTab (Skills & Proficiencies tab, 1.0.47).
+     Turn Undead, Lay on Hands and backstab are used from the Combat tab; skill points and species enemy change in edit mode. --}}
 {{!-- Re-bind ft as a block parameter: hash values are not visible inside nested {{#each}} blocks. --}}
 {{#with ft as |ft|}}
 {{#unless ft.classItem}}<p class="ad2e-placeholder">{{localize "AD2E.Ability2.None"}}</p>{{/unless}}
@@ -24,10 +24,10 @@
       <tr class="{{#unless s.available}}ad2e-unmet{{/unless}}">
         <th>{{s.label}}</th><td>{{s.base}}%</td><td>{{s.raceText}}</td><td>{{s.dexText}}</td>
         {{#if ft.showArmor}}<td>{{s.armorText}}</td>{{/if}}<td>{{s.kitText}}</td>
-        {{#if ft.showPoints}}<td>{{#if ft.combat}}{{s.points}}{{else}}<input type="number" name="system.classAbilities.points.{{s.key}}" value="{{s.points}}" min="0" max="95" step="1"
-          class="{{#if s.overLimit}}ad2e-unmet{{/if}}" {{#unless @root.editable}}disabled{{/unless}}>{{/if}}</td>{{/if}}
+        {{#if ft.showPoints}}<td>{{#if @root.editMode}}<input type="number" name="system.classAbilities.points.{{s.key}}" value="{{s.points}}" min="0" max="95" step="1"
+          class="{{#if s.overLimit}}ad2e-unmet{{/if}}">{{else}}<span class="{{#if s.overLimit}}ad2e-unmet{{/if}}">{{s.points}}</span>{{/if}}</td>{{/if}}
         <td><strong>{{s.total}}%</strong>{{#if s.capped}} <span data-tooltip="{{localize 'AD2E.Skill.Cap'}}">*</span>{{/if}}{{#if s.belowOne}} <span data-tooltip="{{localize 'AD2E.Skill.BelowOne'}}">!</span>{{/if}}</td>
-        <td><button type="button" data-action="rollClassSkill" data-skill="{{s.key}}" {{#unless s.available}}disabled{{/unless}}>{{localize "AD2E.Skill.Roll"}}</button></td>
+        <td><button type="button" data-action="rollClassSkill" data-skill="{{s.key}}" {{#unless s.available}}disabled{{/unless}}><i class="fa-solid fa-dice-d20"></i> {{localize "AD2E.Skill.Roll"}}</button></td>
       </tr>
       {{/each}}
     </tbody>
@@ -38,16 +38,10 @@
 </fieldset>
 {{/if}}
 
-{{#if ft.backstab}}
-<fieldset><legend>{{localize "AD2E.Ability2.Backstab"}}</legend><p>{{ft.backstab}}</p></fieldset>
-{{/if}}
 {{#if ft.turnLevel}}
 <fieldset>
   <legend>{{localize "AD2E.Ability2.TurnUndead"}}</legend>
-  <div class="ad2e-prof-summary">
-    <span>{{ft.turnLevel}}</span>
-    <button type="button" data-action="rollTurnUndead"><i class="fa-solid fa-cross"></i> {{localize "AD2E.Ability2.TurnUndead"}}</button>
-  </div>
+  <div class="ad2e-prof-summary"><span>{{ft.turnLevel}}</span></div>
   <p class="ad2e-note">{{localize "AD2E.Ability2.TurnHint"}}</p>
 </fieldset>
 {{/if}}
@@ -55,9 +49,8 @@
 <fieldset>
   <legend>{{localize "AD2E.Ability2.LayOnHands"}}</legend>
   <div class="ad2e-prof-summary">
-    <span>{{ft.layOnHands.text}}</span>
-    <button type="button" data-action="layOnHands" {{#if ft.layOnHands.used}}disabled data-tooltip="{{localize 'AD2E.Ability2.LayOnHandsUsed'}}"{{/if}}><i class="fa-solid fa-hand-holding-medical"></i> {{localize "AD2E.Ability2.LayOnHands"}}</button>
-    {{#if @root.editable}}<button type="button" data-action="restSpells"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Ability2.Rest"}}</button>{{/if}}
+    <span>{{ft.layOnHands.text}}{{#if ft.layOnHands.used}} · {{localize "AD2E.Ability2.LayOnHandsUsed"}}{{/if}}</span>
+    {{#if @root.editable}}{{#unless @root.system.spells.available}}<button type="button" data-action="restSpells"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Ability2.Rest"}}</button>{{/unless}}{{/if}}
   </div>
   <p>{{ft.cureDisease}}</p>
 </fieldset>
@@ -65,7 +58,7 @@
 {{#if ft.speciesEnemy}}
 <fieldset>
   <legend>{{localize "AD2E.Ability2.SpeciesEnemy"}}</legend>
-  {{#if ft.combat}}<strong>{{@root.system.classAbilities.speciesEnemy}}</strong>{{else}}<input type="text" name="system.classAbilities.speciesEnemy" value="{{@root.system.classAbilities.speciesEnemy}}" {{#unless @root.editable}}disabled{{/unless}}>{{/if}}
+  {{#if @root.editMode}}<input type="text" name="system.classAbilities.speciesEnemy" value="{{@root.system.classAbilities.speciesEnemy}}">{{else}}<strong>{{#if @root.system.classAbilities.speciesEnemy}}{{@root.system.classAbilities.speciesEnemy}}{{else}}—{{/if}}</strong>{{/if}}
   <p>{{ft.tracking}}</p>
 </fieldset>
 {{/if}}

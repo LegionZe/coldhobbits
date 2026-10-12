@@ -202,6 +202,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     window: { resizable: true },
     form: { submitOnChange: true },
     actions: {
+      toggleEditMode: CharacterSheet.#onToggleEditMode,
       rollAbility: CharacterSheet.onRollAbility,
       rollSave: CharacterSheet.onRollSave,
       rollTest: CharacterSheet.onRollTest,
@@ -306,28 +307,58 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     }
   };
 
+  /**
+   * Six play-first tabs (owner's request 1.0.47): Main (abilities with their checks and tests, saves, health, defence,
+   * advancement, movement), Combat (attacks and combat actions, weapons in hand), Inventory (part id "weapons"), Spells,
+   * Skills & Proficiencies (part id "features": class abilities, proficiencies, languages, traits) and Character (part id
+   * "bio": race, class and kit, body, station, familiar, mount, animals, henchmen, followers, biography, GM section). Each
+   * control appears once. The part ids of the old tabs are kept so a remembered tab still opens.
+   */
   static PARTS = {
     header: { template: "systems/ad2e/templates/actor/character-header.hbs" },
     tabs: { template: "templates/generic/tab-navigation.hbs" },
     main: { template: "systems/ad2e/templates/actor/character-main.hbs", scrollable: [""] },
     combat: { template: "systems/ad2e/templates/actor/character-combat.hbs", scrollable: [""] },
     weapons: { template: "systems/ad2e/templates/actor/character-weapons.hbs", scrollable: [""] },
-    class: { template: "systems/ad2e/templates/actor/character-class.hbs", scrollable: [""] },
-    features: { template: "systems/ad2e/templates/actor/character-features.hbs", scrollable: [""] },
-    proficiencies: { template: "systems/ad2e/templates/actor/character-proficiencies.hbs", scrollable: [""] },
     spells: { template: "systems/ad2e/templates/actor/character-spells.hbs", scrollable: [""] },
-    abilities: { template: "systems/ad2e/templates/actor/character-abilities.hbs", scrollable: [""] },
-    bio: { template: "systems/ad2e/templates/actor/character-bio.hbs" },
+    features: { template: "systems/ad2e/templates/actor/character-features.hbs", scrollable: [""] },
+    bio: { template: "systems/ad2e/templates/actor/character-bio.hbs", scrollable: [""] },
     footer: { template: "systems/ad2e/templates/actor/character-footer.hbs" }
   };
 
   static TABS = {
     primary: {
-      tabs: [{ id: "main" }, { id: "combat" }, { id: "weapons" }, { id: "class" }, { id: "features" }, { id: "proficiencies" }, { id: "spells" }, { id: "abilities" }, { id: "bio" }],
+      tabs: [{ id: "main" }, { id: "combat" }, { id: "weapons" }, { id: "spells" }, { id: "features" }, { id: "bio" }],
       initial: "main",
       labelPrefix: "AD2E.Tab"
     }
   };
+
+  /**
+   * Edit mode (owner's request 1.0.47, as dnd5e's play/edit sheet modes): setup fields (rolled scores, maximum hit points,
+   * base AC and overrides, level and experience, class group, alignment, kit choices, body details) and item delete icons
+   * show only while editing; play mode shows their values. A character without race or class opens in edit mode.
+   * Kept per sheet (not saved).
+   */
+  _editMode = null;
+
+  get editMode() {
+    if (!this.isEditable) return false;
+    if (this._editMode === null || this._editMode === undefined) {
+      const info = this.document?.system;
+      this._editMode = !info?.raceInfo?.raceItem || !info?.classInfo?.classItem;
+    }
+    return this._editMode;
+  }
+
+  static #onToggleEditMode() {
+    if (!this.isEditable) return;
+    this._editMode = !this.editMode;
+    this.render();
+  }
+
+  /** Old tab ids (before 1.0.47) open the tab that now holds their contents. */
+  static OLD_TABS = { class: "bio", proficiencies: "features", abilities: "main" };
 
   /** Coin quantity inputs edit the coin item (they have no form name, so the actor form ignores them). */
   _onRender(context, options) {
@@ -390,6 +421,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   }
 
   _prepareTabs(group) {
+    if (group === "primary" && CharacterSheet.OLD_TABS[this.tabGroups?.primary]) this.tabGroups.primary = CharacterSheet.OLD_TABS[this.tabGroups.primary];
     if (group === "primary" && this.tabGroups?.primary === "spells" && this.document?.system?.spells?.available === false) {
       this.tabGroups.primary = "main";
     }
@@ -448,6 +480,16 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
           }))
       };
     });
+    // Main tab (1.0.47): each ability row carries its tests and its table figures (tooltip on the score).
+    for (const ab of context.abilities) {
+      const d = context.abilityDetails.find(x => x.key === ab.key);
+      ab.score = d.score;
+      ab.tests = d.tests;
+      ab.stats = d.stats.map(st => `${st.label}: ${st.value}`).join("\n");
+    }
+    context.editMode = this.editMode;
+    context.isGM = !!game.user?.isGM;
+    context.alignmentLabel = AD2E.alignments[sys.alignment] ? game.i18n.localize(AD2E.alignments[sys.alignment]) : "—";
     context.alignments = AD2E.alignments;
     context.classTab = this._classTabContext(sys);
     context.profTab = this._proficiencyTabContext(sys);
@@ -461,8 +503,6 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.weaponMasterDisplay = !!kitSpecial(this.document).display;
     context.spellTab = this._spellTabContext(sys);
     context.featureTab = this._featureTabContext(sys);
-    // Combat tab copy: shown as text (the Class Abilities tab holds the inputs; duplicate names break the form).
-    context.combatFeatureTab = { ...context.featureTab, combat: true };
     context.movement = this._movementContext(sys);
     const enc = sys.encumbrance.info;
     context.moveLabel = `${enc.rate}${enc.category ? ` (${game.i18n.localize(`AD2E.Enc.${enc.category}`)})` : ""}`
@@ -494,6 +534,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         genders: { "": "—", ...Object.fromEntries(["male", "female", "non-binary", "agender"].map(k => [k, i18n(`AD2E.Gender.${k}`)])) },
         builds: { "": i18n("AD2E.Gender.BuildAuto"), male: i18n("AD2E.Gender.Build.male"), female: i18n("AD2E.Gender.Build.female") },
         feet: feetInches(sys.height), weight: sys.bodyWeight ?? "",
+        genderLabel: sys.gender ? i18n(`AD2E.Gender.${sys.gender}`) : "—",
         canRoll: this.isEditable && !!(raceHeight(raceId) || raceWeight(raceId))
       };
     }
@@ -502,6 +543,18 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       knockedOut: st.knockedOut, temporary: temporaryHp(sys.hp),
       rule: game.i18n.localize(st.doorRule ? "AD2E.Health.RuleDeathsDoorShort" : "AD2E.Health.RuleStandardShort") };
     context.classGroups = AD2E.classGroups;
+    // Level Up shows in play mode once the experience reaches the next level (always while editing).
+    context.levelUpReady = !sys.multi && !!sys.xpNext && (sys.xp ?? 0) >= sys.xpNext;
+    // GM section (Character tab, 1.0.47): only the GM sees it.
+    const ct = context.classTab;
+    context.gm = context.isGM ? {
+      followers: (context.followers?.status ?? []).filter(st => st.ready),
+      dual: ct?.dual ?? null,
+      familiar: !!context.familiar,
+      bond: context.bond?.kind ? context.bond : null,
+      station: context.station ?? null,
+      aging: context.aging
+    } : null;
     return context;
   }
 
@@ -877,7 +930,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const combatRows = rows.filter(r => r.equipped && !r.dropped).map(r => ({ ...r, combat: true }));
     const combatNote = game.i18n.localize(rows.length ? "AD2E.Weapon.EquipHint" : "AD2E.Weapon.NoneYet");
     const combatArmor = armor.filter(x => x.equipped).map(x => ({ ...x, combat: true }));
-    return { rows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value,
+    // Inventory tab rows (1.0.47): no attack buttons there (the Combat tab has them).
+    const inventoryRows = rows.map(r => ({ ...r, inventory: true }));
+    return { rows, inventoryRows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value,
       containers: containerContext(inv), animals: this._animalsContext(sys) };
   }
 
@@ -1410,10 +1465,11 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const settings = languageSettings();
     const raceId = sys.raceInfo?.raceItem?.system.identifier ?? "";
     const st = languageStatus(sys, this.actor.items, raceId, settings);
-    const canChange = this.isEditable && (settings.start === "start" || !!game.user?.isGM);
+    // Languages change in edit mode (1.0.47).
+    const canChange = this.editMode && (settings.start === "start" || !!game.user?.isGM);
     const count = (key, c) => ({ text: i18n(`AD2E.Language.Count.${key}`, { used: c.used, allowed: c.allowed }), over: c.used > c.allowed });
     return {
-      native: st.native, common: st.common, canChange, editable: this.isEditable,
+      native: st.native, common: st.common, canChange, editable: this.editMode,
       rows: st.rows.map(r => ({ ...r, kindLabel: i18n(`AD2E.Language.Kind.${r.kind}`),
         literateLabel: i18n(r.kind === "ancient" ? "AD2E.Language.ReadsAncient" : "AD2E.Language.Literate") })),
       modern: count(settings.mode === "table4" ? "table4" : "modern", st.modern), ancient: count("ancient", st.ancient),

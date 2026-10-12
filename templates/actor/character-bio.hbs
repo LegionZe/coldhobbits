@@ -1,4 +1,38 @@
+{{!-- Character tab (part id "bio", 1.0.47): race, class and kit, body and age, station, familiar, bonded companion or mount,
+     animals, henchmen, followers and stronghold, biography; the GM section (GM only) at the end. --}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{> "ad2e.race-class"}}
+  {{#with body as |b|}}
+  <div class="form-group ad2e-body"><label>{{localize "AD2E.Gender.Label"}}</label>
+    {{#if @root.editMode}}<select name="system.gender">{{selectOptions b.genders selected=@root.system.gender}}</select>
+    <label data-tooltip="{{localize 'AD2E.Gender.BuildHint'}}">{{localize "AD2E.Gender.BuildLabel"}} <select name="system.build">{{selectOptions b.builds selected=@root.system.build}}</select></label>
+    <label>{{localize "AD2E.Gender.Height"}} <input type="number" name="system.height" value="{{@root.system.height}}" min="0" step="1" placeholder="—"></label>
+    <label data-tooltip="{{localize 'AD2E.Animal.BodyWeightHint'}}">{{localize "AD2E.Animal.BodyWeight"}} <input type="number" name="system.bodyWeight" value="{{@root.system.bodyWeight}}" min="0" step="any"></label>
+    {{else}}<strong>{{b.genderLabel}}</strong>{{/if}}
+    {{#if b.feet}}<span class="ad2e-weapon-meta">{{b.feet}}</span>{{/if}}
+    {{#unless @root.editMode}}<span class="ad2e-weapon-meta" data-tooltip="{{localize 'AD2E.Animal.BodyWeightHint'}}">{{localize "AD2E.Animal.BodyWeight"}}: {{#if b.weight}}{{b.weight}}{{else}}—{{/if}}</span>{{/unless}}
+    {{#if @root.editMode}}{{#if b.canRoll}}<button type="button" data-action="rollHeightWeight" data-tooltip="{{localize 'AD2E.Gender.RollHint'}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Gender.Roll"}}</button>{{/if}}{{/if}}</div>
+  {{/with}}
+  <div class="form-group ad2e-age"><label>{{localize "AD2E.Character.age"}}</label>
+    {{#if editMode}}<input type="number" name="system.age" value="{{system.age}}" min="0" step="1" placeholder="—">{{else}}<strong>{{#if system.age}}{{system.age}}{{else}}—{{/if}}</strong>{{/if}}
+    {{#if aging.canRollStart}}<button type="button" data-action="rollStartingAge" data-tooltip="{{aging.startFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollStart"}}</button>{{/if}}
+    {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
+</div>
+  {{#with station as |s|}}
+  <fieldset class="ad2e-prof-list ad2e-station">
+    <legend data-tooltip="{{localize 'AD2E.Station.Hint'}}">{{localize "AD2E.Station.Label"}}</legend>
+    <div class="ad2e-prof-row">
+      <span class="ad2e-prof-name">{{#if s.set}}<strong>{{s.value}}</strong>{{else}}{{localize "AD2E.Station.NotSet"}}{{/if}}</span>
+      <span class="ad2e-weapon-meta">{{#if s.kitName}}{{s.kitName}}{{#if s.formula}} ({{s.formula}}){{/if}}{{/if}}{{#if s.state}} · {{s.state}}{{/if}}{{#if s.bonus}} · {{localize "AD2E.Station.BonusText" n=s.bonus days=s.bonusUntil}}{{/if}}</span>
+      {{#if s.canRoll}}<button type="button" data-action="stationRoll"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Station.Roll"}}</button>{{/if}}
+      {{#if s.set}}<button type="button" data-action="stationCheck" data-tooltip="{{localize 'AD2E.Station.CheckHint'}}">{{localize "AD2E.Station.Check"}}</button>{{/if}}
+    </div>
+    <div class="ad2e-prof-row">
+      {{#if s.editable}}<label data-tooltip="{{localize 'AD2E.Station.SpendHint'}}">{{localize "AD2E.Station.Spend"}} <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
+      <button type="button" data-action="stationSpend"><i class="fa-solid fa-coins"></i> {{localize "AD2E.Station.SpendButton"}}</button>{{/if}}
+    </div>
+  </fieldset>
+  {{/with}}
   {{#with familiar as |f|}}
   <fieldset class="ad2e-prof-list ad2e-familiar">
     <legend>{{localize "AD2E.Familiar.Title"}}</legend>
@@ -10,7 +44,7 @@
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{f.uuid}}">{{f.name}}</a></span>
         <span class="ad2e-weapon-meta {{#if f.dead}}ad2e-unmet{{/if}}">{{f.meta}}{{#if f.dead}} · {{localize "AD2E.Familiar.Dead"}}{{/if}}</span>
       </div>
-      {{#if @root.editable}}<a data-action="removeFamiliar" data-tooltip="{{localize 'AD2E.Familiar.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{else}}<span></span>{{/if}}
+      {{#if @root.editMode}}<a data-action="removeFamiliar" data-tooltip="{{localize 'AD2E.Familiar.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{else}}<span></span>{{/if}}
     </div>
     <div class="ad2e-prof-summary">
       <label data-tooltip="{{localize 'AD2E.Familiar.NearHint'}}"><input type="checkbox" name="system.familiar.near" {{checked f.near}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Familiar.Near"}}</label>
@@ -18,12 +52,11 @@
       {{#if f.needsDeathRoll}}<button type="button" data-action="familiarDeath" class="ad2e-unmet">{{localize "AD2E.Familiar.DeathButton"}}</button>{{/if}}
     </div>
     {{else}}
-    {{#if f.missing}}<p class="ad2e-placeholder ad2e-unmet">{{localize "AD2E.Familiar.Missing"}} {{#if @root.editable}}<a data-action="removeFamiliar"><i class="fa-solid fa-trash"></i></a>{{/if}}</p>
+    {{#if f.missing}}<p class="ad2e-placeholder ad2e-unmet">{{localize "AD2E.Familiar.Missing"}} {{#if @root.editMode}}<a data-action="removeFamiliar"><i class="fa-solid fa-trash"></i></a>{{/if}}</p>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Familiar.None"}}</p>{{/if}}
     {{/if}}
     <div class="ad2e-prof-summary">
       <span class="{{#if f.tooSoon}}ad2e-unmet{{/if}}">{{f.attemptText}}</span>
-      {{#if f.isGM}}<button type="button" data-action="findFamiliar" data-tooltip="{{localize 'AD2E.Familiar.FindHint'}}">{{localize "AD2E.Familiar.Find"}}</button>{{/if}}
     </div>
   </fieldset>
   {{/with}}
@@ -41,7 +74,7 @@
         {{#if b.current.oversize}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Bond.OversizeShort"}}</span>{{/if}}
         {{#each b.current.fit as |w|}}<span class="ad2e-weapon-meta ad2e-unmet">{{w}}</span>{{/each}}
       </div>
-      {{#if @root.editable}}<a data-action="bondClear" data-tooltip="{{localize 'AD2E.Bond.Clear'}}"><i class="fa-solid fa-link-slash"></i></a>{{else}}<span></span>{{/if}}
+      {{#if @root.editMode}}<a data-action="bondClear" data-tooltip="{{localize 'AD2E.Bond.Clear'}}"><i class="fa-solid fa-link-slash"></i></a>{{else}}<span></span>{{/if}}
     </div>
     {{else}}
     <p class="ad2e-placeholder">{{localize "AD2E.Bond.None"}}</p>
@@ -50,18 +83,30 @@
     {{/if}}
     {{#if b.barredText}}<p class="ad2e-note">{{localize "AD2E.Bond.Barred"}}: {{b.barredText}}</p>{{/if}}
     {{#if b.rapportLost}}<p class="ad2e-unmet">{{localize "AD2E.Bond.RapportLost"}}</p>{{/if}}
-    {{#if b.feeble}}<p class="ad2e-unmet">{{b.feeble}}{{#if b.isGM}} <button type="button" data-action="endFeeblemind">{{localize "AD2E.Bond.FeebleEnd"}}</button>{{/if}}</p>{{/if}}
-    {{#if b.isGM}}<div class="ad2e-prof-summary">
-      <button type="button" data-action="bondRoll" data-tooltip="{{localize 'AD2E.Bond.RollHint'}}"><i class="fa-solid fa-dice"></i> {{#if b.isCompanion}}{{localize "AD2E.Bond.CompanionTable"}}{{else}}{{localize "AD2E.Bond.MountTable"}}{{/if}}</button>
-      {{#if b.current.actor}}{{#if b.isCompanion}}
-      <button type="button" data-action="companionLost" data-careless="false">{{localize "AD2E.Bond.LostNatural"}}</button>
-      <button type="button" data-action="companionLost" data-careless="true">{{localize "AD2E.Bond.LostCareless"}}</button>
-      {{else}}
-      <button type="button" data-action="mountDied">{{localize "AD2E.Bond.MountDiedTitle"}}</button>
-      <button type="button" data-action="mountFled">{{localize "AD2E.Bond.FledTitle"}}</button>
-      {{/if}}{{/if}}
-    </div>{{/if}}
+    {{#if b.feeble}}<p class="ad2e-unmet">{{b.feeble}}</p>{{/if}}
     {{/if}}
+  </fieldset>
+  {{/with}}
+  {{#with weaponTab.animals as |an|}}
+  <fieldset class="ad2e-prof-list ad2e-animals">
+    <legend>{{localize "AD2E.Animal.Title"}}</legend>
+    <div class="ad2e-prof-summary">
+      <span class="{{#if an.missingBody}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Animal.RiderHint'}}">{{localize "AD2E.Animal.RiderWeight"}}: <strong>{{an.riderTotal}} lb</strong> ({{an.riderText}})</span>
+    </div>
+    {{#if an.error}}<p class="ad2e-note ad2e-unmet">{{an.error}}</p>{{/if}}
+    {{#each an.rows as |r|}}
+    <div class="ad2e-prof-row ad2e-armor-row">
+      <img src="{{r.img}}" alt="" width="24" height="24">
+      <div class="ad2e-weapon-main">
+        <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
+        <span class="ad2e-weapon-meta {{#if r.over}}ad2e-unmet{{/if}}">{{r.meta}}</span>
+        {{#if r.otherRiderText}}<span class="ad2e-weapon-meta">{{r.otherRiderText}}</span>{{/if}}
+      </div>
+      {{#if r.missing}}{{#if r.compendium}}{{#if @root.editable}}<button type="button" data-action="importAnimal" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Animal.ImportHint'}}">{{localize "AD2E.Animal.Import"}}</button>{{else}}<span></span>{{/if}}{{else}}<span></span>{{/if}}{{else}}<label class="ad2e-spec" data-tooltip="{{localize 'AD2E.Animal.RidingHint'}}"><input type="checkbox" data-action="toggleRiding" data-uuid="{{r.uuid}}" {{checked r.riding}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Animal.Riding"}}</label>{{/if}}
+      {{#if @root.editMode}}<a data-action="removeAnimal" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Animal.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Animal.DropHint"}}</p>
+    {{/each}}
   </fieldset>
   {{/with}}
   {{#with henchmen as |h|}}
@@ -69,7 +114,7 @@
     <legend>{{localize "AD2E.Henchmen.Title"}}</legend>
     <div class="ad2e-prof-summary">
       <span class="{{#if h.over}}ad2e-unmet{{/if}}" data-tooltip="{{localize 'AD2E.Henchmen.LifetimeHint'}}">{{localize "AD2E.Henchmen.Lifetime"}}: <strong>{{h.lifetime}} / {{h.max}}</strong></span>
-      <label data-tooltip="{{localize 'AD2E.Henchmen.LostHint'}}">{{localize "AD2E.Henchmen.Lost"}} <input type="number" name="system.henchmen.lost" value="{{h.lost}}" min="0" step="1" {{#unless @root.editable}}disabled{{/unless}}></label>
+      <label data-tooltip="{{localize 'AD2E.Henchmen.LostHint'}}">{{localize "AD2E.Henchmen.Lost"}} {{#if @root.editMode}}<input type="number" name="system.henchmen.lost" value="{{h.lost}}" min="0" step="1">{{else}}<strong>{{h.lost}}</strong>{{/if}}</label>
       <span data-tooltip="{{localize 'AD2E.Henchmen.LoyaltyHint'}}">{{localize "AD2E.Henchmen.Loyalty"}}: <strong>{{h.loyaltyText}}</strong></span>
       <span>{{localize "AD2E.Henchmen.Morale"}}: <strong>{{h.morale}}</strong></span>
     </div>
@@ -82,7 +127,7 @@
         {{#if r.tooHigh}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Henchmen.TooHigh"}}</span>{{/if}}
       </div>
       <button type="button" data-action="henchmanMorale" data-uuid="{{r.uuid}}">{{localize "AD2E.Monster.Morale"}}</button>
-      {{#if @root.editable}}<a data-action="removeHenchman" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Henchmen.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      {{#if @root.editMode}}<a data-action="removeHenchman" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Henchmen.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Henchmen.DropHint"}}</p>
     {{/each}}
@@ -92,9 +137,9 @@
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Followers.Title"}}</legend>
     <div class="ad2e-prof-summary">
-      <label>{{localize "AD2E.Followers.Stronghold"}} <input type="text" name="system.followers.stronghold.name" value="{{f.stronghold.name}}" placeholder="—" {{#unless @root.editable}}disabled{{/unless}}></label>
-      <select name="system.followers.stronghold.kind" {{#unless @root.editable}}disabled{{/unless}}><option value="">—</option>{{#each f.kinds as |k|}}<option value="{{k.key}}" {{#if k.selected}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
-      <label data-tooltip="{{localize 'AD2E.Followers.BuiltHint'}}"><input type="checkbox" name="system.followers.stronghold.built" {{checked f.stronghold.built}} {{#unless @root.editable}}disabled{{/unless}}> {{localize "AD2E.Followers.Built"}}</label>
+      <label>{{localize "AD2E.Followers.Stronghold"}} <input type="text" name="system.followers.stronghold.name" value="{{f.stronghold.name}}" placeholder="—" {{#unless @root.editMode}}disabled{{/unless}}></label>
+      <select name="system.followers.stronghold.kind" {{#unless @root.editMode}}disabled{{/unless}}><option value="">—</option>{{#each f.kinds as |k|}}<option value="{{k.key}}" {{#if k.selected}}selected{{/if}}>{{k.label}}</option>{{/each}}</select>
+      <label data-tooltip="{{localize 'AD2E.Followers.BuiltHint'}}"><input type="checkbox" name="system.followers.stronghold.built" {{checked f.stronghold.built}} {{#unless @root.editMode}}disabled{{/unless}}> {{localize "AD2E.Followers.Built"}}</label>
     </div>
     {{#with @root.castle as |c|}}
     <details class="ad2e-castle" {{#if c.building}}open{{/if}}>
@@ -163,7 +208,7 @@
     {{#each f.status as |s|}}
     <div class="ad2e-prof-summary">
       <span>{{s.label}}</span>
-      {{#if s.ready}}{{#if f.isGM}}<button type="button" data-action="attractFollowers" data-class="{{s.id}}"><i class="fa-solid fa-flag"></i> {{localize "AD2E.Followers.Attract"}}</button>{{else}}<span class="ad2e-weapon-meta">{{localize "AD2E.Followers.AskGM"}}</span>{{/if}}
+      {{#if s.ready}}<span class="ad2e-weapon-meta">{{localize "AD2E.Followers.AskGM"}}</span>
       {{else}}<span class="ad2e-weapon-meta">{{s.reasonText}}</span>{{/if}}
     </div>
     {{/each}}
@@ -174,50 +219,15 @@
         <span class="ad2e-item-title"><a class="ad2e-prof-name" data-action="openHenchman" data-uuid="{{r.uuid}}">{{r.name}}</a></span>
         <span class="ad2e-weapon-meta">{{r.detail}}</span>
       </div>
-      {{#if @root.editable}}<a data-action="removeFollower" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Followers.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+      {{#if @root.editMode}}<a data-action="removeFollower" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Followers.Remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
     {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Followers.DropHint"}}</p>
     {{/each}}
   </fieldset>
   {{/with}}
-  <div class="form-group ad2e-age"><label>{{localize "AD2E.Character.age"}}</label>
-    <input type="number" name="system.age" value="{{system.age}}" min="0" step="1" placeholder="—">
-    {{#if aging.canRollStart}}<button type="button" data-action="rollStartingAge" data-tooltip="{{aging.startFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollStart"}}</button>{{/if}}
-    {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
-    {{#if aging.isGM}}<label data-tooltip="{{localize 'AD2E.Aging.MaxHint'}}">{{localize "AD2E.Aging.MaxAge"}} <input type="number" name="system.maxAge" value="{{system.maxAge}}" min="0" step="1" placeholder="—"></label>
-    {{#if aging.maxFormula}}<button type="button" data-action="rollMaxAge" data-tooltip="{{aging.maxFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollMax"}}</button>{{/if}}{{/if}}</div>
-  {{#with station as |s|}}
-  <fieldset class="ad2e-prof-list ad2e-station">
-    <legend data-tooltip="{{localize 'AD2E.Station.Hint'}}">{{localize "AD2E.Station.Label"}}</legend>
-    <div class="ad2e-prof-row">
-      <span class="ad2e-prof-name">{{#if s.set}}<strong>{{s.value}}</strong>{{else}}{{localize "AD2E.Station.NotSet"}}{{/if}}</span>
-      <span class="ad2e-weapon-meta">{{#if s.kitName}}{{s.kitName}}{{#if s.formula}} ({{s.formula}}){{/if}}{{/if}}{{#if s.state}} · {{s.state}}{{/if}}{{#if s.bonus}} · {{localize "AD2E.Station.BonusText" n=s.bonus days=s.bonusUntil}}{{/if}}</span>
-      {{#if s.canRoll}}<button type="button" data-action="stationRoll"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Station.Roll"}}</button>{{/if}}
-      {{#if s.set}}<button type="button" data-action="stationCheck" data-tooltip="{{localize 'AD2E.Station.CheckHint'}}">{{localize "AD2E.Station.Check"}}</button>{{/if}}
-    </div>
-    <div class="ad2e-prof-row">
-      {{#if s.isGM}}<label>{{localize "AD2E.Station.Initial"}} <input type="number" name="system.station.base" value="{{@root.system.station.base}}" min="0" max="20" step="1" placeholder="—"></label>{{/if}}
-      {{#if s.editable}}<label data-tooltip="{{localize 'AD2E.Station.SpendHint'}}">{{localize "AD2E.Station.Spend"}} <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
-      <button type="button" data-action="stationSpend"><i class="fa-solid fa-coins"></i> {{localize "AD2E.Station.SpendButton"}}</button>{{/if}}
-    </div>
-    {{#if s.isGM}}
-    <div class="ad2e-prof-row">
-      <button type="button" data-action="stationConvict">{{#if s.criminal}}{{localize "AD2E.Station.Pardon"}}{{else}}{{localize "AD2E.Station.Convict"}}{{/if}}</button>
-      <button type="button" data-action="stationPenniless">{{#if s.penniless}}{{localize "AD2E.Station.NotPenniless"}}{{else}}{{localize "AD2E.Station.Penniless"}}{{/if}}</button>
-      {{#if s.penniless}}<label data-tooltip="{{localize 'AD2E.Station.DebtsHint' gp=s.pennilessGp}}"><input type="checkbox" name="system.station.debts" {{#if s.debts}}checked{{/if}}> {{localize "AD2E.Station.Debts"}}</label>{{/if}}
-      <button type="button" data-action="stationEnslave">{{#if s.slave}}{{localize "AD2E.Station.Free"}}{{else}}{{localize "AD2E.Station.Enslave"}}{{/if}}</button>
-    </div>
-    {{/if}}
+  <fieldset class="ad2e-biography-field">
+    <legend>{{localize "AD2E.Sheet.Biography"}}</legend>
+    <textarea class="ad2e-biography" name="system.biography" {{#unless editable}}disabled{{/unless}}>{{system.biography}}</textarea>
   </fieldset>
-  {{/with}}
-  {{#with body as |b|}}
-  <div class="form-group ad2e-body"><label>{{localize "AD2E.Gender.Label"}}</label>
-    <select name="system.gender">{{selectOptions b.genders selected=@root.system.gender}}</select>
-    <label data-tooltip="{{localize 'AD2E.Gender.BuildHint'}}">{{localize "AD2E.Gender.BuildLabel"}} <select name="system.build">{{selectOptions b.builds selected=@root.system.build}}</select></label>
-    <label>{{localize "AD2E.Gender.Height"}} <input type="number" name="system.height" value="{{@root.system.height}}" min="0" step="1" placeholder="—"></label>
-    {{#if b.feet}}<span class="ad2e-weapon-meta">{{b.feet}}</span>{{/if}}
-    <span class="ad2e-weapon-meta" data-tooltip="{{localize 'AD2E.Animal.BodyWeightHint'}}">{{localize "AD2E.Animal.BodyWeight"}}: {{#if b.weight}}{{b.weight}}{{else}}—{{/if}}</span>
-    {{#if b.canRoll}}<button type="button" data-action="rollHeightWeight" data-tooltip="{{localize 'AD2E.Gender.RollHint'}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Gender.Roll"}}</button>{{/if}}</div>
-  {{/with}}
-  <textarea class="ad2e-biography" name="system.biography">{{system.biography}}</textarea>
+  {{#if isGM}}{{> "ad2e.gm-controls"}}{{/if}}
 </section>

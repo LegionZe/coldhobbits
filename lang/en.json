@@ -103,13 +103,13 @@
   "AD2E.Tab": {
     "main": "Main",
     "combat": "Combat",
+    "weapons": "Inventory",
+    "spells": "Spells",
+    "features": "Skills & Proficiencies",
+    "bio": "Character",
     "class": "Race & Class",
     "proficiencies": "Proficiencies",
-    "abilities": "Abilities",
-    "bio": "Biography",
-    "weapons": "Equipment",
-    "spells": "Spells",
-    "features": "Class Abilities"
+    "abilities": "Abilities"
   },
   "AD2E.Character.kit": "Class Kit",
   "AD2E.Class": {
@@ -338,11 +338,11 @@
     "Proficiency": "Weapon proficiency",
     "MagicHit": "Magical attack bonus",
     "MagicDmg": "Magical damage bonus",
-    "EquipHint": "No weapon in hand. Tick Equipped on the Equipment tab to ready a weapon.",
+    "EquipHint": "No weapon in hand. Tick Equipped on the Inventory tab to ready a weapon.",
     "Stow": "Stow",
     "StowHint": "Sheathe, sling or stow the weapon: still carried, no longer in hand.",
     "Drop": "Drop",
-    "DropHint": "Drop the weapon: no longer in hand or counted toward encumbrance until picked up (Equipment tab).",
+    "DropHint": "Drop the weapon: no longer in hand or counted toward encumbrance until picked up (Inventory tab).",
     "Dropped": "Dropped",
     "PickUp": "Pick up",
     "StowChat": "{name} puts away the {weapon}.",
@@ -509,6 +509,18 @@
     "Total": "total"
   },
   "AD2E.Sheet.Equipment": "AD&D 2e Equipment",
+  "AD2E.Sheet.EditOn": "Editing",
+  "AD2E.Sheet.EditOff": "Edit",
+  "AD2E.Sheet.EditOnHint": "Edit mode: rolled scores, maximum hit points, base AC and overrides, level and experience, kit choices and body details can be changed, and items can be deleted. Click to go back to play mode.",
+  "AD2E.Sheet.EditOffHint": "Play mode: values and roll buttons only. Click to edit the character's setup (scores, overrides, level, details) and delete items.",
+  "AD2E.Sheet.AbilityHint": "Click an ability for a check; the buttons beside it roll its tests. Hover the score for its table figures.",
+  "AD2E.Sheet.Health": "Health",
+  "AD2E.Sheet.Defence": "Defence and attack",
+  "AD2E.Sheet.MoveDetails": "Movement rates and jumps",
+  "AD2E.Sheet.Actions": "Actions",
+  "AD2E.Sheet.WeaponsInHand": "Weapons in hand",
+  "AD2E.Sheet.Biography": "Biography",
+  "AD2E.Sheet.GmSection": "GM",
   "AD2E.Sheet.Monster": "AD&D 2e Monster / NPC",
   "AD2E.Monster": {
     "Tab": {
@@ -664,7 +676,7 @@
     "NotCombination": "These classes are not one of the race's multi-class combinations.",
     "Primary": "main",
     "PrimaryHint": "Its level and experience are the ones in the sheet header; the warrior class comes first (warrior Constitution bonus).",
-    "TabNote": "Experience awards are divided between the classes. Level Up here advances one class; the Level Up button on the Main tab asks which.",
+    "TabNote": "Experience awards are divided between the classes. Level Up here advances one class; the Level Up button on the Main tab (edit mode) asks which.",
     "WhichClass": "Which class advances?",
     "HpGained": "{hp} hit points (Hit Die divided by {n} classes)",
     "FirstHp": "{hp} hit points ({n} dice averaged, plus Constitution)",
@@ -827,7 +839,7 @@
       "Kind": { "gear": "Equipment", "container": "Container", "armor": "Armour, shield or helmet", "ammunition": "Ammunition" },
       "Blank": "— blank item —",
       "Category": "Category",
-      "ContainerHint": "Items put in it count toward its capacity; it is checked on the Equipment tab.",
+      "ContainerHint": "Items put in it count toward its capacity; it is checked on the Inventory tab.",
       "CapacityWeight": "Capacity (lb)",
       "CapacityVolume": "Capacity (volume, as written)",
       "ArmorKind": "Armour kind",
@@ -1065,8 +1077,8 @@
     "FledConfirm": "The mount flees from neglect: the rider can never again have a bonded mount. Continue?",
     "Fled": "{name}'s mount {mount} fled: no empathic rapport with an animal again.",
     "DeathNotice": {
-      "companion": "{name}'s animal companion {animal} has died: use the buttons on {name}'s Biography tab.",
-      "mount": "{name}'s bonded mount {animal} has died: use \"Mount died\" on {name}'s Biography tab."
+      "companion": "{name}'s animal companion {animal} has died: use the buttons on {name}'s Character tab.",
+      "mount": "{name}'s bonded mount {animal} has died: use \"Mount died\" on {name}'s Character tab."
     },
     "Refused": {
       "kit": "{name}: the character's kit has no such bond.",
@@ -1361,7 +1373,7 @@
     "fighter": {
       "specialization": {
         "name": "Weapon specialization",
-        "text": "Extra weapon slots buy specialization: see the Proficiencies tab."
+        "text": "Extra weapon slots buy specialization: see the Skills & Proficiencies tab."
       },
       "followers": {
         "name": "Followers",
@@ -1561,7 +1573,7 @@
       },
       "opposition": {
         "name": "Opposition schools",
-        "text": "Cannot learn spells of the opposition schools or use items that duplicate them (see the Race & Class tab)."
+        "text": "Cannot learn spells of the opposition schools or use items that duplicate them (see the Character tab)."
       },
       "newSpellLevel": {
         "name": "Free school spell",
@@ -2182,7 +2194,7 @@
     "BodyWeightChat": "Body weight (PHB Table 10): {name}, {sex}",
     "HeightText": "{race}: base height {male} in (male) or {female} in (female), plus {dice}.",
     "HeightWeightTitle": "Height and weight (PHB Table 10)",
-    "ColumnAsk": "Which Table 10 column (male or female base figures)? The choice is recorded on the Bio tab.",
+    "ColumnAsk": "Which Table 10 column (male or female base figures)? The choice is recorded on the Character tab.",
     "HeightChat": "Height (PHB Table 10): {name}, {sex}: {result}",
     "NoRaceWeight": "No PHB Table 10 weight for this race: enter the body weight by hand.",
     "RiderWeight": "Weight as a rider",
@@ -2940,7 +2952,7 @@
     "SoldiersNote": "Troop types and equipment are set by the GM.",
     "Placeholder": "No compendium statistics: enter them from the linked page.",
     "Card": "{name}: {cls} followers",
-    "Created": "{n} follower actors created and linked on the character's Bio tab.",
+    "Created": "{n} follower actors created and linked on the character's Character tab.",
     "Remove": "Remove from the followers list (the actor is kept)",
     "DropHint": "No followers. Follower units (role \"Follower unit\") dropped on the sheet are listed here.",
     "UnitSize": "Figures in unit",
