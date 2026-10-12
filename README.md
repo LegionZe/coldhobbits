@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.52)
+## Status (v1.0.53)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Sound effects (1.0.53; owner's request, owner's module PSFX): world settings "Sound effects (PSFX)" (on by default) and
+  "Sound effects volume" (0-1, default 0.8). When Sequencer and PSFX (Peri's Sound Effects, module id `psfx`,
+  https://github.com/JimHPerry/psfx) are active, spells and attacks play a sound through Sequencer's sound section
+  (`module/sound-effects.mjs`). JB2A has no sounds: jb2a_patreon 0.9.4 ships 11,855 `.webm` animations and no audio
+  files, and the inspected animations have a video stream only (ffprobe). PSFX registers 249 sounds under "psfx" on
+  `sequencer.ready` (psfx 0.18.0 `scripts/init.js`, `scripts/psfx_sequencer.js`); all 34 paths used were checked against
+  that database. Spells by their animation entry (fallback: generic casting sound; animation "none" = silent), attacks
+  by weapon kind (light or heavy swing, spear, bow/crossbow, firearm) with an impact on a hit (B bludgeoning, else
+  slashing); delays and choices are implementation choices. Without the modules nothing plays and nothing is reported.
 - Weapon attack animations (1.0.52; owner's request): world setting "Weapon attack animations (JB2A)" (on by default),
   same requirements as the spell animations (Sequencer + a JB2A module). After an attack roll (character weapon attacks,
   the sheet's plain melee/missile attack, unarmed attacks, monster attacks) the attacker's token strikes or shoots at each

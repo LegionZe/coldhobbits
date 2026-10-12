@@ -79,15 +79,15 @@ export const THROWN_BY_TYPE = { S: "jb2a.handaxe.throw.01", P: "jb2a.spear.throw
 export function weaponAnimation({ kind = "weapon", name = "", identifier = "", type = "", missile = false, thrown = false, override = "" } = {}) {
   const own = String(override ?? "").trim();
   if (own.toLowerCase() === "none") return null;
-  if (own) return { file: own, onTarget: false };
-  if (kind === "unarmed") return { file: UNARMED, onTarget: false };
+  if (own) return { id: "custom", file: own, onTarget: false };
+  if (kind === "unarmed") return { id: "unarmed", file: UNARMED, onTarget: false };
   const key = `${identifier} ${String(name).toLowerCase().replace(/['’]/g, "").replace(/\s+/g, "-")}`;
   const list = kind === "natural" ? [...NATURAL, ...WEAPONS] : WEAPONS;
   const hit = kind === "plain" ? null : list.find(w => w.match.test(key) && (missile ? w.missile : w.melee));
-  if (hit) return { file: missile ? hit.missile : hit.melee, onTarget: !missile && !!hit.onTarget };
+  if (hit) return { id: hit.id, file: missile ? hit.missile : hit.melee, onTarget: !missile && !!hit.onTarget };
   const letter = String(type ?? "").toUpperCase().match(/[SPB]/)?.[0] ?? "S";
-  if (missile) return { file: thrown ? THROWN_BY_TYPE[letter] : MISSILE_FALLBACK, onTarget: false };
-  return { file: BY_TYPE[letter], onTarget: false };
+  if (missile) return { id: thrown ? `thrown-${letter}` : "launcher", file: thrown ? THROWN_BY_TYPE[letter] : MISSILE_FALLBACK, onTarget: false };
+  return { id: `type-${letter}`, file: BY_TYPE[letter], onTarget: false };
 }
 
 export function weaponAnimationsOn() {
