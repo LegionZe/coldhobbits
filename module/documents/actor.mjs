@@ -39,6 +39,7 @@ import { TRAVEL } from "../rules/travel-tables.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
 import { playSpellAnimation } from "../spell-animations.mjs";
+import { playWeaponAnimation } from "../weapon-animations.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -974,6 +975,9 @@ export default class AD2EActor extends Actor {
     const misfire = !!misfireAt && natural !== null && natural <= misfireAt;
     if (misfire) notes.push(game.i18n.format("AD2E.Firearm.Misfire", { n: natural, at: misfireAt }));
     const hit = !misfire && (t51.auto || roll.total >= needed);
+    // JB2A animation through Sequencer (module/weapon-animations.mjs; not awaited, never throws).
+    playWeaponAnimation(this, { kind: "weapon", name: item.name, identifier: item.system.identifier, type: item.system.weapon?.type,
+      missile: use === "missile", thrown: this.#isThrownItem(item, use) }, { hit });
     // Critical hit (Combat & Tactics, world setting "criticalHits"; module/criticals.mjs): a natural 18+ hitting by 5 or more.
     let crit = null;
     if (hit && criticalMode() !== "off" && isCritical(natural, roll.total, needed)) {
@@ -1793,6 +1797,7 @@ export default class AD2EActor extends Actor {
     if (dualThac0 !== null) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatThac0", { n: dualThac0 }));
     const needed = (dualThac0 ?? sys.thac0.value) - input.ac;
     const hit = input.t51.auto || roll.total >= needed;
+    playWeaponAnimation(this, { kind: "unarmed", name: form }, { hit }); // module/weapon-animations.mjs
     const rolls = [roll];
     let result = i18n("AD2E.Roll.Miss");
     let damageFlags = {}; // chat context menu: apply to selected tokens (module/health.mjs)
@@ -2054,6 +2059,11 @@ export default class AD2EActor extends Actor {
     const spellHit = this.spellMod("attack"); // spell effects (module/spell-effects.mjs)
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march + spellHit, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
+    // JB2A animation (module/weapon-animations.mjs): a weapon item by its fields, a natural attack by its name.
+    playWeaponAnimation(this, attack.poisonItem
+      ? { kind: "weapon", name: attack.poisonItem.name, identifier: attack.poisonItem.system.identifier, type: attack.type,
+        missile: !attack.melee, thrown: attack.poisonItem.system.weapon?.strength === "full" && !attack.melee }
+      : { kind: "natural", name: attack.name, type: attack.type, missile: !attack.melee }, { hit });
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
     if (hit && criticalMode() !== "off" && isCritical(roll.dice?.[0]?.total ?? null, roll.total, needed)) {
@@ -2856,6 +2866,7 @@ export default class AD2EActor extends Actor {
     const t51 = input.t51 ?? { sum: 0, auto: false, text: "" };
     const roll = await new Roll("1d20 + @adj + @mod", { adj: adj + t51.sum, mod: input.mod }).evaluate();
     const hit = t51.auto || roll.total >= needed;
+    playWeaponAnimation(this, { kind: "plain", missile }, { hit }); // module/weapon-animations.mjs
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }),
       flavor: `${game.i18n.localize("AD2E.Roll.Attack")} vs AC ${targetAc}${AD2EActor.#targetText(targets)} `

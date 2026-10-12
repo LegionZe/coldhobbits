@@ -157,6 +157,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   "none" = off), `animationSteps`; `playSpellAnimation(actor, spell)` called un-awaited by AD2EActor#castSpell, never throws,
   `entryExists` per file, `new Sequence({ moduleName: "ad2e", softFail: true })`). Paths verified against jb2a_patreon 0.9.4
   `scripts/jb2a_sequencer.js` (read from the release zip by byte range; the database registers on `sequencer.ready`).
+- Weapon animations (owner's request 1.0.52): `module/weapon-animations.mjs` (world setting `jb2aWeaponAnimations`; pure
+  `WEAPONS` (regex on "<identifier> <name>" -> melee / missile path, `onTarget`), `NATURAL` (monster attack names), `UNARMED`,
+  `BY_TYPE`, `THROWN_BY_TYPE`, `MISSILE_FALLBACK`, `weaponAnimation({ kind weapon | natural | unarmed | plain, name, identifier,
+  type, missile, thrown, override })`; `playWeaponAnimation(actor, attack, { hit })` un-awaited after the hit is known in
+  rollWeaponAttack, rollMonsterAttack, rollUnarmed, rollAttack; stretched with `missed(true)` on a miss, on-target hits only;
+  uses spell-animations.mjs `jb2aAvailable` / `casterToken`).
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

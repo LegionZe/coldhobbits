@@ -138,7 +138,7 @@ export function jb2aAvailable() {
 }
 
 /** The caster's token on the viewed scene: a controlled one first. */
-function casterToken(actor) {
+export function casterToken(actor) {
   const controlled = globalThis.canvas?.tokens?.controlled?.find(t => t.actor === actor);
   return controlled ?? actor?.getActiveTokens?.()?.[0] ?? null;
 }

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.51)
+## Status (v1.0.52)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Weapon attack animations (1.0.52; owner's request): world setting "Weapon attack animations (JB2A)" (on by default),
+  same requirements as the spell animations (Sequencer + a JB2A module). After an attack roll (character weapon attacks,
+  the sheet's plain melee/missile attack, unarmed attacks, monster attacks) the attacker's token strikes or shoots at each
+  targeted token; a miss uses Sequencer's `missed()` ("Causes the effect to target a location close to the
+  .stretchTowards() location, but not on it", src/sections/effect.js). `module/weapon-animations.mjs`: curated weapons
+  matched on identifier and name (implementation choice; every weapon in the compendiums checked), monster natural attacks
+  by name (bite and claws on the target, hits only), fallbacks by damage type S/P/B, thrown weapons by type, launchers an
+  arrow. All 44 paths are in the jb2a_patreon 0.9.4 database (melee entries carry its "melee" template, missiles
+  "ranged"); missing files at play time fall back to the generic swing or arrow, else nothing.
 - Spell animations (1.0.51; owner's request: JB2A when available, a toggle, no error without it): world setting "Spell
   animations (JB2A)" (on by default). When the Sequencer module (`sequencer`) and a JB2A module (`jb2a_patreon` or the
   free `JB2A_DnD5e`) are active, casting plays an animation through Sequencer (`module/spell-animations.mjs`): a curated
