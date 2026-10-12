@@ -1,3 +1,5 @@
+{{!-- Spells tab: rendered only when the character has the tab (`tab` is null when it is dropped, 1.0.48). --}}
+{{#if tab}}
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with spellTab as |st|}}
   <div class="ad2e-prof-summary">
@@ -81,3 +83,4 @@
   {{/each}}
   {{/with}}
 </section>
+{{/if}}
