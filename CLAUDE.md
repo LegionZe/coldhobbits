@@ -140,6 +140,16 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `module/rules/aq-tables.mjs` (heat penalty, asserted against Table 6), used by `module/aq-rules.mjs` (world setting
   `aqArmorHeat`, `system.mods.heat` on attacks and checks). Kit field `xpTable` (Kahin: druid, `KIT_XP` in
   build-class-data.py, asserted against the Table 3 footnote); corsair two-weapon exemption in combat-tables.
+- Spell effects (owner's rulings 1.0.50): `module/spell-effects.mjs` (pure `parseDuration`, `durationSeconds`, `averageDice`,
+  `durationText`, `spellMods`, `effectData`, `effectModTotals`, `expiredEffects`, `effectRows`, `bestUnit`, `defaultRecipients`,
+  `wantsEffect`; `askSpellEffect` (called by AD2EActor#castSpell after `#castAtTargets`, non-resisting targets), `applySpellEffect`
+  (owned actors directly, else a GM whisper flagged `ad2e.spellEffectRequest` { data, targets, done } created by the active GM's
+  createChatMessage hook), `processSpellEffects` (updateWorldTime, active GM: delete + whisper), `endSpellEffect` (sheet action
+  `endSpellEffect`), world setting `spellEffects`). Effects store `duration` in "seconds" and `flags.ad2e.spellEffect`
+  { spell, spellName, caster, casterName, until, mods }. Spell `system.effectMods` { attack, damage, ac, save, check } (GM-only
+  inputs on the spell sheet). Character `system.mods.spell` (attack in mods.meleeAttack/missileAttack, weapon hit, roll data;
+  damage; ac on armor front/rear/missile), monster `system.spellMods` (ac.value); `AD2EActor#spellMod(key)` in saves, checks,
+  monster attack/damage. Partial `ad2e.spell-effects` (context `spellEffects`).
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

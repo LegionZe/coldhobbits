@@ -1,3 +1,4 @@
+import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { STATION, stationRuleOn } from "../station.mjs";
 import { parseMagicResistance } from "../magic-resistance.mjs";
 import { neutralizePoison, POISON, poisonContext, poisonLabel } from "../poison.mjs";
@@ -26,6 +27,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     window: { resizable: true },
     form: { submitOnChange: true },
     actions: {
+      endSpellEffect: MonsterSheet.onEndSpellEffect,
       rollSave: MonsterSheet.onRollSave,
       pushMount: MonsterSheet.onPushMount,
       breakFreeNet: MonsterSheet.onBreakFreeNet,
@@ -83,6 +85,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     const i18n = k => game.i18n.localize(k);
     context.actor = actor;
     context.system = sys;
+    context.spellEffects = effectRows(this.document.effects, game.time?.worldTime ?? 0, (k, d) => d ? game.i18n.format(k, d) : game.i18n.localize(k));
     context.roles = AD2E.monsterRoles;
     // Al-Qadim station of an NPC (module/station.mjs): shown while the world setting is on; Table 1 other roles to roll.
     context.station = stationRuleOn() ? { roles: STATION.npcs.map((r, i) => ({ index: i, label: `${r.name} (${r.text})`, formula: r.formula })) } : null;
@@ -197,6 +200,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
 
   static onPushMount() { return pushMount(this.document); }
   static onSpringTrap() { return game.user?.isGM ? springTrap(this.document) : null; }
+  /** End a spell effect now (module/spell-effects.mjs). */
+  static onEndSpellEffect(event, target) { return endSpellEffect(this.document, target.dataset.effectId); }
   static onBreakFreeNet() { return this.document.breakFreeNet(); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }

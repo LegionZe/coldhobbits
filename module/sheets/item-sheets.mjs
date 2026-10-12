@@ -7,6 +7,7 @@ import { AD2E, armorSummary, equipmentSummary, gemBaseValue } from "../config.mj
 import { identifyContext } from "../identify.mjs";
 import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { HOLY_ITEM } from "../importers/spell-components.mjs";
+import { durationSeconds, durationText, MOD_KEYS, parseDuration } from "../spell-effects.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -381,6 +382,15 @@ export class SpellSheet extends AD2EItemSheet {
     context.materialChoices = sys.components.material ? await SpellSheet.catalog() : [];
     context.damageRows = (sys.damage ?? []).map((d, index) => ({ ...d, index }));
     context.damageKinds = { damage: "AD2E.Weapon.Damage", healing: "AD2E.Spell.Healing" };
+    // Spell effect (module/spell-effects.mjs): the GM-set modifiers and the duration as read at levels 1, 5 and 10.
+    const parsed = parseDuration(sys.duration);
+    const fmt = (k, d) => game.i18n.format(k, d);
+    context.effect = {
+      gm: !!game.user?.isGM,
+      mods: MOD_KEYS.map(key => ({ key, label: game.i18n.localize(`AD2E.SpellEffect.Mod.${key}`), value: sys.effectMods?.[key] ?? 0 })),
+      kind: game.i18n.localize(`AD2E.SpellEffect.Kind.${parsed.kind}`),
+      preview: parsed.terms.length ? [1, 5, 10].map(level => fmt("AD2E.SpellEffect.AtLevel", { level, length: durationText(durationSeconds(parsed, level), fmt) })).join(" · ") : ""
+    };
     return context;
   }
 

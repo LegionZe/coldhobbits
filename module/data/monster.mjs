@@ -5,6 +5,7 @@ import { poisonClassField, poisonStateField } from "./poison-fields.mjs";
 import { debilitated } from "../poison.mjs";
 import { inventory, PHYSICAL_TYPES } from "../containers.mjs";
 import { loadBand, riderOf, riderWeight } from "../animals.mjs";
+import { effectModTotals } from "../spell-effects.mjs";
 
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -123,6 +124,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       .sort((a, b) => (b.system.shield.melee + b.system.bonus) - (a.system.shield.melee + a.system.bonus))[0];
     const base = body ? body.system.ac - body.system.bonus : this.ac.base;
     this.ac.value = base - (shield ? shield.system.shield.melee + shield.system.bonus : 0);
+    // Spell effects (module/spell-effects.mjs): GM-set modifiers; AC +1 = one point better.
+    this.spellMods = effectModTotals(this.parent?.effects);
+    this.ac.value -= this.spellMods.ac;
     this.ac.armor = [body?.name, shield?.name].filter(Boolean).join(" + ");
 
     // Load carried (items + coins + other cargo) against PHB Table 49: full movement, 1/2, 1/4; "up to a maximum of

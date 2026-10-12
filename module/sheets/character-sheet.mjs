@@ -1,3 +1,4 @@
+import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
 import { lightItem, lightSpec, putOut, turnsLeft } from "../lights.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
@@ -202,6 +203,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     window: { resizable: true },
     form: { submitOnChange: true },
     actions: {
+      endSpellEffect: CharacterSheet.onEndSpellEffect,
       toggleEditMode: CharacterSheet.#onToggleEditMode,
       rollAbility: CharacterSheet.onRollAbility,
       rollSave: CharacterSheet.onRollSave,
@@ -351,6 +353,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     return this._editMode;
   }
 
+  /** End a spell effect now (module/spell-effects.mjs). */
+  static onEndSpellEffect(event, target) { return endSpellEffect(this.document, target.dataset.effectId); }
+
   static #onToggleEditMode() {
     if (!this.isEditable) return;
     this._editMode = !this.editMode;
@@ -440,6 +445,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const context = await super._prepareContext(options);
     context.actor = this.document;
     context.system = this.document.system;
+    context.spellEffects = effectRows(this.document.effects, game.time?.worldTime ?? 0, (k, d) => d ? game.i18n.format(k, d) : game.i18n.localize(k));
     const sys = this.document.system;
     context.abilities = AD2E.abilities.map(key => ({
       key,

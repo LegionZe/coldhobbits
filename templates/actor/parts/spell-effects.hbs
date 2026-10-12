@@ -1,0 +1,15 @@
+{{!-- Active spell effects (module/spell-effects.mjs, 1.0.50): name, time left at render, caster and GM-set modifiers; the
+     owner or GM can end one. Character Main tab and monster header. --}}
+{{#if spellEffects.length}}
+<div class="ad2e-spell-effects">
+  <strong>{{localize "AD2E.SpellEffect.Active"}}</strong>
+  {{#each spellEffects as |e|}}
+  <div class="ad2e-prof-row ad2e-content-row" data-effect-id="{{e.id}}">
+    <img src="{{e.img}}" alt="" width="20" height="20">
+    <span>{{e.name}}{{#if e.caster}} ({{localize "AD2E.SpellEffect.Caster"}}: {{e.caster}}){{/if}}{{#if e.mods}} · {{e.mods}}{{/if}}</span>
+    <span data-tooltip="{{localize 'AD2E.SpellEffect.Remaining'}}">{{e.remaining}}</span>
+    {{#if @root.editable}}<a data-action="endSpellEffect" data-effect-id="{{e.id}}" data-tooltip="{{localize 'AD2E.SpellEffect.End'}}"><i class="fa-solid fa-xmark"></i></a>{{else}}<span></span>{{/if}}
+  </div>
+  {{/each}}
+</div>
+{{/if}}

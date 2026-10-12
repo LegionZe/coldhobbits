@@ -39,6 +39,15 @@ export default class SpellData extends foundry.abstract.TypeDataModel {
       damage: new ArrayField(new SchemaField({ label: text(), formula: text(), kind: new StringField({ initial: "damage" }),
         perRound: new BooleanField({ initial: false }) })),
       range: text(), area: text(), castingTime: text(), duration: text(), save: text(),
+      // Modifiers the GM sets for the spell's Active Effect (module/spell-effects.mjs; owner's ruling 1.0.50: nothing is
+      // read from the spell text): attack and damage rolls, Armor Class (+1 = one point better), saving throws, checks.
+      effectMods: new SchemaField({
+        attack: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        damage: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        ac: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        save: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
+        check: new NumberField({ required: true, integer: true, initial: 0, nullable: false })
+      }),
       // Saving throw category asked of the targets when the spell allows a save (module/save-requests.mjs).
       saveType: new StringField({ required: true, initial: "sp", choices: ["par", "rsw", "pet", "br", "sp"] }),
       sources: new ArrayField(new StringField()),

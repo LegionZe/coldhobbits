@@ -46,6 +46,7 @@ import { registerCalendar } from "./calendar.mjs";
 import ZakharanCalendar from "./apps/calendar.mjs";
 import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
+import { registerSpellEffects } from "./spell-effects.mjs";
 import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
@@ -116,6 +117,7 @@ Hooks.once("init", () => {
     name: "AD2E.Calendar.Name", label: "AD2E.Calendar.Open", hint: "AD2E.Calendar.MenuHint", icon: "fa-solid fa-moon", type: ZakharanCalendar, restricted: false
   });
   registerLights();
+  registerSpellEffects();
   registerStation();
   // GM tool: random NPC builder (Configure Settings, or game.ad2e.createNpc(); module/npc-builder.mjs).
   game.settings.registerMenu("ad2e", "npcBuilder", {
@@ -224,6 +226,7 @@ Hooks.once("init", () => {
     "ad2e.container-list": "systems/ad2e/templates/actor/parts/container-list.hbs",
     "ad2e.trap-fields": "systems/ad2e/templates/actor/parts/trap-fields.hbs",
     "ad2e.poison-state": "systems/ad2e/templates/actor/parts/poison-state.hbs",
+    "ad2e.spell-effects": "systems/ad2e/templates/actor/parts/spell-effects.hbs",
     "ad2e.poison-coat": "systems/ad2e/templates/item/parts/poison-coat.hbs",
     "ad2e.item-material": "systems/ad2e/templates/item/parts/item-material.hbs"
   });
