@@ -38,6 +38,7 @@ import { chartKey, CRIT, targetKind } from "../criticals.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
+import { playSpellAnimation } from "../spell-animations.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -2231,6 +2232,9 @@ export default class AD2EActor extends Actor {
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
     const message = await this.#castAtTargets(spell, content);
+    // JB2A animation through Sequencer when both are active and the setting is on (module/spell-animations.mjs); not
+    // awaited, and it never throws.
+    playSpellAnimation(this, spell);
     // Spell effects (module/spell-effects.mjs): duration and recipients asked at cast; targets that resisted are left out.
     const cast = message?.getFlag?.("ad2e", "spellCast");
     const resisted = new Set((cast?.resisted ?? []).map(t => t.uuid));

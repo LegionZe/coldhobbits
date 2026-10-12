@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.50)
+## Status (v1.0.51)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,17 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Spell animations (1.0.51; owner's request: JB2A when available, a toggle, no error without it): world setting "Spell
+  animations (JB2A)" (on by default). When the Sequencer module (`sequencer`) and a JB2A module (`jb2a_patreon` or the
+  free `JB2A_DnD5e`) are active, casting plays an animation through Sequencer (`module/spell-animations.mjs`): a curated
+  list by spell name (41 entries, e.g. Magic Missile, Fireball, Lightning Bolt, Cone of Cold, Cure Wounds, Hold Person,
+  Web; implementation choice), else a healing glow for spells with a healing option, else a casting glow on the caster.
+  Every path was checked against the jb2a_patreon 0.9.4 database (`scripts/jb2a_sequencer.js`, which registers the
+  "jb2a" entries on Sequencer's `sequencer.ready` hook); at play time each path is checked with
+  `Sequencer.Database.entryExists` (the free module lacks some, which then fall back to the casting glow), and the
+  sequence uses `softFail`. Without the modules, a token or a database entry nothing happens and nothing is reported.
+  Spell field `animation` { file ("" automatic, "none", or a database path), mode } on the spell sheet. Sequencer API:
+  https://github.com/fantasycalendar/FoundryVTT-Sequencer (src/module.js, src/sections/effect.js).
 - Spell effects (1.0.50; owner's rulings: a timer plus GM-set modifiers, asked at cast, removed with a notice): after a
   cast (world setting "Spell effects at cast", on by default) a dialog shows the length read from the spell's Duration
   at the casting level (`module/spell-effects.mjs` `parseDuration`: per-level terms such as "1 rd./level" and "1 rd./2
