@@ -240,3 +240,14 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-language-row > .ad2e-language-native { grid-column: 1 / 3; display: flex; align-items: center; gap: 0.5rem; cursor: default; }
 .ad2e-language-native > input { flex: 1; min-width: 6rem; }
 .ad2e-language-row > input[type="text"] { min-width: 0; }
+
+/* Rows without the 24px icon column of .ad2e-prof-row (owner's screenshot 1.0.57: the Station rows put "Not rolled" and
+   the Spend label into that column). Station and light-source rows: name, note, then buttons; spell damage options: label,
+   formula, kind, per round, remove. */
+.ad2e-prof-row.ad2e-plain-row { grid-template-columns: minmax(8rem, 1fr) auto auto auto; }
+.ad2e-plain-row > .ad2e-inline-field { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.ad2e-plain-row > .ad2e-inline-field > input { width: 5rem; flex: none; }
+.ad2e-plain-row > button { width: auto; white-space: nowrap; }
+.ad2e-prof-row.ad2e-flex-row { display: flex; flex-wrap: wrap; }
+.ad2e-prof-row.ad2e-damage-row { grid-template-columns: minmax(5rem, 1fr) minmax(5rem, 1fr) auto auto 1.5rem; }
+.ad2e-damage-row > input[type="text"] { min-width: 0; }

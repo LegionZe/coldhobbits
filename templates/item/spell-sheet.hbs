@@ -28,7 +28,7 @@
     <legend>{{localize "AD2E.Spell.DamageFormula"}}</legend>
     <p class="ad2e-note">{{localize "AD2E.Spell.DamageFormulaHint"}}</p>
     {{#each damageRows as |d|}}
-    <div class="ad2e-prof-row ad2e-content-row">
+    <div class="ad2e-prof-row ad2e-content-row ad2e-damage-row">
       <input type="text" name="dmg.{{d.index}}.label" value="{{d.label}}" placeholder="{{localize 'AD2E.Spell.DamageLabel'}}">
       <input type="text" name="dmg.{{d.index}}.formula" value="{{d.formula}}">
       <select name="dmg.{{d.index}}.kind">{{selectOptions @root.damageKinds selected=d.kind localize=true}}</select>

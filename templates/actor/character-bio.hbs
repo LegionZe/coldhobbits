@@ -21,14 +21,14 @@
   {{#with station as |s|}}
   <fieldset class="ad2e-prof-list ad2e-station">
     <legend data-tooltip="{{localize 'AD2E.Station.Hint'}}">{{localize "AD2E.Station.Label"}}</legend>
-    <div class="ad2e-prof-row">
+    <div class="ad2e-prof-row ad2e-plain-row">
       <span class="ad2e-prof-name">{{#if s.set}}<strong>{{s.value}}</strong>{{else}}{{localize "AD2E.Station.NotSet"}}{{/if}}</span>
       <span class="ad2e-weapon-meta">{{#if s.kitName}}{{s.kitName}}{{#if s.formula}} ({{s.formula}}){{/if}}{{/if}}{{#if s.state}} · {{s.state}}{{/if}}{{#if s.bonus}} · {{localize "AD2E.Station.BonusText" n=s.bonus days=s.bonusUntil}}{{/if}}</span>
       {{#if s.canRoll}}<button type="button" data-action="stationRoll"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Station.Roll"}}</button>{{/if}}
       {{#if s.set}}<button type="button" data-action="stationCheck" data-tooltip="{{localize 'AD2E.Station.CheckHint'}}">{{localize "AD2E.Station.Check"}}</button>{{/if}}
     </div>
-    <div class="ad2e-prof-row">
-      {{#if s.editable}}<label data-tooltip="{{localize 'AD2E.Station.SpendHint'}}">{{localize "AD2E.Station.Spend"}} <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
+    <div class="ad2e-prof-row ad2e-plain-row ad2e-flex-row">
+      {{#if s.editable}}<label class="ad2e-inline-field" data-tooltip="{{localize 'AD2E.Station.SpendHint'}}">{{localize "AD2E.Station.Spend"}} <input type="number" class="ad2e-station-spend" value="1" min="1" step="1"></label>
       <button type="button" data-action="stationSpend"><i class="fa-solid fa-coins"></i> {{localize "AD2E.Station.SpendButton"}}</button>{{/if}}
     </div>
   </fieldset>
