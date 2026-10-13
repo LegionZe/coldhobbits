@@ -493,7 +493,7 @@ export default class AD2EActor extends Actor {
     let id = classId;
     if (!id) {
       id = await ad2eDialog.wait({
-        window: { title: `${this.name}: ${game.i18n.localize("AD2E.LevelUp")}` },
+        window: { title: `${this.name}: ${game.i18n.localize("AD2E.HP.LevelUp")}` },
         content: `<p>${game.i18n.localize("AD2E.Multi.WhichClass")}</p>`,
         buttons: classes.map((c, i) => ({ action: c.identifier, label: `${c.name} ${c.level} → ${c.level + 1}`, default: i === 0 })),
         rejectClose: false

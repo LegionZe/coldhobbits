@@ -612,6 +612,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   is created with `choices`, the default changes to `false`"); a choice field that may be empty needs `blank: true`, or
   Foundry drops invalid values on load (0.0.31-0.0.38 lost kit modifiers this way). The Node tests stub fields and
   cannot catch this; `node tools/check-pack-data.mjs` (run by the release workflow) checks every pack document.
+- lang/en.json: one block per top-level key. JSON keeps only the last of duplicate keys, so a second "AD2E.X" block silently
+  drops the first one's labels (a second "AD2E.Treasure" block from the treasure generator hid the inventory treasure and
+  gem/jewellery sheet labels until 1.0.59). Add keys to the existing block.
 - Test template rendering with helpers that behave like Foundry's (e.g. `selectOptions` throws on null choices).
 - THAC0 uses PHB Table 53 (generated); the progression in config.mjs only extends it past level 20 and is asserted
   against Table 53 by build-level-tables.py. Do not include rulebook text.
