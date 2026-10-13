@@ -255,7 +255,7 @@ export function treasureCard(result) {
     + `<dt>${i18n("AD2E.Treasure.Gems")}</dt><dd>${gems || "—"}</dd>`
     + `<dt>${i18n("AD2E.Treasure.Art")}</dt><dd>${art || "—"}</dd>`
     + `<dt>${i18n("AD2E.Treasure.Magic")}</dt><dd>${magic ? `<ul>${magic}</ul>` : "—"}</dd></dl>`
-    + `<p class="ad2e-note">${esc(fmt("AD2E.Treasure.Total", { gp: num(treasureValue(result)) }))}</p></div>`;
+    + `<p class="ad2e-note">${esc(fmt("AD2E.Treasure.RolledTotal", { gp: num(treasureValue(result)) }))}</p></div>`;
 }
 
 /** Dialog (GM): treasure letters (from a monster's Treasure field), platinum or electrum; posts the card. */
