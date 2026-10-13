@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.53)
+## Status (v1.0.54)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -43,7 +43,7 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Lasso and net dialogs are for characters; a monster attacking with either makes a normal attack.
 - Throwing objects: "Throw object" is for characters; where a missed object lands is described in chat (the GM moves
   or marks it); splash damage is rolled for the GM to apply to the creatures within 3 ft.
-- Overland terrain movement is not modelled; psionics are not included; monster pictures are never shipped.
+- Psionics are not included; monster pictures are never shipped.
 
 ## GM creators
 - Create monster (GM manual > GM tools, or `game.ad2e.createMonster()`; 1.0.1): a guided window for a Monster / NPC
@@ -141,6 +141,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Spell effects after saves (1.0.54; owner's request): when the cast card asks for saves and the spell's Save entry
+  negates it, an effect applied to the targets is stored on the card (`flags.ad2e.spellEffectPending`) and the active
+  GM creates it on each target whose save fails (save request kind "spell" handler, `module/save-requests.mjs`); saves
+  recorded before the dialog is answered are applied at once, a successful save gets nothing. Half and special saves
+  still apply the effect to every target at once (implementation choice). README: the "Planned" Al-Qadim station entry
+  (done in 1.0.31) and the outdated "overland terrain movement is not modelled" limitation (travel planner, 1.0.18) are
+  removed.
 - Sound effects (1.0.53; owner's request, owner's module PSFX): world settings "Sound effects (PSFX)" (on by default) and
   "Sound effects volume" (0-1, default 0.8). When Sequencer and PSFX (Peri's Sound Effects, module id `psfx`,
   https://github.com/JimHPerry/psfx) are active, spells and attacks play a sound through Sequencer's sound section
@@ -1187,6 +1194,5 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - API calls were checked against the v14 API docs (https://foundryvtt.com/api/) and dnd5e 6.0.5 (v14, https://github.com/foundryvtt/dnd5e). Confirmed working in Foundry 14.368 on 2026-10-02: sheet values, ability checks, saves, attacks, combat tracker and initiative.
 
 ## Planned
-- Al-Qadim station for characters ("Station in Life (AA)"; owner's request, next).
 - Not planned: subabilities and character points; monster pictures shipped with the system (copyright); psionics not
   for the time being (owner's decisions).

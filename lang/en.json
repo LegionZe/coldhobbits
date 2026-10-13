@@ -3544,6 +3544,8 @@
     "Apply": "Apply",
     "Applied": "{spell} on {names}: {length}.",
     "Relayed": "{spell}: the effect is created on {names} by the GM.",
+    "WaitsForSave": "The spell is negated by a successful saving throw: targeted creatures get the effect only when they fail their save.",
+    "OnFailedSave": "{spell}: the effect ({length}) is created on each target that fails its saving throw.",
     "Ended": "{spell} has ended on {name}.",
     "Indefinite": "no end",
     "RollNote": "spell effects {n}",
