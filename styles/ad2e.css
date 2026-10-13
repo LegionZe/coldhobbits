@@ -232,3 +232,11 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e .ad2e-gm-section { border-style: dashed; }
 .ad2e .ad2e-gm-section .ad2e-header-label { min-width: 7rem; }
 .ad2e .ad2e-move-details summary { cursor: pointer; }
+
+/* Language rows (Skills & Proficiencies tab): no icon column, unlike the proficiency rows' 24px first column (owner's
+   screenshot 1.0.56: the Native input was squeezed into that column and the common language's name overlapped its note).
+   Columns: name, note, reads/writes, remove. */
+.ad2e-prof-row.ad2e-language-row { grid-template-columns: minmax(8rem, 1fr) auto auto 1.5rem; }
+.ad2e-language-row > .ad2e-language-native { grid-column: 1 / 3; display: flex; align-items: center; gap: 0.5rem; cursor: default; }
+.ad2e-language-native > input { flex: 1; min-width: 6rem; }
+.ad2e-language-row > input[type="text"] { min-width: 0; }
