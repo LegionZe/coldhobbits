@@ -284,7 +284,12 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         food: new NumberField({ integer: true, min: 0, initial: 0 }), water: new NumberField({ integer: true, min: 0, initial: 0 }),
         starve: new SchemaField({ str: new NumberField({ integer: true, min: 0, initial: 0 }), con: new NumberField({ integer: true, min: 0, initial: 0 }) }),
         thirst: new SchemaField({ str: new NumberField({ integer: true, min: 0, initial: 0 }), con: new NumberField({ integer: true, min: 0, initial: 0 }) }),
-        zero: new SchemaField({ str: new BooleanField({ initial: false }), con: new BooleanField({ initial: false }) })
+        zero: new SchemaField({ str: new BooleanField({ initial: false }), con: new BooleanField({ initial: false }) }),
+        // Living off the land (module/forage.mjs): water found with Survival (world time; covers the next travel day) and
+        // the Survival categories tried today (one a day each; a failure ends the day's attempts).
+        waterFoundAt: new NumberField({ required: false, nullable: true, initial: null }),
+        forage: new SchemaField({ day: new NumberField({ required: false, nullable: true, integer: true, initial: null }),
+          tried: new ArrayField(new StringField()) })
       }),
       // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless (+ debts), enslaved (station while a
       // slave), freed (station when freed and when), spending bonus (points until a world time).

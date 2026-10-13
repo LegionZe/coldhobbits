@@ -194,13 +194,15 @@ export async function enslave(actor) {
 }
 
 /** Spend 1,000 gp a point from the character's coins: the bonus lasts a month (30 days) of world time. */
-export async function spendForStation(actor, points) {
-  points = Math.floor(Number(points) || 0);
-  if (points < 1) return null;
+/**
+ * Pay `copper` (cp) from an actor's coin items, taking the largest coins first and giving change in gp/sp/cp (payPlan).
+ * Resolves true when paid, false when the coins are short (nothing changes). Also used by module/wages.mjs.
+ */
+export async function payCoins(actor, copper) {
   const coins = actor.items.filter(i => i.type === "coin").map(i => ({ id: i.id, denomination: i.system.denomination,
     value: i.system.value ?? COIN_VALUES[i.system.denomination] ?? 0, quantity: i.system.quantity ?? 0 }));
-  const plan = payPlan(coins, points * STATION.goldPerPoint * COIN_VALUES.gp);
-  if (!plan) { ui.notifications?.warn(i18n("AD2E.Station.NotEnough", { gp: points * STATION.goldPerPoint })); return null; }
+  const plan = payPlan(coins, copper);
+  if (!plan) return false;
   const updates = Object.entries(plan.take).map(([id, n]) => ({ _id: id, "system.quantity": actor.items.get(id).system.quantity - n }));
   const create = [];
   for (const [d, n] of Object.entries(plan.change)) {
@@ -216,6 +218,16 @@ export async function spendForStation(actor, points) {
   }
   if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
   if (create.length) await actor.createEmbeddedDocuments("Item", create);
+  return true;
+}
+
+export async function spendForStation(actor, points) {
+  points = Math.floor(Number(points) || 0);
+  if (points < 1) return null;
+  if (!await payCoins(actor, points * STATION.goldPerPoint * COIN_VALUES.gp)) {
+    ui.notifications?.warn(i18n("AD2E.Station.NotEnough", { gp: points * STATION.goldPerPoint }));
+    return null;
+  }
   const now = game.time?.worldTime ?? 0;
   const b = actor.system.station.bonus ?? {};
   const active = b.until !== null && b.until !== undefined && b.until > now;

@@ -100,8 +100,10 @@ export function foodDays(items, days = rationDays) {
 
 /** Item updates eating `days` days of food, or null when there is not enough (pure; opened units first). */
 export function eatPlan(items, days = 1, perUnit = rationDays) {
+  // Foraged food first (module/forage.mjs), then opened units.
+  const foraged = i => i.system?.identifier === "foraged-food-per-day" ? 0 : 1;
   const foods = [...(items ?? [])].filter(i => perUnit(i) && (i.system?.quantity ?? 0) > 0)
-    .sort((a, b) => (a.system?.supply?.left == null) - (b.system?.supply?.left == null));
+    .sort((a, b) => foraged(a) - foraged(b) || (a.system?.supply?.left == null) - (b.system?.supply?.left == null));
   if (foodDays(foods, perUnit) + 1e-9 < days) return null;
   const updates = [];
   let need = days;
@@ -367,8 +369,11 @@ export async function supplyEater(actor, { sources = [actor], animal = false, ga
     from = src;
     break;
   }
-  // Water: from each inventory in turn until the day's need is met.
+  // Water: water found with Survival in the last day covers it (module/forage.mjs); else from each inventory in turn.
   let drunk = 0;
+  const foundAt = actor.type === "character" ? actor.system?.survival?.waterFoundAt : null;
+  const foundWater = Number.isFinite(foundAt) && (game.time?.worldTime ?? 0) - foundAt <= DAY;
+  if (foundWater) drunk = gallons;
   for (const src of sources) {
     if (drunk + 1e-9 >= gallons) break;
     const plan = drinkPlan(src.items, gallons - drunk);
@@ -401,7 +406,7 @@ export async function supplyEater(actor, { sources = [actor], animal = false, ga
   const d100 = () => d100s.shift() ?? 100;
   const r = survivalDay(sys.survival, { fed, watered, base, save: sys.saves?.[SURVIVAL.deathSave]?.value ?? 20,
     shock: sys.abilityData?.con?.systemShock ?? 0, d20, d100 });
-  const update = { "system.survival": r.survival };
+  const update = { "system.survival": { ...r.survival, waterFoundAt: null } };
   for (const k of r.permanent) update[`system.abilities.${k}.value`] = Math.max((sys.abilities[k].value ?? 1) - 1, 1);
   if (r.dead) update["system.hp.dead"] = true;
   await actor.update(update);

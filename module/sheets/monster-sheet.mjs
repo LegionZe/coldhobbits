@@ -1,3 +1,4 @@
+import { payArrears, wageContext } from "../wages.mjs";
 import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { STATION, stationRuleOn } from "../station.mjs";
 import { parseMagicResistance } from "../magic-resistance.mjs";
@@ -28,6 +29,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     form: { submitOnChange: true },
     actions: {
       endSpellEffect: MonsterSheet.onEndSpellEffect,
+      payArrears: MonsterSheet.onPayArrears,
       rollSave: MonsterSheet.onRollSave,
       pushMount: MonsterSheet.onPushMount,
       breakFreeNet: MonsterSheet.onBreakFreeNet,
@@ -160,6 +162,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Header link to the stat block's source page (completecompendium.com for imported monsters).
     // Wage (hirelings) or price (mounts); shown for those roles or whenever one is set.
     context.showCost = ["hireling", "mount", "pack"].includes(sys.role) || !!sys.cost;
+    context.wage = wageContext(actor);
     context.dead = sys.hpState?.state === "dead";
     context.knockedOut = !!sys.hpState?.knockedOut;
     context.temporary = temporaryHp(sys.hp);
@@ -202,6 +205,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onSpringTrap() { return game.user?.isGM ? springTrap(this.document) : null; }
   /** End a spell effect now (module/spell-effects.mjs). */
   static onEndSpellEffect(event, target) { return endSpellEffect(this.document, target.dataset.effectId); }
+  /** Pay a hireling's owed wages from its employer (module/wages.mjs). */
+  static onPayArrears() { return payArrears(this.document); }
   static onBreakFreeNet() { return this.document.breakFreeNet(); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
