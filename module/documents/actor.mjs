@@ -41,6 +41,7 @@ import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
 import { playSpellAnimation } from "../spell-animations.mjs";
 import { playWeaponAnimation } from "../weapon-animations.mjs";
 import { playAttackSound, playSpellSound } from "../sound-effects.mjs";
+import { forageFields, forageKind, rollForage } from "../forage.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -109,7 +110,7 @@ export default class AD2EActor extends Actor {
         const kit = AD2EActor.#kitPicked(button.form, options);
         const { mod, note } = readModifier(button.form);
         return { mod, note, kit: kit.sum, kitText: kit.text, genWard: !!button.form.elements.genWard?.checked,
-          masterSave: !!button.form.elements.masterSave?.checked, dualOld: !!button.form.elements.dualOld?.checked };
+          masterSave: !!button.form.elements.masterSave?.checked, dualOld: !!button.form.elements.dualOld?.checked, form: button.form };
       } },
       rejectClose: false
     });
@@ -520,13 +521,22 @@ export default class AD2EActor extends Actor {
     const item = this.items.get(itemId);
     const entry = this.system.proficiencies.entries.find(e => e.item.id === itemId);
     if (!item || entry?.target === null || entry?.target === undefined) return;
+    // Hunting, fishing and Survival (module/forage.mjs) add their own fields and handle the result.
+    const forage = this.type === "character" ? forageKind(item.system.identifier) : null;
     // Situational modifier, and the conditional kit modifiers for this proficiency.
-    const input = await this.#promptRoll(item.name, this.#kitOptions("proficiency", item.system.identifier));
+    const input = await this.#promptRoll(item.name, this.#kitOptions("proficiency", item.system.identifier), "",
+      forage ? forageFields(this, forage) : "");
     if (!input) return;
     const heat = this.system.mods?.heat ?? 0; // Al-Qadim heat penalty (module/aq-rules.mjs)
     const fatigue = this.system.mods?.fatigue ?? 0; // missed rests (module/dungeon-turns.mjs)
     const spellCheck = this.spellMod("check"); // spell effects (module/spell-effects.mjs)
     const target = entry.target + input.mod + input.kit + heat + fatigue + spellCheck;
+    if (forage) {
+      const notes = `${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}`
+        + `${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""}${spellCheck ? `; ${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellCheck })}` : ""}`
+        + modifierText(input.mod, input.note);
+      return rollForage(this, forage, { item, target, input, notes });
+    }
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total < 20 && roll.total <= target;
     return roll.toMessage({

@@ -75,6 +75,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       load: new SchemaField({ full: optional(), half: optional(), quarter: optional(), other: optional() }),
       url: text(),
       cost: text(), // hirelings: wage (DMG Tables 64/65); mounts: price (PHB Table 44)
+      // Hireling wages (module/wages.mjs): world time of the next payment, copper owed.
+      wage: new SchemaField({ due: new NumberField({ required: false, nullable: true, initial: null }),
+        unpaid: new NumberField({ required: true, nullable: false, integer: true, min: 0, initial: 0 }) }),
       // Role "trap" (module/traps.mjs): a trap placed as a token, e.g. a pit or a deadfall.
       trap: trapField(),
       // Force marching (module/travel.mjs): days of penalty (-1 to attack rolls each), the consecutive streak, the last

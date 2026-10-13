@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.54)
+## Status (v1.0.55)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,21 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Living off the land (1.0.55; owner's request and rulings): `tools/build-forage-tables.py` writes
+  `module/rules/forage-tables.mjs` from the AD&D 2e wiki, regex-checked: Hunting (Proficiency) (PHB: -1 per nonproficient
+  hunter, 101 to 200 yards (100+1d100), a check per 20 yards closed, surprise; CBarbH Table 33 rations per animal size,
+  left of the slash average butchering, right with animal rending), Fishing (Proficiency) (PHB: a check each hour, fish =
+  Wisdom score - die roll, a net three times; CBarbH: two game fish feed an adult a day, Table 32 spot quality, the Grog
+  example asserted in the tests) and Survival (Proficiency) (PHB: a failed check ends the day's attempts; S&P times).
+  `module/forage.mjs`: the three proficiency rolls get their own dialog fields; food found becomes "Foraged food (per
+  day)" (1 lb a day: "a pound or so of food per day", Provisioning the Crew (CSH)), eaten first by the travel days;
+  owner's rulings: a Survival success gives one day's food or water (water covers the next End day), hunting kills are
+  GM buttons by size after the fight. Implementation choice: one Survival attempt per category a day (Skills & Powers).
+- Hireling wages (1.0.55; owner's rulings: automatic payment with a notice, the monthly rate): `module/wages.mjs` pays
+  every hireling in a character's henchmen list from that character's coins each 30 days of world time (active GM),
+  reading the wage from its Cost text (DMG Tables 64/65 wording); weekly-only wages x 30/7, ranges at the lower figure
+  (implementation choice); short coins leave the wage owed (`system.wage.unpaid`, Pay arrears button) and suggest a morale
+  check. `station.mjs` `payCoins` (shared with the station spending) pays with change.
 - Spell effects after saves (1.0.54; owner's request): when the cast card asks for saves and the spell's Save entry
   negates it, an effect applied to the targets is stored on the card (`flags.ad2e.spellEffectPending`) and the active
   GM creates it on each target whose save fails (save request kind "spell" handler, `module/save-requests.mjs`); saves

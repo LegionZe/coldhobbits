@@ -1,3 +1,4 @@
+import { huntButtons } from "../forage.mjs";
 import { damageButtons } from "../health.mjs";
 import { treasureButtons } from "../treasure.mjs";
 import { saveRequestButtons } from "../save-requests.mjs";
@@ -19,6 +20,7 @@ export default class AD2EChatMessage extends ChatMessage {
     travelButtons(this, html);
     encounterButtons(this, html);
     constructionButtons(this, html);
+    huntButtons(this, html);
     return html;
   }
 }
