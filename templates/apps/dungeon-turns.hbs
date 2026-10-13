@@ -22,7 +22,7 @@
   <fieldset>
     <legend>{{localize "AD2E.Light.Lit"}}</legend>
     {{#each lights as |l|}}
-    <div class="ad2e-prof-row">
+    <div class="ad2e-prof-row ad2e-plain-row">
       <span class="ad2e-prof-name">{{l.bearer}}: {{l.name}}</span>
       <span class="ad2e-weapon-meta">{{localize "AD2E.Light.TurnsLeft" n=l.turns}} · {{l.radius}} ft</span>
       <button type="button" data-action="out" data-uuid="{{l.uuid}}">{{localize "AD2E.Light.Out"}}</button>

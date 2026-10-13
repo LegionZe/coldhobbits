@@ -284,6 +284,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `deleteItem` icons only while editing (`{{#if @root.editMode}}`), play controls keep `@root.editable`. GM section
   partial `ad2e.gm-controls` (context `gm`, GM only, end of the Character tab). CSS for these classes at the end of
   styles/ad2e.css (own markup only).
+  Row grid: `.ad2e-prof-row` starts with a 24px icon column; a row whose first child is not an `<img>`/`<i>` icon needs a
+  class with its own columns (`ad2e-language-row`, `ad2e-plain-row` (+ `ad2e-flex-row` for a left-aligned line),
+  `ad2e-damage-row`), or its first item is squeezed into the icon column (owner's screenshots 1.0.57 languages, 1.0.58 station).
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities,proficiencies,race-class,gm-controls}.hbs`,
   registered by name in init with `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e).
   Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with `{{#with x as |x|}}`
