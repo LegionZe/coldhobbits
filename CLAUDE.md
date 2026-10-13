@@ -149,7 +149,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   { spell, spellName, caster, casterName, until, mods }. Spell `system.effectMods` { attack, damage, ac, save, check } (GM-only
   inputs on the spell sheet). Character `system.mods.spell` (attack in mods.meleeAttack/missileAttack, weapon hit, roll data;
   damage; ac on armor front/rear/missile), monster `system.spellMods` (ac.value); `AD2EActor#spellMod(key)` in saves, checks,
-  monster attack/damage. Partial `ad2e.spell-effects` (context `spellEffects`).
+  monster attack/damage. Partial `ad2e.spell-effects` (context `spellEffects`). 1.0.54: `askSpellEffect({ castMessage })`; a "negates"
+  save request (`waitsForSave`) stores `flags.ad2e.spellEffectPending` { data, done } on the cast card (`deferSpellEffect`, already
+  failed saves relayed at once via `failedPending`), save handler kind "spell" (registerSpellEffects) creates it on failed saves.
 - Spell animations (owner's request 1.0.51): `module/spell-animations.mjs` (world setting `jb2aAnimations`; `jb2aAvailable` =
   modules `sequencer` + `jb2a_patreon` or `JB2A_DnD5e` active and `globalThis.Sequence` / `Sequencer.Database`; pure
   `ANIMATIONS` (curated name regexes -> steps { mode missile | cone | burst | target | caster, file, size, scale }),

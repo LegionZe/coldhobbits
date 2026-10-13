@@ -2257,7 +2257,7 @@ export default class AD2EActor extends Actor {
     const cast = message?.getFlag?.("ad2e", "spellCast");
     const resisted = new Set((cast?.resisted ?? []).map(t => t.uuid));
     await askSpellEffect(this, spell, { level: Number(castingLevel) || 1,
-      targets: (cast?.targets ?? []).filter(t => !resisted.has(t.uuid)) });
+      targets: (cast?.targets ?? []).filter(t => !resisted.has(t.uuid)), castMessage: message });
     return message;
   }
 

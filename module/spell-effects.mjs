@@ -1,6 +1,6 @@
 import { LIGHT_TABLES } from "./rules/light-tables.mjs";
 import { ad2eDialog } from "./dialogs.mjs";
-import { targetActor } from "./save-requests.mjs";
+import { registerSaveHandler, saveRequestOf, targetActor } from "./save-requests.mjs";
 
 /**
  * Spell effects (owner's request and rulings, 1.0.50): a cast spell with a duration becomes a timed Active Effect on the
@@ -182,7 +182,7 @@ const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
  * After a cast (AD2EActor#castSpell): ask the duration (computed at the casting level, dice rolled) and the recipients,
  * then create the effects. `targets` = [{ uuid, name }] reached by the spell (magic resistance already removed).
  */
-export async function askSpellEffect(caster, spell, { level = 1, targets = [] } = {}) {
+export async function askSpellEffect(caster, spell, { level = 1, targets = [], castMessage = null } = {}) {
   if (!spellEffectsOn()) return null;
   const parsed = parseDuration(spell.system?.duration);
   const mods = spellMods(spell);
@@ -209,7 +209,9 @@ export async function askSpellEffect(caster, spell, { level = 1, targets = [] } 
       + `<div class="form-group"><label>${esc(i18n("AD2E.SpellEffect.Recipients"))}</label><select name="recipients">`
       + option("targets", `${i18n("AD2E.SpellEffect.Targets")}${targets.length ? `: ${targets.map(t => t.name).join(", ")}` : ""}`, !targets.length)
       + option("self", i18n("AD2E.SpellEffect.Self", { name: caster.name })) + option("none", i18n("AD2E.SpellEffect.None")) + `</select></div>`
-      + (modText ? `<p class="ad2e-note">${esc(i18n("AD2E.SpellEffect.Modifiers"))}: ${esc(modText)}</p>` : ""),
+      + (modText ? `<p class="ad2e-note">${esc(i18n("AD2E.SpellEffect.Modifiers"))}: ${esc(modText)}</p>` : "")
+      + (saveRequestOf(castMessage)?.kind === "spell" && waitsForSave(saveRequestOf(castMessage))
+        ? `<p class="ad2e-note">${esc(i18n("AD2E.SpellEffect.WaitsForSave"))}</p>` : ""),
     ok: { label: i18n("AD2E.SpellEffect.Apply"), callback: (event, button) => ({
       value: button.form.elements.value.value, unit: button.form.elements.unit.value, recipients: button.form.elements.recipients.value }) },
     rejectClose: false
@@ -218,6 +220,12 @@ export async function askSpellEffect(caster, spell, { level = 1, targets = [] } 
   const amount = Number(input.value);
   const length = input.value !== "" && Number.isFinite(amount) && amount > 0 ? Math.round(amount * (UNIT_SECONDS[input.unit] ?? ROUND)) : null;
   const list = input.recipients === "self" ? [{ uuid: caster.uuid, name: caster.name, actor: caster }] : targets;
+  // A save that negates the spell (save request on the cast card, module/save-requests.mjs): the targets get the effect
+  // only when they fail (owner's request 1.0.54); "half" and "special" saves apply it at once (implementation choice).
+  const request = saveRequestOf(castMessage);
+  if (input.recipients === "targets" && request?.kind === "spell" && waitsForSave(request)) {
+    return deferSpellEffect(caster, spell, castMessage, { seconds: length, mods, note: parsed.text });
+  }
   return applySpellEffect(caster, spell, list, { seconds: length, mods, note: parsed.text });
 }
 
@@ -246,6 +254,41 @@ export async function applySpellEffect(caster, spell, recipients, { seconds = nu
   return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }),
     content: `<p class="ad2e-note">${esc(game.i18n.format("AD2E.SpellEffect.Applied", { spell: spell.name, names,
       length: Number.isFinite(seconds) && seconds > 0 ? lengthText : game.i18n.localize("AD2E.SpellEffect.Indefinite") }))}</p>` });
+}
+
+/** Whether a spell's save request decides who gets the effect (pure): only a save that negates the spell. */
+export const waitsForSave = request => request?.data?.effect === "negates";
+
+/**
+ * Targets whose recorded save failed and who have not had the effect yet (pure): indexes into `request.targets`.
+ * Targets without a result yet wait; `done` = indexes already given the effect.
+ */
+export function failedPending(request, done = []) {
+  return (request?.targets ?? []).map((t, index) => index)
+    .filter(i => request.results?.[i] && !request.results[i].success && !done.includes(i));
+}
+
+/**
+ * Store the effect on the cast card (`flags.ad2e.spellEffectPending` { data, done }) for the active GM to create on each
+ * target that fails its save ("spell" save handler below). Saves already recorded are sent through the GM relay now.
+ */
+async function deferSpellEffect(caster, spell, message, { seconds = null, mods = spellMods(spell), note = "" } = {}) {
+  const now = game.time?.worldTime ?? 0;
+  const data = effectData(spell, { caster, seconds, now, mods, note });
+  await message.setFlag("ad2e", "spellEffectPending", { data, done: [] });
+  const request = saveRequestOf(message);
+  const already = failedPending(request);
+  if (already.length) {
+    await message.setFlag("ad2e", "spellEffectPending.done", already);
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }),
+      whisper: game.users.filter(u => u.isGM).map(u => u.id),
+      content: `<p>${esc(game.i18n.format("AD2E.SpellEffect.Relayed", { spell: spell.name, names: already.map(i => request.targets[i].name).join(", ") }))}</p>`,
+      flags: { ad2e: { spellEffectRequest: { data, targets: already.map(i => ({ uuid: request.targets[i].uuid, name: request.targets[i].name })), done: false } } } });
+  }
+  const lengthText = Number.isFinite(seconds) && seconds > 0 ? durationText(seconds, (k, d) => game.i18n.format(k, d))
+    : game.i18n.localize("AD2E.SpellEffect.Indefinite");
+  return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: caster }),
+    content: `<p class="ad2e-note">${esc(game.i18n.format("AD2E.SpellEffect.OnFailedSave", { spell: spell.name, length: lengthText }))}</p>` });
 }
 
 /** Actors that can carry spell effects: world actors and unlinked scene tokens. */
@@ -290,6 +333,13 @@ export function registerSpellEffects() {
   });
   Hooks.on("updateWorldTime", () => {
     if (game.users?.activeGM?.isSelf) processSpellEffects();
+  });
+  // A save that negates the spell: the effect stored on the cast card goes to each target that fails (active GM).
+  registerSaveHandler("spell", async (actor, request, index, success, message) => {
+    const pending = message?.getFlag?.("ad2e", "spellEffectPending");
+    if (!pending || success || (pending.done ?? []).includes(index)) return;
+    await message.setFlag("ad2e", "spellEffectPending.done", [...(pending.done ?? []), index]);
+    await actor.createEmbeddedDocuments("ActiveEffect", [structuredClone(pending.data)]);
   });
   // Effects on actors the caster does not own: created once by the active GM.
   Hooks.on("createChatMessage", async message => {
