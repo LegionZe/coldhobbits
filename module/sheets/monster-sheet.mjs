@@ -33,6 +33,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollSave: MonsterSheet.onRollSave,
       pushMount: MonsterSheet.onPushMount,
       breakFreeNet: MonsterSheet.onBreakFreeNet,
+      throwObject: MonsterSheet.onThrowObject,
       springTrap: MonsterSheet.onSpringTrap,
       rollAttack: MonsterSheet.onRollAttack,
       rollDamage: MonsterSheet.onRollDamage,
@@ -208,6 +209,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   /** Pay a hireling's owed wages from its employer (module/wages.mjs). */
   static onPayArrears() { return payArrears(this.document); }
   static onBreakFreeNet() { return this.document.breakFreeNet(); }
+  /** Throw an object (module/throwing.mjs). */
+  static onThrowObject() { return this.document.throwObject(); }
   static onRollAttack(event, target) { return this.document.rollMonsterAttack(target.dataset.key); }
   static onRollUnarmed(event, target) { return this.document.rollUnarmed(target.dataset.form); }
   static onRollDamage(event, target) { return this.document.rollMonsterDamage(target.dataset.key); }

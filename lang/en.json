@@ -934,6 +934,7 @@
     "StillTrapped": "still trapped"
   },
   "AD2E.Lasso": {
+    "OwnStr": "Your Strength",
     "Hint": "The lasso is used only with a called shot (Combat & Tactics). Legs: pull/trip with an opposed Strength check. Arms: an opposed attack roll traps one or both arms. Unhorse: pulls a rider from the saddle. Spur: the next round's pull/trip with the lasso tied to the saddle needs no attack roll. The defender's numbers come from the first target and can be changed.",
     "Mode": "Called shot",
     "Modes": { "legs": "Legs (pull/trip)", "arms": "Arms (trap)", "unhorse": "Unhorse a rider", "spur": "Pull/trip by spurring the mount" },
@@ -1849,6 +1850,7 @@
     }
   },
   "AD2E.Throw": {
+    "MonsterHint": "Monsters have no Strength score: the Maximum Press limit and the bend bars roll for heavy objects are not applied. Whether the creature can lift and throw the object is the GM's call.",
     "Title": "Throw object",
     "Hint": "Throw a flask of oil, holy water, acid, a rock or another object (grenade-like missile): attack roll, then damage and splash on a hit or where it lands on a miss.",
     "Rule": "An object of {lb} lb or less can be thrown about {long} ft (short {short} ft, medium {medium} ft); heavier objects: the GM decides the range. Maximum Press: {press} lb.",
@@ -3567,13 +3569,19 @@
     "ModeLabel": "Played",
     "Automatic": "Automatic",
     "NotAvailable": "Sequencer or JB2A not active",
+    "WeaponLegend": "Animation and sound",
+    "WeaponFileHint": "Empty = automatic (by the weapon's name, else its damage type); \"none\" = no animation; or a Sequencer database path (jb2a.spear.melee.01.white) or a file path (wildcards allowed), played from the attacker to the target.",
     "Mode": {"auto": "on each target (default)", "missile": "caster to each target", "cone": "caster towards the first target", "burst": "on the first target", "target": "on each target", "caster": "on the caster"}
   },
   "AD2E.Sound": {
     "Setting": "Sound effects (PSFX)",
     "SettingHint": "Play a sound from Peri's Sound Effects (PSFX) when a spell is cast or an attack is rolled (an impact on a hit). Needs the Sequencer and PSFX modules; without them nothing is played.",
     "Volume": "Sound effects volume",
-    "VolumeHint": "Volume of the PSFX sounds (0 to 1)."
+    "VolumeHint": "Volume of the PSFX sounds (0 to 1).",
+    "File": "Sound",
+    "FileHint": "Empty = automatic (swing or shot, then an impact on a hit); \"none\" = silent; or a Sequencer database path (psfx.weapon-attacks.spear.v1) or a file path (wildcards allowed), played instead of both.",
+    "Automatic": "Automatic sound",
+    "NotAvailable": "Sequencer or PSFX not active"
   },
   "AD2E.Forage": {
     "Nonhunters": "Nonproficient hunters with you",

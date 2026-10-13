@@ -9,6 +9,8 @@ import { containerChoices, PHYSICAL_TYPES } from "../containers.mjs";
 import { HOLY_ITEM } from "../importers/spell-components.mjs";
 import { durationSeconds, durationText, MOD_KEYS, parseDuration } from "../spell-effects.mjs";
 import { animationFor, jb2aAvailable, MODES } from "../spell-animations.mjs";
+import { weaponAnimation } from "../weapon-animations.mjs";
+import { attackSounds, psfxAvailable } from "../sound-effects.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -227,6 +229,16 @@ export class WeaponSheet extends AD2EItemSheet {
         ...[...scores.slice(0, 16), ...bands, ...scores.slice(16)].map(k => [k, bandLabel[k] ?? k])]
         .map(([value, label]) => ({ value, label, selected: value === (sys.bowStrength ?? "") }));
     }
+    // Attack animation and sound (module/weapon-animations.mjs, module/sound-effects.mjs): the automatic choices per use.
+    const uses = [["melee", false], ["missile", true]].filter(([u]) => sys.weapon?.[u]);
+    const attackOf = missile => ({ kind: "weapon", name: this.document.name, identifier: sys.identifier, type: sys.weapon?.type,
+      missile, thrown: missile && sys.weapon?.strength === "full" });
+    const useLabel = u => game.i18n.localize(`AD2E.Weapon.${u}`);
+    context.attackFx = {
+      animation: uses.map(([u, m]) => `${useLabel(u)}: ${weaponAnimation(attackOf(m))?.file ?? "—"}`).join(" · "),
+      sound: uses.map(([u, m]) => `${useLabel(u)}: ${attackSounds(attackOf(m), true).map(x => x.file).join(" + ") || "—"}`).join(" · "),
+      animationReady: jb2aAvailable(), soundReady: psfxAvailable()
+    };
     context.elementOptions = ["", "flame", "sand", "sea", "wind"].map(value => ({ value, selected: value === (sys.element ?? ""),
       label: value ? game.i18n.localize(`AD2E.Elemental.Province.${value}`) : "—" }));
     // On an actor: the linked weapon proficiency, if owned.

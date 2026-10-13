@@ -1,4 +1,5 @@
 import { THROW_TABLES } from "./rules/throw-tables.mjs";
+import { TRAVEL } from "./rules/travel-tables.mjs";
 import { AD2E } from "./config.mjs";
 import { ad2eDialog } from "./dialogs.mjs";
 import { modifierFields, modifierText, readModifier } from "./roll-modifiers.mjs";
@@ -22,8 +23,13 @@ import { modifierFields, modifierText, readModifier } from "./roll-modifiers.mjs
  * (Dexterity, encumbrance, fatigue as other missiles) against the AC entered (the first target's, as other attacks);
  * contents default from the item (lamp oil and Greek fire = oil, lit; holy items = holy water; acids = acid); an object
  * marked "used up" loses one from its quantity.
+ * Monsters (owner's request 1.0.56; monster sheet button): the same dialog with the monster's THAC0; the attack adds the
+ * monster's spell effect and force-march modifiers (as AD2EActor#rollMonsterAttack). Implementation choice: monsters have
+ * no Strength score, so there is no Maximum Press limit and no bend bars/lift gates roll; what a monster can lift and throw
+ * is the GM's call (the dialog says so).
  */
 export const THROW = THROW_TABLES;
+const MARCH_PER_DAY = TRAVEL.march?.attackPerDay ?? 0;
 const esc = v => foundry.utils?.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
 
 /** The character's Throwing proficiency item, or null (pure on an item list). */
@@ -73,9 +79,15 @@ export function throwableItems(items) {
 
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
 
-/** Throw an object (character sheet Combat tab): dialog, attack roll, then damage or scatter. */
+/** Missile attack adjustment of a monster's throw (pure on the numbers): spell effects + force marching. */
+export function monsterThrowAdjustment(spellAttack = 0, marchDays = 0, perDay = 0) {
+  return (Number(spellAttack) || 0) + ((Number(marchDays) || 0) * (Number(perDay) || 0) || 0);
+}
+
+/** Throw an object (character sheet Combat tab, monster sheet header): dialog, attack roll, then damage or scatter. */
 export async function throwObject(actor) {
-  if (actor?.type !== "character") return null;
+  if (!["character", "monster"].includes(actor?.type)) return null;
+  const monster = actor.type === "monster";
   const Actor = CONFIG.Actor.documentClass;
   const targets = Actor.targetsNow?.() ?? [];
   const prof = throwingProficiency(actor.items);
@@ -92,6 +104,7 @@ export async function throwObject(actor) {
   const input = await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Throw.Title") },
     content: `<p class="hint">${esc(i18n("AD2E.Throw.Rule", { lb: THROW.lightWeight, ...THROW.ranges, press: str.press ?? "—" }))}</p>`
+      + (monster ? `<p class="hint">${esc(i18n("AD2E.Throw.MonsterHint"))}</p>` : "")
       + field(i18n("AD2E.Throw.Object"), `<select name="item"><option value="">${esc(i18n("AD2E.Throw.Other"))}</option>${
         items.map(i => `<option value="${i.id}">${esc(i.name)} (${itemWeight(i) ?? "?"} lb, ${i.system.quantity ?? 1})</option>`).join("")}</select>`)
       + field(i18n("AD2E.Throw.OtherWeight"), `<input type="number" name="weight" value="1" min="0" step="0.1">`)
@@ -103,7 +116,7 @@ export async function throwObject(actor) {
         `<select name="profBonus"><option value="hit">${esc(i18n("AD2E.Throw.ProfHit", { n: THROW.proficiency.bonus }))}</option>`
         + `<option value="damage">${esc(i18n("AD2E.Throw.ProfDamage", { n: THROW.proficiency.bonus }))}</option></select>`) : "")
       + field(i18n("AD2E.Throw.UsedUp"), `<input type="checkbox" name="usedUp" checked>`)
-      + field(i18n("AD2E.Throw.Heavy", { n: str.bendBars ?? 0 }), `<input type="checkbox" name="heavy">`)
+      + (monster ? "" : field(i18n("AD2E.Throw.Heavy", { n: str.bendBars ?? 0 }), `<input type="checkbox" name="heavy">`))
       + field(i18n("AD2E.Throw.Boulder"), `<input type="checkbox" name="boulder">`)
       + modifierFields(),
     ok: {
@@ -112,7 +125,7 @@ export async function throwObject(actor) {
         const f = button.form.elements;
         return { item: f.item.value, weight: Number(f.weight.value) || 0, contents: f.contents.value, damage: String(f.damage.value ?? "").trim(),
           ac: Number(f.ac.value) || 0, range: f.range.value, profBonus: f.profBonus?.value ?? "", usedUp: !!f.usedUp.checked,
-          heavy: !!f.heavy.checked, boulder: !!f.boulder.checked, manual: readModifier(button.form) };
+          heavy: !!f.heavy?.checked, boulder: !!f.boulder.checked, manual: readModifier(button.form) };
       }
     },
     rejectClose: false
@@ -121,7 +134,7 @@ export async function throwObject(actor) {
   const item = input.item ? actor.items.get(input.item) : null;
   const weight = item ? (itemWeight(item) ?? 0) : input.weight;
   const name = item?.name ?? i18n("AD2E.Throw.AnObject");
-  if (!canLift(weight, str.press)) {
+  if (!monster && !canLift(weight, str.press)) {
     ui.notifications?.warn(i18n("AD2E.Throw.TooHeavy", { name, weight, press: str.press }));
     return null;
   }
@@ -139,7 +152,9 @@ export async function throwObject(actor) {
   const thac0 = actor.system.thac0.value;
   const needed = thac0 - input.ac;
   const rangeMod = AD2E.rangeModifiers?.[input.range] ?? 0;
-  const roll = await new Roll("1d20 + @adj + @range + @mod", { adj: (actor.system.mods?.missileAttack ?? 0) + profHit, range: rangeMod,
+  const adj = monster ? monsterThrowAdjustment(actor.spellMod?.("attack"), actor.system.march?.days, MARCH_PER_DAY)
+    : (actor.system.mods?.missileAttack ?? 0);
+  const roll = await new Roll("1d20 + @adj + @range + @mod", { adj: adj + profHit, range: rangeMod,
     mod: input.manual.mod }).evaluate();
   const hit = roll.total >= needed;
   const bands = objectRanges(weight, extra);

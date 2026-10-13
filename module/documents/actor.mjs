@@ -39,7 +39,7 @@ import { TRAVEL } from "../rules/travel-tables.mjs";
 import { criticalMode, criticalText, isCritical, multiplyDice, postCriticalCard, rollCritical, sizeOfActor, weaponCritSize } from "../criticals.mjs";
 import { askSpellEffect, effectModTotals } from "../spell-effects.mjs";
 import { playSpellAnimation } from "../spell-animations.mjs";
-import { playWeaponAnimation } from "../weapon-animations.mjs";
+import { itemEffects, playWeaponAnimation } from "../weapon-animations.mjs";
 import { playAttackSound, playSpellSound } from "../sound-effects.mjs";
 import { forageFields, forageKind, rollForage } from "../forage.mjs";
 
@@ -721,9 +721,9 @@ export default class AD2EActor extends Actor {
   async rollWeaponAttack(itemId, use = "melee") {
     const item = this.items.get(itemId);
     // The lasso is only used with called shots (Weapon Descriptions (POCT)): its own dialog.
-    if (item?.system.identifier === "lasso" && this.type === "character") return this.rollLasso(itemId);
+    if (item?.system.identifier === "lasso") return this.rollLasso(itemId);
     // The net traps rather than wounds (Weapon Descriptions (POCT)): its own dialog.
-    if (item?.system.identifier === "net" && this.type === "character") return this.rollNet(itemId);
+    if (item?.system.identifier === "net") return this.rollNet(itemId);
     const entry = this.#weaponEntry(itemId);
     const attack = entry?.attack?.[use];
     if (!item || !attack) return;
@@ -994,7 +994,7 @@ export default class AD2EActor extends Actor {
     const hit = !misfire && (t51.auto || roll.total >= needed);
     // JB2A animation through Sequencer (module/weapon-animations.mjs; not awaited, never throws).
     this.#attackEffects({ kind: "weapon", name: item.name, identifier: item.system.identifier, type: item.system.weapon?.type,
-      missile: use === "missile", thrown: this.#isThrownItem(item, use) }, { hit });
+      missile: use === "missile", thrown: this.#isThrownItem(item, use), ...itemEffects(item) }, { hit });
     // Critical hit (Combat & Tactics, world setting "criticalHits"; module/criticals.mjs): a natural 18+ hitting by 5 or more.
     let crit = null;
     if (hit && criticalMode() !== "off" && isCritical(natural, roll.total, needed)) {
@@ -1302,14 +1302,32 @@ export default class AD2EActor extends Actor {
   /* ---------------------------------------- Targets (applying damage from chat: module/health.mjs) */
 
   /**
+   * The thrower of a lasso or net: { hit, str, size }. Characters: the weapon's derived attack adjustment, Strength and size.
+   * Monsters (owner's request 1.0.56): the item's magical bonus with spell effects and force marching (as rollMonsterAttack),
+   * Strength from lasso.mjs `monsterScores` (3.5 per size + Hit Dice, implementation choice) and the size letter.
+   */
+  #ropeAttacker(item) {
+    if (this.type === "character") {
+      const entry = this.#weaponEntry(item.id);
+      const attack = entry?.attack?.missile ?? entry?.attack?.melee;
+      return attack ? { hit: attack.hit, str: this.system.abilities.str.total, size: this.system.sizeCategory ?? "M" } : null;
+    }
+    if (this.type !== "monster") return null;
+    const s = this.system;
+    const letter = String(s.size ?? "").trim().charAt(0).toUpperCase();
+    const march = TRAVEL.march.attackPerDay * (s.march?.days ?? 0) || 0;
+    return { hit: (Number(item.system.bonus?.hit) || 0) + this.spellMod("attack") + march,
+      str: monsterScores(s.size, s.hitDice, s.movement?.base).str, size: LASSO.sizes.includes(letter) ? letter : "M" };
+  }
+
+  /**
    * Lasso (module/lasso.mjs, Weapon Descriptions and Attack Options (POCT)): a called shot at the legs (pull/trip), the
    * arms (trap) or a rider (unhorse), or a pull/trip by spurring the mount; the opposed rolls are made here with the
    * first target's numbers (editable).
    */
   async rollLasso(itemId) {
     const item = this.items.get(itemId);
-    const entry = this.#weaponEntry(itemId);
-    const attack = entry?.attack?.missile ?? entry?.attack?.melee;
+    const attack = item ? this.#ropeAttacker(item) : null;
     if (!item || !attack) return null;
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
@@ -1331,6 +1349,7 @@ export default class AD2EActor extends Actor {
       + field(i18n("AD2E.Lasso.Mode"), `<select name="mode">${["legs", "arms", "unhorse", "spur"].map(m => `<option value="${m}">${esc(i18n(`AD2E.Lasso.Modes.${m}`))}</option>`).join("")}</select>`)
       + field(game.i18n.format("AD2E.Lasso.CalledShot", { n: LASSO.calledShot, init: LASSO.calledShotInit }), `<input type="number" name="called" value="${LASSO.calledShot}">`)
       + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets, true)}">`)
+      + field(i18n("AD2E.Lasso.OwnStr"), `<input type="number" name="aStr" value="${attack.str}">`)
       + field(i18n("AD2E.Lasso.Range"), `<select name="range">${["short", "medium", "long"].map(r => `<option value="${r}">${esc(i18n(`AD2E.Weapon.${r[0].toUpperCase()}${r.slice(1)}`))}</option>`).join("")}</select>`)
       + `<fieldset><legend>${esc(game.i18n.format("AD2E.Lasso.Defender", { name: def?.name ?? i18n("AD2E.Lasso.NoTarget") }))}</legend>`
       + field(i18n("AD2E.Lasso.DefStr"), `<input type="number" name="dStr" value="${defaults.str}">`)
@@ -1348,7 +1367,7 @@ export default class AD2EActor extends Actor {
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const el = button.form.elements;
         const num = n => Number(el[n]?.value) || 0;
-        return { mode: el.mode.value, called: num("called"), ac: num("ac"), range: el.range.value, dStr: num("dStr"), dDex: num("dDex"),
+        return { mode: el.mode.value, called: num("called"), ac: num("ac"), aStr: num("aStr"), range: el.range.value, dStr: num("dStr"), dDex: num("dDex"),
           dThac0: num("dThac0"), dSize: el.dSize.value, fourLegs: !!el.fourLegs?.checked, unaware: !!el.unaware?.checked,
           stationary: !!el.stationary?.checked, riderMoving: !!el.riderMoving?.checked, tiedSolid: !!el.tiedSolid?.checked,
           tiedSaddle: !!el.tiedSaddle?.checked, ...readModifier(button.form) };
@@ -1371,7 +1390,7 @@ export default class AD2EActor extends Actor {
       lines.push(game.i18n.format("AD2E.Lasso.AttackLine", { roll: r, adj: fmtAdj(adj), total: r + adj, ac: input.ac, need,
         result: i18n(hit ? "AD2E.Roll.Hit" : "AD2E.Roll.Miss") }));
     }
-    const aStr = this.system.abilities.str.total;
+    const aStr = input.aStr;
     const oppStr = async (aScore, dScore) => {
       const ar = await d20(), dr = await d20();
       const res = opposedCheck(aScore, ar, dScore, dr);
@@ -1379,7 +1398,7 @@ export default class AD2EActor extends Actor {
       return res;
     };
     if ((input.mode === "legs" || input.mode === "spur") && hit) {
-      const own = this.system.sizeCategory ?? "M";
+      const own = attack.size;
       const size = input.tiedSaddle && mountSize ? mountSize : own;
       const pt = pullTripScore(aStr, { attackerSize: size, defenderSize: input.dSize, lasso: true, fourLegs: input.fourLegs,
         unaware: input.unaware, stationary: input.stationary });
@@ -1417,8 +1436,7 @@ export default class AD2EActor extends Actor {
    */
   async rollNet(itemId) {
     const item = this.items.get(itemId);
-    const entry = this.#weaponEntry(itemId);
-    const attack = entry?.attack?.missile ?? entry?.attack?.melee;
+    const attack = item ? this.#ropeAttacker(item) : null;
     if (!item || !attack) return null;
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
@@ -1437,6 +1455,7 @@ export default class AD2EActor extends Actor {
       + field(i18n("AD2E.Net.Ac"), `<input type="number" name="netAc" value="${netAc(def?.type === "character" ? ds.abilityData?.dex?.ac : 0, 0)}">`)
       + field(i18n("AD2E.Net.TripAc"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets, true)}">`)
       + field(i18n("AD2E.Lasso.Range"), `<select name="range">${["short", "medium", "long"].map(r => `<option value="${r}">${esc(i18n(`AD2E.Weapon.${r[0].toUpperCase()}${r.slice(1)}`))}</option>`).join("")}</select>`)
+      + field(i18n("AD2E.Lasso.OwnStr"), `<input type="number" name="aStr" value="${attack.str}">`)
       + box("unfolded", game.i18n.format("AD2E.Net.Unfolded", { n: NET.unfolded }), unfolded)
       + `<fieldset><legend>${esc(game.i18n.format("AD2E.Lasso.Defender", { name: def?.name ?? i18n("AD2E.Lasso.NoTarget") }))}</legend>`
       + field(i18n("AD2E.Lasso.DefStr"), `<input type="number" name="dStr" value="${mon ? mon.str : (ds.abilities?.str?.total ?? 10)}">`)
@@ -1451,7 +1470,7 @@ export default class AD2EActor extends Actor {
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const el = button.form.elements;
         const num = n => Number(el[n]?.value) || 0;
-        return { mode: el.mode.value, netAc: num("netAc"), ac: num("ac"), range: el.range.value, unfolded: !!el.unfolded?.checked,
+        return { mode: el.mode.value, netAc: num("netAc"), ac: num("ac"), aStr: num("aStr"), range: el.range.value, unfolded: !!el.unfolded?.checked,
           dStr: num("dStr"), dDex: num("dDex"), dSize: el.dSize.value, fourLegs: !!el.fourLegs?.checked, unaware: !!el.unaware?.checked,
           stationary: !!el.stationary?.checked, ...readModifier(button.form) };
       } },
@@ -1480,10 +1499,10 @@ export default class AD2EActor extends Actor {
     if (hit && input.mode === "throw") lines.push(i18n("AD2E.Net.Trapped"));
     if (hit && input.mode === "wrap") lines.push(game.i18n.format("AD2E.Net.Wrapped", { n: NET.improveStr }));
     if (hit && input.mode === "trip") {
-      const pt = pullTripScore(this.system.abilities.str.total, { attackerSize: this.system.sizeCategory ?? "M", defenderSize: input.dSize, lasso: false,
+      const pt = pullTripScore(input.aStr, { attackerSize: attack.size, defenderSize: input.dSize, lasso: false,
         fourLegs: input.fourLegs, unaware: input.unaware, stationary: input.stationary });
       const dScore = Math.max(input.dStr, input.dDex);
-      lines.push(game.i18n.format("AD2E.Lasso.StrParts", { str: this.system.abilities.str.total, parts: pt.parts.map(([k, v]) => `${i18n(`AD2E.Lasso.Part.${k}`)} ${fmtAdj(v)}`).join(", ") || "—",
+      lines.push(game.i18n.format("AD2E.Lasso.StrParts", { str: input.aStr, parts: pt.parts.map(([k, v]) => `${i18n(`AD2E.Lasso.Part.${k}`)} ${fmtAdj(v)}`).join(", ") || "—",
         score: pt.score, def: dScore }));
       const ar = await d20(), dr = await d20();
       lines.push(game.i18n.format("AD2E.Lasso.StrLine", { a: pt.score, ar, d: dScore, dr }));
@@ -2040,6 +2059,10 @@ export default class AD2EActor extends Actor {
   async rollMonsterAttack(key) {
     const attack = this.monsterAttacks().find(a => a.key === key);
     if (!attack) return;
+    // A monster's lasso or net item: the same dialogs as characters' (module/lasso.mjs; owner's request 1.0.56).
+    const rope = attack.poisonItem?.system.identifier;
+    if (rope === "lasso") return this.rollLasso(attack.poisonItem.id);
+    if (rope === "net") return this.rollNet(attack.poisonItem.id);
     const i18n = k => game.i18n.localize(k);
     const targets = AD2EActor.#targetsNow();
     this.#rememberTargets(key, targets);
@@ -2079,7 +2102,7 @@ export default class AD2EActor extends Actor {
     // JB2A animation (module/weapon-animations.mjs): a weapon item by its fields, a natural attack by its name.
     this.#attackEffects(attack.poisonItem
       ? { kind: "weapon", name: attack.poisonItem.name, identifier: attack.poisonItem.system.identifier, type: attack.type,
-        missile: !attack.melee, thrown: attack.poisonItem.system.weapon?.strength === "full" && !attack.melee }
+        missile: !attack.melee, thrown: attack.poisonItem.system.weapon?.strength === "full" && !attack.melee, ...itemEffects(attack.poisonItem) }
       : { kind: "natural", name: attack.name, type: attack.type, missile: !attack.melee }, { hit });
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
