@@ -19,6 +19,22 @@
 export const MODES = ["missile", "cone", "burst", "target", "caster"];
 
 /**
+ * A file path rather than a Sequencer database path (pure): it has a slash. Sequencer's `file()` takes either, and file
+ * paths may hold a `*` wildcard (https://fantasycomputer.works/FoundryVTT-Sequencer/api/effect.html and api/sound.html:
+ * "Filepath", "Wildcard filepath", "Database Path"). Only database paths can be checked with `Database.entryExists`.
+ */
+export function isFilePath(file) {
+  return /[\\/]/.test(String(file ?? ""));
+}
+
+/** A file Sequencer can play: a file path (not checked), or a database entry that exists. */
+export function sequencerHas(file) {
+  if (!file) return false;
+  if (isFilePath(file)) return true;
+  try { return !!globalThis.Sequencer.Database.entryExists(file); } catch { return false; }
+}
+
+/**
  * Curated spells: `match` is tested against the lower-cased spell name; `steps` play in order. Modes: missile = from the
  * caster to each target, cone = from the caster towards the first target, burst = on the first target (else the caster),
  * target = on each target (else the caster), caster = on the caster. `size` = grid squares (burst), `scale` = times the
@@ -154,7 +170,7 @@ export async function playSpellAnimation(actor, spell, targetTokens = null) {
     if (!caster) return false;
     const targets = [...(targetTokens ?? globalThis.game?.user?.targets ?? [])].filter(t => t && t !== caster);
     let steps = animationSteps(animationFor(spell), { caster, targets });
-    const exists = f => { try { return !!globalThis.Sequencer.Database.entryExists(f); } catch { return false; } };
+    const exists = sequencerHas;
     // The free JB2A module lacks some files: those steps fall back to the generic glow, else nothing.
     steps = steps.map(s => exists(s.file) ? s : (exists(GENERIC_FALLBACK.steps[0].file) ? { ...GENERIC_FALLBACK.steps[0], at: caster, size: null } : null))
       .filter(Boolean);

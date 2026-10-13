@@ -1,4 +1,4 @@
-import { animationFor } from "./spell-animations.mjs";
+import { animationFor, sequencerHas } from "./spell-animations.mjs";
 import { weaponAnimation } from "./weapon-animations.mjs";
 
 /**
@@ -13,6 +13,8 @@ import { weaponAnimation } from "./weapon-animations.mjs";
  * Which sound fits which spell or weapon is an implementation choice: spells by the animation entry they match
  * (spell-animations.mjs `ANIMATIONS` ids), weapons by their animation entry (weapon-animations.mjs) and damage type.
  * Delays are implementation choices so a second sound (an explosion, an impact) follows the first.
+ * A weapon item's own sound (`system.animation.sound`, weapon sheet; owner's request 1.0.56) replaces both the swing or shot
+ * and the impact: "none" = silent, else a database path or a file path (wildcards allowed; spell-animations.mjs `isFilePath`).
  */
 
 /** Spell sounds by animation id: [{ file, delay (ms) }]. PSFX paths ending in a distance use its 30 ft variant. */
@@ -80,7 +82,11 @@ export function spellSounds(spell) {
  * PSFX has no piercing impact). Bows and crossbows twang; firearms fire; spears use PSFX's spear attack.
  */
 export function attackSounds(attack, hit = null) {
-  const a = weaponAnimation(attack);
+  const own = String(attack?.sound ?? "").trim();
+  if (own.toLowerCase() === "none") return [];
+  if (own) return [{ file: own }];
+  // The automatic sound follows the automatic animation entry (a weapon's own animation does not change it).
+  const a = weaponAnimation({ ...attack, override: "" });
   if (!a) return [];
   const letter = String(attack.type ?? "").toUpperCase().match(/[SPB]/)?.[0] ?? (HEAVY.has(a.id) ? "B" : "S");
   const out = [];
@@ -115,8 +121,7 @@ export function psfxAvailable() {
 export async function playSounds(list) {
   try {
     if (!list?.length || !soundsOn() || !psfxAvailable()) return false;
-    const exists = f => { try { return !!globalThis.Sequencer.Database.entryExists(f); } catch { return false; } };
-    const sounds = list.filter(s => s?.file && exists(s.file));
+    const sounds = list.filter(s => sequencerHas(s?.file));
     if (!sounds.length) return false;
     const seq = new globalThis.Sequence({ moduleName: "ad2e", softFail: true });
     const volume = soundVolume();

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.55)
+## Status (v1.0.56)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -40,9 +40,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - Dual-class: the PHB's per-adventure choice of class while restricted is not tracked (the tick boxes in the dialogs
   and the experience penalty are).
 - Net: its hand-to-hand block and disarm are not modelled; a trapped victim is described in chat, not marked.
-- Lasso and net dialogs are for characters; a monster attacking with either makes a normal attack.
-- Throwing objects: "Throw object" is for characters; where a missed object lands is described in chat (the GM moves
-  or marks it); splash damage is rolled for the GM to apply to the creatures within 3 ft.
+- Throwing objects: where a missed object lands is described in chat (the GM moves or marks it); splash damage is rolled
+  for the GM to apply to the creatures within 3 ft. Monsters have no Maximum Press limit or bend bars roll (GM's call).
+- Weapon animation and sound choices are per weapon item; monster natural attacks use the automatic choices.
 - Psionics are not included; monster pictures are never shipped.
 
 ## GM creators
@@ -141,6 +141,19 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Weapon animation and sound choices (1.0.56; owner's request): weapon item field `animation` { file, sound } on the weapon
+  sheet ("Animation and sound", with the automatic choices for melee and missile use shown). "" = automatic, "none" =
+  nothing, else a Sequencer database path or a file path. A chosen sound replaces both the swing/shot and the impact; a
+  chosen animation does not change the automatic sound. Sequencer's `file()` takes a file path, a wildcard file path or
+  a database path (https://fantasycomputer.works/FoundryVTT-Sequencer/api/effect.html and api/sound.html: "Filepath",
+  "Wildcard filepath", "Database Path"); only database paths are checked with `Database.entryExists`, file paths
+  (anything with a slash) are played as given. Spell sheet animation paths accept file paths the same way.
+- Monsters with lasso, net and thrown objects (1.0.56; owner's request): a monster's lasso or net weapon item opens the
+  same dialogs as a character's from its Attacks table; the thrower's Strength is a dialog field, prefilled for monsters
+  with 3.5 per size category + Hit Dice (`monsterScores`, the implementation choice already used for defenders), and the
+  attack adds the item's magical bonus, spell effect and force-march modifiers (as other monster attacks). "Throw object"
+  is in the monster header: THAC0 plus spell effect and force-march modifiers; no Maximum Press limit and no bend
+  bars/lift gates box (monsters have no Strength score; implementation choice: the GM decides, the dialog says so).
 - Living off the land (1.0.55; owner's request and rulings): `tools/build-forage-tables.py` writes
   `module/rules/forage-tables.mjs` from the AD&D 2e wiki, regex-checked: Hunting (Proficiency) (PHB: -1 per nonproficient
   hunter, 101 to 200 yards (100+1d100), a check per 20 yards closed, surprise; CBarbH Table 33 rations per animal size,

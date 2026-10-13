@@ -31,6 +31,12 @@ export default class WeaponData extends foundry.abstract.TypeDataModel {
       bowStrength: new StringField({ required: true, blank: true, initial: "" }),
       // Elemental province of attacks with it (Al-Qadim; module/elemental.mjs, module/gens.mjs): "" or flame, sand, sea, wind.
       element: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
+      // Attack animation and sound (module/weapon-animations.mjs, module/sound-effects.mjs; owner's request 1.0.56): "" = automatic,
+      // "none" = nothing, else a Sequencer database path (jb2a..., psfx...) or a file path (wildcards allowed).
+      animation: new SchemaField({
+        file: new StringField({ required: true, blank: true, initial: "" }),
+        sound: new StringField({ required: true, blank: true, initial: "" })
+      }),
       bonus: new SchemaField({
         hit: new NumberField({ required: true, integer: true, initial: 0, nullable: false }),
         dmg: new NumberField({ required: true, integer: true, initial: 0, nullable: false })

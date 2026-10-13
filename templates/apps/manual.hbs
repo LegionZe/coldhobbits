@@ -391,6 +391,12 @@
   bite or claw show on the target (hits only); fists, slams, tails and tentacles strike; stings and gores pierce; "hurl
   rocks" throws a boulder. Unarmed attacks punch. Lasso, net and the attack options (disarm, grab and the like) play
   nothing.</p>
+  <p>Each weapon's sheet has an "Animation and sound" section showing the automatic choices for melee and missile use.
+  Type a Sequencer database path (e.g. <code>jb2a.spear.melee.01.white</code>) or a file path (e.g.
+  <code>worlds/myworld/fx/blade.webm</code>; <code>*</code> picks one of several files at random) to change the animation,
+  or <code>none</code> for no animation. The sound field works the same way (e.g. <code>psfx.weapon-attacks.spear.v1</code>);
+  a chosen sound replaces both the swing and the impact, and <code>none</code> makes the weapon silent. A spell's
+  animation field also accepts a file path.</p>
   <h3>Sound effects (PSFX)</h3>
   <p>With the Sequencer module and Peri's Sound Effects (PSFX) active, casting a spell and rolling an attack play a sound
   for everyone (world settings "Sound effects (PSFX)", on by default, and "Sound effects volume"). Spells use the sound
@@ -419,18 +425,21 @@
     <li><strong>Surprise, morale, reactions</strong>: Surprise on the character sheet and the eye button on monster
     sheets; morale and reaction buttons on monster sheets.</li>
     <li><strong>Modifiers</strong>: every roll dialog has a modifier and reason for anything the system does not track.</li>
-    <li><strong>Lasso</strong>: a character attacking with a lasso gets its own dialog: legs (pull/trip), arms (trap),
+    <li><strong>Lasso</strong>: a character or monster attacking with a lasso gets its own dialog: legs (pull/trip), arms (trap),
     unhorse a rider, or a pull/trip by spurring a mount the lasso is tied to. Target the defender first: its Strength,
     Dexterity, THAC0 and size are filled in (for monsters from size, Hit Dice and movement) and can be changed. Tick four
-    legs, unaware or stationary as they apply. Chat shows every roll and the result.</li>
-    <li><strong>Throwing objects</strong>: "Throw object" on a character's Combat tab throws a flask of oil, holy water,
+    legs, unaware or stationary as they apply. The thrower's Strength is a field too: a monster's starts at 3.5 per size
+    category plus its Hit Dice (change it if you know better). Chat shows every roll and the result.</li>
+    <li><strong>Throwing objects</strong>: "Throw object" on a character's Combat tab or a monster's header throws a flask of oil, holy water,
     acid, a rock or another object. Up to 5 lb it reaches 10 / 20 / 30 ft (short, medium, long); for heavier objects you
     decide which band is possible, tick "exceptionally heavy" for a bend bars/lift gates check, and nothing heavier than
     the character's Maximum Press can be thrown. A hit rolls the direct damage to the targets and a splash roll for the
     creatures within 3 ft (apply it with the chat buttons to the tokens you select); flaming oil's second round is a note.
     A miss says where it lands (direction and feet from the target point): move or mark it yourself. The Throwing
-    proficiency adds 10 ft to each band (5 more per extra slot) and +1 to hit or damage, for thrown weapons as well.</li>
-    <li><strong>Net</strong>: attacking with a net opens its own dialog: throw (traps weapon and shield; the target AC
+    proficiency adds 10 ft to each band (5 more per extra slot) and +1 to hit or damage, for thrown weapons as well.
+    Monsters have no Strength score, so their throws have no Maximum Press limit and no bend bars box: decide yourself
+    whether the creature can lift the object.</li>
+    <li><strong>Net</strong>: attacking with a net (characters and monsters) opens its own dialog: throw (traps weapon and shield; the target AC
     counts only Dexterity and magic, so enter any magical protection), loop the rope round (the victim breaks free at -4),
     pull/trip, or fold the net (2 rounds; after the first throw it is at -4 to hit until folded). A netted character or
     monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength check.</li>

@@ -1,4 +1,4 @@
-import { casterToken, jb2aAvailable } from "./spell-animations.mjs";
+import { casterToken, jb2aAvailable, sequencerHas } from "./spell-animations.mjs";
 
 /**
  * Weapon attack animations with JB2A through Sequencer (owner's request, 1.0.52): after an attack roll (character weapon
@@ -12,6 +12,8 @@ import { casterToken, jb2aAvailable } from "./spell-animations.mjs";
  * "melee" or "ranged" template (played from the attacker stretched to the target); bite and claws have none (played on
  * the target, hits only). Which animation fits which weapon is an implementation choice (curated list below, matched on
  * the weapon's identifier and name; otherwise by damage type S/P/B, or an arrow for missiles).
+ * A weapon item's own choice (`system.animation.file`, weapon sheet; owner's request 1.0.56) replaces it: "none" = no
+ * animation, else a database path or a file path (spell-animations.mjs `isFilePath`), played from the attacker to the target.
  */
 
 /** Curated weapons: `match` on "<identifier> <name>" (lower case); `melee` / `missile` = database path. */
@@ -71,6 +73,12 @@ export const MISSILE_FALLBACK = "jb2a.arrow.physical.white.02";
 /** Thrown weapons without their own animation, by damage type. */
 export const THROWN_BY_TYPE = { S: "jb2a.handaxe.throw.01", P: "jb2a.spear.throw.01", B: "jb2a.hammer.throw" };
 
+/** A weapon item's own animation and sound choices as attack fields: { override, sound } ("" = automatic). */
+export function itemEffects(item) {
+  const a = item?.system?.animation ?? {};
+  return { override: String(a.file ?? "").trim(), sound: String(a.sound ?? "").trim() };
+}
+
 /**
  * The animation for an attack (pure): { file, onTarget } or null. `kind`: "weapon" (item fields), "natural" (monster
  * attack name), "unarmed", "plain" (the sheet's melee/missile buttons). `missile`: the attack is fired or thrown;
@@ -107,7 +115,7 @@ export async function playWeaponAnimation(actor, attack, { hit = null, targetTok
     if (!targets.length) return false;
     const anim = weaponAnimation(attack);
     if (!anim) return false;
-    const exists = f => { try { return !!globalThis.Sequencer.Database.entryExists(f); } catch { return false; } };
+    const exists = sequencerHas;
     let file = anim.file;
     let onTarget = anim.onTarget;
     if (!exists(file)) {

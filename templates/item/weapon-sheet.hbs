@@ -42,6 +42,17 @@
       {{/if}}
     </dl>
   </fieldset>
+  {{#with attackFx as |fx|}}
+  <fieldset class="ad2e-weapon-fx">
+    <legend>{{localize "AD2E.Animation.WeaponLegend"}}</legend>
+    <div class="ad2e-item-fields">
+      <label data-tooltip="{{localize 'AD2E.Animation.WeaponFileHint'}}">{{localize "AD2E.Animation.File"}} <input type="text" name="system.animation.file" value="{{@root.system.animation.file}}" placeholder="{{localize 'AD2E.Animation.Automatic'}}"></label>
+      <label data-tooltip="{{localize 'AD2E.Sound.FileHint'}}">{{localize "AD2E.Sound.File"}} <input type="text" name="system.animation.sound" value="{{@root.system.animation.sound}}" placeholder="{{localize 'AD2E.Animation.Automatic'}}"></label>
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Animation.Automatic"}}: {{fx.animation}}{{#unless fx.animationReady}} ({{localize "AD2E.Animation.NotAvailable"}}){{/unless}}</p>
+    <p class="ad2e-note">{{localize "AD2E.Sound.Automatic"}}: {{fx.sound}}{{#unless fx.soundReady}} ({{localize "AD2E.Sound.NotAvailable"}}){{/unless}}</p>
+  </fieldset>
+  {{/with}}
   {{#unless hidden}}<label class="ad2e-notes">{{localize "AD2E.Item.notes"}}
     <textarea name="system.notes" rows="6">{{system.notes}}</textarea></label>{{/unless}}
 </section>
