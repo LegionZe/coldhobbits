@@ -3610,6 +3610,53 @@
     "WaterTime": "Takes {time} hours.",
     "FoodName": "Foraged food (per day)"
   },
+  "AD2E.Training": {
+    "Setting": "Training for level advancement",
+    "SettingHint": "Optional rule (Training (Optional Rule) (DMG)): a character must finish training with a tutor of the same class and a higher level before taking a new level. Adds a Training panel to the Character tab; the GM can still level a character up without it.",
+    "Legend": "Training",
+    "LegendHint": "A tutor of the same class and higher level than the level trained for; at least 19 minus the tutor's Wisdom weeks; then an Intelligence or Wisdom check (the higher), +1 for each further week.",
+    "Start": "Start training",
+    "Check": "Training check",
+    "Cancel": "Stop training",
+    "CancelConfirm": "Stop this training? Nothing already paid is refunded.",
+    "None": "Not training. Next: {cls} level {level}.",
+    "Status": {
+      "training": "Training for {cls} level {level} with {tutor} until {date} ({gp} gp paid).",
+      "checkDue": "Training for {cls} level {level} with {tutor}: lessons done, make the training check (roll {target} or less).",
+      "done": "Training for {cls} level {level} finished: ready to level up."
+    },
+    "Hint": "Training for {cls} level {level}: the tutor must be a {cls} of level {need} or higher and know what is taught.",
+    "Tutor": "Tutor",
+    "OtherTutor": "Another tutor (not in this world)",
+    "OtherName": "Other tutor: name",
+    "OtherLevel": "Other tutor: level",
+    "OtherWis": "Other tutor: Wisdom",
+    "Fee": "Fee per week (gp)",
+    "FeeHint": "No set amount; about 100 gp per level per week is common. 0 = free. The minimum weeks are paid now, one more week after each failed check.",
+    "SkipChecks": "Skip the tutor's Wisdom and Charisma checks",
+    "SkipChecksHint": "A player character tutor normally rolls both once; the GM may rule instead.",
+    "KnowReminder": "The tutor must also know what is taught: the same weapon specialization, the spell, the skill.",
+    "TeacherChecks": "{name} as a teacher: Wisdom {wis} (needs {wisScore} or less), Charisma {cha} (needs {chaScore} or less).",
+    "Result": {
+      "Teacher": "Can teach.",
+      "NotQuite": "Close, but not a teacher.",
+      "NoAptitude": "No aptitude for teaching."
+    },
+    "Issue": {
+      "wrongClass": "{name} is not a {cls}.",
+      "tooLow": "{name} must be at least level {need}.",
+      "notTeacher": "{name} cannot teach (failed the Wisdom or Charisma check)."
+    },
+    "NoClass": "This character has no class to train in.",
+    "CannotPay": "{name} cannot pay {gp} gp for the minimum weeks.",
+    "Started": "{name} starts training for {cls} level {level} with {tutor}: {weeks} weeks, until {date} ({gp} gp paid).",
+    "NotYet": "The lessons are not done until {date}.",
+    "CheckOk": "Training check {roll} (needs {target} or less): the lessons are learned. {cls} level {level} can be taken.",
+    "CheckFail": "Training check {roll} (needs {target} or less): another week, until {date} (+{n} to the next check).",
+    "Unpaid": "The week's fee ({gp} gp) could not be paid.",
+    "Required": "Level {level} needs training first (Character tab, Training).",
+    "GmOverride": "This character has not finished training for level {level}. Level up anyway?"
+  },
   "AD2E.Wage": {
     "Title": "Wages",
     "PerMonth": "Wage {amount} a month",

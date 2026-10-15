@@ -18,6 +18,19 @@
     {{#if aging.canRollStart}}<button type="button" data-action="rollStartingAge" data-tooltip="{{aging.startFormula}}"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Aging.RollStart"}}</button>{{/if}}
     {{#if aging.category}}<span class="ad2e-weapon-meta" data-tooltip="{{aging.limits}}">{{aging.category}}{{#if aging.changes}} ({{aging.changes}}){{/if}}</span>{{/if}}
 </div>
+  {{#with training as |tr|}}
+  <fieldset class="ad2e-prof-list ad2e-training">
+    <legend data-tooltip="{{localize 'AD2E.Training.LegendHint'}}">{{localize "AD2E.Training.Legend"}} <a class="ad2e-item-link" href="{{tr.url}}" target="_blank" rel="noopener" data-tooltip="{{localize 'AD2E.Item.Source'}}"><i class="fa-solid fa-book-open"></i></a></legend>
+    <div class="ad2e-prof-row ad2e-plain-row">
+      <span class="ad2e-prof-name {{#if tr.canCheck}}ad2e-unmet{{/if}}">{{tr.text}}</span>
+      {{#if @root.editable}}
+      {{#if tr.canStart}}<button type="button" data-action="trainingStart"><i class="fa-solid fa-chalkboard-user"></i> {{localize "AD2E.Training.Start"}}</button>{{/if}}
+      {{#if tr.canCheck}}<button type="button" data-action="trainingCheck"><i class="fa-solid fa-dice-d20"></i> {{localize "AD2E.Training.Check"}}</button>{{/if}}
+      {{#if tr.canCancel}}<button type="button" data-action="trainingCancel">{{localize "AD2E.Training.Cancel"}}</button>{{/if}}
+      {{/if}}
+    </div>
+  </fieldset>
+  {{/with}}
   {{#with station as |s|}}
   <fieldset class="ad2e-prof-list ad2e-station">
     <legend data-tooltip="{{localize 'AD2E.Station.Hint'}}">{{localize "AD2E.Station.Label"}}</legend>

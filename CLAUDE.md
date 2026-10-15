@@ -186,6 +186,13 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `paymentsDue` (MAX_PAYMENTS 24); `employerOf`, `wagedHirelings` (characters' `henchmen.actors` with role hireling), `processWages`
   (updateWorldTime, active GM; whisper GM + employer owners), `payArrears` (monster sheet action), `wageContext` (monster header));
   monster `system.wage` { due, unpaid }; station.mjs `payCoins(actor, copper)`.
+- Training (owner's request 1.0.60, world setting `levelTraining`, off by default): `module/training.mjs` (source Training (Optional
+  Rule) (DMG) rev 276321, quoted in the header; pure `minWeeks` (19 - tutor Wis, >= 1), `weeklyFee`, `checkTarget`, `tutorIssues`,
+  `trainingStatus`, `trainedFor`, `classLevelOf`, `trainingTarget`; `startTraining` (tutor = world characters of the class above the
+  level, or another tutor; PC tutor Wis/Cha checks once, flag `ad2e.teacher`; minimum weeks paid via station.mjs `payCoins`),
+  `trainingCheck`, `cancelTraining`, `trainingAllows` (AD2EActor#levelUp / #multiLevelUp gate, GM confirm), `trainingUsedUpdate`,
+  `trainingContext` (Character tab panel)); character `system.training` { level, classId ("" main), className, tutor, tutorUuid,
+  tutorWis, fee, weeks, started, until, extra, paid, done }.
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
