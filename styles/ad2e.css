@@ -98,7 +98,10 @@
 .ad2e-coin-row { grid-template-columns: 24px 1fr 6rem auto auto; }
 .ad2e-coin-row input { width: 6rem; }
 .ad2e-coin-value { white-space: nowrap; font-size: 0.85em; }
-.ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto; }
+/* Six columns (1.0.65, owner's self-check report: a lit light's row had six children and its quantity wrapped into the
+   24px icon column): icon, name, Carried, extras (light / liquid controls in .ad2e-gear-extra, or Use), quantity, delete. */
+.ad2e-gear-row { grid-template-columns: 24px 1fr auto auto auto auto; }
+.ad2e-gear-extra { display: flex; align-items: center; gap: 0.3rem; white-space: nowrap; }
 .ad2e-gear-heading { margin: 0.4rem 0 0.15rem; font-size: 0.9em; }
 /* Containers (templates/actor/parts/container-list.hbs): contents indented under their container. */
 .ad2e-container { margin-bottom: 0.3rem; }
