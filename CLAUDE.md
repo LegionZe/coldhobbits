@@ -193,6 +193,12 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `trainingCheck`, `cancelTraining`, `trainingAllows` (AD2EActor#levelUp / #multiLevelUp gate, GM confirm), `trainingUsedUpdate`,
   `trainingContext` (Character tab panel)); character `system.training` { level, classId ("" main), className, tutor, tutorUuid,
   tutorWis, fee, weeks, started, until, extra, paid, done }.
+- Sheet check (owner's request 1.0.61): `module/self-check-scan.mjs` (no imports; `scanElement(root, { hasKey })` -> [{ kind
+  rawKey | placeholder | badValue | squeezedInput (< 30 px) | spill | wrapped (< 50 px) | overlap, text, path }], `elementPath`,
+  `SCAN_LIMITS`) and `module/self-check.mjs` (`runSelfCheck({ scan, show })`: sample sheets + ad2e settings-menu windows except
+  the importers, `tabsOf` (tab buttons) + `changeTab`, characters with `_editMode` false/true, console.error / window error capture,
+  sheets restored or closed; `reportText`; dialog with a copy button). GM manual tool `selfCheck`, `game.ad2e.selfCheck()`.
+  Ask the owner to run it and paste the report before guessing at a display fault.
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

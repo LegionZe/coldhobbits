@@ -52,6 +52,7 @@ import { registerWeaponAnimations } from "./weapon-animations.mjs";
 import { registerSoundEffects } from "./sound-effects.mjs";
 import { registerWages } from "./wages.mjs";
 import { registerTraining } from "./training.mjs";
+import { runSelfCheck } from "./self-check.mjs";
 import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
@@ -139,6 +140,7 @@ Hooks.once("init", () => {
   registerManual();
   game.ad2e = {
     manual: () => new Manual().render({ force: true }),
+    selfCheck: () => runSelfCheck(),
     playerGuide: () => new PlayerGuide().render({ force: true }),
     importMonsters: () => new MonsterImporter().render({ force: true }),
     updateMonsters: () => updateExistingMonsters(),

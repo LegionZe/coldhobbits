@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.60)
+## Status (v1.0.61)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Sheet check (1.0.61; owner's request): GM manual tool "Check sheets" / `game.ad2e.selfCheck()` (`module/self-check.mjs`,
+  `module/self-check-scan.mjs`). Opens up to 6 characters (also in edit mode), up to 3 monsters and one item of each type
+  plus the system's windows (not the importers, which fetch from their websites), shows every tab and lists raw language
+  keys, unfilled "{…}", "undefined"/"NaN", fields under 30 px, text spilling out of its box or wrapped word by word under
+  50 px, overlapping items, and errors logged meanwhile; a report to copy. No data is changed. The scanner was tested in
+  Chromium on the three faults reported in 1.0.57-1.0.59 (rendered from 1.0.55: all found) and on the current templates
+  (none found). Thresholds are implementation choices. Dialogs are not covered.
 - Training for level advancement (1.0.60; owner's request: optional, off by default): world setting "Training for level
   advancement" (`module/training.mjs`). Source: Training (Optional Rule) (DMG),
   https://adnd2e.fandom.com/wiki/Training_(Optional_Rule)_(DMG) (revision 276321): tutor "of the same class and higher level

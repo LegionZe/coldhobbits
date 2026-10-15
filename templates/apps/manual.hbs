@@ -32,6 +32,12 @@
   <h2>GM tools</h2>
   {{#unless isGM}}<p class="ad2e-unmet">{{localize "AD2E.Manual.GmOnly"}}</p>{{/unless}}
   <div class="ad2e-manual-tools">
+    <div><button type="button" data-action="tool" data-tool="selfCheck"><i class="fa-solid fa-stethoscope"></i> Check sheets</button>
+      <p>Opens sample sheets (up to 6 characters, up to 3 monsters, one item of each type) and the system's windows, shows
+      every tab (characters also in edit mode) and lists what looks wrong: labels shown as raw keys (AD2E.…), unfilled
+      "{…}", "undefined" or "NaN", fields squeezed narrower than 30 pixels, text running out of its box or wrapped one word
+      per line, items covering each other, and errors logged while drawing. Nothing is changed; windows it opened are closed
+      again. Copy the report and send it to whoever maintains the system. Not covered: dialogs and the importers.</p></div>
     <div><button type="button" data-action="tool" data-tool="importMonsters"><i class="fa-solid fa-dragon"></i> Import monsters</button>
       <p>Choose a setting and source book from completecompendium.com, select stat blocks and import them as Monster / NPC
       actors (stat block, link to the page, picture as portrait and token; token size from the size letter: T ½, S and M 1,

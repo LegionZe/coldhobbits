@@ -3610,6 +3610,17 @@
     "WaterTime": "Takes {time} hours.",
     "FoodName": "Foraged food (per day)"
   },
+  "AD2E.SelfCheck": {
+    "Title": "Check sheets",
+    "GmOnly": "Only a GM can run the sheet check.",
+    "Running": "Checking sheets and windows: they open and close for a moment.",
+    "Found": "{windows} windows checked: {findings} findings.",
+    "Clean": "{windows} windows checked: nothing found.",
+    "SendHint": "Copy the report and send it with a description of what you see; it lists each finding with the window, tab and place.",
+    "Copy": "Copy report",
+    "Copied": "Report copied.",
+    "Close": "Close"
+  },
   "AD2E.Training": {
     "Setting": "Training for level advancement",
     "SettingHint": "Optional rule (Training (Optional Rule) (DMG)): a character must finish training with a tutor of the same class and a higher level before taking a new level. Adds a Training panel to the Character tab; the GM can still level a character up without it.",
