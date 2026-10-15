@@ -270,6 +270,25 @@
   points are spent on the Skills &amp; Proficiencies tab. Henchmen: drag an actor onto the sheet (Character tab). Mounts, pack animals and
   pets: drag the animal actor onto the sheet; they are listed on the Inventory tab with their load, and "Riding" marks the
   one the character rides (its load then includes the rider).</p>
+  <h3>Training for level advancement (optional)</h3>
+  <p>World setting "Training for level advancement", off by default. When on, Level Up is refused until the character has
+  finished training for that level; you can still level a character up without it (Level Up asks you to confirm). The
+  Character tab gets a Training panel:</p>
+  <ul>
+    <li><strong>Start training</strong>: choose the tutor. The list shows characters in the world of the same class and a
+    higher level than the level trained for (a 7th-level fighter training for 8th needs a 9th-level or higher fighter), or
+    "another tutor" with a name, level and Wisdom. A tutor owned by a player rolls a Wisdom and a Charisma check once (kept
+    on that character; both must succeed to teach); other tutors pass automatically, and you can tick "Skip the tutor's
+    checks". The tutor must also know what is taught (the specialization, the spell, the skill): that is up to you.</li>
+    <li><strong>Fee</strong>: the rule sets no amount; the dialog suggests 100 gp per level per week (0 = free). The minimum
+    weeks are paid from the character's coins when training starts, one more week after each failed check.</li>
+    <li><strong>Time</strong>: 19 minus the tutor's Wisdom weeks (at least 1; a week is 7 days of game time). Then
+    <strong>Training check</strong>: Intelligence or Wisdom, whichever is higher; a failure adds a week and +1 to the next
+    check. A success unlocks Level Up for that level.</li>
+    <li>Multi-class characters train one class at a time (the dialog asks which). Stop training refunds nothing.</li>
+  </ul>
+  <p>Source: Training (Optional Rule) (DMG). Implementation choices: the fee default, payment by week, at least one week,
+  7-day weeks, the tutor's checks kept.</p>
   <h3>Followers and strongholds</h3>
   <p>On the Character tab, "Followers &amp; stronghold" records the stronghold (name, kind, Built). Each class with followers shows
   the level it needs: fighter 9 and bard 9 (a built stronghold), cleric 8 (a built place of worship), ranger 10 and thief

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.59)
+## Status (v1.0.60)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,16 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Training for level advancement (1.0.60; owner's request: optional, off by default): world setting "Training for level
+  advancement" (`module/training.mjs`). Source: Training (Optional Rule) (DMG),
+  https://adnd2e.fandom.com/wiki/Training_(Optional_Rule)_(DMG) (revision 276321): tutor "of the same class and higher level
+  than the one the character is training for"; player character tutors make "both a Wisdom check and a Charisma check"
+  ("It is assumed that all NPC tutors have successfully passed these checks"); "an average of 100 gp per level per week is
+  not uncommon"; "Subtract the Wisdom score from 19. This is the minimum number of weeks"; then "an Intelligence or Wisdom
+  check, whichever is higher", each additional week giving "another +1". Level Up is refused until the check succeeds
+  (the GM may confirm without it). Implementation choices: fee default 100 gp x the level trained for per week (editable),
+  minimum weeks paid at the start and one week per failed check, at least 1 week, 7-day weeks, a player character tutor's
+  checks rolled once and kept, the tutor's knowledge (specialization, spell, skill) not checked.
 - Weapon animation and sound choices (1.0.56; owner's request): weapon item field `animation` { file, sound } on the weapon
   sheet ("Animation and sound", with the automatic choices for melee and missile use shown). "" = automatic, "none" =
   nothing, else a Sequencer database path or a file path. A chosen sound replaces both the swing/shot and the impact; a

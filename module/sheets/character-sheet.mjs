@@ -1,3 +1,4 @@
+import { cancelTraining, startTraining, trainingCheck, trainingContext } from "../training.mjs";
 import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
 import { lightItem, lightSpec, putOut, turnsLeft } from "../lights.mjs";
@@ -257,6 +258,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       rollStartingAge: CharacterSheet.onRollStartingAge,
       rollHeightWeight: CharacterSheet.onRollHeightWeight,
       stationRoll: CharacterSheet.onStationRoll,
+      trainingStart: CharacterSheet.onTrainingStart,
+      trainingCheck: CharacterSheet.onTrainingCheck,
+      trainingCancel: CharacterSheet.onTrainingCancel,
       stationCheck: CharacterSheet.onStationCheck,
       stationSpend: CharacterSheet.onStationSpend,
       stationConvict: CharacterSheet.onStationConvict,
@@ -503,6 +507,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     context.profTab = this._proficiencyTabContext(sys);
     context.languages = this._languagesContext(sys);
     context.station = stationContext(this.actor, this.isEditable);
+    context.training = trainingContext(this.actor);
     context.henchmen = this._henchmenContext();
     context.followers = followersContext(this.actor);
     context.castle = constructionContext(this.actor);
@@ -1434,6 +1439,14 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
 
   /** Al-Qadim station (module/station.mjs). */
   static onStationRoll() { return rollInitialStation(this.actor); }
+  /** Training for level advancement (module/training.mjs). */
+  static onTrainingStart() { return startTraining(this.actor); }
+  static onTrainingCheck() { return trainingCheck(this.actor); }
+  static async onTrainingCancel() {
+    const ok = await ad2eDialog.confirm({ window: { title: game.i18n.localize("AD2E.Training.Cancel") },
+      content: `<p>${game.i18n.localize("AD2E.Training.CancelConfirm")}</p>`, rejectClose: false });
+    return ok ? cancelTraining(this.actor) : null;
+  }
 
   static onStationCheck() { return rollStationCheck(this.actor); }
 

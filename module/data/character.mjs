@@ -291,6 +291,24 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         forage: new SchemaField({ day: new NumberField({ required: false, nullable: true, integer: true, initial: null }),
           tried: new ArrayField(new StringField()) })
       }),
+      // Training for level advancement (module/training.mjs, world setting "levelTraining"): the level trained for (0 = none),
+      // the class (multi-class identifier, "" = the main class), tutor, weekly fee (gp), minimum weeks, world times, failed checks
+      // (+1 each), gp paid, finished.
+      training: new SchemaField({
+        level: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        classId: new StringField({ required: true, blank: true, initial: "" }),
+        className: new StringField({ required: true, blank: true, initial: "" }),
+        tutor: new StringField({ required: true, blank: true, initial: "" }),
+        tutorUuid: new StringField({ required: true, blank: true, initial: "" }),
+        tutorWis: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        fee: new NumberField({ required: true, min: 0, initial: 0 }),
+        weeks: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        started: new NumberField({ required: false, nullable: true, initial: null }),
+        until: new NumberField({ required: false, nullable: true, initial: null }),
+        extra: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
+        paid: new NumberField({ required: true, min: 0, initial: 0 }),
+        done: new BooleanField({ initial: false })
+      }),
       // Al-Qadim station (module/station.mjs): initial (Table 1 roll), conviction (1d2), penniless (+ debts), enslaved (station while a
       // slave), freed (station when freed and when), spending bonus (points until a world time).
       station: new SchemaField({

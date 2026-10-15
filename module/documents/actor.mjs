@@ -42,6 +42,7 @@ import { playSpellAnimation } from "../spell-animations.mjs";
 import { itemEffects, playWeaponAnimation } from "../weapon-animations.mjs";
 import { playAttackSound, playSpellSound } from "../sound-effects.mjs";
 import { forageFields, forageKind, rollForage } from "../forage.mjs";
+import { trainingAllows, trainingUsedUpdate } from "../training.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -188,17 +189,20 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(game.i18n.format("AD2E.Race.LevelLimitReached", { limit }));
       return null;
     }
+    // Optional training (module/training.mjs, world setting "levelTraining").
+    if (!(await trainingAllows(this, "", level))) return null;
+    const trained = trainingUsedUpdate(this, "", level);
     // Dual-class: "the character earns no additional Hit Dice or hit points while advancing in his new class" until his
     // new level is higher than every earlier class's (Multi-Class and Dual-Class Characters (PHB)).
     const prev = this.type === "character" && this.system.dual ? this.system.dualClass.previous : [];
     if (!gainsHitPoints(prev, level)) {
       await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }),
         content: `<p>${game.i18n.format("AD2E.Dual.NoHitPoints", { level, max: this.system.dual.maxOld })}</p>` });
-      return this.update({ "system.level": level, ...this.#drainRegained("main", level) });
+      return this.update({ "system.level": level, ...this.#drainRegained("main", level), ...trained });
     }
     const hp = await this.rollHitPointsForLevel(level);
     return this.update({
-      "system.level": level, ...this.#drainRegained("main", level),
+      "system.level": level, ...this.#drainRegained("main", level), ...trained,
       "system.hp.max": this.system.hp.max + hp,
       "system.hp.value": this.system.hp.value + hp
     });
@@ -507,9 +511,10 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(`${c.name}: ${game.i18n.format("AD2E.Race.LevelLimitReached", { limit: c.levelLimit })}`);
       return null;
     }
+    if (!(await trainingAllows(this, id, level))) return null; // optional training (module/training.mjs)
     const hp = await this.rollHitPointsForLevel(level, { group: c.group, classes: classes.length, className: c.name });
     const update = c.primary ? { "system.level": level } : { "system.multiClass.classes": multiEntries(classes, id, { level }) };
-    Object.assign(update, this.#drainRegained(c.primary ? "main" : `multi:${id}`, level));
+    Object.assign(update, this.#drainRegained(c.primary ? "main" : `multi:${id}`, level), trainingUsedUpdate(this, id, level));
     return this.update({ ...update, "system.hp.max": this.system.hp.max + hp, "system.hp.value": this.system.hp.value + hp });
   }
 
