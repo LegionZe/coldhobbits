@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.64)
+## Status (v1.0.65)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -158,6 +158,12 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   1.75rem); the Magic Resistance row has its own columns (its value and "%" were in 2rem, "Lowered" in 2.5rem); class and kit
   ability minimums wrap to as many 10rem columns as fit ("Constitution", "Intelligence" spilled in three fixed columns);
   monster save levels stay on one line. Each was reproduced in Chromium from the 1.0.61 files and is gone with the new ones.
+- Inventory quantity fixed (1.0.65; owner's 1.0.64 "Check sheets" report: "spill: 1 (box 24px, content 59px)" on
+  `span.ad2e-qty`): a light source's row (Light/Out button and turns left) had six parts for five grid columns, so its
+  quantity wrapped into the 24px icon column of a second line; in edit mode the delete icon of liquid containers, magic
+  items and monster magic items wrapped the same way. Gear rows now have six columns, the light and liquid controls share
+  one cell, and a monster's non-magical gear keeps an empty cell for the Use button. Reproduced in Chromium from the 1.0.64
+  files; every gear row is on one line with the new ones.
   The check itself: "wrapped" now counts the text's lines (a cell stretched to its row's height was reported, e.g. "PM 1"),
   and "spill" findings carry the box and content widths and the parent's grid columns.
 - Sheet check (1.0.61; owner's request): GM manual tool "Check sheets" / `game.ad2e.selfCheck()` (`module/self-check.mjs`,

@@ -312,6 +312,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   Row grid: `.ad2e-prof-row` starts with a 24px icon column; a row whose first child is not an `<img>`/`<i>` icon needs a
   class with its own columns (`ad2e-language-row`, `ad2e-plain-row` (+ `ad2e-flex-row` for a left-aligned line),
   `ad2e-damage-row`), or its first item is squeezed into the icon column (owner's screenshots 1.0.57 languages, 1.0.58 station).
+  Count a row's children against its grid columns, optional ones included: extras wrap onto a second line, the first into
+  the icon column (1.0.65: a light's gear row had 6 children for 5 columns). `.ad2e-gear-row` = 6 columns (icon, name,
+  Carried, `.ad2e-gear-extra` light/liquid controls or Use, quantity, delete); a monster gear row keeps an empty Use cell.
 - Sheet partials: `templates/actor/parts/{weapon-list,armor-list,class-abilities,proficiencies,race-class,gm-controls}.hbs`,
   registered by name in init with `foundry.applications.handlebars.loadTemplates({ "ad2e.<name>": path })` (as dnd5e).
   Hash parameters are not visible inside nested `{{#each}}` blocks: re-bind them with `{{#with x as |x|}}`
