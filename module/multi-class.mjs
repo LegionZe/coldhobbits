@@ -1,3 +1,4 @@
+import { cappedAward } from "./advancement.mjs";
 /**
  * Multi-class characters (world setting "multiClass", off by default; Multi-Class and Dual-Class Characters (PHB),
  * "Multi-Class Combinations" and "Multi-Class Benefits and Restrictions"). Pure rules; the character data model, actor
@@ -134,19 +135,21 @@ export function multiSlots(rules) {
  *   levelLimit: number|null}>} classes  derived `system.multi.classes`
  * @param {number} amount
  */
-export function multiAward(classes, amount) {
+export function multiAward(classes, amount, capFor = null) {
   const split = splitExperience(amount, classes);
   const update = {};
   const entries = [];
   const rows = classes.map((c, i) => {
-    const xp = (c.xp ?? 0) + split[i].gain;
+    // One level per award (module/advancement.mjs): `capFor(c)` = the class's highest allowed experience, or null.
+    const capped = cappedAward(c.xp ?? 0, split[i].gain, capFor ? capFor(c) : null);
+    const xp = capped.xp;
     if (c.primary) update["system.xp"] = xp;
     else entries.push({ identifier: c.identifier, level: c.level ?? 1, xp });
     const canLevel = c.xpNext !== null && c.xpNext !== undefined && xp >= c.xpNext && !(c.levelLimit && c.level >= c.levelLimit);
-    return { identifier: c.identifier, name: c.name, share: split[i].share, bonus: split[i].bonus, gain: split[i].gain, xp, canLevel };
+    return { identifier: c.identifier, name: c.name, share: split[i].share, bonus: split[i].bonus, gain: capped.gain, lost: capped.lost, xp, canLevel };
   });
   update["system.multiClass.classes"] = entries;
-  return { update, rows, gain: rows.reduce((n, r) => n + r.gain, 0), canLevel: rows.some(r => r.canLevel) };
+  return { update, rows, gain: rows.reduce((n, r) => n + r.gain, 0), lost: rows.reduce((n, r) => n + r.lost, 0), canLevel: rows.some(r => r.canLevel) };
 }
 
 /** The stored entries for the non-primary classes after one of them changes (`changes` merged into its entry). */

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.62)
+## Status (v1.0.63)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -39,7 +39,8 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   (the multi-class row is not applied).
 - Dual-class: the PHB's per-adventure choice of class while restricted is not tracked (the tick boxes in the dialogs
   and the experience penalty are).
-- Net: its hand-to-hand block and disarm are not modelled; a trapped victim is described in chat, not marked.
+- Net: its hand-to-hand block and disarm are not modelled; the netted mark changes no roll by itself (the GM rules on
+  actions while netted).
 - Throwing objects: where a missed object lands is described in chat (the GM moves or marks it); splash damage is rolled
   for the GM to apply to the creatures within 3 ft. Monsters have no Maximum Press limit or bend bars roll (GM's call).
 - Weapon animation and sound choices are per weapon item; monster natural attacks use the automatic choices.
@@ -141,6 +142,17 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- One level per award (1.0.63; owner's request, optional, off by default): world setting "One level per experience award"
+  (`module/advancement.mjs`). Source: Rate of Advancement (DMG), https://adnd2e.fandom.com/wiki/Rate_of_Advancement_(DMG)
+  (revision 71282): "Player characters should never advance more than one level per time experience is awarded ... the
+  excess points are lost. The DM should give the character enough experience to place him somewhere between halfway and one
+  point below the next highest level." The sheet's +, the group award and the combat-end award cap each character (each
+  class for multi-class characters) at one point below the experience for two levels up; the points lost are shown in chat.
+  Implementation choice: the cap is the top of the DMG's range (the GM can lower experience by hand).
+- Netted creatures (1.0.63; owner's request): a net throw that hits marks the first target with the status "Netted"
+  (icon styles/icons/netted.svg); looping the rope round also records the -4 to break free; "Break free (net)" pre-ticks it
+  and removes the mark on a success (`module/netted.mjs`; the active GM sets the mark from the chat card, as players cannot
+  change other actors).
 - Sheet check findings fixed (1.0.62; owner's report from "Check sheets" on Foundry 14.369): weapon proficiency tick boxes
   (Specialized and the Skills & Powers Choice / Expertise / Mastery) share one cell (a row had up to 8 parts for 6 grid
   columns, so Expertise or Mastery fell into the 2.5rem cost column); ability scores such as "18/91" get a 3rem column (was

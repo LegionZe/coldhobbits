@@ -43,6 +43,8 @@ import { itemEffects, playWeaponAnimation } from "../weapon-animations.mjs";
 import { playAttackSound, playSpellSound } from "../sound-effects.mjs";
 import { forageFields, forageKind, rollForage } from "../forage.mjs";
 import { trainingAllows, trainingUsedUpdate } from "../training.mjs";
+import { cappedAward, oneLevelOn, xpCap } from "../advancement.mjs";
+import { clearNetted, netHitFlag, netWrapped } from "../netted.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -1515,7 +1517,10 @@ export default class AD2EActor extends Actor {
     }
     // A throw unfolds the net (a pull/trip keeps hold of it).
     if (input.mode !== "trip") await item.setFlag?.("ad2e", "unfolded", true);
-    return ChatMessage.create({ speaker, rolls, content: title + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>` });
+    // A hit marks the first target netted (module/netted.mjs; set by the active GM from the card's flag).
+    const netHit = netHitFlag(input.mode, hit, targets);
+    return ChatMessage.create({ speaker, rolls, content: title + `<ul>${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul>`,
+      ...(netHit ? { flags: { ad2e: { netHit } } } : {}) });
   }
 
   /** Netted: "he can only break free by making a Strength check" (-4 if the rope was looped round). Characters and monsters. */
@@ -1528,7 +1533,7 @@ export default class AD2EActor extends Actor {
       window: { title: `${this.name}: ${i18n("AD2E.Net.BreakFree")}` },
       content: `<p class="ad2e-note">${esc(i18n("AD2E.Net.BreakFreeHint"))}</p>`
         + `<div class="form-group"><label>${esc(i18n("AD2E.Net.Strength"))}</label><input type="number" name="str" value="${str}"></div>`
-        + `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Net.WrappedBox", { n: NET.improveStr }))}</label><input type="checkbox" name="wrapped"></div>`
+        + `<div class="form-group"><label>${esc(game.i18n.format("AD2E.Net.WrappedBox", { n: NET.improveStr }))}</label><input type="checkbox" name="wrapped"${netWrapped(this) ? " checked" : ""}></div>`
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({ str: Number(button.form.elements.str.value) || 0,
         wrapped: !!button.form.elements.wrapped?.checked, ...readModifier(button.form) }) },
@@ -1538,6 +1543,7 @@ export default class AD2EActor extends Actor {
     const target = breakFreeScore(input.str, input.wrapped) + input.mod;
     const roll = await new Roll("1d20").evaluate();
     const ok = roll.total <= target;
+    if (ok) await clearNetted(this); // the netted mark (module/netted.mjs)
     return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), rolls: [roll],
       content: `<p>${esc(game.i18n.format("AD2E.Net.BreakFreeLine", { name: this.name, roll: roll.total, target,
         result: i18n(ok ? "AD2E.Net.Free" : "AD2E.Net.StillTrapped") }))}${modifierText(input.mod, input.note)}</p>` });
@@ -2690,18 +2696,23 @@ export default class AD2EActor extends Actor {
     if (!input?.amount) return;
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     // Multi-class: divided equally between the classes, each share with its own prime requisite bonus (owner's ruling).
+    // One level per award (module/advancement.mjs, world setting "oneLevelPerAward").
+    const capOn = oneLevelOn();
     if (multi) {
-      const award = multiAward(multi.classes, input.amount);
+      const award = multiAward(multi.classes, input.amount, capOn ? c => xpCap(AD2E.xpTable[c.xpKey], c.level) : null);
       await this.update(award.update);
       const parts = award.rows.map(r => `${r.name} +${r.gain}${r.bonus ? ` (${game.i18n.format("AD2E.Xp.WithBonus", { bonus: r.bonus })})` : ""} → ${r.xp}`
+        + (r.lost ? ` (${esc(game.i18n.format("AD2E.Xp.Lost", { n: r.lost }))})` : "")
         + (r.canLevel ? ` <strong>${esc(game.i18n.localize("AD2E.Xp.CanLevel"))}</strong>` : ""));
       return ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: `<p>${esc(game.i18n.format("AD2E.Multi.Gained",
         { name: this.name, gain: award.gain }))}${input.reason ? ` — ${esc(input.reason)}` : ""}</p><ul><li>${parts.join("</li><li>")}</li></ul>` });
     }
     const full = Math.floor(input.amount * (100 + bonus) / 100);
     const penalized = dual ? penalizedAward(full, input.kind, pen) : { gain: full, rule: "", clear: {} };
-    const gain = penalized.gain;
-    const xp = (this.system.xp ?? 0) + gain;
+    const capped = cappedAward(this.system.xp ?? 0, penalized.gain, capOn ? xpCap(AD2E.xpTable[this.system.classInfo?.xpTable], this.system.level) : null);
+    const gain = capped.gain;
+    const xp = capped.xp;
+    if (capped.lost) input.reason = [input.reason, game.i18n.format("AD2E.Xp.Lost", { n: capped.lost })].filter(Boolean).join("; ");
     await this.update({ "system.xp": xp,
       ...Object.fromEntries(Object.entries(penalized.clear).map(([k, v]) => [`system.dualClass.penalty.${k}`, v])) });
     if (penalized.rule) input.reason = [input.reason, i18n(`AD2E.Dual.Award.${penalized.rule}`)].filter(Boolean).join("; ");

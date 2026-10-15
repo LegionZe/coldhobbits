@@ -1,7 +1,8 @@
 import { inParty } from "../party.mjs";
 import { dualClassOn, penalizedAward } from "../dual-class.mjs";
 import { multiAward } from "../multi-class.mjs";
-import { creatureHitDice } from "../config.mjs";
+import { AD2E, creatureHitDice } from "../config.mjs";
+import { cappedAward, oneLevelOn, xpCap } from "../advancement.mjs";
 import { monsterXp } from "./creators.mjs";
 import { CREATOR_TABLES } from "../rules/creator-tables.mjs";
 
@@ -106,12 +107,14 @@ export default class AwardXp extends HandlebarsApplicationMixin(ApplicationV2) {
   static shares(total, actors, kind = "adventure", extra = new Map()) {
     const n = actors.length;
     const even = n ? Math.floor(total / n) : 0;
+    // One level per award (module/advancement.mjs, world setting "oneLevelPerAward").
+    const capOn = oneLevelOn();
     return actors.map(a => {
       // A Table 34 class award joins the character's share (prime requisite bonus and dual-class rules apply to it).
       const share = even + (extra.get(a.id) ?? 0);
       if (a.system.multi) {
-        const award = multiAward(a.system.multi.classes, share);
-        return { actor: a, share, bonus: 0, gain: award.gain, xp: award.rows.map(r => `${r.name} ${r.xp}`).join(", "), next: null,
+        const award = multiAward(a.system.multi.classes, share, capOn ? c => xpCap(AD2E.xpTable[c.xpKey], c.level) : null);
+        return { actor: a, share, bonus: 0, gain: award.gain, lost: award.lost, xp: award.rows.map(r => `${r.name} ${r.xp}`).join(", "), next: null,
           canLevel: award.canLevel, rule: "", clear: {}, update: award.update,
           parts: award.rows.map(r => `${r.name} +${r.gain}${r.bonus ? ` (+${r.bonus}%)` : ""}`).join(", ") };
       }
@@ -119,11 +122,12 @@ export default class AwardXp extends HandlebarsApplicationMixin(ApplicationV2) {
       const full = Math.floor(share * (100 + bonus) / 100);
       // Dual-class penalty (module/dual-class.mjs): only characters with earlier classes carry the flags.
       const pen = a.system.dual ? penalizedAward(full, kind, a.system.dualClass?.penalty) : { gain: full, rule: "", clear: {} };
-      const gain = pen.gain;
-      const xp = (a.system.xp ?? 0) + gain;
+      const capped = cappedAward(a.system.xp ?? 0, pen.gain, capOn ? xpCap(AD2E.xpTable[a.system.classInfo?.xpTable], a.system.level) : null);
+      const gain = capped.gain;
+      const xp = capped.xp;
       const next = a.system.xpNext ?? null;
       const clear = a.system.dual ? pen.clear : {};
-      return { actor: a, share, bonus, gain, xp, next, canLevel: next !== null && xp >= next, rule: pen.rule, clear,
+      return { actor: a, share, bonus, gain, lost: capped.lost, xp, next, canLevel: next !== null && xp >= next, rule: pen.rule, clear,
         update: { "system.xp": xp, ...Object.fromEntries(Object.entries(clear).map(([k, v]) => [`system.dualClass.penalty.${k}`, v])) } };
     });
   }
@@ -146,7 +150,7 @@ export default class AwardXp extends HandlebarsApplicationMixin(ApplicationV2) {
         return { id: a.id, name: a.name, checked: s.recipients.has(a.id), dead: a.system.hpState?.state === "dead",
           classRate: rate, classAward: !!s.classAwards?.has(a.id), classXp: extra.get(a.id) ?? 0,
           share: r?.share ?? "", bonus: r?.bonus ? `+${r.bonus}%` : "", gain: r ? (r.parts ? `${r.gain} (${r.parts})` : r.gain) : "", xp: r?.xp ?? "", canLevel: r?.canLevel,
-          penalty: r?.rule ? game.i18n.localize(`AD2E.Dual.Award.${r.rule}`) : "" };
+          penalty: [r?.rule ? game.i18n.localize(`AD2E.Dual.Award.${r.rule}`) : "", r?.lost ? game.i18n.format("AD2E.Xp.Lost", { n: r.lost }) : ""].filter(Boolean).join("; ") };
       }),
       canAward: (total > 0 || [...extra.values()].some(v => v > 0)) && chosen.length > 0
     };
@@ -189,6 +193,7 @@ export default class AwardXp extends HandlebarsApplicationMixin(ApplicationV2) {
     const esc = v => foundry.utils.escapeHTML(String(v ?? ""));
     const lines = rows.map(r => `<li>${esc(r.actor.name)}: +${r.gain}${extra.get(r.actor.id) ? ` (${esc(game.i18n.format("AD2E.Xp.ClassAwardShort", { n: extra.get(r.actor.id) }))})` : ""}${r.parts ? ` (${esc(r.parts)})` : ""}${r.bonus ? ` (${game.i18n.format("AD2E.Xp.WithBonus", { bonus: r.bonus })})` : ""}`
       + `${r.rule ? ` [${esc(game.i18n.localize(`AD2E.Dual.Award.${r.rule}`))}]` : ""} → ${r.xp}`
+      + `${r.lost ? ` (${esc(game.i18n.format("AD2E.Xp.Lost", { n: r.lost }))})` : ""}`
       + `${r.canLevel ? ` — <strong>${game.i18n.localize("AD2E.Xp.CanLevel")}</strong>` : ""}</li>`).join("");
     await ChatMessage.create({ content: `<p><strong>${game.i18n.format("AD2E.Xp.ChatTitle", { total, n: rows.length, share: Math.floor(total / rows.length) })}</strong>`
       + `${s.reason ? ` ${esc(s.reason)}` : ""}</p><ul>${lines}</ul>` });

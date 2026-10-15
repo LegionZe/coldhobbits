@@ -276,6 +276,12 @@
   points are spent on the Skills &amp; Proficiencies tab. Henchmen: drag an actor onto the sheet (Character tab). Mounts, pack animals and
   pets: drag the animal actor onto the sheet; they are listed on the Inventory tab with their load, and "Riding" marks the
   one the character rides (its load then includes the rider).</p>
+  <h3>One level per award (optional)</h3>
+  <p>World setting "One level per experience award", off by default. When on, an award (the + on the sheet, Award
+  experience, the award after a combat) never takes a character past one point below the experience for two levels up;
+  the rest is lost and the chat message says how much. Multi-class characters are capped per class. Source: Rate of
+  Advancement (DMG), which lets you place the character anywhere from halfway to one point below the next level: the
+  system uses one point below; lower the experience by hand if you want less.</p>
   <h3>Training for level advancement (optional)</h3>
   <p>World setting "Training for level advancement", off by default. When on, Level Up is refused until the character has
   finished training for that level; you can still level a character up without it (Level Up asks you to confirm). The
@@ -467,7 +473,10 @@
     <li><strong>Net</strong>: attacking with a net (characters and monsters) opens its own dialog: throw (traps weapon and shield; the target AC
     counts only Dexterity and magic, so enter any magical protection), loop the rope round (the victim breaks free at -4),
     pull/trip, or fold the net (2 rounds; after the first throw it is at -4 to hit until folded). A netted character or
-    monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength check.</li>
+    monster uses "Break free (net)" (Combat tab, or the monster's header): a Strength check. A hit marks the first target
+    with the "Netted" status icon (looping the rope round also ticks the -4 in its Break free dialog); a successful Break
+    free removes it. The mark changes no roll: rule on what a netted creature can do. Remove it by hand from the token's
+    status icons if the creature is cut free another way.</li>
     <li><strong>Poison</strong>: a monster's natural attack can carry a DMG Table 51 poison class (Attacks table, Poison
     column); weapons and missiles are coated from their sheet with a poison item (compendium "Poisons (DMG)", one dose per
     weapon or missile); traps have a poison class and how they deliver it. A damage roll with a poisoned attack posts a

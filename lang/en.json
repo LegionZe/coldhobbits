@@ -931,7 +931,8 @@
     "WrappedBox": "Rope looped round ({n})",
     "BreakFreeLine": "{name} tries to break free of the net: {roll} against {target}: {result}",
     "Free": "free",
-    "StillTrapped": "still trapped"
+    "StillTrapped": "still trapped",
+    "Status": "Netted"
   },
   "AD2E.Lasso": {
     "OwnStr": "Your Strength",
@@ -2010,6 +2011,9 @@
     "NotSurprised": "Not surprised"
   },
   "AD2E.Xp": {
+    "OneLevelSetting": "One level per experience award",
+    "OneLevelHint": "Rate of Advancement (DMG): a character never advances more than one level per award; experience beyond one point below the level after next is lost (shown in the chat message). Applies to the + on the sheet, the group award and the award after a combat.",
+    "Lost": "{n} XP lost: one level per award",
     "AutoSetting": "Experience window when a combat ends",
     "AutoSettingHint": "When the GM ends a combat with monsters in it, the Award Experience window opens with the defeated monsters ticked and the combat's characters as recipients.",
     "Calculated": "calculated",
