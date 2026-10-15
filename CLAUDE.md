@@ -201,6 +201,13 @@ The owner installs and updates from that manifest URL only (no shell access to t
   Ask the owner to run it and paste the report before guessing at a display fault. 1.0.62: `textLines` (wrapped = 2+ text lines,
   not box height: stretched grid/table cells gave false findings), `layoutNote` on spill (box/content px, parent grid columns).
   Reproduce a reported finding by rendering the template section in Chromium with styles/ad2e.css and running scanElement.
+- One level per award (owner's request 1.0.63, world setting `oneLevelPerAward`, off by default): `module/advancement.mjs` (Rate of
+  Advancement (DMG) rev 71282; pure `xpCap(table, level)` = table[level + 1] - 1 (AD2E.xpTable index = level -> XP for level + 1),
+  `cappedAward(before, gain, cap)` { xp, gain, lost }); used by AD2EActor#awardExperience, AwardXp.shares, multi-class.mjs
+  `multiAward(classes, amount, capFor)` (rows/award `lost`); chat note AD2E.Xp.Lost.
+- Netted (owner's request 1.0.63): `module/netted.mjs` (`NET_STATUS` "ad2e-netted" (styles/icons/netted.svg), `netHitFlag(mode, hit,
+  targets)` -> rollNet card flag `ad2e.netHit` { targets, wrapped }, active-GM createChatMessage hook `markNetted`, actor flag
+  `ad2e.netWrapped`; breakFreeNet pre-ticks it and `clearNetted` on success; `registerNetted` in init).
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.
