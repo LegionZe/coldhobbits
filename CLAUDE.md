@@ -198,7 +198,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `SCAN_LIMITS`) and `module/self-check.mjs` (`runSelfCheck({ scan, show })`: sample sheets + ad2e settings-menu windows except
   the importers, `tabsOf` (tab buttons) + `changeTab`, characters with `_editMode` false/true, console.error / window error capture,
   sheets restored or closed; `reportText`; dialog with a copy button). GM manual tool `selfCheck`, `game.ad2e.selfCheck()`.
-  Ask the owner to run it and paste the report before guessing at a display fault.
+  Ask the owner to run it and paste the report before guessing at a display fault. 1.0.62: `textLines` (wrapped = 2+ text lines,
+  not box height: stretched grid/table cells gave false findings), `layoutNote` on spill (box/content px, parent grid columns).
+  Reproduce a reported finding by rendering the template section in Chromium with styles/ad2e.css and running scanElement.
 - Hit points and death: `module/health.mjs` (rules, death-rule setting, status icon sync on updateActor, bleeding per
   round on updateCombat by the active GM, chat context menu on messages flagged `flags.ad2e.damage`), actor methods
   applyDamage / applyHealing / bindWounds / restHeal / raiseFromDead / recoverTemporary; derived `system.hpState`.

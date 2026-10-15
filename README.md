@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.61)
+## Status (v1.0.62)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -141,6 +141,14 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   normally allowed against the spell". Neither text adjusts for the caster's level, so nothing is adjusted. Monsters use
   the first percentage of their Magic Resistance text ("Nil" = 0); characters `system.magicResistance` { value, lowered }
   (Main tab, next to the saves). Rolled for every targeted creature when a spell is cast (`module/magic-resistance.mjs`).
+- Sheet check findings fixed (1.0.62; owner's report from "Check sheets" on Foundry 14.369): weapon proficiency tick boxes
+  (Specialized and the Skills & Powers Choice / Expertise / Mastery) share one cell (a row had up to 8 parts for 6 grid
+  columns, so Expertise or Mastery fell into the 2.5rem cost column); ability scores such as "18/91" get a 3rem column (was
+  1.75rem); the Magic Resistance row has its own columns (its value and "%" were in 2rem, "Lowered" in 2.5rem); class and kit
+  ability minimums wrap to as many 10rem columns as fit ("Constitution", "Intelligence" spilled in three fixed columns);
+  monster save levels stay on one line. Each was reproduced in Chromium from the 1.0.61 files and is gone with the new ones.
+  The check itself: "wrapped" now counts the text's lines (a cell stretched to its row's height was reported, e.g. "PM 1"),
+  and "spill" findings carry the box and content widths and the parent's grid columns.
 - Sheet check (1.0.61; owner's request): GM manual tool "Check sheets" / `game.ad2e.selfCheck()` (`module/self-check.mjs`,
   `module/self-check-scan.mjs`). Opens up to 6 characters (also in edit mode), up to 3 monsters and one item of each type
   plus the system's windows (not the importers, which fetch from their websites), shows every tab and lists raw language

@@ -25,6 +25,7 @@
         {{#if r.invalidText}}<span class="ad2e-unmet">{{r.invalidText}}</span>{{/if}}
         {{#if r.typeConflict}}<span class="ad2e-unmet">{{r.typeConflict}}</span>{{/if}}
       </div>
+      <span class="ad2e-prof-flags">
       <label class="ad2e-spec {{#if r.specInvalid}}ad2e-unmet{{/if}}" data-tooltip="{{#if r.specInvalid}}{{localize 'AD2E.Weapon.SpecInvalid'}}{{else}}{{localize 'AD2E.Weapon.Specialize'}}{{/if}}">
         <input type="checkbox" data-action="toggleSpecialized" data-item-id="{{r.id}}" {{checked r.specialized}} {{#unless @root.editMode}}disabled{{/unless}}>
         {{localize "AD2E.Weapon.Specialized"}}</label>
@@ -41,6 +42,7 @@
         <input type="checkbox" data-action="toggleProfFlag" data-field="mastery" data-item-id="{{r.id}}" {{checked r.mastery}} {{#unless @root.editMode}}disabled{{/unless}}>
         {{localize "AD2E.SP.Mastery"}}</label>
       {{/if}}
+      </span>
       <span class="ad2e-prof-cost" data-tooltip="{{r.costHint}}">{{#if r.granted}}{{localize "AD2E.Prof.KitBonus"}}{{#if r.cost}} +{{r.cost}}{{/if}}{{else}}{{r.cost}}{{/if}}</span>
       {{#if @root.editMode}}<a data-action="deleteItem" data-item-id="{{r.id}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
     </div>
