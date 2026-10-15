@@ -58,6 +58,12 @@
             {{#if @root.editable}}<a data-action="removeAttack" data-index="{{a.index}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
           </td>
         </tr>
+        <tr class="ad2e-monster-attack-fx">
+          <td colspan="7"><div class="ad2e-item-fields">
+            <label data-tooltip="{{localize 'AD2E.Animation.NaturalFileHint'}}">{{localize "AD2E.Animation.File"}} <input type="text" name="system.attacks.{{a.index}}.animation" value="{{a.animation}}" placeholder="{{a.autoAnimation}}"></label>
+            <label data-tooltip="{{localize 'AD2E.Sound.FileHint'}}">{{localize "AD2E.Sound.File"}} <input type="text" name="system.attacks.{{a.index}}.sound" value="{{a.sound}}" placeholder="{{a.autoSound}}"></label>
+          </div></td>
+        </tr>
         {{/each}}
         {{#each weapons as |w|}}
         <tr>

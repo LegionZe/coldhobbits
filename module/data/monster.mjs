@@ -56,7 +56,11 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
         // DMG Table 51 poison class of the attack ("" = none; module/poison.mjs), e.g. a giant centipede's bite.
         poison: poisonClassField(),
         // Damage type for PHB Table 52 (S, P, B; "" = none; module/armor-types.mjs): claws slash, a bite pierces, a tail bludgeons.
-        type: new StringField({ required: true, blank: true, initial: "", choices: ["S", "P", "B"] })
+        type: new StringField({ required: true, blank: true, initial: "", choices: ["S", "P", "B"] }),
+        // Animation and sound of the attack (owner's request 1.0.64, as weapon items' `animation` 1.0.56): "" automatic, "none",
+        // a Sequencer database path or a file path (module/weapon-animations.mjs, module/sound-effects.mjs).
+        animation: new StringField({ required: true, blank: true, initial: "" }),
+        sound: new StringField({ required: true, blank: true, initial: "" })
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),
