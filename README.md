@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.63)
+## Status (v1.0.64)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -43,7 +43,6 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   actions while netted).
 - Throwing objects: where a missed object lands is described in chat (the GM moves or marks it); splash damage is rolled
   for the GM to apply to the creatures within 3 ft. Monsters have no Maximum Press limit or bend bars roll (GM's call).
-- Weapon animation and sound choices are per weapon item; monster natural attacks use the automatic choices.
 - Psionics are not included; monster pictures are never shipped.
 
 ## GM creators
@@ -185,6 +184,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   a database path (https://fantasycomputer.works/FoundryVTT-Sequencer/api/effect.html and api/sound.html: "Filepath",
   "Wildcard filepath", "Database Path"); only database paths are checked with `Database.entryExists`, file paths
   (anything with a slash) are played as given. Spell sheet animation paths accept file paths the same way.
+- Monster natural attack animation and sound (1.0.64; owner's request): each row of a monster's Attacks table has a
+  second line with "Animation" and "Sound" fields (`system.attacks[].animation` / `.sound`), the same values as a weapon's
+  ("" = automatic, shown greyed in the field; "none"; a database or file path).
 - Monsters with lasso, net and thrown objects (1.0.56; owner's request): a monster's lasso or net weapon item opens the
   same dialogs as a character's from its Attacks table; the thrower's Strength is a dialog field, prefilled for monsters
   with 3.5 per size category + Hit Dice (`monsterScores`, the implementation choice already used for defenders), and the

@@ -7,6 +7,8 @@ import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import { mountTrained } from "../combat-options.mjs";
 import { pushMount, pushText } from "../animals.mjs";
+import { weaponAnimation } from "../weapon-animations.mjs";
+import { attackSounds } from "../sound-effects.mjs";
 import { springTrap, trapContext } from "../traps.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
@@ -127,7 +129,12 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       { label: "XP", value: sys.xp }
     ];
     context.saves = AD2E.saves.map(key => ({ key, label: i18n(`AD2E.Save.${key}`), value: sys.saves[key].value, level: sys.saves[key].level }));
-    context.naturalAttacks = sys.attacks.map((a, index) => ({ ...a, index, key: `a${index}` }));
+    // Each natural attack's automatic animation and sound (1.0.64), shown as the placeholders of its own fields.
+    context.naturalAttacks = sys.attacks.map((a, index) => {
+      const auto = { kind: "natural", name: a.name, type: a.type, missile: false };
+      return { ...a, index, key: `a${index}`, autoAnimation: weaponAnimation(auto)?.file ?? "—",
+        autoSound: attackSounds(auto, true).map(x => x.file).join(" + ") || "—" };
+    });
     context.isGM = !!game.user?.isGM;
     // Importer suggestion (complete-compendium.mjs guessElement): shown while a natural attack has no element.
     const guess = actor.getFlag?.("ad2e", "elementGuess") ?? null;

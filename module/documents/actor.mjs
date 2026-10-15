@@ -2059,7 +2059,7 @@ export default class AD2EActor extends Actor {
     if (this.type !== "monster") return [];
     const natural = this.system.attacks.map((a, i) => ({ key: `a${i}`, name: a.name, hit: a.bonus, melee: true,
       damage: [{ label: "", formula: a.damage }], dmgBonus: 0, element: PROVINCES.includes(a.element) ? a.element : "", poison: a.poison ?? "",
-      type: a.type ?? "" }));
+      type: a.type ?? "", animation: String(a.animation ?? "").trim(), sound: String(a.sound ?? "").trim() }));
     const weapons = this.items.filter(i => i.type === "weapon").map(i => ({ key: `w${i.id}`, name: i.name, hit: i.system.bonus.hit,
       melee: !!i.system.weapon?.melee, element: PROVINCES.includes(i.system.element) ? i.system.element : "",
       damage: i.system.weapon.damage.filter(d => d.sm || d.l).map(d => ({ label: d.label, sm: d.sm, l: d.l })),
@@ -2110,11 +2110,12 @@ export default class AD2EActor extends Actor {
     const spellHit = this.spellMod("attack"); // spell effects (module/spell-effects.mjs)
     const roll = await new Roll("1d20 + @adj + @mod", { adj: attack.hit + vsUnarmed + input.t51.sum + mountedMelee + (t52?.mod ?? 0) + maneuverHit + march + spellHit, mod: input.mod }).evaluate();
     const hit = input.t51.auto || roll.total >= needed;
-    // JB2A animation (module/weapon-animations.mjs): a weapon item by its fields, a natural attack by its name.
+    // JB2A animation (module/weapon-animations.mjs): a weapon item by its fields, a natural attack by its name (or its own
+    // animation / sound fields, 1.0.64).
     this.#attackEffects(attack.poisonItem
       ? { kind: "weapon", name: attack.poisonItem.name, identifier: attack.poisonItem.system.identifier, type: attack.type,
         missile: !attack.melee, thrown: attack.poisonItem.system.weapon?.strength === "full" && !attack.melee, ...itemEffects(attack.poisonItem) }
-      : { kind: "natural", name: attack.name, type: attack.type, missile: !attack.melee }, { hit });
+      : { kind: "natural", name: attack.name, type: attack.type, missile: !attack.melee, override: attack.animation, sound: attack.sound }, { hit });
     // Critical hit (module/criticals.mjs): natural attacks count as weapons of the monster's size (implementation choice).
     let crit = null;
     if (hit && criticalMode() !== "off" && isCritical(roll.dice?.[0]?.total ?? null, roll.total, needed)) {

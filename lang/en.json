@@ -3573,6 +3573,7 @@
     "Automatic": "Automatic",
     "NotAvailable": "Sequencer or JB2A not active",
     "WeaponLegend": "Animation and sound",
+    "NaturalFileHint": "Empty = automatic (by the attack's name, else its damage type; shown greyed); \"none\" = no animation; or a Sequencer database path (jb2a.claws.400px.red) or a file path (wildcards allowed), played from the monster to the target.",
     "WeaponFileHint": "Empty = automatic (by the weapon's name, else its damage type); \"none\" = no animation; or a Sequencer database path (jb2a.spear.melee.01.white) or a file path (wildcards allowed), played from the attacker to the target.",
     "Mode": {"auto": "on each target (default)", "missile": "caster to each target", "cone": "caster towards the first target", "burst": "on the first target", "target": "on each target", "caster": "on the caster"}
   },
