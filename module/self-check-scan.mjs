@@ -8,12 +8,14 @@
  *  - placeholder: visible text with an unfilled "{name}" (a format string shown without its value; 1.0.59 "{gp}").
  *  - badValue: visible "undefined", "NaN" or "[object Object]".
  *  - squeezedInput: a visible text field or select narrower than 30px (the narrowest set on purpose is 3.5rem) (1.0.57: the Native language input in a 24px column).
- *  - spill: an element whose own text runs past its box (1.0.57: "Midani" over its note).
- *  - wrapped: two or more words in a box under 50px wide wrapped onto several lines (1.0.58: "Not rolled", "Spend (x 1,000 gp)").
+ *  - spill: an element whose own text runs past its box (1.0.57: "Midani" over its note); the text ends with the box and
+ *    content widths and the parent's grid columns (1.0.62, so a report shows the cause).
+ *  - wrapped: two or more words in a box under 50px wide laid out on two or more lines (1.0.58: "Not rolled", "Spend (x 1,000
+ *    gp)"); lines are counted from the text itself (1.0.62; the box height gave false findings in stretched rows).
  *  - overlap: two visible children of a grid or flex row covering each other.
  * Thresholds are implementation choices.
  */
-export const SCAN_LIMITS = { inputMin: 30, wrapWidth: 50, overlapMin: 4, textMax: 80 };
+export const SCAN_LIMITS = { inputMin: 30, wrapWidth: 50, overlapMin: 4, textMax: 200 };
 
 const RAW_KEY = /\bAD2E\.[A-Z][A-Za-z0-9_.]*[A-Za-z0-9_]/;
 const PLACEHOLDER = /\{[A-Za-z][A-Za-z0-9_]*\}/;
@@ -43,6 +45,30 @@ const short = text => {
   const t = String(text ?? "").replace(/\s+/g, " ").trim();
   return t.length > SCAN_LIMITS.textMax ? t.slice(0, SCAN_LIMITS.textMax - 1) + "…" : t;
 };
+
+/** Measurements for a layout finding: box and content width, and the parent's grid columns or flex setting. */
+export function layoutNote(el) {
+  const parent = el.parentElement;
+  const pcs = parent ? getComputedStyle(parent) : null;
+  const layout = !pcs ? "" : /grid/.test(pcs.display) ? `; parent grid ${pcs.gridTemplateColumns}`
+    : /flex/.test(pcs.display) ? `; parent flex ${pcs.flexWrap}` : `; parent ${pcs.display}`;
+  return `(box ${Math.round(el.clientWidth)}px, content ${Math.round(el.scrollWidth)}px${layout})`;
+}
+
+/**
+ * Lines the element's own text is laid out on (distinct line tops of its text nodes). The box height is not used: a cell
+ * or flex item is stretched to its row (1.0.61 report: "PM 1" and "Level 2" flagged though on one line).
+ */
+export function textLines(el) {
+  const tops = new Set();
+  const range = el.ownerDocument.createRange();
+  for (const n of el.childNodes) {
+    if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+    range.selectNodeContents(n);
+    for (const r of range.getClientRects()) if (r.width > 0) tops.add(Math.round(r.top));
+  }
+  return tops.size;
+}
 
 /** The element's own text (its direct text nodes). */
 function ownText(el) {
@@ -104,10 +130,9 @@ export function scanElement(root, { hasKey = () => false } = {}) {
     const cs = getComputedStyle(el);
     const rect = el.getBoundingClientRect();
     const clipped = cs.overflowX !== "visible" || cs.textOverflow === "ellipsis";
-    if (!clipped && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 4 && cs.display !== "inline") add("spill", el, text);
-    const line = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.2 || 16;
-    if (text.split(" ").length >= 2 && rect.width > 0 && rect.width < SCAN_LIMITS.wrapWidth && rect.height >= 1.8 * line) {
-      add("wrapped", el, `${text} (${Math.round(rect.width)}px wide)`);
+    if (!clipped && el.clientWidth > 0 && el.scrollWidth > el.clientWidth + 4 && cs.display !== "inline") add("spill", el, `${text} ${layoutNote(el)}`);
+    if (text.split(" ").length >= 2 && rect.width > 0 && rect.width < SCAN_LIMITS.wrapWidth && textLines(el) >= 2) {
+      add("wrapped", el, `${text} (${Math.round(rect.width)}px wide, ${textLines(el)} lines)`);
     }
   }
   for (const box of root.querySelectorAll("*")) {

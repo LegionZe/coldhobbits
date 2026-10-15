@@ -13,7 +13,7 @@
 .ad2e.character .ad2e-tab:not(.active) { display: none; }
 
 .ad2e-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); gap: 0.5rem; align-items: start; }
-.ad2e-ability { display: grid; grid-template-columns: 1fr 3.5rem 1.75rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
+.ad2e-ability { display: grid; grid-template-columns: 1fr 3.5rem 3rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
 .ad2e-total { text-align: center; }
 .ad2e-adjusted { text-decoration: underline dotted; }
 .ad2e-save { display: grid; grid-template-columns: 1fr 2rem 2.5rem 3.5rem; align-items: center; gap: 0.25rem; margin-bottom: 0.2rem; }
@@ -57,7 +57,7 @@
 .ad2e-item-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
 .ad2e-item-fields label { display: flex; flex-direction: column; }
 .ad2e-item-fields .ad2e-checkbox { flex-direction: row; align-items: center; gap: 0.25rem; }
-.ad2e-min-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.25rem 0.75rem; }
+.ad2e-min-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: 0.25rem 0.75rem; }
 .ad2e-min-grid label { display: grid; grid-template-columns: 1fr 3.5rem; align-items: center; }
 .ad2e.item input[type="number"] { width: 3.5rem; }
 .ad2e-notes { display: flex; flex-direction: column; }
@@ -69,7 +69,7 @@
 .ad2e-skill-table td, .ad2e-skill-table th { padding: 0.1rem 0.25rem; }
 .ad2e-prof-summary { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0.25rem 0 0.5rem; }
 .ad2e-prof-row { display: grid; grid-template-columns: 24px 1fr auto auto 2.5rem auto; align-items: center; gap: 0.5rem; margin-bottom: 0.15rem; }
-.ad2e-prof-row-weapon { grid-template-columns: 24px minmax(8rem, 1fr) auto auto 2.5rem auto; }
+.ad2e-prof-row-weapon { grid-template-columns: 24px minmax(8rem, 1fr) auto minmax(2.5rem, auto) auto; }
 .ad2e-weapon-main { display: flex; flex-direction: column; min-width: 0; }
 .ad2e-weapon-meta { font-size: 0.8em; opacity: 0.8; }
 .ad2e-spec { display: flex; align-items: center; gap: 0.2rem; font-size: 0.85em; white-space: nowrap; }
@@ -251,3 +251,15 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-prof-row.ad2e-flex-row { display: flex; flex-wrap: wrap; }
 .ad2e-prof-row.ad2e-damage-row { grid-template-columns: minmax(5rem, 1fr) minmax(5rem, 1fr) auto auto 1.5rem; }
 .ad2e-damage-row > input[type="text"] { min-width: 0; }
+
+/* Sheet check findings (owner's report 1.0.61, "Check sheets"): the weapon proficiency tick boxes (Specialized, and with
+   Skills & Powers Choice, Expertise, Mastery) share one cell instead of spilling into the cost column; ability scores such as
+   "18/91" have a 3rem column (was 1.75rem); the Magic Resistance row has its own columns (label, value with "%", Lowered;
+   the save row's 2rem and 2.5rem columns were too narrow); class and kit ability minimums wrap to as many columns as fit. */
+.ad2e-prof-flags { display: flex; flex-wrap: wrap; align-items: center; gap: 0.25rem 0.6rem; }
+.ad2e .ad2e-save.ad2e-mr-field { grid-template-columns: 1fr auto auto; }
+.ad2e .ad2e-mr-input { display: flex; align-items: center; gap: 0.25rem; white-space: nowrap; }
+.ad2e .ad2e-mr-input > input { width: 3.5rem; flex: none; }
+.ad2e .ad2e-mr-field > .ad2e-check { white-space: nowrap; }
+/* Monster save table: "Level 2" stays on one line (it wrapped in a narrow column; 1.0.61 report, line count confirmed). */
+.ad2e-monster-saves td.ad2e-note { white-space: nowrap; }
