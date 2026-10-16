@@ -3278,6 +3278,20 @@
       "troops": "Troops sent away (half speed)"
     }
   },
+  "AD2E.QuickNpc": {
+    "Title": "Quick NPC",
+    "GmOnly": "Only a GM can roll a quick NPC.",
+    "Create": "Create actor",
+    "Created": "Created: {name}",
+    "Another": "Another",
+    "Hp": "{n} hp",
+    "Ac": "AC {n}",
+    "Thac0": "THAC0 {n}",
+    "Saves": "Saves",
+    "SavesHint": "PPD paralyzation, poison or death magic · RSW rod, staff or wand · PP petrification or polymorph · BW breath weapon · Sp spell",
+    "Ability": {"str": "Str", "dex": "Dex", "con": "Con", "int": "Int", "wis": "Wis", "cha": "Cha"},
+    "Save": {"par": "PPD", "rsw": "RSW", "pet": "PP", "br": "BW", "sp": "Sp"}
+  },
   "AD2E.Npc": {
     "Title": "Random NPC",
     "Open": "Open the NPC builder",

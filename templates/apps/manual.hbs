@@ -31,116 +31,153 @@
   {{#if is.tools}}
   <h2>GM tools</h2>
   {{#unless isGM}}<p class="ad2e-unmet">{{localize "AD2E.Manual.GmOnly"}}</p>{{/unless}}
+  <h3>Creating</h3>
   <div class="ad2e-manual-tools">
-    <div><button type="button" data-action="tool" data-tool="selfCheck"><i class="fa-solid fa-stethoscope"></i> Check sheets</button>
-      <p>Opens sample sheets (up to 6 characters, up to 3 monsters, one item of each type) and the system's windows, shows
-      every tab (characters also in edit mode) and lists what looks wrong: labels shown as raw keys (AD2E.…), unfilled
-      "{…}", "undefined" or "NaN", fields squeezed narrower than 30 pixels, text running out of its box or wrapped one word
-      per line, items covering each other, and errors logged while drawing. Nothing is changed; windows it opened are closed
-      again. Copy the report and send it to whoever maintains the system. Not covered: dialogs and the importers.</p></div>
-    <div><button type="button" data-action="tool" data-tool="importMonsters"><i class="fa-solid fa-dragon"></i> Import monsters</button>
-      <p>Choose a setting and source book from completecompendium.com, select stat blocks and import them as Monster / NPC
-      actors (stat block, link to the page, picture as portrait and token; token size from the size letter: T ½, S and M 1,
-      L 2, H 3, G 4 squares). Importing the same stat block again updates the actor.</p></div>
-    <div><button type="button" data-action="tool" data-tool="updateMonsters"><i class="fa-solid fa-rotate"></i> Update existing monsters</button>
-      <p>Re-reads the page of every imported monster in the world and in unlocked world compendiums. Names, current hit
-      points, pictures and token sizes you set, and attack elements you chose stay; tokens already placed on scenes get the
-      new picture and size if they still had the old one.</p></div>
-    <div><button type="button" data-action="tool" data-tool="importSpells"><i class="fa-solid fa-wand-sparkles"></i> Import spells</button>
-      <p>Choose a source book from the AD&amp;D 2e wiki, filter by class and level, and import the spells' statistics and links
-      into the world compendium "Imported Spells" (folders by class and level). Material components are linked to the Spell
-      Components compendium, and damage or healing dice are read for the spell's Damage button. After each import the
-      compendium is read back from the server: if it is missing or lacks any imported spell, an error replaces the success
-      message (details in the browser console, F12).</p></div>
-    <div><button type="button" data-action="tool" data-tool="updateSpells"><i class="fa-solid fa-rotate"></i> Update existing spells</button>
-      <p>Refreshes every spell in the Items directory, on characters and in "Imported Spells" from its wiki page; memorization,
-      learned status and notes stay.</p></div>
-    <div><button type="button" data-action="tool" data-tool="awardXp"><i class="fa-solid fa-star"></i> Award experience</button>
-      <p>Divides an experience award equally among the chosen characters; each share gets that character's prime requisite bonus. A single
-      character's award is the "+" next to XP on the sheet. When you end a combat with monsters in it, this window opens by
-      itself (world setting) with the dead monsters ticked and the combat's characters as recipients; tick monsters that
-      fled or surrendered too. A monster with no XP value is calculated from its Hit Dice (marked "calculated"). Warriors
-      (10 XP) and bards (5 XP) can also get the DMG's class award per Hit Die of the creatures defeated: untick it for
-      anyone who did not earn it.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createMonster"><i class="fa-solid fa-dragon"></i> Create monster</button>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="quickNpc"><i class="fa-solid fa-bolt"></i> Quick NPC</button>
+      <p>One click: a random NPC card in chat (whispered to you), made into an actor only if you press "Create actor".</p>
+      <details><summary>Details</summary>
+      <p>Rolls an NPC with the Random NPC rules, every choice random (townsfolk by default), and whispers you a card: race,
+      class and level, gender, age, alignment, ability scores, hit points, AC, THAC0 and saving throws (as the character sheet
+      would work them out from the class's basic gear), role, height and weight, personality and looks. Nothing is created:
+      press "Create actor" on the card to make the character actor (in the world; its sheet opens), or pick a purpose beside
+      "Another" and roll a new card. For a macro: <code>game.ad2e.quickNpc("soldier")</code> (any purpose: townsfolk,
+      soldier, adventurer, official, sage, caster, spy, assassin).</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createNpc"><i class="fa-solid fa-user-plus"></i> Random NPC</button>
+      <p>A random NPC by purpose with every choice open; creates a character actor.</p>
+      <details><summary>Details</summary>
+      <p>Pick a purpose (townsfolk, soldier, adventurer, official, sage, spellcaster for hire, spy, assassin) and, if you
+      like, the race, class, level (a number or dice such as 1d4), gender (male, female, non-binary or agender),
+      the height and weight column (PHB Table 10 male or female base figures; "Automatic" follows a male or female
+      gender and rolls either for the others), profession, troop type, title culture or sage
+      field; anything left on "Random" is rolled. "Roll" shows the NPC; "Create" makes a character actor with race and
+      class items, abilities (3d6 in order, raised to the race's and class's minimums), hit points, basic equipment for
+      the class (a soldier's from their troop type, a tradesman's proficiency), age, height and weight, personality traits
+      and looks; the notes on the Character tab list the rest (title, sage field and ability, wage, base morale, spell costs for
+      casters). Spells are not chosen: add them on the sheet. 0-level NPCs have no class.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createPatron"><i class="fa-solid fa-crown"></i> Create patron</button>
+      <p>An NPC who hires or sponsors the party, with DMG personality and looks.</p>
+      <details><summary>Details</summary>
+      <p>An NPC who hires or sponsors the party, as a Monster / NPC actor with the role "Patron". Choose race, class group
+      and level (THAC0, saving throws and hit points follow; 0-level is possible), alignment, AC and morale; write what the
+      patron wants, offers and pays; choose or roll a personality from DMG Table 70 and appearance words from the DMG's NPC
+      section. Everything but the numbers goes into the actor's notes.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createMonster"><i class="fa-solid fa-dragon"></i> Create monster</button>
+      <p>A new Monster / NPC actor; THAC0, saves and XP follow the Hit Dice.</p>
+      <details><summary>Details</summary>
       <p>A guided window for a new Monster / NPC actor: size, intelligence and morale with their Monstrous Manual bands,
       Hit Dice, AC, movement and attacks. THAC0 and saving throws follow the Hit Dice; experience is DMG Table 31 for the
       Hit Dice plus the Table 32 special abilities you tick (you may enter your own value). Hit points are rolled. The
-      actor goes into the world or an unlocked world compendium, and its sheet opens for anything else.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createWeapon"><i class="fa-solid fa-khanda"></i> Create weapon</button>
+      actor goes into the world or an unlocked world compendium, and its sheet opens for anything else.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createWeapon"><i class="fa-solid fa-khanda"></i> Create weapon</button>
+      <p>A new weapon item, from scratch or copied from another, with a matching proficiency.</p>
+      <details><summary>Details</summary>
       <p>A guided window for a new weapon item: start from any weapon in the compendiums or the Items directory, or a blank
       one, and set its size, type, speed factor, damage (two rows, e.g. one- and two-handed), melee and missile use, rate
       of fire and range, Strength use, magical bonuses and notes; these statistics are read-only on the weapon sheet. It can
-      create a matching weapon proficiency, or link an existing one so characters proficient with it use it.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createItem"><i class="fa-solid fa-sack-dollar"></i> Create item</button>
+      create a matching weapon proficiency, or link an existing one so characters proficient with it use it.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createItem"><i class="fa-solid fa-sack-dollar"></i> Create item</button>
+      <p>Equipment, a container, armour or ammunition.</p>
+      <details><summary>Details</summary>
       <p>A guided window for equipment (with its category), a container (capacity in pounds or volume), armour (body armour
       AC, a shield's bonus against melee and missiles and the attackers it covers, a helmet; the size it was made for and a
       magical bonus) or ammunition (the weapons that fire it and its damage). Start from an existing item of that kind or a
-      blank one; the cost is checked ("5 gp", "2 sp each").</p></div>
-    <div><button type="button" data-action="tool" data-tool="createMagicItem"><i class="fa-solid fa-hat-wizard"></i> Create magic item</button>
+      blank one; the cost is checked ("5 gp", "2 sp each").</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createMagicItem"><i class="fa-solid fa-hat-wizard"></i> Create magic item</button>
+      <p>A magical item, or magical arms with a bonus, valued from the DMG tables.</p>
+      <details><summary>Details</summary>
       <p>Either a magical item (category, charges when found for wands, rods and staves, rolled at once if you like, the
       classes that may use it, XP and gp values, a container's capacity and whether its contents weigh nothing), or
       magical arms: a copy of a weapon, armour or ammunition with a bonus (-5 to +5), named and valued from the DMG tables
       (armour +1 500 XP, swords +1 400 XP, other weapons +1 500 XP and so on; the value goes in the notes). Items are
-      unidentified unless you tick Identified.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createPatron"><i class="fa-solid fa-crown"></i> Create patron</button>
-      <p>An NPC who hires or sponsors the party, as a Monster / NPC actor with the role "Patron". Choose race, class group
-      and level (THAC0, saving throws and hit points follow; 0-level is possible), alignment, AC and morale; write what the
-      patron wants, offers and pays; choose or roll a personality from DMG Table 70 and appearance words from the DMG's NPC
-      section. Everything but the numbers goes into the actor's notes.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createSpell"><i class="fa-solid fa-wand-sparkles"></i> Create spell</button>
+      unidentified unless you tick Identified.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createSpell"><i class="fa-solid fa-wand-sparkles"></i> Create spell</button>
+      <p>A new wizard or priest spell, with the DMG research advice and check.</p>
+      <details><summary>Details</summary>
       <p>A new wizard or priest spell: schools or spheres (the PHB lists, plus any typed), level, components, range, area,
       casting time, duration, save and damage or healing options (rolled from the Spells tab). Advice from the DMG's
       spell research section: the level for the damage dice, research time (two weeks per level, a week more per failed
       check) and cost (100-1,000 gp per level). Choose the researching character to roll the research check (a wizard's
-      chance to learn the spell, a priest's Wisdom check); once researched the spell can go straight into their spells.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createTrap"><i class="fa-solid fa-burst"></i> Create trap</button>
+      chance to learn the spell, a priest's Wisdom check); once researched the spell can go straight into their spells.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="createTrap"><i class="fa-solid fa-burst"></i> Create trap</button>
+      <p>A trap actor or trap item with its attack or save, damage and a Spring button.</p>
+      <details><summary>Details</summary>
       <p>A trap actor (a token on the map: pits, deadfalls) or a trap item (put on the chest, door or other object it
       guards). It hits by an attack at its THAC0 against the victim's AC, or by the victim's saving throw (avoided or halved
       on a success); damage, trigger, effect and reset; and a find/remove modifier up to 30% either way. The trap's sheet
       (or the item's) has a GM "Spring" button: target the victims' tokens first; the attack or saves are rolled and the
       damage comes with the usual apply buttons. A thief's Find/Remove Traps roll offers the targeted trap's modifier and a
-      silent attempt (-10%, a click on 01-10).</p></div>
-    <div><button type="button" data-action="tool" data-tool="poisonTargets"><i class="fa-solid fa-skull-crossbones"></i> Poison targets</button>
+      silent attempt (-10%, a click on 01-10).</p></details></div>
+  </div>
+  <h3>At the table</h3>
+  <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="awardXp"><i class="fa-solid fa-star"></i> Award experience</button>
+      <p>Shares an experience award among characters; opens by itself after a combat.</p>
+      <details><summary>Details</summary>
+      <p>Divides an experience award equally among the chosen characters; each share gets that character's prime requisite bonus. A single
+      character's award is the "+" next to XP on the sheet. When you end a combat with monsters in it, this window opens by
+      itself (world setting) with the dead monsters ticked and the combat's characters as recipients; tick monsters that
+      fled or surrendered too. A monster with no XP value is calculated from its Hit Dice (marked "calculated"). Warriors
+      (10 XP) and bards (5 XP) can also get the DMG's class award per Hit Die of the creatures defeated: untick it for
+      anyone who did not earn it.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
+      <p>Rolls DMG treasure types to a GM card that adds them to a token's actor.</p>
+      <details><summary>Details</summary>
+      <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
+      its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
+      button, prefilled from the stat block.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="rollReaction"><i class="fa-solid fa-comments"></i> Encounter reaction</button>
+      <p>Rolls the encounter reaction table with the speaker's modifiers.</p>
+      <details><summary>Details</summary>
+      <p>Rolls the encounter reaction table with the speaker's Charisma and kit reaction modifiers. Monster sheets have the
+      same button.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="encounters"><i class="fa-solid fa-dragon"></i> Random encounters</button>
+      <p>Sets the encounter area, rolls checks (by hand or as time passes) and builds encounter tables.</p>
+      <details><summary>Details</summary>
+      <p>Set the area: wilderness (terrain and population: patrolled or sparsely settled +1, heavily populated +2) or a
+      dungeon (every hour, or every turn in a dangerous part), an extra modifier, and the RollTable to use. "Check now"
+      rolls 1d10 (an encounter on the chance or less); "Encounter now" skips the roll. With "Automatic" ticked, checks are
+      rolled whenever world time passes (at the marked times of day outdoors, each hour or turn in a dungeon; not during a
+      combat; they stop at the first encounter). The travel card's "End day" sets the area to the day's terrain and rolls
+      that day's checks. The table builder takes creatures dragged in (or the selected tokens) and text entries, each
+      with a frequency (read from the stat block; unique creatures are refused), and creates a RollTable in the 2-20
+      layout (1d8+1d12) or the percentile layout; a table level lowers the frequency of creatures of other levels. An
+      encounter card is whispered to you, with the creature, the number appearing, and buttons for the distance, surprise
+      (the creature, or each selected token) and the reaction roll.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="poisonTargets"><i class="fa-solid fa-skull-crossbones"></i> Poison targets</button>
+      <p>Gives a DMG poison to the targeted tokens and asks for their saves.</p>
+      <details><summary>Details</summary>
       <p>Gives a poison (DMG Table 51 class A-P) to the targeted tokens: a drugged drink, a contact poison on a door handle.
       Choose how it is given: a poison given another way than its own works at half strength (injected or ingested
-      swapped), and injected or ingested poisons do nothing by contact. A save request goes to chat (see Combat, Poison).</p></div>
-    <div><button type="button" data-action="tool" data-tool="falling"><i class="fa-solid fa-person-falling"></i> Falling damage</button>
+      swapped), and injected or ingested poisons do nothing by contact. A save request goes to chat (see Combat, Poison).</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="falling"><i class="fa-solid fa-person-falling"></i> Falling damage</button>
+      <p>Falling damage for the targeted tokens, with item saves if wanted.</p>
+      <details><summary>Details</summary>
       <p>Target (or select) the tokens that fell and enter the distance: 1d6 per full 10 feet, at most 20d6, posted with the
       usual apply buttons (no massive-damage check: a fall is not an attack). Item saves vs. Fall follow if ticked (more
-      than 5 feet; soft surface +5, -1 per 5 feet beyond the first).</p></div>
-    <div><button type="button" data-action="tool" data-tool="itemSaves"><i class="fa-solid fa-flask"></i> Item saving throws</button>
+      than 5 feet; soft surface +5, -1 per 5 feet beyond the first).</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="itemSaves"><i class="fa-solid fa-flask"></i> Item saving throws</button>
+      <p>DMG Table 29 item saving throws for the selected tokens' items.</p>
+      <details><summary>Details</summary>
       <p>For the selected (or targeted) tokens: choose the attack form (acid, crushing blow, disintegration, fall, magical
       or normal fire, cold, lightning bolt, electricity) and roll DMG Table 29 for the ticked items. Fragile items
       (potions, oils, paper, glass, pottery) are ticked; adjust material, bonus and the +2 "designed to counter" box per item.
       A failed item is renamed "(destroyed)", unequipped and no longer carried; delete it when ready. The same window opens
-      from the "Item saves" button next to a failed save on a spell or poison save card.</p></div>
-    <div><button type="button" data-action="tool" data-tool="rollTreasure"><i class="fa-solid fa-coins"></i> Roll treasure</button>
-      <p>Rolls DMG treasure types (e.g. "Q x5, X"): coins, gems, objects of art and magical items. The result is a GM chat card;
-      its button adds everything to the selected token's actor, magical items unidentified. Monster sheets have the same
-      button, prefilled from the stat block.</p></div>
-    <div><button type="button" data-action="tool" data-tool="rollReaction"><i class="fa-solid fa-comments"></i> Encounter reaction</button>
-      <p>Rolls the encounter reaction table with the speaker's Charisma and kit reaction modifiers. Monster sheets have the
-      same button.</p></div>
-    <div><button type="button" data-action="tool" data-tool="party"><i class="fa-solid fa-people-group"></i> Party</button>
+      from the "Item saves" button next to a failed save on a spell or poison save card.</p></details></div>
+  </div>
+  <h3>Party, travel and time</h3>
+  <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="party"><i class="fa-solid fa-people-group"></i> Party</button>
+      <p>Who is in the party, used by travel, dungeon turns, experience and reactions.</p>
+      <details><summary>Details</summary>
       <p>List who is in the party: drag actors from the Actors sidebar onto the window, or use "Add selected tokens" or
       "Add player characters"; the arrows reorder the list and the cross removes a member (a deleted actor leaves it by
       itself). Each row shows hit points and the henchmen, animals and mount that come along. The travel planner starts
       with the party ("Use party" brings it back), the dungeon turn fatigue penalty applies to the party's characters, and
       the group experience award (outside combat) and reaction rolls offer the party's characters. While the list is
-      empty every player-owned character counts as the party, as before.</p></div>
-    <div><button type="button" data-action="tool" data-tool="calendar"><i class="fa-solid fa-moon"></i> Zakharan calendar</button>
-      <p>For Al-Qadim games: turn on "Zakharan (Al-Qadim) calendar" in Configure Settings (the world reloads). The world's
-      date then follows the Zakharan year: Taraq, Masta, Magarib, Gammam, Mihla, Qawafil, the five High Holy Days (Ahad,
-      Atnen, Salas, Arba, Yasad), Safa, Dar, Riyah, Nau, Rahat, Saris; 30-day months, 365 days. The window shows today's
-      date with any holiday of Golden Huzuz, the constellations fully visible this month (the sha'ir astrologer's list) and
-      the year's months; set the year, month and day there (world time moves to that day, keeping the time of day; timers
-      such as lights, poisons and travel see the time pass, so set the date before the adventure starts). The travel log
-      writes Zakharan dates, the dungeon turn tracker shows the date and time of day, and the travel planner starts in the date's season: spring from 19 Magarib, summer from 20
-      Qawafil (the High Holy Days are in summer), fall from 21 Riyah, winter from 20 Saris (the Harptos equinoxes and
-      solstices on the paired Zakharan months; the season select in the planner still overrides it for the day). Players can open the window from Configure Settings. Not in the sources, chosen here: no leap
-      day, years counted from 0 (set the year you play in) and a ten-day week of numbered days.</p></div>
-    <div><button type="button" data-action="tool" data-tool="travel"><i class="fa-solid fa-route"></i> Weather and travel</button>
+      empty every player-owned character counts as the party, as before.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="travel"><i class="fa-solid fa-route"></i> Weather and travel</button>
+      <p>Daily weather, travel planning, supplies, travel events and the day log.</p>
+      <details><summary>Details</summary>
       <p>Pick the season and roll the day's weather (2d6 wind by season, adverse winds, rain or snow); it is kept for the
       world and can be changed by hand. The planner starts with the party from the Party window (else the selected tokens,
       else the player characters); "Use selected tokens" or "Use party" changes it: the slowest member sets the pace (a rider uses the
@@ -170,37 +207,72 @@
       success gives a day's food, or covers the finder's water on the next End day. Travel events: no events, the built-in list or a
       roll table of your own, with a 1-in-N chance each day; "Copy built-in list to a table" makes an editable table.
       Each End day writes a log entry (date, miles, weather, lost, encounter, event, supplies), listed in the planner
-      and posted to you.</p></div>
-    <div><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
+      and posted to you.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
+      <p>Ten-minute dungeon turns, rest reminders and burning lights.</p>
+      <details><summary>Details</summary>
       <p>Start an expedition, then use "Next turn" and "Rest turn" (10 minutes of world time each; 6 turns are an hour).
       After 5 active turns you are whispered that the next turn should be a rest; every 6 turns without one give the
       party's characters (the Party window; the player characters while it is empty) -1 to attack rolls and checks until they rest. Torches, candles and lanterns lit on the Equipment
       tab burn down whenever world time passes (PHB Table 63: torch 3 turns, lantern 12 turns a flask of oil, candle a turn
       an inch), are used up or run dry with a chat notice, and light their bearer's token; the tracker lists them with
-      their turns left and can put them out.</p></div>
-    <div><button type="button" data-action="tool" data-tool="createNpc"><i class="fa-solid fa-user-plus"></i> Random NPC</button>
-      <p>Pick a purpose (townsfolk, soldier, adventurer, official, sage, spellcaster for hire, spy, assassin) and, if you
-      like, the race, class, level (a number or dice such as 1d4), gender (male, female, non-binary or agender),
-      the height and weight column (PHB Table 10 male or female base figures; "Automatic" follows a male or female
-      gender and rolls either for the others), profession, troop type, title culture or sage
-      field; anything left on "Random" is rolled. "Roll" shows the NPC; "Create" makes a character actor with race and
-      class items, abilities (3d6 in order, raised to the race's and class's minimums), hit points, basic equipment for
-      the class (a soldier's from their troop type, a tradesman's proficiency), age, height and weight, personality traits
-      and looks; the notes on the Character tab list the rest (title, sage field and ability, wage, base morale, spell costs for
-      casters). Spells are not chosen: add them on the sheet. 0-level NPCs have no class.</p></div>
-    <div><button type="button" data-action="tool" data-tool="encounters"><i class="fa-solid fa-dragon"></i> Random encounters</button>
-      <p>Set the area: wilderness (terrain and population: patrolled or sparsely settled +1, heavily populated +2) or a
-      dungeon (every hour, or every turn in a dangerous part), an extra modifier, and the RollTable to use. "Check now"
-      rolls 1d10 (an encounter on the chance or less); "Encounter now" skips the roll. With "Automatic" ticked, checks are
-      rolled whenever world time passes (at the marked times of day outdoors, each hour or turn in a dungeon; not during a
-      combat; they stop at the first encounter). The travel card's "End day" sets the area to the day's terrain and rolls
-      that day's checks. The table builder takes creatures dragged in (or the selected tokens) and text entries, each
-      with a frequency (read from the stat block; unique creatures are refused), and creates a RollTable in the 2-20
-      layout (1d8+1d12) or the percentile layout; a table level lowers the frequency of creatures of other levels. An
-      encounter card is whispered to you, with the creature, the number appearing, and buttons for the distance, surprise
-      (the creature, or each selected token) and the reaction roll.</p></div>
-    <div><button type="button" data-action="tool" data-tool="settings"><i class="fa-solid fa-gears"></i> Configure Settings</button>
-      <p>Foundry's settings window; this system's settings are under its own tab.</p></div>
+      their turns left and can put them out.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="calendar"><i class="fa-solid fa-moon"></i> Zakharan calendar</button>
+      <p>The Zakharan (Al-Qadim) calendar: date, holidays and constellations.</p>
+      <details><summary>Details</summary>
+      <p>For Al-Qadim games: turn on "Zakharan (Al-Qadim) calendar" in Configure Settings (the world reloads). The world's
+      date then follows the Zakharan year: Taraq, Masta, Magarib, Gammam, Mihla, Qawafil, the five High Holy Days (Ahad,
+      Atnen, Salas, Arba, Yasad), Safa, Dar, Riyah, Nau, Rahat, Saris; 30-day months, 365 days. The window shows today's
+      date with any holiday of Golden Huzuz, the constellations fully visible this month (the sha'ir astrologer's list) and
+      the year's months; set the year, month and day there (world time moves to that day, keeping the time of day; timers
+      such as lights, poisons and travel see the time pass, so set the date before the adventure starts). The travel log
+      writes Zakharan dates, the dungeon turn tracker shows the date and time of day, and the travel planner starts in the date's season: spring from 19 Magarib, summer from 20
+      Qawafil (the High Holy Days are in summer), fall from 21 Riyah, winter from 20 Saris (the Harptos equinoxes and
+      solstices on the paired Zakharan months; the season select in the planner still overrides it for the day). Players can open the window from Configure Settings. Not in the sources, chosen here: no leap
+      day, years counted from 0 (set the year you play in) and a ten-day week of numbered days.</p></details></div>
+  </div>
+  <h3>Importing</h3>
+  <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="importMonsters"><i class="fa-solid fa-dragon"></i> Import monsters</button>
+      <p>Monster / NPC actors from completecompendium.com stat blocks, with picture and token size.</p>
+      <details><summary>Details</summary>
+      <p>Choose a setting and source book from completecompendium.com, select stat blocks and import them as Monster / NPC
+      actors (stat block, link to the page, picture as portrait and token; token size from the size letter: T ½, S and M 1,
+      L 2, H 3, G 4 squares). Importing the same stat block again updates the actor.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="updateMonsters"><i class="fa-solid fa-rotate"></i> Update existing monsters</button>
+      <p>Re-reads the page of every imported monster; your own changes stay.</p>
+      <details><summary>Details</summary>
+      <p>Re-reads the page of every imported monster in the world and in unlocked world compendiums. Names, current hit
+      points, pictures and token sizes you set, and attack elements you chose stay; tokens already placed on scenes get the
+      new picture and size if they still had the old one.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="importSpells"><i class="fa-solid fa-wand-sparkles"></i> Import spells</button>
+      <p>Spells from the AD&amp;D 2e wiki into the world compendium "Imported Spells".</p>
+      <details><summary>Details</summary>
+      <p>Choose a source book from the AD&amp;D 2e wiki, filter by class and level, and import the spells' statistics and links
+      into the world compendium "Imported Spells" (folders by class and level). Material components are linked to the Spell
+      Components compendium, and damage or healing dice are read for the spell's Damage button. After each import the
+      compendium is read back from the server: if it is missing or lacks any imported spell, an error replaces the success
+      message (details in the browser console, F12).</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="updateSpells"><i class="fa-solid fa-rotate"></i> Update existing spells</button>
+      <p>Refreshes spells from their wiki pages; memorization and notes stay.</p>
+      <details><summary>Details</summary>
+      <p>Refreshes every spell in the Items directory, on characters and in "Imported Spells" from its wiki page; memorization,
+      learned status and notes stay.</p></details></div>
+  </div>
+  <h3>Maintenance</h3>
+  <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="selfCheck"><i class="fa-solid fa-stethoscope"></i> Check sheets</button>
+      <p>Opens sample sheets and windows and lists display faults and errors, for the system's maintainer.</p>
+      <details><summary>Details</summary>
+      <p>Opens sample sheets (up to 6 characters, up to 3 monsters, one item of each type) and the system's windows, shows
+      every tab (characters also in edit mode) and lists what looks wrong: labels shown as raw keys (<code>AD2E.…</code>), unfilled
+      <code>{…}</code>, <code>undefined</code> or <code>NaN</code>, fields squeezed narrower than 30 pixels, text running out of its box or wrapped one word
+      per line, items covering each other, and errors logged while drawing. Nothing is changed; windows it opened are closed
+      again. Copy the report and send it to whoever maintains the system. Not covered: dialogs and the importers.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="settings"><i class="fa-solid fa-gears"></i> Configure Settings</button>
+      <p>Foundry's settings window; this system's settings are under its own tab.</p>
+      <details><summary>Details</summary>
+      <p>Foundry's settings window; this system's settings are under its own tab.</p></details></div>
   </div>
   {{/if}}
 
@@ -603,6 +675,9 @@
       <tr><td><code>game.ad2e.createPatron()</code></td><td>Patron creator.</td></tr>
       <tr><td><code>game.ad2e.createSpell()</code></td><td>Spell creator.</td></tr>
       <tr><td><code>game.ad2e.createTrap()</code></td><td>Trap creator.</td></tr>
+      <tr><td><code>game.ad2e.createNpc()</code></td><td>Random NPC builder.</td></tr>
+      <tr><td><code>game.ad2e.quickNpc(purpose)</code></td><td>Quick NPC card in chat (purpose optional: townsfolk, soldier, adventurer, official, sage, caster, spy, assassin).</td></tr>
+      <tr><td><code>game.ad2e.selfCheck()</code></td><td>Check sheets.</td></tr>
       <tr><td><code>game.ad2e.poisonTargets()</code></td><td>Give a poison to the targeted tokens.</td></tr>
       <tr><td><code>game.ad2e.falling()</code></td><td>Falling damage for the targeted tokens.</td></tr>
       <tr><td><code>game.ad2e.itemSaves()</code></td><td>Item saving throws for the selected tokens.</td></tr>
