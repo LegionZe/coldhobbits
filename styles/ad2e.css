@@ -202,8 +202,19 @@ body.ad2e-tab-colours :is(#sidebar, #sidebar-tabs) menu > li > button[data-tab="
 .ad2e-manual-body { flex: 1; overflow-y: auto; padding-right: 0.5rem; }
 .ad2e-manual-body h2 { margin-top: 0; }
 .ad2e-manual-body li { margin-bottom: 0.3rem; }
-.ad2e-manual-tools > div { margin-bottom: 0.6rem; }
-.ad2e-manual-tools > div > p { margin: 0.2rem 0 0 0.5rem; }
+/* GM tools page (1.0.66, owner's request): per group a two-column grid, buttons on the left, the one-line summary and the
+   collapsed details on the right (each .ad2e-manual-tool is display: contents, so a group's buttons share one column). */
+.ad2e-manual-tools { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0.3rem 0.75rem; align-items: start; margin-bottom: 0.75rem; }
+.ad2e-manual-tool { display: contents; }
+.ad2e-manual-tool > button { grid-column: 1; justify-content: flex-start; white-space: nowrap; }
+.ad2e-manual-tool > p { grid-column: 2; margin: 0.3rem 0 0; }
+.ad2e-manual-tool > details { grid-column: 2; margin: 0 0 0.3rem; font-size: 0.95em; }
+.ad2e-manual-tool > details > summary { cursor: pointer; opacity: 0.8; }
+.ad2e-manual-tool > details p { margin: 0.25rem 0; }
+/* Quick NPC chat card (module/quick-npc.mjs). */
+.ad2e-quick-npc h3 { margin: 0 0 0.2rem; }
+.ad2e-quick-npc p { margin: 0.15rem 0; }
+.ad2e-quick-npc-buttons select { flex: 1 1 7rem; width: auto; min-width: 0; }
 .ad2e-manual-table { width: 100%; border-collapse: collapse; }
 .ad2e-manual-table td, .ad2e-manual-table th { vertical-align: top; padding: 0.2rem 0.4rem; text-align: left; }
 .ad2e-manual-columns { columns: 2; }

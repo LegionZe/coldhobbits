@@ -13,6 +13,8 @@
  *  - wrapped: two or more words in a box under 50px wide laid out on two or more lines (1.0.58: "Not rolled", "Spend (x 1,000
  *    gp)"); lines are counted from the text itself (1.0.62; the box height gave false findings in stretched rows).
  *  - overlap: two visible children of a grid or flex row covering each other.
+ * Text inside <code> is not checked for keys, placeholders or bad values (1.0.66: literal examples, e.g. the GM manual
+ * naming "undefined" among what this check finds).
  * Thresholds are implementation choices.
  */
 export const SCAN_LIMITS = { inputMin: 30, wrapWidth: 50, overlapMin: 4, textMax: 200 };
@@ -93,7 +95,7 @@ export function scanElement(root, { hasKey = () => false } = {}) {
     const text = node.textContent;
     if (!text || !text.trim()) continue;
     const el = node.parentElement;
-    if (!el || ["SCRIPT", "STYLE", "TEXTAREA", "OPTION"].includes(el.tagName) || !visible(el)) continue;
+    if (!el || ["SCRIPT", "STYLE", "TEXTAREA", "OPTION", "CODE"].includes(el.tagName) || el.closest("code") || !visible(el)) continue;
     const raw = text.match(RAW_KEY);
     if (raw) add("rawKey", el, raw[0]);
     if (PLACEHOLDER.test(text)) add("placeholder", el, text);

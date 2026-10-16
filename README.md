@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.65)
+## Status (v1.0.66)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -745,6 +745,17 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   hireling, a tradesman's nonweapon proficiency for the trade (`PROFESSION_PROFS`); personality (Table 70) and looks
   (Personality (DMG)) as for patrons; the rest (title, wage, sage ability, base morale, Table 69 costs for casters) in
   the Character tab notes. Spells are not chosen.
+- Quick NPC (1.0.66; owner's request: GM tool "Quick NPC" or `game.ad2e.quickNpc(purpose)`): one click rolls an NPC with
+  the Random NPC builder's rules, every choice random (townsfolk unless a purpose is given; implementation choice), and
+  whispers the GM a chat card with race, class and level, gender, age, alignment, ability scores, hit points, AC, THAC0,
+  saving throws, role, height and weight, personality and looks. Nothing is created until "Create actor" on the card
+  (owner's choice) makes the same character actor the builder would; "Another" rolls a new card for the purpose picked
+  beside it. AC, THAC0 and saves are read from an unsaved actor made from that data (`new Actor.implementation(data)`),
+  so they follow the character sheet's rules (the class's basic gear or a soldier's equipment worn, Dexterity, race and
+  class); if that fails the card leaves them out.
+- GM manual, GM tools page (1.0.66; owner's request): tools grouped under Creating, At the table, Party, travel and time,
+  Importing, and Maintenance; each button has a one-line summary beside it and the full text under a collapsed
+  "Details". The sheet check no longer reads text inside `<code>` as a fault (the manual quotes "undefined" as an example).
 - Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
   Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
   tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"

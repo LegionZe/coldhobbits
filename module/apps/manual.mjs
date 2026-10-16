@@ -12,6 +12,7 @@ import DungeonTurnTracker from "./dungeon-turns.mjs";
 import PartyTracker from "./party-tracker.mjs";
 import ZakharanCalendar from "./calendar.mjs";
 import NpcBuilder from "./npc-builder.mjs";
+import { quickNpc } from "../quick-npc.mjs";
 import { runSelfCheck } from "../self-check.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -44,6 +45,7 @@ export const MANUAL_TOOLS = {
   party: () => new PartyTracker().render({ force: true }),
   calendar: () => new ZakharanCalendar().render({ force: true }),
   createNpc: () => new NpcBuilder().render({ force: true }),
+  quickNpc: () => quickNpc(),
   selfCheck: () => runSelfCheck(),
   settings: () => new foundry.applications.settings.SettingsConfig().render({ force: true })
 };

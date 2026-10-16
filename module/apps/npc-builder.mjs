@@ -11,6 +11,32 @@ async function packDoc(pack, identifier) {
   return entry ? p.getDocument(entry._id) : null;
 }
 
+/** The system's races and classes (loaded once per session; shared by the builder and the quick NPC card). */
+let itemCache = null;
+export async function npcItems() {
+  if (!itemCache) {
+    const load = async name => [...((await game.packs.get(`ad2e.${name}`)?.getDocuments()) ?? [])];
+    itemCache = { races: await load("races"), classes: await load("classes") };
+  }
+  return itemCache;
+}
+
+/** The compendium documents an NPC spec needs: race, class, the class's basic gear, a tradesman's proficiency, a soldier's equipment. */
+export async function npcDocs(sp) {
+  const docs = { race: sp.race, cls: sp.cls, gear: [], prof: null, soldierItems: [] };
+  const gearKey = sp.cls ? (sp.cls.system.group === "wizard" ? "wizard" : sp.cls.system.identifier) : null;
+  for (const g of NPC.gear[gearKey] ?? []) { const d = await packDoc(g.pack, g.identifier); if (d) docs.gear.push(d); }
+  if (sp.profession?.prof) docs.prof = await packDoc("proficiencies", sp.profession.prof);
+  if (sp.soldier?.hireling) {
+    const pack = game.packs.get("ad2e.hirelings");
+    const index = await pack?.getIndex({ fields: ["system.identifier"] });
+    const entry = index?.find(e => e.system?.identifier === sp.soldier.hireling);
+    const actor = entry ? await pack.getDocument(entry._id) : null;
+    docs.soldierItems = [...(actor?.items ?? [])];
+  }
+  return docs;
+}
+
 /**
  * GM random NPC builder (module/npc-builder.mjs; Configure Settings, the GM manual, or game.ad2e.createNpc()): pick the
  * purpose and, if wanted, race, class, level formula, gender, Table 10 height/weight column, profession, troop type, title culture or sage field; "Roll"
@@ -31,16 +57,8 @@ export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2
 
   spec = null;
 
-  #items = null;
-
   /** Races and classes from the system compendiums (loaded once). */
-  async items() {
-    if (!this.#items) {
-      const load = async name => [...((await game.packs.get(`ad2e.${name}`)?.getDocuments()) ?? [])];
-      this.#items = { races: await load("races"), classes: await load("classes") };
-    }
-    return this.#items;
-  }
+  items() { return npcItems(); }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
@@ -100,17 +118,7 @@ export default class NpcBuilder extends HandlebarsApplicationMixin(ApplicationV2
     if (!this.spec) await NpcBuilder.#onRoll.call(this);
     const sp = this.spec;
     if (!sp) return null;
-    const docs = { race: sp.race, cls: sp.cls, gear: [], prof: null, soldierItems: [] };
-    const gearKey = sp.cls ? (sp.cls.system.group === "wizard" ? "wizard" : sp.cls.system.identifier) : null;
-    for (const g of NPC.gear[gearKey] ?? []) { const d = await packDoc(g.pack, g.identifier); if (d) docs.gear.push(d); }
-    if (sp.profession?.prof) docs.prof = await packDoc("proficiencies", sp.profession.prof);
-    if (sp.soldier?.hireling) {
-      const pack = game.packs.get("ad2e.hirelings");
-      const index = await pack?.getIndex({ fields: ["system.identifier"] });
-      const entry = index?.find(e => e.system?.identifier === sp.soldier.hireling);
-      const actor = entry ? await pack.getDocument(entry._id) : null;
-      docs.soldierItems = [...(actor?.items ?? [])];
-    }
+    const docs = await npcDocs(sp);
     const data = npcActorData({ ...sp, name: this.state.name || sp.name }, docs, i18n);
     const actor = await Actor.implementation.create(data, this.state.destination ? { pack: this.state.destination } : {});
     if (!actor) return null;

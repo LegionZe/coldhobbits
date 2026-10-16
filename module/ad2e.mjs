@@ -59,6 +59,7 @@ import { registerStation } from "./station.mjs";
 import { registerEncounters } from "./encounters.mjs";
 import { registerConstruction } from "./construction.mjs";
 import NpcBuilder from "./apps/npc-builder.mjs";
+import { quickNpc } from "./quick-npc.mjs";
 import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCreator, TrapCreator, WeaponCreator } from "./apps/creators.mjs";
 import SpellData from "./data/item-spell.mjs";
 import AD2EActor from "./documents/actor.mjs";
@@ -167,7 +168,8 @@ Hooks.once("init", () => {
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),
     calendar: () => new ZakharanCalendar().render({ force: true }),
-    createNpc: () => new NpcBuilder().render({ force: true })
+    createNpc: () => new NpcBuilder().render({ force: true }),
+    quickNpc: purpose => quickNpc(purpose)
   };
 
   game.settings.register("ad2e", "encumbrance", {
