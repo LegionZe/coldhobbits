@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.67)
+## Status (v1.0.68)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -763,6 +763,10 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   typographic minus while typing ("−1" became 1). The monster To-hit and initiative boxes, the character initiative
   modifier and the modifier box of every roll dialog are now text boxes that read "+2", "2", "-1" and "−1"; text that is
   not a whole number keeps the stored value on a sheet (with a warning) and counts as 0 in a dialog (with a warning).
+- Weapon proficiency drop-down (1.0.68; owner's request): the weapon sheet's "Weapon proficiency" is a drop-down of every
+  weapon proficiency in the Item compendiums, the Items directory and the weapon's actor, instead of a box for the
+  identifier; "— none —" clears it, and an identifier not found there stays selected as "(not found)". The Weapon
+  creator's list is the same one (`module/weapon-proficiencies.mjs`).
 - Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
   Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
   tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"

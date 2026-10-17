@@ -4,6 +4,7 @@ import { TREASURE_ROLLS } from "../rules/treasure-tables.mjs";
 import { SP_WEAPONS } from "../rules/sp-weapon-tables.mjs";
 import { learnChance } from "../learn-spells.mjs";
 import { TRAP } from "../traps.mjs";
+import { weaponProficiencyList } from "../weapon-proficiencies.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -220,19 +221,18 @@ export class WeaponCreator extends HandlebarsApplicationMixin(ApplicationV2) {
   proficiencies = null; // [{ identifier, name }]
 
   async #loadLists() {
-    const sources = [], profs = new Map();
+    const sources = [];
     for (const pack of game.packs ?? []) {
       if (pack.documentName !== "Item") continue;
       const index = await pack.getIndex({ fields: ["type", "system.identifier", "system.kind"] });
       for (const e of index) {
         if (e.type === "weapon") sources.push({ uuid: e.uuid ?? `Compendium.${pack.collection}.Item.${e._id}`, name: e.name, pack: pack.metadata.label });
-        if (e.type === "proficiency" && e.system?.kind === "weapon" && e.system.identifier) profs.set(e.system.identifier, e.name);
       }
     }
     for (const i of game.items?.filter(x => x.type === "weapon") ?? []) sources.push({ uuid: i.uuid, name: i.name, pack: game.i18n.localize("AD2E.Creator.World") });
-    for (const i of game.items?.filter(x => x.type === "proficiency" && x.system.kind === "weapon") ?? []) profs.set(i.system.identifier, i.name);
     this.sources = sources.sort((a, b) => a.name.localeCompare(b.name));
-    this.proficiencies = [...profs].map(([identifier, name]) => ({ identifier, name })).sort((a, b) => a.name.localeCompare(b.name));
+    // Weapon proficiencies: the same list as the weapon sheet's drop-down (module/weapon-proficiencies.mjs).
+    this.proficiencies = await weaponProficiencyList();
   }
 
   async _prepareContext(options) {

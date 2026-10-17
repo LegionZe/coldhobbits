@@ -11,6 +11,7 @@ import { durationSeconds, durationText, MOD_KEYS, parseDuration } from "../spell
 import { animationFor, jb2aAvailable, MODES } from "../spell-animations.mjs";
 import { weaponAnimation } from "../weapon-animations.mjs";
 import { attackSounds, psfxAvailable } from "../sound-effects.mjs";
+import { proficiencyOptions, weaponProficiencyList } from "../weapon-proficiencies.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -217,6 +218,9 @@ export class WeaponSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     const sys = this.document.system;
     context.weapon = weaponStats(sys.weapon);
+    // Weapon proficiency drop-down (module/weapon-proficiencies.mjs, 1.0.68).
+    context.profOptions = proficiencyOptions(await weaponProficiencyList(this.document.parent), sys.proficiency,
+      (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k)));
     context.poisonCoat = poisonCoatContext(this.document, this.isEditable);
     // Bows only: the Strength the bow is made for (Strength 3-25 and the 18/xx bands of PHB Table 1).
     context.isBow = sys.weapon?.family === "bow";
