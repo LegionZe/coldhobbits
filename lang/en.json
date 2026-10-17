@@ -3418,12 +3418,17 @@
     "ToggleHint": "Light it or put it out. It burns with world time (PHB Table 63: torch 30 min. = 3 turns, lantern 2 hrs. a pint, candle 10 min. an inch) and lights your token; an empty lantern uses a flask of lamp oil.",
     "BurntOut": "{actor}'s {name} has burnt out.",
     "OutOfOil": "{actor}'s {name} is out of oil.",
+    "Refill": "Refill",
+    "RefillHint": "Pour a flask of lamp oil into the lantern: full again (one pint), lit or out. A partly full lantern still takes a whole flask.",
+    "Refilled": "{name} refilled with a flask of lamp oil.",
     "Inches": "Candle length (inches)",
     "InchesHint": "PHB Table 63: a candle burns 10 minutes (one turn) an inch. Empty: 6 inches.",
     "Cannot": {
       "notLight": "{name} is not a light source.",
       "none": "No {name} left to light.",
-      "noOil": "{name} is empty and there is no flask of lamp oil to fill it."
+      "noOil": "There is no flask of lamp oil to fill {name}.",
+      "notLantern": "{name} is not a lantern.",
+      "full": "{name} is already full."
     }
   },
   "AD2E.Dungeon": {

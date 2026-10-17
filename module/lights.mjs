@@ -9,6 +9,9 @@ import { LIGHT_TABLES } from "./rules/light-tables.mjs";
  * (implementation choices: one flask = one pint; a candle of unknown length is 6 inches). Lit sources light the bearer's
  * tokens (owner's request): the largest radius, a cone for bullseye and beacon lanterns; the token's own light is kept
  * in flag `ad2e.priorLight` and restored when nothing is lit.
+ * Refilling (owner's request 1.0.68): a lantern's Refill button pours one flask of lamp oil into it, lit or out, and fills
+ * it to one pint (implementation choices: a lantern holds one pint, the PHB burning time being per pint; a partly full
+ * lantern still takes a whole flask, the rest of the flask is not kept).
  */
 export const LIGHT = LIGHT_TABLES;
 const TURN = LIGHT_TABLES.turnSeconds;
@@ -64,6 +67,22 @@ export function lightPlan(item, items, now) {
   return { ok: true, update: { "system.light.lit": true, "system.light.until": now + left, "system.light.left": left }, oil };
 }
 
+/**
+ * Refilling a lantern (pure): { ok, reason, update, oil }. Reasons: "notLantern", "full", "noOil". A lit lantern keeps
+ * burning, now with a full pint.
+ */
+export function refillPlan(item, items, now) {
+  const spec = lightSpec(item);
+  if (!spec || spec.per !== "pint") return { ok: false, reason: "notLantern" };
+  const full = fullSeconds(spec, item);
+  if (secondsLeft(item, now) >= full) return { ok: false, reason: "full" };
+  const flask = oilFlask(items);
+  if (!flask) return { ok: false, reason: "noOil" };
+  const lit = !!item.system.light?.lit;
+  return { ok: true, oil: { _id: flask.id, "system.quantity": flask.system.quantity - 1 },
+    update: { "system.light.left": full, "system.light.until": lit ? now + full : null } };
+}
+
 /** Putting a lit item out (pure): the fuel left is kept. */
 export function outUpdate(item, now) {
   return { "system.light.lit": false, "system.light.until": null, "system.light.left": secondsLeft(item, now) };
@@ -116,6 +135,19 @@ export async function lightItem(actor, item) {
   if (plan.oil) await actor.updateEmbeddedDocuments("Item", [plan.oil]);
   await item.update(plan.update);
   await syncTokenLight(actor);
+  return item;
+}
+
+/** Refill a lantern from a flask of lamp oil (sheet button). */
+export async function refillLantern(actor, item) {
+  const plan = refillPlan(item, actor.items, game.time?.worldTime ?? 0);
+  if (!plan.ok) {
+    ui.notifications?.warn(game.i18n.format(`AD2E.Light.Cannot.${plan.reason}`, { name: item.name }));
+    return null;
+  }
+  await actor.updateEmbeddedDocuments("Item", [plan.oil]);
+  await item.update(plan.update);
+  ui.notifications?.info(game.i18n.format("AD2E.Light.Refilled", { name: item.name }));
   return item;
 }
 

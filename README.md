@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.68)
+## Status (v1.0.69)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -767,6 +767,10 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   weapon proficiency in the Item compendiums, the Items directory and the weapon's actor, instead of a box for the
   identifier; "— none —" clears it, and an identifier not found there stays selected as "(not found)". The Weapon
   creator's list is the same one (`module/weapon-proficiencies.mjs`).
+- Refilling lanterns (1.0.69; owner's request): a lantern's row on the Inventory tab has a "Refill" button that pours one
+  flask of lamp oil into it, lit or out, and fills it to one pint (12 turns for a hooded or bullseye lantern, PHB Table 63;
+  a lit lantern keeps burning). Implementation choices: a lantern holds one pint; a partly full lantern still takes a whole
+  flask; refused when it is full or there is no flask. Lighting an empty lantern still uses a flask by itself.
 - Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
   Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
   tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"
