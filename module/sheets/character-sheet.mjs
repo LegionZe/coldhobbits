@@ -1,7 +1,7 @@
 import { cancelTraining, startTraining, trainingCheck, trainingContext } from "../training.mjs";
 import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
-import { lightItem, lightSpec, putOut, turnsLeft } from "../lights.mjs";
+import { lightItem, lightSpec, putOut, refillLantern, turnsLeft } from "../lights.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
 import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
@@ -234,6 +234,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleCarried: CharacterSheet.onToggleCarried,
       toggleFull: CharacterSheet.onToggleFull,
       toggleLight: CharacterSheet.onToggleLight,
+      refillLight: CharacterSheet.onRefillLight,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
@@ -913,7 +914,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         id: i.id, name: i.name, img: i.img, url: i.system.url, quantity: i.system.quantity, carried: i.system.carried,
         summary: equipmentSummary(i.system), inside: insideText(inv, i), contained: inContainer(inv, i),
         liquid: i.system.liquid?.fullWeight !== null && i.system.liquid?.fullWeight !== undefined, full: !!i.system.liquid?.full,
-        light: lightSpec(i) ? { lit: !!i.system.light?.lit, turns: turnsLeft(i, game.time?.worldTime ?? 0) } : null,
+        light: lightSpec(i) ? { lit: !!i.system.light?.lit, turns: turnsLeft(i, game.time?.worldTime ?? 0), lantern: lightSpec(i).per === "pint" } : null,
         total: (i.system.unitWeight ?? i.system.weight) && i.system.quantity > 1
           ? Math.round((i.system.unitWeight ?? i.system.weight) * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
@@ -1880,6 +1881,12 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const item = this.actor.items.get(target.dataset.itemId);
     if (!item) return null;
     return item.system.light?.lit ? putOut(this.actor, item) : lightItem(this.actor, item);
+  }
+
+  /** A lantern (module/lights.mjs): refill it from a flask of lamp oil. */
+  static onRefillLight(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item ? refillLantern(this.actor, item) : null;
   }
 
   /** A liquid container (e.g. a waterskin): fill it or empty it; full, it weighs its full weight. */
