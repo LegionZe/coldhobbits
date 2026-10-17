@@ -28,6 +28,7 @@ import { sideOf } from "../initiative.mjs";
 import { bondInfo, bondKind, canBond, COMPANIONS, companionLost, endFeeblemind, feeblemindActive, fitText, mountDied, mountFled, oversizeCompanion, rollBondCreature, setBond } from "../companions.mjs";
 import { breakGenLink, dismissGen, genBack, genDeath, genInfo, genStatusText, raiseGen, sendGenAway, summonGen } from "../gens.mjs";
 import { GEN_KINDS, genReturns, isShair, repeatsOf, requestChance, requestSpell, searchUnit, spellStanding, spellTitle } from "../shair.mjs";
+import { readSigned, signedText, warnUnreadable } from "../signed-number.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -449,6 +450,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     const context = await super._prepareContext(options);
     context.actor = this.document;
     context.system = this.document.system;
+    context.initModText = signedText(this.document.system.initiative?.mod);
     context.spellEffects = effectRows(this.document.effects, game.time?.worldTime ?? 0, (k, d) => d ? game.i18n.format(k, d) : game.i18n.localize(k));
     const sys = this.document.system;
     context.abilities = AD2E.abilities.map(key => ({
@@ -1153,6 +1155,19 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       buttons, rejectClose: false
     });
     return choice === "multi" || choice === "replace" ? choice : null;
+  }
+
+  /** Signed modifiers are typed as text ("+2"; module/signed-number.mjs): read them, keeping the stored value if unreadable. */
+  _processFormData(event, form, formData) {
+    const data = super._processFormData(event, form, formData);
+    const path = "system.initiative.mod";
+    const typed = foundry.utils.getProperty(data, path);
+    if (typed !== undefined) {
+      const r = readSigned(typed, this.document?._source?.system?.initiative?.mod ?? 0);
+      foundry.utils.setProperty(data, path, r.value);
+      warnUnreadable(r.bad ? [r.bad] : []);
+    }
+    return data;
   }
 
   async _onDropItem(event, item) {

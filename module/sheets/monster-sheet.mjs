@@ -9,6 +9,7 @@ import { mountTrained } from "../combat-options.mjs";
 import { pushMount, pushText } from "../animals.mjs";
 import { weaponAnimation } from "../weapon-animations.mjs";
 import { attackSounds } from "../sound-effects.mjs";
+import { readSigned, signedText, warnUnreadable } from "../signed-number.mjs";
 import { springTrap, trapContext } from "../traps.mjs";
 import { jewellerySummary, magicSummary } from "./character-sheet.mjs";
 import { promptHitPoints, temporaryHp } from "../health.mjs";
@@ -132,10 +133,11 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     // Each natural attack's automatic animation and sound (1.0.64), shown as the placeholders of its own fields.
     context.naturalAttacks = sys.attacks.map((a, index) => {
       const auto = { kind: "natural", name: a.name, type: a.type, missile: false };
-      return { ...a, index, key: `a${index}`, autoAnimation: weaponAnimation(auto)?.file ?? "—",
+      return { ...a, index, key: `a${index}`, bonusText: signedText(a.bonus), autoAnimation: weaponAnimation(auto)?.file ?? "—",
         autoSound: attackSounds(auto, true).map(x => x.file).join(" + ") || "—" };
     });
     context.isGM = !!game.user?.isGM;
+    context.initModText = signedText(sys.initiative?.mod);
     // Importer suggestion (complete-compendium.mjs guessElement): shown while a natural attack has no element.
     const guess = actor.getFlag?.("ad2e", "elementGuess") ?? null;
     context.elementGuess = guess?.element && sys.attacks.some(a => !a.element)
@@ -197,13 +199,33 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     return super._onDragStart(event);
   }
 
-  /** Natural attacks are edited as system.attacks.<n>.<field>; the form sends an object, the schema wants an array. */
+  /**
+   * Natural attacks are edited as system.attacks.<n>.<field>; the form sends an object, the schema wants an array.
+   * To-hit bonuses and the initiative modifier are typed as text ("+2"; module/signed-number.mjs): unreadable text keeps
+   * the stored value (1.0.67: a number box dropped "+2" and the stored 0 came back on the next redraw).
+   */
   _processFormData(event, form, formData) {
     const data = super._processFormData(event, form, formData);
-    const attacks = foundry.utils.getProperty(data, "system.attacks");
+    const source = this.document?._source?.system ?? {};
+    const bad = [];
+    let attacks = foundry.utils.getProperty(data, "system.attacks");
     if (attacks && !Array.isArray(attacks)) {
-      foundry.utils.setProperty(data, "system.attacks", Object.keys(attacks).sort((a, b) => a - b).map(k => attacks[k]));
+      attacks = Object.keys(attacks).sort((a, b) => a - b).map(k => attacks[k]);
+      foundry.utils.setProperty(data, "system.attacks", attacks);
     }
+    for (const [i, a] of (attacks ?? []).entries()) {
+      if (!a || !("bonus" in a)) continue;
+      const r = readSigned(a.bonus, source.attacks?.[i]?.bonus ?? 0);
+      a.bonus = r.value;
+      if (r.bad) bad.push(r.bad);
+    }
+    const typed = foundry.utils.getProperty(data, "system.initiative.mod");
+    if (typed !== undefined) {
+      const r = readSigned(typed, source.initiative?.mod ?? 0);
+      foundry.utils.setProperty(data, "system.initiative.mod", r.value);
+      if (r.bad) bad.push(r.bad);
+    }
+    warnUnreadable(bad);
     return data;
   }
 

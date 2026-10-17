@@ -650,6 +650,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
 - lang/en.json: one block per top-level key. JSON keeps only the last of duplicate keys, so a second "AD2E.X" block silently
   drops the first one's labels (a second "AD2E.Treasure" block from the treasure generator hid the inventory treasure and
   gem/jewellery sheet labels until 1.0.59). Add keys to the existing block.
+- Signed modifiers (1.0.67): type them in text boxes (class `ad2e-signed`) read by `module/signed-number.mjs` (`parseSigned`,
+  `signedText`, `readSigned` keeps the stored value on unreadable text, `warnUnreadable`; dialogs `dialogModifier` in
+  roll-modifiers.mjs), never `<input type="number">`: its value is "" for "+2"-style text and Chromium drops "+"/"−" (owner's
+  diagnostic: monster to-hit lost). Monster sheet `_processFormData` (attack bonus, initiative.mod), character sheet
+  `_processFormData` (initiative.mod).
 - Test template rendering with helpers that behave like Foundry's (e.g. `selectOptions` throws on null choices).
 - THAC0 uses PHB Table 53 (generated); the progression in config.mjs only extends it past level 20 and is asserted
   against Table 53 by build-level-tables.py. Do not include rulebook text.

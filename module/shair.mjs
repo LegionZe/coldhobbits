@@ -13,6 +13,7 @@ import { ad2eDialog } from "./dialogs.mjs";
  *  - The gen returns at the world time of the end of its search (character `system.gen.fetch`); the active GM processes
  *    the return (updateWorldTime) and the expiry three turns later. One request at a time.
  */
+import { dialogModifier } from "./roll-modifiers.mjs";
 import { SHAIR } from "./rules/shair-tables.mjs";
 import { SPELL_NATIVE } from "./rules/province-tables.mjs";
 import { AD2E } from "./config.mjs";
@@ -131,10 +132,10 @@ export async function requestSpell(actor, itemId) {
       + `<p>${esc(fmt("AD2E.Shair.SearchText", { die: SHAIR.searchNative.die, level: st.level, extra: gen.replacements,
         unit: i18n(`AD2E.Shair.Unit.${unit}`) }))}</p>`
       + (st.priest ? `<p class="ad2e-unmet">${esc(fmt("AD2E.Shair.PriestWarning", { chance: SHAIR.priestNotice * st.level }))}</p>` : "")
-      + `<div class="form-group"><label>${i18n("AD2E.Shair.Modifier")}</label><input type="number" name="mod" value="0"></div>`
+      + `<div class="form-group"><label>${i18n("AD2E.Shair.Modifier")}</label><input type="text" class="ad2e-signed" name="mod" value="0"></div>`
       + `<div class="form-group"><label>${i18n("AD2E.Shair.Failure")}</label><input type="number" name="failure" value="${fail0}" min="0" max="100"></div>`,
     ok: { label: i18n("AD2E.Shair.Send"), callback: (event, button) => ({
-      mod: Number(button.form.elements.mod.value) || 0, failure: Math.max(0, Number(button.form.elements.failure.value) || 0) }) },
+      mod: dialogModifier(button.form.elements.mod.value), failure: Math.max(0, Number(button.form.elements.failure.value) || 0) }) },
     rejectClose: false
   });
   if (!input) return;
