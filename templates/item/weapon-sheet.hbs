@@ -9,7 +9,7 @@
     {{#if containerOptions}}<label>{{localize "AD2E.Container.InContainer"}}
       <select name="system.container">{{#each containerOptions as |o|}}<option value="{{o.id}}" {{#if o.selected}}selected{{/if}}>{{o.name}}</option>{{/each}}</select></label>{{/if}}
     {{#unless hidden}}<label>{{localize "AD2E.Item.identifier"}} <input type="text" name="system.identifier" value="{{system.identifier}}"></label>{{/unless}}
-    <label>{{localize "AD2E.Weapon.Proficiency"}} <input type="text" name="system.proficiency" value="{{system.proficiency}}"></label>
+    <label data-tooltip="{{localize 'AD2E.Weapon.ProficiencyHint'}}">{{localize "AD2E.Weapon.Proficiency"}} <select name="system.proficiency">{{#each profOptions as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
     <label>{{localize "AD2E.Weapon.Quantity"}} <input type="number" name="system.quantity" value="{{system.quantity}}" min="0"></label>
     <label>{{localize "AD2E.Weapon.Cost"}} <input type="text" name="system.cost" value="{{system.cost}}"></label>
     <label>{{localize "AD2E.Weapon.Weight"}} <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="any"></label>

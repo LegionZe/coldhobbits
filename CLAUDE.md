@@ -329,7 +329,9 @@ The owner installs and updates from that manifest URL only (no shell access to t
   manual tool `createMonster`): DMG Table 31 + Table 32 Hit Dice modifiers (`monsterXp`, `hdScale`, worked examples
   asserted), MM size/intelligence/morale bands. Weapon creator (`WeaponCreator`, `game.ad2e.createWeapon`, `createWeapon`):
   `fromItem` copies a weapon's statistics, `itemData` gives the weapon (+ proficiency with the same `weapon` data),
-  `weaponIssues`, `slugify`. Item creator (`ItemCreator`, `game.ad2e.createItem`, `createItem`): kinds gear / container
+  `weaponIssues`, `slugify`; its proficiency list and the weapon sheet's `system.proficiency` drop-down (1.0.68) come from
+  `module/weapon-proficiencies.mjs` (`weaponProficiencyList(actor)`: Item pack indexes once per session + world + actor items,
+  kind "weapon"; pure `proficiencyOptions` keeps an unknown identifier as "(not found)"). Item creator (`ItemCreator`, `game.ad2e.createItem`, `createItem`): kinds gear / container
   (equipment) / armor / ammunition (`ITEM_KINDS`), `fromItem`, `itemData`, `itemIssues`, `costValid`. Magic item creator (`MagicItemCreator`, `game.ad2e.createMagicItem`,
   `createMagicItem`): modes item / arms; `chargesFor` (CREATOR_TABLES.magic.charges from build-magic-item-data.py `CHARGES`),
   `armsXp` (TREASURE_ROLLS.arms), `isSword` (SP "swords" group), `armsData`, `itemData`. Patron creator (`PatronCreator`,
