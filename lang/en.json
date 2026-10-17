@@ -3278,6 +3278,11 @@
       "troops": "Troops sent away (half speed)"
     }
   },
+  "AD2E.Signed": {
+    "Hint": "A whole number, with or without a sign: +2, 2, -1.",
+    "Unreadable": "Not a whole number: {text}. The previous value was kept; type it as +2, 2 or -1.",
+    "Ignored": "Modifier {text} is not a whole number and was not used; type it as +2, 2 or -1."
+  },
   "AD2E.QuickNpc": {
     "Title": "Quick NPC",
     "GmOnly": "Only a GM can roll a quick NPC.",

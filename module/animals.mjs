@@ -9,6 +9,7 @@ import { ad2eDialog } from "./dialogs.mjs";
  *  - A character's animals are monster actors in `system.animals.actors` (UUIDs, dropped on the sheet); `riding` is the
  *    one it rides.
  */
+import { dialogModifier } from "./roll-modifiers.mjs";
 import { RACE_WEIGHT } from "./rules/race-tables.mjs";
 import { MOUNT_PUSH } from "./rules/movement-tables.mjs";
 import { NPC_TABLES } from "./rules/npc-tables.mjs";
@@ -152,9 +153,9 @@ export async function pushMount(actor) {
       + `<option value="double">${esc(fmt("AD2E.Push.Double", { mod: dbl.total }))}</option>`
       + `<option value="triple">${esc(fmt("AD2E.Push.Triple", { mod: MOUNT_PUSH.triple.mod }))}</option></select></div>`
       + `<p class="ad2e-note">${esc(fmt("AD2E.Push.Note", { target, previous: dbl.previous, hardy: dbl.hardy }))}</p>`
-      + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="number" name="mod" value="0"></div>`,
+      + `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}</label><input type="text" class="ad2e-signed" name="mod" value="0"></div>`,
     ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({ pace: button.form.elements.pace.value,
-      mod: Number(button.form.elements.mod.value) || 0 }) },
+      mod: dialogModifier(button.form.elements.mod.value) }) },
     rejectClose: false
   });
   if (!input) return;

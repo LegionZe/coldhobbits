@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.66)
+## Status (v1.0.67)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -756,6 +756,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
 - GM manual, GM tools page (1.0.66; owner's request): tools grouped under Creating, At the table, Party, travel and time,
   Importing, and Maintenance; each button has a one-line summary beside it and the full text under a collapsed
   "Details". The sheet check no longer reads text inside `<code>` as a fault (the manual quotes "undefined" as an example).
+- Monster to-hit kept (1.0.67; owner's report: natural attack to-hit values "reset" when an attack was added or a Type
+  changed). The owner's diagnostic showed the to-hit box empty to the sheet (the browser's number box value was "") with
+  0 stored: what was typed never reached the actor, and the redraw after the next change showed the 0. A number box gives
+  "" for any text that is not a plain number (HTML Standard, input type=number), and Chromium silently drops "+" and the
+  typographic minus while typing ("−1" became 1). The monster To-hit and initiative boxes, the character initiative
+  modifier and the modifier box of every roll dialog are now text boxes that read "+2", "2", "-1" and "−1"; text that is
+  not a whole number keeps the stored value on a sheet (with a warning) and counts as 0 in a dialog (with a warning).
 - Stronghold construction (DMGR2 *The Castle Guide*, Chapter 5: "The Construction Site", "Types of Castles", "Castle
   Design", "Average Construction Time & Cost", "The Work Force" and "Monthly Events (TCG)"; `python3
   tools/build-construction-tables.py`, every value parsed and every rule regex-checked; the book's "Castle on the Moors"

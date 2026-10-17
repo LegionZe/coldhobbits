@@ -1,4 +1,5 @@
 import { ad2eDialog } from "./dialogs.mjs";
+import { parseSigned } from "./signed-number.mjs";
 /**
  * Situational modifiers for roll dialogs: a number and an optional reason (e.g. "ring of protection +1", "cover"),
  * entered by hand for magical items and other conditions the system does not track. The reason is shown in chat.
@@ -9,15 +10,24 @@ const esc = v => foundry.utils?.escapeHTML?.(String(v ?? "")) ?? String(v ?? "")
 export function modifierFields({ unit = "", autofocus = false } = {}) {
   const i18n = k => game.i18n.localize(k);
   return `<div class="form-group"><label>${i18n("AD2E.Roll.Modifier")}${unit ? ` (${unit})` : ""}</label>`
-    + `<input type="number" name="mod" value="0"${unit === "%" ? ' step="5"' : ""}${autofocus ? " autofocus" : ""}></div>`
+    + `<input type="text" class="ad2e-signed" name="mod" value="0" data-tooltip="${esc(i18n("AD2E.Signed.Hint"))}"${autofocus ? " autofocus" : ""}></div>`
     + `<div class="form-group"><label>${i18n("AD2E.Roll.ModifierNote")}</label>`
     + `<input type="text" name="modNote" placeholder="${esc(i18n("AD2E.Roll.ModifierNoteHint"))}"></div>`;
+}
+
+/** The typed modifier of a dialog (text box: "+2", "-1"; module/signed-number.mjs): 0 when empty, 0 with a warning when unreadable. */
+export function dialogModifier(value) {
+  const text = String(value ?? "").trim();
+  if (!text) return 0;
+  const n = parseSigned(text);
+  if (n === null) globalThis.ui?.notifications?.warn(game.i18n.format("AD2E.Signed.Ignored", { text }));
+  return n ?? 0;
 }
 
 /** { mod, note } from a dialog form with modifierFields(). */
 export function readModifier(form) {
   const el = form?.elements ?? {};
-  return { mod: Number(el.mod?.value) || 0, note: String(el.modNote?.value ?? "").trim() };
+  return { mod: dialogModifier(el.mod?.value), note: String(el.modNote?.value ?? "").trim() };
 }
 
 /** Chat text for a situational modifier: " [+1 ring of protection]"; "" when none. */
