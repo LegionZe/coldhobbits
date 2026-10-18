@@ -138,6 +138,12 @@
     "KitNotForClass": "{kit} is not available to {class}.",
     "KitDoesNotFit": "This kit is not available to the current class."
   },
+  "AD2E.Inventory": {
+    "Create": "Create item",
+    "CreateType": "Kind of item to create",
+    "CreateHint": "Make a new item of this kind on the character; its sheet opens to fill in. Items from the compendiums can still be dragged in.",
+    "NewItem": "New {type}"
+  },
   "TYPES.Item": {
     "class": "Class",
     "kit": "Class Kit",
@@ -336,6 +342,8 @@
     "Cost": "Cost",
     "Weight": "Weight (lb)",
     "Proficiency": "Weapon proficiency",
+    "AddDamage": "Add damage row",
+    "RangeNote": "Short, medium and long range in yards, as the compendium weapons give them (a long bow: 70 / 140 / 210); rate of fire as attacks per round (2/1, 1, 1/2).",
     "ProficiencyNone": "— none —",
     "ProficiencyMissing": "{id} (not found)",
     "ProficiencyHint": "The weapon proficiency that covers this weapon: compendium, world and this actor's weapon proficiencies.",

@@ -277,3 +277,13 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e .ad2e-mr-field > .ad2e-check { white-space: nowrap; }
 /* Monster save table: "Level 2" stays on one line (it wrapped in a narrow column; 1.0.61 report, line count confirmed). */
 .ad2e-monster-saves td.ad2e-note { white-space: nowrap; }
+/* Inventory tab: create an item on the character (1.0.70; own markup). */
+.ad2e-create-item { display: flex; align-items: center; gap: 0.4rem; margin: 0.25rem 0 0.5rem; }
+.ad2e-create-item select { flex: 0 1 14rem; width: auto; min-width: 0; }
+.ad2e-create-item button { flex: 0 0 auto; width: auto; }
+/* Weapon sheet: editable damage rows (1.0.70; own markup). */
+.ad2e-weapon-damage-edit { width: 100%; border-collapse: collapse; margin: 0.35rem 0; }
+.ad2e-weapon-damage-edit th { text-align: left; font-size: 0.85em; font-weight: normal; }
+.ad2e-weapon-damage-edit td { padding: 0.1rem 0.2rem; }
+.ad2e-weapon-damage-edit td:nth-child(4) input { width: 3.5rem; }
+.ad2e-weapon-damage-edit td:last-child { width: 1.5rem; text-align: center; }

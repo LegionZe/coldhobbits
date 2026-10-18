@@ -2,8 +2,9 @@ import { ad2eDialog } from "./dialogs.mjs";
 /**
  * Material components when casting (world setting "trackComponents", off by default: "There are some very good reasons
  * why you shouldn't use material components in play", Material Spell Components (POSM)).
- *  - A spell's `system.materials` links components by identifier; the caster's owned equipment items with the same
- *    identifier and a quantity of at least 1 supply them.
+ *  - A spell's `system.materials` links components by identifier; the caster's owned equipment or jewellery (gem) items
+ *    with the same identifier and a quantity of at least 1 supply them (a gem's value, e.g. "of at least 100 gp", is not
+ *    checked: the GM's call).
  *  - Consumed components lose one from their quantity ("Whatever the component, it is automatically destroyed or lost
  *    when the spell is cast, unless the spell description specifically notes otherwise", Casting Spells (PHB));
  *    others (holy symbols) only need to be carried.
@@ -17,7 +18,8 @@ export function trackingOn() {
 
 /** Each material link of a spell with the caster's item that supplies it: [{ link, item | null }]. */
 export function componentStatus(actor, spell) {
-  const owned = [...(actor?.items ?? [])].filter(i => i.type === "equipment" && (i.system.quantity ?? 0) >= 1);
+  // Equipment, or a gem (jewellery item) such as a pearl (module/component-catalog.mjs, 1.0.70).
+  const owned = [...(actor?.items ?? [])].filter(i => ["equipment", "jewellery"].includes(i.type) && (i.system.quantity ?? 0) >= 1);
   return (spell?.system?.materials ?? []).map(link => ({ link, item: owned.find(i => i.system.identifier === link.identifier) ?? null }));
 }
 

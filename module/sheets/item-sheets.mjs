@@ -12,6 +12,8 @@ import { animationFor, jb2aAvailable, MODES } from "../spell-animations.mjs";
 import { weaponAnimation } from "../weapon-animations.mjs";
 import { attackSounds, psfxAvailable } from "../sound-effects.mjs";
 import { proficiencyOptions, weaponProficiencyList } from "../weapon-proficiencies.mjs";
+import { componentCatalog } from "../component-catalog.mjs";
+import { MISSILE_COLUMNS, WEAPON_SIZES } from "../apps/creators.mjs";
 import { formatKitModifier, formatKitProficiencies, formatKitRecommended, formatKitSpecialization } from "./character-sheet.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -206,11 +208,61 @@ function poisonCoatContext(item, editable) {
     dosesLabel: missiles ? "AD2E.Poison.Missiles" : "AD2E.Poison.Doses", dosesHint: missiles ? "AD2E.Poison.MissilesHint" : "AD2E.Poison.DosesHint" };
 }
 
+/**
+ * Editable weapon statistics on the weapon sheet (owner's report 1.0.70: new weapons and magical weapons could not be given
+ * their details; they were read-only, set only by the compendiums and the Weapon creator). Option lists as the Weapon creator's.
+ */
+export function weaponEditContext(w, t) {
+  const opt = (list, value, label = x => x) => list.map(x => ({ value: x, label: label(x), selected: x === value }));
+  return {
+    sizes: [{ value: "", label: "—", selected: !w.size }, ...opt(WEAPON_SIZES, w.size)],
+    families: opt(["other", "bow", "crossbow"], w.family, x => t(`AD2E.Creator.Weapon.Family.${x}`)),
+    columns: opt(MISSILE_COLUMNS, w.missileColumn ?? "", x => x || t("AD2E.Creator.Weapon.NoColumn")),
+    strengths: opt(["full", "damage", "penalty", "none"], w.strength, x => t(`AD2E.Creator.Weapon.Strength.${x}`)),
+    damage: (w.damage ?? []).map((d, index) => ({ ...d, index, speed: d.speed ?? "" })),
+    twoHands: (w.rules ?? []).includes("twoHands")
+  };
+}
+
+/** Weapon damage rows are edited as system.weapon.damage.<n>.<field>: the form sends an object, the schema wants an array. */
+export function weaponFormArrays(data) {
+  const damage = data?.system?.weapon?.damage;
+  if (damage && !Array.isArray(damage)) {
+    data.system.weapon.damage = Object.keys(damage).sort((a, b) => a - b).map(k => {
+      const d = damage[k];
+      const speed = d.speed === "" || d.speed === undefined || d.speed === null ? null : Number(d.speed);
+      return { label: d.label ?? "", sm: d.sm ?? "", l: d.l ?? "", speed: Number.isFinite(speed) ? speed : null };
+    });
+  }
+  return data;
+}
+
 export class WeaponSheet extends AD2EItemSheet {
-  static DEFAULT_OPTIONS = { classes: ["weapon"], actions: { coatPoison: WeaponSheet.#onCoatPoison } };
+  static DEFAULT_OPTIONS = { classes: ["weapon"], actions: { coatPoison: WeaponSheet.#onCoatPoison,
+    addWeaponDamage: WeaponSheet.#onAddDamage, removeWeaponDamage: WeaponSheet.#onRemoveDamage, toggleTwoHands: WeaponSheet.#onToggleTwoHands } };
 
   static #onCoatPoison() {
     return coatWithPoison(this.document);
+  }
+
+  static #onAddDamage() {
+    const rows = foundry.utils.deepClone(this.document.system.weapon?.damage ?? []);
+    return this.document.update({ "system.weapon.damage": [...rows, { label: "", sm: "", l: "", speed: null }] });
+  }
+
+  static #onRemoveDamage(event, target) {
+    const i = Number(target.dataset.index);
+    return this.document.update({ "system.weapon.damage": (this.document.system.weapon?.damage ?? []).filter((_, n) => n !== i) });
+  }
+
+  /** "Two hands regardless of the wielder's size" is the weapon rule "twoHands" (combat-options.mjs needsTwoHands). */
+  static #onToggleTwoHands() {
+    const rules = [...(this.document.system.weapon?.rules ?? [])];
+    return this.document.update({ "system.weapon.rules": rules.includes("twoHands") ? rules.filter(r => r !== "twoHands") : [...rules, "twoHands"] });
+  }
+
+  _processFormData(event, form, formData) {
+    return weaponFormArrays(super._processFormData(event, form, formData));
   }
   static PARTS = { body: { template: "systems/ad2e/templates/item/weapon-sheet.hbs", scrollable: [""] } };
 
@@ -218,6 +270,8 @@ export class WeaponSheet extends AD2EItemSheet {
     const context = await super._prepareContext(options);
     const sys = this.document.system;
     context.weapon = weaponStats(sys.weapon);
+    // Editable statistics (1.0.70) for whoever may edit the sheet, unless the weapon is unidentified to this user.
+    context.weaponEdit = this.isEditable && !context.hidden ? weaponEditContext(sys.weapon ?? {}, k => game.i18n.localize(k)) : null;
     // Weapon proficiency drop-down (module/weapon-proficiencies.mjs, 1.0.68).
     context.profOptions = proficiencyOptions(await weaponProficiencyList(this.document.parent), sys.proficiency,
       (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k)));
@@ -350,13 +404,11 @@ export class SpellSheet extends AD2EItemSheet {
     return this.document.update({ "system.damage": (this.document.system.damage ?? []).filter((_, n) => n !== i) });
   }
 
-  /** Component items to link: the Spell Components compendium (POSM Table 16) and the PHB holy item. */
+  /** Component items to link: the Spell Components (POSM Table 16) and Gems compendiums (module/component-catalog.mjs) and the PHB holy item. */
   static #catalog = null;
   static async catalog() {
     if (SpellSheet.#catalog) return SpellSheet.#catalog;
-    const index = await game.packs?.get("ad2e.components")?.getIndex({ fields: ["system.identifier"] });
-    SpellSheet.#catalog = [HOLY_ITEM, ...[...(index ?? [])].map(e => ({ identifier: e.system?.identifier ?? "", name: e.name }))
-      .filter(c => c.identifier).sort((a, b) => a.name.localeCompare(b.name))];
+    SpellSheet.#catalog = [HOLY_ITEM, ...[...(await componentCatalog())].sort((a, b) => a.name.localeCompare(b.name))];
     return SpellSheet.#catalog;
   }
 

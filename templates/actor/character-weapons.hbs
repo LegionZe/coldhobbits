@@ -3,6 +3,10 @@
 <section class="tab ad2e-tab {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
   {{#with weaponTab as |wt|}}
   <p class="ad2e-note">{{localize "AD2E.Weapon.DragHint"}}</p>
+  {{#if @root.editable}}<div class="ad2e-create-item" data-tooltip="{{localize 'AD2E.Inventory.CreateHint'}}">
+    <select data-create-type aria-label="{{localize 'AD2E.Inventory.CreateType'}}">{{#each wt.createTypes as |c|}}<option value="{{c.type}}">{{c.label}}</option>{{/each}}</select>
+    <button type="button" data-action="createOwnedItem"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Inventory.Create"}}</button>
+  </div>{{/if}}
   {{#with wt.enc as |e|}}
   <fieldset class="ad2e-prof-list">
     <legend>{{localize "AD2E.Enc.Encumbrance"}} &amp; {{localize "AD2E.Move.Movement"}}</legend>
