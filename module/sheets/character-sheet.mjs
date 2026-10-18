@@ -235,6 +235,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleFull: CharacterSheet.onToggleFull,
       toggleLight: CharacterSheet.onToggleLight,
       refillLight: CharacterSheet.onRefillLight,
+      createOwnedItem: CharacterSheet.onCreateOwnedItem,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
@@ -949,7 +950,21 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
     // Inventory tab rows (1.0.47): no attack buttons there (the Combat tab has them).
     const inventoryRows = rows.map(r => ({ ...r, inventory: true }));
     return { rows, inventoryRows, combatRows, combatNote, combatArmor, ammo, armor, enc, coins, gear, magic, treasure, unarmed, ac: acSummary, thac0: sys.thac0.value,
-      containers: containerContext(inv), animals: this._animalsContext(sys) };
+      containers: containerContext(inv), animals: this._animalsContext(sys),
+      createTypes: CharacterSheet.CREATE_TYPES.map(type => ({ type, label: game.i18n.localize(`TYPES.Item.${type}`) })) };
+  }
+
+  /** Item types the Inventory tab can create on the character (owner's request 1.0.70: players add their own items). */
+  static CREATE_TYPES = ["equipment", "weapon", "armor", "ammunition", "magic", "jewellery"];
+
+  /** Create a blank item of the chosen type on the character and open its sheet (owners: players and GMs). */
+  static async onCreateOwnedItem(event, target) {
+    const type = target.closest(".ad2e-create-item")?.querySelector("select[data-create-type]")?.value;
+    if (!CharacterSheet.CREATE_TYPES.includes(type) || !this.isEditable) return null;
+    const name = game.i18n.format("AD2E.Inventory.NewItem", { type: game.i18n.localize(`TYPES.Item.${type}`) });
+    const [item] = await this.actor.createEmbeddedDocuments("Item", [{ name, type }]);
+    item?.sheet?.render(true);
+    return item;
   }
 
   /** Mounts and pack animals (module/animals.mjs): each animal's load with this character's weight when ridden. */

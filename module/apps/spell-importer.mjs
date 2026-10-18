@@ -1,3 +1,4 @@
+import { componentCatalog } from "../component-catalog.mjs";
 import * as wiki from "../importers/adnd2e-wiki.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -23,19 +24,12 @@ async function listAll(params, key) {
 /** World compendium the importer writes to (created on the first import). */
 export const SPELL_PACK = { name: "ad2e-imported-spells", label: "AD2E.SpellImporter.PackLabel" };
 /** System compendium of spell components (POSM Table 16) and the PHB equipment holding the holy item. */
-const COMPONENT_PACK = "ad2e.components";
 
 /**
- * Component catalog for linking ([{ identifier, name }], module/importers/spell-components.mjs): the Spell Components
- * compendium's items, loaded once per session.
+ * Component catalog for linking ([{ identifier, name }], module/importers/spell-components.mjs): the Spell Components and
+ * Gems compendiums (module/component-catalog.mjs), loaded once per session.
  */
-let componentCatalog = null;
-async function components() {
-  if (componentCatalog) return componentCatalog;
-  const index = await game.packs.get(COMPONENT_PACK)?.getIndex({ fields: ["system.identifier"] });
-  componentCatalog = [...(index ?? [])].map(e => ({ identifier: e.system?.identifier ?? "", name: e.name })).filter(c => c.identifier);
-  return componentCatalog;
-}
+const components = () => componentCatalog();
 
 /**
  * GM tool: import spells from the AD&D 2e wiki (https://adnd2e.fandom.com/) by source book, then filter by class

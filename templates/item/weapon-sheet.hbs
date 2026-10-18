@@ -28,6 +28,43 @@
   {{> "ad2e.poison-coat"}}
   <fieldset class="ad2e-weapon-details">
     <legend>{{localize "AD2E.Weapon.Details"}}</legend>
+    {{#with weaponEdit as |we|}}
+    <div class="ad2e-item-fields">
+      <label>{{localize "AD2E.Weapon.Size"}} <select name="system.weapon.size">{{#each we.sizes as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Weapon.Type"}} <input type="text" name="system.weapon.type" value="{{@root.system.weapon.type}}" placeholder="S, P, B, P/S"></label>
+      <label>{{localize "AD2E.Weapon.Speed"}} <input type="number" name="system.weapon.speed" value="{{@root.system.weapon.speed}}" step="1"></label>
+      <label>{{localize "AD2E.Creator.Weapon.Strength.label"}} <select name="system.weapon.strength">{{#each we.strengths as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check"><input type="checkbox" name="system.weapon.melee" {{checked @root.system.weapon.melee}}> {{localize "AD2E.Weapon.melee"}}</label>
+      <label class="ad2e-check"><input type="checkbox" name="system.weapon.missile" {{checked @root.system.weapon.missile}}> {{localize "AD2E.Weapon.missile"}}</label>
+      <label class="ad2e-check"><input type="checkbox" data-action="toggleTwoHands" {{checked we.twoHands}}> {{localize "AD2E.Creator.Weapon.TwoHands"}}</label>
+    </div>
+    <table class="ad2e-weapon-damage-edit">
+      <thead><tr><th>{{localize "AD2E.Creator.Weapon.DamageLabel"}}</th><th>{{localize "AD2E.Weapon.DamageSM"}}</th><th>{{localize "AD2E.Weapon.DamageL"}}</th><th>{{localize "AD2E.Weapon.Speed"}}</th><th></th></tr></thead>
+      <tbody>
+        {{#each we.damage as |d|}}
+        <tr>
+          <td><input type="text" name="system.weapon.damage.{{d.index}}.label" value="{{d.label}}"></td>
+          <td><input type="text" name="system.weapon.damage.{{d.index}}.sm" value="{{d.sm}}" placeholder="1d8"></td>
+          <td><input type="text" name="system.weapon.damage.{{d.index}}.l" value="{{d.l}}" placeholder="1d12"></td>
+          <td><input type="number" name="system.weapon.damage.{{d.index}}.speed" value="{{d.speed}}" step="1"></td>
+          <td><a data-action="removeWeaponDamage" data-index="{{d.index}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    <button type="button" data-action="addWeaponDamage"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Weapon.AddDamage"}}</button>
+    {{#if @root.system.weapon.missile}}
+    <div class="ad2e-item-fields">
+      <label>{{localize "AD2E.Weapon.ROF"}} <input type="text" name="system.weapon.range.rof" value="{{@root.system.weapon.range.rof}}" placeholder="1, 2, 3/2"></label>
+      <label>{{localize "AD2E.Creator.Weapon.Family.label"}} <select name="system.weapon.family">{{#each we.families as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Weapon.Short"}} <input type="text" name="system.weapon.range.short" value="{{@root.system.weapon.range.short}}"></label>
+      <label>{{localize "AD2E.Weapon.Medium"}} <input type="text" name="system.weapon.range.medium" value="{{@root.system.weapon.range.medium}}"></label>
+      <label>{{localize "AD2E.Weapon.Long"}} <input type="text" name="system.weapon.range.long" value="{{@root.system.weapon.range.long}}"></label>
+      <label>{{localize "AD2E.Creator.Weapon.Column"}} <select name="system.weapon.missileColumn">{{#each we.columns as |o|}}<option value="{{o.value}}" {{#if o.selected}}selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Weapon.RangeNote"}}</p>
+    {{/if}}
+    {{else}}
     <dl class="ad2e-weapon-stats">
       <dt>{{localize "AD2E.Weapon.Size"}}</dt><dd>{{weapon.size}}</dd>
       <dt>{{localize "AD2E.Weapon.Type"}}</dt><dd>{{weapon.type}}</dd>
@@ -41,6 +78,7 @@
       <dt>{{localize "AD2E.Weapon.MissileRange"}}</dt><dd>{{weapon.range.short}} / {{weapon.range.medium}} / {{weapon.range.long}}</dd>
       {{/if}}
     </dl>
+    {{/with}}
   </fieldset>
   {{#with attackFx as |fx|}}
   <fieldset class="ad2e-weapon-fx">
