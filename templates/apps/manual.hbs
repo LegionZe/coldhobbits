@@ -167,6 +167,19 @@
   </div>
   <h3>Party, travel and time</h3>
   <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="timekeeper"><i class="fa-solid fa-clock"></i> Timekeeper</button>
+      <p>Floating window: the date, quick time steps, the dungeon turn and travel.</p>
+      <details><summary>Details</summary>
+      <p>Open it with the "Timekeeper" button in the Settings sidebar tab (every user), Shift+T (change it in Configure
+      Controls) or <code>game.ad2e.timekeeper()</code>. It stays where you put it and opens again after a reload until you
+      close it. The top always shows the date and time of day (the Zakharan date when that calendar is on, else Foundry's
+      world calendar), your step buttons (back or forward a day, an hour, a turn of 10 minutes or a round of 1 minute) and
+      the dungeon turn line (turn number, turns since the rest, the rest due or the missed-rest penalty). Minimise the
+      window (double-click its title bar) or use the button beside the time for the compact view with only those three;
+      do it again for the full view. Its tabs: Calendar (travel season; set the year, month and day), Dungeon (start or
+      end the expedition, Next turn, Rest turn, lights lit and the first to go out; the full dungeon turn tracker) and
+      Travel (today's weather, Roll weather, the travel planner and the party). Players see the date and the dungeon line
+      without the controls.</p></details></div>
     <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="party"><i class="fa-solid fa-people-group"></i> Party</button>
       <p>Who is in the party, used by travel, dungeon turns, experience and reactions.</p>
       <details><summary>Details</summary>
@@ -669,6 +682,7 @@
       <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
       <tr><td><code>game.ad2e.party()</code></td><td>Party tracker (who is in the party).</td></tr>
+      <tr><td><code>game.ad2e.timekeeper()</code></td><td>Timekeeper window (date, time steps, dungeon turn, travel).</td></tr>
       <tr><td><code>game.ad2e.calendar()</code></td><td>Zakharan calendar window (when the setting is on).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
       <tr><td><code>game.ad2e.createWeapon()</code></td><td>Weapon creator.</td></tr>

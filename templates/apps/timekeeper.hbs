@@ -1,0 +1,63 @@
+<section class="ad2e-timekeeper-body">
+  <div class="ad2e-timekeeper-now">
+    <span class="ad2e-timekeeper-date">{{date}}</span>
+    <span class="ad2e-timekeeper-clock">{{clock}}</span>
+    <button type="button" class="ad2e-timekeeper-toggle" data-action="compact" data-tooltip="{{#if compact}}{{localize "AD2E.Timekeeper.Expand"}}{{else}}{{localize "AD2E.Timekeeper.Shrink"}}{{/if}}" aria-label="{{#if compact}}{{localize "AD2E.Timekeeper.Expand"}}{{else}}{{localize "AD2E.Timekeeper.Shrink"}}{{/if}}"><i class="fa-solid {{#if compact}}fa-up-right-and-down-left-from-center{{else}}fa-down-left-and-up-right-to-center{{/if}}"></i></button>
+  </div>
+  {{#if isGM}}
+  <div class="ad2e-timekeeper-steps">
+    {{#each steps.back as |s|}}<button type="button" data-action="step" data-seconds="{{s.seconds}}" data-tooltip="{{s.title}}" aria-label="{{s.title}}">{{s.label}}</button>{{/each}}
+    {{#each steps.forward as |s|}}<button type="button" data-action="step" data-seconds="{{s.seconds}}" data-tooltip="{{s.title}}" aria-label="{{s.title}}">{{s.label}}</button>{{/each}}
+  </div>
+  {{/if}}
+  <p class="ad2e-timekeeper-dungeon {{#if dungeon.warn}}ad2e-unmet{{/if}}"><i class="fa-solid fa-dungeon"></i> {{dungeon.text}}</p>
+  {{#unless compact}}
+  <nav class="ad2e-timekeeper-tabs">
+    {{#each tabs as |t|}}<button type="button" data-action="tab" data-tab="{{t.key}}" class="{{#if t.active}}active{{/if}}" aria-pressed="{{#if t.active}}true{{else}}false{{/if}}">{{t.label}}</button>{{/each}}
+  </nav>
+  {{#if isCalendar}}
+  <div class="ad2e-timekeeper-panel">
+    <p>{{localize "AD2E.Calendar.TravelSeason"}}: {{season}}</p>
+    {{#if isGM}}{{#if months}}
+    <div class="ad2e-timekeeper-setdate">
+      <label>{{localize "AD2E.Calendar.Year"}} <input type="number" name="year" value="{{year}}" step="1"></label>
+      <label>{{localize "AD2E.Calendar.Month"}} <select name="month">{{#each months as |m|}}<option value="{{m.value}}" {{#if m.selected}}selected{{/if}}>{{m.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Calendar.Day"}} <input type="number" name="day" value="{{day}}" min="1" step="1"></label>
+      <button type="button" data-action="setDate"><i class="fa-solid fa-calendar-check"></i> {{localize "AD2E.Calendar.SetDate"}}</button>
+    </div>
+    {{/if}}{{/if}}
+    {{#if zakharan}}<div class="ad2e-timekeeper-links"><button type="button" data-action="openCalendar"><i class="fa-solid fa-moon"></i> {{localize "AD2E.Timekeeper.FullCalendar"}}</button></div>{{/if}}
+  </div>
+  {{/if}}
+  {{#if isDungeon}}
+  <div class="ad2e-timekeeper-panel">
+    {{#if isGM}}
+    <div class="ad2e-timekeeper-links">
+      {{#if st.active}}
+      <button type="button" data-action="next"><i class="fa-solid fa-forward-step"></i> {{localize "AD2E.Dungeon.Next"}}</button>
+      <button type="button" data-action="rest"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Dungeon.Rest"}}</button>
+      <button type="button" data-action="end"><i class="fa-solid fa-door-open"></i> {{localize "AD2E.Dungeon.End"}}</button>
+      {{else}}
+      <button type="button" data-action="start"><i class="fa-solid fa-dungeon"></i> {{localize "AD2E.Dungeon.Start"}}</button>
+      {{/if}}
+    </div>
+    {{/if}}
+    <p>{{localize "AD2E.Timekeeper.LightsLit" n=lightCount}}{{#if firstLight}} · {{firstLight}}{{/if}}</p>
+    {{#if isGM}}<div class="ad2e-timekeeper-links"><button type="button" data-action="openDungeon"><i class="fa-solid fa-hourglass-half"></i> {{localize "AD2E.Timekeeper.FullDungeon"}}</button></div>{{/if}}
+  </div>
+  {{/if}}
+  {{#if isTravel}}
+  <div class="ad2e-timekeeper-panel">
+    <p>{{localize "AD2E.Travel.Weather"}}: {{weather}}</p>
+    <p>{{localize "AD2E.Timekeeper.PartyCount" n=partyCount}}</p>
+    {{#if isGM}}
+    <div class="ad2e-timekeeper-links">
+      <button type="button" data-action="rollWeather"><i class="fa-solid fa-cloud-sun-rain"></i> {{localize "AD2E.Travel.RollWeather"}}</button>
+      <button type="button" data-action="openTravel"><i class="fa-solid fa-route"></i> {{localize "AD2E.Timekeeper.FullTravel"}}</button>
+      <button type="button" data-action="openParty"><i class="fa-solid fa-people-group"></i> {{localize "AD2E.Party.Title"}}</button>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
+  {{/unless}}
+</section>

@@ -287,3 +287,26 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-weapon-damage-edit td { padding: 0.1rem 0.2rem; }
 .ad2e-weapon-damage-edit td:nth-child(4) input { width: 3.5rem; }
 .ad2e-weapon-damage-edit td:last-child { width: 1.5rem; text-align: center; }
+/* Timekeeper (1.0.71; own markup, module/apps/timekeeper.mjs): date line, step buttons, dungeon line, tabs; the compact
+   view keeps the first three. */
+.ad2e-timekeeper .window-content { padding: 0.4rem 0.5rem; }
+.ad2e-timekeeper-body { display: flex; flex-direction: column; gap: 0.35rem; }
+.ad2e-timekeeper-now { display: flex; align-items: center; gap: 0.5rem; }
+.ad2e-timekeeper-date { flex: 1 1 auto; min-width: 0; font-weight: bold; }
+.ad2e-timekeeper-clock { flex: none; font-variant-numeric: tabular-nums; }
+.ad2e-timekeeper-toggle { flex: none; width: 1.8rem; height: 1.6rem; padding: 0; }
+.ad2e-timekeeper-steps { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 0.2rem; }
+.ad2e-timekeeper-steps > button { min-width: 0; padding: 0 0.1rem; height: 1.6rem; font-size: 0.85em; white-space: nowrap; }
+.ad2e-timekeeper-dungeon { margin: 0; font-size: 0.9em; }
+.ad2e-timekeeper .ad2e-unmet { color: var(--color-level-error, #c33); }
+.ad2e-timekeeper-tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--color-border, #888); padding-bottom: 0.25rem; }
+.ad2e-timekeeper-tabs > button { flex: 1 1 0; min-width: 0; height: 1.7rem; }
+.ad2e-timekeeper-tabs > button.active { font-weight: bold; box-shadow: inset 0 -2px 0 currentColor; }
+.ad2e-timekeeper-panel > p { margin: 0.2rem 0; }
+.ad2e-timekeeper-setdate { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 0.5rem; }
+.ad2e-timekeeper-setdate label { display: flex; align-items: center; gap: 0.25rem; white-space: nowrap; }
+.ad2e-timekeeper-setdate input[name="year"] { width: 4.5rem; }
+.ad2e-timekeeper-setdate input[name="day"] { width: 3rem; }
+.ad2e-timekeeper-setdate select { width: auto; max-width: 9rem; }
+.ad2e-timekeeper-setdate button, .ad2e-timekeeper-links button { width: auto; flex: 0 0 auto; white-space: nowrap; }
+.ad2e-timekeeper-links { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }

@@ -3721,5 +3721,47 @@
     "Range": "{hireling}'s wage is a range; {amount} (the lower figure) was used: type the exact wage in the cost field.",
     "CannotPay": "{name} does not have {amount}.",
     "ArrearsPaid": "{name} pays {hireling} the {amount} owed."
+  },
+  "AD2E.Timekeeper": {
+    "Title": "Timekeeper",
+    "Open": "Timekeeper",
+    "Key": "Open or close the Timekeeper",
+    "KeyHint": "The floating window with the date, dungeon turns and travel.",
+    "Expand": "Full view",
+    "Shrink": "Compact view",
+    "Step": {
+      "day": "1d",
+      "hour": "1h",
+      "turn": "1t",
+      "round": "1r"
+    },
+    "Back": {
+      "day": "Back one day",
+      "hour": "Back one hour",
+      "turn": "Back one turn (10 minutes)",
+      "round": "Back one round (1 minute)"
+    },
+    "Forward": {
+      "day": "Forward one day",
+      "hour": "Forward one hour",
+      "turn": "Forward one turn (10 minutes)",
+      "round": "Forward one round (1 minute)"
+    },
+    "Tab": {
+      "calendar": "Calendar",
+      "dungeon": "Dungeon",
+      "travel": "Travel"
+    },
+    "NoExpedition": "No dungeon expedition",
+    "Turn": "Dungeon turn {n} ({since} since rest)",
+    "RestNext": "rest next turn",
+    "Fatigue": "missed rest: -{n}",
+    "FirstOut": "first out: {bearer}'s {name} ({n} turns)",
+    "LightsLit": "Lights lit: {n}",
+    "PartyCount": "Party: {n} characters",
+    "FullCalendar": "Zakharan calendar",
+    "FullDungeon": "Dungeon turn tracker",
+    "FullTravel": "Travel planner",
+    "BadDate": "Not a valid date: a whole year, and a day within the month."
   }
 }

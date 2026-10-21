@@ -502,6 +502,14 @@ The owner installs and updates from that manifest URL only (no shell access to t
   pure `restState`, `fatigueFor` -> character `mods.fatigue` in attacks, roll data and checks; `advanceTurn({ rest })`,
   `dungeonTick`). `module/apps/dungeon-turns.mjs` (`DungeonTurnTracker`, menu `ad2e.dungeonTurns`, `game.ad2e.dungeonTurns`,
   manual tool `dungeonTurns`).
+- Timekeeper (owner's request 1.0.71): `module/timekeeper.mjs` (pure `STEPS`, `normalizeState`, `onScreen`, `stepButtons`,
+  `coreDateText` (game.time.components + calendar months/yearZero, as dnd5e SetDateDialog), `componentClock`, `dungeonLine`,
+  `firstOut`) and `module/apps/timekeeper.mjs` (`Timekeeper` singleton `open()` / `toggle()` / `instance`; `minimize()` /
+  `maximize()` overridden to switch the compact view instead of collapsing; client setting `timekeeper` { open, compact, tab,
+  left, top } saved in `_onFirstRender` / `_onPosition` (debounced) / `_onClose`, reopened on ready; key binding
+  `ad2e.timekeeper` (Shift+T); `registerTimekeeper` in init; sidebar button in manual.mjs `renderSettings`; manual tool
+  `timekeeper`; set date: Zakharan `setDate`, else `game.time.calendar.jumpToDate({ year, month, day })`). No settings menu
+  (a menu would build a second instance with the same id).
 - Party (owner's request 1.0.42): `module/party.mjs` (world setting `party` { members: [actor UUIDs] }, onChange hook
   `ad2eParty`; pure `partyUuids`, `addMembers`, `removeMember`, `moveMember`, `resolveMembers`, `isMember`; `partyList`,
   `partyDefined`, `inParty`, `partyActors({ fallback })` = listed members, else player-owned characters (implementation
