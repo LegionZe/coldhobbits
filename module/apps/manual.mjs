@@ -11,6 +11,7 @@ import EncounterTool from "./encounter-tools.mjs";
 import DungeonTurnTracker from "./dungeon-turns.mjs";
 import PartyTracker from "./party-tracker.mjs";
 import ZakharanCalendar from "./calendar.mjs";
+import Timekeeper from "./timekeeper.mjs";
 import NpcBuilder from "./npc-builder.mjs";
 import { quickNpc } from "../quick-npc.mjs";
 import { runSelfCheck } from "../self-check.mjs";
@@ -44,6 +45,7 @@ export const MANUAL_TOOLS = {
   dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
   party: () => new PartyTracker().render({ force: true }),
   calendar: () => new ZakharanCalendar().render({ force: true }),
+  timekeeper: () => Timekeeper.open(),
   createNpc: () => new NpcBuilder().render({ force: true }),
   quickNpc: () => quickNpc(),
   selfCheck: () => runSelfCheck(),
@@ -175,17 +177,18 @@ export function registerManual() {
   Hooks.on("renderSettings", (app, html) => {
     const root = html instanceof HTMLElement ? html : html?.[0];
     if (!root || root.querySelector(".ad2e-manual-button")) return;
-    const make = (cls, icon, label, App) => {
+    const make = (cls, icon, label, open) => {
       const button = document.createElement("button");
       button.type = "button";
       button.classList.add("ad2e-manual-button", cls);
       button.innerHTML = `<i class="${icon}"></i> ${game.i18n.localize(label)}`;
-      button.addEventListener("click", () => new App().render({ force: true }));
+      button.addEventListener("click", open);
       return button;
     };
-    // The player guide for everyone; the GM manual for GMs.
-    const buttons = [make("ad2e-guide-button", "fa-solid fa-book-open-reader", "AD2E.Guide.Open", PlayerGuide)];
-    if (game.user?.isGM) buttons.push(make("ad2e-gm-button", "fa-solid fa-book", "AD2E.Manual.Open", Manual));
+    // The Timekeeper and the player guide for everyone; the GM manual for GMs.
+    const buttons = [make("ad2e-timekeeper-button", "fa-solid fa-clock", "AD2E.Timekeeper.Open", () => Timekeeper.open()),
+      make("ad2e-guide-button", "fa-solid fa-book-open-reader", "AD2E.Guide.Open", () => new PlayerGuide().render({ force: true }))];
+    if (game.user?.isGM) buttons.push(make("ad2e-gm-button", "fa-solid fa-book", "AD2E.Manual.Open", () => new Manual().render({ force: true })));
     const info = root.querySelector(".info");
     if (info) info.after(...buttons);
     else root.append(...buttons);

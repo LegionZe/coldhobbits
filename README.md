@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.70)
+## Status (v1.0.71)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -474,6 +474,19 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   the calendar window shows the season and where each one starts. Implementation choice: the seasons start on the paired
   day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 0-2 days: spring 1, summer 2, fall 2 (later), winter 0).
   The dungeon turn tracker shows the Zakharan date and time of day when the calendar is on (1.0.46, owner's request).
+- Timekeeper (1.0.71; owner's request): a floating window (`module/apps/timekeeper.mjs`, pure helpers in
+  `module/timekeeper.mjs`) for the date, dungeon turns and overland travel, opened from a "Timekeeper" button in the Game
+  Settings sidebar tab (every user), a key binding (Shift+T by default, Configure Controls) or `game.ad2e.timekeeper()`.
+  It persists: a client setting remembers open/closed, position, tab and view, and it reopens on `ready`. Minimising it
+  (ApplicationV2 `minimize()`, the header double-click) shows a compact view instead of only the title bar: the date and
+  time of day (the Zakharan date when that calendar is on; otherwise Foundry's world calendar from `game.time.components`
+  and `game.time.calendar`, read as dnd5e's SetDateDialog does), the GM's step buttons (a day, an hour, a turn of 10
+  minutes (Time and Movement (PHB)), a round of 1 minute (The Combat Round (PHB)), back and forward, through
+  `game.time.advance`) and the dungeon turn line. The full view adds tabs: Calendar (set the date: Zakharan periods, or
+  the world calendar's months via `CalendarData#jumpToDate` as dnd5e's SetDateDialog), Dungeon (start/end, Next turn,
+  Rest turn, lights lit) and Travel (weather, Roll weather, links to the travel planner and party tracker). Players see
+  the date and dungeon line only. Implementation choices: the travel planner stays its own window (the Travel tab links
+  to it); the default key Shift+T.
 - Party tracker (1.0.42; owner's request): a GM "Party" window (Configure Settings, the GM manual, `game.ad2e.party()`)
   lists the party's actors (world setting `party`, actor UUIDs): drag actors from the Actors sidebar, add the selected
   tokens or every player character, reorder or remove; rows show hit points and the henchmen, animals and mount that

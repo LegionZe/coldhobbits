@@ -44,6 +44,7 @@ import { registerDungeonTurns } from "./dungeon-turns.mjs";
 import { registerParty } from "./party.mjs";
 import { registerCalendar } from "./calendar.mjs";
 import ZakharanCalendar from "./apps/calendar.mjs";
+import Timekeeper, { registerTimekeeper } from "./apps/timekeeper.mjs";
 import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
 import { registerSpellEffects } from "./spell-effects.mjs";
@@ -125,6 +126,8 @@ Hooks.once("init", () => {
   game.settings.registerMenu("ad2e", "calendar", {
     name: "AD2E.Calendar.Name", label: "AD2E.Calendar.Open", hint: "AD2E.Calendar.MenuHint", icon: "fa-solid fa-moon", type: ZakharanCalendar, restricted: false
   });
+  // Timekeeper: floating date / dungeon turn / travel window (client setting, key binding; module/timekeeper.mjs).
+  registerTimekeeper();
   registerLights();
   registerSpellEffects();
   registerSpellAnimations();
@@ -168,6 +171,7 @@ Hooks.once("init", () => {
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),
     calendar: () => new ZakharanCalendar().render({ force: true }),
+    timekeeper: () => Timekeeper.open(),
     createNpc: () => new NpcBuilder().render({ force: true }),
     quickNpc: purpose => quickNpc(purpose)
   };
