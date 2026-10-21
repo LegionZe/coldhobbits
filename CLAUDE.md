@@ -510,6 +510,7 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `ad2e.timekeeper` (Shift+T); `registerTimekeeper` in init; sidebar button in manual.mjs `renderSettings`; manual tool
   `timekeeper`; set date: Zakharan `setDate`, else `game.time.calendar.jumpToDate({ year, month, day })`). No settings menu
   (a menu would build a second instance with the same id).
+  Never name an action `close`, `tab` or `toggleControls`: ApplicationV2 handles those itself (1.0.72: tab action `showTab`).
 - Party (owner's request 1.0.42): `module/party.mjs` (world setting `party` { members: [actor UUIDs] }, onChange hook
   `ad2eParty`; pure `partyUuids`, `addMembers`, `removeMember`, `moveMember`, `resolveMembers`, `isMember`; `partyList`,
   `partyDefined`, `inParty`, `partyActors({ fallback })` = listed members, else player-owned characters (implementation

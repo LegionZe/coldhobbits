@@ -13,7 +13,7 @@
   <p class="ad2e-timekeeper-dungeon {{#if dungeon.warn}}ad2e-unmet{{/if}}"><i class="fa-solid fa-dungeon"></i> {{dungeon.text}}</p>
   {{#unless compact}}
   <nav class="ad2e-timekeeper-tabs">
-    {{#each tabs as |t|}}<button type="button" data-action="tab" data-tab="{{t.key}}" class="{{#if t.active}}active{{/if}}" aria-pressed="{{#if t.active}}true{{else}}false{{/if}}">{{t.label}}</button>{{/each}}
+    {{#each tabs as |t|}}<button type="button" data-action="showTab" data-tab="{{t.key}}" class="{{#if t.active}}active{{/if}}" aria-pressed="{{#if t.active}}true{{else}}false{{/if}}">{{t.label}}</button>{{/each}}
   </nav>
   {{#if isCalendar}}
   <div class="ad2e-timekeeper-panel">
