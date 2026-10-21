@@ -28,7 +28,7 @@ export default class Timekeeper extends HandlebarsApplicationMixin(ApplicationV2
     window: { title: "AD2E.Timekeeper.Title", icon: "fa-solid fa-clock", resizable: false },
     position: { width: 440, height: "auto" },
     actions: {
-      step: Timekeeper.#onStep, compact: Timekeeper.#onCompact, tab: Timekeeper.#onTab, setDate: Timekeeper.#onSetDate,
+      step: Timekeeper.#onStep, compact: Timekeeper.#onCompact, showTab: Timekeeper.#onTab, setDate: Timekeeper.#onSetDate,
       start: () => startExpedition(), end: () => endExpedition(), next: () => advanceTurn(), rest: () => advanceTurn({ rest: true }),
       rollWeather: Timekeeper.#onRollWeather,
       openDungeon: () => new DungeonTurnTracker().render({ force: true }),
@@ -163,6 +163,8 @@ export default class Timekeeper extends HandlebarsApplicationMixin(ApplicationV2
 
   static #onCompact() { return this.#setCompact(!this.#compact); }
 
+  // Not "tab": ApplicationV2 handles the actions "close", "tab" and "toggleControls" itself (its tab switching needs data-group),
+  // so a handler of that name never ran (owner's report 1.0.71: the Dungeon and Travel tabs did nothing).
   static #onTab(event, target) {
     this.#tab = TABS.includes(target.dataset.tab) ? target.dataset.tab : "calendar";
     writeState({ tab: this.#tab });
