@@ -310,3 +310,9 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-timekeeper-setdate select { width: auto; max-width: 9rem; }
 .ad2e-timekeeper-setdate button, .ad2e-timekeeper-links button { width: auto; flex: 0 0 auto; white-space: nowrap; }
 .ad2e-timekeeper-links { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.3rem; }
+/* Monster menu (1.0.73; own markup): butchered meat's Cook / Preserve / Eat buttons and status share the gear row's extras
+   cell and wrap inside it instead of spilling into the quantity column. */
+.ad2e-gear-extra.ad2e-meat-controls { flex-wrap: wrap; white-space: normal; row-gap: 0.2rem; max-width: 14rem; }
+.ad2e-meat-controls > .ad2e-weapon-meta { flex-basis: 100%; }
+.ad2e-meat-controls > button { white-space: nowrap; }
+.ad2e-monster-menu input[name="system.menu.flavour"] { min-width: 0; }

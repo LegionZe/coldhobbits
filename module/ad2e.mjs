@@ -45,6 +45,7 @@ import { registerParty } from "./party.mjs";
 import { registerCalendar } from "./calendar.mjs";
 import ZakharanCalendar from "./apps/calendar.mjs";
 import Timekeeper, { registerTimekeeper } from "./apps/timekeeper.mjs";
+import { butcher, createMenuTables, registerMonsterMenu } from "./monster-menu.mjs";
 import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
 import { registerSpellEffects } from "./spell-effects.mjs";
@@ -128,6 +129,8 @@ Hooks.once("init", () => {
   });
   // Timekeeper: floating date / dungeon turn / travel window (client setting, key binding; module/timekeeper.mjs).
   registerTimekeeper();
+  // Monster menu: butchering and eating monsters (world setting, off by default; module/monster-menu.mjs).
+  registerMonsterMenu();
   registerLights();
   registerSpellEffects();
   registerSpellAnimations();
@@ -172,6 +175,8 @@ Hooks.once("init", () => {
     party: () => new PartyTracker().render({ force: true }),
     calendar: () => new ZakharanCalendar().render({ force: true }),
     timekeeper: () => Timekeeper.open(),
+    butcher: monster => butcher(monster ?? undefined),
+    menuTables: () => createMenuTables(),
     createNpc: () => new NpcBuilder().render({ force: true }),
     quickNpc: purpose => quickNpc(purpose)
   };

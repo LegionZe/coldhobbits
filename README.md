@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.72)
+## Status (v1.0.73)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -474,6 +474,24 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   the calendar window shows the season and where each one starts. Implementation choice: the seasons start on the paired
   day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 0-2 days: spring 1, summer 2, fall 2 (later), winter 0).
   The dungeon turn tracker shows the Zakharan date and time of day when the calendar is on (1.0.46, owner's request).
+- Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
+  slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
+  preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by
+  size from Complete Barbarian's Handbook Table 33 (the Hunting table already used by living off the land; Tiny 1 and
+  Gargantuan twice Huge are implementation choices) with a check against the butcher's best of Hunting, Survival or
+  Cooking (failed or none: half spoils); meat is food only (a ration a day, eaten on the road before rations), hit points
+  change only through the menu rolls; Monstrous Manual creatures only. The structure follows Skerples' "Monster Menu"
+  posts (Coins and Scrolls, 2017: https://coinsandscrolls.blogspot.com/2017/07/monster-menu-all-part-1-eating-ad.html,
+  and part 2 for the starving modifier): ordinary meat rolls d6 (+1 well cooked, -4 rotten, +2 starving), intelligent
+  "people" are flagged for the GM, extraplanar and incorporeal creatures leave nothing, and special creatures roll d10.
+  The posts carry no licence, so none of their text is used (owner's ruling): every flavour line and effect is written
+  for this system in AD&D terms (the five saving throws, hit points, rounds and turns), and special creatures share 17
+  themed tables (draconic, petrifying, ooze, undead, fey...) instead of one table each (implementation choice). Meat keeps
+  2 days, 30 once salted or smoked (implementation choices). Results are whispered to the GM; saves are asked on a save
+  request card and their damage comes to the GM with the apply buttons. The GM can override a monster's category, table
+  and taste on its Ecology tab, and copy the tables into editable world roll tables ("Monster menu tables").
+  Fix found on the way: "Foraged food (per day)" (Hunting, Fishing, Survival, 1.0.55) was never counted as food on the
+  road (`rationDays` only matched identifiers containing "ration"); it is now eaten first.
 - Timekeeper (1.0.71; owner's request): a floating window (`module/apps/timekeeper.mjs`, pure helpers in
   `module/timekeeper.mjs`) for the date, dungeon turns and overland travel, opened from a "Timekeeper" button in the Game
   Settings sidebar tab (every user), a key binding (Shift+T by default, Configure Controls) or `game.ad2e.timekeeper()`.

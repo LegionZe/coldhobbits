@@ -511,6 +511,21 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `timekeeper`; set date: Zakharan `setDate`, else `game.time.calendar.jumpToDate({ year, month, day })`). No settings menu
   (a menu would build a second instance with the same id).
   Never name an action `close`, `tab` or `toggleControls`: ApplicationV2 handles those itself (1.0.72: tab action `showTab`).
+- Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
+  (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
+  `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`
+  d10 bands { range, save, damage, half, heal, lost } (bands must cover -10..20 once), `MODIFIERS`, `EXTRA_RATIONS` (T, G),
+  `KEEP`, `MEAT_ID` "monster-meat"; texts in lang block `AD2E.Menu` (Flavour.<key>, Effect.<table>.<index>, Theme, Category).
+  `module/monster-menu.mjs` (pure `creatureFor`, `menuOf` (monster `system.menu` { category, theme, flavour } overrides),
+  `sizeLetter`, `rationFormula`, `butcherCheck`, `keptRations`, `goodUntil`, `isRotten`, `mealModifiers`, `resultIndex`,
+  `worldMenuTables`, `tableResultData`; `butcher` / `butcherWith` (meat item flag `ad2e.meat` { source, uuid, key, category,
+  theme, flavour, at, preservedAt, cooked }; card flag `ad2e.butchered` -> active GM sets monster flag `ad2e.butchered`),
+  `cookMeat`, `preserveMeat`, `eatMeat` (character `system.survival.fedAt`), `mealEffect` (GM whisper; world RollTable flagged
+  `ad2e.menuTable` replaces texts, results flagged `ad2e.menuEffect` keep mechanics), save kind "meal" `mealSave`,
+  `createMenuTables`, `registerMonsterMenu`). travel-days.mjs: `rationDays` counts `foraged-food-per-day` and `MEAT_ID`;
+  `eatPlan` order foraged, meat by `goodUntil`, rest; `supplyEater` skips food when `fedAt` is within a day and calls
+  `mealEffect` for meat eaten. Sheets: monster header `butcher`, Ecology tab fieldset; character gear row `r.meat`
+  (`.ad2e-meat-controls`, actions cookMeat / preserveMeat / eatMeat). Manual tools `butcher`, `menuTables`.
 - Party (owner's request 1.0.42): `module/party.mjs` (world setting `party` { members: [actor UUIDs] }, onChange hook
   `ad2eParty`; pure `partyUuids`, `addMembers`, `removeMember`, `moveMember`, `resolveMembers`, `isMember`; `partyList`,
   `partyDefined`, `inParty`, `partyActors({ fallback })` = listed members, else player-owned characters (implementation
