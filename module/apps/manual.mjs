@@ -12,6 +12,7 @@ import DungeonTurnTracker from "./dungeon-turns.mjs";
 import PartyTracker from "./party-tracker.mjs";
 import ZakharanCalendar from "./calendar.mjs";
 import Timekeeper from "./timekeeper.mjs";
+import { butcher, createMenuTables } from "../monster-menu.mjs";
 import NpcBuilder from "./npc-builder.mjs";
 import { quickNpc } from "../quick-npc.mjs";
 import { runSelfCheck } from "../self-check.mjs";
@@ -46,6 +47,8 @@ export const MANUAL_TOOLS = {
   party: () => new PartyTracker().render({ force: true }),
   calendar: () => new ZakharanCalendar().render({ force: true }),
   timekeeper: () => Timekeeper.open(),
+  butcher: () => butcher(),
+  menuTables: () => createMenuTables(),
   createNpc: () => new NpcBuilder().render({ force: true }),
   quickNpc: () => quickNpc(),
   selfCheck: () => runSelfCheck(),

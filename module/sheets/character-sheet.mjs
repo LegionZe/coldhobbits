@@ -2,6 +2,8 @@ import { cancelTraining, startTraining, trainingCheck, trainingContext } from ".
 import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
 import { lightItem, lightSpec, putOut, refillLantern, turnsLeft } from "../lights.mjs";
+import { cookMeat, eatMeat, isRotten, meatStatus, menuOn, preserveMeat } from "../monster-menu.mjs";
+import { MEAT_ID } from "../rules/menu-tables.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { languageSettings, languageStatus, languageSuggestions } from "../languages.mjs";
 import { maxAgeFormula, rollMaxAge, rollStartingAge, startingAgeFormula } from "../aging.mjs";
@@ -235,6 +237,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       toggleFull: CharacterSheet.onToggleFull,
       toggleLight: CharacterSheet.onToggleLight,
       refillLight: CharacterSheet.onRefillLight,
+      cookMeat: CharacterSheet.onCookMeat, preserveMeat: CharacterSheet.onPreserveMeat, eatMeat: CharacterSheet.onEatMeat,
       createOwnedItem: CharacterSheet.onCreateOwnedItem,
       adjustPrepared: CharacterSheet.onAdjustPrepared,
       castSpell: CharacterSheet.onCastSpell,
@@ -916,6 +919,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         summary: equipmentSummary(i.system), inside: insideText(inv, i), contained: inContainer(inv, i),
         liquid: i.system.liquid?.fullWeight !== null && i.system.liquid?.fullWeight !== undefined, full: !!i.system.liquid?.full,
         light: lightSpec(i) ? { lit: !!i.system.light?.lit, turns: turnsLeft(i, game.time?.worldTime ?? 0), lantern: lightSpec(i).per === "pint" } : null,
+        // Butchered meat (module/monster-menu.mjs): cook, preserve, eat.
+        meat: menuOn() && i.system.identifier === MEAT_ID && i.getFlag?.("ad2e", "meat") ? { status: meatStatus(i),
+          rotten: isRotten(i.getFlag("ad2e", "meat"), game.time?.worldTime ?? 0), preserved: Number.isFinite(i.getFlag("ad2e", "meat").preservedAt) } : null,
         total: (i.system.unitWeight ?? i.system.weight) && i.system.quantity > 1
           ? Math.round((i.system.unitWeight ?? i.system.weight) * i.system.quantity * 10) / 10 : null
       })).sort((x, y) => x.name.localeCompare(y.name))
@@ -1902,6 +1908,22 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   static onRefillLight(event, target) {
     const item = this.actor.items.get(target.dataset.itemId);
     return item ? refillLantern(this.actor, item) : null;
+  }
+
+  /** Butchered meat (module/monster-menu.mjs): cook it, salt or smoke it, eat a ration. */
+  static onCookMeat(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item ? cookMeat(this.actor, item) : null;
+  }
+
+  static onPreserveMeat(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item ? preserveMeat(this.actor, item) : null;
+  }
+
+  static onEatMeat(event, target) {
+    const item = this.actor.items.get(target.dataset.itemId);
+    return item ? eatMeat(this.actor, item) : null;
   }
 
   /** A liquid container (e.g. a waterskin): fill it or empty it; full, it weighs its full weight. */

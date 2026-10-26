@@ -64,6 +64,9 @@ export default class MonsterData extends foundry.abstract.TypeDataModel {
       })),
       attacksText: text(), damageText: text(), specialAttacks: text(), specialDefenses: text(),
       magicResistance: text(), size: text(),
+      // Monster menu (module/monster-menu.mjs, 1.0.73): category, menu table and taste, "" = from the creature's name.
+      menu: new SchemaField({ category: new StringField({ required: true, blank: true, initial: "" }),
+        theme: new StringField({ required: true, blank: true, initial: "" }), flavour: new StringField({ required: true, blank: true, initial: "" }) }),
       // Critical hit target type (Combat & Tactics System II; module/criticals.mjs): "" = monster (the default category).
       bodyType: new StringField({ required: true, blank: true, initial: "", choices: ["humanoid", "animal", "monster"] }),
       // Magic resistance lowered at will (module/magic-resistance.mjs): no roll against spells.

@@ -7,6 +7,8 @@ import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import { mountTrained } from "../combat-options.mjs";
 import { pushMount, pushText } from "../animals.mjs";
+import { butcher, flavourText, menuOf, menuOn } from "../monster-menu.mjs";
+import { CATEGORIES, THEMES } from "../rules/menu-tables.mjs";
 import { weaponAnimation } from "../weapon-animations.mjs";
 import { attackSounds } from "../sound-effects.mjs";
 import { readSigned, signedText, warnUnreadable } from "../signed-number.mjs";
@@ -59,6 +61,7 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
       rollUnarmed: MonsterSheet.onRollUnarmed,
       rollReaction: MonsterSheet.onRollReaction,
       rollTreasure: MonsterSheet.onRollTreasure,
+      butcher: MonsterSheet.onButcher,
       takeOut: MonsterSheet.onTakeOut,
       neutralizePoison: MonsterSheet.onNeutralizePoison
     }
@@ -110,6 +113,21 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
     context.isFollower = this.document.system.role === "follower";
     context.poisonClasses = Object.fromEntries(Object.keys(POISON.classes).map(k => [k, poisonLabel(k)]));
     context.pushText = pushText(this.document);
+    // Monster menu (module/monster-menu.mjs): Butcher once dead; the category, menu table and taste on the Ecology tab.
+    if (menuOn()) {
+      const m = menuOf(actor);
+      const dead = !!sys.hp?.dead || (sys.hp?.value ?? 1) <= 0;
+      const fmt = (k, d) => game.i18n.format(k, d);
+      context.menu = {
+        canButcher: dead && m.category !== "inedible" && !actor.getFlag?.("ad2e", "butchered"),
+        butchered: !!actor.getFlag?.("ad2e", "butchered"),
+        categories: [{ value: "", label: fmt("AD2E.Menu.Category.auto", { category: i18n(`AD2E.Menu.Category.${m.auto.category}`) }), selected: !sys.menu?.category },
+          ...CATEGORIES.map(c => ({ value: c, label: i18n(`AD2E.Menu.Category.${c}`), selected: sys.menu?.category === c }))],
+        themes: [{ value: "", label: i18n("AD2E.Menu.Theme.auto"), selected: !sys.menu?.theme },
+          ...["normal", ...Object.keys(THEMES)].map(t => ({ value: t, label: i18n(`AD2E.Menu.Theme.${t}`), selected: sys.menu?.theme === t }))],
+        flavour: sys.menu?.flavour ?? "", placeholder: flavourText({ ...m, flavour: "" }, game.i18n.localize.bind(game.i18n))
+      };
+    }
     context.trainedChoices = { yes: "AD2E.Mounted.Trained.yes", no: "AD2E.Mounted.Trained.no" };
     context.trainedAuto = game.i18n.localize(mountTrained(this.document) ? "AD2E.Mounted.Trained.autoYes" : "AD2E.Mounted.Trained.autoNo");
     context.saveGroups = AD2E.classGroups;
@@ -255,6 +273,8 @@ export default class MonsterSheet extends HandlebarsApplicationMixin(ActorSheetV
   static onRollMorale() { return this.document.rollMorale(); }
   /** GM: roll the stat block's treasure types (module/treasure.mjs). */
   static onRollTreasure() { return rollTreasureDialog(this.document); }
+
+  static onButcher() { return butcher(this.document); }
   static onRollHp() { return this.document.rollMonsterHitPoints(); }
   static onAddAttack() {
     return this.document.update({ "system.attacks": [...this.document.system.attacks, { name: "Attack", damage: "1d6", bonus: 0, element: "" }] });

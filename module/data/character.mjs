@@ -288,6 +288,8 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
         // Living off the land (module/forage.mjs): water found with Survival (world time; covers the next travel day) and
         // the Survival categories tried today (one a day each; a failure ends the day's attempts).
         waterFoundAt: new NumberField({ required: false, nullable: true, initial: null }),
+        // A meal of butchered meat eaten with "Eat" (module/monster-menu.mjs, world time): the day's food (travel-days.mjs).
+        fedAt: new NumberField({ required: false, nullable: true, initial: null }),
         forage: new SchemaField({ day: new NumberField({ required: false, nullable: true, integer: true, initial: null }),
           tried: new ArrayField(new StringField()) })
       }),

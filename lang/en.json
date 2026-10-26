@@ -3763,5 +3763,253 @@
     "FullDungeon": "Dungeon turn tracker",
     "FullTravel": "Travel planner",
     "BadDate": "Not a valid date: a whole year, and a day within the month."
+  },
+  "AD2E.Menu": {
+    "Setting": "Monster menu (butchering and eating monsters)",
+    "SettingHint": "Optional: butcher slain monsters for meat (rations by size, a Hunting, Survival or Cooking check), cook, preserve and eat it; ordinary meat rolls d6 and special creatures roll on their own d10 tables for good and bad effects.",
+    "Title": "Monster menu",
+    "Category": {
+      "label": "Menu",
+      "auto": "Automatic ({category})",
+      "normal": "Normal meat",
+      "rare": "Rare meat",
+      "vermin": "Insects and vermin",
+      "people": "People",
+      "special": "Special",
+      "inedible": "Nothing to eat"
+    },
+    "Theme": {
+      "label": "Menu table",
+      "auto": "Automatic",
+      "normal": "Normal meat",
+      "beast": "Magical beast",
+      "draconic": "Draconic",
+      "petrifying": "Petrifying",
+      "aberrant": "Aberrant",
+      "ooze": "Ooze",
+      "fungal": "Fungal",
+      "undead": "Undead",
+      "celestial": "Celestial",
+      "fey": "Fey",
+      "venomous": "Venomous",
+      "paralytic": "Paralytic",
+      "regenerating": "Regenerating",
+      "shapechanger": "Shapechanger",
+      "parasite": "Parasites",
+      "flickering": "Flickering",
+      "fiery": "Fiery",
+      "foul": "Foul"
+    },
+    "FlavourLabel": "Taste",
+    "FlavourHint": "Leave empty for the menu's own description.",
+    "Butcher": "Butcher",
+    "ButcherHint": "Cut this creature up for meat: rations by size (Complete Barbarian's Handbook Table 33), a Hunting, Survival or Cooking check keeps it all.",
+    "ButcherTitle": "Butcher {name}",
+    "Butcherer": "Butcher",
+    "NoButcher": "No character to do the butchering: you need an owned character (players) or a party member or player character (GM).",
+    "Alive": "{name} is not dead.",
+    "AlreadyButchered": "{name} has already been butchered.",
+    "NothingToEat": "{name} leaves nothing to eat.",
+    "Inedible": "Nothing edible: {flavour}",
+    "SizeLine": "Size {size}: {formula} rations{rending}.",
+    "Rending": " (Animal Rending)",
+    "Check": "{name}: {prof} check, roll {roll} under {target}: {result}.",
+    "NoCheck": "{name} has none of Hunting, Survival or Cooking: half the meat is spoilt.",
+    "Spoilt": "Half spoilt: {kept} of {total} rations kept.",
+    "Kept": "All {total} rations kept.",
+    "Result": "{butcher} butchers {name}: {n} rations of meat.",
+    "PeopleNote": "These are intelligent creatures: most peoples count eating them as an evil act, and the GM decides what follows.",
+    "MeatName": "Meat: {name}",
+    "Fresh": "fresh until {date}",
+    "Preserved": "preserved until {date}",
+    "Rotten": "rotten",
+    "Cooked": "cooked",
+    "WellCooked": "well cooked",
+    "Raw": "raw",
+    "Cook": "Cook",
+    "CookHint": "Cook this meat: a Cooking check makes it well cooked (+1 on the menu roll).",
+    "CookCheck": "{name} cooks {meat}: Cooking check, roll {roll} under {target}: {result}.",
+    "CookPlain": "{name} cooks {meat} (no Cooking proficiency: cooked, no bonus).",
+    "Preserve": "Preserve",
+    "PreserveHint": "Salt or smoke this meat (about a day's work): it keeps for 30 days instead of 2.",
+    "PreservedDone": "{name} salts and smokes {meat}: it keeps until {date}.",
+    "RottenCannot": "{meat} is already rotten.",
+    "Eat": "Eat",
+    "EatHint": "Eat one ration of this meat: a day's food; the menu roll decides any other effect.",
+    "Ate": "{name} eats {meat}. {flavour}",
+    "GmRoll": "{name}, {meat} ({table}): roll {roll}{mods} = {total}. {effect}",
+    "ModCooked": "well cooked",
+    "ModRotten": "rotten",
+    "ModStarving": "starving",
+    "Healed": "{name} regains {n} hit points.",
+    "MealLost": "The meal gives no nourishment (it does not count as food).",
+    "SaveTitle": "{name}: save vs. {save} (a meal)",
+    "SaveFailedDamage": "{name} fails the save against {meat}: {damage} damage.",
+    "SaveHalfDamage": "{name} saves against {meat}: half damage, {damage}.",
+    "SaveFailed": "{name} fails the save against {meat}: {effect}",
+    "SaveMade": "{name} saves against {meat}.",
+    "TravelAte": "{name} ate {meat} on the road.",
+    "MakeTables": "Create editable menu tables",
+    "MakeTablesHint": "Write the normal-meat table and every themed table as roll tables in a \"Monster menu\" folder. Edit their texts and ranges there: the menu rolls on these tables (by name) when they exist; each built-in result keeps its saves, damage and healing.",
+    "TablesMade": "{n} monster menu tables created in the folder \"{folder}\".",
+    "TablesExist": "The monster menu tables already exist ({n}); delete them to create fresh copies.",
+    "FolderName": "Monster menu",
+    "TableName": "Monster menu: {theme}",
+    "Off": "The monster menu is off: turn on \"Monster menu (butchering and eating monsters)\" in Configure Settings.",
+    "Select": "Target or select a slain monster's token first.",
+    "Flavour": {
+      "extraplanar": "The body falls apart into smoke, sulphur, slush or nothing at all; there is no meat to cut.",
+      "incorporeal": "There is nothing solid to cut, only a chill where it was.",
+      "bones": "Bone, stone or iron: no flesh to cut, however hungry you are.",
+      "basilisk": "Pale, firm flesh like river fish that has sat in the sun; the jaw muscles grind as you chew.",
+      "cockatrice": "Thin, gamey bird meat that leaves a chalky film on the tongue.",
+      "gorgon": "Dense dark beef with a metallic edge, as if it had been cooked on a hot iron.",
+      "medusa": "Sweet pale meat; the hair-snakes are bitter and best thrown away.",
+      "beholder": "Rubbery, wet and fizzing; every mouthful seems to look back.",
+      "floatingEye": "A jelly-like eye with a salty, oyster-like taste and an afterimage that lingers.",
+      "mindFlayer": "Soft grey meat smelling of low tide; your thoughts feel crowded while you eat.",
+      "brainEater": "Spongy, faintly sweet tissue that hums in the teeth.",
+      "umberHulk": "Hard, sour meat inside a shell you need a hammer to open; your eyes swim as you eat.",
+      "ooze": "It quivers in the pot and stings the lips; whatever it is, it is not quite dead.",
+      "fungus": "Earthy and woody, like overgrown mushrooms; the spores catch in the throat.",
+      "ghoul": "Grey, cold meat that numbs the tongue and smells of the grave.",
+      "carrionCrawler": "Pale, sweet worm-flesh; the tentacles make the lips tingle and go numb.",
+      "undead": "Dry, stringy and cold whatever the fire does; it smells of dust and old cloth.",
+      "smallDragon": "A few mouthfuls of rich, smoky meat with a spark on the tongue.",
+      "dragon": "Rich, dark and smoky meat, hot in the belly long after the meal.",
+      "chimera": "Lion, goat and dragon in one pot: tough, gamey and smoky by turns.",
+      "wyvern": "Firm white meat like a great lizard's; the tail must be cut away before anything else.",
+      "manticore": "Strong, lion-like meat; the spiked tail is full of poison.",
+      "purpleWorm": "Endless pale, rubbery meat; the sting at the tail end is deadly.",
+      "catoblepas": "Bitter, swampy beef that leaves the eaters drowsy and gloomy.",
+      "troll": "Rank green meat that twitches in the pot and smells of bog.",
+      "hydra": "Tough reptile meat; the necks are fatty and keep jerking long after the heads are gone.",
+      "celestial": "Clean, sweet meat with a light, bright scent; it is hard not to feel watched.",
+      "fey": "Light and sweet like honeyed fowl, and gone almost before you taste it.",
+      "shapechanger": "The texture changes as you chew: now pork, now fowl, now something you cannot name.",
+      "parasite": "Tiny, wriggling and bitter; some of it is still alive.",
+      "displacer": "Lean, catlike meat; the plate never seems to be quite where you reach.",
+      "fiery": "Hot to the touch long after the fire is out, and peppery enough to make the eyes water.",
+      "foul": "The stench alone turns the stomach; whatever is boiled out of it tastes worse.",
+      "rustMonster": "Lean, pale meat with a taste of old coins and wet iron.",
+      "magicalBeast": "Strong, dark game meat with a faint tang of magic.",
+      "jellyfish": "Clear, salty jelly that stings everywhere it touches.",
+      "giant": "Coarse, fatty meat in huge joints; it needs a long day of stewing.",
+      "ogre": "Greasy, sour meat smelling of smoke and stale ale.",
+      "goblinoid": "Fatty, gamey meat with a sour aftertaste.",
+      "reptilePeople": "Pale meat between fish and fowl, with many small bones.",
+      "fishPeople": "Oily sea-fish meat with a briny skin.",
+      "beastPeople": "Horse or bull at one end, something else at the other.",
+      "demihuman": "Ordinary fatty pork, by most accounts.",
+      "insect": "Crunchy, bitter flesh under a shell, with a sharp, vinegary aftertaste.",
+      "shellfish": "Rubbery, faintly fishy meat in a hard shell or a slimy skin.",
+      "bigGame": "Mountains of tough, dense meat; it needs half a day of boiling.",
+      "predator": "Stringy, strong-tasting meat; hunters' meat rather than a feast.",
+      "bigBird": "Plenty of dark fowl, tough in the legs.",
+      "seaHorse": "Thin, chewy strips that taste of the sea.",
+      "fish": "Fish: flaky and plain.",
+      "seaMammal": "Oily, fatty meat with a layer of blubber.",
+      "reptile": "Pale meat between chicken and fish, with many small bones.",
+      "cephalopod": "Chewy, rubbery white meat; good grilled.",
+      "beef": "Beef: dense and plain.",
+      "mutton": "Mutton: fatty and strong.",
+      "pork": "Pork, lean or fatty depending on the beast.",
+      "venison": "Venison: lean and dark.",
+      "horse": "Stringy, slightly sweet meat with a lot of gristle.",
+      "fowl": "Plain fowl, tougher than a farmyard bird.",
+      "unknown": "Unfamiliar meat; nobody is quite sure what it is."
+    },
+    "Effect": {
+      "normal": {
+        "0": "Bad meat: save vs. poison or the meal does not stay down (no nourishment) and the eater feels sick for the rest of the day.",
+        "1": "Nothing unusual.",
+        "2": "A good meal: 1 hit point regained."
+      },
+      "beast": {
+        "0": "Tough and gristly: save vs. poison or the meal does not stay down (no nourishment).",
+        "1": "Nothing unusual.",
+        "2": "A hearty meal: 1d2 hit points regained."
+      },
+      "draconic": {
+        "0": "The blood burns: 1d6 damage (save vs. breath weapon for half).",
+        "1": "Nothing unusual.",
+        "2": "Fire in the belly: +2 on saving throws vs. this creature's kind of breath weapon for the next day.",
+        "3": "Dragon's vigour: 1d6 hit points regained."
+      },
+      "petrifying": {
+        "0": "The flesh stiffens the limbs: save vs. petrification or -2 to initiative and Dexterity checks for 1d6 hours.",
+        "1": "Nothing unusual.",
+        "2": "Stone in the gut: +1 on saving throws vs. petrification for the next day."
+      },
+      "aberrant": {
+        "0": "Alien thoughts: save vs. spell or be confused (as the spell) for 1d4 rounds.",
+        "1": "Nothing unusual.",
+        "2": "Strange dreams that night: the GM may give a glimpse of something far away.",
+        "3": "An opened mind: the next Intelligence or Wisdom check within a day gains +2."
+      },
+      "ooze": {
+        "0": "It is still alive: save vs. poison or 2d6 acid damage, and the meal is lost.",
+        "1": "Nothing unusual, if hardly a meal.",
+        "2": "It settles well: no illness for a week (the GM decides what that covers)."
+      },
+      "fungal": {
+        "0": "Spores: save vs. poison or 1d6 damage and a cough for a turn (-1 to attack rolls).",
+        "1": "Nothing unusual.",
+        "2": "Earthy and filling: 1 hit point regained."
+      },
+      "undead": {
+        "0": "Grave rot: save vs. death magic or 1d6 damage, and the meal is lost.",
+        "1": "Dead meat: it gives no nourishment.",
+        "2": "Somehow it does no harm."
+      },
+      "celestial": {
+        "0": "A curse for eating it: save vs. spell or -1 on saving throws for a week.",
+        "1": "Nothing unusual.",
+        "2": "A blessing all the same: 1d4 hit points regained."
+      },
+      "fey": {
+        "0": "Glamoured: save vs. spell or giddy and distracted for a turn (-1 to attack rolls and checks).",
+        "1": "Nothing unusual.",
+        "2": "Sweet and light: 1 hit point regained."
+      },
+      "venomous": {
+        "0": "Venom left in the meat: save vs. poison or 2d4 damage.",
+        "1": "Nothing unusual.",
+        "2": "A numb tongue for an hour, and no harm."
+      },
+      "paralytic": {
+        "0": "Numbing flesh: save vs. paralyzation or be paralyzed for 1d4 turns.",
+        "1": "Nothing unusual.",
+        "2": "Only the lips go numb, for a while."
+      },
+      "regenerating": {
+        "0": "It keeps growing: save vs. poison or 1d4 damage, and the meal is lost.",
+        "1": "Nothing unusual.",
+        "2": "Some of its vigour passes on: 1d4 hit points regained."
+      },
+      "shapechanger": {
+        "0": "Features blur: save vs. polymorph or the eater's face and voice shift oddly for 1d6 hours (-2 on reaction rolls).",
+        "1": "Nothing unusual.",
+        "2": "For an hour the eater can mimic one voice heard that day."
+      },
+      "parasite": {
+        "0": "Live young in the meat: save vs. poison or 1d4 damage (the GM may rule a disease).",
+        "1": "Nothing unusual."
+      },
+      "flickering": {
+        "0": "The world flickers: save vs. spell or -1 to attack rolls for a turn.",
+        "1": "Nothing unusual.",
+        "2": "Hard to pin down: +1 to Armor Class for 1 turn, once within the next day."
+      },
+      "fiery": {
+        "0": "Still burning: 1d6 fire damage (save vs. breath weapon for half).",
+        "1": "Nothing unusual.",
+        "2": "Warm through: cold weather does not trouble the eater for a day."
+      },
+      "foul": {
+        "0": "It comes straight back up: save vs. poison or retch helplessly for 1d4 rounds; no nourishment.",
+        "1": "Choked down, but it gives no nourishment."
+      }
+    }
   }
 }

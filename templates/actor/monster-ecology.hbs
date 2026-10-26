@@ -7,4 +7,15 @@
       {{/each}}
     </div>
   </fieldset>
+  {{#if menu}}
+  <fieldset class="ad2e-monster-menu">
+    <legend>{{localize "AD2E.Menu.Title"}}</legend>
+    <div class="ad2e-form-grid">
+      <label>{{localize "AD2E.Menu.Category.label"}}</label><select name="system.menu.category">{{#each menu.categories as |c|}}<option value="{{c.value}}" {{#if c.selected}}selected{{/if}}>{{c.label}}</option>{{/each}}</select>
+      <label>{{localize "AD2E.Menu.Theme.label"}}</label><select name="system.menu.theme">{{#each menu.themes as |t|}}<option value="{{t.value}}" {{#if t.selected}}selected{{/if}}>{{t.label}}</option>{{/each}}</select>
+      <label>{{localize "AD2E.Menu.FlavourLabel"}}</label><input type="text" name="system.menu.flavour" value="{{menu.flavour}}" placeholder="{{menu.placeholder}}" data-tooltip="{{localize 'AD2E.Menu.FlavourHint'}}">
+    </div>
+    {{#if menu.butchered}}<p class="ad2e-note">{{localize "AD2E.Menu.AlreadyButchered" name=actor.name}}</p>{{/if}}
+  </fieldset>
+  {{/if}}
 </section>

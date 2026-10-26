@@ -1,3 +1,5 @@
+import { goodUntil, mealEffect } from "./monster-menu.mjs";
+import { MEAT_ID } from "./rules/menu-tables.mjs";
 import { zakharanDate } from "./calendar.mjs";
 import { SURVIVAL_TABLES } from "./rules/survival-tables.mjs";
 
@@ -70,8 +72,22 @@ export function survivalLoss(s) {
 /** Days of food one unit of an item holds: rations "-per-week" 7, "-per-day" 1; 0 = not food (pure). */
 export function rationDays(item) {
   const id = String(item?.system?.identifier ?? "");
-  if (item?.type !== "equipment" || !/ration/.test(id)) return 0;
+  if (item?.type !== "equipment") return 0;
+  // Foraged food (module/forage.mjs) and butchered meat (module/monster-menu.mjs) are a day a unit. Foraged food was left
+  // out by the "ration" test until 1.0.73, so it was never eaten on the road.
+  if (id === FORAGED_ID || id === MEAT_ID) return 1;
+  if (!/ration/.test(id)) return 0;
   return /per-week/.test(id) ? 7 : 1;
+}
+
+const FORAGED_ID = "foraged-food-per-day";
+
+/** Eating order (pure): foraged food, then butchered meat (the soonest to rot first), then everything else. */
+function eatRank(item) {
+  const id = item.system?.identifier;
+  if (id === FORAGED_ID) return [0, 0];
+  if (id === MEAT_ID) return [1, goodUntil(item.flags?.ad2e?.meat ?? item.getFlag?.("ad2e", "meat"))];
+  return [2, 0];
 }
 
 /** The system's animal feed item identifier (one day per unit). */
@@ -100,10 +116,10 @@ export function foodDays(items, days = rationDays) {
 
 /** Item updates eating `days` days of food, or null when there is not enough (pure; opened units first). */
 export function eatPlan(items, days = 1, perUnit = rationDays) {
-  // Foraged food first (module/forage.mjs), then opened units.
-  const foraged = i => i.system?.identifier === "foraged-food-per-day" ? 0 : 1;
+  // Foraged food first (module/forage.mjs), then butchered meat by when it rots (module/monster-menu.mjs), then opened units.
   const foods = [...(items ?? [])].filter(i => perUnit(i) && (i.system?.quantity ?? 0) > 0)
-    .sort((a, b) => foraged(a) - foraged(b) || (a.system?.supply?.left == null) - (b.system?.supply?.left == null));
+    .sort((a, b) => { const ra = eatRank(a), rb = eatRank(b);
+      return ra[0] - rb[0] || ra[1] - rb[1] || (a.system?.supply?.left == null) - (b.system?.supply?.left == null); });
   if (foodDays(foods, perUnit) + 1e-9 < days) return null;
   const updates = [];
   let need = days;
@@ -360,15 +376,28 @@ export async function supplyEater(actor, { sources = [actor], animal = false, ga
   // Food: one day (animals: their size's feed units), from the first inventory that has it all (grazing animals need none).
   const meal = animal ? feed : 1;
   let fed = (animal && graze) || meal <= 0;
+  // A character who ate a meal of butchered meat in the last day ("Eat", module/monster-menu.mjs) needs no more food today.
+  const fedAt = !animal && actor.type === "character" ? actor.system?.survival?.fedAt : null;
+  const ateToday = Number.isFinite(fedAt) && (game.time?.worldTime ?? 0) - fedAt <= DAY;
+  if (ateToday) fed = true;
   let from = null;
+  const meals = [];
   if (!fed) for (const src of sources) {
     const eat = eatPlan(src.items, meal, perUnit);
     if (!eat) continue;
+    // Butchered meat eaten: the menu roll for each ration (module/monster-menu.mjs), after the update.
+    for (const u of eat) {
+      const item = src.items.get?.(u._id) ?? [...src.items].find(i => i.id === u._id);
+      const meat = item?.system?.identifier === MEAT_ID ? (item.flags?.ad2e?.meat ?? item.getFlag?.("ad2e", "meat")) : null;
+      const n = meat ? Math.max((item.system.quantity ?? 0) - (u["system.quantity"] ?? 0), 0) : 0;
+      for (let k = 0; k < n; k++) meals.push({ name: item.name, meat });
+    }
     if (eat.length) await src.updateEmbeddedDocuments("Item", eat);
     fed = true;
     from = src;
     break;
   }
+  for (const m of meals) await mealEffect(actor, m, { travel: true });
   // Water: water found with Survival in the last day covers it (module/forage.mjs); else from each inventory in turn.
   let drunk = 0;
   const foundAt = actor.type === "character" ? actor.system?.survival?.waterFoundAt : null;

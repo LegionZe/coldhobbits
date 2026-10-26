@@ -111,6 +111,30 @@
   </div>
   <h3>At the table</h3>
   <div class="ad2e-manual-tools">
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="butcher"><i class="fa-solid fa-drumstick-bite"></i> Butcher a monster</button>
+      <p>Monster menu: cut the targeted slain monster up for meat.</p>
+      <details><summary>Details</summary>
+      <p>Optional: turn on "Monster menu (butchering and eating monsters)" in Configure Settings. Target or select a slain
+      monster's token (or use the Butcher button in its sheet header) and pick the butcher: one of the party's characters
+      (players: their own characters). The meat is a number of rations by size (Complete Barbarian's Handbook Table 33, the
+      Hunting table: S 1-2, M 3-4, L 5-9, H 9-15, more with Animal Rending; Tiny 1 and Gargantuan twice Huge are this
+      system's choice). A check with the butcher's best of Hunting, Survival or Cooking keeps it all; a failure, or none of
+      them, spoils half. Extraplanar and incorporeal creatures, skeletons, iron and stone golems, gargoyles and xorn leave
+      nothing; eating intelligent creatures is flagged for your ruling. The rations arrive as "Meat: (creature)" in the
+      butcher's Inventory with Cook, Preserve and Eat buttons: meat keeps 2 days, 30 once preserved (salted or smoked),
+      then it is rotten (-4). Cooking with the Cooking proficiency (a successful check) gives +1; starving characters
+      get +2. Eating a ration is the day's food (also on the road: the travel day eats meat before rations, soonest to rot
+      first) and rolls the creature's table: d6 for ordinary meat (bad meat, nothing, or 1 hit point), d10 for special
+      creatures by kind (draconic, petrifying, ooze, undead, fey and so on). You are whispered the roll and the result;
+      saves are asked on a card and their damage comes to you with the apply buttons. On the Ecology tab of a monster sheet
+      you can change its menu category, table and taste. The creature lists follow Skerples' "Monster Menu" posts (Coins
+      and Scrolls); all flavour and effects are this system's own.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="menuTables"><i class="fa-solid fa-table-list"></i> Monster menu tables</button>
+      <p>Copies the menu tables into editable roll tables.</p>
+      <details><summary>Details</summary>
+      <p>Creates one roll table per menu table (normal meat and each kind of special creature) in a "Monster menu" folder.
+      Change the texts and ranges there and the menu rolls on your tables; each original result keeps its save, damage and
+      healing, and results you add yourself are text only. Delete the tables to go back to the built-in ones.</p></details></div>
     <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="awardXp"><i class="fa-solid fa-star"></i> Award experience</button>
       <p>Shares an experience award among characters; opens by itself after a combat.</p>
       <details><summary>Details</summary>
@@ -682,6 +706,8 @@
       <tr><td><code>game.ad2e.updateSpells()</code></td><td>Update existing spells.</td></tr>
       <tr><td><code>game.ad2e.awardExperience()</code></td><td>Group experience award.</td></tr>
       <tr><td><code>game.ad2e.party()</code></td><td>Party tracker (who is in the party).</td></tr>
+      <tr><td><code>game.ad2e.butcher(monster)</code></td><td>Monster menu: butcher a slain monster (default: the targeted token's).</td></tr>
+      <tr><td><code>game.ad2e.menuTables()</code></td><td>Monster menu: create editable roll tables.</td></tr>
       <tr><td><code>game.ad2e.timekeeper()</code></td><td>Timekeeper window (date, time steps, dungeon turn, travel).</td></tr>
       <tr><td><code>game.ad2e.calendar()</code></td><td>Zakharan calendar window (when the setting is on).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
