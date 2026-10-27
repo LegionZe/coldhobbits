@@ -223,6 +223,11 @@ Hooks.once("init", () => {
     choices: { individual: "AD2E.Init.Mode.individual", group: "AD2E.Init.Mode.group", standard: "AD2E.Init.Mode.standard" },
     default: "individual"
   });
+  // Initiative each round (Initiative (PHB): "Initiative is not set, but changes from round to round"; owner's request 1.0.76):
+  // the active GM clears every combatant's initiative when a new round begins, before the spell declaration card.
+  game.settings.register("ad2e", "initiativeEachRound", {
+    name: "AD2E.Init.EachRoundSetting", hint: "AD2E.Init.EachRoundHint", scope: "world", config: true, type: Boolean, default: true
+  });
 
   registerAqRules();
   registerSpWeapons();

@@ -524,6 +524,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   (updateCombat with `round`, active GM; card flag `ad2e.declare` { combat, round }) and `declareButtons` (AD2EChatMessage;
   rows per owned caster, select + Declare -> castSpell declare); initiative.mjs `defaultAction(actor, actions, declaredSpell)`
   (AD2ECombatant#getInitiativeRoll and the dialog pass `castingOf(combatant)?.spellId`).
+  1.0.76: world setting `initiativeEachRound` (ad2e.mjs, default on): the round hook (active GM) calls
+  `combat.resetAll({ updateTurn: false })` from round 2 before the declaration card; AD2ECombat#rollInitiative passes
+  `updateTurn: false` at turn 0 while some initiative is unrolled; `onCombatUpdate` completes a segments casting only for a
+  rolled current combatant and not on the round-change update; updateCombatant hook completes it when the last initiative
+  is rolled and the caster is current.
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`

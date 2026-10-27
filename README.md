@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.75)
+## Status (v1.0.76)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -490,6 +490,11 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   listing the combatants with spells memorized; owners pick a spell and press Declare before initiative ("Characters casting
   spells ... must add the spellcasting time to the die roll", Initiative (PHB)), and a declared spell becomes the
   combatant's initiative action (dialog default and Roll All), so its casting time is added to the roll.
+  Initiative each round (1.0.76, owner's request; world setting "Roll initiative each round", on by default): Initiative (PHB)
+  rev 157824, "Initiative is not set, but changes from round to round". From round 2, the active GM's client clears every
+  initiative when a round begins (`Combat#resetAll({ updateTurn: false })`), then posts the declaration card; while some
+  combatants have not rolled at turn 0, rolls keep the turn at the top of the order (`updateTurn: false`). A casting waiting
+  for its caster's turn completes only after that combatant has rolled (or when the last roll of the round puts it first).
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

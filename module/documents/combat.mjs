@@ -142,6 +142,12 @@ export default class AD2ECombat extends Combat {
             + modifierText(input.mod, input.note) }
       };
     }
+    // At the start of a round with initiative re-rolled (setting "initiativeEachRound"), keep the turn at the top of the
+    // order instead of on the combatant who happened to be current before anyone rolled (core keeps the same combatant).
+    if (options.updateTurn === undefined && (this.turn ?? 0) === 0
+      && Array.from(this.combatants.values?.() ?? this.combatants).some(c => c.initiative === null || c.initiative === undefined)) {
+      options = { ...options, updateTurn: false };
+    }
     const result = await super.rollInitiative(list, options);
     // A spell chosen as the action is declared: its casting begins (module/spell-casting.mjs; world setting "spellCasting").
     if (declared) await declared.actor.castSpell?.(declared.spellId, { declare: true });
