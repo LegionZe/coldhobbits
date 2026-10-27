@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.76)
+## Status (v1.0.77)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -495,6 +495,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   initiative when a round begins (`Combat#resetAll({ updateTurn: false })`), then posts the declaration card; while some
   combatants have not rolled at turn 0, rolls keep the turn at the top of the order (`updateTurn: false`). A casting waiting
   for its caster's turn completes only after that combatant has rolled (or when the last roll of the round puts it first).
+  1.0.77 (owner's report: a declared spell did not go off when its caster was first in the order): the order is read from
+  a fresh sort after the rolls settle, a spell completes once even when Roll All updates everyone at once, and a spell
+  declared after everyone rolled goes off at once when its caster is first.
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

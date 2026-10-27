@@ -528,7 +528,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `combat.resetAll({ updateTurn: false })` from round 2 before the declaration card; AD2ECombat#rollInitiative passes
   `updateTurn: false` at turn 0 while some initiative is unrolled; `onCombatUpdate` completes a segments casting only for a
   rolled current combatant and not on the round-change update; updateCombatant hook completes it when the last initiative
-  is rolled and the caster is current.
+  is rolled and the caster is current. 1.0.77 (owner's report: a caster first in the order never cast): the current
+  combatant is `currentCombatant(combat)` (fresh `_sortCombatants` sort, not the cached `combat.combatant`), the
+  updateCombatant check (`checkRolledTurn`) runs after a `setTimeout(0)`, `completeCasting` is deduplicated per combatant
+  (`completing` set; Roll All), and a declaration made after everyone rolled checks at once.
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`
