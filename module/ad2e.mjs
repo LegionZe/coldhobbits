@@ -46,6 +46,7 @@ import { registerCalendar } from "./calendar.mjs";
 import ZakharanCalendar from "./apps/calendar.mjs";
 import Timekeeper, { registerTimekeeper } from "./apps/timekeeper.mjs";
 import { butcher, createMenuTables, registerMonsterMenu } from "./monster-menu.mjs";
+import { registerSpellCasting } from "./spell-casting.mjs";
 import PartyTracker from "./apps/party-tracker.mjs";
 import { registerLights } from "./lights.mjs";
 import { registerSpellEffects } from "./spell-effects.mjs";
@@ -131,6 +132,8 @@ Hooks.once("init", () => {
   registerTimekeeper();
   // Monster menu: butchering and eating monsters (world setting, off by default; module/monster-menu.mjs).
   registerMonsterMenu();
+  // Casting time in combat and disruption (world setting "spellCasting"; module/spell-casting.mjs).
+  registerSpellCasting();
   registerLights();
   registerSpellEffects();
   registerSpellAnimations();

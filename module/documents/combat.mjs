@@ -104,6 +104,7 @@ export default class AD2ECombat extends Combat {
     const mode = initiativeMode();
     if (mode !== "individual" && !options.formula && !(await this.#ensureSideRolls(list))) return this;
     let ask = list.length === 1 && !options.formula;
+    let declared = null;
     try { ask &&= game.settings.get("ad2e", "initiativePrompt"); } catch { /* setting not registered */ }
     if (ask) {
       const combatant = this.combatants.get(list[0]);
@@ -114,6 +115,7 @@ export default class AD2ECombat extends Combat {
       const hasteLost = casting && input.situations.some(s => s.key === "hasted");
       const situations = hasteLost ? input.situations.filter(s => s.key !== "hasted") : input.situations;
       const action = mode === "standard" ? null : input.action;
+      if (/^spell\./.test(input.action?.key ?? "") && combatant?.actor) declared = { actor: combatant.actor, spellId: input.action.key.slice(6) };
       const terms = [action?.value ? `${action.value}[${flavor(action.short)}]` : null,
         input.display ? `${input.display.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }))}]` : null,
         // A kit initiative bonus lowers the roll (lowest acts first).
@@ -136,7 +138,10 @@ export default class AD2ECombat extends Combat {
             + modifierText(input.mod, input.note) }
       };
     }
-    return super.rollInitiative(list, options);
+    const result = await super.rollInitiative(list, options);
+    // A spell chosen as the action is declared: its casting begins (module/spell-casting.mjs; world setting "spellCasting").
+    if (declared) await declared.actor.castSpell?.(declared.spellId, { declare: true });
+    return result;
   }
 
   /** Initiative dialog: action (default: the automatic one), scroll casting time, Table 55 situations, modifier. */

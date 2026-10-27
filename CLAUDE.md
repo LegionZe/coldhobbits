@@ -511,6 +511,16 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `timekeeper`; set date: Zakharan `setDate`, else `game.time.calendar.jumpToDate({ year, month, day })`). No settings menu
   (a menu would build a second instance with the same id).
   Never name an action `close`, `tab` or `toggleControls`: ApplicationV2 handles those itself (1.0.72: tab action `showTab`).
+- Casting time in combat (owner's request 1.0.74, world setting `spellCasting` off | phb (default) | house): `module/spell-casting.mjs`
+  (pure `castingPlan(text, level)` { kind segments | rounds, n }, `castingState`, `completesNow`, `responsibleUser` (first active
+  non-GM owner, else active GM); `beginCasting(actor, spell, { declare, level })` (combatant flag `ad2e.casting` { spellId, name,
+  time, kind, n, startRound, endRound, declared, actorUuid }, status `CASTING_STATUS` styles/icons/casting.svg, card flag
+  `ad2e.casting` { combat, combatant, spellId } -> `castingButtons` Takes effect now / Stop casting), `completeCasting` ->
+  `actor.castSpell(id, { complete: true })`, `stopCasting` (kept), `castingStruck(actor, "damage" | "save")` (phb: `system.cast`
+  +1; house: kept), `onCombatUpdate` (updateCombat: turn of a segments casting, round past `endRound`), deleteCombat clears
+  statuses). AD2EActor#castSpell(itemId, { complete, declare }) = `#castingAllowed` (feeblemind, armour confirms) +
+  `beginCasting` + `#castNow`; applyDamage and rollSave (failure) call `castingStruck`; AD2ECombat#rollInitiative declares
+  a spell action (`castSpell(id, { declare: true })`).
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`
