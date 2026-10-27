@@ -559,8 +559,12 @@
     <li><strong>Casting time</strong> (world setting "Spell casting time in combat"; PHB by default): during a combat, Cast
     begins the casting instead of casting at once. A spell with a casting time without units takes effect when the caster's
     turn comes in the tracker (at once if it is already the caster's turn); one of 1 round or more takes effect at the end of
-    its last round (3 rounds begun in round 2: when round 5 begins; a turn is 10 rounds). Choosing a spell as the action in the
-    initiative dialog declares it the same way. The caster shows the "Casting a spell" status, and a card offers "Takes effect
+    its last round (3 rounds begun in round 2: when round 5 begins; a turn is 10 rounds). A casting time without units is
+    not a wait of rounds: it is added to the initiative roll, and the spell goes off that round on that count. At the start of
+    each round a "declare spells" card lists the combatants with spells memorized; each player (and you, for all) picks a
+    spell and presses Declare before initiative is rolled, and the declared spell becomes that combatant's initiative action
+    (its casting time is added, also with Roll All). Choosing a spell as the action in the initiative dialog declares it the
+    same way. If a caster is already the current combatant when its spell is declared, use "Takes effect now" on its turn. The caster shows the "Casting a spell" status, and a card offers "Takes effect
     now" (when the moment was missed) and "Stop casting" (the spell stays memorized). Damage applied to the caster (the
     damage buttons or the sheet's damage button) or a failed saving throw before then disrupts the casting: under the PHB
     rule the spell is lost from memory; under the house rule it is interrupted and stays memorized; "Off" casts at once as

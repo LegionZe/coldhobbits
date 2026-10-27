@@ -106,10 +106,13 @@ export function initiativeActions(actor) {
 }
 
 /**
- * The automatic action: the weapon of the last attack (if still ready), else the fastest ready weapon; a monster
- * without weapons and with natural attacks: its size modifier; otherwise none.
+ * The automatic action: a spell declared before initiative, else the weapon of the last attack (if still ready), else the
+ * fastest ready weapon; a monster without weapons and with natural attacks: its size modifier; otherwise none.
  */
-export function defaultAction(actor, actions = initiativeActions(actor)) {
+export function defaultAction(actor, actions = initiativeActions(actor), declaredSpell = null) {
+  // A spell declared before initiative (module/spell-casting.mjs) is the action: its casting time joins the roll.
+  const declared = declaredSpell ? actions.find(a => a.key === `spell.${declaredSpell}`) : null;
+  if (declared) return declared;
   const last = actor?._ad2eLastWeapon;
   const weapons = actions.filter(a => /^weapon\.[^.]+$/.test(a.key)); // each weapon's base use
   return (last && weapons.find(a => a.key === `weapon.${last}`))

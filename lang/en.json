@@ -4036,6 +4036,10 @@
     "Lost": "{spell} is lost from memory.",
     "Kept": "{spell} stays memorized (house rule).",
     "Now": "Takes effect now",
-    "Stop": "Stop casting"
+    "Stop": "Stop casting",
+    "DeclareTitle": "Round {round}: declare spells",
+    "DeclareHint": "Spellcasters: declare the spell you will cast this round before rolling initiative; its casting time is added to your initiative roll.",
+    "Declare": "Declare",
+    "Declared": "{name} is casting {spell}."
   }
 }

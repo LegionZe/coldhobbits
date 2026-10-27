@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.74)
+## Status (v1.0.75)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -486,6 +486,10 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   interrupted, still memorized. Implementation choices: any damage counts as struck, components are used when the spell
   takes effect, stopping by choice keeps the spell, nothing is tracked outside combat, a combat that ends stops castings.
   Not done: the loss of the Dexterity AC bonus while casting (Casting Spells (PHB)).
+  Declaring spells (1.0.75, owner's request): at the start of each round the active GM's client posts a "declare spells" card
+  listing the combatants with spells memorized; owners pick a spell and press Declare before initiative ("Characters casting
+  spells ... must add the spellcasting time to the die roll", Initiative (PHB)), and a declared spell becomes the
+  combatant's initiative action (dialog default and Roll All), so its casting time is added to the roll.
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

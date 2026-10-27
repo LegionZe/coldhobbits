@@ -2,6 +2,7 @@ import { ad2eDialog } from "../dialogs.mjs";
 import { modifierFields, modifierText, readModifier } from "../roll-modifiers.mjs";
 import { castingTimeModifier, defaultAction, initiativeActions, sideOf, STANDARD_MODIFIERS } from "../initiative.mjs";
 import { displayPenalty } from "../kit-features.mjs";
+import { castingOf } from "../spell-casting.mjs";
 
 export { sideOf };
 
@@ -53,7 +54,7 @@ export class AD2ECombatant extends Combatant {
     const display = shown ? ` + ${shown.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: shown.name }))}]` : "";
     const base = baseFormula(this, mode);
     if (mode === "standard") return super.getInitiativeRoll(base + display);
-    const action = defaultAction(this.actor);
+    const action = defaultAction(this.actor, undefined, castingOf(this)?.spellId);
     return super.getInitiativeRoll((action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base) + display);
   }
 }
@@ -115,7 +116,10 @@ export default class AD2ECombat extends Combat {
       const hasteLost = casting && input.situations.some(s => s.key === "hasted");
       const situations = hasteLost ? input.situations.filter(s => s.key !== "hasted") : input.situations;
       const action = mode === "standard" ? null : input.action;
-      if (/^spell\./.test(input.action?.key ?? "") && combatant?.actor) declared = { actor: combatant.actor, spellId: input.action.key.slice(6) };
+      // A spell chosen here is declared, unless it already was (the round's declaration card).
+      if (/^spell\./.test(input.action?.key ?? "") && combatant?.actor && castingOf(combatant)?.spellId !== input.action.key.slice(6)) {
+        declared = { actor: combatant.actor, spellId: input.action.key.slice(6) };
+      }
       const terms = [action?.value ? `${action.value}[${flavor(action.short)}]` : null,
         input.display ? `${input.display.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }))}]` : null,
         // A kit initiative bonus lowers the roll (lowest acts first).
@@ -150,7 +154,7 @@ export default class AD2ECombat extends Combat {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const actor = combatant?.actor;
     const actions = initiativeActions(actor);
-    const chosen = defaultAction(actor, [...actions]);
+    const chosen = defaultAction(actor, [...actions], castingOf(combatant)?.spellId);
     const hasScroll = actions.some(a => a.scroll);
     // Conditional kit initiative modifiers (e.g. the astrologer's hung spells); unconditional ones are in @init.
     const kitOptions = actor?.type === "character" && mode !== "standard" ? (actor.system.kitMods?.options("initiative") ?? []) : [];

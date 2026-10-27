@@ -520,7 +520,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   +1; house: kept), `onCombatUpdate` (updateCombat: turn of a segments casting, round past `endRound`), deleteCombat clears
   statuses). AD2EActor#castSpell(itemId, { complete, declare }) = `#castingAllowed` (feeblemind, armour confirms) +
   `beginCasting` + `#castNow`; applyDamage and rollSave (failure) call `castingStruck`; AD2ECombat#rollInitiative declares
-  a spell action (`castSpell(id, { declare: true })`).
+  a spell action (`castSpell(id, { declare: true })`, not when already declared). 1.0.75: `memorizedSpells`, `postDeclarationCard`
+  (updateCombat with `round`, active GM; card flag `ad2e.declare` { combat, round }) and `declareButtons` (AD2EChatMessage;
+  rows per owned caster, select + Declare -> castSpell declare); initiative.mjs `defaultAction(actor, actions, declaredSpell)`
+  (AD2ECombatant#getInitiativeRoll and the dialog pass `castingOf(combatant)?.spellId`).
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`
