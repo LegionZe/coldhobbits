@@ -1,3 +1,4 @@
+import { beginCasting, castingStruck } from "../spell-casting.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
@@ -691,12 +692,15 @@ export default class AD2EActor extends Actor {
     const bonus = (useMaster ? (masterSave.bonus ?? 0) : this.system.saves[key].bonus) + poisonBonus;
     const roll = await new Roll(bonus ? "1d20 + @bonus + @mod" : "1d20 + @mod", { bonus, mod }).evaluate();
     const success = roll.total >= target;
-    return roll.toMessage({
+    const message = await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this }), flags: { ad2e: { save: { key, success, roll: roll.total, ...(request ? { request, target: requestTarget } : {}) } } },
       flavor: `${game.i18n.localize(`AD2E.Save.${key}`)} (${game.i18n.localize("AD2E.Roll.Needs")} ${target}+${input.kitText ? `; ${input.kitText}` : ""})${modifierText(input.mod, input.note)}: `
         + game.i18n.localize(success ? "AD2E.Roll.Success" : "AD2E.Roll.Failure")
         + (useMaster ? ` (${game.i18n.localize(success ? "AD2E.Familiar.SpecialNone" : "AD2E.Familiar.SpecialHalf")})` : "")
     });
+    // A failed save disrupts a spell being cast (Casting Spells (PHB); module/spell-casting.mjs).
+    if (!success) await castingStruck(this, "save");
+    return message;
   }
 
   /**
@@ -2236,7 +2240,7 @@ export default class AD2EActor extends Actor {
    * Cast a memorized spell: one fewer remaining until the next rest; posts the spell's game statistics and a link to
    * its full description.
    */
-  async castSpell(itemId) {
+  async castSpell(itemId, { complete = false, declare = false } = {}) {
     const spell = this.items.get(itemId);
     if (!spell || spell.type !== "spell") return;
     const sys = spell.system;
@@ -2244,11 +2248,27 @@ export default class AD2EActor extends Actor {
       ui.notifications.warn(game.i18n.format("AD2E.Spell.NotMemorized", { name: spell.name }));
       return;
     }
+    // The confirmations below are asked when the casting begins; a tracked casting that completes (module/spell-casting.mjs)
+    // skips them.
+    if (!complete) {
+      if (!(await this.#castingAllowed(spell))) return;
+      // Casting time in combat (world setting "spellCasting"): the spell takes effect on the caster's turn or at the end of
+      // its last round; damage or a failed save before then disrupts it.
+      const level = this.system.spells?.castingLevels?.[sys.kind] ?? this.system.spells?.castingLevel ?? this.system.level;
+      if (await beginCasting(this, spell, { declare, level })) return null;
+      if (declare) return null;
+    }
+    return this.#castNow(spell);
+  }
+
+  /** The confirmations before casting: feeblemind, wizard spells in armour. */
+  async #castingAllowed(spell) {
+    const sys = spell.system;
     // Rider feebleminded after a negligent mount death (module/companions.mjs; owner's ruling: confirm to cast).
     if (this.type === "character" && feeblemindActive(this)) {
       const ok = await ad2eDialog.confirm({ window: { title: spell.name }, rejectClose: false,
         content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.localize("AD2E.Bond.FeebleCast")) ?? ""}</p>` });
-      if (!ok) return;
+      if (!ok) return false;
     }
     // Wizard spells in armour (owner's ruling: warn and confirm): "the wearing of armor is restricted" for multi-class
     // wizards, with elves in elven chain as the exception (Multi-Class and Dual-Class Characters (PHB)); bards abide by
@@ -2259,9 +2279,15 @@ export default class AD2EActor extends Actor {
         const ok = await ad2eDialog.confirm({ window: { title: spell.name },
           content: `<p class="ad2e-unmet">${foundry.utils.escapeHTML?.(game.i18n.format("AD2E.Spell.ArmorWarning", { armor: worn.map(i => i.name).join(", ") })) ?? ""}</p>`,
           rejectClose: false });
-        if (!ok) return;
+        if (!ok) return false;
       }
     }
+    return true;
+  }
+
+  /** The spell takes effect: components, memory, the card, saves, animation, effects. */
+  async #castNow(spell) {
+    const sys = spell.system;
     // Material components (module/components.mjs; world setting "trackComponents"): missing ones ask to cast anyway.
     const comp = await useComponents(this, spell);
     if (!comp.cast) return;
@@ -2780,6 +2806,8 @@ export default class AD2EActor extends Actor {
       }
     }
     await this.update(update);
+    // Being struck disrupts a spell being cast (Casting Spells (PHB); module/spell-casting.mjs).
+    await castingStruck(this, "damage");
     const state = this.system.hpState?.state;
     const key = bleeding ? "AD2E.Health.Bleeds" : "AD2E.Health.Damaged";
     return this.#hpMessage(fmt(key, { name: this.name, n, before, after: this.system.hp.value }) + note

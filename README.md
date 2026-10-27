@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.73)
+## Status (v1.0.74)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -474,6 +474,18 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   the calendar window shows the season and where each one starts. Implementation choice: the seasons start on the paired
   day of the month (Harptos festival days fall elsewhere, so by day of the year the starts differ from Harptos by 0-2 days: spring 1, summer 2, fall 2 (later), winter 0).
   The dungeon turn tracker shows the Zakharan date and time of day when the calendar is on (1.0.46, owner's request).
+- Casting time in combat (1.0.74; owner's request; world setting "Spell casting time in combat": off | PHB (default) |
+  house rule; `module/spell-casting.mjs`). In a combat, Cast begins the casting (combatant flag, "Casting a spell" status):
+  a casting time without units takes effect on the caster's turn in the tracker (at once on the caster's own turn), rounds
+  at the end of the last round (turns = 10 rounds, hours = 60, "per level" uses the casting level); choosing a spell in the
+  initiative dialog declares it. Sources (adnd2e.fandom.com): Initiative (PHB) rev 157824 ("a spell requiring one round
+  to cast takes effect at the end of the current round"; "the spell takes effect at the very end of the last round of the
+  required casting time"), Notes on Spells (PHB) rev 175672, Casting Spells (PHB) rev 70370 ("if the spellcaster is struck
+  by a weapon or fails to make a saving throw before the spell is cast, the caster's concentration is disrupted. The spell
+  is lost"). Disruption: damage applied to the caster or a failed save; PHB: the spell is used up; house rule (owner's):
+  interrupted, still memorized. Implementation choices: any damage counts as struck, components are used when the spell
+  takes effect, stopping by choice keeps the spell, nothing is tracked outside combat, a combat that ends stops castings.
+  Not done: the loss of the Dexterity AC bonus while casting (Casting Spells (PHB)).
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

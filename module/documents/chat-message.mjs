@@ -1,3 +1,4 @@
+import { castingButtons } from "../spell-casting.mjs";
 import { huntButtons } from "../forage.mjs";
 import { damageButtons } from "../health.mjs";
 import { treasureButtons } from "../treasure.mjs";
@@ -23,6 +24,7 @@ export default class AD2EChatMessage extends ChatMessage {
     constructionButtons(this, html);
     huntButtons(this, html);
     quickNpcButtons(this, html);
+    castingButtons(this, html);
     return html;
   }
 }

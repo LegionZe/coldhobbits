@@ -4011,5 +4011,31 @@
         "1": "Choked down, but it gives no nourishment."
       }
     }
+  },
+  "AD2E.Casting": {
+    "Setting": "Spell casting time in combat",
+    "SettingHint": "Phb: in a combat, a spell takes effect on the caster's turn (a casting time without units) or at the end of its last round (rounds, turns), and damage or a failed saving throw before then disrupts it: the spell is lost from memory. House rule: disruption stops the casting but the spell stays memorized. Off: spells take effect when Cast is pressed.",
+    "Mode": {
+      "off": "Off (spells take effect at once)",
+      "phb": "Casting time; disrupted spells are lost (PHB)",
+      "house": "Casting time; disrupted spells are kept (house rule)"
+    },
+    "Status": "Casting a spell",
+    "Begins": "{name} begins casting {spell} (casting time {time}).",
+    "OnTurn": "It takes effect on {name}'s turn in the initiative order.",
+    "AtEnd": "It takes effect at the end of round {round}.",
+    "PhbNote": "Damage or a failed saving throw before then disrupts it, and the spell is lost from memory.",
+    "HouseNote": "Damage or a failed saving throw before then interrupts it; the spell stays memorized (house rule).",
+    "Already": "{name} is already casting {spell}.",
+    "Replace": "Stop casting {old} and begin {spell}? {old} stays memorized.",
+    "Stopped": "{name} stops casting {spell}; it stays memorized.",
+    "Disrupted": {
+      "damage": "{name} is struck while casting {spell}: the casting is disrupted.",
+      "save": "{name} fails a saving throw while casting {spell}: the casting is disrupted."
+    },
+    "Lost": "{spell} is lost from memory.",
+    "Kept": "{spell} stays memorized (house rule).",
+    "Now": "Takes effect now",
+    "Stop": "Stop casting"
   }
 }
