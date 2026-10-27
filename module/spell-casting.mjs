@@ -183,13 +183,29 @@ export function castingButtons(message, html) {
   (html.querySelector(".message-content") ?? html).append(box);
 }
 
-/** On a combat update: the castings that complete now, run by each caster's responsible user. */
+/** World setting "initiativeEachRound" (registered in module/ad2e.mjs). */
+export function initiativeEachRound() {
+  try { return game.settings.get("ad2e", "initiativeEachRound") !== false; } catch { return false; }
+}
+
+/** A combat's combatants as an array (a Collection iterates its values; plain Maps in tests give values()). */
+const combatantsOf = combat => Array.from(combat?.combatants?.values?.() ?? combat?.combatants ?? []);
+
+const rolled = c => c?.initiative !== null && c?.initiative !== undefined && Number.isFinite(Number(c.initiative));
+
+/**
+ * On a combat update: the castings that complete now, run by each caster's responsible user. A casting waiting for its
+ * caster's turn completes only once that combatant has rolled initiative this round (with initiative re-rolled each
+ * round, the turn at the start of a round is not the caster's count yet).
+ */
 export async function onCombatUpdate(combat, changed) {
   if (castingMode() === "off" || !combat?.started || !("turn" in (changed ?? {}) || "round" in (changed ?? {}))) return;
-  for (const c of combat.combatants ?? []) {
+  const newRound = "round" in (changed ?? {}) && initiativeEachRound();
+  for (const c of combatantsOf(combat)) {
     const state = castingOf(c);
     if (!state || !c.actor) continue;
-    if (!completesNow(state, { round: combat.round, turnOf: combat.combatant?.id === c.id })) continue;
+    const turnOf = !newRound && combat.combatant?.id === c.id && rolled(c);
+    if (!completesNow(state, { round: combat.round, turnOf })) continue;
     if (responsibleUser(c.actor, game.users)?.id !== game.user?.id) continue;
     await completeCasting(c);
   }
@@ -197,7 +213,8 @@ export async function onCombatUpdate(combat, changed) {
 
 /** Spells an actor could cast now (pure): memorized and not yet cast. [{ id, name, time }] */
 export function memorizedSpells(actor) {
-  return [...(actor?.items ?? [])].filter(i => i.type === "spell" && (i.system?.prepared ?? 0) - (i.system?.cast ?? 0) > 0)
+  const items = actor?.items?.contents ?? actor?.items ?? [];
+  return [...(typeof items[Symbol.iterator] === "function" ? items : [])].filter(i => i.type === "spell" && (i.system?.prepared ?? 0) - (i.system?.cast ?? 0) > 0)
     .map(i => ({ id: i.id, name: i.name, time: String(i.system?.castingTime ?? "") }));
 }
 
@@ -207,7 +224,7 @@ export function memorizedSpells(actor) {
  * roll"; owner's request 1.0.75). Lists the combatants with spells memorized; nothing is posted when there are none.
  */
 export async function postDeclarationCard(combat) {
-  const casters = (combat?.combatants ?? []).filter(c => c.actor && memorizedSpells(c.actor).length);
+  const casters = combatantsOf(combat).filter(c => c.actor && memorizedSpells(c.actor).length);
   if (!casters.length) return null;
   return ChatMessage.implementation.create({ speaker: { alias: i18n("AD2E.Casting.DeclareTitle", { round: combat.round }) },
     content: `<p><strong>${esc(i18n("AD2E.Casting.DeclareTitle", { round: combat.round }))}</strong></p><p>${esc(i18n("AD2E.Casting.DeclareHint"))}</p>`
@@ -223,7 +240,7 @@ export function declareButtons(message, html) {
   if (!combat || combat.round !== flag.round) return;
   const box = document.createElement("div");
   box.className = "ad2e-declare-rows";
-  for (const c of combat.combatants ?? []) {
+  for (const c of combatantsOf(combat)) {
     const actor = c.actor;
     if (!actor || !(actor.isOwner || game.user?.isGM)) continue;
     const spells = memorizedSpells(actor);
@@ -259,14 +276,28 @@ export function registerSpellCasting() {
   if (Array.isArray(list)) { if (!list.some(e => e.id === CASTING_STATUS.id)) list.push({ ...CASTING_STATUS }); }
   else if (list && !list[CASTING_STATUS.id]) list[CASTING_STATUS.id] = { ...CASTING_STATUS };
   Hooks.on("updateCombat", (combat, changed) => onCombatUpdate(combat, changed));
-  // Each new round (the combat's start included): the active GM asks spellcasters to declare before initiative.
-  Hooks.on("updateCombat", (combat, changed) => {
-    if (!game.user?.isActiveGM || castingMode() === "off" || !("round" in (changed ?? {})) || !(combat?.round >= 1)) return null;
+  // Each new round (the combat's start included): the active GM clears initiative (setting "initiativeEachRound"; from
+  // round 2, so rolls made before the combat began stand) and asks spellcasters to declare before it is rolled.
+  Hooks.on("updateCombat", async (combat, changed) => {
+    if (!game.user?.isActiveGM || !("round" in (changed ?? {})) || !(combat?.round >= 1)) return null;
+    if (initiativeEachRound() && combat.round >= 2 && combatantsOf(combat).some(rolled)) await combat.resetAll?.({ updateTurn: false });
+    if (castingMode() === "off") return null;
     return postDeclarationCard(combat);
+  });
+  // The last initiative of the round is rolled: a casting waiting for the current combatant's turn completes now.
+  Hooks.on("updateCombatant", (combatant, changed) => {
+    const combat = combatant?.parent;
+    if (castingMode() === "off" || !("initiative" in (changed ?? {})) || !combat?.started) return null;
+    if (!combatantsOf(combat).every(rolled)) return null;
+    const current = combat.combatant;
+    const state = castingOf(current);
+    if (!state || state.kind !== "segments" || !current.actor) return null;
+    if (responsibleUser(current.actor, game.users)?.id !== game.user?.id) return null;
+    return completeCasting(current);
   });
   // A combat that ends stops its castings (the spells stay memorized); the active GM clears the casting marks.
   Hooks.on("deleteCombat", async combat => {
     if (!game.user?.isActiveGM) return;
-    for (const c of combat.combatants ?? []) if (castingOf(c)) await setStatus(c.actor, false);
+    for (const c of combatantsOf(combat)) if (castingOf(c)) await setStatus(c.actor, false);
   });
 }

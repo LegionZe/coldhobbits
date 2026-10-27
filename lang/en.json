@@ -1758,7 +1758,9 @@
     "SideNote": "{side} side",
     "SideGmFirst": "The GM rolls initiative for this side first (group or standard initiative).",
     "ScrollTime": "Casting time of the spell on the scroll",
-    "HasteCasting": "no haste benefit while casting"
+    "HasteCasting": "no haste benefit while casting",
+    "EachRoundSetting": "Roll initiative each round",
+    "EachRoundHint": "When a new round begins, every combatant's initiative is cleared so it is rolled again (Initiative (PHB): initiative changes from round to round). Spellcasters declare their spells before rolling."
   },
   "AD2E.AbilityRoll": {
     "Title": "Roll ability scores",
