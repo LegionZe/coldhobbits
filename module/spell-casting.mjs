@@ -195,6 +195,60 @@ export async function onCombatUpdate(combat, changed) {
   }
 }
 
+/** Spells an actor could cast now (pure): memorized and not yet cast. [{ id, name, time }] */
+export function memorizedSpells(actor) {
+  return [...(actor?.items ?? [])].filter(i => i.type === "spell" && (i.system?.prepared ?? 0) - (i.system?.cast ?? 0) > 0)
+    .map(i => ({ id: i.id, name: i.name, time: String(i.system?.castingTime ?? "") }));
+}
+
+/**
+ * Start of a round (active GM): a card asking spellcasters to declare their spells before initiative is rolled, so the
+ * casting time joins the roll (Initiative (PHB): "Characters casting spells ... must add the spellcasting time to the die
+ * roll"; owner's request 1.0.75). Lists the combatants with spells memorized; nothing is posted when there are none.
+ */
+export async function postDeclarationCard(combat) {
+  const casters = (combat?.combatants ?? []).filter(c => c.actor && memorizedSpells(c.actor).length);
+  if (!casters.length) return null;
+  return ChatMessage.implementation.create({ speaker: { alias: i18n("AD2E.Casting.DeclareTitle", { round: combat.round }) },
+    content: `<p><strong>${esc(i18n("AD2E.Casting.DeclareTitle", { round: combat.round }))}</strong></p><p>${esc(i18n("AD2E.Casting.DeclareHint"))}</p>`
+      + `<p class="ad2e-note">${esc(casters.map(c => c.name).join(", "))}</p>`,
+    flags: { ad2e: { declare: { combat: combat.id, round: combat.round } } } });
+}
+
+/** Rows on the declaration card: for each caster the user owns (the GM: all), a spell select and "Declare". */
+export function declareButtons(message, html) {
+  const flag = message?.getFlag?.("ad2e", "declare");
+  if (!flag || !html?.querySelector) return;
+  const combat = game.combats?.get?.(flag.combat);
+  if (!combat || combat.round !== flag.round) return;
+  const box = document.createElement("div");
+  box.className = "ad2e-declare-rows";
+  for (const c of combat.combatants ?? []) {
+    const actor = c.actor;
+    if (!actor || !(actor.isOwner || game.user?.isGM)) continue;
+    const spells = memorizedSpells(actor);
+    const current = castingOf(c);
+    if (!spells.length && !current) continue;
+    const row = document.createElement("div");
+    row.className = "ad2e-damage-buttons ad2e-declare-row";
+    if (current) {
+      row.innerHTML = `<span>${esc(i18n("AD2E.Casting.Declared", { name: c.name, spell: current.name }))}</span>`;
+    } else {
+      row.innerHTML = `<label>${esc(c.name)} <select data-declare="spell">${spells.map(s => `<option value="${esc(s.id)}">${esc(s.name)}${s.time ? ` (${esc(s.time)})` : ""}</option>`).join("")}</select></label>`
+        + `<button type="button" data-declare="go"><i class="fa-solid fa-wand-sparkles"></i> ${esc(i18n("AD2E.Casting.Declare"))}</button>`;
+      row.querySelector("[data-declare=go]").addEventListener("click", async ev => {
+        ev.preventDefault(); ev.stopPropagation();
+        const id = row.querySelector("[data-declare=spell]").value;
+        await actor.castSpell?.(id, { declare: true });
+        const now = castingOf(c);
+        if (now) row.innerHTML = `<span>${esc(i18n("AD2E.Casting.Declared", { name: c.name, spell: now.name }))}</span>`;
+      });
+    }
+    box.append(row);
+  }
+  if (box.childElementCount) (html.querySelector(".message-content") ?? html).append(box);
+}
+
 /** World setting, status, hooks. Called in init. */
 export function registerSpellCasting() {
   game.settings.register("ad2e", "spellCasting", {
@@ -205,6 +259,11 @@ export function registerSpellCasting() {
   if (Array.isArray(list)) { if (!list.some(e => e.id === CASTING_STATUS.id)) list.push({ ...CASTING_STATUS }); }
   else if (list && !list[CASTING_STATUS.id]) list[CASTING_STATUS.id] = { ...CASTING_STATUS };
   Hooks.on("updateCombat", (combat, changed) => onCombatUpdate(combat, changed));
+  // Each new round (the combat's start included): the active GM asks spellcasters to declare before initiative.
+  Hooks.on("updateCombat", (combat, changed) => {
+    if (!game.user?.isActiveGM || castingMode() === "off" || !("round" in (changed ?? {})) || !(combat?.round >= 1)) return null;
+    return postDeclarationCard(combat);
+  });
   // A combat that ends stops its castings (the spells stay memorized); the active GM clears the casting marks.
   Hooks.on("deleteCombat", async combat => {
     if (!game.user?.isActiveGM) return;
