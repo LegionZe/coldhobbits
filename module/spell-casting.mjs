@@ -120,16 +120,45 @@ export async function beginCasting(actor, spell, { declare = false, level = 1 } 
     content: `<p>${esc(i18n("AD2E.Casting.Begins", { name: actor.name, spell: spell.name, time: state.time }))} ${esc(whenText(state, actor.name))}</p>`
       + `<p class="ad2e-note">${esc(i18n(castingMode() === "house" ? "AD2E.Casting.HouseNote" : "AD2E.Casting.PhbNote"))}</p>`,
     flags: { ad2e: { casting: { combat: combat.id, combatant: combatant.id, spellId: spell.id } } } });
+  // Declared when every initiative is already in and the caster is first: its turn is now.
+  if (declare) await checkRolledTurn(combat);
   return true;
 }
 
 /** Complete a casting (on the responsible user's client): the spell takes effect through castSpell. */
+const completing = new Set();
+
 export async function completeCasting(combatant) {
   const state = castingOf(combatant);
   const actor = combatant?.actor;
-  if (!state || !actor) return null;
-  await clearCasting(combatant);
-  return actor.castSpell?.(state.spellId, { complete: true });
+  if (!state || !actor || completing.has(combatant.id)) return null;
+  // Several updates can ask at once (Roll All updates every combatant): one completion per casting.
+  completing.add(combatant.id);
+  try {
+    await clearCasting(combatant);
+    return await actor.castSpell?.(state.spellId, { complete: true });
+  } finally { completing.delete(combatant.id); }
+}
+
+/**
+ * The combatant whose turn it is, from a fresh sort of the combatants (pure over the combat): Foundry's cached turn order
+ * (`combat.combatant`) can still be the order before the latest initiative rolls when updateCombatant hooks run.
+ */
+export function currentCombatant(combat) {
+  const list = combatantsOf(combat);
+  const sort = typeof combat?._sortCombatants === "function" ? combat._sortCombatants.bind(combat) : null;
+  const turns = sort ? [...list].sort(sort) : list;
+  return turns[Math.max(Number(combat?.turn) || 0, 0)] ?? null;
+}
+
+/** All initiatives of the round are in: a casting of the combatant now first (at the current turn) completes. */
+export function checkRolledTurn(combat) {
+  if (castingMode() === "off" || !combat?.started || !combatantsOf(combat).every(rolled)) return null;
+  const current = currentCombatant(combat);
+  const state = castingOf(current);
+  if (!state || state.kind !== "segments" || !current.actor) return null;
+  if (responsibleUser(current.actor, game.users)?.id !== game.user?.id) return null;
+  return completeCasting(current);
 }
 
 /** Stop a casting by choice: the spell stays memorized. */
@@ -204,7 +233,7 @@ export async function onCombatUpdate(combat, changed) {
   for (const c of combatantsOf(combat)) {
     const state = castingOf(c);
     if (!state || !c.actor) continue;
-    const turnOf = !newRound && combat.combatant?.id === c.id && rolled(c);
+    const turnOf = !newRound && currentCombatant(combat)?.id === c.id && rolled(c);
     if (!completesNow(state, { round: combat.round, turnOf })) continue;
     if (responsibleUser(c.actor, game.users)?.id !== game.user?.id) continue;
     await completeCasting(c);
@@ -285,15 +314,11 @@ export function registerSpellCasting() {
     return postDeclarationCard(combat);
   });
   // The last initiative of the round is rolled: a casting waiting for the current combatant's turn completes now.
+  // Checked after the update has settled (owner's report 1.0.76: a caster first in the order never cast; the cached turn
+  // order was read before Foundry re-sorted it), from a fresh sort.
   Hooks.on("updateCombatant", (combatant, changed) => {
-    const combat = combatant?.parent;
-    if (castingMode() === "off" || !("initiative" in (changed ?? {})) || !combat?.started) return null;
-    if (!combatantsOf(combat).every(rolled)) return null;
-    const current = combat.combatant;
-    const state = castingOf(current);
-    if (!state || state.kind !== "segments" || !current.actor) return null;
-    if (responsibleUser(current.actor, game.users)?.id !== game.user?.id) return null;
-    return completeCasting(current);
+    if (!("initiative" in (changed ?? {}))) return null;
+    return new Promise(resolve => setTimeout(() => resolve(checkRolledTurn(combatant?.parent)), 0));
   });
   // A combat that ends stops its castings (the spells stay memorized); the active GM clears the casting marks.
   Hooks.on("deleteCombat", async combat => {
