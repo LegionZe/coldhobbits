@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.77)
+## Status (v1.0.78)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -485,7 +485,6 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   is lost"). Disruption: damage applied to the caster or a failed save; PHB: the spell is used up; house rule (owner's):
   interrupted, still memorized. Implementation choices: any damage counts as struck, components are used when the spell
   takes effect, stopping by choice keeps the spell, nothing is tracked outside combat, a combat that ends stops castings.
-  Not done: the loss of the Dexterity AC bonus while casting (Casting Spells (PHB)).
   Declaring spells (1.0.75, owner's request): at the start of each round the active GM's client posts a "declare spells" card
   listing the combatants with spells memorized; owners pick a spell and press Declare before initiative ("Characters casting
   spells ... must add the spellcasting time to the die roll", Initiative (PHB)), and a declared spell becomes the
@@ -498,6 +497,14 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   1.0.77 (owner's report: a declared spell did not go off when its caster was first in the order): the order is read from
   a fresh sort after the rolls settle, a spell completes once even when Roll All updates everyone at once, and a spell
   declared after everyone rolled goes off at once when its caster is first.
+  1.0.78 (owner's request): Dexterity while casting: Casting Spells (PHB) rev 70370, "no AC benefit from Dexterity is
+  gained by spellcasters while casting spells"; while the "Casting a spell" status is on, a character's beneficial
+  Dexterity AC adjustment is dropped (front, missile and rear AC; a Dexterity penalty stays), noted in the AC tooltip and
+  on the casting card. Scrolls: in a combat, a scroll's "Use" (or a scroll chosen as the initiative action, or declared on
+  the round's card) asks the casting time of its spell (default 1, the last one typed is kept on the scroll) and is
+  tracked like a spell; the scroll is used up when the spell takes effect. Implementation choices: a disrupted reading uses
+  up one scroll under the PHB setting (Casting Spells (PHB) applied to scroll spells) and keeps it under the house rule;
+  outside combat a scroll is read at once.
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

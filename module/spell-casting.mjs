@@ -20,6 +20,13 @@
  * are used and the spell leaves memory when it takes effect (or when disrupted under phb); "per level" casting times use
  * the casting level; a casting time without a number ("special") takes effect at once; outside combat nothing is tracked;
  * stopping a casting by choice (card button, or casting another spell) keeps the spell; a combat ending stops castings.
+ * Scrolls (1.0.78): reading a scroll in combat is tracked the same way (state `source: "scroll"`, `spellId` = the scroll
+ * item); the casting time is the one typed for the scroll's spell (asked when "Use" is pressed or with initiative, kept
+ * as item flag `ad2e.castingTime`); the scroll is used up when the spell takes effect (AD2EActor#useMagicItem). Under phb a
+ * disrupted reading uses up one scroll (a charge or one of the quantity) and the house rule keeps it (implementation
+ * choices, following the Casting Spells rule above).
+ * Dexterity: Casting Spells (PHB) rev 70370 "no AC benefit from Dexterity is gained by spellcasters while casting spells":
+ * while CASTING_STATUS is on, CharacterData drops a beneficial Dexterity AC adjustment (`castingDexAc`).
  */
 import { ad2eDialog } from "./dialogs.mjs";
 
@@ -47,12 +54,21 @@ export function castingPlan(text, level = 1) {
   return { kind: "rounds", n: Math.max(Number(m[1]), 1) * UNIT_ROUNDS[unit] * per };
 }
 
-/** The state stored on the combatant when a casting begins (pure). */
-export function castingState(spell, plan, combat, { declared = false, actorUuid = "" } = {}) {
+/**
+ * The state stored on the combatant when a casting begins (pure). `time` overrides the spell's casting time (a scroll);
+ * `source` "scroll" marks a scroll being read (`spellId` = the scroll item's id).
+ */
+export function castingState(spell, plan, combat, { declared = false, actorUuid = "", time = null, source = "spell" } = {}) {
   const round = Math.max(Number(combat?.round) || 1, 1);
-  return { spellId: spell.id, name: spell.name, time: String(spell.system?.castingTime ?? ""), kind: plan.kind, n: plan.n,
-    startRound: round, endRound: plan.kind === "rounds" ? round + plan.n - 1 : null, declared, actorUuid };
+  return { spellId: spell.id, name: spell.name, time: String(time ?? spell.system?.castingTime ?? ""), kind: plan.kind, n: plan.n,
+    startRound: round, endRound: plan.kind === "rounds" ? round + plan.n - 1 : null, declared, actorUuid, source };
 }
+
+/**
+ * The Dexterity AC adjustment that applies (pure): a beneficial (negative) one is dropped while casting (Casting Spells
+ * (PHB) rev 70370: "no AC benefit from Dexterity is gained by spellcasters while casting spells"); a penalty stays.
+ */
+export const castingDexAc = (dexAc, casting) => (casting && dexAc < 0 ? 0 : dexAc);
 
 /** Whether a casting completes at this point of the combat (pure): `turnOf` = the caster's turn has come; `round` now. */
 export function completesNow(state, { round, turnOf = false } = {}) {
@@ -95,13 +111,13 @@ const whenText = (state, name) => (state.kind === "segments"
  * Called by AD2EActor#castSpell before the spell takes effect: true when the casting was begun (tracked), false when it
  * takes effect now. `declare` = chosen as the initiative action (never at once).
  */
-export async function beginCasting(actor, spell, { declare = false, level = 1 } = {}) {
+export async function beginCasting(actor, spell, { declare = false, level = 1, time = null, source = "spell" } = {}) {
   if (castingMode() === "off") return false;
   const combat = game.combat;
   // Declared with initiative: the combat may not have begun yet; "Cast" pressed: only in a combat under way.
   const combatant = casterCombatant(actor, combat, { started: !declare });
   if (!combatant) return false;
-  const plan = castingPlan(spell.system?.castingTime, level);
+  const plan = castingPlan(time ?? spell.system?.castingTime, level);
   if (!plan) return false;
   // A numeric casting time on the caster's own turn: the initiative roll already held it, so the spell takes effect now.
   if (!declare && plan.kind === "segments" && combat.combatant?.id === combatant.id) return false;
@@ -113,12 +129,13 @@ export async function beginCasting(actor, spell, { declare = false, level = 1 } 
     if (!ok) return true;
     await stopCasting(combatant, { reason: "changed" });
   }
-  const state = castingState(spell, plan, combat, { declared: declare, actorUuid: actor.uuid });
+  const state = castingState(spell, plan, combat, { declared: declare, actorUuid: actor.uuid, time, source });
   await combatant.setFlag("ad2e", "casting", state);
   await setStatus(actor, true);
   await ChatMessage.implementation.create({ speaker: ChatMessage.getSpeaker({ actor }),
     content: `<p>${esc(i18n("AD2E.Casting.Begins", { name: actor.name, spell: spell.name, time: state.time }))} ${esc(whenText(state, actor.name))}</p>`
-      + `<p class="ad2e-note">${esc(i18n(castingMode() === "house" ? "AD2E.Casting.HouseNote" : "AD2E.Casting.PhbNote"))}</p>`,
+      + `<p class="ad2e-note">${esc(i18n(`AD2E.Casting.${source === "scroll" ? "Scroll" : ""}${castingMode() === "house" ? "HouseNote" : "PhbNote"}`))} `
+      + `${esc(i18n("AD2E.Casting.NoDex"))}</p>`,
     flags: { ad2e: { casting: { combat: combat.id, combatant: combatant.id, spellId: spell.id } } } });
   // Declared when every initiative is already in and the caster is first: its turn is now.
   if (declare) await checkRolledTurn(combat);
@@ -136,6 +153,7 @@ export async function completeCasting(combatant) {
   completing.add(combatant.id);
   try {
     await clearCasting(combatant);
+    if (state.source === "scroll") return await actor.useMagicItem?.(state.spellId, { complete: true });
     return await actor.castSpell?.(state.spellId, { complete: true });
   } finally { completing.delete(combatant.id); }
 }
@@ -182,12 +200,18 @@ export async function castingStruck(actor, reason = "damage") {
   const state = castingOf(combatant);
   if (!state) return null;
   await clearCasting(combatant);
-  const spell = actor.items?.get?.(state.spellId);
-  const lost = mode === "phb" && spell && spell.system.prepared - spell.system.cast > 0;
-  if (lost) await spell.update({ "system.cast": spell.system.cast + 1 });
+  const item = actor.items?.get?.(state.spellId);
+  const scroll = state.source === "scroll";
+  let lost = false;
+  if (mode === "phb" && item) {
+    const update = scroll ? scrollUseUpdate(item.system) : (item.system.prepared - item.system.cast > 0 ? { "system.cast": item.system.cast + 1 } : null);
+    if (update) { await item.update(update); lost = true; }
+  }
+  const text = scroll ? (lost ? "AD2E.Casting.ScrollLost" : mode === "phb" ? "AD2E.Casting.ScrollNoUse" : "AD2E.Casting.ScrollKept")
+    : (lost ? "AD2E.Casting.Lost" : "AD2E.Casting.Kept");
   return ChatMessage.implementation.create({ speaker: ChatMessage.getSpeaker({ actor }),
     content: `<p><strong>${esc(i18n(`AD2E.Casting.Disrupted.${reason}`, { name: actor.name, spell: state.name }))}</strong> `
-      + `${esc(i18n(lost ? "AD2E.Casting.Lost" : "AD2E.Casting.Kept", { spell: state.name }))}</p>` });
+      + `${esc(i18n(text, { spell: state.name }))}</p>` });
 }
 
 /**
@@ -210,6 +234,44 @@ export function castingButtons(message, html) {
   on("[data-casting=now]", () => completeCasting(combatant));
   on("[data-casting=stop]", () => stopCasting(combatant));
   (html.querySelector(".message-content") ?? html).append(box);
+}
+
+/**
+ * The update that uses up one reading of a magical item (pure): a charge when it has charges, else one of the quantity when
+ * it is consumable; null when none is left or it is neither (as AD2EActor#useMagicItem).
+ */
+export function scrollUseUpdate(sys) {
+  if (sys?.usesCharges) return (sys.charges?.value ?? 0) >= 1 ? { "system.charges.value": sys.charges.value - 1 } : null;
+  if (sys?.consumable) return (sys.quantity ?? 0) >= 1 ? { "system.quantity": sys.quantity - 1 } : null;
+  return null;
+}
+
+/** Whether reading a scroll now would be tracked (casting time asked): tracking on and the actor in a (started) combat. */
+export function scrollTracked(actor, { declare = false } = {}) {
+  return castingMode() !== "off" && !!casterCombatant(actor, game.combat, { started: !declare });
+}
+
+/** The casting time of the spell on a scroll (dialog; default the last one typed for it, else 1). null = cancelled. */
+export async function askScrollTime(item) {
+  const last = item?.getFlag?.("ad2e", "castingTime") ?? "1";
+  const time = await ad2eDialog.prompt({
+    window: { title: item?.name ?? "" }, rejectClose: false,
+    content: `<p class="ad2e-note">${esc(i18n("AD2E.Casting.ScrollHint"))}</p><div class="form-group"><label>${esc(i18n("AD2E.Init.ScrollTime"))}</label>`
+      + `<input type="text" name="scrollTime" value="${esc(last)}"></div>`,
+    ok: { label: i18n("AD2E.Casting.Read"), callback: (event, button) => String(button.form.elements.scrollTime?.value ?? "").trim() }
+  });
+  if (time === null || time === undefined) return null;
+  if (time && time !== last && item?.isOwner) await item.setFlag("ad2e", "castingTime", time);
+  return time || "1";
+}
+
+/** Scrolls an actor could read now (pure): magical items of category scroll with a use left. [{ id, name, time }] */
+export function readyScrolls(actor) {
+  const items = actor?.items?.contents ?? actor?.items ?? [];
+  return [...(typeof items[Symbol.iterator] === "function" ? items : [])]
+    .filter(i => i.type === "magic" && i.system?.category === "scroll"
+      && (scrollUseUpdate(i.system) || (!i.system.usesCharges && !i.system.consumable)))
+    .map(i => ({ id: i.id, name: i.name, time: String(i.getFlag?.("ad2e", "castingTime") ?? "") }));
 }
 
 /** World setting "initiativeEachRound" (registered in module/ad2e.mjs). */
@@ -253,7 +315,7 @@ export function memorizedSpells(actor) {
  * roll"; owner's request 1.0.75). Lists the combatants with spells memorized; nothing is posted when there are none.
  */
 export async function postDeclarationCard(combat) {
-  const casters = combatantsOf(combat).filter(c => c.actor && memorizedSpells(c.actor).length);
+  const casters = combatantsOf(combat).filter(c => c.actor && (memorizedSpells(c.actor).length || readyScrolls(c.actor).length));
   if (!casters.length) return null;
   return ChatMessage.implementation.create({ speaker: { alias: i18n("AD2E.Casting.DeclareTitle", { round: combat.round }) },
     content: `<p><strong>${esc(i18n("AD2E.Casting.DeclareTitle", { round: combat.round }))}</strong></p><p>${esc(i18n("AD2E.Casting.DeclareHint"))}</p>`
@@ -273,19 +335,22 @@ export function declareButtons(message, html) {
     const actor = c.actor;
     if (!actor || !(actor.isOwner || game.user?.isGM)) continue;
     const spells = memorizedSpells(actor);
+    const scrolls = readyScrolls(actor);
     const current = castingOf(c);
-    if (!spells.length && !current) continue;
+    if (!spells.length && !scrolls.length && !current) continue;
     const row = document.createElement("div");
     row.className = "ad2e-damage-buttons ad2e-declare-row";
     if (current) {
       row.innerHTML = `<span>${esc(i18n("AD2E.Casting.Declared", { name: c.name, spell: current.name }))}</span>`;
     } else {
-      row.innerHTML = `<label>${esc(c.name)} <select data-declare="spell">${spells.map(s => `<option value="${esc(s.id)}">${esc(s.name)}${s.time ? ` (${esc(s.time)})` : ""}</option>`).join("")}</select></label>`
+      row.innerHTML = `<label>${esc(c.name)} <select data-declare="spell">${spells.map(s => `<option value="${esc(s.id)}">${esc(s.name)}${s.time ? ` (${esc(s.time)})` : ""}</option>`).join("")}`
+        + `${scrolls.map(s => `<option value="scroll:${esc(s.id)}">${esc(i18n("AD2E.Casting.ScrollOption", { name: s.name }))}</option>`).join("")}</select></label>`
         + `<button type="button" data-declare="go"><i class="fa-solid fa-wand-sparkles"></i> ${esc(i18n("AD2E.Casting.Declare"))}</button>`;
       row.querySelector("[data-declare=go]").addEventListener("click", async ev => {
         ev.preventDefault(); ev.stopPropagation();
         const id = row.querySelector("[data-declare=spell]").value;
-        await actor.castSpell?.(id, { declare: true });
+        if (id.startsWith("scroll:")) await actor.useMagicItem?.(id.slice(7), { declare: true });
+        else await actor.castSpell?.(id, { declare: true });
         const now = castingOf(c);
         if (now) row.innerHTML = `<span>${esc(i18n("AD2E.Casting.Declared", { name: c.name, spell: now.name }))}</span>`;
       });

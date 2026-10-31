@@ -54,7 +54,7 @@ export class AD2ECombatant extends Combatant {
     const display = shown ? ` + ${shown.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: shown.name }))}]` : "";
     const base = baseFormula(this, mode);
     if (mode === "standard") return super.getInitiativeRoll(base + display);
-    const action = defaultAction(this.actor, undefined, castingOf(this)?.spellId);
+    const action = defaultAction(this.actor, undefined, castingOf(this));
     return super.getInitiativeRoll((action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base) + display);
   }
 }
@@ -120,6 +120,10 @@ export default class AD2ECombat extends Combat {
       if (/^spell\./.test(input.action?.key ?? "") && combatant?.actor && castingOf(combatant)?.spellId !== input.action.key.slice(6)) {
         declared = { actor: combatant.actor, spellId: input.action.key.slice(6) };
       }
+      // A scroll chosen here begins its reading with the casting time typed in the dialog (unless already being read).
+      if (/^scroll\./.test(input.action?.key ?? "") && combatant?.actor && castingOf(combatant)?.spellId !== input.action.key.slice(7)) {
+        declared = { actor: combatant.actor, scrollId: input.action.key.slice(7), time: input.action.time };
+      }
       const terms = [action?.value ? `${action.value}[${flavor(action.short)}]` : null,
         input.display ? `${input.display.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }))}]` : null,
         // A kit initiative bonus lowers the roll (lowest acts first).
@@ -150,7 +154,8 @@ export default class AD2ECombat extends Combat {
     }
     const result = await super.rollInitiative(list, options);
     // A spell chosen as the action is declared: its casting begins (module/spell-casting.mjs; world setting "spellCasting").
-    if (declared) await declared.actor.castSpell?.(declared.spellId, { declare: true });
+    if (declared?.scrollId) await declared.actor.useMagicItem?.(declared.scrollId, { declare: true, castingTime: declared.time });
+    else if (declared) await declared.actor.castSpell?.(declared.spellId, { declare: true });
     return result;
   }
 
@@ -160,7 +165,8 @@ export default class AD2ECombat extends Combat {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const actor = combatant?.actor;
     const actions = initiativeActions(actor);
-    const chosen = defaultAction(actor, [...actions], castingOf(combatant)?.spellId);
+    const current = castingOf(combatant);
+    const chosen = defaultAction(actor, [...actions], current);
     const hasScroll = actions.some(a => a.scroll);
     // Conditional kit initiative modifiers (e.g. the astrologer's hung spells); unconditional ones are in @init.
     const kitOptions = actor?.type === "character" && mode !== "standard" ? (actor.system.kitMods?.options("initiative") ?? []) : [];
@@ -169,7 +175,7 @@ export default class AD2ECombat extends Combat {
     const content = `<p class="ad2e-note">${i18n("AD2E.Init.Hint")}${mode !== "individual" ? ` ${i18n(`AD2E.Init.ModeNote.${mode}`)}` : ""}</p>`
       + (mode === "standard" ? "" : `<div class="form-group"><label>${i18n("AD2E.Init.ActionLabel")}</label><select name="action">${actions.map(a =>
         `<option value="${esc(a.key)}"${a.key === chosen.key ? " selected" : ""}>${esc(a.label)}</option>`).join("")}</select></div>`
-        + (hasScroll ? `<div class="form-group"><label>${i18n("AD2E.Init.ScrollTime")}</label><input type="text" name="scrollTime" value="1"></div>` : ""))
+        + (hasScroll ? `<div class="form-group"><label>${i18n("AD2E.Init.ScrollTime")}</label><input type="text" name="scrollTime" value="${esc(chosen.time ?? "1")}"></div>` : ""))
       + `<fieldset><legend>${i18n("AD2E.Init.Standard")}</legend><div class="ad2e-check-grid">${STANDARD_MODIFIERS.map(m =>
         `<label><input type="checkbox" name="t55-${m.key}" value="${m.value}"> ${esc(m.label)} (${m.value > 0 ? "+" : ""}${m.value})</label>`).join("")}</div></fieldset>`
       + (kitOptions.length ? `<fieldset><legend>${esc(game.i18n.format("AD2E.Kit.Situational", { kit: actor.system.classInfo?.kitItem?.name ?? "" }))}</legend>`
@@ -189,7 +195,8 @@ export default class AD2ECombat extends Combat {
           // The casting time of the spell on the scroll: a number, or a time in rounds/turns (end of the round).
           const ct = castingTimeModifier(f.scrollTime?.value) ?? { value: 0, endOfRound: false };
           action = { ...action, value: ct.value, note: ct.endOfRound ? i18n("AD2E.Init.EndOfRound") : "",
-            label: `${action.label}: ${f.scrollTime?.value ?? ""}` };
+            label: `${(actions.find(a => a.key === action.key) ?? action).label}: ${f.scrollTime?.value ?? ""}`,
+            time: String(f.scrollTime?.value ?? "").trim() || "1" };
         }
         const situations = STANDARD_MODIFIERS.filter(m => f[`t55-${m.key}`]?.checked);
         const ticked = [...(button.form.querySelectorAll?.("input[name=kitinit]:checked") ?? [])].map(i => Number(i.value));

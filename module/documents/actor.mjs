@@ -1,4 +1,4 @@
-import { beginCasting, castingStruck } from "../spell-casting.mjs";
+import { askScrollTime, beginCasting, castingStruck, scrollTracked } from "../spell-casting.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
@@ -2599,26 +2599,34 @@ export default class AD2EActor extends Actor {
    * Use a magical item: spends a charge (items with charges) or one from the quantity (potions, scrolls, dusts),
    * and posts the item to chat with what is left and a link to its description. Other items are just announced.
    */
-  async useMagicItem(itemId) {
+  async useMagicItem(itemId, { complete = false, declare = false, castingTime = null } = {}) {
     const item = this.items.get(itemId);
     if (!item || item.type !== "magic") return;
     const sys = item.system;
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
+    if (sys.usesCharges && sys.charges.value < 1) {
+      ui.notifications.warn(game.i18n.format("AD2E.Magic.NoCharges", { name: item.name }));
+      return;
+    }
+    if (!sys.usesCharges && sys.consumable && sys.quantity < 1) {
+      ui.notifications.warn(game.i18n.format("AD2E.Magic.NoneLeft", { name: item.name }));
+      return;
+    }
+    // A scroll read in combat takes the casting time of its spell (module/spell-casting.mjs; world setting "spellCasting"):
+    // it is used when the spell takes effect (`complete`), and a disruption before then follows the casting rules.
+    if (!complete && sys.category === "scroll" && scrollTracked(this, { declare })) {
+      const time = castingTime ?? (await askScrollTime(item));
+      if (time === null) return;
+      if (await beginCasting(this, item, { declare, time, source: "scroll" })) return null;
+      if (declare) return null;
+    }
     let left = "";
     if (sys.usesCharges) {
-      if (sys.charges.value < 1) {
-        ui.notifications.warn(game.i18n.format("AD2E.Magic.NoCharges", { name: item.name }));
-        return;
-      }
       const n = sys.charges.value - 1;
       await item.update({ "system.charges.value": n });
       left = game.i18n.format("AD2E.Magic.ChargesLeft", { n, max: sys.charges.max });
     } else if (sys.consumable) {
-      if (sys.quantity < 1) {
-        ui.notifications.warn(game.i18n.format("AD2E.Magic.NoneLeft", { name: item.name }));
-        return;
-      }
       const n = sys.quantity - 1;
       await item.update({ "system.quantity": n });
       left = game.i18n.format("AD2E.Ammo.Left", { name: item.name, n });
