@@ -4042,6 +4042,16 @@
     "DeclareTitle": "Round {round}: declare spells",
     "DeclareHint": "Spellcasters: declare the spell you will cast this round before rolling initiative; its casting time is added to your initiative roll.",
     "Declare": "Declare",
-    "Declared": "{name} is casting {spell}."
+    "Declared": "{name} is casting {spell}.",
+    "NoDex": "While casting, a Dexterity bonus to Armor Class does not apply.",
+    "NoDexShort": "casting: no Dexterity bonus",
+    "ScrollHint": "In combat the spell on the scroll takes its casting time: a number without units is added to initiative; rounds or turns end at the end of the last round.",
+    "Read": "Begin reading",
+    "ScrollOption": "Scroll: {name}",
+    "ScrollLost": "The scroll's spell is used up ({spell}).",
+    "ScrollNoUse": "The reading of {spell} is lost (no charge or quantity to deduct).",
+    "ScrollKept": "{spell} can be read again (house rule).",
+    "ScrollPhbNote": "Damage or a failed saving throw before then disrupts it, and the scroll's spell is used up.",
+    "ScrollHouseNote": "Damage or a failed saving throw before then interrupts it; the scroll can be read again (house rule)."
   }
 }

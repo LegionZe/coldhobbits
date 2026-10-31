@@ -532,6 +532,14 @@ The owner installs and updates from that manifest URL only (no shell access to t
   combatant is `currentCombatant(combat)` (fresh `_sortCombatants` sort, not the cached `combat.combatant`), the
   updateCombatant check (`checkRolledTurn`) runs after a `setTimeout(0)`, `completeCasting` is deduplicated per combatant
   (`completing` set; Roll All), and a declaration made after everyone rolled checks at once.
+  1.0.78: Dexterity while casting (Casting Spells (PHB) rev 70370): CharacterData passes `castingDexAc(dex.ac, statuses has
+  CASTING_STATUS)` to `#computeArmor` (beneficial adjustment dropped, penalty kept), `armor.castingNoDex` for the AC tooltip.
+  Scrolls: state `source: "scroll"` (`spellId` = magic item id, `time` typed); `AD2EActor#useMagicItem(id, { complete, declare,
+  castingTime })` (`scrollTracked`, `askScrollTime` (item flag `ad2e.castingTime`), `beginCasting(..., { time, source })`);
+  `completeCasting` calls useMagicItem for scrolls; `castingStruck` phb uses `scrollUseUpdate` (charge, else quantity);
+  `readyScrolls` on the declaration card (option value `scroll:<id>`); initiative.mjs `defaultAction` takes the casting state
+  (scroll action valued by `castingTimeModifier(state.time)`, `time` prefills the dialog's scrollTime); AD2ECombat#rollInitiative
+  declares a chosen scroll via useMagicItem.
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`

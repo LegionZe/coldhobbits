@@ -109,10 +109,19 @@ export function initiativeActions(actor) {
  * The automatic action: a spell declared before initiative, else the weapon of the last attack (if still ready), else the
  * fastest ready weapon; a monster without weapons and with natural attacks: its size modifier; otherwise none.
  */
-export function defaultAction(actor, actions = initiativeActions(actor), declaredSpell = null) {
-  // A spell declared before initiative (module/spell-casting.mjs) is the action: its casting time joins the roll.
-  const declared = declaredSpell ? actions.find(a => a.key === `spell.${declaredSpell}`) : null;
-  if (declared) return declared;
+export function defaultAction(actor, actions = initiativeActions(actor), declared = null) {
+  // A spell declared before initiative (module/spell-casting.mjs; an id, or the casting state) is the action: its casting
+  // time joins the roll. A scroll being read: its action with the casting time typed for it.
+  const state = typeof declared === "string" ? { spellId: declared } : declared;
+  if (state?.source === "scroll") {
+    const scroll = actions.find(a => a.key === `scroll.${state.spellId}`);
+    const ct = castingTimeModifier(state.time);
+    if (scroll && ct) return { ...scroll, value: ct.value, note: ct.endOfRound ? game.i18n.localize("AD2E.Init.EndOfRound") : "",
+      label: `${scroll.label}: ${state.time}`, time: state.time };
+  } else if (state?.spellId) {
+    const spell = actions.find(a => a.key === `spell.${state.spellId}`);
+    if (spell) return spell;
+  }
   const last = actor?._ad2eLastWeapon;
   const weapons = actions.filter(a => /^weapon\.[^.]+$/.test(a.key)); // each weapon's base use
   return (last && weapons.find(a => a.key === `weapon.${last}`))

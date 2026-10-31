@@ -1,4 +1,5 @@
 import { effectModTotals } from "../spell-effects.mjs";
+import { CASTING_STATUS, castingDexAc } from "../spell-casting.mjs";
 import { fatigueFor } from "../dungeon-turns.mjs";
 import { languageSettings } from "../languages.mjs";
 import { TRAVEL } from "../rules/travel-tables.mjs";
@@ -413,7 +414,10 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
     };
 
     this.hpState = hpState(this.hp, { character: true });
-    this.armor = this.#computeArmor(dex.ac);
+    // Casting a spell (status from module/spell-casting.mjs): no AC benefit from Dexterity (Casting Spells (PHB) rev 70370).
+    const casting = !!this.parent?.statuses?.has?.(CASTING_STATUS.id);
+    this.armor = this.#computeArmor(castingDexAc(dex.ac, casting));
+    this.armor.castingNoDex = casting && dex.ac < 0;
     this.traits = this.#computeTraits();
     this.kitMods = this.#computeKitModifiers();
     const kitAc = this.kitMods.total("ac") + (this.ac.misc ?? 0);
