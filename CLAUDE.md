@@ -540,6 +540,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `readyScrolls` on the declaration card (option value `scroll:<id>`); initiative.mjs `defaultAction` takes the casting state
   (scroll action valued by `castingTimeModifier(state.time)`, `time` prefills the dialog's scrollTime); AD2ECombat#rollInitiative
   declares a chosen scroll via useMagicItem.
+  1.0.79: `postDeclarationCard` forces the public message mode (core v14 per-user setting `core.messageMode`; a GM in a private
+  mode hid the card from players). GM-posted cards meant for players should do the same.
 - Monster menu (owner's rulings 1.0.73, world setting `monsterMenu`, off by default): `module/rules/menu-tables.mjs` is HAND-WRITTEN
   (not generated; original flavour and effects, the Coins and Scrolls posts carry no licence, never copy their text):
   `CREATURES` (key, `match` regex on the lower-case name or its reversed "b a" form, category, theme), `NORMAL` d6, `THEMES`
