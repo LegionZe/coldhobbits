@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.78)
+## Status (v1.0.79)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -505,6 +505,9 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   tracked like a spell; the scroll is used up when the spell takes effect. Implementation choices: a disrupted reading uses
   up one scroll under the PHB setting (Casting Spells (PHB) applied to scroll spells) and keeps it under the house rule;
   outside combat a scroll is read at once.
+  1.0.79 (owner's report: players did not see the declaration card): the card is posted by the GM's client and is now
+  always public (`ChatMessage.applyMode(data, "public")` and the create option `messageMode: "public"`, as dnd5e 6.1.0
+  BasicRoll.toMessage), whatever chat mode the GM is using.
 - Monster menu (1.0.73; owner's request; world setting "Monster menu (butchering and eating monsters)", off by default):
   slain monsters can be butchered (monster sheet "Butcher" button, GM manual tool, `game.ad2e.butcher()`), cooked,
   preserved and eaten (`module/monster-menu.mjs`, data in `module/rules/menu-tables.mjs`). Owner's rulings: rations by

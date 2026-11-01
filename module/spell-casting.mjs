@@ -317,10 +317,16 @@ export function memorizedSpells(actor) {
 export async function postDeclarationCard(combat) {
   const casters = combatantsOf(combat).filter(c => c.actor && (memorizedSpells(c.actor).length || readyScrolls(c.actor).length));
   if (!casters.length) return null;
-  return ChatMessage.implementation.create({ speaker: { alias: i18n("AD2E.Casting.DeclareTitle", { round: combat.round }) },
+  const data = { speaker: { alias: i18n("AD2E.Casting.DeclareTitle", { round: combat.round }) },
     content: `<p><strong>${esc(i18n("AD2E.Casting.DeclareTitle", { round: combat.round }))}</strong></p><p>${esc(i18n("AD2E.Casting.DeclareHint"))}</p>`
       + `<p class="ad2e-note">${esc(casters.map(c => c.name).join(", "))}</p>`,
-    flags: { ad2e: { declare: { combat: combat.id, round: combat.round } } } });
+    flags: { ad2e: { declare: { combat: combat.id, round: combat.round } } } };
+  // Always public (owner's report 1.0.79: players did not see the card). Core v14 has a per-user message mode (core
+  // setting "messageMode": public, gm, blind, self, ic; dnd5e 6.1.0 BasicRoll.getMessageMode) and ChatMessage.applyMode /
+  // the create option `messageMode` (as dnd5e BasicRoll.toMessage); the card is posted by the GM's client, so a GM chatting
+  // in a private mode would otherwise hide it from the players it is meant for.
+  ChatMessage.implementation.applyMode?.(data, "public");
+  return ChatMessage.implementation.create(data, { messageMode: "public" });
 }
 
 /** Rows on the declaration card: for each caster the user owns (the GM: all), a spell select and "Declare". */
