@@ -1,0 +1,124 @@
+<section class="ad2e-ship-body">
+  <header class="ad2e-header ad2e-ship-header">
+    <img class="ad2e-portrait" src="{{actor.img}}" alt="{{actor.name}}" data-tooltip="{{actor.name}}" {{#if editable}}data-action="editImage" data-edit="img"{{/if}}>
+    <div class="ad2e-ship-title">
+      <input class="ad2e-name" type="text" name="name" value="{{actor.name}}">
+      <div class="ad2e-ship-line">
+        <label>{{localize "AD2E.Naval.Type"}} <select name="system.shipType">{{#each types as |t|}}<option value="{{t.value}}"{{#if t.selected}} selected{{/if}}>{{t.label}}</option>{{/each}}</select></label>
+        {{#if variable}}<label data-tooltip="{{localize 'AD2E.Naval.LengthHint'}}">{{localize "AD2E.Naval.Length"}} <input type="number" name="system.length" value="{{system.length}}" placeholder="{{spec.length}}" min="1" step="1"></label>{{/if}}
+        {{#if both}}<label>{{localize "AD2E.Naval.Propulsion.label"}} <select name="system.propulsion">{{#each propulsions as |p|}}<option value="{{p.value}}"{{#if p.selected}} selected{{/if}}>{{p.label}}</option>{{/each}}</select></label>{{/if}}
+        {{#if system.sunk}}<strong class="ad2e-unmet">{{localize "AD2E.Naval.Sunk"}}</strong>{{/if}}
+        {{#if sinking}}<strong class="ad2e-unmet">{{sinking}}</strong>{{/if}}
+        {{#if aground}}<span class="ad2e-unmet">{{aground}}</span>{{/if}}
+      </div>
+    </div>
+    <dl class="ad2e-monster-summary">
+      {{#each summary as |s|}}<div class="ad2e-summary-cell"><dt>{{s.label}}</dt><dd {{#if s.tooltip}}data-tooltip="{{s.tooltip}}"{{/if}}>{{s.value}}</dd></div>{{/each}}
+    </dl>
+  </header>
+
+  {{#if editable}}
+  <div class="ad2e-ship-buttons">
+    <button type="button" data-action="seaworthiness"><i class="fa-solid fa-water"></i> {{localize "AD2E.Naval.CheckButton"}}</button>
+    <button type="button" data-action="boost"><i class="fa-solid fa-gauge-high"></i> {{localize "AD2E.Naval.Boost"}}</button>
+    {{#if sinking}}<button type="button" data-action="patch"><i class="fa-solid fa-hammer"></i> {{localize "AD2E.Naval.Patch"}}</button>{{/if}}
+    <button type="button" data-action="repairAtSea"><i class="fa-solid fa-screwdriver-wrench"></i> {{localize "AD2E.Naval.RepairAtSea"}}</button>
+    {{#if isGM}}<button type="button" data-action="shipyard"><i class="fa-solid fa-anchor"></i> {{localize "AD2E.Naval.Shipyard"}}</button>{{/if}}
+    {{#if isSkeleton}}<button type="button" data-action="skeleton"><i class="fa-solid fa-people-pulling"></i> {{localize "AD2E.Naval.Effort"}}</button>{{/if}}
+  </div>
+  {{/if}}
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.HullLegend"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.Hull"}} <span class="ad2e-ship-pair"><input type="number" name="system.hull.value" value="{{system.hullNow}}"> / <input type="number" name="system.hull.max" value="{{system.hullMax}}" min="0"></span></label>
+      <label>{{localize "AD2E.Naval.Crippling"}} <span class="ad2e-ship-pair"><input type="number" name="system.crippling.value" value="{{system.cripplingNow}}"> / <input type="number" name="system.crippling.max" value="{{system.cripplingMax}}" min="0"></span></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.SeaworthinessHint'}}">{{localize "AD2E.Naval.SeaworthinessBase"}} <input type="number" name="system.seaworthiness" value="{{system.seaworthiness}}" placeholder="{{spec.seaworthiness}}" min="1" max="20"></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.RamHint'}}">{{localize "AD2E.Naval.Ram"}} <input type="number" name="system.ramFactor" value="{{system.ramFactor}}" placeholder="{{spec.combat.rf}}" min="0" max="4"></label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.JuryHint'}}"><input type="checkbox" name="system.jury" {{checked system.jury}}> {{localize "AD2E.Naval.Jury"}}</label>
+      <label class="ad2e-check"><input type="checkbox" name="system.sunk" {{checked system.sunk}}> {{localize "AD2E.Naval.Sunk"}}</label>
+    </div>
+    <p class="ad2e-note">{{localize "AD2E.Naval.RateNow" rate=system.rate.rate}}{{#if rateNotes}} ({{rateNotes}}){{/if}}{{#if repair}} · {{repair}}{{/if}}</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.CrewLegend"}} · {{crewStateText}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.ExperienceLabel"}} <select name="system.experience">{{#each experiences as |e|}}<option value="{{e.value}}"{{#if e.selected}} selected{{/if}}>{{e.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Naval.Sailors"}} <input type="number" name="system.sailors.count" value="{{system.sailors.count}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Rowers"}} <input type="number" name="system.rowers.count" value="{{system.rowers.count}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Officers"}} <input type="number" name="system.officers" value="{{system.officers}}" min="0"></label>
+      <label class="ad2e-check"><input type="checkbox" name="system.captain" {{checked system.captain}}> {{localize "AD2E.Naval.Captain"}}</label>
+      <label>{{localize "AD2E.Naval.Inactive"}} <input type="number" name="system.inactive" value="{{system.inactive}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Passengers"}} <input type="number" name="system.passengers" value="{{system.passengers}}" min="0"></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.CrewHdHint'}}">{{localize "AD2E.Naval.CrewHd"}} <input type="number" name="system.sailors.hd" value="{{system.sailors.hd}}" min="1"></label>
+      <label>{{localize "AD2E.Naval.MoraleBase"}} <input type="number" name="system.morale.base" value="{{system.morale.base}}" placeholder="{{morale}}" min="1" max="20"></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.TiredHint'}}">{{localize "AD2E.Naval.Tired"}} <input type="number" name="system.morale.tired" value="{{system.morale.tired}}" min="0"></label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.RowersTiredHint'}}"><input type="checkbox" name="system.rowersTired" {{checked system.rowersTired}}> {{localize "AD2E.Naval.RowersTired"}}</label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.RestingHint'}}"><input type="checkbox" name="system.restingRowers" {{checked system.restingRowers}}> {{localize "AD2E.Naval.Resting"}}</label>
+    </div>
+    {{#if rowers}}<p class="ad2e-note">{{localize "AD2E.Naval.RowersNote" rowers=rowers.rowers skeleton=rowers.skeleton minimum=rowers.minimum}}{{#if warriors}} · {{localize "AD2E.Naval.WarriorsNote" n=warriors}}{{/if}}</p>{{/if}}
+    {{#if allRow}}<p class="ad2e-note">{{localize "AD2E.Naval.AllRow"}}</p>{{/if}}
+    {{#if editable}}<div class="ad2e-ship-buttons">
+      <button type="button" data-action="fullCrew"><i class="fa-solid fa-users"></i> {{localize "AD2E.Naval.FullCrew"}}</button>
+      <button type="button" data-action="rollExperience"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Naval.RollExperience"}}</button>
+    </div>{{/if}}
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.MarinesLegend"}} · {{localize "AD2E.Naval.Free" n=system.marinesFree}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.Marines"}} <input type="number" name="system.marines.count" value="{{system.marines.count}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Archers"}} <input type="number" name="system.marines.archers" value="{{system.marines.archers}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Boarders"}} <input type="number" name="system.marines.boarders" value="{{system.marines.boarders}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Artillerists"}} <input type="number" name="system.marines.artillerists" value="{{system.marines.artillerists}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.Firefighters"}} <input type="number" name="system.marines.firefighters" value="{{system.marines.firefighters}}" min="0"></label>
+      <label>{{localize "AD2E.Naval.MarineHd"}} <input type="number" name="system.marines.hd" value="{{system.marines.hd}}" min="1"></label>
+      <label>THAC0 <input type="number" name="system.thac0" value="{{system.thac0}}"></label>
+      <label>{{localize "AD2E.Naval.CrewAc"}} <input type="number" name="system.ac" value="{{system.ac}}"></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.ArtilleryLegend"}} · {{localize "AD2E.Naval.DeckUsed" used=deck.used space=deck.space tons=deck.tons}}</legend>
+    {{#each artillery as |a|}}
+    <div class="ad2e-ship-row">
+      <span>{{a.label}}</span>
+      <label>{{localize "AD2E.Naval.ArtilleryCrew"}} <input type="number" name="system.artillery.{{a.index}}.crew" value="{{a.crew}}" min="0"> / {{a.need}}</label>
+      <label class="ad2e-check"><input type="checkbox" name="system.artillery.{{a.index}}.incendiary" {{checked a.incendiary}}> {{localize "AD2E.Naval.Incendiary"}}</label>
+      <label class="ad2e-check"><input type="checkbox" name="system.artillery.{{a.index}}.destroyed" {{checked a.destroyed}}> {{localize "AD2E.Naval.Destroyed"}}</label>
+      <input type="hidden" name="system.artillery.{{a.index}}.key" value="{{a.key}}">
+      <input type="hidden" name="system.artillery.{{a.index}}.loaded" value="{{a.loaded}}">
+      {{#if @root.editable}}<a data-action="removeArtillery" data-index="{{a.index}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Naval.NoArtillery"}}</p>
+    {{/each}}
+    {{#each artilleryIssues as |t|}}<p class="ad2e-note ad2e-unmet">{{t}}</p>{{/each}}
+    {{#if editable}}<div class="ad2e-ship-buttons">
+      <select data-artillery-kind aria-label="{{localize 'AD2E.Naval.ArtilleryLegend'}}">{{#each artilleryKinds as |k|}}<option value="{{k.value}}">{{k.label}}</option>{{/each}}</select>
+      <button type="button" data-action="addArtillery"><i class="fa-solid fa-plus"></i> {{localize "AD2E.Naval.AddArtillery"}}</button>
+    </div>{{/if}}
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.FiresLegend"}}</legend>
+    {{#each fires as |f|}}
+    <div class="ad2e-ship-row">
+      <label>{{localize "AD2E.Naval.FireLocation"}} <select name="system.fires.{{f.index}}.location"><option value="hull"{{#if f.hull}} selected{{/if}}>{{localize "AD2E.Naval.FireAt.hull"}}</option><option value="crippling"{{#unless f.hull}} selected{{/unless}}>{{localize "AD2E.Naval.FireAt.crippling"}}</option></select></label>
+      <label>{{localize "AD2E.Naval.FireSize"}} <input type="number" name="system.fires.{{f.index}}.die" value="{{f.die}}" min="4"></label>
+      {{#if @root.editable}}<a data-action="removeFire" data-index="{{f.index}}" data-tooltip="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Naval.NoFires"}}</p>
+    {{/each}}
+    <div class="ad2e-ship-grid">
+      <label data-tooltip="{{localize 'AD2E.Naval.IncendiaryHint'}}">{{localize "AD2E.Naval.Volleys"}} <input type="number" name="system.incendiary" value="{{system.incendiary}}" min="0"></label>
+    </div>
+    {{#if editable}}<div class="ad2e-ship-buttons"><button type="button" data-action="addFire"><i class="fa-solid fa-fire"></i> {{localize "AD2E.Naval.AddFire"}}</button></div>{{/if}}
+  </fieldset>
+
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.NotesLegend"}}</legend>
+    <label class="ad2e-ship-wide">{{localize "AD2E.Naval.CargoCarried"}} <input type="text" name="system.cargo" value="{{system.cargo}}"></label>
+    <textarea name="system.notes" rows="4" aria-label="{{localize 'AD2E.Naval.NotesLegend'}}">{{system.notes}}</textarea>
+  </fieldset>
+</section>

@@ -7,6 +7,7 @@ import { ItemCreator, MagicItemCreator, MonsterCreator, PatronCreator, SpellCrea
 import { rollEncounterReaction } from "../reaction.mjs";
 import { rollTreasureDialog } from "../treasure.mjs";
 import TravelPlanner from "./travel-planner.mjs";
+import SeaVoyage from "./sea-voyage.mjs";
 import EncounterTool from "./encounter-tools.mjs";
 import DungeonTurnTracker from "./dungeon-turns.mjs";
 import PartyTracker from "./party-tracker.mjs";
@@ -42,6 +43,7 @@ export const MANUAL_TOOLS = {
   falling: () => fallingDialog(),
   rollReaction: () => rollEncounterReaction(null),
   travel: () => new TravelPlanner().render({ force: true }),
+  voyage: () => new SeaVoyage().render({ force: true }),
   encounters: () => new EncounterTool().render({ force: true }),
   dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
   party: () => new PartyTracker().render({ force: true }),

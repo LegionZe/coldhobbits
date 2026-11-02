@@ -246,6 +246,19 @@
       roll table of your own, with a 1-in-N chance each day; "Copy built-in list to a table" makes an editable table.
       Each End day writes a log entry (date, miles, weather, lost, encounter, event, supplies), listed in the planner
       and posted to you.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="voyage"><i class="fa-solid fa-sailboat"></i> Sea voyage</button>
+      <p>A ship's day at sea: wind, distance, drift, seaworthiness checks, encounters and visibility (Of Ships and the Sea).</p>
+      <details><summary>Details</summary>
+      <p>Create a Ship actor first (Actors sidebar, type Ship) and pick its type; "Typical crew" fills in the crew,
+      marines, hull and crippling points. In the tool, "Roll today's wind" rolls the wind's strength (2d6 on the first
+      day, then the next-day dice for 1d4 days) and its direction (by season, held 1d4 days); you can also set both by hand.
+      Choose the ship and its heading: the course to the wind (into, with, across) follows from the heading unless you
+      pick it. The day's distance uses the ship's rate under sail with the wind (three times the rate sailing through
+      the night, twice anchoring at night) or under oars (twice the rate), less a skeleton crew's or damage's share; a
+      pushed day adds a third. Gales and storms blow the ship off course (a Seamanship check cuts a gale's drift by a third)
+      and call for a seaworthiness check: the button rolls it on the ship. Encounter checks roll Tables 7-9 for the
+      waters (and Table 10 for natural phenomena) and are whispered to you; the visibility row gives Table 6 ranges for a
+      ship of this size. "Post the day" writes the card whose "End day" button advances world time a day.</p></details></div>
     <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
       <p>Ten-minute dungeon turns, rest reminders and burning lights.</p>
       <details><summary>Details</summary>
@@ -643,6 +656,14 @@
     mounts (Animal Master Table 42, Rider Table 43; see <em>Characters</em>).</li>
     <li><strong>Mounts</strong>: a rider's load is checked against the mount's capacity; the Push button pushes a mount
     beyond its normal pace. With the world setting on, a rider's and mount's tokens move together.</li>
+    <li><strong>Ships</strong> (actor type Ship; Of Ships and the Sea): the ship record holds the type (Tables 1, 2 and
+    38), length for barges, canoes, outriggers and rafts, crew and marines with their hit dice, experience and morale,
+    hull and crippling points, artillery, fires and incendiary volleys. The sheet shows the current seaworthiness (hull
+    damage lowers it), movement, maneuverability and pursuit dice. Buttons: seaworthiness check (gale, storm, choppy seas,
+    hull damage, running aground on a soft or rocky bottom, rocky shoals: a failure founders, capsizes, grounds or
+    sinks; the sinking clock runs on world time and the ship is marked sunk when it runs out), speed increase (rowing
+    sprint, sailing, a pushed day), patch a leak, repair at sea, shipyard repair (cost and days from Table 30), skeleton
+    crew effort and crew experience (3d4). Naval combat between ships is a later addition.</li>
     <li><strong>Familiars</strong>: Find Familiar is rolled by the GM from the character sheet; the familiar's death and
     separation are tracked. Sha'ir characters summon and send their gen from the sheet.</li>
     <li><strong>Importing</strong>: see <em>GM tools</em>. Pictures are not shipped with the system; the importer copies
@@ -729,6 +750,7 @@
       <tr><td><code>game.ad2e.party()</code></td><td>Party tracker (who is in the party).</td></tr>
       <tr><td><code>game.ad2e.butcher(monster)</code></td><td>Monster menu: butcher a slain monster (default: the targeted token's).</td></tr>
       <tr><td><code>game.ad2e.menuTables()</code></td><td>Monster menu: create editable roll tables.</td></tr>
+      <tr><td><code>game.ad2e.voyage()</code></td><td>Sea voyage tool (wind, a ship's day at sea, encounters, visibility).</td></tr>
       <tr><td><code>game.ad2e.timekeeper()</code></td><td>Timekeeper window (date, time steps, dungeon turn, travel).</td></tr>
       <tr><td><code>game.ad2e.calendar()</code></td><td>Zakharan calendar window (when the setting is on).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>

@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.79)
+## Status (v1.0.80)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -924,6 +924,31 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   all attack rolls, cumulative (character and monster attacks), and "Rest" removes one day per half day. Table 73
   (optional, one round in difficult terrain) is listed in the character sheet's movement line. The day's card has an
   "End day" button (GM) that advances world time by the travel hours (owner's ruling).
+- Ships and nautical travel (1.0.80; owner's request; Of Ships and the Sea (DMGR9) on adnd2e.fandom.com: Ship Particulars
+  (OSS) rev 173984, Movement (OSS) rev 173978, Shipwrecks (OSS) rev 172512, Vision (OSS) rev 172711, Encounter Tables (OSS)
+  rev 249009, the Chapter 4 combat pages for Tables 11-38; `python3 tools/build-naval-tables.py` parses every table and
+  regex-checks every rule it uses, the worked examples are tests). Actor type **Ship** (`module/data/ship.mjs`, sheet
+  `module/sheets/ship-sheet.mjs`): the ship record (type, length for the variable barge/canoe/outrigger/raft, sails or
+  oars, crew and marines with hit dice and assignments, crew experience and morale, hull and crippling points, artillery
+  with deck space and cargo checks, fires, incendiary volleys, jury rigging, the sinking clock). Derived: size, crew state
+  (full; skeleton: 2/3 movement, -2 seaworthiness and dice; below the minimum: movement 3, 1d4 maneuverability),
+  seaworthiness after hull damage (Table 28), movement after damage (half the hull lost -1/3, three quarters -2/3; each
+  third of the crippling points -1/3), maneuverability and pursuit dice (Table 12 experience, damage, tired rowers).
+  Sheet actions (`module/ships.mjs`): seaworthiness checks by situation (founder in 1d10 hours; storm 20 capsizes; soft
+  grounding refloated in 1d6 days and jury-rigged at -3; rocky grounding sinks in 1d3 hours, 20 splinters; a 20 on a
+  hull-damage check sinks in Table 29 rounds), patching (1d20 12+, +3), repairs at sea (1d6 hull / 1d12 crippling, at
+  most what the event caused; 1d4 days + 2 per size above Small), shipyard repairs (Table 30), speed increases (1d20 12+,
+  +3 for Seamanship), skeleton-crew effort (morale check, -1 morale), crew experience (3d4 +2/+3). The sinking clock is
+  world time (active GM). GM tool **Sea voyage** (`module/apps/sea-voyage.mjs`, `game.ad2e.voyage()`): Table 4 wind
+  strength (2d6, next-day dice for 1d4 days) and Table 5 direction (by season, 1d4 days) kept in a world setting, course
+  to the wind from the heading, Table 3 sailing rates, daily miles (sails x3, anchoring x2, oars x2; pushed +1/3), gale
+  and storm drift (Seamanship -1/3 in a gale; into the wind backwards), the checks the wind calls for, encounter checks
+  (Tables 7-10 by waters) and Table 6 visibility; "Post the day" with an "End day" button (24 hours).
+  Implementation choices: travel uses Table 2, naval combat Table 38 (they differ for the great galley and the dromond);
+  single-rate ships' propulsion where the descriptions do not say it (canoe, skiff, keelboat rowed; caravel, sohar,
+  fishing boat, manta sailed); crippling counted in thirds (the fraction is missing in the wiki text); anchoring doubles
+  the wind-adjusted rate; officers kept apart from the crew count; one hit die per crew member unless set. Detailed naval
+  combat and the underwater rules are the next additions.
 - Random encounters (GM tool "Random encounters": Configure Settings, the GM manual, or `game.ad2e.encounters()`;
   `python3 tools/build-encounter-check-tables.py`, tables parsed and rules regex-checked against "DMing Encounters (DMG)",
   "DMG Table 56", "Random Encounters (DMG)", "Creating Encounter Tables (DMG)", "DMG Table 54", "DMG Table 55" and

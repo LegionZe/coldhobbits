@@ -2,6 +2,10 @@ import { rollEncounterReaction } from "./reaction.mjs";
 import { AD2E } from "./config.mjs";
 import CharacterData from "./data/character.mjs";
 import MonsterData from "./data/monster.mjs";
+import ShipData from "./data/ship.mjs";
+import ShipSheet from "./sheets/ship-sheet.mjs";
+import SeaVoyage, { registerSeaVoyage } from "./apps/sea-voyage.mjs";
+import { registerShips } from "./ships.mjs";
 import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
@@ -113,6 +117,9 @@ Hooks.once("init", () => {
     name: "AD2E.Encounter.Title", label: "AD2E.Encounter.Open", hint: "AD2E.Encounter.MenuHint", icon: "fa-solid fa-dragon", type: EncounterTool, restricted: true
   });
   registerEncounters();
+  // Ships and nautical travel (Of Ships and the Sea; game.ad2e.voyage(); module/naval.mjs, ships.mjs, apps/sea-voyage.mjs).
+  registerSeaVoyage();
+  registerShips();
   // GM tool: the party's members (Configure Settings, or game.ad2e.party(); module/party.mjs).
   game.settings.registerMenu("ad2e", "party", {
     name: "AD2E.Party.Title", label: "AD2E.Party.Open", hint: "AD2E.Party.MenuHint", icon: "fa-solid fa-people-group", type: PartyTracker, restricted: true
@@ -173,6 +180,7 @@ Hooks.once("init", () => {
     itemSaves: () => itemSavesTool(),
     falling: () => fallingDialog(),
     travel: () => new TravelPlanner().render({ force: true }),
+    voyage: () => new SeaVoyage().render({ force: true }),
     encounters: () => new EncounterTool().render({ force: true }),
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),
@@ -267,6 +275,7 @@ Hooks.once("init", () => {
   });
   CONFIG.Actor.dataModels.character = CharacterData;
   CONFIG.Actor.dataModels.monster = MonsterData;
+  CONFIG.Actor.dataModels.ship = ShipData;
   CONFIG.Item.dataModels.class = ClassData;
   CONFIG.Item.dataModels.kit = KitData;
   CONFIG.Item.dataModels.race = RaceData;
@@ -293,6 +302,7 @@ Hooks.once("init", () => {
     label: "AD2E.Sheet.Character"
   });
   DocumentSheetConfig.registerSheet(Actor, "ad2e", MonsterSheet, { types: ["monster"], makeDefault: true, label: "AD2E.Sheet.Monster" });
+  DocumentSheetConfig.registerSheet(Actor, "ad2e", ShipSheet, { types: ["ship"], makeDefault: true, label: "AD2E.Sheet.Ship" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", ClassSheet, { types: ["class"], makeDefault: true, label: "AD2E.Sheet.Class" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", KitSheet, { types: ["kit"], makeDefault: true, label: "AD2E.Sheet.Kit" });
   DocumentSheetConfig.registerSheet(Item, "ad2e", RaceSheet, { types: ["race"], makeDefault: true, label: "AD2E.Sheet.Race" });
