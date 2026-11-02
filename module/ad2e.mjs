@@ -8,6 +8,8 @@ import SeaVoyage, { registerSeaVoyage } from "./apps/sea-voyage.mjs";
 import { registerShips } from "./ships.mjs";
 import NavalCombat from "./apps/naval-combat.mjs";
 import { registerNavalBattle } from "./naval-battle.mjs";
+import UnderwaterTool from "./apps/underwater-tool.mjs";
+import { registerUnderwater } from "./underwater.mjs";
 import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
@@ -127,6 +129,11 @@ Hooks.once("init", () => {
   game.settings.registerMenu("ad2e", "navalCombat", {
     name: "AD2E.NavalCombat.Title", label: "AD2E.NavalCombat.Open", hint: "AD2E.NavalCombat.MenuHint", icon: "fa-solid fa-anchor", type: NavalCombat, restricted: true
   });
+  // GM tool: underwater adventuring (game.ad2e.underwater(); module/underwater.mjs, the "Underwater" status).
+  registerUnderwater();
+  game.settings.registerMenu("ad2e", "underwater", {
+    name: "AD2E.Underwater.Title", label: "AD2E.Underwater.Open", hint: "AD2E.Underwater.MenuHint", icon: "fa-solid fa-water", type: UnderwaterTool, restricted: true
+  });
   // GM tool: the party's members (Configure Settings, or game.ad2e.party(); module/party.mjs).
   game.settings.registerMenu("ad2e", "party", {
     name: "AD2E.Party.Title", label: "AD2E.Party.Open", hint: "AD2E.Party.MenuHint", icon: "fa-solid fa-people-group", type: PartyTracker, restricted: true
@@ -189,6 +196,7 @@ Hooks.once("init", () => {
     travel: () => new TravelPlanner().render({ force: true }),
     voyage: () => new SeaVoyage().render({ force: true }),
     navalCombat: () => new NavalCombat().render({ force: true }),
+    underwater: () => new UnderwaterTool().render({ force: true }),
     encounters: () => new EncounterTool().render({ force: true }),
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),

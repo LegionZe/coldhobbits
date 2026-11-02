@@ -351,3 +351,8 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-naval-b { border-left-style: dashed; }
 .ad2e-naval-unit legend a { font-weight: bold; cursor: pointer; }
 .ad2e-naval .ad2e-ship-grid > label > input[type="number"] { width: 5rem; flex: 0 0 5rem; }
+/* Underwater tool (1.0.82): own markup, templates/apps/underwater-tool.hbs. */
+.ad2e-underwater .ad2e-check-grid { grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); margin: 0.3rem 0; }
+.ad2e-underwater-hearing { width: 100%; border-collapse: collapse; }
+.ad2e-underwater-hearing th { text-align: left; }
+.ad2e-underwater-hearing th, .ad2e-underwater-hearing td { padding: 0.1rem 0.4rem; }

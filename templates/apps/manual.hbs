@@ -277,6 +277,23 @@
       round's hull damage and the rowers' endurance, counts down reloading, says which ships owe a morale check, and
       advances world time by the round (1, 10 or 30 minutes). "Fleet battle" settles side A against side B with one roll
       per pair (Table 38). Casualties, hull and crippling damage and fires are written on the ship sheets.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="underwater"><i class="fa-solid fa-water"></i> Underwater</button>
+      <p>Diving: combat penalties, swimming, breath, depth and cold, vision, hearing and underwater encounters.</p>
+      <details><summary>Details</summary>
+      <p>Select tokens (or give a token the "Underwater" status) and open the tool. "Underwater" puts the status on the
+      actor; set its depth, maximum depth (humans 400 feet and dwarves 600 by default: Table 43 is not readable on the
+      wiki, so set other creatures' depth yourself), air (an airy water sphere or similar), free action and cold protection.
+      While the status is on, attack dialogs add ticked boxes for the underwater penalty (-4, or -2 with the Underwater
+      Combat proficiency; none with free action or air), cold below 300 feet (-2) and each Depth Unit past the first, and
+      show the weapon's Table 44 speed and damage (or that it cannot be used); initiative adds +4 (+2 proficient, +4 for
+      casting) and +2 in the cold. Specialization bonuses are not removed for you. Casting a spell whispers whether it
+      works underwater, needs air for its verbal component and may lose its material components (a button rolls the Table
+      46 saves); using a magical item on Tables 47 or 48 posts a note. Buttons per actor: "Breath: next round" counts the
+      held breath (a third of Constitution in rounds) and rolls the Constitution checks past it; "Depth check" asks for
+      the save vs. paralyzation and rolls the crushing damage on a failure (the damage card's buttons apply it); "Cold
+      check" is the optional freezing rule. The vision section gives Tables 39-41 for the water, surface condition, light
+      and depth; hearing gives Table 42; the encounter section rolls the day's checks for an area (Tables 49-56, aquatic
+      races Table 57, hazards Table 58) and a hazard, whispered to you.</p></details></div>
     <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
       <p>Ten-minute dungeon turns, rest reminders and burning lights.</p>
       <details><summary>Details</summary>
@@ -770,6 +787,7 @@
       <tr><td><code>game.ad2e.menuTables()</code></td><td>Monster menu: create editable roll tables.</td></tr>
       <tr><td><code>game.ad2e.voyage()</code></td><td>Sea voyage tool (wind, a ship's day at sea, encounters, visibility).</td></tr>
       <tr><td><code>game.ad2e.navalCombat()</code></td><td>Naval combat window (Of Ships and the Sea detailed naval combat).</td></tr>
+      <tr><td><code>game.ad2e.underwater()</code></td><td>Underwater window (Of Ships and the Sea underwater rules).</td></tr>
       <tr><td><code>game.ad2e.timekeeper()</code></td><td>Timekeeper window (date, time steps, dungeon turn, travel).</td></tr>
       <tr><td><code>game.ad2e.calendar()</code></td><td>Zakharan calendar window (when the setting is on).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>

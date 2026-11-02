@@ -9,6 +9,7 @@ import { rollTreasureDialog } from "../treasure.mjs";
 import TravelPlanner from "./travel-planner.mjs";
 import SeaVoyage from "./sea-voyage.mjs";
 import NavalCombat from "./naval-combat.mjs";
+import UnderwaterTool from "./underwater-tool.mjs";
 import EncounterTool from "./encounter-tools.mjs";
 import DungeonTurnTracker from "./dungeon-turns.mjs";
 import PartyTracker from "./party-tracker.mjs";
@@ -46,6 +47,7 @@ export const MANUAL_TOOLS = {
   travel: () => new TravelPlanner().render({ force: true }),
   voyage: () => new SeaVoyage().render({ force: true }),
   navalCombat: () => new NavalCombat().render({ force: true }),
+  underwater: () => new UnderwaterTool().render({ force: true }),
   encounters: () => new EncounterTool().render({ force: true }),
   dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
   party: () => new PartyTracker().render({ force: true }),

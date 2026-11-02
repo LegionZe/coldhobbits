@@ -3,6 +3,7 @@ import { modifierFields, modifierText, readModifier } from "../roll-modifiers.mj
 import { castingTimeModifier, defaultAction, initiativeActions, sideOf, STANDARD_MODIFIERS } from "../initiative.mjs";
 import { displayPenalty } from "../kit-features.mjs";
 import { castingOf } from "../spell-casting.mjs";
+import { initiativeTerm as underwaterTerm } from "../underwater.mjs";
 
 export { sideOf };
 
@@ -53,9 +54,11 @@ export class AD2ECombatant extends Combatant {
     const shown = displayPenalty(this.parent, this, sideOf);
     const display = shown ? ` + ${shown.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: shown.name }))}]` : "";
     const base = baseFormula(this, mode);
-    if (mode === "standard") return super.getInitiativeRoll(base + display);
+    // Underwater (module/underwater.mjs): +4 (+2 proficient, cold, depth), or +4 for a spell's gestures.
+    if (mode === "standard") return super.getInitiativeRoll(base + display + underwaterTerm(this.actor));
     const action = defaultAction(this.actor, undefined, castingOf(this));
-    return super.getInitiativeRoll((action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base) + display);
+    const water = underwaterTerm(this.actor, { casting: /^(spell|scroll)\./.test(action.key ?? "") });
+    return super.getInitiativeRoll((action.value ? `${base} + ${action.value}[${flavor(action.short)}]` : base) + display + water);
   }
 }
 
@@ -128,7 +131,8 @@ export default class AD2ECombat extends Combat {
         input.display ? `${input.display.value}[${flavor(game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }))}]` : null,
         // A kit initiative bonus lowers the roll (lowest acts first).
         ...(mode === "standard" ? [] : input.kit.map(k => `${-k.current}[${flavor(k.condition)}]`)),
-        ...situations.map(s => `${s.value}[${flavor(s.label)}]`), input.mod ? `${input.mod}[${flavor(input.note || "modifier")}]` : null]
+        ...situations.map(s => `${s.value}[${flavor(s.label)}]`), input.mod ? `${input.mod}[${flavor(input.note || "modifier")}]` : null,
+        underwaterTerm(combatant?.actor, { casting }).replace(/^ \+ /, "") || null]
         .filter(Boolean);
       const parts = [action && action.key !== "none" ? action.label : null, action?.note || null,
         input.display ? game.i18n.format("AD2E.KitFeature.DisplayTerm", { name: input.display.name }) + ` +${input.display.value}` : null,
