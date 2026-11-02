@@ -1,4 +1,5 @@
 import { askScrollTime, beginCasting, castingStruck, scrollTracked } from "../spell-casting.mjs";
+import { attackFields as underwaterAttackFields, attackPicked as underwaterAttackPicked, castingNote as underwaterCastingNote, itemNote as underwaterItemNote } from "../underwater.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
@@ -847,7 +848,7 @@ export default class AD2EActor extends Actor {
         + maneuverField + ammoField + rangeField + throwField + wetField + moveField + backstabField + twoField + nonlethalField
         + (use === "melee" ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
         + styleField + this.#dualField(this.system.dual?.thac0Option)
-        + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "")
+        + AD2EActor.#combatModFields(targets, use === "missile", PROVINCES.includes(item.system.element) ? item.system.element : "", this, item)
         + modifierFields()
         + this.#kitFields(kitOptions),
       ok: {
@@ -1801,7 +1802,7 @@ export default class AD2EActor extends Actor {
       content: `<p class="ad2e-note">${i18n(`AD2E.Unarmed.Hint.${form}`)} ${game.i18n.format("AD2E.Unarmed.ArmedDefender", { bonus: C.armedDefender })}`
         + `${monster ? ` ${i18n("AD2E.Unarmed.CreatureHint")}` : ""}</p>`
         + field(i18n("AD2E.Roll.TargetAC"), `<input type="number" name="ac" value="${AD2EActor.#targetAc(targets)}" autofocus>`)
-        + extra + (monster ? "" : this.#dualField(this.system.dual?.thac0Option)) + AD2EActor.#combatModFields(targets) + modifierFields() + this.#kitFields(kitOptions),
+        + extra + (monster ? "" : this.#dualField(this.system.dual?.thac0Option)) + AD2EActor.#combatModFields(targets, false, "", this) + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form.elements;
         const kit = AD2EActor.#kitPicked(button.form, kitOptions);
@@ -1919,7 +1920,7 @@ export default class AD2EActor extends Actor {
    * target has (e.g. Prone, Stunned: +4; Asleep, Paralyzed, Restrained, Unconscious: automatic hit; Invisible: -4) are
    * ticked, with the condition named.
    */
-  static #combatModFields(targets, missile = false, element = "") {
+  static #combatModFields(targets, missile = false, element = "", attacker = null, item = null) {
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     // Skills & Powers shield proficiency of the first target (Table 51): a tick box, not ticked (the defender guards
     // against a limited number of attacks per round and names them; the GM decides).
@@ -1938,7 +1939,9 @@ export default class AD2EActor extends Actor {
         const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
         return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
           + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
-      }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>";
+      }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>"
+      // Underwater (module/underwater.mjs): the attacker's penalties as ticked boxes, and the weapon's Table 44 note.
+      + (attacker ? underwaterAttackFields(attacker, item, { missile }) : "");
   }
 
   /** Record on this actor's combatant that it shot with its missile style this round (combatant flag ad2e.shot = round). */
@@ -2006,7 +2009,9 @@ export default class AD2EActor extends Actor {
     const genBox = form?.elements?.genWard;
     const gen = genBox?.checked ? Number(genBox.value) || 0 : 0;
     if (genBox?.checked) text.push(`${game.i18n.localize("AD2E.Gen.WardShort")} ${gen}`);
-    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen + ms, auto: rows.some(m => m.value === "auto"),
+    const uw = underwaterAttackPicked(form);
+    if (uw.text) text.push(uw.text);
+    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen + ms + uw.sum, auto: rows.some(m => m.value === "auto"),
       text: text.join("; ") };
   }
 
@@ -2087,7 +2092,7 @@ export default class AD2EActor extends Actor {
         // Called shots and opposed maneuvers (world setting "attackOptions", module/attack-options.mjs).
         + (attackOptionsOn() ? this.#maneuverField(["normal", "calledShot", "disarm", "grab", "trap", ...(attack.melee ? ["block"] : [])], targets, attack.type) : "")
         + (attack.melee ? AD2EActor.#armedDefenderField() + this.#mountedMeleeField(targets) : "")
-        + AD2EActor.#combatModFields(targets, !attack.melee, attack.element)
+        + AD2EActor.#combatModFields(targets, !attack.melee, attack.element, this, attack.poisonItem ?? null)
         + modifierFields(),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => ({
         ac: Number(button.form.elements.ac.value) || 0, vsUnarmed: !!button.form.elements.vsUnarmed?.checked,
@@ -2288,6 +2293,8 @@ export default class AD2EActor extends Actor {
   /** The spell takes effect: components, memory, the card, saves, animation, effects. */
   async #castNow(spell) {
     const sys = spell.system;
+    // Underwater (module/underwater.mjs): a note on the spell's underwater status and component saves.
+    underwaterCastingNote(this, spell).catch(err => console.error("AD2E | underwater note", err));
     // Material components (module/components.mjs; world setting "trackComponents"): missing ones ask to cast anyway.
     const comp = await useComponents(this, spell);
     if (!comp.cast) return;
@@ -2603,6 +2610,7 @@ export default class AD2EActor extends Actor {
     const item = this.items.get(itemId);
     if (!item || item.type !== "magic") return;
     const sys = item.system;
+    if (!declare) underwaterItemNote(this, item).catch(err => console.error("AD2E | underwater note", err));
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     if (sys.usesCharges && sys.charges.value < 1) {
@@ -2946,7 +2954,7 @@ export default class AD2EActor extends Actor {
     const targets = AD2EActor.#targetsNow();
     const input = await promptModifier(game.i18n.localize("AD2E.Roll.Attack"), {
       extra: `<div class="form-group"><label>${game.i18n.localize("AD2E.Roll.TargetAC")}</label><input type="number" name="ac" value="${AD2EActor.#targetAc(targets, missile)}" autofocus></div>`
-        + this.#dualField(this.system.dual?.thac0Option) + AD2EActor.#combatModFields(targets),
+        + this.#dualField(this.system.dual?.thac0Option) + AD2EActor.#combatModFields(targets, missile, "", this),
       read: form => ({ ac: Number(form.elements.ac.value) || 0, t51: AD2EActor.#combatModPicked(form), dualOld: !!form.elements.dualOld?.checked })
     });
     if (!input) return;

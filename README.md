@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.81)
+## Status (v1.0.82)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -966,7 +966,27 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   example's modified 13 is a critical hit by Table 24 (12-14); the table is followed. Implementation choices: see the
   headers of naval-combat.mjs and naval-battle.mjs (adjusted hit number = THAC0 - AC - bonuses; marine losses unassigned
   first; checks after half the hull at each further quarter of what was left; fires burn each minute; a growing fire's
-  second fire takes a Table 20 size; the worst failed-morale penalty is kept for the battle). The underwater rules are next.
+  second fire takes a Table 20 size; the worst failed-morale penalty is kept for the battle).
+  Underwater adventuring (1.0.82; Combat Effects (OSS) rev 172759, Temperature (OSS) rev 172710, Movement - Underwater
+  (OSS) rev 172850, Vision - Underwater (OSS) rev 172704, Communication (OSS) rev 241755, Special Weapons (OSS) rev 172778,
+  Casting Spells Underwater (OSS) rev 241756, Spells Allowed Underwater (OSS) rev 172859, Underwater Alterations (OSS) rev
+  247403, Underwater Encounters (OSS) rev 173017, Swimming (PHB) rev 144872): `python3 tools/build-underwater-tables.py`
+  parses Tables 39-42 and 44-59 and regex-checks the rules into `module/rules/underwater-tables.mjs`; `module/underwater.mjs`
+  holds the rules. An actor is underwater while it has the "Underwater" status; GM tool **Underwater**
+  (`module/apps/underwater-tool.mjs`, `game.ad2e.underwater()`) sets its depth, maximum depth, air, free action and cold
+  protection, shows its combat penalties, swimming, walking and sinking rates and held breath, and has buttons for a
+  breath round (Constitution checks at a cumulative -2 past a third of Constitution), the depth check (save vs.
+  paralyzation, 4d10 + 1d10 per Depth Unit crushing damage) and the optional freezing check; Tables 39-41 vision by
+  water, surface condition, light and depth, infravision a quarter, Table 42 hearing (yards), and encounter checks by
+  area (Tables 49-56; trench 15% a day, Table 52; aquatic races Table 57, hazards Table 58, vortex Table 59). Attack
+  dialogs add ticked boxes for the underwater penalty (-4, Underwater Combat -2, none with free action or air), cold
+  below 300 feet (-2) and Depth Units past the first, and the weapon's Table 44 speed and damage or that it cannot be
+  used (crossbows: a tenth of the range, -1 damage); initiative adds +4 (+2 proficient; +4 for casting) and +2 in the
+  cold. Casting whispers whether the spell is on the list, verbal components needing air and a button for the Table 46
+  component saves; magical items on Tables 47/48 post a note. Implementation choices: Table 43 is a picture on the wiki,
+  so only human 400 and dwarf 600 feet are defaults (the GM sets the rest); weapons are matched to Table 44 by name words
+  (a weapon split by grip uses the one-handed row); the cold -2 to damage and the loss of specialization bonuses are
+  noted in the dialog, not applied; an unlisted spell is reported, not blocked.
 - Random encounters (GM tool "Random encounters": Configure Settings, the GM manual, or `game.ad2e.encounters()`;
   `python3 tools/build-encounter-check-tables.py`, tables parsed and rules regex-checked against "DMing Encounters (DMG)",
   "DMG Table 56", "Random Encounters (DMG)", "Creating Encounter Tables (DMG)", "DMG Table 54", "DMG Table 55" and

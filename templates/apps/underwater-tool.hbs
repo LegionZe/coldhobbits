@@ -1,0 +1,65 @@
+<section class="ad2e-underwater">
+  {{#each rows as |r|}}
+  <fieldset class="ad2e-underwater-actor">
+    <legend>{{r.name}}</legend>
+    <div class="ad2e-ship-buttons">
+      <button type="button" data-action="toggle" data-uuid="{{r.uuid}}"><i class="fa-solid {{#if r.on}}fa-arrow-up{{else}}fa-arrow-down{{/if}}"></i> {{#if r.on}}{{localize "AD2E.Underwater.Surfacing"}}{{else}}{{localize "AD2E.Underwater.Dive"}}{{/if}}</button>
+      {{#if r.on}}
+      <button type="button" data-action="breath" data-uuid="{{r.uuid}}"><i class="fa-solid fa-lungs"></i> {{localize "AD2E.Underwater.BreathRound"}}</button>
+      <button type="button" data-action="resetBreath" data-uuid="{{r.uuid}}"><i class="fa-solid fa-wind"></i> {{localize "AD2E.Underwater.ResetBreath"}}</button>
+      <button type="button" data-action="depth" data-uuid="{{r.uuid}}"><i class="fa-solid fa-arrows-down-to-line"></i> {{localize "AD2E.Underwater.DepthCheck"}}</button>
+      <button type="button" data-action="freeze" data-uuid="{{r.uuid}}"><i class="fa-solid fa-snowflake"></i> {{localize "AD2E.Underwater.FreezeCheck"}}</button>
+      {{/if}}
+    </div>
+    {{#if r.on}}
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Underwater.DepthFeet"}} <input type="number" data-uw-actor="depth" data-uuid="{{r.uuid}}" value="{{r.depth}}" min="0" step="10"></label>
+      <label>{{localize "AD2E.Underwater.MaxDepth"}} <input type="number" data-uw-actor="maxDepth" data-uuid="{{r.uuid}}" value="{{r.maxDepth}}" placeholder="{{r.maxPlaceholder}}" min="0" step="10"></label>
+    </div>
+    <div class="ad2e-check-grid">
+      <label class="checkbox"><input type="checkbox" data-uw-actor="air" data-uuid="{{r.uuid}}"{{#if r.air}} checked{{/if}}> {{localize "AD2E.Underwater.Air"}}</label>
+      <label class="checkbox"><input type="checkbox" data-uw-actor="freeAction" data-uuid="{{r.uuid}}"{{#if r.freeAction}} checked{{/if}}> {{localize "AD2E.Underwater.FreeAction"}}</label>
+      <label class="checkbox"><input type="checkbox" data-uw-actor="coldProtected" data-uuid="{{r.uuid}}"{{#if r.coldProtected}} checked{{/if}}> {{localize "AD2E.Underwater.ColdProtected"}}</label>
+    </div>
+    <p class="ad2e-note">{{r.combat}}</p>
+    {{#if r.depthText}}<p class="ad2e-note ad2e-unmet">{{r.depthText}}</p>{{/if}}
+    {{/if}}
+    <p class="ad2e-note">{{r.move}}{{#if r.breath}} · {{r.breath}}{{/if}}</p>
+  </fieldset>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Underwater.NoActors"}}</p>
+  {{/each}}
+  <fieldset>
+    <legend>{{localize "AD2E.Underwater.VisionTitle"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Underwater.WaterLabel"}} <select data-uw="water">{{#each waters as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Underwater.SurfaceLabel"}} <select data-uw="surface">{{#each surfaces as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Underwater.LightLabel"}} <select data-uw="light">{{#each lights as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Underwater.DepthFeet"}} <input type="number" data-uw="depth" value="{{state.depth}}" min="0" step="10"></label>
+      <label>{{localize "AD2E.Underwater.InfraFeet"}} <input type="number" data-uw="infra" value="{{state.infra}}" min="0" step="10"></label>
+    </div>
+    <p class="ad2e-note">{{vision}}</p>
+    <p class="ad2e-note">{{infra}}</p>
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Underwater.HearingTitle"}}</legend>
+    <table class="ad2e-underwater-hearing">
+      <thead><tr><th>{{localize "AD2E.Underwater.Sound"}}</th><th>{{localize "AD2E.Underwater.Unassisted"}}</th><th>{{localize "AD2E.Underwater.Assisted"}}</th><th>{{localize "AD2E.Underwater.Marine"}}</th></tr></thead>
+      <tbody>{{#each hearing as |h|}}<tr><td>{{h.label}}</td><td>{{h.a}}</td><td>{{h.b}}</td><td>{{h.c}}</td></tr>{{/each}}</tbody>
+    </table>
+    <p class="ad2e-note">{{localize "AD2E.Underwater.Yards"}}</p>
+  </fieldset>
+  {{#if isGM}}
+  <fieldset>
+    <legend>{{localize "AD2E.Underwater.EncountersTitle"}}</legend>
+    <div class="ad2e-ship-buttons">
+      <select data-uw="area" aria-label="{{localize 'AD2E.Underwater.AreaLabel'}}">{{#each areas as |o|}}<option value="{{o.value}}"{{#if o.selected}} selected{{/if}}>{{o.label}}</option>{{/each}}</select>
+      <button type="button" data-action="encounters"><i class="fa-solid fa-fish"></i> {{localize "AD2E.Underwater.RollEncounters"}}</button>
+      <button type="button" data-action="hazard"><i class="fa-solid fa-triangle-exclamation"></i> {{localize "AD2E.Underwater.RollHazard"}}</button>
+    </div>
+  </fieldset>
+  {{/if}}
+  <div class="ad2e-ship-buttons">
+    <button type="button" data-action="refresh"><i class="fa-solid fa-rotate"></i> {{localize "AD2E.Underwater.Refresh"}}</button>
+    <a href="{{sourceUrl}}" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.Underwater.Rules"}}</a>
+  </div>
+</section>

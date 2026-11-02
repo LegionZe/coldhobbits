@@ -1,5 +1,6 @@
 import { castingButtons, declareButtons } from "../spell-casting.mjs";
 import { voyageButtons } from "../apps/sea-voyage.mjs";
+import { componentSaveButtons } from "../underwater.mjs";
 import { huntButtons } from "../forage.mjs";
 import { damageButtons } from "../health.mjs";
 import { treasureButtons } from "../treasure.mjs";
@@ -28,6 +29,7 @@ export default class AD2EChatMessage extends ChatMessage {
     castingButtons(this, html);
     declareButtons(this, html);
     voyageButtons(this, html);
+    componentSaveButtons(this, html);
     return html;
   }
 }
