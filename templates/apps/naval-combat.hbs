@@ -1,0 +1,64 @@
+<section class="ad2e-naval">
+  <div class="ad2e-naval-top">
+    <span><strong>{{#if active}}{{localize "AD2E.NavalCombat.RoundPhase" round=round phase=phase}}{{else}}{{localize "AD2E.NavalCombat.NotStarted"}}{{/if}}</strong></span>
+    <span>{{windText}}</span>
+    {{#if stormy}}<span class="ad2e-unmet">{{localize "AD2E.NavalCombat.Stormy"}}</span>{{/if}}
+    <a href="{{rulesUrl}}" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i> {{localize "AD2E.NavalCombat.Rules"}}</a>
+  </div>
+  {{#if isGM}}
+  <div class="ad2e-ship-buttons">
+    {{#if addable.length}}<select data-add-ship aria-label="{{localize 'AD2E.NavalCombat.AddShip'}}">{{#each addable as |s|}}<option value="{{s.value}}">{{s.label}}</option>{{/each}}</select>
+    <button type="button" data-action="addShip"><i class="fa-solid fa-plus"></i> {{localize "AD2E.NavalCombat.AddShip"}}</button>{{/if}}
+    <button type="button" data-action="addTokens"><i class="fa-solid fa-users-viewfinder"></i> {{localize "AD2E.NavalCombat.AddTokens"}}</button>
+    {{#if active}}
+    <button type="button" data-action="maneuver"><i class="fa-solid fa-compass"></i> {{localize "AD2E.NavalCombat.Maneuver"}}</button>
+    <button type="button" data-action="resolution"><i class="fa-solid fa-forward-step"></i> {{localize "AD2E.NavalCombat.Resolution"}}</button>
+    <button type="button" data-action="end"><i class="fa-solid fa-flag"></i> {{localize "AD2E.NavalCombat.End"}}</button>
+    {{else}}
+    <button type="button" data-action="begin"><i class="fa-solid fa-play"></i> {{localize "AD2E.NavalCombat.Begin"}}</button>
+    {{/if}}
+    <button type="button" data-action="fleet"><i class="fa-solid fa-ship"></i> {{localize "AD2E.NavalCombat.Fleet"}}</button>
+  </div>
+  {{/if}}
+  {{#each units as |u|}}
+  <fieldset class="ad2e-naval-unit {{#if u.sideA}}ad2e-naval-a{{else}}ad2e-naval-b{{/if}}">
+    <legend><a data-action="openActor" data-uuid="{{u.uuid}}">{{u.name}}</a>{{#if u.status}} · {{u.status}}{{/if}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.NavalCombat.SideLabel"}} <select data-unit-field="side" data-uuid="{{u.uuid}}">{{#each u.sides as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.NavalCombat.TargetLabel"}} <select data-unit-field="target" data-uuid="{{u.uuid}}">{{#each u.targets as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>
+      {{#if u.actions.length}}<label>{{localize "AD2E.NavalCombat.ActionLabel"}} <select data-unit-field="action" data-uuid="{{u.uuid}}">{{#each u.actions as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>{{/if}}
+      {{#if u.ship}}<label>{{localize "AD2E.Naval.CourseLabel"}} <select data-unit-field="course" data-uuid="{{u.uuid}}">{{#each u.courses as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>{{/if}}
+    </div>
+    <p class="ad2e-note">{{#if u.rangeText}}{{u.rangeText}} · {{/if}}{{localize "AD2E.NavalCombat.DiceRate" dice=u.dice rate=u.rate}}{{#if u.ship}} · {{localize "AD2E.NavalCombat.ShipLine" hull=u.hull crippling=u.crippling sea=u.seaworthiness crew=u.crew marines=u.marines}}{{/if}}{{#if u.mods}} · {{u.mods}}{{/if}}</p>
+    {{#if @root.isGM}}{{#if @root.active}}
+    <div class="ad2e-ship-buttons">
+      {{#if u.ship}}
+      <button type="button" data-action="missiles" data-uuid="{{u.uuid}}"><i class="fa-solid fa-bullseye"></i> {{localize "AD2E.NavalCombat.Missiles"}}</button>
+      <button type="button" data-action="incendiary" data-uuid="{{u.uuid}}"><i class="fa-solid fa-fire"></i> {{localize "AD2E.NavalCombat.Incendiary"}}</button>
+      <button type="button" data-action="artillery" data-uuid="{{u.uuid}}"><i class="fa-solid fa-meteor"></i> {{localize "AD2E.NavalCombat.Artillery"}}</button>
+      {{/if}}
+      {{#if u.canRam}}<button type="button" data-action="ram" data-uuid="{{u.uuid}}"><i class="fa-solid fa-burst"></i> {{localize "AD2E.NavalCombat.Ram"}}</button>{{/if}}
+      <button type="button" data-action="board" data-uuid="{{u.uuid}}"><i class="fa-solid fa-link"></i> {{localize "AD2E.NavalCombat.Board"}}</button>
+      {{#if u.canMelee}}<button type="button" data-action="melee" data-uuid="{{u.uuid}}"><i class="fa-solid fa-khanda"></i> {{localize "AD2E.NavalCombat.Melee"}}</button>{{/if}}
+      {{#if u.canFree}}<button type="button" data-action="free" data-uuid="{{u.uuid}}"><i class="fa-solid fa-scissors"></i> {{localize "AD2E.NavalCombat.BreakFree"}}</button>{{/if}}
+      {{#if u.ship}}
+      <button type="button" data-action="spells" data-uuid="{{u.uuid}}"><i class="fa-solid fa-wand-sparkles"></i> {{localize "AD2E.NavalCombat.SpellRolls"}}</button>
+      <button type="button" data-action="morale" data-uuid="{{u.uuid}}"><i class="fa-solid fa-flag"></i> {{localize "AD2E.NavalCombat.Morale"}}</button>
+      {{/if}}
+      <a data-action="removeUnit" data-uuid="{{u.uuid}}" data-tooltip="{{localize 'AD2E.Item.remove'}}" aria-label="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{else}}
+    <div class="ad2e-ship-buttons"><a data-action="removeUnit" data-uuid="{{u.uuid}}" data-tooltip="{{localize 'AD2E.Item.remove'}}" aria-label="{{localize 'AD2E.Item.remove'}}"><i class="fa-solid fa-trash"></i></a></div>
+    {{/if}}{{/if}}
+  </fieldset>
+  {{else}}<p class="ad2e-placeholder">{{localize "AD2E.NavalCombat.NoUnits"}}</p>
+  {{/each}}
+  {{#if pairs.length}}
+  <fieldset>
+    <legend>{{localize "AD2E.NavalCombat.Ranges"}}</legend>
+    <div class="ad2e-ship-grid">
+      {{#each pairs as |p|}}<label>{{p.label}} <input type="number" data-range-pair="{{p.key}}" value="{{p.range}}" min="0" step="10" {{#unless @root.isGM}}disabled{{/unless}}></label>{{/each}}
+    </div>
+  </fieldset>
+  {{/if}}
+</section>

@@ -6,6 +6,8 @@ import ShipData from "./data/ship.mjs";
 import ShipSheet from "./sheets/ship-sheet.mjs";
 import SeaVoyage, { registerSeaVoyage } from "./apps/sea-voyage.mjs";
 import { registerShips } from "./ships.mjs";
+import NavalCombat from "./apps/naval-combat.mjs";
+import { registerNavalBattle } from "./naval-battle.mjs";
 import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
@@ -120,6 +122,11 @@ Hooks.once("init", () => {
   // Ships and nautical travel (Of Ships and the Sea; game.ad2e.voyage(); module/naval.mjs, ships.mjs, apps/sea-voyage.mjs).
   registerSeaVoyage();
   registerShips();
+  // GM tool: detailed naval combat (game.ad2e.navalCombat(); module/naval-combat.mjs, naval-battle.mjs).
+  registerNavalBattle();
+  game.settings.registerMenu("ad2e", "navalCombat", {
+    name: "AD2E.NavalCombat.Title", label: "AD2E.NavalCombat.Open", hint: "AD2E.NavalCombat.MenuHint", icon: "fa-solid fa-anchor", type: NavalCombat, restricted: true
+  });
   // GM tool: the party's members (Configure Settings, or game.ad2e.party(); module/party.mjs).
   game.settings.registerMenu("ad2e", "party", {
     name: "AD2E.Party.Title", label: "AD2E.Party.Open", hint: "AD2E.Party.MenuHint", icon: "fa-solid fa-people-group", type: PartyTracker, restricted: true
@@ -181,6 +188,7 @@ Hooks.once("init", () => {
     falling: () => fallingDialog(),
     travel: () => new TravelPlanner().render({ force: true }),
     voyage: () => new SeaVoyage().render({ force: true }),
+    navalCombat: () => new NavalCombat().render({ force: true }),
     encounters: () => new EncounterTool().render({ force: true }),
     dungeonTurns: () => new DungeonTurnTracker().render({ force: true }),
     party: () => new PartyTracker().render({ force: true }),
