@@ -1570,6 +1570,8 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
   /** An actor dropped on the sheet becomes a henchman (Henchmen (PHB)); not the character itself, not twice. */
   async _onDropActor(event, actor) {
     if (!this.actor.isOwner || !actor || actor.uuid === this.actor.uuid) return null;
+    // Ships (actor type "ship") are not henchmen or animals.
+    if (actor.type === "ship") return null;
     // A familiar (module/familiars.mjs): one at a time; from a compendium it is imported into the world first.
     if (isFamiliar(actor)) {
       if (this.actor.system.familiar?.uuid && this.actor.system.familiar.uuid !== actor.uuid) {

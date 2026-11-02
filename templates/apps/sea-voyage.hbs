@@ -1,0 +1,48 @@
+<section class="ad2e-voyage">
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.WindLegend"}}</legend>
+    <p>{{windText}}</p>
+    {{#if isGM}}
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.WindLabel"}} <select data-voyage="wind.wind">{{#each winds as |w|}}<option value="{{w.value}}"{{#if w.selected}} selected{{/if}}>{{w.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Naval.FromLabel"}} <select data-voyage="wind.direction">{{#each directions as |w|}}<option value="{{w.value}}"{{#if w.selected}} selected{{/if}}>{{w.label}}</option>{{/each}}</select></label>
+    </div>
+    <div class="ad2e-ship-buttons"><button type="button" data-action="rollWind"><i class="fa-solid fa-wind"></i> {{localize "AD2E.Naval.RollWind"}}</button></div>
+    {{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.ShipLegend"}}</legend>
+    {{#if ships.length}}
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.ShipLabel"}} <select data-voyage="ship">{{#each ships as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Naval.Heading"}} <select data-voyage="heading">{{#each headings as |h|}}<option value="{{h.value}}"{{#if h.selected}} selected{{/if}}>{{h.label}}</option>{{/each}}</select></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.CourseHint'}}">{{localize "AD2E.Naval.CourseLabel"}} <select data-voyage="course">{{#each courses as |c|}}<option value="{{c.value}}"{{#if c.selected}} selected{{/if}}>{{c.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.AnchorHint'}}"><input type="checkbox" data-voyage="anchor" {{checked state.anchor}}> {{localize "AD2E.Naval.Anchor"}}</label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.PushHint'}}"><input type="checkbox" data-voyage="push" {{checked state.push}}> {{localize "AD2E.Naval.Push"}}</label>
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.SeamanshipHint'}}"><input type="checkbox" data-voyage="seamanship" {{checked state.seamanship}}> {{localize "AD2E.Naval.SeamanshipPassed"}}</label>
+    </div>
+    <p><strong>{{dayText}}</strong>{{#if driftText}} · {{driftText}}{{/if}}</p>
+    {{#if notesText}}<p class="ad2e-note">{{notesText}}</p>{{/if}}
+    <div class="ad2e-ship-buttons">
+      <button type="button" data-action="openShip"><i class="fa-solid fa-ship"></i> {{localize "AD2E.Naval.OpenShip"}}</button>
+      {{#each checks as |c|}}<button type="button" data-action="check" data-situation="{{c.key}}"><i class="fa-solid fa-water"></i> {{c.label}}</button>{{/each}}
+      {{#if isGM}}<button type="button" data-action="post"><i class="fa-solid fa-scroll"></i> {{localize "AD2E.Naval.PostDay"}}</button>{{/if}}
+    </div>
+    {{else}}<p class="ad2e-placeholder">{{localize "AD2E.Naval.NoShips"}}</p>{{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.EncountersLegend"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.AreaLabel"}} <select data-voyage="area">{{#each areas as |a|}}<option value="{{a.value}}"{{#if a.selected}} selected{{/if}}>{{a.label}}</option>{{/each}}</select></label>
+    </div>
+    {{#if isGM}}<div class="ad2e-ship-buttons"><button type="button" data-action="encounters"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Naval.RollEncounters"}}</button></div>{{/if}}
+  </fieldset>
+  <fieldset>
+    <legend>{{localize "AD2E.Naval.VisibilityLegend"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.Naval.Condition"}} <select data-voyage="condition">{{#each conditions as |c|}}<option value="{{c.value}}"{{#if c.selected}} selected{{/if}}>{{c.label}}</option>{{/each}}</select></label>
+      <label>{{localize "AD2E.Naval.Viewer"}} <select data-voyage="height">{{#each heights as |h|}}<option value="{{h.value}}"{{#if h.selected}} selected{{/if}}>{{h.label}}</option>{{/each}}</select></label>
+    </div>
+    {{#if vis}}<p>{{localize "AD2E.Naval.VisibilityText" movement=vis.movement spotted=vis.spotted type=vis.type id=vis.id detail=vis.detail}}</p>{{/if}}
+  </fieldset>
+</section>
