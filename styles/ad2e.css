@@ -343,3 +343,11 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-ship-wide input { flex: 1; min-width: 0; }
 .ad2e-ship-body textarea { width: 100%; }
 .ad2e-voyage { display: flex; flex-direction: column; gap: 0.4rem; }
+/* Naval combat window (1.0.81; own markup: templates/apps/naval-combat.hbs). Side A solid edge, side B dashed. */
+.ad2e-naval { display: flex; flex-direction: column; gap: 0.4rem; }
+.ad2e-naval-top { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem 1rem; }
+.ad2e-naval-unit { border-left-width: 4px; }
+.ad2e-naval-a { border-left-style: solid; }
+.ad2e-naval-b { border-left-style: dashed; }
+.ad2e-naval-unit legend a { font-weight: bold; cursor: pointer; }
+.ad2e-naval .ad2e-ship-grid > label > input[type="number"] { width: 5rem; flex: 0 0 5rem; }

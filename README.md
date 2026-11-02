@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.80)
+## Status (v1.0.81)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -947,8 +947,26 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Implementation choices: travel uses Table 2, naval combat Table 38 (they differ for the great galley and the dromond);
   single-rate ships' propulsion where the descriptions do not say it (canoe, skiff, keelboat rowed; caravel, sohar,
   fishing boat, manta sailed); crippling counted in thirds (the fraction is missing in the wiki text); anchoring doubles
-  the wind-adjusted rate; officers kept apart from the crew count; one hit die per crew member unless set. Detailed naval
-  combat and the underwater rules are the next additions.
+  the wind-adjusted rate; officers kept apart from the crew count; one hit die per crew member unless set.
+  Detailed naval combat (1.0.81; Time in Nautical Combat (OSS) rev 172547, The Maneuvering Phase (OSS) rev 249006, Action
+  Phase (OSS) rev 237560, Resolution Phase (OSS) rev 249023, Monsters in Naval Combat (OSS) rev 237980, Scuttling and
+  Crippling (OSS) rev 172666, Fleet Battles (OSS) rev 172688). GM tool **Naval combat** (`module/apps/naval-combat.mjs`,
+  `game.ad2e.navalCombat()`; rules `module/naval-combat.mjs`, table play `module/naval-battle.mjs`; battle state in a world
+  setting): units are ships and sea creatures (monster actors: Table 34 dice, swimming rate) with a side, opponent, action
+  and course to the wind; round length and possible actions by range (Table 11); the Maneuvering phase rolls each pair and
+  applies Table 13 (range change limited to one band, Table 14 yards, ties to the faster ship, both closing or fleeing by
+  their summed rates, grapples at double the roll); missile volleys (Table 17 archers, Tables 15/16 hits, Table 18 crew
+  sections with pooled hit dice, Table 19 fires), incendiary volleys (AC 10), artillery (Table 21 ranges, rates and crews,
+  Tables 22/23, greek fire, creatures Table 35), ramming (Tables 24-26; ship vs. creature Table 36, creature vs. ship Table
+  37), boarding (Table 27, boarding factors, grapples, a quarter more boarders a round), boarding melee, breaking free,
+  spell hits (Table 18/19 rolls), morale (Tables 31-33); the Resolution phase burns fires (Table 20 sizes, growth and
+  spread, firefighters), rolls the hull-damage seaworthiness checks, rower endurance and reloading and advances world time
+  by the round; 0 hull points start the Table 29 sinking clock; fleet battles (Table 38 bonuses). The book's worked examples
+  (Sea Sprite, Discord and Strömbreaker, missile fire, boarding, morale, scuttling, fleet bonuses) are tests. The ramming
+  example's modified 13 is a critical hit by Table 24 (12-14); the table is followed. Implementation choices: see the
+  headers of naval-combat.mjs and naval-battle.mjs (adjusted hit number = THAC0 - AC - bonuses; marine losses unassigned
+  first; checks after half the hull at each further quarter of what was left; fires burn each minute; a growing fire's
+  second fire takes a Table 20 size; the worst failed-morale penalty is kept for the battle). The underwater rules are next.
 - Random encounters (GM tool "Random encounters": Configure Settings, the GM manual, or `game.ad2e.encounters()`;
   `python3 tools/build-encounter-check-tables.py`, tables parsed and rules regex-checked against "DMing Encounters (DMG)",
   "DMG Table 56", "Random Encounters (DMG)", "Creating Encounter Tables (DMG)", "DMG Table 54", "DMG Table 55" and

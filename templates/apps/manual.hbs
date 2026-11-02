@@ -259,6 +259,24 @@
       and call for a seaworthiness check: the button rolls it on the ship. Encounter checks roll Tables 7-9 for the
       waters (and Table 10 for natural phenomena) and are whispered to you; the visibility row gives Table 6 ranges for a
       ship of this size. "Post the day" writes the card whose "End day" button advances world time a day.</p></details></div>
+    <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="navalCombat"><i class="fa-solid fa-anchor"></i> Naval combat</button>
+      <p>Ship-to-ship (and sea creature) battles: maneuvering, missiles, artillery, ramming, boarding, fires, morale.</p>
+      <details><summary>Details</summary>
+      <p>Add ships from the list or select ship and sea-creature tokens and press "Add selected tokens". For each unit pick a
+      side, an opponent, an action (flee, close, ram, evade, board: only those the range allows) and, for ships, the course
+      to the wind (the Sea voyage tool's wind is used). "Begin" puts unset ranges at the Spotted range for clear skies;
+      ranges can be typed at any time. Each round: <strong>Maneuvering</strong> rolls every pair (pursuit dice when they
+      are more than 250 yards apart, maneuverability dice closer; crew experience, damage, tired rowers, skeleton crews and
+      last round's results count) and moves the range by Table 13; then the action buttons: Missiles (archers up to the
+      ship's size limit, artillery shooting at the crew, extra factors for PCs; hits fall on sailors, rowers, marines or
+      "special" by Table 18), Incendiaries (a prepared volley; fires by Table 19), Artillery (one weapon: range bands, its
+      rate of fire per round length, Tables 22 and 23; greek fire), Ram (range 0; Tables 24-26; creatures Tables 36-37),
+      Board (Table 27; grapples), Boarding melee, Break free (grapples or a ram stuck in a hull), Spell hits (Table 18 and
+      19 rolls as the spell notes say) and Morale (Tables 31-33 with the situations ticked from the battle).
+      <strong>Resolution, next round</strong> burns the fires (firefighters first), rolls the seaworthiness checks for this
+      round's hull damage and the rowers' endurance, counts down reloading, says which ships owe a morale check, and
+      advances world time by the round (1, 10 or 30 minutes). "Fleet battle" settles side A against side B with one roll
+      per pair (Table 38). Casualties, hull and crippling damage and fires are written on the ship sheets.</p></details></div>
     <div class="ad2e-manual-tool"><button type="button" data-action="tool" data-tool="dungeonTurns"><i class="fa-solid fa-hourglass-half"></i> Dungeon turns</button>
       <p>Ten-minute dungeon turns, rest reminders and burning lights.</p>
       <details><summary>Details</summary>
@@ -663,7 +681,7 @@
     hull damage, running aground on a soft or rocky bottom, rocky shoals: a failure founders, capsizes, grounds or
     sinks; the sinking clock runs on world time and the ship is marked sunk when it runs out), speed increase (rowing
     sprint, sailing, a pushed day), patch a leak, repair at sea, shipyard repair (cost and days from Table 30), skeleton
-    crew effort and crew experience (3d4). Naval combat between ships is a later addition.</li>
+    crew effort and crew experience (3d4). Ship battles: the Naval combat tool (GM tools).</li>
     <li><strong>Familiars</strong>: Find Familiar is rolled by the GM from the character sheet; the familiar's death and
     separation are tracked. Sha'ir characters summon and send their gen from the sheet.</li>
     <li><strong>Importing</strong>: see <em>GM tools</em>. Pictures are not shipped with the system; the importer copies
@@ -751,6 +769,7 @@
       <tr><td><code>game.ad2e.butcher(monster)</code></td><td>Monster menu: butcher a slain monster (default: the targeted token's).</td></tr>
       <tr><td><code>game.ad2e.menuTables()</code></td><td>Monster menu: create editable roll tables.</td></tr>
       <tr><td><code>game.ad2e.voyage()</code></td><td>Sea voyage tool (wind, a ship's day at sea, encounters, visibility).</td></tr>
+      <tr><td><code>game.ad2e.navalCombat()</code></td><td>Naval combat window (Of Ships and the Sea detailed naval combat).</td></tr>
       <tr><td><code>game.ad2e.timekeeper()</code></td><td>Timekeeper window (date, time steps, dungeon turn, travel).</td></tr>
       <tr><td><code>game.ad2e.calendar()</code></td><td>Zakharan calendar window (when the setting is on).</td></tr>
       <tr><td><code>game.ad2e.createMonster()</code></td><td>Monster creator.</td></tr>
