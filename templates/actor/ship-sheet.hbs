@@ -42,6 +42,17 @@
     </div>
     <p class="ad2e-note">{{localize "AD2E.Naval.RateNow" rate=system.rate.rate}}{{#if rateNotes}} ({{rateNotes}}){{/if}}{{#if repair}} · {{repair}}{{/if}}</p>
   </fieldset>
+  {{#if gvSailing}}
+  <fieldset>
+    <legend>{{localize "AD2E.GvSailing.ShipLegend"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label class="ad2e-check" data-tooltip="{{localize 'AD2E.GvSailing.StormDamagedHint'}}"><input type="checkbox" name="system.gv.stormDamaged" {{checked system.gv.stormDamaged}}> {{localize "AD2E.GvSailing.StormDamaged"}}</label>
+      <label>{{localize "AD2E.GvSailing.Holes"}} <input type="number" name="system.gv.holes" value="{{system.gv.holes}}" min="0"></label>
+      <label data-tooltip="{{localize 'AD2E.GvSailing.BailersHint'}}">{{localize "AD2E.GvSailing.Bailers"}} <input type="number" name="system.gv.bailers" value="{{system.gv.bailers}}" min="0"></label>
+    </div>
+    {{#if gvReef}}<p class="ad2e-note{{#if gvFlooding}} ad2e-unmet{{/if}}">{{gvReef}}</p>{{/if}}
+  </fieldset>
+  {{/if}}
 
   <fieldset>
     <legend>{{localize "AD2E.Naval.CrewLegend"}} · {{crewStateText}}</legend>

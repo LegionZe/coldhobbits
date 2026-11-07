@@ -53,7 +53,11 @@ export default class ShipData extends foundry.abstract.TypeDataModel {
       rowersTired: new BooleanField({ initial: false }), restingRowers: new BooleanField({ initial: false }),
       skeletonPushed: new BooleanField({ initial: false }),
       // Sinking clock: world time when the ship sinks (foundering), aground (soft: refloat), sunk.
-      founderAt: optional(), aground: new StringField({ required: true, blank: true, initial: "", choices: { "": "", soft: "soft", rocky: "rocky" } }),
+      founderAt: optional(), aground: new StringField({ required: true, blank: true, initial: "", choices: { "": "", soft: "soft", rocky: "rocky", reef: "reef" } }),
+      // Golden Voyages sailing rules (module/gv-sailing.mjs): storm damage (a second failure sinks), reef holes, bailers,
+      // high tide and the next hourly reef check (world time).
+      gv: new SchemaField({ stormDamaged: new BooleanField({ initial: false }), holes: count(0), bailers: count(0),
+        refloatAt: optional(), nextCheck: optional() }),
       sunk: new BooleanField({ initial: false }),
       cargo: new StringField({ initial: "" }),
       notes: new HTMLField({ initial: "" })

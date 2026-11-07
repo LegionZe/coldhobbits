@@ -1,3 +1,4 @@
+import { flooding, gvSailingOn } from "../gv-sailing.mjs";
 import { artilleryIssues, artilleryLoad, deckSpace, diceText, EXPERIENCE, NAVAL, pursuitDice, shipyardRepair } from "../naval.mjs";
 import { patchShip, repairAtSea, rollCrewExperience, rollSeaworthiness, shipyardRepairShip, skeletonEffort, speedBoost } from "../ships.mjs";
 
@@ -73,6 +74,10 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       types: NAVAL.ships.map(t => ({ value: t.key, label: t.label, selected: t.key === s.shipType })),
       variable: !!spec.variable, both: spec.propulsion === "both",
       openWaterRule: !!spec.seaworthinessOpen,
+      gvSailing: gvSailingOn(), gvFlooding: flooding(s.gv?.holes ?? 0, s.gv?.bailers ?? 0),
+      gvReef: s.aground === "reef" || (s.gv?.holes ?? 0) > 0 ? i18n(flooding(s.gv?.holes ?? 0, s.gv?.bailers ?? 0) ? "AD2E.GvSailing.ReefFlooding" : "AD2E.GvSailing.ReefState",
+        { holes: s.gv?.holes ?? 0, need: (s.gv?.holes ?? 0) * NAVAL.gv.reef.bailersPerHole,
+          tide: s.gv?.refloatAt !== null && s.gv?.refloatAt !== undefined ? Math.max(Math.ceil((s.gv.refloatAt - now) / 3600), 0) : "—" }) : "",
       // Arabian Adventures ships (Zakharan, owner's request 1.0.83): the book's figures and the conversion's template ship.
       aaNote: spec.source === "GV" ? gvNote(spec) : spec.source === "AA" ? (spec.aa.base !== null
         ? i18n("AD2E.Naval.AaNote", { base: spec.aa.base, emergency: spec.aa.emergency, coastal: spec.aa.coastal,
