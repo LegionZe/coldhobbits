@@ -11,6 +11,7 @@
         {{#if sinking}}<strong class="ad2e-unmet">{{sinking}}</strong>{{/if}}
         {{#if aground}}<span class="ad2e-unmet">{{aground}}</span>{{/if}}
       </div>
+      {{#if aaNote}}<p class="ad2e-note ad2e-ship-aa">{{aaNote}} <a href="{{aaUrl}}" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i></a></p>{{/if}}
     </div>
     <dl class="ad2e-monster-summary">
       {{#each summary as |s|}}<div class="ad2e-summary-cell"><dt>{{s.label}}</dt><dd {{#if s.tooltip}}data-tooltip="{{s.tooltip}}"{{/if}}>{{s.value}}</dd></div>{{/each}}
@@ -33,8 +34,9 @@
     <div class="ad2e-ship-grid">
       <label>{{localize "AD2E.Naval.Hull"}} <span class="ad2e-ship-pair"><input type="number" name="system.hull.value" value="{{system.hullNow}}"> / <input type="number" name="system.hull.max" value="{{system.hullMax}}" min="0"></span></label>
       <label>{{localize "AD2E.Naval.Crippling"}} <span class="ad2e-ship-pair"><input type="number" name="system.crippling.value" value="{{system.cripplingNow}}"> / <input type="number" name="system.crippling.max" value="{{system.cripplingMax}}" min="0"></span></label>
-      <label data-tooltip="{{localize 'AD2E.Naval.SeaworthinessHint'}}">{{localize "AD2E.Naval.SeaworthinessBase"}} <input type="number" name="system.seaworthiness" value="{{system.seaworthiness}}" placeholder="{{spec.seaworthiness}}" min="1" max="20"></label>
+      <label data-tooltip="{{localize 'AD2E.Naval.SeaworthinessHint'}}">{{localize "AD2E.Naval.SeaworthinessBase"}} <input type="number" name="system.seaworthiness" value="{{system.seaworthiness}}" placeholder="{{#if system.seaworthiness}}{{spec.seaworthiness}}{{else}}{{system.seaworthinessBase}}{{/if}}" min="1" max="20"></label>
       <label data-tooltip="{{localize 'AD2E.Naval.RamHint'}}">{{localize "AD2E.Naval.Ram"}} <input type="number" name="system.ramFactor" value="{{system.ramFactor}}" placeholder="{{spec.combat.rf}}" min="0" max="4"></label>
+      {{#if openWaterRule}}<label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.OpenWaterHint'}}"><input type="checkbox" name="system.openWater" {{checked system.openWater}}> {{localize "AD2E.Naval.OpenWater"}}</label>{{/if}}
       <label class="ad2e-check" data-tooltip="{{localize 'AD2E.Naval.JuryHint'}}"><input type="checkbox" name="system.jury" {{checked system.jury}}> {{localize "AD2E.Naval.Jury"}}</label>
       <label class="ad2e-check"><input type="checkbox" name="system.sunk" {{checked system.sunk}}> {{localize "AD2E.Naval.Sunk"}}</label>
     </div>
