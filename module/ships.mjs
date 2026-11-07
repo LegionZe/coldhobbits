@@ -49,6 +49,8 @@ export async function rollSeaworthiness(actor, { situation = null } = {}) {
   const choice = situation ? { situation, extra: 0 } : await ad2eDialog.prompt({
     window: { title: i18n("AD2E.Naval.CheckTitle", { name: actor.name }) }, rejectClose: false,
     content: `<p class="ad2e-note">${esc(i18n("AD2E.Naval.CheckHint", { rating: s.seaworthinessNow }))}</p>`
+      + (s.spec?.seaworthinessStorm || s.spec?.seaworthinessReef ? `<p class="ad2e-note">${esc(i18n("AD2E.Naval.SituationRatings",
+        { storm: s.seaworthinessIn("storm"), reef: s.seaworthinessIn("shoals"), other: s.seaworthinessIn("other") }))}</p>` : "")
       + `<div class="form-group"><label>${esc(i18n("AD2E.Naval.Situation.label"))}</label><select name="situation">`
       + Object.keys(SITUATIONS).map(k => `<option value="${k}">${esc(i18n(`AD2E.Naval.Situation.${k}`))}</option>`).join("") + `</select></div>`
       + `<div class="form-group"><label>${esc(i18n("AD2E.Roll.Modifier"))}</label><input type="text" name="extra" value="0"></div>`,
@@ -60,7 +62,8 @@ export async function rollSeaworthiness(actor, { situation = null } = {}) {
   const extra = (choice.extra ?? 0) + (sit.extra ?? 0) + (sit.choppy && s.sizeKey === "small" ? -1 : 0);
   const penalty = checkPenalty({ wind: sit.storm ? "storm" : "", skeleton: s.crewState === "skeleton" && !s.skeletonPushed, jury: s.jury, extra });
   const r = await roll("1d20");
-  const res = seaworthinessCheck(r.total, s.seaworthinessNow, { penalty, storm: !!sit.storm, rocky: !!sit.rocky });
+  const rating = s.seaworthinessIn?.(choice.situation) ?? s.seaworthinessNow;
+  const res = seaworthinessCheck(r.total, rating, { penalty, storm: !!sit.storm, rocky: !!sit.rocky });
   const now = game.time?.worldTime ?? 0;
   const lines = [i18n("AD2E.Naval.CheckResult", { name: actor.name, roll: res.roll, target: res.target })];
   const update = {};

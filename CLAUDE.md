@@ -610,6 +610,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   zaruq, dunij, qarib to `NAVAL.ships` with `source` "AA", `template` (sohar / skiff), `aa` { base, emergency, coastal, open,
   prices, lateenX3, feetPerRound, mph }, `seaworthinessOpen`, `draft`/`build` null; `NAVAL.aaFit` = the % -> rating line.
   ShipData `openWater` (sheet tick box when `seaworthinessOpen`) picks the open-water rating; sheet `aaNote`.
+  Golden Voyages (1.0.84): owner-supplied `GV_SHIPS` (numbers from Home Port pp. 15-16 + price table; never its text) adds
+  baghla, boom (`source` "GV") and GV prices/cross-checks for the AA dhows (`aa.aaPrices` keeps AA's); spec
+  `seaworthinessStorm` / `seaworthinessReef`; pure `seaworthinessFor(spec, { open, situation })` in naval.mjs (reef, storm,
+  open, base); ShipData `seaworthinessIn(situation)` used by ships.mjs `rollSeaworthiness`; sheet `gvNote`, `situationRatings`.
 - Naval combat (owner's request 1.0.81): `module/naval-combat.mjs` (pure over NAVAL.combat: `roundFor`, `actionsAt`, `rangeYards`,
   `limitRange`, `outcome`, `maneuver({ a, b, minutes, range, d10 })`, `hitNumber`, `tableHits`, `volleyHits`, `missileTarget`,
   `incendiaryTarget`, `fireSize`, `fireGrows`, `woundGroup`, `marineLosses`, `artilleryBand`, `artilleryAc`, `artilleryRate`,

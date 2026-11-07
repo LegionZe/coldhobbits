@@ -29,6 +29,8 @@ percentages over the eight ships both list, rounded (30% lies below the fitted r
 Table 76's barge and raft speed, OSS rate 3; the figures neither book gives come from a template OSS ship (sohar for the
 dhows: the OSS "Arabian" merchant ship; skiff for the launches) with hull, crippling and marines scaled by length, beam
 from the sambuk's beam/length; pursuit is 1d6 + a third of the rate (the OSS rule).
+Golden Voyages (ALQ1) baghla and boom, and its prices (1.0.84): owner-supplied figures in `GV_SHIPS` (numbers only),
+converted the same way; their seaworthiness by hazard becomes `seaworthinessStorm` / `seaworthinessReef`.
 No rulebook text is copied: tables hold numbers and short labels; the effects are paraphrased in lang/en.json.
 Run from the repo root:  python3 tools/build-naval-tables.py
 """
@@ -684,6 +686,22 @@ def combat_rules():
 
 
 
+# Golden Voyages (ALQ1), Home Port pp. 15-16 and its dhow price table: figures supplied by the owner (1.0.84; the box set
+# is not on the wiki). Numbers only, no text. Ranges keep both ends; `seaworthiness` percentages by hazard or water:
+# baghla 50% foundering in storms and whirlpools, 60% breaking up on a reef or shoal; boom 45% in storms and open sea,
+# 60% along coasts and reefs; zarug 50% in sight of shore, 30% open water; barijah 40% / 30%. Prices A / N / B (gp).
+GV_SHIPS = {
+    "baghla": {"length": (150, 200), "beam": (25, 30), "cargoPerFoot": 1, "passengers": 400, "crew": (30, 40), "base": 4,
+               "emergency": 5, "storm": 50, "reef": 60, "coastal": None, "open": None, "price": (50000, 40000, 30000)},
+    "boom": {"length": (100, 150), "beam": (25, 25), "cargo": (100, 125), "passengers": 300, "crew": (25, 30), "base": 3,
+             "emergency": 5, "emergencyPartial": 4, "rigHours": 1, "storm": 45, "reef": 60, "coastal": 60, "open": 45,
+             "price": (25000, 20000, 15000)},
+    "sambuk": {"length": (50, 100), "average": 75, "price": (15000, 10000, 7500)},
+    "zaruq": {"coastal": 50, "open": 30, "crew": (15, 20), "cargoTons": 60, "price": (12000, 8000, 6000)},
+    "barijah": {"length": (40, 50), "coastal": 40, "open": 30, "crew": (10, 10), "cargoTons": 40, "price": (7500, 5000, 3750)},
+}
+
+
 WORDS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "ten": 10}
 
 
@@ -734,7 +752,8 @@ def aa_ships(t1, t2, combat_ships):
     beam_ratio = int(sb[2]) / int(sb[1])
     out = []
 
-    def make(key, label, src_price, length, beam, crew, passengers, cargo, base, emergency, pct, pct_open, template, propulsion):
+    def make(key, label, src_price, length, beam, crew, passengers, cargo, base, emergency, pct, pct_open, template, propulsion,
+             source="AA", minimum=None):
         t, c = t1[template], combat_ships[template]
         tt = t2[template]
         scale = length / t["length"]
@@ -745,8 +764,10 @@ def aa_ships(t1, t2, combat_ships):
         size = "small" if length < 20 else "medium" if length < 60 else "large" if length <= 100 else "veryLarge"
         hull = max(round(c["hull"] * scale), 1)
         crip = max(round((c["crippling"] or c["hull"]) * scale), 1) if c["crippling"] else None
-        minimum = max(round(crew[0] * tt["crew"]["minimum"] / tt["crew"]["max"]), 1)
-        out.append({"key": key, "label": label, "source": "AA", "draft": None, "length": length, "beam": beam, "cost": prices[src_price]["N"],
+        price = src_price if isinstance(src_price, dict) else prices[src_price]
+        if minimum is None:
+            minimum = max(round(crew[0] * tt["crew"]["minimum"] / tt["crew"]["max"]), 1)
+        out.append({"key": key, "label": label, "source": source, "draft": None, "length": length, "beam": beam, "cost": price["N"],
                     "build": None, "propulsion": propulsion, "move": move, "seaworthiness": sea_c, "seaworthinessOpen": sea_o,
                     "pursuit": {"n": 1, "die": 6, "plus": rate // 3}, "maneuver": {"sail": tt["maneuver"][0], "oar": tt["maneuver"][-1]},
                     "size": [size], "crew": {"max": crew[0], "average": crew[1], "minimum": minimum}, "rowers": None, "warriors": None,
@@ -755,7 +776,8 @@ def aa_ships(t1, t2, combat_ships):
                                "maneuver": {"sail": tt["maneuver"][0], "oar": tt["maneuver"][-1]}, "rf": c["rf"], "defense": c["defense"],
                                "marines": round(c["marines"] * scale), "warMarines": None, "hull": hull, "crippling": crip},
                     "variable": None, "template": template,
-                    "aa": {"base": base, "emergency": emergency, "coastal": pct, "open": pct_open, "prices": prices[src_price],
+                    "seaworthinessStorm": None, "seaworthinessReef": None,
+                    "aa": {"base": base, "emergency": emergency, "coastal": pct, "open": pct_open, "prices": price,
                            "lateenX3": key == "qarib"}})
 
     bl = int(b[1])
@@ -776,6 +798,37 @@ def aa_ships(t1, t2, combat_ships):
         e["seaworthiness"] = e["combat"]["seaworthiness"] = sk["seaworthiness"]
         e["aa"].update({"feetPerRound": int(ln[2]), "mph": int(ln[3])})
     assert [s["seaworthiness"] for s in out[:3]] == [sea(40), sea(40), sea(50)] and out[0]["move"]["sail"] == 9 and out[2]["move"]["sail"] == 15
+    # Golden Voyages (owner-supplied figures): its figures for the AA ships agree with Arabian Adventures except the zarug's
+    # price (AA 5,000 / 3,500 / 2,000 gp): the Golden Voyages price is used (the later, ship-specific book).
+    by = {e["key"]: e for e in out}
+    gv = GV_SHIPS
+    gvp = {k: dict(zip("ANB", v["price"])) for k, v in gv.items()}
+    assert gvp["barijah"] == prices["Barijah"] and gvp["sambuk"] == prices["Sambuk"], "GV prices = AA prices"
+    assert by["sambuk"]["length"] == gv["sambuk"]["average"] and gv["barijah"]["length"][0] <= by["barijah"]["length"] <= gv["barijah"]["length"][1]
+    for k in ("zaruq", "barijah"):
+        assert (by[k]["aa"]["coastal"], by[k]["aa"]["open"]) == (gv[k]["coastal"], gv[k]["open"]), k
+        assert (by[k]["crew"]["average"], by[k]["crew"]["max"]) == gv[k]["crew"] and by[k]["cargo"]["tons"] == gv[k]["cargoTons"], k
+    for k in ("barijah", "sambuk", "zaruq"):
+        e = by[k]
+        e["aa"]["aaPrices"] = e["aa"]["prices"]
+        e["aa"]["prices"] = gvp[k]
+        e["cost"] = gvp[k]["N"]
+        e["gv"] = True
+    mid = lambda r: (r[0] + r[1]) / 2
+    for key, label in (("baghla", "Baghla (GV)"), ("boom", "Boom (GV)")):
+        g = gv[key]
+        length = round(mid(g["length"]))
+        cargo = {"tons": length * g["cargoPerFoot"]} if "cargoPerFoot" in g else {"tons": round(mid(g["cargo"]))}
+        make(key, label, gvp[key], length, round(mid(g["beam"])), (g["crew"][1], g["crew"][0]), g["passengers"], cargo,
+             g["base"], g["emergency"], g["coastal"] if g["coastal"] is not None else g["storm"], g["open"], "sohar", "sail",
+             source="GV", minimum=g["crew"][0])
+        e = out[-1]
+        e["seaworthinessStorm"] = sea(g["storm"]) if g["storm"] != (g["coastal"] if g["coastal"] is not None else g["storm"]) else None
+        e["seaworthinessReef"] = sea(g["reef"])
+        e["gv"] = True
+        e["aa"].update({"storm": g["storm"], "reef": g["reef"], "emergencyPartial": g.get("emergencyPartial"), "rigHours": g.get("rigHours"),
+                        "lengthRange": list(g["length"])})
+    assert by["sambuk"]["cost"] == 10000 and by["zaruq"]["cost"] == 8000
     return out, {"Equipment Descriptions (AA)": rev, "Equipment Lists (AA)": lrev, "Movement on Water (DMG)": drev}, \
         {"slope": round(slope, 4), "intercept": round(icept, 4), "pairs": pairs}
 

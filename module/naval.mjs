@@ -141,6 +141,19 @@ export function seaworthinessLoss(sizeKey, hullLost) {
   return Math.floor(Math.max(hullLost, 0) / per) * pts;
 }
 
+/**
+ * The type's seaworthiness for a check (pure; Zakharan ships, 1.0.83-1.0.84): Golden Voyages rates the baghla and boom
+ * higher against reefs and shoals (grounding checks) and the boom lower in storms; Arabian Adventures / Golden Voyages
+ * rate the barijah, zaruq and boom lower out of sight of land. Order: reef, storm, open water, the ship's rating.
+ */
+export function seaworthinessFor(spec, { open = false, situation = "" } = {}) {
+  if (!spec) return 1;
+  if (["groundSoft", "groundRocky", "shoals"].includes(situation) && spec.seaworthinessReef) return spec.seaworthinessReef;
+  if (["gale", "storm"].includes(situation) && spec.seaworthinessStorm) return spec.seaworthinessStorm;
+  if (open && spec.seaworthinessOpen) return spec.seaworthinessOpen;
+  return spec.seaworthiness;
+}
+
 /** Current seaworthiness rating (pure): the type's (or the ship's own) less the Table 28 loss; never below 1. */
 export function seaworthinessNow(base, sizeKey, hullLost) {
   return Math.max(base - seaworthinessLoss(sizeKey, hullLost), 1);
