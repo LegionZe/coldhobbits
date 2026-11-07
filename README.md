@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.83)
+## Status (v1.0.84)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -959,7 +959,14 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   fitted lateen sail is noted, not applied); figures neither book gives come from the OSS sohar (dhows) or skiff (launches),
   hull, crippling and marines scaled by length, beam from the sambuk's proportions, the zaruq's length the middle of
   50-60 feet, the barijah's passengers its "four times" the crew less the crew; pursuit 1d6 + a third of the rate (OSS).
-  The baghla and boom of Golden Voyages are not included (no source gives their figures).
+  Golden Voyages (1.0.84; ALQ1 Home Port pp. 15-16 and its dhow price table, figures supplied by the owner, `GV_SHIPS`
+  in the generator, numbers only): ship types Baghla (GV) and Boom (GV) (lengths, beams and cargo at the middle of the book's
+  ranges: baghla 175 ft, 28 ft beam, cargo = length in tons, 400 passengers, crew 30-40 with 30 the minimum; boom 125 ft,
+  25 ft beam, 112 tons, 300 passengers, crew 25-30), rates 4 / 3 (OSS 12 / 9), and seaworthiness by check: baghla 50% in
+  storms (11), 60% on reefs and shoals (15); boom 45% in storms and open sea (9), 60% along coasts and reefs (15). The
+  seaworthiness check uses the situation's rating (gales and storms; groundings and shoals). The Golden Voyages figures
+  for the barijah, sambuk and zarug agree with Arabian Adventures (asserted) except the zarug's price: the Golden Voyages
+  price (8,000 gp, AA 3,500) is used. Other figures as for the Arabian Adventures dhows (sohar template, scaled by length).
   Detailed naval combat (1.0.81; Time in Nautical Combat (OSS) rev 172547, The Maneuvering Phase (OSS) rev 249006, Action
   Phase (OSS) rev 237560, Resolution Phase (OSS) rev 249023, Monsters in Naval Combat (OSS) rev 237980, Scuttling and
   Crippling (OSS) rev 172666, Fleet Battles (OSS) rev 172688). GM tool **Naval combat** (`module/apps/naval-combat.mjs`,

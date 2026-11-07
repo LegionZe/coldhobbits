@@ -1,5 +1,5 @@
 import { baseMorale, crewState, currentRate, damageDiceMod, EXPERIENCE, experienceMod, maneuverDice, NAVAL, propulsionOf,
-  pursuitDice, seaworthinessNow, shipSpec } from "../naval.mjs";
+  pursuitDice, seaworthinessFor, seaworthinessNow, shipSpec } from "../naval.mjs";
 
 const { ArrayField, BooleanField, HTMLField, NumberField, SchemaField, StringField } = foundry.data.fields;
 
@@ -73,7 +73,7 @@ export default class ShipData extends foundry.abstract.TypeDataModel {
     this.cripplingNow = this.crippling.value ?? cripMax;
     this.crewCount = this.sailors.count + this.rowers.count;
     this.crewState = crewState(spec, this.crewCount);
-    this.seaworthinessBase = this.seaworthiness ?? (this.openWater && spec.seaworthinessOpen ? spec.seaworthinessOpen : spec.seaworthiness);
+    this.seaworthinessBase = this.seaworthiness ?? seaworthinessFor(spec, { open: this.openWater });
     this.seaworthinessNow = seaworthinessNow(this.seaworthinessBase, this.sizeKey, hullMax - this.hullNow);
     this.ram = this.ramFactor ?? spec.combat.rf;
     this.marinesFree = Math.max(this.marines.count - this.marines.archers - this.marines.boarders - this.marines.artillerists - this.marines.firefighters, 0);
@@ -85,5 +85,11 @@ export default class ShipData extends foundry.abstract.TypeDataModel {
     this.diceMod = experienceMod(this.experience) + damageDiceMod(state) + (this.crewState === "skeleton" ? NAVAL.travel.skeleton.dice : 0)
       - (this.rowersTired && this.prop !== "sail" ? 1 : 0) + (this.morale.penalty ?? 0);
     this.maneuver = maneuverDice(spec, this.propulsion, this.crewState);
+  }
+
+  /** The current rating for a check situation (ships.mjs SITUATIONS key): the ship's own rating, else the type's for it. */
+  seaworthinessIn(situation = "") {
+    const base = this.seaworthiness ?? seaworthinessFor(this.spec, { open: this.openWater, situation });
+    return seaworthinessNow(base, this.sizeKey, this.hullMax - this.hullNow);
   }
 }

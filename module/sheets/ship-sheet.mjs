@@ -9,6 +9,26 @@ const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
  * Sheet for ships (actor type "ship"; module/data/ship.mjs, rules in module/naval.mjs and module/ships.mjs): the
  * Of Ships and the Sea ship record. One part; the GM edits the record, owners use the buttons.
  */
+/** Golden Voyages ships (baghla, boom; owner-supplied figures, 1.0.84): the book's rates and seaworthiness by hazard. */
+function gvNote(spec) {
+  const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
+  const a = spec.aa;
+  const sea = [a.storm !== null && a.storm !== undefined ? i18n("AD2E.Naval.SeaStorm", { n: a.storm }) : null,
+    a.reef ? i18n("AD2E.Naval.SeaReef", { n: a.reef }) : null,
+    a.coastal !== null && a.coastal !== a.storm ? i18n("AD2E.Naval.SeaCoast", { n: a.coastal }) : null,
+    a.open ? i18n("AD2E.Naval.SeaOpen", { n: a.open }) : null].filter(Boolean).join(", ");
+  const emergency = a.emergencyPartial ? i18n("AD2E.Naval.GvEmergencyRig", { n: a.emergency, partial: a.emergencyPartial, hours: a.rigHours }) : String(a.emergency);
+  return i18n("AD2E.Naval.GvNote", { base: a.base, emergency, sea, from: a.lengthRange[0], to: a.lengthRange[1],
+    template: NAVAL.ships.find(t => t.key === spec.template)?.label ?? spec.template });
+}
+
+/** Ratings by check situation when the type has them (seaworthiness tooltip). */
+function situationRatings(s) {
+  const spec = s.spec;
+  if (!spec?.seaworthinessStorm && !spec?.seaworthinessReef) return "";
+  return game.i18n.format("AD2E.Naval.SituationRatings", { storm: s.seaworthinessIn("storm"), reef: s.seaworthinessIn("shoals"), other: s.seaworthinessIn("other") });
+}
+
 export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) {
   static DEFAULT_OPTIONS = {
     classes: ["ad2e", "ship"],
@@ -54,7 +74,7 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       variable: !!spec.variable, both: spec.propulsion === "both",
       openWaterRule: !!spec.seaworthinessOpen,
       // Arabian Adventures ships (Zakharan, owner's request 1.0.83): the book's figures and the conversion's template ship.
-      aaNote: spec.source === "AA" ? (spec.aa.base !== null
+      aaNote: spec.source === "GV" ? gvNote(spec) : spec.source === "AA" ? (spec.aa.base !== null
         ? i18n("AD2E.Naval.AaNote", { base: spec.aa.base, emergency: spec.aa.emergency, coastal: spec.aa.coastal,
           open: spec.aa.open ?? spec.aa.coastal, template: NAVAL.ships.find(t => t.key === spec.template)?.label ?? spec.template })
         : i18n(spec.aa.lateenX3 ? "AD2E.Naval.AaLaunchSail" : "AD2E.Naval.AaLaunch", { feet: spec.aa.feetPerRound, mph: spec.aa.mph,
@@ -65,7 +85,7 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       summary: [
         { label: i18n("AD2E.Naval.Size.label"), value: label(s.sizeKey) },
         { label: i18n("AD2E.Naval.Move"), value: moveText, tooltip: i18n("AD2E.Naval.MoveHint", { combat: combatMove }) },
-        { label: i18n("AD2E.Naval.Seaworthiness"), value: `${s.seaworthinessNow}${s.seaworthinessNow !== s.seaworthinessBase ? ` / ${s.seaworthinessBase}` : ""}${s.jury ? ` (${i18n("AD2E.Naval.Jury")})` : ""}` },
+        { label: i18n("AD2E.Naval.Seaworthiness"), tooltip: situationRatings(s), value: `${s.seaworthinessNow}${s.seaworthinessNow !== s.seaworthinessBase ? ` / ${s.seaworthinessBase}` : ""}${s.jury ? ` (${i18n("AD2E.Naval.Jury")})` : ""}` },
         { label: i18n("AD2E.Naval.Maneuver"), value: diceText(s.maneuver, s.diceMod) },
         { label: i18n("AD2E.Naval.Pursuit"), value: diceText(pursuitDice(Math.max(s.rate.rate, 0), s.crewState), s.diceMod) },
         { label: i18n("AD2E.Naval.Defense"), value: spec.combat.defense },
@@ -74,7 +94,8 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         { label: i18n("AD2E.Naval.CrewCapacity"), value: `${spec.crew.max}/${spec.crew.average}/${spec.crew.minimum}`, tooltip: i18n("AD2E.Naval.CrewCapacityHint") },
         { label: i18n("AD2E.Naval.MarinesMax"), value: spec.combat.warMarines ? `${spec.combat.marines}/${spec.combat.warMarines}` : String(spec.combat.marines) },
         { label: i18n("AD2E.Naval.Draft"), value: spec.draft === null || spec.draft === undefined ? "—" : i18n("AD2E.Naval.Feet", { n: spec.draft }) },
-        { label: i18n("AD2E.Naval.Cost"), value: `${spec.cost} gp` }
+        { label: i18n("AD2E.Naval.Cost"), value: `${spec.cost} gp`,
+          tooltip: spec.aa?.aaPrices && spec.aa.aaPrices.N !== spec.cost ? i18n("AD2E.Naval.AaPrice", { n: spec.aa.aaPrices.N }) : "" }
       ],
       crewState: s.crewState, crewStateText: i18n(`AD2E.Naval.CrewState.${s.crewState}`),
       rateNotes: s.rate.notes.map(n => i18n(`AD2E.Naval.RateNote.${n}`)).join(", "),
