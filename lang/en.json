@@ -4769,5 +4769,28 @@
     "BailersHint": "Three bailers per hole keep the ship afloat.",
     "ReefState": "{holes} hole(s), {need} bailers needed; high tide in {tide} hours. Checks run every hour of world time.",
     "ReefFlooding": "{holes} hole(s) and too few bailers ({need} needed): the next check breaks her up. High tide in {tide} hours."
+  },
+  "AD2E.ShipCrew": {
+    "Title": "Generate crew: {name}",
+    "Quality": "Crew quality",
+    "Generate": "Generate crew",
+    "Hint": "Poor: all level 0, the average complement, only the captain as officer, no marines. Average: mostly level 0, every role filled. Quality: mostly levels 1-3. Excellent: mostly levels 3-6. The crew experience follows the quality; the captain and the officers are made as NPC actors.",
+    "Replace": "The {n} officer actor(s) generated for this ship before are deleted.",
+    "Q": {
+      "poor": "Poor",
+      "average": "Average",
+      "quality": "Quality",
+      "excellent": "Excellent"
+    },
+    "Done": "{name}: {quality} crew: {sailors} sailors, {rowers} rowers, {marines} marines (sailors' Hit Dice {hd}, THAC0 {thac0}), {officers} officers and a level {captain} captain; experience {experience}; {actors} NPC actor(s) made.",
+    "Folder": "Crew of {name}",
+    "Captain": "{name}: captain",
+    "Officer": "{name}: officer {n}",
+    "Officers": "Officers",
+    "Level": "level {n}",
+    "Role": {
+      "captain": "captain",
+      "officer": "officer"
+    }
   }
 }

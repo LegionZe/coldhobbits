@@ -623,6 +623,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   damage then sinking; reef aground), `processReefs` (updateWorldTime, active GM)). Ship `aground` "reef", `system.gv`
   { stormDamaged, holes, bailers, refloatAt, nextCheck }. Tool items: build-aq-equipment-data.py `GV_TOOLS` (run alone it
   also re-sorts weapons the later generators touch: keep only the new files, or run build-all.sh).
+  Crew generation (owner's rulings 1.0.86): `module/ship-crew.mjs` (`QUALITY` poor/average/quality/excellent level weights,
+  experience; pure `pickLevel`, `rollLevels`, `groupHitDice`, `commonLevel`, `crewPlan(spec, quality, { artillery, random })`,
+  `crewUpdate`; `generateCrew(ship)` (sheet action `generateCrew`, GM) -> captain + officers via npc-builder `buildNpc` /
+  `npcActorData` (purpose soldier, fighter, human), Actor folder, flags `ad2e.crewOf` (ship UUID) / `crewRole`; `crewActors`
+  -> sheet `crewNpcs`, action `openCrew`). Lang block `AD2E.ShipCrew`.
 - Naval combat (owner's request 1.0.81): `module/naval-combat.mjs` (pure over NAVAL.combat: `roundFor`, `actionsAt`, `rangeYards`,
   `limitRange`, `outcome`, `maneuver({ a, b, minutes, range, d10 })`, `hitNumber`, `tableHits`, `volleyHits`, `missileTarget`,
   `incendiaryTarget`, `fireSize`, `fireGrows`, `woundGroup`, `marineLosses`, `artilleryBand`, `artilleryAc`, `artilleryRate`,
