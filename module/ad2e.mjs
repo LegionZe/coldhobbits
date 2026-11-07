@@ -10,6 +10,7 @@ import NavalCombat from "./apps/naval-combat.mjs";
 import { registerNavalBattle } from "./naval-battle.mjs";
 import UnderwaterTool from "./apps/underwater-tool.mjs";
 import { registerUnderwater } from "./underwater.mjs";
+import { registerGvSailing } from "./gv-sailing.mjs";
 import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
@@ -124,6 +125,8 @@ Hooks.once("init", () => {
   // Ships and nautical travel (Of Ships and the Sea; game.ad2e.voyage(); module/naval.mjs, ships.mjs, apps/sea-voyage.mjs).
   registerSeaVoyage();
   registerShips();
+  // Golden Voyages sailing rules (world setting "gvSailing"; module/gv-sailing.mjs).
+  registerGvSailing();
   // GM tool: detailed naval combat (game.ad2e.navalCombat(); module/naval-combat.mjs, naval-battle.mjs).
   registerNavalBattle();
   game.settings.registerMenu("ad2e", "navalCombat", {

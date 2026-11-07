@@ -614,6 +614,15 @@ The owner installs and updates from that manifest URL only (no shell access to t
   baghla, boom (`source` "GV") and GV prices/cross-checks for the AA dhows (`aa.aaPrices` keeps AA's); spec
   `seaworthinessStorm` / `seaworthinessReef`; pure `seaworthinessFor(spec, { open, situation })` in naval.mjs (reef, storm,
   open, base); ShipData `seaworthinessIn(situation)` used by ships.mjs `rollSeaworthiness`; sheet `gvNote`, `situationRatings`.
+  Golden Voyages sailing (1.0.85, world setting `gvSailing`): `GV_SAILING` -> `NAVAL.gv` (owner-supplied numbers, Home Port
+  pp. 18-22); `module/gv-sailing.mjs` (pure `gvWeather` (DMG Table 79 via travel-tables `TRAVEL.weather` + modifier/change;
+  worked example `NAVAL.gv.weather.example` tested), `fogToday`, `windFor`, `navigationBonus`, `navigationResult`,
+  `anchorageChance`, `flooding`, `reefCheck`, `toolsOf` (TOOL_ITEMS identifiers); `navigationFields` / `rollNavigation`
+  (AD2EActor#rollProficiency, identifier "navigation", fog from seaWind `gv.fog`), `rollGvWeather` / `findAnchorage`
+  (sea-voyage actions gvWeather / anchorage; seaWind `gv` { condition, fog }), `gvFailure` (ships.mjs failed checks: storm
+  damage then sinking; reef aground), `processReefs` (updateWorldTime, active GM)). Ship `aground` "reef", `system.gv`
+  { stormDamaged, holes, bailers, refloatAt, nextCheck }. Tool items: build-aq-equipment-data.py `GV_TOOLS` (run alone it
+  also re-sorts weapons the later generators touch: keep only the new files, or run build-all.sh).
 - Naval combat (owner's request 1.0.81): `module/naval-combat.mjs` (pure over NAVAL.combat: `roundFor`, `actionsAt`, `rangeYards`,
   `limitRange`, `outcome`, `maneuver({ a, b, minutes, range, d10 })`, `hitNumber`, `tableHits`, `volleyHits`, `missileTarget`,
   `incendiaryTarget`, `fireSize`, `fireGrows`, `woundGroup`, `marineLosses`, `artilleryBand`, `artilleryAc`, `artilleryRate`,

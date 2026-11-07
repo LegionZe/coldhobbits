@@ -79,6 +79,15 @@ AA_WEAPONS = {
 # weigh 9 lb"); the list names the waterskin's 1 gallon itself.
 LIQUID = {"waterskin-1-gal": {"volume": "1 gallon", "fullWeight": 9, "full": False}}
 
+# Golden Voyages (ALQ1) navigation tools, Home Port pp. 19-20 (owner-supplied figures, 1.0.85): A / N / B prices as typed
+# (gp; the kamal's .5 / .3 / .1 gp written in sp). Daftar and rahmani are not sold; the gen compass has no price.
+# The navigation bonuses are in module/gv-sailing.mjs (NAVAL.gv.tools).
+GV_SOURCE = "Al-Qadim: Golden Voyages"
+GV_TOOLS = [("Compass", "compass", ("100 gp", "75 gp", "60 gp")), ("Cross staff", "cross-staff", ("25 gp", "17 gp", "10 gp")),
+            ("Kamal", "kamal", ("5 sp", "3 sp", "1 sp")), ("Daftar", "daftar", None), ("Rahmani", "rahmani", None),
+            ("Gen compass", "gen-compass", None)]
+
+
 def times(cost, n):
     """'15 gp' x 10 -> '150 gp'; '3sp/12' -> '30 sp/12'; '' -> ''."""
     m = re.match(r"\s*([\d,]+)\s*(cp|sp|gp|pp)\.?(.*)$", str(cost or ""))
@@ -317,7 +326,19 @@ if __name__ == "__main__":
         f" *   Heat penalty for worn armour: {classdata.url('Armor in Fiery Zakhara (AA)')} (revision {rev_armor}), Table 6",
         " */", "export const AQ_TABLES = " + json.dumps({"heat": heat}) + ";", ""]))
 
-    write_docs("packs/_source/aq-equipment", [wfolder, pfolder, afolder, zfolder, *folders.values(), *wdocs, *adocs, *zdocs, *docs])
+    nfolder = classdata.folder_doc("aq.gv-navigation", "Navigation (Golden Voyages)", sort=9500)
+    gdocs = []
+    for n, (name, ident, prices) in enumerate(GV_TOOLS):
+        note = (f"Asking {prices[0]}, bargain {prices[2]} (Golden Voyages)." if prices
+                else "Not sold (Golden Voyages): shared, traded or given." if ident in ("daftar", "rahmani")
+                else "Magical, very rare (Golden Voyages): no price.")
+        system = {"identifier": ident, "category": "gear", "cost": prices[1] if prices else "", "weight": None, "quantity": 1,
+                  "carried": True, "capacity": {"weight": None, "volume": ""}, "load": {"full": None, "half": None, "quarter": None},
+                  "source": GV_SOURCE, "url": "", "notes": note + " Navigation bonus: Golden Voyages sailing rules (world setting)."}
+        d = classdata.item_doc("equipment", f"aq.gv.{ident}", name, "icons/svg/item-bag.svg", system, n * 100)
+        d["folder"] = nfolder["_id"]
+        gdocs.append(d)
+    write_docs("packs/_source/aq-equipment", [wfolder, pfolder, afolder, zfolder, nfolder, *folders.values(), *wdocs, *adocs, *zdocs, *docs, *gdocs])
     print(f"PHB weapons at Zakharan prices: {len(zdocs)} ({len(exotic)} exotic: {exotic})")
     print(f"wrote packs/_source/aq-equipment: {len(weapons)} weapons (+ proficiencies), 2 armour, {sum(counts.values())} items "
           f"{counts}; no normal price: {blank}; revs: lists {rev}, descriptions {rev_desc}, armor {rev_armor}, bazaar {rev_bazaar}")

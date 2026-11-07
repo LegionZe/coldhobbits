@@ -1,6 +1,7 @@
 import { askScrollTime, beginCasting, castingStruck, scrollTracked } from "../spell-casting.mjs";
 import { attackFields as underwaterAttackFields, attackPicked as underwaterAttackPicked, castingNote as underwaterCastingNote, itemNote as underwaterItemNote } from "../underwater.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
+import { gvSailingOn, navigationFields, rollNavigation } from "../gv-sailing.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
@@ -532,9 +533,13 @@ export default class AD2EActor extends Actor {
     if (!item || entry?.target === null || entry?.target === undefined) return;
     // Hunting, fishing and Survival (module/forage.mjs) add their own fields and handle the result.
     const forage = this.type === "character" ? forageKind(item.system.identifier) : null;
+    // Navigation under the Golden Voyages sailing rules (module/gv-sailing.mjs): waters, time of day, tools, fog.
+    const navigating = !forage && item.system.identifier === "navigation" && gvSailingOn();
+    let fog = false;
+    try { fog = !!game.settings.get("ad2e", "seaWind")?.gv?.fog; } catch { /* no voyage weather */ }
     // Situational modifier, and the conditional kit modifiers for this proficiency.
     const input = await this.#promptRoll(item.name, this.#kitOptions("proficiency", item.system.identifier), "",
-      forage ? forageFields(this, forage) : "");
+      forage ? forageFields(this, forage) : navigating ? navigationFields(this, { fog }) : "");
     if (!input) return;
     const heat = this.system.mods?.heat ?? 0; // Al-Qadim heat penalty (module/aq-rules.mjs)
     const fatigue = this.system.mods?.fatigue ?? 0; // missed rests (module/dungeon-turns.mjs)
@@ -545,6 +550,12 @@ export default class AD2EActor extends Actor {
         + `${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""}${spellCheck ? `; ${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellCheck })}` : ""}`
         + modifierText(input.mod, input.note);
       return rollForage(this, forage, { item, target, input, notes });
+    }
+    if (navigating) {
+      const notes = `${input.kitText ? `; ${input.kitText}` : ""}${heat ? `; ${game.i18n.format("AD2E.AQ.HeatNote", { n: heat })}` : ""}`
+        + `${fatigue ? `; ${game.i18n.format("AD2E.Dungeon.FatigueNote", { n: fatigue })}` : ""}${spellCheck ? `; ${game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellCheck })}` : ""}`
+        + modifierText(input.mod, input.note);
+      return rollNavigation(this, { item, target, input, notes });
     }
     const roll = await new Roll("1d20").evaluate();
     const success = roll.total < 20 && roll.total <= target;

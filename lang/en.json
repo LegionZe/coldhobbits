@@ -4111,7 +4111,8 @@
     "SinksIn": "Founders in {n} h",
     "Aground": {
       "soft": "Aground (soft bottom)",
-      "rocky": "Aground on rocks"
+      "rocky": "Aground on rocks",
+      "reef": "On the reef"
     },
     "CheckButton": "Seaworthiness check",
     "Boost": "Speed increase",
@@ -4672,5 +4673,101 @@
     "NotCold": "{name} is not in cold enough water, or is protected.",
     "FreezeOk": "{name}: cold check {roll} against {target}, no harm.",
     "FreezeFail": "{name}: cold check {roll} against {target}, failed: loses {n} Constitution."
+  },
+  "AD2E.GvSailing": {
+    "Setting": "Golden Voyages sailing rules",
+    "SettingHint": "Al-Qadim Golden Voyages navigation, weather (DMG Table 79 with yesterday's modifier, fog), storm damage before sinking, reefs and shoals (holes, bailers, high tide) and anchorages, added to the Of Ships and the Sea rules.",
+    "NavLegend": "Fixing location (Golden Voyages)",
+    "WatersLabel": "Waters",
+    "TimeLabel": "Time of day",
+    "NavHint": "Only the best navigator's roll counts. Daftar and rahmani (only in the waters it charts) do not combine; the cross staff works at noon or midnight, the kamal in the evening.",
+    "Waters": {
+      "wellKnown": "Along a well-known coast",
+      "unfamiliar": "Along an unfamiliar coast",
+      "uncharted": "Along an uncharted coast",
+      "openSea": "On the open sea"
+    },
+    "Time": {
+      "day": "Day",
+      "noon": "Noon",
+      "evening": "Evening",
+      "midnight": "Midnight",
+      "night": "Night"
+    },
+    "Tool": {
+      "daftar": "Daftar",
+      "rahmani": "Rahmani",
+      "crossStaff": "Cross staff",
+      "compass": "Compass",
+      "magicCompass": "Gen compass",
+      "kamal": "Kamal"
+    },
+    "Fog": "Fog",
+    "FogShort": "Fog: no navigation checks.",
+    "FogToday": "Fog today: navigation checks are impossible; near shore the ship may run onto a sandbar, reef or shoals.",
+    "FogNoCheck": "{name} cannot fix the ship's position in fog.",
+    "Nav": {
+      "wellKnown": {
+        "success": "A familiar landmark fixes the ship within {within} miles.",
+        "failure": "No landmark sighted."
+      },
+      "unfamiliar": {
+        "success": "A landmark seen or described before fixes the ship within {within} miles.",
+        "failure": "No landmark sighted."
+      },
+      "uncharted": {
+        "success": "Latitude fixed within {latitude} miles, and a prominent landmark noted on the charts.",
+        "failure": "The latitude is up to {latitude} miles off; no landmark sighted."
+      },
+      "openSea": {
+        "success": "Latitude within {latitude} miles, longitude guessed within {longitude} miles.",
+        "failure": "Latitude guessed within {latitude} miles; longitude cannot be fixed."
+      },
+      "offCourse": "A 20: the navigator took the wrong landmark and the ship is up to {miles} miles off course."
+    },
+    "RollWeather": "Roll weather (Golden Voyages)",
+    "ConditionLabel": "Weather",
+    "ConditionHint": "DMG Table 79 condition; it sets the wind strength above.",
+    "Today": "Weather: {condition}.",
+    "WeatherLine": "Weather: 2d6 {roll} {mod} = {total} → {table}; after yesterday's weather: {condition}.",
+    "Condition": {
+      "becalmed": "Becalmed",
+      "light": "Light breeze",
+      "favorable": "Favorable winds",
+      "strong": "Strong winds",
+      "storm": "Storm",
+      "gale": "Gale",
+      "hurricane": "Hurricane"
+    },
+    "AnchorageLegend": "Anchorage (Golden Voyages)",
+    "ShoreLabel": "Shoreline",
+    "RiverMouth": "River mouth or delta",
+    "FindAnchorage": "Search for an anchorage",
+    "AnchorageHint": "No more than one search every 5 miles. If the party must find one, or nothing argues against it, it is simply found.",
+    "Shore": {
+      "cliff": "Coastal cliff",
+      "rocky": "Rocky coast",
+      "sandy": "Sandy beach",
+      "mangrove": "Mangrove swamp",
+      "atoll": "Atoll"
+    },
+    "AnchorageFound": "{shore}: {roll} against {chance}%: an anchorage.",
+    "AnchorageNone": "{shore}: {roll} against {chance}%: no anchorage along this stretch.",
+    "StormDamage": "The ship does not sink but is badly damaged (sails, a mast, or driven onto a reef: the GM decides) and needs repairs before the voyage goes on. Another failed check sinks her.",
+    "StormSinks": "A second failed check: the ship sinks.",
+    "OnReef": "Run aground on the reef. High tide lifts her in {hours} hours.",
+    "Holed": "Hole check: {roll} against {target}: holed ({holes} hole(s)).",
+    "NotHoled": "Hole check: {roll} against {target}: no hole ({holes} hole(s)).",
+    "Flooding": "Water floods in: {need} bailers are needed, or the next check fails and she breaks up.",
+    "BreaksUp": "Flooded, the ship breaks up on the reef.",
+    "HighTide": "High tide: the ship comes off the reef.",
+    "ShipLegend": "Golden Voyages",
+    "StormDamaged": "Storm damage",
+    "StormDamagedHint": "Set by a failed storm check; another failure sinks the ship. Clear it when repaired (a shipyard repair clears it).",
+    "Holes": "Holes",
+    "Bailers": "Bailers",
+    "BailersHint": "Three bailers per hole keep the ship afloat.",
+    "ReefState": "{holes} hole(s), {need} bailers needed; high tide in {tide} hours. Checks run every hour of world time.",
+    "ReefFlooding": "{holes} hole(s) and too few bailers ({need} needed): the next check breaks her up. High tide in {tide} hours."
   }
 }

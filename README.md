@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.84)
+## Status (v1.0.85)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -967,6 +967,21 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   seaworthiness check uses the situation's rating (gales and storms; groundings and shoals). The Golden Voyages figures
   for the barijah, sambuk and zarug agree with Arabian Adventures (asserted) except the zarug's price: the Golden Voyages
   price (8,000 gp, AA 3,500) is used. Other figures as for the Arabian Adventures dhows (sohar template, scaled by length).
+  Golden Voyages sailing rules (1.0.85; Home Port pp. 18-22, owner-supplied figures in `GV_SAILING`, numbers only; world
+  setting "Golden Voyages sailing rules", off by default, added to the Of Ships and the Sea rules; `module/gv-sailing.mjs`):
+  a Navigation proficiency roll asks for the waters (well-known, unfamiliar or uncharted coast, open sea), the time of day
+  and the tools and reports the fix (10 / 15 miles; latitude 30 or 50 miles and longitude 100 at sea; a 20 on an unfamiliar
+  coast puts the ship up to 100 miles off course); daftar or rahmani +2 (not combined), cross staff +1 at noon or midnight,
+  compass +1 or gen compass +2 (the better counts: implementation choice), kamal +1 in the evening; no check in fog. The
+  Sea voyage tool's "Roll weather" uses DMG Table 79 with yesterday's modifier and the results it changes (the book's worked
+  example is a test), fog on a 6 with a light breeze or becalmed (not in summer); the condition sets the Of Ships and the
+  Sea wind strength (implementation choice: storm -> gale, gale and hurricane -> storm). A failed check in a gale or storm
+  damages the ship the first time ("Storm damage" on the sheet; the GM picks what broke) and sinks her the second. A failed
+  grounding check puts her on the reef: a hole check at once and every hour of world time, 3 bailers per hole, flooding
+  breaks her up at the next check, high tide in 2d12 hours. Anchorage search by shoreline (5-75%, +10% at a river mouth).
+  Navigation tools (compass, cross staff, kamal at the Golden Voyages prices; daftar, rahmani, gen compass unpriced) are in
+  the Al-Qadim Equipment pack, folder "Navigation (Golden Voyages)"; a navigator carrying them has the boxes ticked.
+  Golden Voyages ship combat is not included yet (its pages have not been supplied).
   Detailed naval combat (1.0.81; Time in Nautical Combat (OSS) rev 172547, The Maneuvering Phase (OSS) rev 249006, Action
   Phase (OSS) rev 237560, Resolution Phase (OSS) rev 249023, Monsters in Naval Combat (OSS) rev 237980, Scuttling and
   Crippling (OSS) rev 172666, Fleet Battles (OSS) rev 172688). GM tool **Naval combat** (`module/apps/naval-combat.mjs`,

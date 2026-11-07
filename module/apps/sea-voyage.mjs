@@ -2,6 +2,7 @@ import { COURSES, courseFor, currentRate, dailyMiles, DIRECTIONS, encounterCheck
   WINDS } from "../naval.mjs";
 import { rollSeaworthiness } from "../ships.mjs";
 import { zakharanSeason } from "../calendar.mjs";
+import { CONDITIONS, findAnchorage, gvSailingOn, rollGvWeather, SHORES, windFor } from "../gv-sailing.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -56,12 +57,13 @@ export default class SeaVoyage extends HandlebarsApplicationMixin(ApplicationV2)
     window: { title: "AD2E.Naval.VoyageTitle", icon: "fa-solid fa-sailboat", resizable: true },
     position: { width: 600, height: "auto" },
     actions: { rollWind: SeaVoyage.#onRollWind, check: SeaVoyage.#onCheck, encounters: SeaVoyage.#onEncounters, post: SeaVoyage.#onPost,
-      openShip: SeaVoyage.#onOpenShip }
+      openShip: SeaVoyage.#onOpenShip, gvWeather: SeaVoyage.#onGvWeather, anchorage: SeaVoyage.#onAnchorage }
   };
 
   static PARTS = { main: { template: "systems/ad2e/templates/apps/sea-voyage.hbs" } };
 
-  state = { ship: "", heading: "north", course: "", anchor: false, push: false, seamanship: false, area: "openSea", condition: "clearSky", height: "deck" };
+  state = { ship: "", heading: "north", course: "", anchor: false, push: false, seamanship: false, area: "openSea", condition: "clearSky", height: "deck",
+    shore: "sandy", river: false };
 
   get ship() {
     return game.actors?.get(this.state.ship) ?? game.actors?.find(a => a.type === "ship") ?? null;
@@ -89,7 +91,12 @@ export default class SeaVoyage extends HandlebarsApplicationMixin(ApplicationV2)
       driftText: day?.drift ? i18n("AD2E.Naval.DriftText", { miles: day.drift }) : "",
       notesText: day?.notes?.length ? day.notes.map(n => i18n(`AD2E.Naval.RateNote.${n}`)).join(", ") : "",
       checks: (day?.checks ?? []).map(c => ({ key: c, label: i18n(`AD2E.Naval.Situation.${c}`) })),
-      vis
+      vis,
+      // Golden Voyages sailing rules (module/gv-sailing.mjs, world setting "gvSailing").
+      gv: gvSailingOn(), gvText: wind.gv?.condition ? i18n("AD2E.GvSailing.Today", { condition: i18n(`AD2E.GvSailing.Condition.${wind.gv.condition}`) })
+        + (wind.gv.fog ? ` ${i18n("AD2E.GvSailing.FogShort")}` : "") : "",
+      gvConditions: CONDITIONS.map(c => ({ value: c, label: i18n(`AD2E.GvSailing.Condition.${c}`), selected: c === wind.gv?.condition })),
+      shores: opt(SHORES, this.state.shore, "AD2E.GvSailing.Shore")
     });
   }
 
@@ -100,6 +107,8 @@ export default class SeaVoyage extends HandlebarsApplicationMixin(ApplicationV2)
         const k = ev.currentTarget.dataset.voyage;
         const v = ev.currentTarget.type === "checkbox" ? ev.currentTarget.checked : ev.currentTarget.value;
         if (k.startsWith("wind.")) return this.#setWind(k.slice(5), v);
+        if (k === "gv.condition") return this.#setGv({ condition: v });
+        if (k === "gv.fog") return this.#setGv({ fog: v });
         this.state[k] = v;
         this.render();
       });
@@ -110,6 +119,30 @@ export default class SeaVoyage extends HandlebarsApplicationMixin(ApplicationV2)
     if (!game.user?.isGM) return;
     await game.settings.set("ad2e", "seaWind", { ...seaWind(), [key]: value });
     this.render();
+  }
+
+  /** Set the Golden Voyages condition (and the wind strength it gives) or fog by hand. */
+  async #setGv(patch) {
+    if (!game.user?.isGM) return;
+    const w = seaWind();
+    const gv = { ...(w.gv ?? {}), ...patch };
+    await game.settings.set("ad2e", "seaWind", { ...w, gv, ...(patch.condition ? { wind: windFor(patch.condition) } : {}) });
+    this.render();
+  }
+
+  /** The day's weather by DMG Table 79 with the Golden Voyages modifiers; the direction still follows Table 5. */
+  static async #onGvWeather() {
+    if (!game.user?.isGM) return;
+    const prev = seaWind();
+    const res = await rollGvWeather(prev.gv?.condition, season());
+    const next = await nextWind(prev, season(), rollTotal);
+    await game.settings.set("ad2e", "seaWind", { ...next, wind: windFor(res.weather.condition), gv: { condition: res.weather.condition, fog: res.fog } });
+    this.render();
+  }
+
+  static async #onAnchorage() {
+    if (!game.user?.isGM) return;
+    return findAnchorage(this.state.shore, !!this.state.river);
   }
 
   static async #onRollWind() {

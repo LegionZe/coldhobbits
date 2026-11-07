@@ -7,7 +7,17 @@
       <label>{{localize "AD2E.Naval.WindLabel"}} <select data-voyage="wind.wind">{{#each winds as |w|}}<option value="{{w.value}}"{{#if w.selected}} selected{{/if}}>{{w.label}}</option>{{/each}}</select></label>
       <label>{{localize "AD2E.Naval.FromLabel"}} <select data-voyage="wind.direction">{{#each directions as |w|}}<option value="{{w.value}}"{{#if w.selected}} selected{{/if}}>{{w.label}}</option>{{/each}}</select></label>
     </div>
-    <div class="ad2e-ship-buttons"><button type="button" data-action="rollWind"><i class="fa-solid fa-wind"></i> {{localize "AD2E.Naval.RollWind"}}</button></div>
+    <div class="ad2e-ship-buttons">{{#if gv}}<button type="button" data-action="gvWeather"><i class="fa-solid fa-cloud-sun-rain"></i> {{localize "AD2E.GvSailing.RollWeather"}}</button>
+      {{else}}<button type="button" data-action="rollWind"><i class="fa-solid fa-wind"></i> {{localize "AD2E.Naval.RollWind"}}</button>{{/if}}</div>
+    {{/if}}
+    {{#if gv}}
+    {{#if gvText}}<p>{{gvText}}</p>{{/if}}
+    {{#if isGM}}
+    <div class="ad2e-ship-grid">
+      <label data-tooltip="{{localize 'AD2E.GvSailing.ConditionHint'}}">{{localize "AD2E.GvSailing.ConditionLabel"}} <select data-voyage="gv.condition">{{#each gvConditions as |c|}}<option value="{{c.value}}"{{#if c.selected}} selected{{/if}}>{{c.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check"><input type="checkbox" data-voyage="gv.fog" {{checked wind.gv.fog}}> {{localize "AD2E.GvSailing.Fog"}}</label>
+    </div>
+    {{/if}}
     {{/if}}
   </fieldset>
   <fieldset>
@@ -37,6 +47,17 @@
     </div>
     {{#if isGM}}<div class="ad2e-ship-buttons"><button type="button" data-action="encounters"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Naval.RollEncounters"}}</button></div>{{/if}}
   </fieldset>
+  {{#if gv}}{{#if isGM}}
+  <fieldset>
+    <legend>{{localize "AD2E.GvSailing.AnchorageLegend"}}</legend>
+    <div class="ad2e-ship-grid">
+      <label>{{localize "AD2E.GvSailing.ShoreLabel"}} <select data-voyage="shore">{{#each shores as |s|}}<option value="{{s.value}}"{{#if s.selected}} selected{{/if}}>{{s.label}}</option>{{/each}}</select></label>
+      <label class="ad2e-check"><input type="checkbox" data-voyage="river" {{checked state.river}}> {{localize "AD2E.GvSailing.RiverMouth"}}</label>
+    </div>
+    <div class="ad2e-ship-buttons"><button type="button" data-action="anchorage"><i class="fa-solid fa-anchor"></i> {{localize "AD2E.GvSailing.FindAnchorage"}}</button></div>
+    <p class="ad2e-note">{{localize "AD2E.GvSailing.AnchorageHint"}}</p>
+  </fieldset>
+  {{/if}}{{/if}}
   <fieldset>
     <legend>{{localize "AD2E.Naval.VisibilityLegend"}}</legend>
     <div class="ad2e-ship-grid">

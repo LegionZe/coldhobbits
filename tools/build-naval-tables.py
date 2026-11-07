@@ -702,6 +702,46 @@ GV_SHIPS = {
 }
 
 
+# Golden Voyages (ALQ1), Home Port pp. 18-22 ("The Lore of the Sea"): sailing rules supplied by the owner (1.0.85).
+# Numbers only; the procedures are paraphrased in lang/en.json and the code. Weather uses DMG Table 79 (travel-tables.mjs).
+GV_SAILING = {
+    # Fixing location: a Navigation proficiency check (the best navigator's score). Miles of the fix / of the error.
+    "navigation": {
+        "wellKnown": {"success": {"within": 10}, "failure": {}},
+        "unfamiliar": {"success": {"within": 15}, "failure": {"twenty": 100}},
+        "uncharted": {"success": {"latitude": 30, "landmark": True}, "failure": {"latitude": 50}},
+        "openSea": {"success": {"latitude": 50, "longitude": 100}, "failure": {"latitude": 100, "noLongitude": True}},
+    },
+    # Tools: daftar and rahmani (+2, the rahmani only in the waters it shows) do not combine; cross staff +1 at noon or
+    # midnight; compass +1, magical (gen) compass +2; kamal +1 in the evening.
+    "tools": {"daftar": 2, "rahmani": 2, "crossStaff": 1, "compass": 1, "magicCompass": 2, "kamal": 1},
+    "toolTimes": {"crossStaff": ["noon", "midnight"], "kamal": ["evening"]},
+    "exclusive": [["daftar", "rahmani"], ["compass", "magicCompass"]],
+    "toolPrices": {"compass": [100, 75, 60], "crossStaff": [25, 17, 10], "kamal": [0.5, 0.3, 0.1]},
+    # Anchorage: % chance per shoreline, no more than once every 5 miles; river mouth or delta +10%.
+    "anchorage": {"perMiles": 5, "riverMouth": 10,
+                  "shores": {"cliff": 5, "rocky": 30, "sandy": 60, "mangrove": 70, "atoll": 75}},
+    # Reefs and shoals: failed check = aground; a check at once and every hour after for a hole; 3 bailers per hole keep
+    # her afloat; flooding = the next check fails and she breaks up; high tide lifts her in 2d12 hours.
+    "reef": {"bailersPerHole": 3, "checkHours": 1, "highTide": "2d12"},
+    # Weather (DMG Table 79, 2d6): modifier from yesterday's weather and the results it changes; voyages start favorable.
+    "weather": {"start": "favorable",
+                "modifier": {"becalmed": -2, "light": -1, "favorable": 0, "strong": 0, "storm": 1, "gale": 2, "hurricane": 3},
+                "change": {"becalmed": {"gale": "storm", "hurricane": "storm"}, "light": {"hurricane": "storm"},
+                           "strong": {"becalmed": "light"}, "storm": {"becalmed": "light"},
+                           "gale": {"becalmed": "favorable", "light": "favorable"},
+                           "hurricane": {"becalmed": "strong", "light": "strong", "favorable": "strong"}},
+                # Worked example (summer, deep ocean): after a storm 10 + 1 = 11 gale; after the gale 3 + 2 = 5 light -> favorable.
+                "example": [["summer", "storm", 10, "gale"], ["summer", "gale", 3, "favorable"]]},
+    "fog": {"when": ["light", "becalmed"], "die": "1d6", "on": 6, "never": ["summer"]},
+    # A failed check in a storm, gale or hurricane: major damage (repairs needed) the first time, sinking the second.
+    "storm": {"conditions": ["storm", "gale", "hurricane"]},
+    # Implementation choice: DMG Table 79 conditions -> OSS wind strengths (Table 3 rates, drift, check penalties).
+    "windFor": {"becalmed": "calm", "light": "light", "favorable": "moderate", "strong": "strong", "storm": "gale",
+                "gale": "storm", "hurricane": "storm"},
+}
+
+
 WORDS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "ten": 10}
 
 
@@ -868,7 +908,7 @@ def build():
     gg = next(s for s in ships if s["key"] == "great-galley")
     assert gg["move"] == {"both": 18, "sail": 6, "oar": 12} and gg["combat"]["move"] == {"both": 18, "sail": 9, "oar": 15}
     data = {
-        "ships": ships, "aaFit": aa_fit, "sizes": SIZE_ORDER, "sizeFeet": {"small": 5, "medium": 20, "large": 60, "veryLarge": 101},
+        "ships": ships, "aaFit": aa_fit, "gv": GV_SAILING, "sizes": SIZE_ORDER, "sizeFeet": {"small": 5, "medium": 20, "large": 60, "veryLarge": 101},
         "travel": {"rowMilesPerRate": 2, "sailMilesPerRate": 3, "anchorMilesPerRate": 2, "dayHours": 10,
                    "boost": {"die": 20, "target": 12, "seamanship": 3, "fraction": 1 / 3, "rowRounds": 5, "rowMaxTurns": 3, "sailMinutes": 10},
                    "push": {"die": 20, "target": 12, "seamanship": 3, "seamanshipPenalty": -2, "fraction": 1 / 3, "restHours": 12},

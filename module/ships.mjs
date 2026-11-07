@@ -13,6 +13,7 @@
  * ship's owners.
  */
 import { ad2eDialog } from "./dialogs.mjs";
+import { gvFailure, gvSailingOn } from "./gv-sailing.mjs";
 import { boostSucceeds, checkPenalty, experienceFor, NAVAL, seaRepair, seaRepairDays, seaworthinessCheck, shipyardRepair } from "./naval.mjs";
 
 const i18n = (k, d) => (d ? game.i18n.format(k, d) : game.i18n.localize(k));
@@ -68,8 +69,13 @@ export async function rollSeaworthiness(actor, { situation = null } = {}) {
   const lines = [i18n("AD2E.Naval.CheckResult", { name: actor.name, roll: res.roll, target: res.target })];
   const update = {};
   const rolls = [r];
+  const gv = res.fail && !res.capsized && !res.splintered && gvSailingOn() ? await gvFailure(actor, choice.situation, { rating, penalty }) : null;
   if (!res.fail) lines.push(i18n("AD2E.Naval.CheckPassed"));
-  else if (res.capsized || res.splintered) {
+  else if (gv) {
+    Object.assign(update, gv.update);
+    lines.push(...gv.lines);
+    rolls.push(...gv.rolls);
+  } else if (res.capsized || res.splintered) {
     update["system.sunk"] = true;
     update["system.founderAt"] = null;
     lines.push(i18n(res.capsized ? "AD2E.Naval.Capsized" : "AD2E.Naval.Splintered"));
@@ -159,6 +165,7 @@ export async function shipyardRepairShip(actor) {
     content: `<p>${esc(i18n("AD2E.Naval.ShipyardAsk", { points, cost: r.cost, days: r.days }))}</p>` });
   if (!ok) return null;
   await actor.update({ "system.hull.value": s.hullMax, "system.crippling.value": s.cripplingMax, "system.jury": false, "system.aground": "",
+    "system.gv.stormDamaged": false, "system.gv.holes": 0, "system.gv.refloatAt": null, "system.gv.nextCheck": null,
     "system.founderAt": null });
   return card(actor, `<p>${esc(i18n("AD2E.Naval.ShipyardDone", { name: actor.name, cost: r.cost, days: r.days }))}</p>`);
 }
