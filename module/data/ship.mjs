@@ -40,6 +40,8 @@ export default class ShipData extends foundry.abstract.TypeDataModel {
       crippling: new SchemaField({ value: optional({ integer: true }), max: optional({ integer: true, min: 0 }) }),
       // Seaworthiness (null = the type's, adjusted for length); jury-rigged after a grounding: -3 until a shipyard repair.
       seaworthiness: optional({ integer: true, min: 1, max: 20 }), jury: new BooleanField({ initial: false }),
+      // Out of sight of land: Arabian Adventures ships with a lower open-water seaworthiness use it (spec.seaworthinessOpen).
+      openWater: new BooleanField({ initial: false }),
       ramFactor: optional({ integer: true, min: 0, max: 4 }),
       artillery: new ArrayField(new SchemaField({ key: new StringField({ required: true, initial: "ballistaLight" }),
         crew: count(0), loaded: count(0), destroyed: new BooleanField({ initial: false }), incendiary: new BooleanField({ initial: false }) })),
@@ -71,7 +73,7 @@ export default class ShipData extends foundry.abstract.TypeDataModel {
     this.cripplingNow = this.crippling.value ?? cripMax;
     this.crewCount = this.sailors.count + this.rowers.count;
     this.crewState = crewState(spec, this.crewCount);
-    this.seaworthinessBase = this.seaworthiness ?? spec.seaworthiness;
+    this.seaworthinessBase = this.seaworthiness ?? (this.openWater && spec.seaworthinessOpen ? spec.seaworthinessOpen : spec.seaworthiness);
     this.seaworthinessNow = seaworthinessNow(this.seaworthinessBase, this.sizeKey, hullMax - this.hullNow);
     this.ram = this.ramFactor ?? spec.combat.rf;
     this.marinesFree = Math.max(this.marines.count - this.marines.archers - this.marines.boarders - this.marines.artillerists - this.marines.firefighters, 0);

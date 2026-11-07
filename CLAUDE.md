@@ -605,6 +605,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   sinking clock on updateWorldTime). `module/apps/sea-voyage.mjs` (`SeaVoyage`, menu `ad2e.voyage`, `game.ad2e.voyage`, manual tool
   `voyage`; world setting `seaWind`; pure `voyageDay`; `voyageButtons` (flag `ad2e.voyage`) in AD2EChatMessage). Lang block `AD2E.Naval`,
   CSS `.ad2e-ship-*`. Code that loops over actors must tolerate type "ship" (no hp, abilities or items logic).
+  Zakharan ships (1.0.83, owner's choice: Arabian Adventures figures, Golden Voyages' are not online): build-naval-tables.py
+  `aa_ships` (Equipment Descriptions/Lists (AA), Movement on Water (DMG) Tables 76/77 regex-checked) appends barijah, sambuk,
+  zaruq, dunij, qarib to `NAVAL.ships` with `source` "AA", `template` (sohar / skiff), `aa` { base, emergency, coastal, open,
+  prices, lateenX3, feetPerRound, mph }, `seaworthinessOpen`, `draft`/`build` null; `NAVAL.aaFit` = the % -> rating line.
+  ShipData `openWater` (sheet tick box when `seaworthinessOpen`) picks the open-water rating; sheet `aaNote`.
 - Naval combat (owner's request 1.0.81): `module/naval-combat.mjs` (pure over NAVAL.combat: `roundFor`, `actionsAt`, `rangeYards`,
   `limitRange`, `outcome`, `maneuver({ a, b, minutes, range, d10 })`, `hitNumber`, `tableHits`, `volleyHits`, `missileTarget`,
   `incendiaryTarget`, `fireSize`, `fireGrows`, `woundGroup`, `marineLosses`, `artilleryBand`, `artilleryAc`, `artilleryRate`,

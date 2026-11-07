@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.82)
+## Status (v1.0.83)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -948,6 +948,18 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   single-rate ships' propulsion where the descriptions do not say it (canoe, skiff, keelboat rowed; caravel, sohar,
   fishing boat, manta sailed); crippling counted in thirds (the fraction is missing in the wiki text); anchoring doubles
   the wind-adjusted rate; officers kept apart from the crew count; one hit die per crew member unless set.
+  Zakharan ships (1.0.83; owner's choice: the Golden Voyages ship figures are not on the wiki, so the Arabian Adventures
+  ones are used; Equipment Descriptions (AA) rev 272209, Equipment Lists (AA) rev 272210, Movement on Water (DMG) rev 99762):
+  ship types Barijah, Sambuk and Zaruq, and the Dunij and Qarib launches, with the book's length, crew, passengers, cargo
+  and N price. Implementation choices for the conversion to Of Ships and the Sea: sailing rate = the DMG base move x 3
+  (true of the caravel and cog, the sail-only ships DMG Table 77 and OSS Table 2 share; asserted); seaworthiness rating =
+  the least-squares line of OSS ratings on Table 77 percentages over the eight shared ships, rounded (40% -> 8, 50% -> 11,
+  30% -> 4, below the fitted range); the barijah's and zaruq's lower open-water seaworthiness applies when the ship sheet's
+  "Out of sight of land" is ticked; the launches' 60 feet a round is Table 76's barge and raft speed, OSS rate 3 (a
+  fitted lateen sail is noted, not applied); figures neither book gives come from the OSS sohar (dhows) or skiff (launches),
+  hull, crippling and marines scaled by length, beam from the sambuk's proportions, the zaruq's length the middle of
+  50-60 feet, the barijah's passengers its "four times" the crew less the crew; pursuit 1d6 + a third of the rate (OSS).
+  The baghla and boom of Golden Voyages are not included (no source gives their figures).
   Detailed naval combat (1.0.81; Time in Nautical Combat (OSS) rev 172547, The Maneuvering Phase (OSS) rev 249006, Action
   Phase (OSS) rev 237560, Resolution Phase (OSS) rev 249023, Monsters in Naval Combat (OSS) rev 237980, Scuttling and
   Crippling (OSS) rev 172666, Fleet Battles (OSS) rev 172688). GM tool **Naval combat** (`module/apps/naval-combat.mjs`,

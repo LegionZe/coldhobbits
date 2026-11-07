@@ -52,6 +52,14 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       actor, system: s, spec, editable: this.isEditable, isGM: !!game.user?.isGM,
       types: NAVAL.ships.map(t => ({ value: t.key, label: t.label, selected: t.key === s.shipType })),
       variable: !!spec.variable, both: spec.propulsion === "both",
+      openWaterRule: !!spec.seaworthinessOpen,
+      // Arabian Adventures ships (Zakharan, owner's request 1.0.83): the book's figures and the conversion's template ship.
+      aaNote: spec.source === "AA" ? (spec.aa.base !== null
+        ? i18n("AD2E.Naval.AaNote", { base: spec.aa.base, emergency: spec.aa.emergency, coastal: spec.aa.coastal,
+          open: spec.aa.open ?? spec.aa.coastal, template: NAVAL.ships.find(t => t.key === spec.template)?.label ?? spec.template })
+        : i18n(spec.aa.lateenX3 ? "AD2E.Naval.AaLaunchSail" : "AD2E.Naval.AaLaunch", { feet: spec.aa.feetPerRound, mph: spec.aa.mph,
+          template: NAVAL.ships.find(t => t.key === spec.template)?.label ?? spec.template })) : "",
+      aaUrl: NAVAL.urls.aaShips,
       propulsions: ["", "sail", "oar"].map(p => ({ value: p, label: i18n(`AD2E.Naval.Propulsion.${p || "both"}`), selected: p === s.propulsion })),
       experiences: EXPERIENCE.map(k => ({ value: k, label: i18n(`AD2E.Naval.Experience.${k}`), selected: k === s.experience })),
       summary: [
@@ -65,7 +73,7 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
         { label: i18n("AD2E.Naval.Cargo"), value: cargo },
         { label: i18n("AD2E.Naval.CrewCapacity"), value: `${spec.crew.max}/${spec.crew.average}/${spec.crew.minimum}`, tooltip: i18n("AD2E.Naval.CrewCapacityHint") },
         { label: i18n("AD2E.Naval.MarinesMax"), value: spec.combat.warMarines ? `${spec.combat.marines}/${spec.combat.warMarines}` : String(spec.combat.marines) },
-        { label: i18n("AD2E.Naval.Draft"), value: i18n("AD2E.Naval.Feet", { n: spec.draft }) },
+        { label: i18n("AD2E.Naval.Draft"), value: spec.draft === null || spec.draft === undefined ? "—" : i18n("AD2E.Naval.Feet", { n: spec.draft }) },
         { label: i18n("AD2E.Naval.Cost"), value: `${spec.cost} gp` }
       ],
       crewState: s.crewState, crewStateText: i18n(`AD2E.Naval.CrewState.${s.crewState}`),

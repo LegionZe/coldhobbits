@@ -19,6 +19,16 @@ Sources (AD&D 2e fandom wiki, MediaWiki API), every table parsed and every rule 
     endurance; "Action Phase (OSS)" Tables 15-27; "Resolution Phase (OSS)" Tables 28-33, foundering, repairs, escape,
     casualties; "Monsters in Naval Combat (OSS)" Tables 34-37; "Scuttling and Crippling (OSS)"; "Fleet Battles (OSS)"
     Table 38 (combat statistics, the figures naval combat uses).
+Zakharan ships (owner's request 1.0.83; Golden Voyages' ship figures are not on the wiki, so the owner chose the Arabian
+Adventures ones): "Equipment Descriptions (AA)" (barijah, sambuk, zaruq, dunij and qarib launches: length, beam, crew,
+passengers, cargo, DMG base/emergency rates, seaworthiness % in sight of land / open water), "Equipment Lists (AA)" (A/N/B
+prices; N is used), "Movement on Water (DMG)" (Table 76 riverboats in feet per round, Table 77 ship rates and seaworthiness
+%). Converted to the OSS figures (see `aa_ships`): sailing rate = DMG base move x 3 (asserted for the caravel and cog, the
+OSS sail-only ships Table 77 lists); seaworthiness rating = least-squares line of OSS Table 2 ratings on Table 77
+percentages over the eight ships both list, rounded (30% lies below the fitted range); the launches' 60 feet per round is
+Table 76's barge and raft speed, OSS rate 3; the figures neither book gives come from a template OSS ship (sohar for the
+dhows: the OSS "Arabian" merchant ship; skiff for the launches) with hull, crippling and marines scaled by length, beam
+from the sambuk's beam/length; pursuit is 1d6 + a third of the rate (the OSS rule).
 No rulebook text is copied: tables hold numbers and short labels; the effects are paraphrased in lang/en.json.
 Run from the repo root:  python3 tools/build-naval-tables.py
 """
@@ -673,6 +683,102 @@ def combat_rules():
         "Resolution Phase (OSS)": rrev, "Monsters in Naval Combat (OSS)": nrev, "Scuttling and Crippling (OSS)": srev, "Fleet Battles (OSS)": frev}
 
 
+
+WORDS = {"two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "ten": 10}
+
+
+def aa_ships(t1, t2, combat_ships):
+    """Arabian Adventures ships in the OSS ship format (implementation choices in the module docstring)."""
+    w, rev, _ = classdata.page("Equipment Descriptions (AA)")
+    p = plain(w.replace("&nbsp;", " "))
+    lw, lrev, _ = classdata.page("Equipment Lists (AA)")
+    dw, drev, _ = classdata.page("Movement on Water (DMG)")
+    num = lambda x: int(x.replace(",", ""))
+    b = need(p, r"Barijah: This small, (\d+)-foot dhow .*? It lacks a sterncastle\. It is lateen-rigged .*? The ship carries a crew of (\d+) men, "
+             r"but it can comfortably bear four times that amount, or (\d+) tons of cargo\. The barijah has a base movement rate of (\d+), an emergency "
+             r"rate of (\d+), and a seaworthiness of (\d+) percent when traveling in sight of land\. In open water, seaworthiness drops to (\d+) percent", "barijah")
+    sb = need(p, r"Sambuk: .*? It has a keel length of (\d+) feet and a beam \(width\) of (\d+) feet\. The crew comprises (\d+) to (\d+) sailors\. In addition, "
+              r"the sambuk can carry up to (\d+) passengers or (\d+) tons of cargo\. .*? lateen \(triangular\) sails\. It is marginally more reliable than the "
+              r"barijah, having a (\d+) percent seaworthiness in all waters\. The sambuk's base movement rate is (\d+), and its emergency rate is (\d+)", "sambuk")
+    z = need(p, r"Zaruq: .*? On average, the ship measures (\d+) to (\d+) feet in length\. It carries a crew of (\d+) to (\d+) men, and can also carry up to "
+             r"(\d+) tons of cargo\. The ship's base movement rate is (\d+), its emergency rate is (\d+), and its seaworthiness is an admirable (\d+) percent "
+             r"when sailing in sight of the shoreline\..*? In open water, however, the zaruq's seaworthiness drops precipitously to (\d+) percent", "zaruq")
+    ln = need(p, r"The smaller ship is the dunij; it can hold (\w+) passengers, move (\d+) feet per round, or (\d+) mph, and can carry ([\d,]+) pounds\. "
+              r"The larger boat is the qarib; it can hold up to (\d+) passengers or ([\d,]+) pounds of cargo, with the same movement rates as the dunij\. "
+              r"Some qaribs may be fitted with a lateen sail as well, and may move three times as fast", "launches")
+    need(p, r"See \"?Ocean Voyaging\"? in Chapter 14 of the DMG", "AA rates are DMG Table 77's")
+    prices = {}
+    for r in table(lw, "Transport"):
+        if len(r) >= 4 and re.fullmatch(r"[\d,]+ gp", r[2] or ""):
+            prices[r[0]] = {k: num(v.replace(" gp", "")) for k, v in zip("ABN", (r[1], r[3], r[2]))}
+    for k in ("Barijah", "Sambuk", "Zaruq", "Launch, large (qarib)", "Launch, small (dunij)"):
+        assert k in prices, f"price {k}"
+    # DMG Table 77 against OSS Table 2: rates and seaworthiness.
+    t77 = {slug(r[0]): r for r in table(dw, "Table 77: Ship Types") if len(r) == 4}
+    need(dw, r"Base move per hour is the average speed of the vessel under good conditions", "Table 77 base move")
+    need(dw, r"If the roll is equal to or less than the seaworthiness rating of the ship, it remains afloat", "Table 77 seaworthiness")
+    for k in ("caravel", "cog"):
+        assert t2[k]["move"] == [3 * int(t77[k][1])], f"OSS rate = 3 x DMG base ({k})"
+    pairs = [(int(t77[k][3].rstrip("%")), t2[k]["seaworthiness"]) for k in t77 if k in t2]
+    assert len(pairs) == 8, pairs
+    n = len(pairs)
+    mx = sum(x for x, _ in pairs) / n
+    my = sum(y for _, y in pairs) / n
+    slope = sum((x - mx) * (y - my) for x, y in pairs) / sum((x - mx) ** 2 for x, _ in pairs)
+    icept = my - slope * mx
+    assert max(abs(icept + slope * x - y) for x, y in pairs) < 3, "fit"
+    sea = lambda pct: min(max(round(icept + slope * pct), 1), 20)
+    t76 = {slug(r[0]): r for r in table(dw, "Table 76: Boat Movement") if len(r) >= 3}
+    assert t76["barge"][1] == t76["keelboat-or-raft"][1] == ln[2], "launch speed = Table 76 barge / raft"
+    assert t2["barge"]["move"] == [3] and t2["raft"]["move"] == [3]
+    beam_ratio = int(sb[2]) / int(sb[1])
+    out = []
+
+    def make(key, label, src_price, length, beam, crew, passengers, cargo, base, emergency, pct, pct_open, template, propulsion):
+        t, c = t1[template], combat_ships[template]
+        tt = t2[template]
+        scale = length / t["length"]
+        rate = 3 * base if propulsion == "sail" else 3
+        sea_c = sea(pct) if pct is not None else tt["seaworthiness"]
+        sea_o = sea(pct_open) if pct_open is not None else None
+        move = {"both": None, "sail": rate if propulsion == "sail" else None, "oar": rate if propulsion == "oar" else None}
+        size = "small" if length < 20 else "medium" if length < 60 else "large" if length <= 100 else "veryLarge"
+        hull = max(round(c["hull"] * scale), 1)
+        crip = max(round((c["crippling"] or c["hull"]) * scale), 1) if c["crippling"] else None
+        minimum = max(round(crew[0] * tt["crew"]["minimum"] / tt["crew"]["max"]), 1)
+        out.append({"key": key, "label": label, "source": "AA", "draft": None, "length": length, "beam": beam, "cost": prices[src_price]["N"],
+                    "build": None, "propulsion": propulsion, "move": move, "seaworthiness": sea_c, "seaworthinessOpen": sea_o,
+                    "pursuit": {"n": 1, "die": 6, "plus": rate // 3}, "maneuver": {"sail": tt["maneuver"][0], "oar": tt["maneuver"][-1]},
+                    "size": [size], "crew": {"max": crew[0], "average": crew[1], "minimum": minimum}, "rowers": None, "warriors": None,
+                    "allRow": False, "passengers": passengers, "cargo": cargo,
+                    "combat": {"move": dict(move), "seaworthiness": sea_c, "pursuit": {"n": 1, "die": 6, "plus": rate // 3},
+                               "maneuver": {"sail": tt["maneuver"][0], "oar": tt["maneuver"][-1]}, "rf": c["rf"], "defense": c["defense"],
+                               "marines": round(c["marines"] * scale), "warMarines": None, "hull": hull, "crippling": crip},
+                    "variable": None, "template": template,
+                    "aa": {"base": base, "emergency": emergency, "coastal": pct, "open": pct_open, "prices": prices[src_price],
+                           "lateenX3": key == "qarib"}})
+
+    bl = int(b[1])
+    make("barijah", "Barijah (AA)", "Barijah", bl, round(bl * beam_ratio), (int(b[2]), int(b[2])), 4 * int(b[2]) - int(b[2]),
+         {"tons": int(b[3])}, int(b[4]), int(b[5]), int(b[6]), int(b[7]), "sohar", "sail")
+    make("sambuk", "Sambuk (AA)", "Sambuk", int(sb[1]), int(sb[2]), (int(sb[4]), int(sb[3])), int(sb[5]), {"tons": int(sb[6])},
+         int(sb[8]), int(sb[9]), int(sb[7]), None, "sohar", "sail")
+    zl = (int(z[1]) + int(z[2])) // 2
+    make("zaruq", "Zaruq (AA)", "Zaruq", zl, round(zl * beam_ratio), (int(z[4]), int(z[3])), 0, {"tons": int(z[5])},
+         int(z[6]), int(z[7]), int(z[8]), int(z[9]), "sohar", "sail")
+    dun = WORDS.get(ln[1], None) or int(ln[1])
+    for key, label, price, pas, lb in [("dunij", "Dunij (AA launch)", "Launch, small (dunij)", dun, num(ln[4])),
+                                       ("qarib", "Qarib (AA launch)", "Launch, large (qarib)", int(ln[5]), num(ln[6]))]:
+        sk = t2["skiff"]
+        make(key, label, price, t1["skiff"]["length"], t1["skiff"]["beam"], (sk["crew"]["max"], sk["crew"]["average"]), pas, {"lb": lb},
+             None, None, None, None, "skiff", "oar")
+        e = out[-1]
+        e["seaworthiness"] = e["combat"]["seaworthiness"] = sk["seaworthiness"]
+        e["aa"].update({"feetPerRound": int(ln[2]), "mph": int(ln[3])})
+    assert [s["seaworthiness"] for s in out[:3]] == [sea(40), sea(40), sea(50)] and out[0]["move"]["sail"] == 9 and out[2]["move"]["sail"] == 15
+    return out, {"Equipment Descriptions (AA)": rev, "Equipment Lists (AA)": lrev, "Movement on Water (DMG)": drev}, \
+        {"slope": round(slope, 4), "intercept": round(icept, 4), "pairs": pairs}
+
 def build():
     t1, t2, rowers, warriors, ship_rev, ship_wiki = ships_tables()
     wind, strength, direction, move_rev = movement_rules()
@@ -701,13 +807,15 @@ def build():
                                  "maneuver": {"sail": c["maneuver"][0], "oar": c["maneuver"][-1]}, "rf": c["rf"], "defense": c["defense"],
                                  "marines": c["marines"], "warMarines": c["warMarines"], "hull": c["hull"], "crippling": c["crippling"]},
                       "variable": VARIABLE.get(key)})
+    aa, aa_revs, aa_fit = aa_ships(t1, t2, combat["combatShips"])
     ships.sort(key=lambda s: s["label"])
+    ships += aa
     # Table 2 and Table 38 differ for two ships (great galley movement 18/6/12 vs 18/9/15; dromond maneuverability):
     # travel uses Table 2, naval combat Table 38 ("Ship Combat Statistics"), as the book's chapters do.
     gg = next(s for s in ships if s["key"] == "great-galley")
     assert gg["move"] == {"both": 18, "sail": 6, "oar": 12} and gg["combat"]["move"] == {"both": 18, "sail": 9, "oar": 15}
     data = {
-        "ships": ships, "sizes": SIZE_ORDER, "sizeFeet": {"small": 5, "medium": 20, "large": 60, "veryLarge": 101},
+        "ships": ships, "aaFit": aa_fit, "sizes": SIZE_ORDER, "sizeFeet": {"small": 5, "medium": 20, "large": 60, "veryLarge": 101},
         "travel": {"rowMilesPerRate": 2, "sailMilesPerRate": 3, "anchorMilesPerRate": 2, "dayHours": 10,
                    "boost": {"die": 20, "target": 12, "seamanship": 3, "fraction": 1 / 3, "rowRounds": 5, "rowMaxTurns": 3, "sailMinutes": 10},
                    "push": {"die": 20, "target": 12, "seamanship": 3, "seamanshipPenalty": -2, "fraction": 1 / 3, "restHours": 12},
@@ -730,10 +838,12 @@ def build():
                  "maneuvering": classdata.url("The Maneuvering Phase (OSS)"), "action": classdata.url("Action Phase (OSS)"),
                  "resolution": classdata.url("Resolution Phase (OSS)"), "monsters": classdata.url("Monsters in Naval Combat (OSS)"),
                  "scuttling": classdata.url("Scuttling and Crippling (OSS)"), "fleet": classdata.url("Fleet Battles (OSS)"),
-                 "pcs": classdata.url("Player Characters in Detailed Naval Combat (OSS)")}
+                 "pcs": classdata.url("Player Characters in Detailed Naval Combat (OSS)"),
+                 "aaShips": classdata.url("Equipment Descriptions (AA)"), "aaPrices": classdata.url("Equipment Lists (AA)"),
+                 "dmgShips": classdata.url("Movement on Water (DMG)")}
     }
     revs = {"Ship Particulars (OSS)": ship_rev, "Movement (OSS)": move_rev, "Shipwrecks (OSS)": wreck_rev, "Vision (OSS)": vision_rev,
-            "Encounter Tables (OSS)": enc_rev, **combat_revs}
+            "Encounter Tables (OSS)": enc_rev, **combat_revs, **aa_revs}
     return data, revs
 
 
@@ -741,6 +851,6 @@ if __name__ == "__main__":
     data, revs = build()
     with open("module/rules/naval-tables.mjs", "w") as f:
         f.write("// GENERATED by tools/build-naval-tables.py from the AD&D 2e fandom wiki (MediaWiki API): do not edit.\n")
-        f.write("// Sources (Of Ships and the Sea): " + ", ".join(f"{k} rev {v}" for k, v in revs.items()) + ".\n")
+        f.write("// Sources (Of Ships and the Sea; Zakharan ships: Arabian Adventures and the DMG): " + ", ".join(f"{k} rev {v}" for k, v in revs.items()) + ".\n")
         f.write(f"export const NAVAL = {json.dumps(data, ensure_ascii=False)};\n")
     print(len(data["ships"]), "ships,", len(data["combat"]["artillery"]), "artillery,", len(data["combat"]["moraleMods"]), "morale modifiers")
