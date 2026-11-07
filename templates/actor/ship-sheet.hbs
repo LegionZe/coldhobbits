@@ -75,7 +75,9 @@
     {{#if editable}}<div class="ad2e-ship-buttons">
       <button type="button" data-action="fullCrew"><i class="fa-solid fa-users"></i> {{localize "AD2E.Naval.FullCrew"}}</button>
       <button type="button" data-action="rollExperience"><i class="fa-solid fa-dice"></i> {{localize "AD2E.Naval.RollExperience"}}</button>
+      {{#if isGM}}<button type="button" data-action="generateCrew"><i class="fa-solid fa-people-group"></i> {{localize "AD2E.ShipCrew.Generate"}}</button>{{/if}}
     </div>{{/if}}
+    {{#if crewNpcs.length}}<p class="ad2e-note">{{localize "AD2E.ShipCrew.Officers"}}: {{#each crewNpcs as |c|}}<a data-action="openCrew" data-uuid="{{c.uuid}}">{{c.name}}</a> ({{c.role}}, {{localize "AD2E.ShipCrew.Level" n=c.level}}){{#unless @last}}, {{/unless}}{{/each}}</p>{{/if}}
   </fieldset>
 
   <fieldset>

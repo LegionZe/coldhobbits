@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.85)
+## Status (v1.0.86)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -982,6 +982,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Navigation tools (compass, cross staff, kamal at the Golden Voyages prices; daftar, rahmani, gen compass unpriced) are in
   the Al-Qadim Equipment pack, folder "Navigation (Golden Voyages)"; a navigator carrying them has the boxes ticked.
   Golden Voyages ship combat is not included yet (its pages have not been supplied).
+  Crew generation (1.0.86, owner's rulings; `module/ship-crew.mjs`): the ship sheet's GM button "Generate crew" asks for a
+  quality. Poor: all level 0, the type's average complement, the captain as the only officer, no marines (so no archers,
+  boarders, artillerists or firefighters), experience landlubbers. Average: mostly level 0, every role filled, mates.
+  Quality: mostly levels 1-3, mariners. Excellent: mostly levels 3-6, old salts. Sailors, rowers and marines stay numbers
+  (count and hit dice per group: the average of the men's levels, level 0 counting as 1 Hit Die); THAC0 = the warrior THAC0
+  of the marines' most common level; the artillery is manned from the marines first, the rest split between archers and
+  boarders; the captain and the officers (1 per 10 sailors or 20 rowers) become NPC actors (fighters; level 0 has no
+  class) in an Actor folder "Crew of <ship>", listed on the sheet; generating again replaces them. Implementation choices:
+  the level mix per quality (`QUALITY` weights), officers and captain a step above the crew, human officers.
   Detailed naval combat (1.0.81; Time in Nautical Combat (OSS) rev 172547, The Maneuvering Phase (OSS) rev 249006, Action
   Phase (OSS) rev 237560, Resolution Phase (OSS) rev 249023, Monsters in Naval Combat (OSS) rev 237980, Scuttling and
   Crippling (OSS) rev 172666, Fleet Battles (OSS) rev 172688). GM tool **Naval combat** (`module/apps/naval-combat.mjs`,

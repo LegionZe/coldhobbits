@@ -1,4 +1,5 @@
 import { flooding, gvSailingOn } from "../gv-sailing.mjs";
+import { crewActors, generateCrew } from "../ship-crew.mjs";
 import { artilleryIssues, artilleryLoad, deckSpace, diceText, EXPERIENCE, NAVAL, pursuitDice, shipyardRepair } from "../naval.mjs";
 import { patchShip, repairAtSea, rollCrewExperience, rollSeaworthiness, shipyardRepairShip, skeletonEffort, speedBoost } from "../ships.mjs";
 
@@ -46,7 +47,9 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       boost: function () { return speedBoost(this.actor); },
       skeleton: function () { return skeletonEffort(this.actor); },
       rollExperience: function () { return rollCrewExperience(this.actor); },
-      fullCrew: ShipSheet.#onFullCrew
+      fullCrew: ShipSheet.#onFullCrew,
+      generateCrew: function () { return generateCrew(this.actor); },
+      openCrew: function (event, target) { return foundry.utils.fromUuidSync(target.dataset.uuid, { strict: false })?.sheet?.render(true); }
     }
   };
 
@@ -74,6 +77,9 @@ export default class ShipSheet extends HandlebarsApplicationMixin(ActorSheetV2) 
       types: NAVAL.ships.map(t => ({ value: t.key, label: t.label, selected: t.key === s.shipType })),
       variable: !!spec.variable, both: spec.propulsion === "both",
       openWaterRule: !!spec.seaworthinessOpen,
+      // Generated captain and officers (module/ship-crew.mjs).
+      crewNpcs: crewActors(actor).map(a => ({ uuid: a.uuid, name: a.name, level: a.system?.level ?? 0,
+        role: i18n(`AD2E.ShipCrew.Role.${a.getFlag("ad2e", "crewRole") ?? "officer"}`) })),
       gvSailing: gvSailingOn(), gvFlooding: flooding(s.gv?.holes ?? 0, s.gv?.bailers ?? 0),
       gvReef: s.aground === "reef" || (s.gv?.holes ?? 0) > 0 ? i18n(flooding(s.gv?.holes ?? 0, s.gv?.bailers ?? 0) ? "AD2E.GvSailing.ReefFlooding" : "AD2E.GvSailing.ReefState",
         { holes: s.gv?.holes ?? 0, need: (s.gv?.holes ?? 0) * NAVAL.gv.reef.bailersPerHole,
