@@ -4829,6 +4829,8 @@
     "Restricted": "Only some spells of these spheres are allowed (see the priesthood's page): {list}.",
     "Limited": "Limited spheres (only the spells the priesthood allows are listed): {list}.",
     "ReversedOnly": "reversed form only",
+    "ReversedName": "{name} (reversed)",
+    "CastReversed": "Cast in its reversed form (the priesthood allows only the reversed form).",
     "Choice": "Plus one sphere of the player's choice from: {list} (add it to the own major spheres)."
   }
 }

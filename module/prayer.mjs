@@ -6,7 +6,8 @@
  * paladin, ranger), replaced by an Al-Qadim cleric kit's (kahin, ethoist, moralist, pragmatist, hakima, mystic; 1.0.88), by
  * the character's Complete Priest's Handbook priesthood when chosen (specialty priests, 1.0.88), and by the character's
  * own sphere fields when filled. A priesthood's limits within a sphere (`limits`: named spells, words in the name,
- * reversed forms only, excluded spells; 1.0.89) are enforced while its spheres apply (not under the own fields).
+ * reversed forms only, excluded spells; 1.0.89) are enforced while its spheres apply (not under the own fields); a spell
+ * allowed only in reversed form is prayed for as its reversed form (1.0.90).
  * Implementation choices: a spell with any accessible sphere is allowed (a spell in two spheres needs only one); a spell
  * with damage or healing options stays, used up, until the next rest so its roll can still be made; spells added by hand
  * (dropped on the sheet) are never removed; duplicates across compendiums are listed once (world items, then world
@@ -148,16 +149,32 @@ export async function priestCatalog({ fresh = false } = {}) {
   return catalog;
 }
 
-/** Add a spell from the catalogue to the priest, memorized `count` times (an owned copy of the same spell gains them). */
-export async function praySpell(actor, uuid, count = 1) {
+/**
+ * A spell's reversed form (pure over item data; owner's ruling 1.0.90 for reversed-only spheres): the name marked
+ * reversed, healing options rolled as damage, flag `ad2e.reversed`.
+ */
+export function reversedData(data, name) {
+  data.name = name;
+  data.system.damage = (data.system.damage ?? []).map(d => ({ ...d, kind: d.kind === "healing" ? "damage" : d.kind }));
+  data.flags = foundry.utils.mergeObject(data.flags ?? {}, { ad2e: { reversed: true } });
+  return data;
+}
+
+/**
+ * Add a spell from the catalogue to the priest, memorized `count` times (an owned copy of the same spell, in the same
+ * form, gains them). `reversed`: the spell is prayed for in its reversed form (reversedData).
+ */
+export async function praySpell(actor, uuid, count = 1, { reversed = false } = {}) {
   const doc = await fromUuid(uuid);
   if (!doc || doc.type !== "spell") return null;
   const n = Math.max(Math.floor(Number(count) || 1), 1);
-  const owned = actor.items.find(i => i.type === "spell" && i.system.kind === "priest" && i.name === doc.name && i.system.level === doc.system.level);
+  const name = reversed ? game.i18n.format("AD2E.Prayer.ReversedName", { name: doc.name }) : doc.name;
+  const owned = actor.items.find(i => i.type === "spell" && i.system.kind === "priest" && i.name === name && i.system.level === doc.system.level);
   if (owned) return owned.update({ "system.prepared": owned.system.prepared + n });
   const data = doc.toObject();
   delete data._id;
   delete data.folder;
+  if (reversed) reversedData(data, name);
   foundry.utils.mergeObject(data, { system: { prepared: n, cast: 0, learned: true }, flags: { ad2e: { prayed: true, prayedFrom: uuid } } });
   const [made] = await actor.createEmbeddedDocuments("Item", [data]);
   return made;
