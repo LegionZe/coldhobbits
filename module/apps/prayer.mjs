@@ -23,7 +23,7 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
   constructor(actor, options = {}) {
     super({ id: `ad2e-prayer-${actor.id}`, ...options });
     this.actor = actor;
-    this.state = { level: "", mine: true, text: "" };
+    this.filters = { level: "", mine: true, text: "" };
   }
 
   get title() {
@@ -37,16 +37,16 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     const max = Math.max(0, ...levels.map(l => l.level));
     const access = sphereAccess(classIds(sys), sys.spheres ?? {}, { kit: kitId(sys) });
     const all = await priestCatalog();
-    const lvl = this.state.level === "" ? null : Number(this.state.level);
+    const lvl = this.filters.level === "" ? null : Number(this.filters.level);
     const rule = e => (access.source === "none" ? { reversed: false } : prayRule(e.spheres, e.level, access, e));
-    const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl) && (!this.state.mine || rule(e)))
-      .map(e => ({ ...e, sphereText: e.spheres.join(", "), key: e.name.toLowerCase(), reversedOnly: this.state.mine && !!rule(e)?.reversed,
+    const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl) && (!this.filters.mine || rule(e)))
+      .map(e => ({ ...e, sphereText: e.spheres.join(", "), key: e.name.toLowerCase(), reversedOnly: this.filters.mine && !!rule(e)?.reversed,
         owned: this.actor.items.filter(i => i.type === "spell" && i.system.level === e.level
           && (i.name === e.name || i.name === i18n("AD2E.Prayer.ReversedName", { name: e.name }))).reduce((n, i) => n + i.system.prepared, 0) }));
     const list = set => [...set].map(title).join(", ") || "—";
     return Object.assign(context, {
-      levels: levels.map(l => ({ ...l, selected: String(l.level) === this.state.level, label: i18n("AD2E.Prayer.LevelLine", l) })),
-      state: this.state, rows, count: rows.length, total: all.length, noLevels: !levels.length,
+      levels: levels.map(l => ({ ...l, selected: String(l.level) === this.filters.level, label: i18n("AD2E.Prayer.LevelLine", l) })),
+      state: this.filters, rows, count: rows.length, total: all.length, noLevels: !levels.length,
       accessText: access.source === "none" ? i18n("AD2E.Prayer.NoAccess")
         : i18n("AD2E.Prayer.Access", { major: list(access.major), minor: list(access.minor), max: SPHERE_TABLES.minorMaxLevel }),
       own: { major: sys.spheres?.major ?? "", minor: sys.spheres?.minor ?? "" }, editable: this.actor.isOwner,
@@ -67,13 +67,13 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     const search = el.querySelector("[data-prayer-search]");
     const filter = () => {
       const q = (search?.value ?? "").trim().toLowerCase();
-      this.state.text = search?.value ?? "";
+      this.filters.text = search?.value ?? "";
       for (const row of el.querySelectorAll("[data-prayer-row]")) row.hidden = !!q && !row.dataset.key.includes(q);
     };
     search?.addEventListener("input", filter);
     filter();
-    el.querySelector("[data-prayer-level]")?.addEventListener("change", ev => { this.state.level = ev.currentTarget.value; this.render(); });
-    el.querySelector("[data-prayer-mine]")?.addEventListener("change", ev => { this.state.mine = ev.currentTarget.checked; this.render(); });
+    el.querySelector("[data-prayer-level]")?.addEventListener("change", ev => { this.filters.level = ev.currentTarget.value; this.render(); });
+    el.querySelector("[data-prayer-mine]")?.addEventListener("change", ev => { this.filters.mine = ev.currentTarget.checked; this.render(); });
     el.querySelector("[data-prayer-priesthood]")?.addEventListener("change", async ev => {
       await this.actor.update({ "system.spheres.priesthood": ev.currentTarget.value });
       this.render();
