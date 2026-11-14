@@ -4816,6 +4816,17 @@
     "Add": "Pray for this spell",
     "AddHint": "Add one memorized copy",
     "Prayed": "Prayed for: leaves the sheet when used",
-    "WorldItems": "World items"
+    "WorldItems": "World items",
+    "Priesthood": "Specialty priesthood",
+    "PriesthoodHint": "A Complete Priest's Handbook priesthood: its spheres replace the class's and kit's.",
+    "NoPriesthood": "— none: the class or kit spheres —",
+    "Source": {
+      "class": "From the class.",
+      "kit": "From the kit {name}.",
+      "priesthood": "From the priesthood {name}.",
+      "own": "From the character's own sphere fields."
+    },
+    "Restricted": "Only some spells of these spheres are allowed (see the priesthood's page): {list}.",
+    "Choice": "Plus one sphere of the player's choice from: {list} (add it to the own major spheres)."
   }
 }

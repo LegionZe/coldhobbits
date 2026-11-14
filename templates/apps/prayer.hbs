@@ -1,6 +1,11 @@
 <section class="ad2e-prayer">
-  <p class="ad2e-note">{{accessText}}</p>
+  <p class="ad2e-note">{{sourceText}} {{accessText}}{{#if priesthoodUrl}} <a href="{{priesthoodUrl}}" target="_blank" rel="noopener"><i class="fa-solid fa-book-open"></i></a>{{/if}}</p>
+  {{#if restrictedText}}<p class="ad2e-note ad2e-unmet">{{restrictedText}}</p>{{/if}}
+  {{#if choiceText}}<p class="ad2e-note ad2e-unmet">{{choiceText}}</p>{{/if}}
   {{#if editable}}
+  <div class="ad2e-ship-grid ad2e-prayer-wide">
+    <label data-tooltip="{{localize 'AD2E.Prayer.PriesthoodHint'}}">{{localize "AD2E.Prayer.Priesthood"}} <select data-prayer-priesthood>{{#each priesthoods as |p|}}<option value="{{p.value}}"{{#if p.selected}} selected{{/if}}>{{p.label}}</option>{{/each}}</select></label>
+  </div>
   <div class="ad2e-ship-grid">
     <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMajor"}} <input type="text" data-prayer-sphere="major" value="{{own.major}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>
     <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMinor"}} <input type="text" data-prayer-sphere="minor" value="{{own.minor}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>

@@ -9,7 +9,13 @@ Sources (AD&D 2e fandom wiki, MediaWiki API), every rule used regex-checked:
   - "Paladin (PHB)": combat, divination, healing and protective spheres (major: no limit is given beyond the paladin's
     own spell levels).
   - "Ranger (PHB)": plant and animal spheres.
-Specialty priests (kits) are not covered: the character's own sphere fields override the class's.
+  - Al-Qadim cleric kits (owner's request 1.0.88): "Kahin", "Ethoist", "Moralist", "Pragmatist", "Hakima", "Mystic - Al-Qadim"
+    (Character Kit) pages, "* Major Access: ..." / "* Minor Access: ..." lines; they replace the cleric's spheres.
+  - Specialty priests (owner's request 1.0.88): every page of "Category:The Complete Priest's Handbook" with a "Spheres of
+    Influence:" paragraph ("Major Access to ... Minor Access to ..."), the Race page one priesthood per race. Spells limited
+    within a sphere (a parenthesis after it) are kept as `restricted` (shown, not enforced: implementation choice); the
+    half-elf's choice of one sphere is `choice`. Options and DM substitutions in the paragraph are not applied.
+The character's own sphere fields override all of these.
 Run from the repo root:  python3 tools/build-sphere-tables.py
 """
 import importlib.util
@@ -36,6 +42,90 @@ def need(text, pattern, what):
 def names(text):
     """'all, animal, elemental, and weather' -> ['all', 'animal', 'elemental', 'weather']."""
     return [w.strip().lower() for w in re.split(r",\s*(?:and\s+)?|\s+and\s+|\s+or\s+", text) if w.strip()]
+
+
+AQ_KITS = {"kahin": "Kahin (Character Kit)", "ethoist": "Ethoist (Character Kit)", "moralist": "Moralist (Character Kit)",
+           "pragmatist": "Pragmatist (Character Kit)", "hakima": "Hakima (Character Kit)", "mystic-al-qadim": "Mystic - Al-Qadim (Character Kit)"}
+
+
+def access_list(text, spheres):
+    """'All, Animal (only ...), and Plant' -> (keys, restricted keys, choice keys)."""
+    # Race (CPrH), halflings: the page splits a word ("Pro  tection"); joined here.
+    t = re.sub(r"\bPro\s+tection\b", "Protection", text)
+    choice = []
+    m = re.search(r",?\s*and player's choice of one from the following list: ([A-Za-z, ]+)", t)
+    if m:
+        choice = [c for c in names(m[1].replace(" or ", ", "))]
+        t = t[:m.start()]
+    restricted = []
+    out = []
+    for part in re.split(r",(?![^(]*\))", t):
+        part = part.strip().strip(".")
+        part = re.sub(r"^and\s+", "", part)
+        if not part or part.lower() == "none":
+            continue
+        word = re.match(r"([A-Za-z]+)", part)[1].lower()
+        assert word in spheres, (word, text)
+        out.append(word)
+        if "(" in part:
+            restricted.append(word)
+    for c in choice:
+        assert c in spheres, (c, text)
+    return out, restricted, choice
+
+
+def kit_spheres(spheres, revs):
+    kits = {}
+    for key, title in AQ_KITS.items():
+        w, revs[title], _ = classdata.page(title)
+        major = need(w, r"\* Major Access: ([^*]+?)\s*\* Minor Access: ([^*]+?)\s*\* Forbidden Spheres", f"{key} spheres")
+        a, _, _ = access_list(major[1].replace(".", ""), spheres)
+        b, _, _ = access_list(major[2].replace(".", ""), spheres)
+        kits[key] = {"major": a, "minor": b}
+    assert kits["kahin"] == {"major": ["all", "animal", "divination", "elemental", "healing", "plant", "weather"], "minor": ["creation", "protection", "sun"]}
+    assert kits["moralist"]["minor"] == [] and kits["hakima"]["minor"] == ["charm", "creation", "guardian", "weather"]
+    return kits
+
+
+def priesthoods(spheres, revs):
+    titles, cont = [], {}
+    while True:
+        r = classdata.api(action="query", list="categorymembers", cmtitle="Category:The Complete Priest's Handbook", cmlimit=500, **cont)
+        titles += [m["title"] for m in r["query"]["categorymembers"]]
+        if "continue" not in r:
+            break
+        cont = r["continue"]
+    out = []
+    for i in range(0, len(titles), 50):
+        r = classdata.api(action="query", prop="revisions", rvprop="content|ids", rvslots="main", titles="|".join(titles[i:i + 50]))
+        for p in r["query"]["pages"].values():
+            wiki = p["revisions"][0]["slots"]["main"]["*"]
+            if "Spheres of Influence:" not in wiki or p["title"] == "Priesthoods (CPrH)":
+                continue
+            text = plain(wiki)
+            base = p["title"].replace(" (CPrH)", "")
+            found = list(re.finditer(r"(?:([A-Z][A-Za-z-]+): )?Major Access to (.+?)\.\s*(?:Minor Access to (.+?)\.)?(?=\s|$)", text))
+            if p["title"] == "Race (CPrH)":
+                found = [m for m in found if m[1]]
+                assert len(found) == 6, [m[1] for m in found]
+            else:
+                found = found[:1]
+            assert found, p["title"]
+            revs[p["title"]] = p["revisions"][0]["revid"]
+            for m in found:
+                major, r1, choice = access_list(m[2], spheres)
+                minor, r2, _ = access_list(m[3] or "", spheres)
+                label = f"{base}: {m[1]}" if p["title"] == "Race (CPrH)" else base
+                out.append({"key": re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-"), "label": label, "major": major, "minor": minor,
+                            "restricted": sorted(set(r1 + r2)), "choice": choice, "url": classdata.url(p["title"])})
+    out.sort(key=lambda x: x["label"])
+    by = {x["key"]: x for x in out}
+    assert len(out) == 64, len(out)
+    assert by["death"]["major"] == ["all", "astral", "charm", "divination", "protection"] and by["death"]["minor"] == ["guardian", "necromantic", "sun", "weather"]
+    assert by["war"]["major"] == ["combat", "healing"] and by["community"]["minor"] == ["combat", "protection"]
+    assert by["fire"]["restricted"] == ["elemental"] and by["race-half-elves"]["choice"] == ["animal", "plant", "protection", "summoning"]
+    assert by["race-halflings"]["major"][-1] == "protection"
+    return out
 
 
 def build():
@@ -73,8 +163,10 @@ def build():
             assert s in spheres, (k, s)
     assert druid["major"] == ["all", "animal", "elemental", "healing", "plant", "weather"] and druid["minor"] == ["divination"]
     assert paladin["major"] == ["combat", "divination", "healing", "protection"] and ranger["major"] == ["plant", "animal"]
-    return {"spheres": spheres, "minorMaxLevel": 3, "classes": classes,
-            "urls": {k: classdata.url(k) for k in revs}}, revs
+    kits = kit_spheres(spheres, revs)
+    priests = priesthoods(spheres, revs)
+    return {"spheres": spheres, "minorMaxLevel": 3, "classes": classes, "kits": kits, "priesthoods": priests,
+            "urls": {k: classdata.url(k) for k in revs if "(CPrH)" not in k}}, revs
 
 
 if __name__ == "__main__":
@@ -83,4 +175,4 @@ if __name__ == "__main__":
         f.write("// GENERATED by tools/build-sphere-tables.py from the AD&D 2e fandom wiki (MediaWiki API): do not edit.\n")
         f.write("// Sources: " + ", ".join(f"{k} rev {v}" for k, v in revs.items()) + ".\n")
         f.write(f"export const SPHERE_TABLES = {json.dumps(data, ensure_ascii=False)};\n")
-    print(len(data["spheres"]), "spheres;", {k: (len(v["major"]), len(v["minor"])) for k, v in data["classes"].items()})
+    print(len(data["priesthoods"]), "priesthoods,", len(data["kits"]), "kits;", len(data["spheres"]), "spheres;", {k: (len(v["major"]), len(v["minor"])) for k, v in data["classes"].items()})
