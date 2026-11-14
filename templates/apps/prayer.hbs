@@ -24,7 +24,7 @@
     {{#each rows as |r|}}
     <li class="ad2e-prayer-row" data-prayer-row data-key="{{r.key}}">
       <span class="ad2e-prayer-level">{{r.level}}</span>
-      <span class="ad2e-prayer-name"><a data-action="open" data-uuid="{{r.uuid}}">{{r.name}}</a><br><span class="ad2e-note">{{r.sphereText}} · {{r.source}}</span></span>
+      <span class="ad2e-prayer-name"><a data-action="open" data-uuid="{{r.uuid}}">{{r.name}}</a><br><span class="ad2e-note">{{r.sphereText}} · {{r.source}}{{#if r.reversedOnly}} · <strong>{{localize "AD2E.Prayer.ReversedOnly"}}</strong>{{/if}}</span></span>
       <span class="ad2e-prayer-owned">{{#if r.owned}}×{{r.owned}}{{/if}}</span>
       {{#if @root.editable}}<button type="button" data-action="pray" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Prayer.AddHint'}}" aria-label="{{localize 'AD2E.Prayer.Add'}}"><i class="fa-solid fa-plus"></i></button>{{/if}}
     </li>

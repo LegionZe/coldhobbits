@@ -44,6 +44,48 @@ def names(text):
     return [w.strip().lower() for w in re.split(r",\s*(?:and\s+)?|\s+and\s+|\s+or\s+", text) if w.strip()]
 
 
+# Limits within a priesthood's sphere (owner's request 1.0.89: enforced in the prayer window). Each entry's `match` must
+# occur in the priesthood's "Spheres of Influence" paragraph (plain text). Rule fields: `names` = the only spells allowed
+# (exact names), `words` = spell names with a word starting so (also allowed), `reversed` = only reversible spells (cast
+# reversed), `reversedWhereApplicable` = reversible spells only reversed (others allowed: shown, not enforced), `exclude` =
+# names not allowed, `excludeWords` = name words not allowed. Implementation choices: Dawn's "spells involving heat, fire,
+# or air" read as names with fire, flame, heat, pyrotechnics, air or wind (and chariot of Sustarre); Earth's "dealing
+# with dust, stone, rock, mud, and earth" as names with those words; Oceans' "insect-related" Animal spells as names with
+# "insect" or "creeping doom"; its sea-life-only Animal spells and water-elemental conjuring are notes.
+FIRE_WORDS = ["fire", "flame", "heat", "pyrotechnics"]
+LIMITS = {
+    "agriculture": {"summoning": {"match": r"Summoning \(can only use wall of thorns , weather summoning , and creeping doom from this sphere\)",
+                                  "names": ["wall of thorns", "weather summoning", "creeping doom"]}},
+    "dawn": {"elemental": {"match": r"Elemental \(only spells involving heat, fire, or air; earth and water spells may not be used\)",
+                           "words": FIRE_WORDS + ["air", "wind"], "names": ["chariot of sustarre"]}},
+    "disease": {"healing": {"match": r"Healing \(reversed forms of spells only\)", "reversed": True},
+                "necromantic": {"match": r"Necromantic \(reversed forms of spells only\)", "reversed": True},
+                "protection": {"match": r"Protection \(reversed forms of spells only, where applicable\)", "reversedWhereApplicable": True}},
+    "earth": {"elemental": {"match": r"Elemental \(the priest may only use spells dealing with dust, stone, rock, mud, and earth, plus transmute metal to wood",
+                            "words": ["dust", "stone", "rock", "mud", "earth"], "names": ["transmute metal to wood"]}},
+    "evil-philosophy": {"protection": {"match": r"Protection \(may only use reversed forms of the spells\)", "reversed": True}},
+    "fire": {"elemental": {"match": r"Elemental \(the priest may only use the spells whose names include the words Fire, Flame, Heat, Pyrotechnics, and the spell chariot of Sustarre",
+                           "words": FIRE_WORDS, "names": ["chariot of sustarre"]}},
+    "life-death-rebirth-cycle-force": {"necromantic": {"match": r"These priests cannot use resurrection spell; they use reincarnate instead",
+                                                       "exclude": ["resurrection"]}},
+    "lightning": {"elemental": {"match": r"Elemental \(the priest may only use the spells whose names include the words Air, Wind, Fire, Flame, Heat, Pyrotechnics, and the spell chariot of Sustarre",
+                                "words": ["air", "wind"] + FIRE_WORDS, "names": ["chariot of sustarre"]}},
+    "metalwork": {"elemental": {"match": r"Elemental \(the priest may only use the spells whose names include the words Fire, Flame, Heat, Pyrotechnics, and the spell chariot of Sustarre",
+                                "words": FIRE_WORDS, "names": ["chariot of sustarre"]}},
+    "sky-weather": {"elemental": {"match": r"Elemental \(the priest can only use spells with the words Water, Air, and Wind in their names, and the spell chariot of Sustarre",
+                                  "words": ["water", "air", "wind"], "names": ["chariot of sustarre"]}},
+    "sun": {"elemental": {"match": r"Elemental \(the priest can only use spells with the words fire, flame, heat, and pyrotechnics in the names\)",
+                          "words": FIRE_WORDS}},
+    "wind": {"elemental": {"match": r"Elemental \(the priest can only use the spells dust devil, air walk, chariot of Sustarre, and wind walk",
+                           "names": ["dust devil", "air walk", "chariot of sustarre", "wind walk"]}},
+    "oceans-rivers": {
+        "animal": {"match": r"Within his Animal sphere, the priest can only cast spells dealing with sea animals.*cannot use the insect-related spells at all",
+                   "excludeWords": ["insect"], "exclude": ["creeping doom"], "note": True},
+        "elemental": {"match": r"Within his Elemental sphere, the priest can only use spells with the word \"water\" in the name; he can also use the earthquake and transmute rock to mud spells",
+                      "words": ["water"], "names": ["earthquake", "transmute rock to mud"], "note": True}},
+}
+
+
 AQ_KITS = {"kahin": "Kahin (Character Kit)", "ethoist": "Ethoist (Character Kit)", "moralist": "Moralist (Character Kit)",
            "pragmatist": "Pragmatist (Character Kit)", "hakima": "Hakima (Character Kit)", "mystic-al-qadim": "Mystic - Al-Qadim (Character Kit)"}
 
@@ -112,12 +154,19 @@ def priesthoods(spheres, revs):
                 found = found[:1]
             assert found, p["title"]
             revs[p["title"]] = p["revisions"][0]["revid"]
+            para = re.search(r"Spheres of Influence:\s*(.*?)(?:Powers:|$)", text)[1]
             for m in found:
                 major, r1, choice = access_list(m[2], spheres)
                 minor, r2, _ = access_list(m[3] or "", spheres)
                 label = f"{base}: {m[1]}" if p["title"] == "Race (CPrH)" else base
-                out.append({"key": re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-"), "label": label, "major": major, "minor": minor,
-                            "restricted": sorted(set(r1 + r2)), "choice": choice, "url": classdata.url(p["title"])})
+                key = re.sub(r"[^a-z0-9]+", "-", label.lower()).strip("-")
+                limits = {}
+                for sphere, rule in LIMITS.get(key, {}).items():
+                    assert re.search(rule["match"], para), f"limit changed: {key} {sphere}"
+                    assert sphere in major + minor, (key, sphere)
+                    limits[sphere] = {k: v for k, v in rule.items() if k != "match"}
+                out.append({"key": key, "label": label, "major": major, "minor": minor,
+                            "restricted": sorted(set(r1 + r2) | set(limits)), "limits": limits, "choice": choice, "url": classdata.url(p["title"])})
     out.sort(key=lambda x: x["label"])
     by = {x["key"]: x for x in out}
     assert len(out) == 64, len(out)
@@ -125,6 +174,9 @@ def priesthoods(spheres, revs):
     assert by["war"]["major"] == ["combat", "healing"] and by["community"]["minor"] == ["combat", "protection"]
     assert by["fire"]["restricted"] == ["elemental"] and by["race-half-elves"]["choice"] == ["animal", "plant", "protection", "summoning"]
     assert by["race-halflings"]["major"][-1] == "protection"
+    for p in out:  # every sphere limited in brackets has a rule (Life-Death-Rebirth's note is in brackets too)
+        assert set(p["restricted"]) == set(p["limits"]), (p["key"], p["restricted"], list(p["limits"]))
+    assert set(LIMITS) <= set(by), set(LIMITS) - set(by)
     return out
 
 

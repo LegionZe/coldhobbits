@@ -1,4 +1,4 @@
-import { canPray, priestCatalog, priestLevels, praySpell, sphereAccess, classIds, kitId, splitSpheres } from "../prayer.mjs";
+import { prayRule, priestCatalog, priestLevels, praySpell, sphereAccess, classIds, kitId, splitSpheres } from "../prayer.mjs";
 import { SPHERE_TABLES } from "../rules/sphere-tables.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -38,9 +38,9 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     const access = sphereAccess(classIds(sys), sys.spheres ?? {}, { kit: kitId(sys) });
     const all = await priestCatalog();
     const lvl = this.state.level === "" ? null : Number(this.state.level);
-    const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl)
-      && (!this.state.mine || access.source === "none" || canPray(e.spheres, e.level, access)))
-      .map(e => ({ ...e, sphereText: e.spheres.join(", "), key: e.name.toLowerCase(),
+    const rule = e => (access.source === "none" ? { reversed: false } : prayRule(e.spheres, e.level, access, e));
+    const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl) && (!this.state.mine || rule(e)))
+      .map(e => ({ ...e, sphereText: e.spheres.join(", "), key: e.name.toLowerCase(), reversedOnly: this.state.mine && !!rule(e)?.reversed,
         owned: this.actor.items.find(i => i.type === "spell" && i.name === e.name && i.system.level === e.level)?.system.prepared ?? 0 }));
     const list = set => [...set].map(title).join(", ") || "—";
     return Object.assign(context, {
@@ -53,7 +53,8 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
       priesthoods: [{ value: "", label: i18n("AD2E.Prayer.NoPriesthood"), selected: !sys.spheres?.priesthood },
         ...SPHERE_TABLES.priesthoods.map(p => ({ value: p.key, label: p.label, selected: p.key === sys.spheres?.priesthood }))],
       priesthoodUrl: access.priesthood?.url ?? "",
-      restrictedText: access.restricted.length ? i18n("AD2E.Prayer.Restricted", { list: access.restricted.map(title).join(", ") }) : "",
+      restrictedText: access.restricted.length ? i18n(Object.keys(access.limits).length ? "AD2E.Prayer.Limited" : "AD2E.Prayer.Restricted",
+        { list: access.restricted.map(title).join(", ") }) : "",
       choiceText: access.choice.length ? i18n("AD2E.Prayer.Choice", { list: access.choice.map(title).join(", ") }) : "",
       sphereList: SPHERE_TABLES.spheres.map(title).join(", "), empty: !all.length
     });

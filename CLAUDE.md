@@ -701,7 +701,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   (16 spheres, `minorMaxLevel` 3, `classes` cleric/druid/paladin/ranger major/minor; 1.0.88 `kits` = Al-Qadim cleric kits
   (`AQ_KITS`, kit pages' "* Major Access:" lines) and `priesthoods` [{ key, label, major, minor, restricted, choice, url }] =
   CPrH category pages' "Spheres of Influence" paragraphs (Race page per race; "Pro  tection" typo joined)). Precedence in
-  `sphereAccess(ids, own, { kit })`: own fields > `own.priesthood` (character `system.spheres.priesthood`) > kit (cleric) > class. `module/prayer.mjs` (pure `sphereKey`,
+  `sphereAccess(ids, own, { kit })`: own fields > `own.priesthood` (character `system.spheres.priesthood`) > kit (cleric) > class.
+  1.0.89: priesthood `limits` { sphere: { names, words, reversed, reversedWhereApplicable, exclude, excludeWords, note } } from
+  the generator's curated `LIMITS` (a `match` regex per entry on the paragraph; every bracketed limit must have one);
+  pure `limitAllows(rule, spell)`, `prayRule(spheres, level, access, spell)` -> null | { reversed }; catalogue entries carry
+  `reversible`; access `limits` are dropped when the own fields are filled. `module/prayer.mjs` (pure `sphereKey`,
   `splitSpheres`, `classIds`, `sphereAccess(ids, own)`, `canPray`, `priestLevels`, `usedUp`, `mergeEntries`; `priestCatalog`
   (Item pack indexes + world items, cached), `praySpell` (copy flagged `ad2e.prayed`), `clearUsedPrayers` (AD2EActor#castNow end,
   restSpells with `resting`, spell-casting.mjs castingStruck), `registerPrayer` (updateItem: prepared 0 deletes)). Character
