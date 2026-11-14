@@ -511,6 +511,8 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `timekeeper`; set date: Zakharan `setDate`, else `game.time.calendar.jumpToDate({ year, month, day })`). No settings menu
   (a menu would build a second instance with the same id).
   Never name an action `close`, `tab` or `toggleControls`: ApplicationV2 handles those itself (1.0.72: tab action `showTab`).
+  Never assign `this.state` in an ApplicationV2 constructor: core defines a getter-only `state` (render state), so the
+  assignment throws (1.0.91: the prayer window never opened; it uses `this.filters`). A class field `state = ...` shadows it.
 - Casting time in combat (owner's request 1.0.74, world setting `spellCasting` off | phb (default) | house): `module/spell-casting.mjs`
   (pure `castingPlan(text, level)` { kind segments | rounds, n }, `castingState`, `completesNow`, `responsibleUser` (first active
   non-GM owner, else active GM); `beginCasting(actor, spell, { declare, level })` (combatant flag `ad2e.casting` { spellId, name,
