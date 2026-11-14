@@ -2,6 +2,7 @@ import { askScrollTime, beginCasting, castingStruck, scrollTracked } from "../sp
 import { attackFields as underwaterAttackFields, attackPicked as underwaterAttackPicked, castingNote as underwaterCastingNote, itemNote as underwaterItemNote } from "../underwater.mjs";
 import { ad2eDialog } from "../dialogs.mjs";
 import { gvSailingOn, navigationFields, rollNavigation } from "../gv-sailing.mjs";
+import { clearUsedPrayers } from "../prayer.mjs";
 import { AD2E, hitDiceAt } from "../config.mjs";
 import { modifierFields, modifierText, promptModifier, readModifier } from "../roll-modifiers.mjs";
 import { MASSIVE_DAMAGE, naturalHealing, punchRestore } from "../health.mjs";
@@ -2347,6 +2348,8 @@ export default class AD2EActor extends Actor {
     const resisted = new Set((cast?.resisted ?? []).map(t => t.uuid));
     await askSpellEffect(this, spell, { level: Number(castingLevel) || 1,
       targets: (cast?.targets ?? []).filter(t => !resisted.has(t.uuid)), castMessage: message });
+    // A prayed priest spell leaves the sheet once used up (module/prayer.mjs).
+    if (spell.getFlag?.("ad2e", "prayed")) await clearUsedPrayers(this);
     return message;
   }
 
@@ -2479,6 +2482,8 @@ export default class AD2EActor extends Actor {
    * daily class abilities (paladin lay on hands) are restored.
    */
   async restSpells() {
+    // Prayed priest spells used up (kept for their damage roll) leave the sheet (module/prayer.mjs).
+    await clearUsedPrayers(this, { resting: true });
     const updates = this.items.filter(i => i.type === "spell" && i.system.cast > 0).map(i => ({ _id: i.id, "system.cast": 0 }));
     if (updates.length) await this.updateEmbeddedDocuments("Item", updates);
     if (this.type === "character" && this.system.classAbilities.layOnHandsUsed) {

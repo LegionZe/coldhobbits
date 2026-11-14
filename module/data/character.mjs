@@ -198,6 +198,9 @@ export default class CharacterData extends foundry.abstract.TypeDataModel {
       height: new NumberField({ min: 0, nullable: true, initial: null }),
       // Elemental mage kit (Al-Qadim): the chosen province (module/elemental.mjs).
       element: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
+      // Priest spheres of influence (module/prayer.mjs): comma lists overriding the class's (specialty priests); "" = class.
+      spheres: new SchemaField({ major: new StringField({ required: true, blank: true, initial: "" }),
+        minor: new StringField({ required: true, blank: true, initial: "" }) }),
       // Sorcerer kit (Al-Qadim): the second chosen province (the first is `element`).
       element2: new StringField({ required: true, blank: true, initial: "", choices: ["", "flame", "sand", "sea", "wind"] }),
       // Skills & Powers kits (module/kit-features.mjs): social rank (rolled on the kit's table) and military title, and a

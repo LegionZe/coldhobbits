@@ -1,4 +1,6 @@
 import { cancelTraining, startTraining, trainingCheck, trainingContext } from "../training.mjs";
+import PrayForSpells from "../apps/prayer.mjs";
+import { priestLevels } from "../prayer.mjs";
 import { effectRows, endSpellEffect } from "../spell-effects.mjs";
 import { convict, enslave, rollInitialStation, rollStationCheck, spendForStation, stationContext } from "../station.mjs";
 import { lightItem, lightSpec, putOut, refillLantern, turnsLeft } from "../lights.mjs";
@@ -243,6 +245,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       castSpell: CharacterSheet.onCastSpell,
       rollSpellDamage: CharacterSheet.onRollSpellDamage,
       restSpells: CharacterSheet.onRestSpells,
+      prayForSpells: function () { return new PrayForSpells(this.actor).render({ force: true }); },
       requestSpell: CharacterSheet.onRequestSpell,
       summonGen: CharacterSheet.onSummonGen,
       dismissGen: CharacterSheet.onDismissGen,
@@ -824,7 +827,7 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
         // Wizard spells not yet understood: the chance to learn and why a roll is not possible now.
         const unlearned = !shair && s.kind === "wizard" && s.learned === false;
         const lc = unlearned ? learnChance(this.document, i) : null;
-        return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared,
+        return { id: i.id, name: i.name, img: i.img, reversible: s.reversible, prepared: s.prepared, prayed: !!i.getFlag?.("ad2e", "prayed"),
           remaining: Math.max(s.prepared - s.cast, 0), usable: shair || s.kind === (l.kind ?? sp.kind), unlearned,
           learnText: lc ? (lc.blocked ? game.i18n.format(`AD2E.Learn.Blocked.${lc.blocked}`, { name: i.name, level: s.learnFailedLevel ?? "" })
             : game.i18n.format("AD2E.Learn.ChanceText", { chance: lc.chance })) : "",
@@ -841,7 +844,9 @@ export default class CharacterSheet extends HandlebarsApplicationMixin(ActorShee
       { class: sp.old.className, kind: i18n(`AD2E.Spell.${sp.old.kind}`), level: sp.old.castingLevel }) : "";
     return { kind: sp.kind ? i18n(`AD2E.Spell.${sp.kind}`) : (sp.old ? i18n(`AD2E.Spell.${sp.old.kind}`) : null),
       castingLevel: sp.kind ? sp.castingLevel : sp.old?.castingLevel ?? null, oldCaster, oldRestricted: !!(sp.old && sys.dual?.restricted), levels,
-      hasSlots: sp.levels.some(l => l.slots > 0), shair, gen: genPanel };
+      hasSlots: sp.levels.some(l => l.slots > 0), shair, gen: genPanel,
+      // Priests pray for spells from the compendiums (module/prayer.mjs).
+      canPray: priestLevels(sp).length > 0 };
   }
 
   /** Display data for the Weapons tab: owned weapon items and their proficiency status. */

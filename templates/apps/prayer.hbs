@@ -1,0 +1,29 @@
+<section class="ad2e-prayer">
+  <p class="ad2e-note">{{accessText}}</p>
+  {{#if editable}}
+  <div class="ad2e-ship-grid">
+    <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMajor"}} <input type="text" data-prayer-sphere="major" value="{{own.major}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>
+    <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMinor"}} <input type="text" data-prayer-sphere="minor" value="{{own.minor}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>
+  </div>
+  <p class="ad2e-note">{{localize "AD2E.Prayer.SphereList" list=sphereList}}</p>
+  {{/if}}
+  {{#if noLevels}}<p class="ad2e-placeholder">{{localize "AD2E.Prayer.NoLevels"}}</p>{{else}}
+  <div class="ad2e-ship-grid">
+    <label>{{localize "AD2E.Prayer.Search"}} <input type="search" data-prayer-search value="{{state.text}}" placeholder="{{localize 'AD2E.Prayer.SearchHint'}}"></label>
+    <label>{{localize "AD2E.Spell.Level"}} <select data-prayer-level><option value="">{{localize "AD2E.Prayer.AllLevels"}}</option>{{#each levels as |l|}}<option value="{{l.level}}"{{#if l.selected}} selected{{/if}}>{{l.label}}</option>{{/each}}</select></label>
+    <label class="ad2e-check"><input type="checkbox" data-prayer-mine {{checked state.mine}}> {{localize "AD2E.Prayer.Mine"}}</label>
+  </div>
+  <p class="ad2e-note">{{localize "AD2E.Prayer.Count" count=count total=total}} <a data-action="refresh"><i class="fa-solid fa-rotate"></i> {{localize "AD2E.Prayer.Refresh"}}</a></p>
+  {{#if empty}}<p class="ad2e-placeholder">{{localize "AD2E.Prayer.Empty"}}</p>{{/if}}
+  <ol class="ad2e-prayer-list">
+    {{#each rows as |r|}}
+    <li class="ad2e-prayer-row" data-prayer-row data-key="{{r.key}}">
+      <span class="ad2e-prayer-level">{{r.level}}</span>
+      <span class="ad2e-prayer-name"><a data-action="open" data-uuid="{{r.uuid}}">{{r.name}}</a><br><span class="ad2e-note">{{r.sphereText}} · {{r.source}}</span></span>
+      <span class="ad2e-prayer-owned">{{#if r.owned}}×{{r.owned}}{{/if}}</span>
+      {{#if @root.editable}}<button type="button" data-action="pray" data-uuid="{{r.uuid}}" data-tooltip="{{localize 'AD2E.Prayer.AddHint'}}" aria-label="{{localize 'AD2E.Prayer.Add'}}"><i class="fa-solid fa-plus"></i></button>{{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{/if}}
+</section>

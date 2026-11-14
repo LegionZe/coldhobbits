@@ -11,6 +11,7 @@ import { registerNavalBattle } from "./naval-battle.mjs";
 import UnderwaterTool from "./apps/underwater-tool.mjs";
 import { registerUnderwater } from "./underwater.mjs";
 import { registerGvSailing } from "./gv-sailing.mjs";
+import { registerPrayer } from "./prayer.mjs";
 import ClassData from "./data/item-class.mjs";
 import KitData from "./data/item-kit.mjs";
 import RaceData from "./data/item-race.mjs";
@@ -127,6 +128,8 @@ Hooks.once("init", () => {
   registerShips();
   // Golden Voyages sailing rules (world setting "gvSailing"; module/gv-sailing.mjs).
   registerGvSailing();
+  // Priests praying for spells: prayed spells leave the sheet when used (module/prayer.mjs).
+  registerPrayer();
   // GM tool: detailed naval combat (game.ad2e.navalCombat(); module/naval-combat.mjs, naval-battle.mjs).
   registerNavalBattle();
   game.settings.registerMenu("ad2e", "navalCombat", {
