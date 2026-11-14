@@ -1,4 +1,4 @@
-import { canPray, priestCatalog, priestLevels, praySpell, sphereAccess, classIds, splitSpheres } from "../prayer.mjs";
+import { canPray, priestCatalog, priestLevels, praySpell, sphereAccess, classIds, kitId, splitSpheres } from "../prayer.mjs";
 import { SPHERE_TABLES } from "../rules/sphere-tables.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -35,7 +35,7 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     const sys = this.actor.system;
     const levels = priestLevels(sys.spells);
     const max = Math.max(0, ...levels.map(l => l.level));
-    const access = sphereAccess(classIds(sys), sys.spheres ?? {});
+    const access = sphereAccess(classIds(sys), sys.spheres ?? {}, { kit: kitId(sys) });
     const all = await priestCatalog();
     const lvl = this.state.level === "" ? null : Number(this.state.level);
     const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl)
@@ -49,6 +49,12 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
       accessText: access.source === "none" ? i18n("AD2E.Prayer.NoAccess")
         : i18n("AD2E.Prayer.Access", { major: list(access.major), minor: list(access.minor), max: SPHERE_TABLES.minorMaxLevel }),
       own: { major: sys.spheres?.major ?? "", minor: sys.spheres?.minor ?? "" }, editable: this.actor.isOwner,
+      sourceText: access.source === "none" ? "" : i18n(`AD2E.Prayer.Source.${access.source}`, { name: access.priesthood?.label ?? sys.classInfo?.kitItem?.name ?? "" }),
+      priesthoods: [{ value: "", label: i18n("AD2E.Prayer.NoPriesthood"), selected: !sys.spheres?.priesthood },
+        ...SPHERE_TABLES.priesthoods.map(p => ({ value: p.key, label: p.label, selected: p.key === sys.spheres?.priesthood }))],
+      priesthoodUrl: access.priesthood?.url ?? "",
+      restrictedText: access.restricted.length ? i18n("AD2E.Prayer.Restricted", { list: access.restricted.map(title).join(", ") }) : "",
+      choiceText: access.choice.length ? i18n("AD2E.Prayer.Choice", { list: access.choice.map(title).join(", ") }) : "",
       sphereList: SPHERE_TABLES.spheres.map(title).join(", "), empty: !all.length
     });
   }
@@ -66,6 +72,10 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     filter();
     el.querySelector("[data-prayer-level]")?.addEventListener("change", ev => { this.state.level = ev.currentTarget.value; this.render(); });
     el.querySelector("[data-prayer-mine]")?.addEventListener("change", ev => { this.state.mine = ev.currentTarget.checked; this.render(); });
+    el.querySelector("[data-prayer-priesthood]")?.addEventListener("change", async ev => {
+      await this.actor.update({ "system.spheres.priesthood": ev.currentTarget.value });
+      this.render();
+    });
     for (const input of el.querySelectorAll("[data-prayer-sphere]")) {
       input.addEventListener("change", async ev => {
         const k = ev.currentTarget.dataset.prayerSphere;

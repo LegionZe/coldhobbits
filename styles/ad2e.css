@@ -364,3 +364,5 @@ body.ad2e-light-checkboxes :is(.application.ad2e, .application.ad2e-dialog).them
 .ad2e-prayer-level { text-align: center; font-weight: bold; }
 .ad2e-prayer-owned { text-align: right; }
 .ad2e-prayer-row button { width: 2rem; padding: 0; }
+.ad2e-prayer .ad2e-ship-grid > label > select { max-width: none; flex: 1 1 auto; }
+.ad2e-prayer .ad2e-prayer-wide { grid-template-columns: minmax(0, 1fr); }

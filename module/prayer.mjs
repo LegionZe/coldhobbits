@@ -3,7 +3,9 @@
  * compendiums (and the world's spell items) for the spells its spheres and spell levels allow and adds them memorized;
  * a prayed spell leaves the sheet once its last memorized copy is cast. Rules (sphere-tables.mjs, Priest (PHB)): major
  * access = every spell of the sphere, minor access = 1st- to 3rd-level spells; the class's spheres (cleric, druid,
- * paladin, ranger), or the character's own sphere fields when filled (specialty priests).
+ * paladin, ranger), replaced by an Al-Qadim cleric kit's (kahin, ethoist, moralist, pragmatist, hakima, mystic; 1.0.88), by
+ * the character's Complete Priest's Handbook priesthood when chosen (specialty priests, 1.0.88), and by the character's
+ * own sphere fields when filled. Spheres a priesthood limits to some spells (`restricted`) are shown, not enforced.
  * Implementation choices: a spell with any accessible sphere is allowed (a spell in two spheres needs only one); a spell
  * with damage or healing options stays, used up, until the next rest so its roll can still be made; spells added by hand
  * (dropped on the sheet) are never removed; duplicates across compendiums are listed once (world items, then world
@@ -22,26 +24,45 @@ export function sphereKey(s) {
 /** A comma list of spheres (pure). */
 export const splitSpheres = text => String(text ?? "").split(/[,;]/).map(sphereKey).filter(Boolean);
 
+/** The character's kit identifier when the kit fits its class. */
+export const kitId = system => (system?.classInfo?.kitFits ? system.classInfo.kitItem?.system?.identifier ?? "" : "");
+
 /** Class identifiers of a character (main, multi-class others, dual-class previous). */
 export function classIds(system) {
   return [system?.classInfo?.classItem?.system?.identifier, ...(system?.multi?.others ?? []).map(c => c.identifier),
     ...(system?.dualClass?.previous ?? []).map(p => p.identifier)].filter(Boolean);
 }
 
+/** A specialty priesthood by key (pure). */
+export const priesthoodOf = key => T.priesthoods.find(p => p.key === key) ?? null;
+
 /**
- * Sphere access (pure): the union of the classes' access, each list replaced by the character's own when filled.
- * Returns { major: Set, minor: Set, source: "own" | "class" | "none" }.
+ * Sphere access (pure): the union of the classes' access (a cleric kit with spheres replaces the cleric's), replaced by
+ * the chosen priesthood's, each list then replaced by the character's own when filled.
+ * Returns { major: Set, minor: Set, source: "own" | "priesthood" | "kit" | "class" | "none", priesthood, restricted, choice }.
  */
-export function sphereAccess(ids, own = {}) {
+export function sphereAccess(ids, own = {}, { kit = "" } = {}) {
   const major = new Set();
   const minor = new Set();
-  for (const id of ids) for (const [set, list] of [[major, T.classes[id]?.major], [minor, T.classes[id]?.minor]]) for (const s of list ?? []) set.add(s);
+  const kitAccess = T.kits[kit] ?? null;
+  for (const id of ids) {
+    const a = id === "cleric" && kitAccess ? kitAccess : T.classes[id];
+    for (const [set, list] of [[major, a?.major], [minor, a?.minor]]) for (const s of list ?? []) set.add(s);
+  }
+  let source = kitAccess && ids.includes("cleric") ? "kit" : null;
+  const ph = priesthoodOf(own.priesthood);
+  if (ph) {
+    major.clear(); minor.clear();
+    ph.major.forEach(s => major.add(s)); ph.minor.forEach(s => minor.add(s));
+    source = "priesthood";
+  }
   const ownMajor = splitSpheres(own.major);
   const ownMinor = splitSpheres(own.minor);
   if (ownMajor.length) { major.clear(); ownMajor.forEach(s => major.add(s)); }
   if (ownMinor.length) { minor.clear(); ownMinor.forEach(s => minor.add(s)); }
   for (const s of major) minor.delete(s);
-  return { major, minor, source: ownMajor.length || ownMinor.length ? "own" : major.size || minor.size ? "class" : "none" };
+  return { major, minor, source: ownMajor.length || ownMinor.length ? "own" : source ?? (major.size || minor.size ? "class" : "none"),
+    priesthood: ph, restricted: ph?.restricted ?? [], choice: ph?.choice ?? [] };
 }
 
 /** Whether a spell's spheres and level fit the access (pure); no sphere data or no access: false. */
