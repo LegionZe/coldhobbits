@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.88)
+## Status (v1.0.89)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -1171,8 +1171,15 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Pragmatist, Hakima, Mystic; their kit pages' Major/Minor Access lines, revs 272224, 272211, 272231, 272238, 272218, 272232)
   replace the cleric's, and a "Specialty priesthood" choice offers the 64 Complete Priest's Handbook priesthoods (every page
   of the category with a "Spheres of Influence" paragraph; the Race page one per race) whose spheres replace the class's
-  and kit's; spheres a priesthood limits to some spells are named in the window, not enforced, and the half-elf's choice
-  of one sphere is entered in the own fields. Options and DM substitutions in those paragraphs are not applied.
+  and kit's; the half-elf's choice of one sphere is entered in the own fields. Options and DM substitutions in those
+  paragraphs are not applied. 1.0.89 (owner's request): the limits within a priesthood's sphere are enforced (`LIMITS` in
+  the generator, each checked against the page: Agriculture's three Summoning spells, Wind's four Elemental spells, the
+  fire / air / water / earth name words of Dawn, Earth, Fire, Lightning, Metalwork, Sky and Sun, reversed forms only for
+  Disease's Healing and Necromantic and Evil's Protection (only reversible spells listed, marked "reversed form only"),
+  no resurrection for Life-Death-Rebirth, Oceans' water spells, earthquake and transmute rock to mud and no insect spells).
+  Implementation choices: Dawn's "spells involving heat, fire, or air" read as names with fire, flame, heat, pyrotechnics,
+  air or wind; Disease's Protection "reversed where applicable" is marked, not enforced; Oceans' sea-life-only Animal spells
+  are not checked; the own sphere fields drop the priesthood's limits.
   Implementation choices: one accessible sphere is enough for a spell in two spheres;
   a prayed spell with damage or healing options stays, used up, until the next rest so its roll can be made; spells
   dropped on the sheet are never removed; a spell in several compendiums is listed once (world items, then world

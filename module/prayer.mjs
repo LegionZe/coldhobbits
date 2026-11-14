@@ -5,7 +5,8 @@
  * access = every spell of the sphere, minor access = 1st- to 3rd-level spells; the class's spheres (cleric, druid,
  * paladin, ranger), replaced by an Al-Qadim cleric kit's (kahin, ethoist, moralist, pragmatist, hakima, mystic; 1.0.88), by
  * the character's Complete Priest's Handbook priesthood when chosen (specialty priests, 1.0.88), and by the character's
- * own sphere fields when filled. Spheres a priesthood limits to some spells (`restricted`) are shown, not enforced.
+ * own sphere fields when filled. A priesthood's limits within a sphere (`limits`: named spells, words in the name,
+ * reversed forms only, excluded spells; 1.0.89) are enforced while its spheres apply (not under the own fields).
  * Implementation choices: a spell with any accessible sphere is allowed (a spell in two spheres needs only one); a spell
  * with damage or healing options stays, used up, until the next rest so its roll can still be made; spells added by hand
  * (dropped on the sheet) are never removed; duplicates across compendiums are listed once (world items, then world
@@ -62,15 +63,43 @@ export function sphereAccess(ids, own = {}, { kit = "" } = {}) {
   if (ownMinor.length) { minor.clear(); ownMinor.forEach(s => minor.add(s)); }
   for (const s of major) minor.delete(s);
   return { major, minor, source: ownMajor.length || ownMinor.length ? "own" : source ?? (major.size || minor.size ? "class" : "none"),
-    priesthood: ph, restricted: ph?.restricted ?? [], choice: ph?.choice ?? [] };
+    priesthood: ph, restricted: ph?.restricted ?? [], choice: ph?.choice ?? [],
+    limits: ph && !(ownMajor.length || ownMinor.length) ? ph.limits ?? {} : {} };
+}
+
+const spellName = n => String(n ?? "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
+const hasWord = (name, w) => new RegExp(`\\b${w}`, "i").test(name);
+
+/** Whether a priesthood's limit within a sphere allows a spell (pure): { ok, reversed }. */
+export function limitAllows(rule, spell = {}) {
+  const name = spellName(spell.name);
+  if ((rule.exclude ?? []).includes(name) || (rule.excludeWords ?? []).some(w => hasWord(name, w))) return { ok: false };
+  if (rule.reversed && !spell.reversible) return { ok: false };
+  if ((rule.names?.length || rule.words?.length) && !((rule.names ?? []).includes(name) || (rule.words ?? []).some(w => hasWord(name, w)))) {
+    return { ok: false };
+  }
+  return { ok: true, reversed: !!(rule.reversed || (rule.reversedWhereApplicable && spell.reversible)) };
+}
+
+/**
+ * Whether the access allows a spell (pure): one sphere it can use for the spell's level, within that sphere's limit.
+ * Returns null (not allowed) or { reversed } (true when only a reversed-only sphere allows it).
+ */
+export function prayRule(spheres, level, access, spell = {}) {
+  let best = null;
+  for (const k of (spheres ?? []).map(sphereKey)) {
+    if (!(access.major.has(k) || (level <= T.minorMaxLevel && access.minor.has(k)))) continue;
+    const rule = access.limits?.[k];
+    const res = rule ? limitAllows(rule, spell) : { ok: true, reversed: false };
+    if (!res.ok) continue;
+    if (!res.reversed) return { reversed: false };
+    best = { reversed: true };
+  }
+  return best;
 }
 
 /** Whether a spell's spheres and level fit the access (pure); no sphere data or no access: false. */
-export function canPray(spheres, level, access) {
-  const keys = (spheres ?? []).map(sphereKey);
-  if (keys.some(k => access.major.has(k))) return true;
-  return level <= T.minorMaxLevel && keys.some(k => access.minor.has(k));
-}
+export const canPray = (spheres, level, access, spell = {}) => !!prayRule(spheres, level, access, spell);
 
 /** The priest spell levels a character has slots for (pure over prepared data): [{ level, slots, prepared }]. */
 export function priestLevels(spells) {
@@ -103,14 +132,15 @@ let catalog = null;
 /** Every priest spell the GM's world can see: world items, world compendiums, then the system's (cached; `fresh` reloads). */
 export async function priestCatalog({ fresh = false } = {}) {
   if (catalog && !fresh) return catalog;
-  const entry = (uuid, d, source) => ({ uuid, name: d.name, level: Number(d.system?.level) || 0, spheres: [...(d.system?.spheres ?? [])], source });
+  const entry = (uuid, d, source) => ({ uuid, name: d.name, level: Number(d.system?.level) || 0, spheres: [...(d.system?.spheres ?? [])],
+    reversible: !!d.system?.reversible, source });
   const world = (game.items ?? []).filter(i => i.type === "spell" && i.system.kind === "priest")
     .map(i => entry(i.uuid, i, game.i18n.localize("AD2E.Prayer.WorldItems")));
   const packs = [...(game.packs ?? [])].filter(p => p.documentName === "Item");
   const groups = [[], []];
   for (const p of packs) {
     let index;
-    try { index = await p.getIndex({ fields: ["type", "system.kind", "system.level", "system.spheres"] }); } catch { continue; }
+    try { index = await p.getIndex({ fields: ["type", "system.kind", "system.level", "system.spheres", "system.reversible"] }); } catch { continue; }
     const list = [...index].filter(e => e.type === "spell" && e.system?.kind === "priest").map(e => entry(e.uuid ?? `Compendium.${p.collection}.Item.${e._id}`, e, p.title));
     groups[p.metadata?.packageType === "world" ? 0 : 1].push(...list);
   }
