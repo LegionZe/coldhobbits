@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.86)
+## Status (v1.0.87)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -1161,6 +1161,16 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   an unidentified name (the GM's, else "Unidentified item (Rings)" or the base weapon or armour name) and no source
   link, notes, values, usable-by, charges or magical bonus fields; only the GM ticks Identified. Bonuses still apply,
   so attack totals and Armor Class can reveal them.
+- Priests pray for spells (1.0.87, owner's request; `module/prayer.mjs`): the Spells tab's "Pray for spells" lists the priest
+  spells of the world's items and every Item compendium (the Spell importer fills "Imported Spells"), filtered by the
+  priest's spell levels and spheres, with a search box; "+" adds a memorized copy marked as prayed for, which leaves the
+  sheet once its last copy is cast (or disrupted, or its count lowered to 0). Spheres: `python3 tools/build-sphere-tables.py`
+  (Priest (PHB) rev 281481: 16 spheres, minor access = levels 1-3; Cleric (PHB) rev 67226, Druid (PHB) rev 157697,
+  Paladin (PHB) rev 67199, Ranger (PHB) rev 144846, each regex-checked); the window's own major/minor sphere fields replace
+  the class's (specialty priests). Implementation choices: one accessible sphere is enough for a spell in two spheres;
+  a prayed spell with damage or healing options stays, used up, until the next rest so its roll can be made; spells
+  dropped on the sheet are never removed; a spell in several compendiums is listed once (world items, then world
+  compendiums, then the system's).
 - Al-Qadim rules: kit modifiers for the Al-Qadim kits (reactions, proficiency and ability checks, saves, initiative,
   attack; checked against each kit page by `tools/build-kit-mechanics.py`); the Kahin advances on the druid experience
   table (kit field `xpTable`); corsairs, like rangers, have no two-weapon penalty in studded leather or lighter; the

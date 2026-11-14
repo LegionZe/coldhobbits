@@ -9,6 +9,7 @@
     <span>{{localize "AD2E.Spell.CastingLevel"}}: <strong>{{st.castingLevel}}</strong></span>
     {{else}}<span class="ad2e-placeholder">{{localize "AD2E.Spell.NoCaster"}}</span>{{/if}}
     {{#if st.oldCaster}}<span class="ad2e-note {{#if st.oldRestricted}}ad2e-unmet{{/if}}">{{st.oldCaster}}</span>{{/if}}
+    {{#if st.canPray}}{{#if @root.editable}}<button type="button" data-action="prayForSpells" data-tooltip="{{localize 'AD2E.Prayer.ButtonHint'}}"><i class="fa-solid fa-hands-praying"></i> {{localize "AD2E.Prayer.Button"}}</button>{{/if}}{{/if}}
     {{#if @root.editable}}<button type="button" data-action="restSpells" data-tooltip="{{localize 'AD2E.Spell.RestHint'}}"><i class="fa-solid fa-bed"></i> {{localize "AD2E.Spell.Rest"}}</button>{{/if}}
   </div>
   {{#if st.gen}}
@@ -60,7 +61,7 @@
     <div class="ad2e-prof-row ad2e-spell-row {{#unless r.usable}}ad2e-spell-unusable{{/unless}}">
       <img src="{{r.img}}" alt="" width="24" height="24">
       <div class="ad2e-weapon-main">
-        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.reversible}} <em>(R)</em>{{/if}}</a>
+        <a class="ad2e-prof-name" data-action="openItem" data-item-id="{{r.id}}">{{r.name}}{{#if r.reversible}} <em>(R)</em>{{/if}}</a>{{#if r.prayed}} <i class="fa-solid fa-hands-praying ad2e-note" data-tooltip="{{localize 'AD2E.Prayer.Prayed'}}"></i>{{/if}}
         <span class="ad2e-weapon-meta">{{r.meta}}{{#unless r.usable}} · <span class="ad2e-unmet">{{localize "AD2E.Spell.NotForClass"}}</span>{{/unless}}</span>
         {{#if r.unlearned}}<span class="ad2e-weapon-meta ad2e-unmet">{{localize "AD2E.Learn.NotLearned"}} · {{r.learnText}}</span>{{/if}}
       </div>

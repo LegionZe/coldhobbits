@@ -4792,5 +4792,30 @@
       "captain": "captain",
       "officer": "officer"
     }
+  },
+  "AD2E.Prayer": {
+    "Title": "Pray for spells: {name}",
+    "Button": "Pray for spells",
+    "ButtonHint": "Search the priest spells in the compendiums and add the ones you pray for, memorized; each leaves the sheet when used.",
+    "Access": "Major spheres: {major}. Minor spheres (spell levels 1-{max}): {minor}.",
+    "NoAccess": "No spheres known for this class: every priest spell is listed. Fill in the spheres below.",
+    "OwnMajor": "Own major spheres",
+    "OwnMinor": "Own minor spheres",
+    "OwnHint": "Comma list; replaces the class's (specialty priests). Empty = the class's.",
+    "FromClass": "from the class",
+    "SphereList": "Spheres: {list}.",
+    "NoLevels": "No priest spell slots at this level.",
+    "Search": "Search",
+    "SearchHint": "spell name",
+    "AllLevels": "All my levels",
+    "LevelLine": "{level} ({prepared}/{slots} memorized)",
+    "Mine": "Only my spheres",
+    "Count": "{count} of {total} priest spells shown.",
+    "Refresh": "Reload the compendiums",
+    "Empty": "No priest spells found in the world or its compendiums: import some with the Spell importer (GM tools).",
+    "Add": "Pray for this spell",
+    "AddHint": "Add one memorized copy",
+    "Prayed": "Prayed for: leaves the sheet when used",
+    "WorldItems": "World items"
   }
 }

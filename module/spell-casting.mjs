@@ -28,6 +28,7 @@
  * Dexterity: Casting Spells (PHB) rev 70370 "no AC benefit from Dexterity is gained by spellcasters while casting spells":
  * while CASTING_STATUS is on, CharacterData drops a beneficial Dexterity AC adjustment (`castingDexAc`).
  */
+import { clearUsedPrayers } from "./prayer.mjs";
 import { ad2eDialog } from "./dialogs.mjs";
 
 export const CASTING_STATUS = { id: "ad2e-casting", name: "AD2E.Casting.Status", img: "systems/ad2e/styles/icons/casting.svg" };
@@ -206,6 +207,7 @@ export async function castingStruck(actor, reason = "damage") {
   if (mode === "phb" && item) {
     const update = scroll ? scrollUseUpdate(item.system) : (item.system.prepared - item.system.cast > 0 ? { "system.cast": item.system.cast + 1 } : null);
     if (update) { await item.update(update); lost = true; }
+    if (lost && !scroll && item.getFlag?.("ad2e", "prayed")) await clearUsedPrayers(actor, { resting: true });
   }
   const text = scroll ? (lost ? "AD2E.Casting.ScrollLost" : mode === "phb" ? "AD2E.Casting.ScrollNoUse" : "AD2E.Casting.ScrollKept")
     : (lost ? "AD2E.Casting.Lost" : "AD2E.Casting.Kept");
