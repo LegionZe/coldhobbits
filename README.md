@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.89)
+## Status (v1.0.90)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -1178,8 +1178,10 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   Disease's Healing and Necromantic and Evil's Protection (only reversible spells listed, marked "reversed form only"),
   no resurrection for Life-Death-Rebirth, Oceans' water spells, earthquake and transmute rock to mud and no insect spells).
   Implementation choices: Dawn's "spells involving heat, fire, or air" read as names with fire, flame, heat, pyrotechnics,
-  air or wind; Disease's Protection "reversed where applicable" is marked, not enforced; Oceans' sea-life-only Animal spells
-  are not checked; the own sphere fields drop the priesthood's limits.
+  air or wind; Oceans' sea-life-only Animal spells are not checked; the own sphere fields drop the priesthood's limits.
+  1.0.90 (owner's rulings): Disease's Protection "reversed forms of spells only, where applicable" leaves out
+  non-reversible spells too, and a spell allowed only in reversed form is prayed for as its reversed form: named
+  "<spell> (reversed)", its healing options rolled as damage, the cast card saying it is cast reversed (flag `ad2e.reversed`).
   Implementation choices: one accessible sphere is enough for a spell in two spheres;
   a prayed spell with damage or healing options stays, used up, until the next rest so its roll can be made; spells
   dropped on the sheet are never removed; a spell in several compendiums is listed once (world items, then world

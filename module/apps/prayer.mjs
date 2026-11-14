@@ -41,7 +41,8 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
     const rule = e => (access.source === "none" ? { reversed: false } : prayRule(e.spheres, e.level, access, e));
     const rows = all.filter(e => e.level >= 1 && e.level <= max && (lvl === null || e.level === lvl) && (!this.state.mine || rule(e)))
       .map(e => ({ ...e, sphereText: e.spheres.join(", "), key: e.name.toLowerCase(), reversedOnly: this.state.mine && !!rule(e)?.reversed,
-        owned: this.actor.items.find(i => i.type === "spell" && i.name === e.name && i.system.level === e.level)?.system.prepared ?? 0 }));
+        owned: this.actor.items.filter(i => i.type === "spell" && i.system.level === e.level
+          && (i.name === e.name || i.name === i18n("AD2E.Prayer.ReversedName", { name: e.name }))).reduce((n, i) => n + i.system.prepared, 0) }));
     const list = set => [...set].map(title).join(", ") || "—";
     return Object.assign(context, {
       levels: levels.map(l => ({ ...l, selected: String(l.level) === this.state.level, label: i18n("AD2E.Prayer.LevelLine", l) })),
@@ -88,7 +89,7 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
 
   static async #onPray(event, target) {
     if (!this.actor.isOwner) return;
-    await praySpell(this.actor, target.dataset.uuid, 1);
+    await praySpell(this.actor, target.dataset.uuid, 1, { reversed: target.dataset.reversed === "true" });
     this.render();
   }
 

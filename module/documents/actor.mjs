@@ -2337,6 +2337,7 @@ export default class AD2EActor extends Actor {
       + (sys.url ? `<p><a href="${esc(sys.url)}" target="_blank" rel="noopener">${i18n("AD2E.Spell.FullText")}</a></p>` : "")
       + (comp.used.length ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Components.Used", { list: comp.used.join(", ") }))}</p>` : "")
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
+      + (spell.getFlag?.("ad2e", "reversed") ? `<p class="ad2e-note"><strong>${i18n("AD2E.Prayer.CastReversed")}</strong></p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
     const message = await this.#castAtTargets(spell, content);
     // JB2A animation through Sequencer when both are active and the setting is on (module/spell-animations.mjs); not

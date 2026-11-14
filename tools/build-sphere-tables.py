@@ -46,8 +46,8 @@ def names(text):
 
 # Limits within a priesthood's sphere (owner's request 1.0.89: enforced in the prayer window). Each entry's `match` must
 # occur in the priesthood's "Spheres of Influence" paragraph (plain text). Rule fields: `names` = the only spells allowed
-# (exact names), `words` = spell names with a word starting so (also allowed), `reversed` = only reversible spells (cast
-# reversed), `reversedWhereApplicable` = reversible spells only reversed (others allowed: shown, not enforced), `exclude` =
+# (exact names), `words` = spell names with a word starting so (also allowed), `reversed` = only reversible spells, prayed
+# as their reversed form (owner's ruling 1.0.90), `reversedWhereApplicable` = reversible spells only reversed (others allowed), `exclude` =
 # names not allowed, `excludeWords` = name words not allowed. Implementation choices: Dawn's "spells involving heat, fire,
 # or air" read as names with fire, flame, heat, pyrotechnics, air or wind (and chariot of Sustarre); Earth's "dealing
 # with dust, stone, rock, mud, and earth" as names with those words; Oceans' "insect-related" Animal spells as names with
@@ -60,7 +60,8 @@ LIMITS = {
                            "words": FIRE_WORDS + ["air", "wind"], "names": ["chariot of sustarre"]}},
     "disease": {"healing": {"match": r"Healing \(reversed forms of spells only\)", "reversed": True},
                 "necromantic": {"match": r"Necromantic \(reversed forms of spells only\)", "reversed": True},
-                "protection": {"match": r"Protection \(reversed forms of spells only, where applicable\)", "reversedWhereApplicable": True}},
+                # Owner's ruling 1.0.90: "where applicable" = wherever a reversed form exists; non-reversible spells are left out.
+                "protection": {"match": r"Protection \(reversed forms of spells only, where applicable\)", "reversed": True}},
     "earth": {"elemental": {"match": r"Elemental \(the priest may only use spells dealing with dust, stone, rock, mud, and earth, plus transmute metal to wood",
                             "words": ["dust", "stone", "rock", "mud", "earth"], "names": ["transmute metal to wood"]}},
     "evil-philosophy": {"protection": {"match": r"Protection \(may only use reversed forms of the spells\)", "reversed": True}},
