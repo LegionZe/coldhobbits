@@ -7,7 +7,8 @@
  * the character's Complete Priest's Handbook priesthood when chosen (specialty priests, 1.0.88), and by the character's
  * own sphere fields when filled. A priesthood's limits within a sphere (`limits`: named spells, words in the name,
  * reversed forms only, excluded spells; 1.0.89) are enforced while its spheres apply (not under the own fields); a spell
- * allowed only in reversed form is prayed for as its reversed form (1.0.90).
+ * allowed only in reversed form is prayed for as its reversed form (1.0.90). Faiths & Avatars specialty priests (1.0.92) join
+ * the priesthoods (`source` "FA"), with the Tome of Magic spheres and elemental subspheres (air, earth, fire, water).
  * Implementation choices: a spell with any accessible sphere is allowed (a spell in two spheres needs only one); a spell
  * with damage or healing options stays, used up, until the next rest so its roll can still be made; spells added by hand
  * (dropped on the sheet) are never removed; duplicates across compendiums are listed once (world items, then world
@@ -17,11 +18,20 @@ import { SPHERE_TABLES } from "./rules/sphere-tables.mjs";
 
 const T = SPHERE_TABLES;
 
-/** A sphere name as a key (pure): lower case, without "(...)" qualifiers; "protective" = protection. */
+/**
+ * A sphere name as a key (pure): lower case, without "(...)" qualifiers; "protective" = protection, "travellers" = travelers;
+ * elemental subspheres kept ("Elemental (Air)", "Elemental Air" -> "elemental air"; wiki spells use both forms, 1.0.92).
+ */
 export function sphereKey(s) {
-  const k = String(s ?? "").toLowerCase().replace(/\(.*?\)/g, "").trim();
-  return k === "protective" ? "protection" : k;
+  const t = String(s ?? "").toLowerCase();
+  const el = t.match(/^\s*elemental\W*(air|earth|fire|water)\b/);
+  if (el) return `elemental ${el[1]}`;
+  const k = t.replace(/\(.*?\)/g, "").replace(/\s+/g, " ").trim();
+  return { protective: "protection", travellers: "travelers" }[k] ?? k;
 }
+
+/** The general sphere of an elemental subsphere ("elemental fire" -> "elemental"), else null (pure). */
+const baseSphere = k => (k.startsWith("elemental ") ? "elemental" : null);
 
 /** A comma list of spheres (pure). */
 export const splitSpheres = text => String(text ?? "").split(/[,;]/).map(sphereKey).filter(Boolean);
@@ -65,19 +75,25 @@ export function sphereAccess(ids, own = {}, { kit = "" } = {}) {
   for (const s of major) minor.delete(s);
   return { major, minor, source: ownMajor.length || ownMinor.length ? "own" : source ?? (major.size || minor.size ? "class" : "none"),
     priesthood: ph, restricted: ph?.restricted ?? [], choice: ph?.choice ?? [],
-    limits: ph && !(ownMajor.length || ownMinor.length) ? ph.limits ?? {} : {} };
+    limits: ph && !(ownMajor.length || ownMinor.length) ? ph.limits ?? {} : {},
+    extra: ph && !(ownMajor.length || ownMinor.length) ? ph.extraSpells ?? [] : [] };
 }
 
 const spellName = n => String(n ?? "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ").trim();
 const hasWord = (name, w) => new RegExp(`\\b${w}`, "i").test(name);
 
-/** Whether a priesthood's limit within a sphere allows a spell (pure): { ok, reversed }. */
-export function limitAllows(rule, spell = {}) {
+/**
+ * Whether a priesthood's limit within a sphere allows a spell (pure): { ok, reversed }. `sphere` = the spell's sphere key the
+ * limit is applied for (`excludeSubs`: elemental subspheres left out); `orReversed`: spells outside `names`/`words` are
+ * allowed in their reversed form when reversible (Faiths & Avatars darkness-only sun spells, 1.0.92).
+ */
+export function limitAllows(rule, spell = {}, sphere = "") {
   const name = spellName(spell.name);
   if ((rule.exclude ?? []).includes(name) || (rule.excludeWords ?? []).some(w => hasWord(name, w))) return { ok: false };
+  if ((rule.excludeSubs ?? []).some(e => sphere === `elemental ${e}`)) return { ok: false };
   if (rule.reversed && !spell.reversible) return { ok: false };
   if ((rule.names?.length || rule.words?.length) && !((rule.names ?? []).includes(name) || (rule.words ?? []).some(w => hasWord(name, w)))) {
-    return { ok: false };
+    return rule.orReversed && spell.reversible ? { ok: true, reversed: true } : { ok: false };
   }
   return { ok: true, reversed: !!(rule.reversed || (rule.reversedWhereApplicable && spell.reversible)) };
 }
@@ -87,11 +103,17 @@ export function limitAllows(rule, spell = {}) {
  * Returns null (not allowed) or { reversed } (true when only a reversed-only sphere allows it).
  */
 export function prayRule(spheres, level, access, spell = {}) {
+  // Spells a priesthood may use beyond its spheres or levels (Eldath's peacemen: hold plant).
+  if ((access.extra ?? []).includes(spellName(spell.name))) return { reversed: false };
   let best = null;
   for (const k of (spheres ?? []).map(sphereKey)) {
-    if (!(access.major.has(k) || (level <= T.minorMaxLevel && access.minor.has(k)))) continue;
-    const rule = access.limits?.[k];
-    const res = rule ? limitAllows(rule, spell) : { ok: true, reversed: false };
+    // An elemental subsphere spell ("elemental fire") is open to that subsphere or to the whole elemental sphere; a spell of
+    // the general elemental sphere needs the whole sphere (implementation choice).
+    const base = baseSphere(k);
+    const has = set => set.has(k) || (base && set.has(base));
+    if (!(has(access.major) || (level <= T.minorMaxLevel && has(access.minor)))) continue;
+    const rule = access.limits?.[k] ?? (base ? access.limits?.[base] : null);
+    const res = rule ? limitAllows(rule, spell, k) : { ok: true, reversed: false };
     if (!res.ok) continue;
     if (!res.reversed) return { reversed: false };
     best = { reversed: true };

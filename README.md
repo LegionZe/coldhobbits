@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.91)
+## Status (v1.0.92)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -1186,6 +1186,18 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   a prayed spell with damage or healing options stays, used up, until the next rest so its roll can be made; spells
   dropped on the sheet are never removed; a spell in several compendiums is listed once (world items, then world
   compendiums, then the system's).
+  1.0.92 (owner's request): Faiths & Avatars specialty priests join the "Specialty priesthood" list (grouped by book):
+  49 priesthoods from the "Specialty Priests ..." sections of the 44 deity pages in "Category:Faiths & Avatars"
+  (`fa_priesthoods` in `tools/build-sphere-tables.py`; scanning typos fixed by `FA_FIXES`, each asserted present).
+  They use the Tome of Magic spheres (chaos, law, numbers, thought, time, travelers, war, wards: the headings of "New
+  Spheres (TOM)") and elemental subspheres. Spell sphere keys keep the element ("Elemental (Air)" and "Elemental Air"
+  -> "elemental air"); a subsphere spell is open to that subsphere or to the whole elemental sphere, a general elemental
+  spell needs the whole sphere (implementation choice). This also fixes clerics and druids, whose elemental access did
+  not match wiki spells recorded as "Elemental Water" etc. Limits (`LIMITS` "fa-..."): Auril no fire-related elemental
+  spells; Beshaba healing/necromantic, Iyachtu Xvim healing/sun and Ibrandul sun reversed only; Shar and Bane sun spells
+  named with "dark" or reversed reversible ones (Bane's "detrimental effects" read the same way: implementation choice);
+  Lathander's and Umberlee's brackets are notes. `EXTRA_SPELLS`: Eldath's peacemen may pray for hold plant (4th level,
+  minor plant).
 - Al-Qadim rules: kit modifiers for the Al-Qadim kits (reactions, proficiency and ability checks, saves, initiative,
   attack; checked against each kit page by `tools/build-kit-mechanics.py`); the Kahin advances on the druid experience
   table (kit field `xpTable`); corsairs, like rangers, have no two-weapon penalty in studded leather or lighter; the

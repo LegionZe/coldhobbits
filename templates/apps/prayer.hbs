@@ -4,13 +4,13 @@
   {{#if choiceText}}<p class="ad2e-note ad2e-unmet">{{choiceText}}</p>{{/if}}
   {{#if editable}}
   <div class="ad2e-ship-grid ad2e-prayer-wide">
-    <label data-tooltip="{{localize 'AD2E.Prayer.PriesthoodHint'}}">{{localize "AD2E.Prayer.Priesthood"}} <select data-prayer-priesthood>{{#each priesthoods as |p|}}<option value="{{p.value}}"{{#if p.selected}} selected{{/if}}>{{p.label}}</option>{{/each}}</select></label>
+    <label data-tooltip="{{localize 'AD2E.Prayer.PriesthoodHint'}}">{{localize "AD2E.Prayer.Priesthood"}} <select data-prayer-priesthood><option value=""{{#if noPriesthood}} selected{{/if}}>{{localize "AD2E.Prayer.NoPriesthood"}}</option>{{#each priesthoodGroups as |g|}}<optgroup label="{{g.label}}">{{#each g.options as |p|}}<option value="{{p.value}}"{{#if p.selected}} selected{{/if}}>{{p.label}}</option>{{/each}}</optgroup>{{/each}}</select></label>
   </div>
   <div class="ad2e-ship-grid">
     <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMajor"}} <input type="text" data-prayer-sphere="major" value="{{own.major}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>
     <label data-tooltip="{{localize 'AD2E.Prayer.OwnHint'}}">{{localize "AD2E.Prayer.OwnMinor"}} <input type="text" data-prayer-sphere="minor" value="{{own.minor}}" placeholder="{{localize 'AD2E.Prayer.FromClass'}}"></label>
   </div>
-  <p class="ad2e-note">{{localize "AD2E.Prayer.SphereList" list=sphereList}}</p>
+  <p class="ad2e-note">{{localize "AD2E.Prayer.SphereList" list=sphereList elements=elementList}}</p>
   {{/if}}
   {{#if noLevels}}<p class="ad2e-placeholder">{{localize "AD2E.Prayer.NoLevels"}}</p>{{else}}
   <div class="ad2e-ship-grid">

@@ -51,13 +51,16 @@ export default class PrayForSpells extends HandlebarsApplicationMixin(Applicatio
         : i18n("AD2E.Prayer.Access", { major: list(access.major), minor: list(access.minor), max: SPHERE_TABLES.minorMaxLevel }),
       own: { major: sys.spheres?.major ?? "", minor: sys.spheres?.minor ?? "" }, editable: this.actor.isOwner,
       sourceText: access.source === "none" ? "" : i18n(`AD2E.Prayer.Source.${access.source}`, { name: access.priesthood?.label ?? sys.classInfo?.kitItem?.name ?? "" }),
-      priesthoods: [{ value: "", label: i18n("AD2E.Prayer.NoPriesthood"), selected: !sys.spheres?.priesthood },
-        ...SPHERE_TABLES.priesthoods.map(p => ({ value: p.key, label: p.label, selected: p.key === sys.spheres?.priesthood }))],
+      noPriesthood: !sys.spheres?.priesthood,
+      priesthoodGroups: ["CPrH", "FA"].map(src => ({ label: i18n(`AD2E.Prayer.Group.${src}`),
+        options: SPHERE_TABLES.priesthoods.filter(p => (p.source ?? "CPrH") === src)
+          .map(p => ({ value: p.key, label: p.label, selected: p.key === sys.spheres?.priesthood })) })),
       priesthoodUrl: access.priesthood?.url ?? "",
       restrictedText: access.restricted.length ? i18n(Object.keys(access.limits).length ? "AD2E.Prayer.Limited" : "AD2E.Prayer.Restricted",
         { list: access.restricted.map(title).join(", ") }) : "",
       choiceText: access.choice.length ? i18n("AD2E.Prayer.Choice", { list: access.choice.map(title).join(", ") }) : "",
-      sphereList: SPHERE_TABLES.spheres.map(title).join(", "), empty: !all.length
+      sphereList: [...SPHERE_TABLES.spheres, ...(SPHERE_TABLES.tomSpheres ?? [])].map(title).join(", "),
+      elementList: (SPHERE_TABLES.elements ?? []).map(e => title(`elemental ${e}`)).join(", "), empty: !all.length
     });
   }
 
