@@ -49,6 +49,7 @@ import { forageFields, forageKind, rollForage } from "../forage.mjs";
 import { trainingAllows, trainingUsedUpdate } from "../training.mjs";
 import { cappedAward, oneLevelOn, xpCap } from "../advancement.mjs";
 import { clearNetted, netHitFlag, netWrapped } from "../netted.mjs";
+import { deafSurpriseField, deafSurprisePicked, failureContent, voiceAllows, voiceFailure } from "../hearing.mjs";
 import { blindAttackFields, blindAttackPicked, blindBackstabField, blindSaveField, blindSavePicked, isBlind } from "../blindness.mjs";
 
 export default class AD2EActor extends Actor {
@@ -2292,6 +2293,8 @@ export default class AD2EActor extends Actor {
   /** The confirmations before casting: feeblemind, wizard spells in armour. */
   async #castingAllowed(spell) {
     const sys = spell.system;
+    // Silenced (core "silence" status; module/hearing.mjs): no spell that needs the voice.
+    if (!voiceAllows(this, spell)) return false;
     // Rider feebleminded after a negligent mount death (module/companions.mjs; owner's ruling: confirm to cast).
     if (this.type === "character" && feeblemindActive(this)) {
       const ok = await ad2eDialog.confirm({ window: { title: spell.name }, rejectClose: false,
@@ -2332,6 +2335,14 @@ export default class AD2EActor extends Actor {
       await retributionNotice(this, spell);
       await clearFetched(this);
     } else await spell.update({ "system.cast": sys.cast + 1 });
+    // Silenced while casting: the spell is lost; deafened: d100, 01-20 miscasts (module/hearing.mjs). The spell is used up.
+    const failure = await voiceFailure(this, spell);
+    if (failure?.reason) {
+      const lost = await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this }), content: failureContent(this, spell, failure),
+        ...(failure.roll ? { rolls: [failure.roll] } : {}) });
+      if (spell.getFlag?.("ad2e", "prayed")) await clearUsedPrayers(this);
+      return lost;
+    }
     const i18n = k => game.i18n.localize(k);
     const esc = v => foundry.utils.escapeHTML?.(String(v ?? "")) ?? String(v ?? "");
     const castingLevel = oldCaster?.castingLevel ?? this.system.spells?.castingLevels?.[sys.kind] ?? this.system.spells?.castingLevel ?? this.system.level;
@@ -2349,6 +2360,7 @@ export default class AD2EActor extends Actor {
       + (comp.used.length ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Components.Used", { list: comp.used.join(", ") }))}</p>` : "")
       + (comp.missing.length ? `<p class="ad2e-note ad2e-unmet">${esc(game.i18n.format("AD2E.Components.CastWithout", { list: comp.missing.join(", ") }))}</p>` : "")
       + (spell.getFlag?.("ad2e", "reversed") ? `<p class="ad2e-note"><strong>${i18n("AD2E.Prayer.CastReversed")}</strong></p>` : "")
+      + (failure?.roll ? `<p class="ad2e-note">${esc(game.i18n.format("AD2E.Hearing.NoMiscast", { roll: failure.roll.total }))}</p>` : "")
       + `<p class="ad2e-note">${game.i18n.format("AD2E.Spell.Remaining", { n: left })}</p></div>`;
     const message = await this.#castAtTargets(spell, content);
     // JB2A animation through Sequencer when both are active and the setting is on (module/spell-animations.mjs); not
@@ -2707,7 +2719,7 @@ export default class AD2EActor extends Actor {
       classes: ["ad2e"], position: { width: 520 },
       window: { title: `${this.name}: ${i18n("AD2E.Surprise.Title")}` },
       content: `<p class="ad2e-note">${i18n("AD2E.Surprise.Hint")}${fixed ? ` ${esc(fixed)}` : ""}</p>`
-        + `<div class="ad2e-dialog-scroll">${groups}</div>` + modifierFields() + this.#kitFields(kitOptions),
+        + `<div class="ad2e-dialog-scroll">${groups}${deafSurpriseField(this)}</div>` + modifierFields() + this.#kitFields(kitOptions),
       ok: { label: i18n("AD2E.Roll.Roll"), callback: (event, button) => {
         const f = button.form;
         const picked = [];
@@ -2722,6 +2734,9 @@ export default class AD2EActor extends Actor {
           const v = el?.type === "checkbox" ? (el.checked ? Number(el.value) : 0) : Number(el?.value) || 0;
           if (v) { table += v; picked.push(`${m.label} ${v > 0 ? "+" : ""}${v}`); }
         }
+        // Deafened (module/hearing.mjs): -1 unless the other senses are keen (the box is pre-ticked).
+        const deaf = deafSurprisePicked(f);
+        if (deaf.value) { table += deaf.value; picked.push(deaf.text); }
         const kit = AD2EActor.#kitPicked(f, kitOptions);
         return { ...readModifier(f), table, picked, kit: kit.sum, kitText: kit.text };
       } },

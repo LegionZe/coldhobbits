@@ -4793,6 +4793,15 @@
       "officer": "officer"
     }
   },
+  "AD2E.Hearing": {
+    "Deaf": "Deafened",
+    "Silenced": "Silenced",
+    "SurpriseBox": "Deafened ({n}; untick for unusually keen other senses)",
+    "CannotCast": "{name} is silenced: {spell} needs the voice and cannot be cast.",
+    "LostSilenced": "{name} was silenced while casting: the spell is lost.",
+    "Miscast": "{name} is deafened: d100 {roll} (01-{n}), the spell is miscast and lost.",
+    "NoMiscast": "Deafened: d100 {roll}, no miscast."
+  },
   "AD2E.Blind": {
     "Status": "Blinded",
     "Attacker": "Attacker blinded",

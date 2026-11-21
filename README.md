@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.93)
+## Status (v1.0.94)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -772,6 +772,14 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   still); saving throws of a blinded actor -4 (also quick saves); backstab disabled for a blinded attacker without
   blind-fighting ("sight-related damage bonuses ... are negated"). Implementation choices: a blind-fighter keeps backstab
   (the GM halves it); the movement rule and Table 72's degrees of darkness are not applied.
+- Deafened and silenced (1.0.94, owner's request; `module/hearing.mjs`, `COMBAT_TABLES.deaf` / `.silence` regex-checked against
+  Deafness (Wizard Spell), Casting Spells (PHB) and Silence, 15' Radius (Priest Spell)): core statuses "Deaf" and "Silenced"
+  (registered if a world lacks them; Silenced also stands for a gag or a mute). Deafened: a pre-ticked -1 box in the surprise
+  dialog ("unless its other senses are unusually keen": untick it); a spell needing the voice rolls d100 when it takes
+  effect, 01-20 miscast (used up, no effect). Silenced: such a spell cannot be begun, and a caster silenced during a
+  tracked casting loses it. A spell needs the voice when it has a verbal component or no components recorded (the
+  standard rule: "The caster must be able to speak"). Implementation choices: a miscast uses the components; the +1
+  initiative of Cause Blindness or Deafness is not applied; scrolls and command words are not checked.
 - Learning spells (Intelligence (PHB) Table 4, Specialist Wizard (PHB), Wizard (PHB)): dropping a wizard spell on a
   wizard or bard asks "Roll to learn", "Add as known (no roll)" or "Do not add". The roll is d100 at or under the
   Intelligence "Chance to Learn Spell", specialists +15% for their school and -15% for other schools; it is not possible
