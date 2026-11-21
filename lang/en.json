@@ -4803,7 +4803,7 @@
     "OwnMinor": "Own minor spheres",
     "OwnHint": "Comma list; replaces the class's (specialty priests). Empty = the class's.",
     "FromClass": "from the class",
-    "SphereList": "Spheres: {list}.",
+    "SphereList": "Spheres: {list}. Elemental subspheres: {elements}.",
     "NoLevels": "No priest spell slots at this level.",
     "Search": "Search",
     "SearchHint": "spell name",
@@ -4818,7 +4818,11 @@
     "Prayed": "Prayed for: leaves the sheet when used",
     "WorldItems": "World items",
     "Priesthood": "Specialty priesthood",
-    "PriesthoodHint": "A Complete Priest's Handbook priesthood: its spheres replace the class's and kit's.",
+    "PriesthoodHint": "A Complete Priest's Handbook priesthood or a Faiths & Avatars specialty priesthood: its spheres replace the class's and kit's.",
+    "Group": {
+      "CPrH": "The Complete Priest's Handbook",
+      "FA": "Faiths & Avatars"
+    },
     "NoPriesthood": "— none: the class or kit spheres —",
     "Source": {
       "class": "From the class.",

@@ -707,7 +707,11 @@ The owner installs and updates from that manifest URL only (no shell access to t
   1.0.89: priesthood `limits` { sphere: { names, words, reversed, reversedWhereApplicable, exclude, excludeWords, note } } from
   the generator's curated `LIMITS` (a `match` regex per entry on the paragraph; every bracketed limit must have one);
   pure `limitAllows(rule, spell)`, `prayRule(spheres, level, access, spell)` -> null | { reversed }; catalogue entries carry
-  `reversible`; access `limits` are dropped when the own fields are filled. 1.0.90 (owner's rulings): Disease Protection =
+  `reversible`; access `limits` are dropped when the own fields are filled. 1.0.92: Faiths & Avatars specialty priests (`fa_priesthoods`,
+  `source` "FA", keys "fa-<deity>-<name>", `FA_FIXES` typos, `EXTRA_SPELLS` -> priesthood `extraSpells` / access `extra`),
+  `tomSpheres` ("New Spheres (TOM)" headings) and `elements`; `sphereKey` keeps "elemental <element>" and `prayRule` opens it
+  to the whole elemental sphere too (limits looked up by subsphere, then "elemental"); `limitAllows(rule, spell, sphere)`
+  rule fields `excludeSubs`, `orReversed`; the window groups the priesthood select by `source`. 1.0.90 (owner's rulings): Disease Protection =
   `reversed`; `praySpell(actor, uuid, n, { reversed })` + pure `reversedData` (name AD2E.Prayer.ReversedName, healing -> damage,
   flag `ad2e.reversed`; the window's "+" passes `data-reversed` from `prayRule().reversed`); #castNow notes AD2E.Prayer.CastReversed. `module/prayer.mjs` (pure `sphereKey`,
   `splitSpheres`, `classIds`, `sphereAccess(ids, own)`, `canPray`, `priestLevels`, `usedUp`, `mergeEntries`; `priestCatalog`
