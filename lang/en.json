@@ -4793,6 +4793,19 @@
       "officer": "officer"
     }
   },
+  "AD2E.Blind": {
+    "Status": "Blinded",
+    "Attacker": "Attacker blinded",
+    "AttackerFighting": "Attacker blinded, blind-fighting (melee)",
+    "Target": "{name} blinded: AC four worse (to a limit of {limit})",
+    "TargetLimit": "{name} blinded: AC already at the limit of {limit}",
+    "TargetFighting": "{name} blinded, but blind-fighting: no AC penalty in melee",
+    "ShortSelf": "Blinded",
+    "ShortTarget": "Target blinded",
+    "Save": "Blinded ({n})",
+    "SaveShort": "blinded {n}",
+    "NoBackstab": "Blinded: no backstab (sight-related damage bonuses are negated; blind-fighting keeps it)."
+  },
   "AD2E.Prayer": {
     "Title": "Pray for spells: {name}",
     "Button": "Pray for spells",

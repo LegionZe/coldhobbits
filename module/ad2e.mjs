@@ -10,6 +10,7 @@ import NavalCombat from "./apps/naval-combat.mjs";
 import { registerNavalBattle } from "./naval-battle.mjs";
 import UnderwaterTool from "./apps/underwater-tool.mjs";
 import { registerUnderwater } from "./underwater.mjs";
+import { registerBlindness } from "./blindness.mjs";
 import { registerGvSailing } from "./gv-sailing.mjs";
 import { registerPrayer } from "./prayer.mjs";
 import ClassData from "./data/item-class.mjs";
@@ -137,6 +138,8 @@ Hooks.once("init", () => {
   });
   // GM tool: underwater adventuring (game.ad2e.underwater(); module/underwater.mjs, the "Underwater" status).
   registerUnderwater();
+  // Blinded combatants: the core "blind" status, registered if missing (module/blindness.mjs).
+  registerBlindness();
   game.settings.registerMenu("ad2e", "underwater", {
     name: "AD2E.Underwater.Title", label: "AD2E.Underwater.Open", hint: "AD2E.Underwater.MenuHint", icon: "fa-solid fa-water", type: UnderwaterTool, restricted: true
   });
