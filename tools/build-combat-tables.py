@@ -172,6 +172,25 @@ if __name__ == "__main__":
                      "weapons": ["short-bow", "composite-short-bow", "light-crossbow"], "specialist": ["long-bow", "composite-long-bow"],
                      "once": ["heavy-crossbow"], "untrained": -2,
                      "smaller": 1, "vsRider": -1}
+    # Blindness (owner's request 1.0.93): Darkness (DMG) for blinded characters (attack, saves, AC to a limit of 10, sight-related
+    # damage bonuses such as backstab negated), Blind-fighting (Proficiency) (-2, no AC penalty, melee distance only), the
+    # Blindness (Wizard Spell) figures agree (-4 to hit, opponents +4).
+    dk, rev_dark, _ = classdata.page("Darkness (DMG)")
+    need(dk, r"equally well when the characters are affected by a darkness spell, blundering about in pea-soup fog, out on a moonless night, or even blindfolded", "darkness = blinded")
+    need(dk, r"Characters also suffer a -4 penalty to attack rolls and saving throws", "blind: -4 attack and saves")
+    need(dk, r"Their Armor Class is four worse than normal \(to a limit of 10\)", "blind: AC 4 worse, limit 10")
+    need(dk, r"Sight-related damage bonuses \(backstabbing, etc\.\) are negated", "blind: no backstab")
+    bf, rev_bf, _ = classdata.page("Blind-fighting (Proficiency)")
+    need(bf, r"In total darkness, the character suffers only a -2 penalty to his attack roll \(as compared to a -4 penalty without this proficiency\)", "blind-fighting -2")
+    need(bf, r"The character suffers no penalties to his AC because of darkness", "blind-fighting AC")
+    need(bf, r"effective only against opponents or threats within melee distance of the character", "blind-fighting melee only")
+    need(bf, r"AC penalties remain for missile fire", "blind-fighting missiles")
+    need(bf, r"retains special abilities that would normally be lost in darkness, although the effectiveness of these are reduced by one-half", "blind-fighting abilities")
+    bs, rev_bs, _ = classdata.page("Blindness (Wizard Spell)")
+    need(bs, r"A blinded creature suffers a -4 penalty to its attack rolls, and its opponents gain a \+4 bonus to their attack rolls", "blindness spell")
+    blind = {"attack": -4, "save": -4, "ac": 4, "acLimit": 10, "noBackstab": True,
+             "blindFighting": {"proficiency": "blind-fighting", "attack": -2, "ac": 0, "meleeOnly": True, "abilitiesHalved": True}}
+
     # Lasso (Weapon Descriptions (POCT)) with the called shot, opposed rolls and pull/trip of Attack Options (POCT).
     wd, rev_wd, _ = classdata.page("Weapon Descriptions (POCT)")
     ao, rev_ao, _ = classdata.page("Attack Options (POCT)")
@@ -231,6 +250,7 @@ if __name__ == "__main__":
         "nonlethal": {"hit": -4, "damage": 0.5},
         "mountedMissile": mounted,
         "mounted": mounted_rules,
+        "blind": blind,
         "lasso": lasso,
         "net": net,
     }
@@ -244,6 +264,8 @@ if __name__ == "__main__":
              f" *   Initiative Tables 55/56: {classdata.url('Initiative (PHB)')} (revision {rev_init})",
              f" *   Table 51 Combat Modifiers: {classdata.url('PHB Table 51')} (revision {rev_51}); status ids: core CONFIG.statusEffects",
              f" *   DMG Table 53 Mounted Missile Fire: {classdata.url('Unusual Combat Situations (DMG)')} (revision {rev_unusual})",
+             f" *   Blindness: {classdata.url('Darkness (DMG)')} (revision {rev_dark}), {classdata.url('Blind-fighting (Proficiency)')}",
+             f" *   (revision {rev_bf}), {classdata.url('Blindness (Wizard Spell)')} (revision {rev_bs})",
              f" *   Lasso and net: {classdata.url('Weapon Descriptions (POCT)')} (revision {rev_wd}); called shot, opposed rolls, pull/trip:",
              f" *   {classdata.url('Attack Options (POCT)')} (revision {rev_ao})",
              " */",

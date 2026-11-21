@@ -49,6 +49,7 @@ import { forageFields, forageKind, rollForage } from "../forage.mjs";
 import { trainingAllows, trainingUsedUpdate } from "../training.mjs";
 import { cappedAward, oneLevelOn, xpCap } from "../advancement.mjs";
 import { clearNetted, netHitFlag, netWrapped } from "../netted.mjs";
+import { blindAttackFields, blindAttackPicked, blindBackstabField, blindSaveField, blindSavePicked, isBlind } from "../blindness.mjs";
 
 export default class AD2EActor extends Actor {
   /**
@@ -686,8 +687,11 @@ export default class AD2EActor extends Actor {
     const oldSave = this.type === "character" ? (this.system.dual?.saveOptions?.[key] ?? null) : null;
     const input = quick ? { mod: 0, note: "", kit: 0, kitText: "" }
       : await this.#promptRoll(game.i18n.localize(`AD2E.Save.${key}`), this.#kitOptions("save", key), "",
-        genField + masterField + this.#dualField(oldSave));
+        genField + masterField + blindSaveField(this) + this.#dualField(oldSave));
     if (!input) return;
+    // Blinded (Darkness (DMG); module/blindness.mjs): -4 to saving throws.
+    const blindSave = quick ? (isBlind(this) ? COMBAT_TABLES.blind.save : 0) : blindSavePicked(input.form);
+    if (blindSave) input.kitText = [input.kitText, game.i18n.format("AD2E.Blind.SaveShort", { n: blindSave })].filter(Boolean).join("; ");
     const genBonus = input.genWard && province ? SHAIR.genWard.save : 0;
     if (genBonus) input.kitText = [input.kitText, game.i18n.format("AD2E.Gen.SaveWardShort", { n: genBonus })].filter(Boolean).join("; ");
     const useMaster = !!(input.masterSave && masterSave);
@@ -695,7 +699,7 @@ export default class AD2EActor extends Actor {
     // Spell effects (module/spell-effects.mjs): not with the master's saving throw.
     const spellSave = useMaster ? 0 : this.spellMod("save");
     if (spellSave) input.kitText = [input.kitText, game.i18n.format("AD2E.SpellEffect.RollNote", { n: spellSave })].filter(Boolean).join("; ");
-    const mod = input.mod + input.kit + genBonus + spellSave;
+    const mod = input.mod + input.kit + genBonus + spellSave + blindSave;
     const useOld = !useMaster && !!(input.dualOld && oldSave !== null);
     if (useOld) await this.markOldClassUse(game.i18n.format("AD2E.Dual.WhatSave", { save: game.i18n.localize(`AD2E.Save.${key}`) }));
     const target = useMaster ? masterSave.value : (useOld ? oldSave : this.system.saves[key].value);
@@ -827,8 +831,9 @@ export default class AD2EActor extends Actor {
     const targets = AD2EActor.#targetsNow();
     this.#rememberTargets(itemId, targets);
     this._ad2eLastWeapon = itemId; // initiative: the weapon of the last attack (module/initiative.mjs)
-    const backstabField = backstab ? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
-      + `<input type="checkbox" name="backstab"></div>` : "";
+    // A blinded attacker without blind-fighting has no backstab (Darkness (DMG); module/blindness.mjs).
+    const backstabField = backstab ? (blindBackstabField(this, i18n("AD2E.Ability2.BackstabAttack")) ?? `<div class="form-group"><label>${i18n("AD2E.Ability2.BackstabAttack")}</label>`
+      + `<input type="checkbox" name="backstab"></div>`) : "";
     // Two weapons (warriors and rogues, melee) and non-lethal attacks with a blade ("Attacking with Two Weapons (PHB)",
     // "Attacking Without Killing (PHB)").
     const spStyles = this.type === "character" ? this.system.proficiencies?.sp?.styles ?? null : null;
@@ -1657,8 +1662,9 @@ export default class AD2EActor extends Actor {
     AD2EActor.#lastSap.delete(sapKey);
     const throwDmg = use === "missile" ? (AD2EActor.#throwDamage.get(sapKey) ?? 0) : 0;
     AD2EActor.#throwDamage.delete(sapKey);
-    const backstabField = mult ? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
-      + `<input type="checkbox" name="backstab"></div>` : "";
+    const backstabField = mult ? (blindBackstabField(this, game.i18n.format("AD2E.Ability2.BackstabDamage", { mult }))
+      ?? `<div class="form-group"><label>${game.i18n.format("AD2E.Ability2.BackstabDamage", { mult })}</label>`
+      + `<input type="checkbox" name="backstab"></div>`) : "";
     // Elemental mage: "+1 to each damage die inflicted with an attack using that element (magical or otherwise)".
     const element = elementOf(this);
     const elementField = element ? `<div class="form-group"><label>${game.i18n.format("AD2E.Elemental.WeaponUses",
@@ -1951,7 +1957,10 @@ export default class AD2EActor extends Actor {
         const value = m.value === "auto" ? game.i18n.localize("AD2E.Combat51.Auto") : `${m.value > 0 ? "+" : ""}${m.value}`;
         return `<label><input type="checkbox" name="t51-${m.key}"${hit.length ? " checked" : ""}> ${esc(game.i18n.localize(`AD2E.Combat51.Row.${m.key}`))} (${value})`
           + `${hit.length ? ` <em>${esc(game.i18n.format("AD2E.Combat51.FromStatus", { status: hit.map(statusName).join(", ") }))}</em>` : ""}</label>`;
-      }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "") + "</div></fieldset>"
+      }).join("") + shieldField + AD2EActor.#genWardField(targets, element) + (missile ? AD2EActor.#missileStyleField(targets) : "")
+      // Blinded attacker or first target (core "blind" status; module/blindness.mjs).
+      + blindAttackFields(attacker, AD2EActor.#targetActor(targets), { missile, ac: AD2EActor.#targetAc(targets, missile), targetName: targets[0]?.name ?? "" })
+      + "</div></fieldset>"
       // Underwater (module/underwater.mjs): the attacker's penalties as ticked boxes, and the weapon's Table 44 note.
       + (attacker ? underwaterAttackFields(attacker, item, { missile }) : "");
   }
@@ -2023,7 +2032,9 @@ export default class AD2EActor extends Actor {
     if (genBox?.checked) text.push(`${game.i18n.localize("AD2E.Gen.WardShort")} ${gen}`);
     const uw = underwaterAttackPicked(form);
     if (uw.text) text.push(uw.text);
-    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen + ms + uw.sum, auto: rows.some(m => m.value === "auto"),
+    const blind = blindAttackPicked(form);
+    if (blind.text) text.push(blind.text);
+    return { sum: rows.reduce((n, m) => n + (m.value === "auto" ? 0 : m.value), 0) + shield + gen + ms + uw.sum + blind.sum, auto: rows.some(m => m.value === "auto"),
       text: text.join("; ") };
   }
 

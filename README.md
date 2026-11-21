@@ -14,7 +14,7 @@ Mechanics-only system; no copyrighted rule text. System id: `ad2e`.
 - Manual: copy the repository contents into `Data/systems/ad2e/` and restart Foundry.
 - `github.com/.../blob/...` URLs return HTML and cannot be used as a manifest URL.
 
-## Status (v1.0.92)
+## Status (v1.0.93)
 First stable release (2026-10-06). Covered:
 - Characters: races, classes and kits (PHB, Complete handbooks, Skills & Powers, Al-Qadim), ability score methods,
   proficiencies (PHB, optional Skills & Powers ratings and weapon rules), traits and disadvantages, class abilities,
@@ -765,6 +765,13 @@ the net (0.0.135), poison (1.0.10), magic resistance and spell save requests (1.
   prone +4, defender surprised +1 and rear attack +2 (missile range stays a separate field). The first target's token
   status icons tick them: Prone or Stunned +4; Asleep, Paralyzed, Restrained or Unconscious automatic hit; Invisible
   -4 (core status ids, checked on core 14.368). Table from `python3 tools/build-combat-tables.py`.
+- Blindness (1.0.93, owner's request; `module/blindness.mjs`, `COMBAT_TABLES.blind` regex-checked against Darkness (DMG),
+  Blind-fighting (Proficiency) and Blindness (Wizard Spell)): the core "Blinded" status (registered if a world lacks it)
+  ticks boxes in every attack dialog: a blinded attacker -4, or -2 in melee with the blind-fighting proficiency; a blinded
+  first target's AC four worse to a limit of 10 (+4, or 10 - AC), none in melee when it has blind-fighting (missiles
+  still); saving throws of a blinded actor -4 (also quick saves); backstab disabled for a blinded attacker without
+  blind-fighting ("sight-related damage bonuses ... are negated"). Implementation choices: a blind-fighter keeps backstab
+  (the GM halves it); the movement rule and Table 72's degrees of darkness are not applied.
 - Learning spells (Intelligence (PHB) Table 4, Specialist Wizard (PHB), Wizard (PHB)): dropping a wizard spell on a
   wizard or bard asks "Roll to learn", "Add as known (no roll)" or "Do not add". The roll is d100 at or under the
   Intelligence "Chance to Learn Spell", specialists +15% for their school and -15% for other schools; it is not possible
