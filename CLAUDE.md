@@ -675,6 +675,10 @@ The owner installs and updates from that manifest URL only (no shell access to t
   `blindAttackFields` / `blindAttackPicked` (boxes `blindSelf` / `blindTarget` in `#combatModFields` / `#combatModPicked`),
   `blindSaveField` / `blindSavePicked` (rollSave; quick saves apply it), `blindBackstabField` (disabled backstab box));
   figures `COMBAT_TABLES.blind` (build-combat-tables.py: Darkness (DMG), Blind-fighting (Proficiency), Blindness (Wizard Spell)).
+  Deafened / silenced (owner's request 1.0.94): `module/hearing.mjs` (core status ids "deaf" / "silence", `registerHearing` adds
+  them only if missing; pure `needsVoice` (verbal or no components recorded), `isMiscast`; `deafSurpriseField` / `deafSurprisePicked`
+  (rollSurprise), `voiceAllows` (#castingAllowed), `voiceFailure` / `failureContent` (#castNow after the spell is spent: lost when
+  silenced, d100 01-20 miscast when deafened)); figures `COMBAT_TABLES.deaf` / `.silence` (build-combat-tables.py `SILENCE_PAGE`).
   Automatic damage on a hit (client setting `autoDamage`): rollWeaponDamage / rollMonsterDamage take a `preset` (no dialog).
   Character size (`system.sizeCategory`, derived) comes from `RACE_SIZE` in race-tables.mjs (build-race-data.py, Monstrous
   Manual sizes asserted by regex); `needsTwoHands` / `twoWeaponRate` give two-handed weapons and the extra-attack rate.

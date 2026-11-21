@@ -56,6 +56,9 @@ STATUS_51 = {"defender-sleeping-or-held": ["sleep", "paralysis", "restrain", "un
              "defender-invisible": ["invisible"]}
 
 
+SILENCE_PAGE = "Silence, 15' Radius (Priest Spell)"
+
+
 def need(text, pattern, what):
     assert re.search(pattern, text), f"rule changed: {what}"
 
@@ -188,6 +191,19 @@ if __name__ == "__main__":
     need(bf, r"retains special abilities that would normally be lost in darkness, although the effectiveness of these are reduced by one-half", "blind-fighting abilities")
     bs, rev_bs, _ = classdata.page("Blindness (Wizard Spell)")
     need(bs, r"A blinded creature suffers a -4 penalty to its attack rolls, and its opponents gain a \+4 bonus to their attack rolls", "blindness spell")
+    # Deafened and silenced (owner's request 1.0.94): Deafness (Wizard Spell) (PHB) for the surprise penalty and the miscast
+    # chance of verbal spells; Casting Spells (PHB) and Silence, 15' Radius (Priest Spell) for spells needing the voice.
+    df, rev_deaf, _ = classdata.page("Deafness (Wizard Spell)")
+    need(df, r"An affected creature has a -1 penalty to its surprise rolls unless its other senses are unusually keen", "deaf: surprise -1")
+    need(df, r"Deafened spellcasters have a 20% chance to miscast any spell with a verbal component", "deaf: 20% miscast")
+    cs, rev_cast, _ = classdata.page("Casting Spells (PHB)")
+    need(cs, r"Verbal components require the caster to speak clearly \(not be silenced in any way\)", "verbal: speak clearly")
+    need(cs, r"One requiring only gestures could be cast even within the radius of a ''silence'' spell|One requiring only gestures could be cast even within the radius of a silence spell", "gestures only in silence")
+    need(cs, r"The caster must be able to speak \(not under the effects of a ''silence'' spell or gagged\)|The caster must be able to speak \(not under the effects of a silence spell or gagged\)", "standard rule: speech")
+    sl, rev_sil, _ = classdata.page(SILENCE_PAGE)
+    need(sl, r"spells cannot be cast \(or at least not those with verbal components, if the optional component rule is used\)", "silence: no verbal spells")
+    deaf = {"surprise": -1, "miscast": 20}
+    silence = {"verbal": True, "noComponentsNeedVoice": True}
     blind = {"attack": -4, "save": -4, "ac": 4, "acLimit": 10, "noBackstab": True,
              "blindFighting": {"proficiency": "blind-fighting", "attack": -2, "ac": 0, "meleeOnly": True, "abilitiesHalved": True}}
 
@@ -251,6 +267,8 @@ if __name__ == "__main__":
         "mountedMissile": mounted,
         "mounted": mounted_rules,
         "blind": blind,
+        "deaf": deaf,
+        "silence": silence,
         "lasso": lasso,
         "net": net,
     }
@@ -266,6 +284,8 @@ if __name__ == "__main__":
              f" *   DMG Table 53 Mounted Missile Fire: {classdata.url('Unusual Combat Situations (DMG)')} (revision {rev_unusual})",
              f" *   Blindness: {classdata.url('Darkness (DMG)')} (revision {rev_dark}), {classdata.url('Blind-fighting (Proficiency)')}",
              f" *   (revision {rev_bf}), {classdata.url('Blindness (Wizard Spell)')} (revision {rev_bs})",
+             f" *   Deafened / silenced: {classdata.url('Deafness (Wizard Spell)')} (revision {rev_deaf}), {classdata.url('Casting Spells (PHB)')}",
+             f" *   (revision {rev_cast}), {classdata.url(SILENCE_PAGE)} (revision {rev_sil})",
              f" *   Lasso and net: {classdata.url('Weapon Descriptions (POCT)')} (revision {rev_wd}); called shot, opposed rolls, pull/trip:",
              f" *   {classdata.url('Attack Options (POCT)')} (revision {rev_ao})",
              " */",
